@@ -27,6 +27,11 @@ Read ALL files in `.agent-context/rules/`:
 ### Step 2: Language Profile (By Stack)
 Load the relevant stack from `.agent-context/stacks/`:
 - TypeScript/Node → `stacks/typescript.md`
+- Python → `stacks/python.md`
+- Java/Kotlin → `stacks/java.md`
+- PHP → `stacks/php.md`
+- Go → `stacks/go.md`
+- C#/.NET → `stacks/csharp.md`
 
 ### Step 3: Blueprint (If Scaffolding)
 Load from `.agent-context/blueprints/` when creating new projects.
