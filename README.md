@@ -77,6 +77,11 @@ Create the initial project structure based on blueprints/api-nextjs.md.
 ├── .windsurfrules                  # Windsurf entry point
 ├── AGENTS.md                       # Universal agent discovery
 ├── .github/copilot-instructions.md # GitHub Copilot entry point
+├── .gemini/instructions.md         # Antigravity / Gemini entry point
+├── .agents/workflows/              # Antigravity workflow definitions
+│   ├── init-project.md             # /init-project slash command
+│   ├── review-code.md              # /review-code slash command
+│   └── refactor.md                 # /refactor slash command
 │
 ├── .agent-context/                 # The Knowledge Base
 │   ├── rules/                      # Universal engineering laws
@@ -154,6 +159,7 @@ One knowledge base, works everywhere:
 | Cursor AI | `.cursorrules` |
 | Windsurf | `.windsurfrules` |
 | GitHub Copilot | `.github/copilot-instructions.md` |
+| Antigravity (Google) | `.gemini/instructions.md` + `.agents/workflows/` |
 | Claude Code / Gemini | `AGENTS.md` |
 
 ### Blueprints, Not Boilerplate
