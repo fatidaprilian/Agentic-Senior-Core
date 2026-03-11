@@ -132,7 +132,9 @@ Agentic-Senior-Core turns your AI into a strict Principal Engineer with these em
 │   │   ├── api-docs.md             # OpenAPI 3.1 mandatory, zero-doc death penalty
 │   │   ├── microservices.md        # When/how to split the monolith
 │   │   ├── event-driven.md         # Pub/sub, CQRS, event sourcing
-│   │   └── database-design.md      # Normalization, indexing, migrations
+│   │   ├── database-design.md      # Normalization, indexing, migrations
+│   │   ├── realtime.md             # WebSockets scaling & strict pub/sub
+│   │   └── frontend-architecture.md# Smart/Dumb UI, TanStack Query vs Zustand
 │   │
 │   ├── stacks/                     # Language-specific profiles (6 files)
 │   │   ├── typescript.md           # Strict TS: no any, Zod, ESM
@@ -140,7 +142,9 @@ Agentic-Senior-Core turns your AI into a strict Principal Engineer with these em
 │   │   ├── java.md                 # Java 25 LTS, Spring Boot 4, Records
 │   │   ├── php.md                  # PHP 8.5, Laravel 12, strict types
 │   │   ├── go.md                   # stdlib-first, chi, explicit errors
-│   │   └── csharp.md               # C# 14, .NET 10 LTS, Minimal APIs
+│   │   ├── csharp.md               # C# 14, .NET 10 LTS, Minimal APIs
+│   │   ├── rust.md                 # Rust, no panic!/unwrap, Axum
+│   │   └── ruby.md                 # Rails, Service Objects, N+1 death
 │   │
 │   ├── blueprints/                 # Project scaffolding templates (8 files)
 │   │   ├── api-nextjs.md           # Next.js App Router API
@@ -152,7 +156,10 @@ Agentic-Senior-Core turns your AI into a strict Principal Engineer with these em
 │   │   ├── aspnet-api.md           # ASP.NET Minimal API (.NET 10)
 │   │   ├── ci-github-actions.md    # GitHub Actions CI/CD pipeline
 │   │   ├── ci-gitlab.md            # GitLab CI/CD pipeline
-│   │   └── observability.md        # OpenTelemetry stack
+│   │   ├── observability.md        # OpenTelemetry stack
+│   │   ├── graphql-grpc-api.md     # Schema-first, Dataloaders required
+│   │   ├── infrastructure-as-code.md # Terraform/Pulumi structure, remote state
+│   │   └── kubernetes-manifests.md # Prod-grade specs, no :latest tag
 │   │
 │   ├── review-checklists/          # AI self-audit guides (4 files)
 │   │   ├── pr-checklist.md         # 10-category quality gate
@@ -260,7 +267,7 @@ bun scripts/validate.ts
 - [x] PR & security checklists
 - [x] Multi-agent compatibility (Cursor, Windsurf, Copilot, Antigravity, Claude Code)
 
-### V1.1 (Current) — Multi-Language
+### V1.1 (Complete) — Multi-Language
 - [x] Python stack + FastAPI blueprint
 - [x] Java stack + Spring Boot blueprint
 - [x] PHP stack + Laravel blueprint
@@ -277,14 +284,14 @@ bun scripts/validate.ts
 - [x] Go blueprint (chi/stdlib HTTP service)
 - [x] C# blueprint (ASP.NET Minimal API service)
 
-### V1.3 (Current) — System Extensions & Infrastructure
-- [ ] Language Stack: Rust profile (`rust.md`)
-- [ ] Language Stack: Ruby on Rails profile (`ruby.md`)
-- [ ] Architecture Rule: Real-time & WebSockets patterns (`realtime.md`)
-- [ ] Architecture Rule: Frontend state & composition patterns (`frontend-architecture.md`)
-- [ ] Blueprint: GraphQL / gRPC API definitions (`graphql-grpc-api.md`)
-- [ ] Blueprint: Infrastructure as Code (`infrastructure-as-code.md`)
-- [ ] Blueprint: Kubernetes manifests structure (`kubernetes-manifests.md`)
+### V1.3 (Complete) — System Extensions & Infrastructure
+- [x] Language Stack: Rust profile (`rust.md`)
+- [x] Language Stack: Ruby on Rails profile (`ruby.md`)
+- [x] Architecture Rule: Real-time & WebSockets patterns (`realtime.md`)
+- [x] Architecture Rule: Frontend state & composition patterns (`frontend-architecture.md`)
+- [x] Blueprint: GraphQL / gRPC API definitions (`graphql-grpc-api.md`)
+- [x] Blueprint: Infrastructure as Code (`infrastructure-as-code.md`)
+- [x] Blueprint: Kubernetes manifests structure (`kubernetes-manifests.md`)
 
 ### V1.4 (Planned) — Dynamic Governance Engine
 - [ ] EPIC 1: The Delivery Engine (Interactive Bun/Node CLI replacing bash script)
