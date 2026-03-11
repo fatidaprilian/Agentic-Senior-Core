@@ -53,20 +53,23 @@ git clone https://github.com/fatidaprilian/Agentic-Senior-Core.git
 
 > **Manual alternative:** Copy `.agent-context/` and the entry point files (`.cursorrules`, `AGENTS.md`, etc.) directly into your project root.
 
-### First Command to Your Agent (The Architect Prompt)
+### Zero-Prompt Setup (Start Coding Immediately)
+
+Thanks to the **Auto-Architect Trigger** baked into this repository, you no longer need to copy-paste massive initiation prompts. The AI already knows what to do.
+
+Just open your AI IDE's chat (Cursor, Windsurf, Copilot, or Antigravity) and say:
 
 ```text
-I want to build a [DESCRIBE YOUR PROJECT AND MAIN FEATURES HERE].
-
-Context: You are a Principal Software Architect operating in a workspace with strict engineering standards.
-
-Step 1: Read `AGENTS.md`, then scan all files in `.agent-context/rules/`, `.agent-context/stacks/`, and `.agent-context/blueprints/`.
-Step 2: Based strictly on my project description and our rules, propose the most efficient technology stack from our blueprints. Explain WHY it is the best choice (reference efficiency-vs-hype.md). Draft a high-level architecture plan.
-
-Do not write any code yet. Wait for my approval. Once approved, scaffold the project using the relevant blueprint.
+I want to build an e-commerce website with ERP integration.
 ```
 
-> **Note:** For more prompt templates (including direct blueprint scaffolds), see [`.agent-context/prompts/init-project.md`](.agent-context/prompts/init-project.md).
+**What the AI will do automatically:**
+1. Detect that you want to start a new project.
+2. Quietly read ALL strict engineering rules, language stacks, and blueprints in `.agent-context/`.
+3. Act as a **Principal Architect** by proposing the most efficient stack for your specific requirements.
+4. Draft a high-level architecture plan and wait for your approval before generating any code.
+
+> **Note:** Want to skip the architecture proposal and force the AI to use a specific framework right away? See the direct prompts in [`.agent-context/prompts/init-project.md`](.agent-context/prompts/init-project.md).
 
 ---
 
@@ -190,10 +193,11 @@ Blueprints are **instructions**, not code files. The AI reads the blueprint and 
 
 ```
 Step 1: Clone & Open
-  git clone → copy into your project → open in Cursor/Windsurf
+  git clone → run init-project.sh → open in Cursor/Windsurf/Copilot
 
-Step 2: The Initiation Prompt
-  "Build [Project]. Scan .agent-context/ and scaffold from blueprints/api-nextjs.md"
+Step 2: Zero-Prompt Initiation
+  "I want to build an e-commerce website."
+  (AI automatically reads rules, proposes architecture, and waits for approval)
 
 Step 3: Agent Builds Like a Pro
   Proper layers, Zod validation, typed errors, structured logging, tests
