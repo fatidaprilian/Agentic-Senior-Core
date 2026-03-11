@@ -25,6 +25,9 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 | [`.agent-context/rules/git-workflow.md`](.agent-context/rules/git-workflow.md) | Git workflow |
 | [`.agent-context/rules/efficiency-vs-hype.md`](.agent-context/rules/efficiency-vs-hype.md) | Dependency selection |
 | [`.agent-context/rules/api-docs.md`](.agent-context/rules/api-docs.md) | API documentation standards |
+| [`.agent-context/rules/microservices.md`](.agent-context/rules/microservices.md) | Microservices decision framework |
+| [`.agent-context/rules/event-driven.md`](.agent-context/rules/event-driven.md) | Event-driven architecture |
+| [`.agent-context/rules/database-design.md`](.agent-context/rules/database-design.md) | Database schema & queries |
 
 ### Language Profiles (Load by Stack)
 
@@ -46,6 +49,11 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 | [`.agent-context/blueprints/fastapi-service.md`](.agent-context/blueprints/fastapi-service.md) | FastAPI service |
 | [`.agent-context/blueprints/laravel-api.md`](.agent-context/blueprints/laravel-api.md) | Laravel API |
 | [`.agent-context/blueprints/spring-boot-api.md`](.agent-context/blueprints/spring-boot-api.md) | Spring Boot API |
+| [`.agent-context/blueprints/go-service.md`](.agent-context/blueprints/go-service.md) | Go chi HTTP service |
+| [`.agent-context/blueprints/aspnet-api.md`](.agent-context/blueprints/aspnet-api.md) | ASP.NET Minimal API |
+| [`.agent-context/blueprints/ci-github-actions.md`](.agent-context/blueprints/ci-github-actions.md) | GitHub Actions pipeline |
+| [`.agent-context/blueprints/ci-gitlab.md`](.agent-context/blueprints/ci-gitlab.md) | GitLab CI pipeline |
+| [`.agent-context/blueprints/observability.md`](.agent-context/blueprints/observability.md) | OpenTelemetry stack |
 
 ### Review Checklists (Load Before Completion)
 

@@ -58,6 +58,9 @@ Read ALL files in `.agent-context/rules/`:
 - `git-workflow.md` — How we collaborate
 - `efficiency-vs-hype.md` — How we choose dependencies
 - `api-docs.md` — How we document APIs
+- `microservices.md` — When and how to split the monolith
+- `event-driven.md` — Pub/sub, CQRS, and event sourcing
+- `database-design.md` — Normalization, indexing, and migrations
 
 ### Step 2: Load Language Profile (BY CONTEXT)
 Based on the project's tech stack, load the relevant file from `.agent-context/stacks/`:

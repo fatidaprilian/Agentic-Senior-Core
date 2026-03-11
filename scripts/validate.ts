@@ -122,6 +122,9 @@ async function validateRuleFiles(): Promise<void> {
     "git-workflow.md",
     "efficiency-vs-hype.md",
     "api-docs.md",
+    "microservices.md",
+    "event-driven.md",
+    "database-design.md",
   ];
 
   for (const rule of expectedRules) {
@@ -158,7 +161,18 @@ async function validateStackFiles(): Promise<void> {
 async function validateBlueprintFiles(): Promise<void> {
   console.log("\n🏗️  Checking blueprints...");
 
-  const expectedBlueprints = ["api-nextjs.md", "nestjs-logic.md", "fastapi-service.md", "laravel-api.md", "spring-boot-api.md"];
+  const expectedBlueprints = [
+    "api-nextjs.md", 
+    "nestjs-logic.md", 
+    "fastapi-service.md", 
+    "laravel-api.md", 
+    "spring-boot-api.md",
+    "go-service.md",
+    "aspnet-api.md",
+    "ci-github-actions.md",
+    "ci-gitlab.md",
+    "observability.md"
+  ];
 
   for (const blueprint of expectedBlueprints) {
     const filePath = join(AGENT_CONTEXT_DIR, "blueprints", blueprint);

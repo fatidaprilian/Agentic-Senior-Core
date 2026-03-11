@@ -79,7 +79,7 @@ Create the initial project structure based on blueprints/api-nextjs.md.
 │   └── refactor.md                 # /refactor slash command
 │
 ├── .agent-context/                 # The Knowledge Base
-│   ├── rules/                      # Universal engineering laws (9 files)
+│   ├── rules/                      # Universal engineering laws (12 files)
 │   │   ├── naming-conv.md          # Clean naming (no more x, data, temp)
 │   │   ├── architecture.md         # Layer separation & module structure
 │   │   ├── security.md             # Trust nothing, validate everything, OWASP 2025
@@ -88,7 +88,10 @@ Create the initial project structure based on blueprints/api-nextjs.md.
 │   │   ├── testing.md              # Test pyramid, AAA, factories
 │   │   ├── git-workflow.md         # Conventional Commits, atomic PRs
 │   │   ├── efficiency-vs-hype.md   # Stable > trendy, justify deps
-│   │   └── api-docs.md             # OpenAPI 3.1 mandatory, zero-doc death penalty
+│   │   ├── api-docs.md             # OpenAPI 3.1 mandatory, zero-doc death penalty
+│   │   ├── microservices.md        # When/how to split the monolith
+│   │   ├── event-driven.md         # Pub/sub, CQRS, event sourcing
+│   │   └── database-design.md      # Normalization, indexing, migrations
 │   │
 │   ├── stacks/                     # Language-specific profiles (6 files)
 │   │   ├── typescript.md           # Strict TS: no any, Zod, ESM
@@ -98,12 +101,17 @@ Create the initial project structure based on blueprints/api-nextjs.md.
 │   │   ├── go.md                   # stdlib-first, chi, explicit errors
 │   │   └── csharp.md               # C# 14, .NET 10 LTS, Minimal APIs
 │   │
-│   ├── blueprints/                 # Project scaffolding templates (5 files)
+│   ├── blueprints/                 # Project scaffolding templates (8 files)
 │   │   ├── api-nextjs.md           # Next.js App Router API
 │   │   ├── nestjs-logic.md         # NestJS module structure
 │   │   ├── fastapi-service.md      # FastAPI + Pydantic + SQLAlchemy
 │   │   ├── laravel-api.md          # Laravel 12 + Form Requests + Pest
-│   │   └── spring-boot-api.md      # Spring Boot 4 + Bean Validation + Flyway
+│   │   ├── spring-boot-api.md      # Spring Boot 4 + Bean Validation + Flyway
+│   │   ├── go-service.md           # Go chi/stdlib HTTP service
+│   │   ├── aspnet-api.md           # ASP.NET Minimal API (.NET 10)
+│   │   ├── ci-github-actions.md    # GitHub Actions CI/CD pipeline
+│   │   ├── ci-gitlab.md            # GitLab CI/CD pipeline
+│   │   └── observability.md        # OpenTelemetry stack
 │   │
 │   ├── review-checklists/          # AI self-audit guides (4 files)
 │   │   ├── pr-checklist.md         # 10-category quality gate
@@ -218,14 +226,14 @@ bun scripts/validate.ts
 - [x] C#/.NET stack profile
 - [x] Performance & architecture review checklists
 
-### V1.2 (Planned) — Advanced Patterns
-- [ ] Microservices decision framework (when to split, how to split)
-- [ ] Event-driven architecture patterns (pub/sub, CQRS, event sourcing)
-- [ ] CI/CD pipeline blueprints (GitHub Actions, GitLab CI)
-- [ ] Database design patterns (normalization rules, indexing strategy)
-- [ ] Observability blueprint (metrics, tracing, alerting)
-- [ ] Go blueprint (chi/stdlib HTTP service)
-- [ ] C# blueprint (ASP.NET Minimal API service)
+### V1.2 — Advanced Patterns (Complete)
+- [x] Microservices decision framework (when to split, how to split)
+- [x] Event-driven architecture patterns (pub/sub, CQRS, event sourcing)
+- [x] CI/CD pipeline blueprints (GitHub Actions, GitLab CI)
+- [x] Database design patterns (normalization rules, indexing strategy)
+- [x] Observability blueprint (metrics, tracing, alerting)
+- [x] Go blueprint (chi/stdlib HTTP service)
+- [x] C# blueprint (ASP.NET Minimal API service)
 
 ---
 

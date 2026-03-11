@@ -23,6 +23,9 @@ Read ALL files in `.agent-context/rules/`:
 - `git-workflow.md` — Conventional Commits, atomic changes
 - `efficiency-vs-hype.md` — Stable dependencies over trendy ones
 - `api-docs.md` — OpenAPI mandatory, zero-doc death penalty
+- `microservices.md` — Monolith first, split triggers, strangler fig
+- `event-driven.md` — Event sourcing, CQRS, idempotency
+- `database-design.md` — 3NF default, index FKs, safe migrations
 
 ### Step 2: Language Profile (By Stack)
 Load the relevant stack from `.agent-context/stacks/`:

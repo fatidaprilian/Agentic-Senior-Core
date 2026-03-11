@@ -14,6 +14,9 @@ Before generating code, read ALL engineering rules in `.agent-context/rules/`:
 - `git-workflow.md` — Conventional Commits, atomic changes
 - `efficiency-vs-hype.md` — Stable dependencies over trendy ones
 - `api-docs.md` — OpenAPI 3.1 mandatory, zero-doc death penalty
+- `microservices.md` — Monolith first, split triggers, strangler fig
+- `event-driven.md` — Event sourcing, CQRS, idempotency
+- `database-design.md` — 3NF default, index FKs, safe migrations
 
 ## Language Profile
 Load the relevant stack profile from `.agent-context/stacks/`:
