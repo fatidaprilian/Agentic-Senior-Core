@@ -235,6 +235,15 @@ bun scripts/validate.ts
 - [x] Go blueprint (chi/stdlib HTTP service)
 - [x] C# blueprint (ASP.NET Minimal API service)
 
+### V1.3 (Planned) — System Extensions & Infrastructure
+- [ ] Language Stack: Rust profile (`rust.md`)
+- [ ] Language Stack: Ruby on Rails profile (`ruby.md`)
+- [ ] Architecture Rule: Real-time & WebSockets patterns (`realtime.md`)
+- [ ] Architecture Rule: Frontend state & composition patterns (`frontend-architecture.md`)
+- [ ] Blueprint: GraphQL / gRPC API definitions
+- [ ] Blueprint: Infrastructure as Code (Terraform / Pulumi)
+- [ ] Blueprint: Kubernetes manifests structure
+
 ---
 
 ## Contributing
