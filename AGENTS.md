@@ -24,6 +24,7 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 | [`.agent-context/rules/testing.md`](.agent-context/rules/testing.md) | Testing standards |
 | [`.agent-context/rules/git-workflow.md`](.agent-context/rules/git-workflow.md) | Git workflow |
 | [`.agent-context/rules/efficiency-vs-hype.md`](.agent-context/rules/efficiency-vs-hype.md) | Dependency selection |
+| [`.agent-context/rules/api-docs.md`](.agent-context/rules/api-docs.md) | API documentation standards |
 
 ### Language Profiles (Load by Stack)
 

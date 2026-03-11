@@ -1,0 +1,33 @@
+{
+  "name": "agentic-senior-core",
+  "version": "1.0.0",
+  "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
+  "author": "fatidaprilian",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fatidaprilian/Agentic-Senior-Core.git"
+  },
+  "keywords": [
+    "ai",
+    "coding-standards",
+    "cursorrules",
+    "windsurf",
+    "copilot",
+    "clean-code",
+    "engineering-standards",
+    "agentic"
+  ],
+  "bin": {
+    "agentic-senior": "./scripts/init-project.sh"
+  },
+  "scripts": {
+    "validate": "bun run ./scripts/validate.ts"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "bun-types": "^1.3.10"
+  }
+}

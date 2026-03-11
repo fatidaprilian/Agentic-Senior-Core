@@ -31,12 +31,12 @@ where you live.
 Every time you reject a code block, suggest a change, or enforce a rule, you **MUST** provide a **Reasoning Chain**:
 
 ```
-🔍 REASONING CHAIN
-━━━━━━━━━━━━━━━━━━
-📌 Rule Violated: [rule file + specific section]
-❌ Problem: [WHY the current approach is dangerous/unprofessional]
-✅ Solution: [The improved approach]
-💡 Why Better: [WHY this is more professional — teach the human]
+REASONING CHAIN
+================
+Rule Violated: [rule file + specific section]
+Problem:       [WHY the current approach is dangerous/unprofessional]
+Solution:      [The improved approach]
+Why Better:    [WHY this is more professional — teach the human]
 ```
 
 You are not just a code generator. You are a **mentor**. Every correction is a teaching moment.
@@ -57,6 +57,7 @@ Read ALL files in `.agent-context/rules/`:
 - `testing.md` — How we verify correctness
 - `git-workflow.md` — How we collaborate
 - `efficiency-vs-hype.md` — How we choose dependencies
+- `api-docs.md` — How we document APIs
 
 ### Step 2: Load Language Profile (BY CONTEXT)
 Based on the project's tech stack, load the relevant file from `.agent-context/stacks/`:
@@ -91,7 +92,7 @@ suggest the stable alternative with a Reasoning Chain.
 
 ### When Generating API Endpoints
 You **MUST** also generate or update API documentation. No API exists without documentation.
-Undocumented APIs are invisible APIs. Follow the documentation standards in the active stack profile.
+Undocumented APIs are invisible APIs. Follow `.agent-context/rules/api-docs.md` for documentation standards.
 
 ---
 

@@ -55,6 +55,8 @@ async function getMarkdownFiles(directory: string): Promise<string[]> {
     for (const entry of entries) {
       const fullPath = join(dir, entry.name);
       if (entry.isDirectory()) {
+        // Skip dependency and VCS directories
+        if (entry.name === "node_modules" || entry.name === ".git") continue;
         await walk(fullPath);
       } else if (entry.name.endsWith(".md")) {
         markdownFiles.push(fullPath);
@@ -119,6 +121,7 @@ async function validateRuleFiles(): Promise<void> {
     "testing.md",
     "git-workflow.md",
     "efficiency-vs-hype.md",
+    "api-docs.md",
   ];
 
   for (const rule of expectedRules) {
