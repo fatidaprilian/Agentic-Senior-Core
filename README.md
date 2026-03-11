@@ -38,10 +38,10 @@ AI:  *Creates properly layered modules with Zod validation, typed errors,
 
 ## Quick Start
 
-### Option 1: npx (Recommended)
+### Option 1: One-Liner (Recommended)
 
 ```bash
-npx agentic-senior-core /path/to/your/project
+curl -sSL https://raw.githubusercontent.com/fatidaprilian/Agentic-Senior-Core/main/scripts/init-project.sh | bash -s -- .
 ```
 
 ### Option 2: Clone and Copy
@@ -51,12 +51,7 @@ git clone https://github.com/fatidaprilian/Agentic-Senior-Core.git
 ./Agentic-Senior-Core/scripts/init-project.sh /path/to/your/project
 ```
 
-### Option 3: Manual Setup
-
-1. Copy `.agent-context/` into your project root
-2. Copy `.cursorrules` (and/or `.windsurfrules`, `AGENTS.md`) into your project root
-3. Open in Cursor / Windsurf / any AI IDE
-4. Start coding — the agent loads the rules automatically
+> **Manual alternative:** Copy `.agent-context/` and the entry point files (`.cursorrules`, `AGENTS.md`, etc.) directly into your project root.
 
 ### First Command to Your Agent
 
@@ -198,21 +193,29 @@ bun scripts/validate.ts
 
 ## Roadmap
 
-### V1.0 (Current) — TypeScript Focus
+### V1.0 — TypeScript Focus
 - [x] 9 universal rule files (including api-docs)
 - [x] TypeScript stack profile
 - [x] Next.js & NestJS blueprints
 - [x] PR & security checklists
-- [x] Multi-agent compatibility
-- [x] npx support
+- [x] Multi-agent compatibility (Cursor, Windsurf, Copilot, Antigravity, Claude Code)
 
-### V1.1 (Planned) — Multi-Language
-- [ ] Python stack + FastAPI blueprint
-- [ ] Java/Kotlin stack + Spring Boot blueprint
-- [ ] PHP stack + Laravel blueprint
-- [ ] Go stack profile
-- [ ] C#/.NET stack profile
-- [ ] Performance & architecture review checklists
+### V1.1 (Current) — Multi-Language
+- [x] Python stack + FastAPI blueprint
+- [x] Java stack + Spring Boot blueprint
+- [x] PHP stack + Laravel blueprint
+- [x] Go stack profile
+- [x] C#/.NET stack profile
+- [x] Performance & architecture review checklists
+
+### V1.2 (Planned) — Advanced Patterns
+- [ ] Microservices decision framework (when to split, how to split)
+- [ ] Event-driven architecture patterns (pub/sub, CQRS, event sourcing)
+- [ ] CI/CD pipeline blueprints (GitHub Actions, GitLab CI)
+- [ ] Database design patterns (normalization rules, indexing strategy)
+- [ ] Observability blueprint (metrics, tracing, alerting)
+- [ ] Go blueprint (chi/stdlib HTTP service)
+- [ ] C# blueprint (ASP.NET Minimal API service)
 
 ---
 

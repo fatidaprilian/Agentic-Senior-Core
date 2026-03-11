@@ -31,6 +31,11 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 | File | When |
 |------|------|
 | [`.agent-context/stacks/typescript.md`](.agent-context/stacks/typescript.md) | TypeScript / Node.js projects |
+| [`.agent-context/stacks/python.md`](.agent-context/stacks/python.md) | Python projects |
+| [`.agent-context/stacks/java.md`](.agent-context/stacks/java.md) | Java / Kotlin projects |
+| [`.agent-context/stacks/php.md`](.agent-context/stacks/php.md) | PHP projects |
+| [`.agent-context/stacks/go.md`](.agent-context/stacks/go.md) | Go projects |
+| [`.agent-context/stacks/csharp.md`](.agent-context/stacks/csharp.md) | C# / .NET projects |
 
 ### Blueprints (Load When Scaffolding)
 
@@ -38,6 +43,9 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 |------|---------|
 | [`.agent-context/blueprints/api-nextjs.md`](.agent-context/blueprints/api-nextjs.md) | Next.js API project |
 | [`.agent-context/blueprints/nestjs-logic.md`](.agent-context/blueprints/nestjs-logic.md) | NestJS module |
+| [`.agent-context/blueprints/fastapi-service.md`](.agent-context/blueprints/fastapi-service.md) | FastAPI service |
+| [`.agent-context/blueprints/laravel-api.md`](.agent-context/blueprints/laravel-api.md) | Laravel API |
+| [`.agent-context/blueprints/spring-boot-api.md`](.agent-context/blueprints/spring-boot-api.md) | Spring Boot API |
 
 ### Review Checklists (Load Before Completion)
 
@@ -45,6 +53,8 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 |------|---------|
 | [`.agent-context/review-checklists/pr-checklist.md`](.agent-context/review-checklists/pr-checklist.md) | Pre-merge quality gate |
 | [`.agent-context/review-checklists/security-audit.md`](.agent-context/review-checklists/security-audit.md) | Security review |
+| [`.agent-context/review-checklists/performance-audit.md`](.agent-context/review-checklists/performance-audit.md) | Performance review |
+| [`.agent-context/review-checklists/architecture-review.md`](.agent-context/review-checklists/architecture-review.md) | Architecture review |
 
 ## Reasoning Clause
 

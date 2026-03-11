@@ -142,7 +142,7 @@ async function validateRuleFiles(): Promise<void> {
 async function validateStackFiles(): Promise<void> {
   console.log("\n🔧 Checking stack profiles...");
 
-  const expectedStacks = ["typescript.md"];
+  const expectedStacks = ["typescript.md", "python.md", "java.md", "php.md", "go.md", "csharp.md"];
 
   for (const stack of expectedStacks) {
     const filePath = join(AGENT_CONTEXT_DIR, "stacks", stack);
@@ -158,7 +158,7 @@ async function validateStackFiles(): Promise<void> {
 async function validateBlueprintFiles(): Promise<void> {
   console.log("\n🏗️  Checking blueprints...");
 
-  const expectedBlueprints = ["api-nextjs.md", "nestjs-logic.md"];
+  const expectedBlueprints = ["api-nextjs.md", "nestjs-logic.md", "fastapi-service.md", "laravel-api.md", "spring-boot-api.md"];
 
   for (const blueprint of expectedBlueprints) {
     const filePath = join(AGENT_CONTEXT_DIR, "blueprints", blueprint);
@@ -174,7 +174,7 @@ async function validateBlueprintFiles(): Promise<void> {
 async function validateChecklistFiles(): Promise<void> {
   console.log("\n✅ Checking review checklists...");
 
-  const expectedChecklists = ["pr-checklist.md", "security-audit.md"];
+  const expectedChecklists = ["pr-checklist.md", "security-audit.md", "performance-audit.md", "architecture-review.md"];
 
   for (const checklist of expectedChecklists) {
     const filePath = join(AGENT_CONTEXT_DIR, "review-checklists", checklist);
