@@ -21,7 +21,7 @@ const padded = str.padStart(10, '0');
 const flat = nested.flat(Infinity);
 ```
 
-**Rule:** If the functionality can be implemented in < 20 lines of clear code, DO NOT add a dependency. Write it yourself.
+**Dependency Defense:** If the user asks to install a new library, or if you feel the need to use one, evaluate it against the "stdlib-first" rule. If the functionality can be implemented safely in under 20 lines of code, write it yourself. If a dependency is strictly necessary, you MUST justify it by providing its bundle size, maintenance status, and why the standard library is insufficient.
 
 ### 2. Is It Maintained? (The Pulse Check)
 | Signal | 🟢 Healthy | 🔴 Dead |

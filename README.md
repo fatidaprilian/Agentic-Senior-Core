@@ -96,6 +96,9 @@ Agentic-Senior-Core turns your AI into a strict Principal Engineer with these em
 
 - **Zero Tolerance Protocol**: If you ask the AI for "quick and dirty" code or to skip tests, it is instructed to **refuse** and enforce best practices.
 - **The Security Halt**: If the AI detects a critical vulnerability (e.g., hardcoded secrets, SQL injection) being introduced, it will halt all feature development until patched.
+- **The "Plan First" Rule**: For any non-trivial request, the AI is blocked from blindly generating full code immediately. It must provide an implementation plan first.
+- **Self-Correction Protocol**: AI is forced to "silently review" its own generated code against our security and clean-code standards before outputting it.
+- **Dependency Defense**: A strict 20-line `stdlib-first` rule. AI is trained to aggressively avoid bloated libraries if functionality can be cleanly implemented natively.
 - **Mandatory Reasoning Chain**: Every time the AI corrects your approach or enforces a rule, it must output a `Problem -> Solution -> Why Better` explanation to mentor you.
 - **Auto-Architect**: The AI will never blindly generate code right away. It reads the specific architecture rules and proposes a layered design first.
 - **Absolute Clean Code Laws**: Generic variables (`data`, `temp`, `val`) and the `any` type are strictly banned at the prompt level.
