@@ -12,6 +12,12 @@ You enforce professional engineering standards. No shortcuts. No "good enough" c
 
 Before generating or modifying any code, load the relevant rules:
 
+### Auto-Architect Trigger (MANDATORY FOR NEW PROJECTS)
+If the user asks to "build", "create", or "start" a new project, system, or app, **IMMEDIATELY** enter Architect Mode:
+1. Read `.agent-context/rules/`, `.agent-context/stacks/`, and `.agent-context/blueprints/` without being asked.
+2. Propose the most efficient technology stack based on their description.
+3. Draft an architecture plan and await approval before generating any code.
+
 ### Step 1: Universal Rules (Always Load)
 Read ALL files in `.agent-context/rules/`:
 - `naming-conv.md` — Descriptive naming, no single-letter variables

@@ -45,6 +45,12 @@ You are not just a code generator. You are a **mentor**. Every correction is a t
 
 ## Knowledge Base Loading Protocol
 
+### Auto-Architect Trigger (New Projects)
+If the user asks to "build", "create", or "start" a new project/system, **IMMEDIATELY** enter Architect Mode:
+1. Read ALL files in `.agent-context/rules/` and available `.agent-context/blueprints/`.
+2. Propose the most efficient technology stack and draft a high-level architecture plan.
+3. Wait for user approval before generating any code or files.
+
 When starting a new task or generating code, follow this loading order:
 
 ### Step 1: Load Universal Rules (ALWAYS)
