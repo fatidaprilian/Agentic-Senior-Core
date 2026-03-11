@@ -79,27 +79,37 @@ Create the initial project structure based on blueprints/api-nextjs.md.
 │   └── refactor.md                 # /refactor slash command
 │
 ├── .agent-context/                 # The Knowledge Base
-│   ├── rules/                      # Universal engineering laws
+│   ├── rules/                      # Universal engineering laws (9 files)
 │   │   ├── naming-conv.md          # Clean naming (no more x, data, temp)
 │   │   ├── architecture.md         # Layer separation & module structure
-│   │   ├── security.md             # Trust nothing, validate everything
+│   │   ├── security.md             # Trust nothing, validate everything, OWASP 2025
 │   │   ├── performance.md          # N+1 death penalty, measure first
 │   │   ├── error-handling.md       # Never swallow, always context
 │   │   ├── testing.md              # Test pyramid, AAA, factories
 │   │   ├── git-workflow.md         # Conventional Commits, atomic PRs
 │   │   ├── efficiency-vs-hype.md   # Stable > trendy, justify deps
-│   │   └── api-docs.md             # OpenAPI mandatory, zero-doc death penalty
+│   │   └── api-docs.md             # OpenAPI 3.1 mandatory, zero-doc death penalty
 │   │
-│   ├── stacks/                     # Language-specific profiles
-│   │   └── typescript.md           # Strict TS: no any, Zod, ESM
+│   ├── stacks/                     # Language-specific profiles (6 files)
+│   │   ├── typescript.md           # Strict TS: no any, Zod, ESM
+│   │   ├── python.md               # Python 3.12+, Pydantic v2, ruff
+│   │   ├── java.md                 # Java 25 LTS, Spring Boot 4, Records
+│   │   ├── php.md                  # PHP 8.5, Laravel 12, strict types
+│   │   ├── go.md                   # stdlib-first, chi, explicit errors
+│   │   └── csharp.md               # C# 14, .NET 10 LTS, Minimal APIs
 │   │
-│   ├── blueprints/                 # Project scaffolding templates
+│   ├── blueprints/                 # Project scaffolding templates (5 files)
 │   │   ├── api-nextjs.md           # Next.js App Router API
-│   │   └── nestjs-logic.md         # NestJS module structure
+│   │   ├── nestjs-logic.md         # NestJS module structure
+│   │   ├── fastapi-service.md      # FastAPI + Pydantic + SQLAlchemy
+│   │   ├── laravel-api.md          # Laravel 12 + Form Requests + Pest
+│   │   └── spring-boot-api.md      # Spring Boot 4 + Bean Validation + Flyway
 │   │
-│   ├── review-checklists/          # AI self-audit guides
+│   ├── review-checklists/          # AI self-audit guides (4 files)
 │   │   ├── pr-checklist.md         # 10-category quality gate
-│   │   └── security-audit.md       # OWASP-aligned security review
+│   │   ├── security-audit.md       # OWASP-aligned security review
+│   │   ├── performance-audit.md    # Query, I/O, caching, memory audit
+│   │   └── architecture-review.md  # Layer, module, dependency review
 │   │
 │   └── prompts/                    # Ready-to-use power prompts
 │       ├── init-project.md         # Scaffold a new project
@@ -107,10 +117,10 @@ Create the initial project structure based on blueprints/api-nextjs.md.
 │       └── refactor.md             # Refactor to follow rules
 │
 ├── scripts/
-│   ├── validate.ts                 # Bun-powered repo validator
+│   ├── validate.ts                 # Bun-powered repo validator (56 checks)
 │   └── init-project.sh             # Copy rules into a new project
 │
-├── package.json                    # npm/npx support
+├── package.json                    # Project metadata & validate script
 ├── CONTRIBUTING.md                 # How to contribute
 ├── LICENSE                         # MIT
 └── README.md                       # You are here
