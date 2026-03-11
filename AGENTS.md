@@ -39,6 +39,8 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 | [`.agent-context/rules/microservices.md`](.agent-context/rules/microservices.md) | Microservices decision framework |
 | [`.agent-context/rules/event-driven.md`](.agent-context/rules/event-driven.md) | Event-driven architecture |
 | [`.agent-context/rules/database-design.md`](.agent-context/rules/database-design.md) | Database schema & queries |
+| [`.agent-context/rules/realtime.md`](.agent-context/rules/realtime.md) | Real-time & WebSockets patterns |
+| [`.agent-context/rules/frontend-architecture.md`](.agent-context/rules/frontend-architecture.md) | Frontend state & composition patterns |
 
 ### Language Profiles (Load by Stack)
 
@@ -50,6 +52,8 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 | [`.agent-context/stacks/php.md`](.agent-context/stacks/php.md) | PHP projects |
 | [`.agent-context/stacks/go.md`](.agent-context/stacks/go.md) | Go projects |
 | [`.agent-context/stacks/csharp.md`](.agent-context/stacks/csharp.md) | C# / .NET projects |
+| [`.agent-context/stacks/rust.md`](.agent-context/stacks/rust.md) | Rust projects |
+| [`.agent-context/stacks/ruby.md`](.agent-context/stacks/ruby.md) | Ruby on Rails projects |
 
 ### Blueprints (Load When Scaffolding)
 
@@ -65,6 +69,9 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 | [`.agent-context/blueprints/ci-github-actions.md`](.agent-context/blueprints/ci-github-actions.md) | GitHub Actions pipeline |
 | [`.agent-context/blueprints/ci-gitlab.md`](.agent-context/blueprints/ci-gitlab.md) | GitLab CI pipeline |
 | [`.agent-context/blueprints/observability.md`](.agent-context/blueprints/observability.md) | OpenTelemetry stack |
+| [`.agent-context/blueprints/graphql-grpc-api.md`](.agent-context/blueprints/graphql-grpc-api.md) | GraphQL / gRPC API definitions |
+| [`.agent-context/blueprints/infrastructure-as-code.md`](.agent-context/blueprints/infrastructure-as-code.md) | Infrastructure as Code pipeline |
+| [`.agent-context/blueprints/kubernetes-manifests.md`](.agent-context/blueprints/kubernetes-manifests.md) | Kubernetes manifests structure |
 
 ### Review Checklists (Load Before Completion)
 

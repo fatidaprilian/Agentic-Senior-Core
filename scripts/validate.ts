@@ -126,6 +126,8 @@ async function validateRuleFiles(): Promise<void> {
     "microservices.md",
     "event-driven.md",
     "database-design.md",
+    "realtime.md",
+    "frontend-architecture.md",
   ];
 
   for (const rule of expectedRules) {
@@ -146,7 +148,7 @@ async function validateRuleFiles(): Promise<void> {
 async function validateStackFiles(): Promise<void> {
   console.log("\n🔧 Checking stack profiles...");
 
-  const expectedStacks = ["typescript.md", "python.md", "java.md", "php.md", "go.md", "csharp.md"];
+  const expectedStacks = ["typescript.md", "python.md", "java.md", "php.md", "go.md", "csharp.md", "rust.md", "ruby.md"];
 
   for (const stack of expectedStacks) {
     const filePath = join(AGENT_CONTEXT_DIR, "stacks", stack);
@@ -172,7 +174,10 @@ async function validateBlueprintFiles(): Promise<void> {
     "aspnet-api.md",
     "ci-github-actions.md",
     "ci-gitlab.md",
-    "observability.md"
+    "observability.md",
+    "graphql-grpc-api.md",
+    "infrastructure-as-code.md",
+    "kubernetes-manifests.md"
   ];
 
   for (const blueprint of expectedBlueprints) {
