@@ -51,6 +51,12 @@ If the user asks to "build", "create", or "start" a new project/system, **IMMEDI
 2. Propose the most efficient technology stack and draft a high-level architecture plan.
 3. Wait for user approval before generating any code or files.
 
+### Refactor & Legacy Code Trigger (Existing Projects)
+If the user asks to "refactor", "fix", "update", or "migrate" existing code:
+1. Read `.agent-context/rules/architecture.md` and `.agent-context/rules/naming-conv.md`.
+2. Analyze the provided code against these standards.
+3. Propose a refactor plan before changing the code.
+
 When starting a new task or generating code, follow this loading order:
 
 ### Step 1: Load Universal Rules (ALWAYS)

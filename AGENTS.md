@@ -14,6 +14,11 @@ If the user asks to "build", "create", or "start" a new project, system, or app,
 2. Propose the most efficient technology stack based on their description.
 3. Draft an architecture plan and await approval before generating any code.
 
+## Refactor & Legacy Code Trigger
+If the user asks to "refactor", "fix", "update", or "migrate" existing code:
+1. Read `.agent-context/rules/architecture.md` and `.agent-context/rules/naming-conv.md`.
+2. Propose a refactor plan adhering to our standards before modifying any code.
+
 ## Knowledge Base
 
 All engineering rules are located in `.agent-context/`. Load them before generating any code.
