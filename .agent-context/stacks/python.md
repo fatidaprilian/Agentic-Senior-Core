@@ -4,7 +4,7 @@
 
 ## Type System (Enforced)
 
-### Type Hints Everywhere (Python 3.10+)
+### Type Hints Everywhere (Python 3.12+)
 ```python
 # BANNED: Untyped function signatures
 def process_data(data, options):
@@ -126,7 +126,7 @@ async with httpx.AsyncClient() as client:
 |------|---------|-----|
 | Web framework | `fastapi` | Async, type-safe, auto OpenAPI docs |
 | Validation | `pydantic` v2 | Fast, Rust-powered, zero compromise |
-| ORM | `sqlalchemy` 2.0+ / `tortoise-orm` | Mature, async support |
+| ORM | `sqlalchemy` 2.0+ / `sqlmodel` | Mature, async support. SQLModel wraps SQLAlchemy + Pydantic |
 | HTTP client | `httpx` | Async-native, requests-compatible API |
 | Testing | `pytest` + `pytest-asyncio` | Standard, plugin-rich |
 | Linting | `ruff` | 10-100x faster than flake8+isort+black combined |

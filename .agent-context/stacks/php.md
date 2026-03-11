@@ -3,7 +3,9 @@
 > PHP 8.x is a different language from PHP 5.
 > If your AI writes PHP without type declarations, reject it immediately.
 
-## Language Version: PHP 8.2+ (Strict)
+## Language Version: PHP 8.5+ (Latest Stable)
+
+PHP 8.5 is stable since November 2025. Use modern PHP features including the pipe operator (`|>`), `Clone With`, and readonly classes.
 
 ### Strict Types Everywhere
 ```php
@@ -40,9 +42,9 @@ enum OrderStatus: string {
 }
 ```
 
-### Readonly Properties and Classes (PHP 8.2+)
+### Readonly Properties and Classes (PHP 8.2+) and Pipe Operator (PHP 8.5+)
 ```php
-// Use readonly for DTOs and value objects
+// Readonly for DTOs and value objects
 readonly class CreateUserDto {
     public function __construct(
         public string $name,
@@ -50,6 +52,12 @@ readonly class CreateUserDto {
         public int $age,
     ) {}
 }
+
+// Pipe operator for cleaner function chains (PHP 8.5)
+$result = $input
+    |> 'trim'
+    |> 'strtolower'
+    |> fn($s) => str_replace(' ', '-', $s);
 ```
 
 ---
@@ -143,7 +151,7 @@ parameters:
 
 | Need | Library | Why |
 |------|---------|-----|
-| Framework | Laravel 11+ | Most productive PHP framework |
+| Framework | Laravel 12 | Most productive PHP framework, auto eager loading, GraphQL |
 | Validation | Laravel Form Requests | Built-in, declarative |
 | ORM | Eloquent | Convention over configuration |
 | Testing | PHPUnit / Pest | Pest preferred for readability |

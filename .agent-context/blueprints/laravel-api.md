@@ -1,12 +1,12 @@
 # Blueprint: Laravel API
 
-> PHP backend API service using Laravel 11+, Form Requests, Eloquent, and Scribe for docs.
+> PHP backend API service using Laravel 12, PHP 8.5+, Form Requests, Eloquent, and Scribe for docs.
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | Laravel 11+ |
+| Framework | Laravel 12 |
 | Validation | Form Requests |
 | ORM | Eloquent |
 | Migration | Laravel Migrations |

@@ -1,13 +1,13 @@
 # Blueprint: Spring Boot API
 
-> Java backend API service using Spring Boot 3.x, Java 21+, Spring Data JPA, and Flyway.
+> Java backend API service using Spring Boot 4.x, Java 25+, Spring Data JPA, and Flyway.
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | Spring Boot 3.x |
-| Language | Java 21+ |
+| Framework | Spring Boot 4.x (Spring Framework 7) |
+| Language | Java 25+ (LTS) |
 | Validation | Jakarta Bean Validation |
 | ORM | Spring Data JPA (Hibernate) |
 | Migration | Flyway |

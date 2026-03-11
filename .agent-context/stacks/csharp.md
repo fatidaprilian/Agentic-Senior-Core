@@ -3,7 +3,9 @@
 > C# has evolved massively. Use the modern features.
 > If your code looks like it's from 2015, it's wrong.
 
-## Language Version: C# 12+ / .NET 8+
+## Language Version: C# 14+ / .NET 10 LTS
+
+.NET 10 is the latest LTS release (November 2025, 3 years support). C# 14 ships with .NET 10. Use modern features: records, primary constructors, extension members, nullable reference types.
 
 ### Nullable Reference Types (Mandatory)
 ```xml
@@ -27,7 +29,7 @@ public record CreateUserRequest(string Name, string Email, int Age);
 public record UserResponse(Guid Id, string Name, string Email, DateTime CreatedAt);
 ```
 
-### Primary Constructors (C# 12)
+### Primary Constructors (C# 12+)
 ```csharp
 // Clean dependency injection
 public class UserService(IUserRepository userRepository, ILogger<UserService> logger)
@@ -118,8 +120,8 @@ ProjectName/
 
 | Need | Library | Why |
 |------|---------|-----|
-| Framework | ASP.NET Core Minimal APIs | Lightweight, modern, fast |
-| ORM | EF Core 8+ | Feature-rich, LINQ, migrations |
+| Framework | ASP.NET Core 10 Minimal APIs | LTS, lightweight, OpenAPI 3.1, passkey auth |
+| ORM | EF Core 10 | LINQ, migrations, vector search, JSON types |
 | Validation | FluentValidation | Expressive, testable, separates concerns |
 | Testing | xUnit + NSubstitute + Testcontainers | Industry standard for .NET |
 | Logging | Serilog + structured sinks | Best structured logging for .NET |
@@ -127,7 +129,8 @@ ProjectName/
 | Mapping | Mapster or manual extension methods | Mapster faster than AutoMapper |
 | HTTP client | `IHttpClientFactory` | Pooled, resilient, built-in |
 | Configuration | Options pattern + `IOptions<T>` | Type-safe, validated config |
-| Auth | ASP.NET Core Identity / JWT | Built-in, well-documented |
+| Auth | ASP.NET Core Identity / JWT / Passkeys | Built-in passkey support in .NET 10 |
+| Cloud-native | .NET Aspire | Orchestration, observability, service defaults |
 
 ---
 

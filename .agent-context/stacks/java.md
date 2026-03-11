@@ -3,9 +3,9 @@
 > Java can be clean. It just needs discipline.
 > Stop writing 200-line classes for a 10-line operation.
 
-## Language Version: Java 21+ (LTS)
+## Language Version: Java 25+ (LTS)
 
-Use modern Java features aggressively. Do not write Java 8-style code in 2025.
+Java 25 is the latest LTS release (September 2025, supported until 2033). Use modern Java features aggressively. Do not write pre-Java 21 style code.
 
 ### Records Over POJOs
 ```java
@@ -64,7 +64,7 @@ public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserReq
 
 ---
 
-## Project Structure (Spring Boot)
+## Project Structure (Spring Boot 4)
 
 ```
 project-name/
@@ -108,13 +108,13 @@ project-name/
 
 | Need | Library | Why |
 |------|---------|-----|
-| Framework | Spring Boot 3.x | Industry standard, mature ecosystem |
+| Framework | Spring Boot 4.x (Spring Framework 7) | Industry standard, virtual threads native support |
 | Validation | Jakarta Bean Validation | Built into Spring Boot |
 | ORM | Spring Data JPA / Hibernate | Standard, powerful |
 | Migration | Flyway | SQL-based, version controlled |
 | Mapping | MapStruct | Compile-time, type-safe DTO mapping |
 | Testing | JUnit 5 + Mockito + Testcontainers | Standard stack |
-| HTTP client | Spring WebClient / RestClient | Non-blocking, built-in |
+| HTTP client | Spring RestClient / WebClient | RestClient (sync, new in Boot 4), WebClient (reactive) |
 | Logging | SLF4J + Logback (or Log4j2) | Standard, structured JSON output |
 | Build | Gradle (Kotlin DSL) or Maven | Gradle preferred for modern projects |
 | API docs | springdoc-openapi | Auto-generates OpenAPI from code |
