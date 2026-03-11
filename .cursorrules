@@ -69,6 +69,8 @@ Read ALL files in `.agent-context/rules/`:
 - `microservices.md` — When and how to split the monolith
 - `event-driven.md` — Pub/sub, CQRS, and event sourcing
 - `database-design.md` — Normalization, indexing, and migrations
+- `realtime.md` — WebSockets scaling & strict pub/sub
+- `frontend-architecture.md` — Smart/Dumb UI, TanStack Query vs Zustand
 
 ### Step 2: Load Language Profile (BY CONTEXT)
 Based on the project's tech stack, load the relevant file from `.agent-context/stacks/`:
@@ -78,6 +80,8 @@ Based on the project's tech stack, load the relevant file from `.agent-context/s
 - PHP → `stacks/php.md` (V1.1)
 - Go → `stacks/go.md` (V1.1)
 - C#/.NET → `stacks/csharp.md` (V1.1)
+- Rust → `stacks/rust.md` (V1.3)
+- Ruby on Rails → `stacks/ruby.md` (V1.3)
 
 ### Step 3: Load Blueprint (IF SCAFFOLDING)
 If creating a new project or module, load the relevant blueprint from `.agent-context/blueprints/`.

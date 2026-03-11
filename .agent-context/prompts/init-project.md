@@ -64,6 +64,8 @@ Every dependency MUST be justified per rules/efficiency-vs-hype.md.
 - `php`
 - `go`
 - `csharp`
+- `rust`
+- `ruby`
 
 ### Blueprints (`[BLUEPRINT].md`)
 | Blueprint | Use When |
@@ -78,3 +80,6 @@ Every dependency MUST be justified per rules/efficiency-vs-hype.md.
 | `ci-github-actions`| GitHub Actions CI/CD pipeline |
 | `ci-gitlab`      | GitLab CI/CD pipeline |
 | `observability`  | OpenTelemetry stack |
+| `graphql-grpc-api` | GraphQL / gRPC API definitions |
+| `infrastructure-as-code` | Infrastructure as Code (Terraform | Pulumi) |
+| `kubernetes-manifests` | Kubernetes manifests structure |

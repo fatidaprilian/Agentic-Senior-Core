@@ -37,6 +37,8 @@ Read ALL files in `.agent-context/rules/`:
 - `microservices.md` — Monolith first, split triggers, strangler fig
 - `event-driven.md` — Event sourcing, CQRS, idempotency
 - `database-design.md` — 3NF default, index FKs, safe migrations
+- `realtime.md` — WebSockets scaling & strict pub/sub
+- `frontend-architecture.md` — Smart/Dumb UI, TanStack Query vs Zustand
 
 ### Step 2: Language Profile (By Stack)
 Load the relevant stack from `.agent-context/stacks/`:
@@ -46,6 +48,8 @@ Load the relevant stack from `.agent-context/stacks/`:
 - PHP → `stacks/php.md`
 - Go → `stacks/go.md`
 - C#/.NET → `stacks/csharp.md`
+- Rust → `stacks/rust.md`
+- Ruby on Rails → `stacks/ruby.md`
 
 ### Step 3: Blueprint (If Scaffolding)
 Load from `.agent-context/blueprints/` when creating new projects.

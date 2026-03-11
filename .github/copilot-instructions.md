@@ -28,6 +28,8 @@ Before generating code, read ALL engineering rules in `.agent-context/rules/`:
 - `microservices.md` — Monolith first, split triggers, strangler fig
 - `event-driven.md` — Event sourcing, CQRS, idempotency
 - `database-design.md` — 3NF default, index FKs, safe migrations
+- `realtime.md` — WebSockets scaling & strict pub/sub
+- `frontend-architecture.md` — Smart/Dumb UI, TanStack Query vs Zustand
 
 ## Language Profile
 Load the relevant stack profile from `.agent-context/stacks/`:
@@ -37,6 +39,8 @@ Load the relevant stack profile from `.agent-context/stacks/`:
 - PHP → `stacks/php.md`
 - Go → `stacks/go.md`
 - C#/.NET → `stacks/csharp.md`
+- Rust → `stacks/rust.md`
+- Ruby on Rails → `stacks/ruby.md`
 
 ## The Reasoning Clause (MANDATORY)
 Every time you reject a code block, suggest a change, or enforce a rule, you MUST provide a Reasoning Chain:
