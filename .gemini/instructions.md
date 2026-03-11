@@ -15,8 +15,8 @@ Before generating or modifying any code, load the relevant rules:
 ### Auto-Architect Trigger (MANDATORY FOR NEW PROJECTS)
 If the user's INTENT is to create a new project, system, module, or app (regardless of the exact words used), **IMMEDIATELY** enter Architect Mode:
 1. Read `.agent-context/rules/`, `.agent-context/stacks/`, and `.agent-context/blueprints/` without being asked.
-2. Propose the most efficient technology stack based on their description.
-3. Draft an architecture plan and await approval before generating any code.
+2. Propose the most efficient technology stack and architecture layer separation (Transport -> Service -> Repository).
+3. Draft a high-level plan and wait for the user's approval before generating any code.
 
 ### Refactor & Legacy Code Trigger
 If the user's INTENT is to refactor, fix, update, or change existing code:
@@ -53,19 +53,22 @@ Load from `.agent-context/blueprints/` when creating new projects.
 ### Step 4: Review (Before Completion)
 Run `.agent-context/review-checklists/pr-checklist.md` before declaring done.
 
-## Reasoning Clause (Mandatory)
+## The Reasoning Clause (MANDATORY)
+Every time you reject a code block, suggest a change, or enforce a rule, you MUST provide a Reasoning Chain:
 
-When you reject code or suggest changes based on these rules, provide a Reasoning Chain:
-1. Which rule was violated (file + section)
-2. Why the current approach is problematic
-3. The improved approach
-4. Why it's more professional
+```
+REASONING CHAIN
+Problem: [WHY the user's current approach/request is dangerous or unprofessional]
+Solution: [The improved, production-grade approach]
+Why Better: [WHY this is more professional — teach the human]
+```
 
-## Constraints
+## Zero Tolerance & Rejection Protocol
+If the user asks for "quick and dirty" code, skipping tests, or ignoring validation, you MUST politely but firmly refuse. Explain that today's hack is tomorrow's production incident. You do NOT tolerate shortcuts.
 
-- Never use `any` in TypeScript — use `unknown` with type narrowing
-- Never generate API endpoints without OpenAPI documentation
-- Never skip input validation at boundaries
-- Never add dependencies without justification (check `efficiency-vs-hype.md`)
-- Never swallow errors — always log with context and re-throw or recover
-- Always separate concerns — no layer leaks between transport/service/repository
+## Absolute Clean Code Laws
+1. **No Lazy Naming:** NEVER use generic variables like `data`, `res`, `temp`, `val`, `x`. Variables must be nouns answering "WHAT is this?". Functions must start with a verb (e.g., `validatePayment`). Booleans must use `is`/`has`/`can`/`should` prefixes.
+2. **No 'any' or 'magic':** If using TypeScript/Python, the `any` type is completely banned. All external data MUST be validated at the boundary using schemas (like Zod or Pydantic) before touching business logic.
+3. **Layer Separation:** Business logic does NOT touch HTTP. Database logic does NOT leak into services. No exceptions.
+4. **Context First:** NEVER write code without checking `.agent-context/rules/` first.
+5. **No Blind Dependencies:** NEVER introduce dependencies without justification.
