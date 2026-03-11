@@ -55,8 +55,9 @@ git clone https://github.com/fatidaprilian/Agentic-Senior-Core.git
 
 ### Zero-Prompt Setup (Start Coding Immediately)
 
-Thanks to the **Auto-Architect Trigger** baked into this repository, you no longer need to copy-paste massive initiation prompts. The AI already knows what to do.
+Thanks to the **Intent-Based Triggers** baked into this repository, you no longer need to copy-paste massive initiation prompts. The AI already knows what to do based on your intent.
 
+#### 1. For New Projects (Auto-Architect Trigger)
 Just open your AI IDE's chat (Cursor, Windsurf, Copilot, or Antigravity) and type any natural language request. For example:
 
 ```text
@@ -66,10 +67,24 @@ Just open your AI IDE's chat (Cursor, Windsurf, Copilot, or Antigravity) and typ
 - "Halo, tolong buatkan sistem manajemen inventaris."
 ```
 **What the AI will do automatically:**
-1. Detect that you want to start a new project.
+1. Detect your intent to start a new project.
 2. Quietly read ALL strict engineering rules, language stacks, and blueprints in `.agent-context/`.
 3. Act as a **Principal Architect** by proposing the most efficient stack for your specific requirements.
 4. Draft a high-level architecture plan and wait for your approval before generating any code.
+
+#### 2. For Existing Projects (Legacy Refactor Trigger)
+If you paste the `.agent-context` folder into an existing, messy codebase, you can just say:
+
+```text
+- "Refactor this login controller."
+- "Fix the bugs in the user service."
+- "Tolong perbaiki routing di aplikasi ini."
+```
+**What the AI will do automatically:**
+1. Detect your intent to refactor or fix existing code.
+2. Quietly read the specific rules for architecture and clean code (`architecture.md`, `naming-conv.md`, etc.).
+3. Analyze your legacy code and point out where it violates the standards.
+4. Propose a refactor plan before rewriting the code.
 
 > **Note:** Want to skip the architecture proposal and force the AI to use a specific framework right away? See the direct prompts in [`.agent-context/prompts/init-project.md`](.agent-context/prompts/init-project.md).
 
