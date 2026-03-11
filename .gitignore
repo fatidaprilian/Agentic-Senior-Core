@@ -1,0 +1,21 @@
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+
+# Node (for scripts/)
+node_modules/
+bun.lockb
+
+# Logs
+*.log
+
+# Env
+.env
+.env.local
