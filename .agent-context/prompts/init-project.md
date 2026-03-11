@@ -1,37 +1,71 @@
-# Prompt: Initialize Project
+# Prompts: Initialize Project
 
-> Copy-paste this prompt to your AI agent when starting a new project.
-> Replace `[BLUEPRINT]` and `[PROJECT_NAME]` with your values.
+> Copy-paste one of these prompts to your AI agent (Cursor, Windsurf, Copilot, Antigravity) right after cloning this repository.
 
 ---
 
-## The Prompt
+## Option 1: The Architect Prompt (Recommended)
+Use this when you have an idea, but want the AI to choose the most efficient stack and framework based on this repository's engineering standards.
 
+```text
+I want to build a [DESCRIBE YOUR PROJECT AND MAIN FEATURES HERE].
+
+Context: You are a Principal Software Architect operating in a workspace with strict engineering standards.
+
+Step 1: Context Gathering
+1. Read `AGENTS.md` to understand your role and available knowledge base.
+2. Scan all files in `.agent-context/rules/` to understand our mandatory engineering laws.
+3. Review the available technology stacks in `.agent-context/stacks/` and blueprints in `.agent-context/blueprints/`.
+
+Step 2: Architecture Proposal
+Based strictly on my project description and our repository's existing rules (especially `efficiency-vs-hype.md`):
+1. Propose the most efficient technology stack from our approved profiles.
+2. Explain WHY this stack is the best choice for this specific project.
+3. Draft a high-level architecture plan.
+
+Do not write any application code yet. Write your proposal and wait for my approval. Once I approve, you will scaffold the project using the relevant blueprint.
 ```
-I want to build [PROJECT_NAME].
+
+---
+
+## Option 2: The Direct Blueprint Prompt
+Use this when you already know exactly which framework you want to use from the available blueprints.
+
+```text
+I want to build [PROJECT NAME].
 
 Before writing any code:
-1. Read ALL files in .agent-context/rules/ to understand our engineering standards.
-2. Read .agent-context/stacks/typescript.md for language-specific guidelines.
-3. Read .agent-context/blueprints/[BLUEPRINT].md for the project structure.
+1. Read `AGENTS.md` to understand your role.
+2. Read ALL files in `.agent-context/rules/` to understand our engineering standards.
+3. Read `.agent-context/stacks/[STACK].md` for language-specific guidelines.
+4. Read `.agent-context/blueprints/[BLUEPRINT].md` for the project structure.
 
 Now scaffold the initial project structure following the blueprint exactly:
 - Create all directories and files from the blueprint
-- Set up tsconfig.json with strict mode (all flags from stacks/typescript.md)
-- Create .env.example with placeholder values
-- Set up Zod-validated environment config
+- Set up the environment config and validation (e.g., Zod, Pydantic, FluentValidation)
 - Set up the error handling foundation (base error class + global handler)
-- Set up the logger (pino)
+- Set up the logger
 - Create a health check endpoint
-- Initialize the ORM with initial schema
+- Initialize the ORM/Database connection
 
 Every file MUST follow the naming conventions from rules/naming-conv.md.
 Every module MUST follow the architecture from rules/architecture.md.
 Every dependency MUST be justified per rules/efficiency-vs-hype.md.
 ```
 
-## Available Blueprints
+---
 
+## Available Stacks & Blueprints Reference
+
+### Stacks (`[STACK].md`)
+- `typescript`
+- `python`
+- `java`
+- `php`
+- `go`
+- `csharp`
+
+### Blueprints (`[BLUEPRINT].md`)
 | Blueprint | Use When |
 |-----------|----------|
 | `api-nextjs` | Next.js App Router API project |
