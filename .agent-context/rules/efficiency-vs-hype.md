@@ -48,15 +48,15 @@ Prefer packages that the ecosystem has settled on:
 
 | Need | ✅ Standard | ❌ Avoid |
 |------|-----------|---------|
-| HTTP client (Node) | `undici` (built-in) / `ky` | `axios` (bloated for most needs), `got` |
+| HTTP client (Node) | `undici` (built-in) / native `fetch` / `ky` | `axios` (declining, CVE-2025-58754, bloated) |
 | Validation | `zod` | `joi` (heavier), `yup` (less type-safe) |
 | ORM (Node) | `prisma`, `drizzle` | `sequelize` (legacy API), `typeorm` (decorator hell) |
-| Date handling | `date-fns`, `dayjs` | `moment` (deprecated, massive) |
-| Testing | `vitest`, `jest` | `mocha` + `chai` + `sinon` (3 deps for what 1 does) |
-| Password hashing | `bcrypt`, `argon2` | Custom crypto (NEVER) |
+| Date handling | `date-fns`, `dayjs`, `Temporal` (when stable) | `moment` (deprecated, massive) |
+| Testing | `vitest` (new projects), `jest` (existing) | `mocha` + `chai` + `sinon` (3 deps for what 1 does) |
+| Password hashing | `argon2` (OWASP primary), `bcrypt` (legacy) | Custom crypto (NEVER) |
 | Env loading | `dotenv` (if needed) | Custom `.env` parser |
 
-**Note:** These are current recommendations as of 2025. Evaluate against this framework; don't blindly follow.
+**Note:** These are current recommendations as of March 2026. Evaluate against this framework; don't blindly follow.
 
 ### 5. Can You Remove It Later? (The Exit Strategy)
 ```

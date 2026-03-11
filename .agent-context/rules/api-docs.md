@@ -25,12 +25,13 @@ REQUIRED: Documentation MUST be updated in the SAME commit as the endpoint chang
 
 ---
 
-## Documentation Format: OpenAPI 3.x (Non-Negotiable)
+## Documentation Format: OpenAPI 3.1 (Non-Negotiable)
 
-All APIs produce an OpenAPI 3.x specification. No proprietary formats. No "we'll add Swagger later."
+All APIs produce an OpenAPI 3.1 specification. Not 3.0, not proprietary formats, not "we'll add Swagger later."
 
 ### Why OpenAPI
 - Machine-readable: clients, tests, and mocks can be generated from the spec
+- Full JSON Schema Draft 2020-12 compatibility (3.1+ only)
 - Vendor-neutral: works with Scalar, Swagger UI, Redoc, Postman, Stoplight
 - Version-controllable: the spec is a file you can diff and review
 
@@ -116,7 +117,7 @@ Expose the spec at `/api/docs` or `/api/openapi.json`.
 
 ### Other Frameworks (Express, Fastify, Hono)
 Use `swagger-jsdoc` + TSDoc comments, or `@asteasolutions/zod-to-openapi`.
-The output MUST be a valid OpenAPI 3.x JSON/YAML file served at a known endpoint.
+The output MUST be a valid OpenAPI 3.1 JSON/YAML file served at a known endpoint.
 
 ---
 

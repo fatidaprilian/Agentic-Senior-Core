@@ -104,8 +104,11 @@ If a secret is accidentally committed:
 ## Authentication & Authorization
 
 ### Authentication Rules
-1. Never implement custom auth crypto — use established libraries (bcrypt, argon2, Passport, NextAuth)
-2. Hash passwords with bcrypt (cost ≥ 12) or argon2 — NEVER MD5, SHA1, or plain SHA256
+1. Never implement custom auth crypto — use established libraries (argon2, bcrypt, Passport, NextAuth)
+2. Hash passwords with **argon2id** (OWASP primary recommendation) — bcrypt only for legacy systems
+   - Argon2id: minimum 19 MiB memory, 2 iterations, 1 parallelism
+   - bcrypt: minimum cost 12 (legacy systems only — limited to 72 bytes, no memory-hardness)
+   - NEVER: MD5, SHA1, plain SHA256, or PBKDF2 without FIPS requirement
 3. Use constant-time comparison for tokens and hashes
 4. Implement rate limiting on auth endpoints (max 5 attempts per minute per IP)
 5. Session tokens must be cryptographically random (≥ 256 bits)
@@ -163,6 +166,17 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 
 ---
 
+## Supply Chain Security (OWASP 2025 A03)
+
+1. **Pin all dependency versions** — use lockfiles, never `*` ranges in production
+2. **Audit dependencies regularly** — `npm audit`, `pip audit`, `composer audit`
+3. **Verify package integrity** — check checksums, use signed packages where available
+4. **Minimize dependency trees** — fewer transitive dependencies = smaller attack surface
+5. **Monitor for CVEs** — automate vulnerability scanning in CI (Dependabot, Snyk, Trivy)
+6. **Review new dependencies** — check maintainer history, download trends, and bus factor before adding
+
+---
+
 ## The Security Checklist (Quick Reference)
 
 Before any code is "done", verify:
@@ -171,9 +185,11 @@ Before any code is "done", verify:
 - [ ] No string concatenation in queries/commands
 - [ ] No secrets in source code
 - [ ] Authentication uses established libraries
+- [ ] Password hashing uses argon2id (or bcrypt for legacy)
 - [ ] Authorization enforced server-side
 - [ ] Security headers configured
 - [ ] CORS properly restricted
 - [ ] Rate limiting on sensitive endpoints
 - [ ] Error responses don't leak internal details
 - [ ] Logging includes security events (login failures, permission denials)
+- [ ] Dependencies audited for known vulnerabilities
