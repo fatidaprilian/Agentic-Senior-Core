@@ -94,6 +94,7 @@ async function validateRequiredFiles(): Promise<void> {
     ".windsurfrules",
     "AGENTS.md",
     ".github/copilot-instructions.md",
+    ".gemini/instructions.md",
     "README.md",
     "LICENSE",
     ".gitignore",

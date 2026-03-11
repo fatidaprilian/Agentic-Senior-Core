@@ -72,6 +72,17 @@ mkdir -p "$TARGET_DIR/.github"
 cp "$REPO_DIR/.github/copilot-instructions.md" "$TARGET_DIR/.github/copilot-instructions.md"
 echo -e "${GREEN}✅ Copied .github/copilot-instructions.md${NC}"
 
+# Copy Gemini & Antigravity instructions
+if [ -d "$REPO_DIR/.gemini" ]; then
+  cp -r "$REPO_DIR/.gemini" "$TARGET_DIR/.gemini"
+  echo -e "${GREEN}✅ Copied .gemini/instructions.md${NC}"
+fi
+
+if [ -d "$REPO_DIR/.agents" ]; then
+  cp -r "$REPO_DIR/.agents" "$TARGET_DIR/.agents"
+  echo -e "${GREEN}✅ Copied .agents/workflows/${NC}"
+fi
+
 echo ""
 echo "═══════════════════════════════════════════════════"
 echo -e "  ${GREEN}DONE!${NC} Your project now has Staff-level AI standards."
