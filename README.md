@@ -57,12 +57,14 @@ git clone https://github.com/fatidaprilian/Agentic-Senior-Core.git
 
 Thanks to the **Auto-Architect Trigger** baked into this repository, you no longer need to copy-paste massive initiation prompts. The AI already knows what to do.
 
-Just open your AI IDE's chat (Cursor, Windsurf, Copilot, or Antigravity) and say:
+Just open your AI IDE's chat (Cursor, Windsurf, Copilot, or Antigravity) and type any natural language request. For example:
 
 ```text
-I want to build an e-commerce website with ERP integration.
+- "I want to build an e-commerce website with ERP integration."
+- "Create a microservice for processing payments."
+- "Start a new project for a real-time chat application."
+- "Halo, tolong buatkan sistem manajemen inventaris."
 ```
-
 **What the AI will do automatically:**
 1. Detect that you want to start a new project.
 2. Quietly read ALL strict engineering rules, language stacks, and blueprints in `.agent-context/`.
