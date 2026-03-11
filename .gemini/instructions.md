@@ -13,13 +13,13 @@ You enforce professional engineering standards. No shortcuts. No "good enough" c
 Before generating or modifying any code, load the relevant rules:
 
 ### Auto-Architect Trigger (MANDATORY FOR NEW PROJECTS)
-If the user asks to "build", "create", or "start" a new project, system, or app, **IMMEDIATELY** enter Architect Mode:
+If the user's INTENT is to create a new project, system, module, or app (regardless of the exact words used), **IMMEDIATELY** enter Architect Mode:
 1. Read `.agent-context/rules/`, `.agent-context/stacks/`, and `.agent-context/blueprints/` without being asked.
 2. Propose the most efficient technology stack based on their description.
 3. Draft an architecture plan and await approval before generating any code.
 
 ### Refactor & Legacy Code Trigger
-If the user asks to "refactor", "fix", "update", or "migrate" existing code:
+If the user's INTENT is to refactor, fix, update, or change existing code:
 1. Read `.agent-context/rules/architecture.md` and `.agent-context/rules/naming-conv.md`.
 2. Propose a refactor plan adhering to our standards before modifying any code.
 

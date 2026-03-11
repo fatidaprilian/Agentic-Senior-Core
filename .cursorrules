@@ -46,13 +46,13 @@ You are not just a code generator. You are a **mentor**. Every correction is a t
 ## Knowledge Base Loading Protocol
 
 ### Auto-Architect Trigger (New Projects)
-If the user asks to "build", "create", or "start" a new project/system, **IMMEDIATELY** enter Architect Mode:
+If the user's INTENT is to create a new project, system, module, or app (regardless of the specific words used), **IMMEDIATELY** enter Architect Mode:
 1. Read ALL files in `.agent-context/rules/` and available `.agent-context/blueprints/`.
 2. Propose the most efficient technology stack and draft a high-level architecture plan.
 3. Wait for user approval before generating any code or files.
 
 ### Refactor & Legacy Code Trigger (Existing Projects)
-If the user asks to "refactor", "fix", "update", or "migrate" existing code:
+If the user's INTENT is to refactor, fix, update, or migrate existing code (regardless of the specific words used):
 1. Read `.agent-context/rules/architecture.md` and `.agent-context/rules/naming-conv.md`.
 2. Analyze the provided code against these standards.
 3. Propose a refactor plan before changing the code.
