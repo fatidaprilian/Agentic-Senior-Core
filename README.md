@@ -293,13 +293,13 @@ bun scripts/validate.ts
 - [x] Blueprint: Infrastructure as Code (`infrastructure-as-code.md`)
 - [x] Blueprint: Kubernetes manifests structure (`kubernetes-manifests.md`)
 
-### V1.4 (Planned) — Dynamic Governance Engine
-- [ ] EPIC 1: The Delivery Engine (Interactive Bun/Node CLI replacing bash script)
-- [ ] EPIC 2: Dynamic Context Compiler (Merge rules and blueprints into a single context file)
-- [ ] EPIC 3: Codebase Intelligence (Add `.agent-context/state/` for architecture and dependency mapping)
-- [ ] EPIC 4: The Override System (Support `.agent-override.md` for enterprise readiness)
-- [ ] EPIC 5: Automated Guardrails & LLM-as-a-Judge (CI/CD integration using `pr-checklist.md`)
-- [ ] EPIC 6: Model Context Protocol (MCP) & Self-Healing Loop (Autonomous PR error fixing via MCP)
+### V1.4 (Current) — Dynamic Governance Engine
+- [ ] EPIC 1: **The Delivery Engine** (Interactive Bun/Node CLI replacing bash script)
+- [ ] EPIC 2: **Dynamic Context Compiler** (Merge rules and blueprints into a single optimized context file)
+- [ ] EPIC 3: **Codebase Intelligence** (Add `.agent-context/state/` for architecture and dependency mapping)
+- [ ] EPIC 4: **The Override System** (Enterprise Readiness: `.agent-override.md` support)
+- [ ] EPIC 5: **Automated Guardrails & LLM-as-a-Judge** (CI/CD integration using `pr-checklist.md`)
+- [ ] EPIC 6: **Model Context Protocol (MCP) & Self-Healing Loop** (Autonomous PR fixes via MCP)
 
 ---
 

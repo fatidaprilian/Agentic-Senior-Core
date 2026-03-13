@@ -7,8 +7,17 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$(dirname "$SCRIPT_DIR")"
+if [ -n "${BASH_SOURCE[0]:-}" ]; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  REPO_DIR="$(dirname "$SCRIPT_DIR")"
+  IS_PIPED=false
+else
+  # Being piped via curl | bash
+  IS_PIPED=true
+  REPO_DIR=$(mktemp -d)
+  echo "Downloading Agentic-Senior-Core repository..."
+  curl -sSL https://github.com/fatidaprilian/Agentic-Senior-Core/archive/refs/heads/main.tar.gz | tar -xz -C "$REPO_DIR" --strip-components=1
+fi
 
 # Colors
 RED='\033[0;31m'
