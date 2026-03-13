@@ -5,19 +5,31 @@
 # Usage: ./scripts/init-project.sh /path/to/your/project
 # ──────────────────────────────────────────────────────────
 
-set -euo pipefail
-
-if [ -n "${BASH_SOURCE[0]:-}" ]; then
-  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  REPO_DIR="$(dirname "$SCRIPT_DIR")"
-  IS_PIPED=false
-else
-  # Being piped via curl | bash
+# Detect if we are being run locally or piped
+# We check this BEFORE 'set -u' to avoid "unbound variable" noise on BASH_SOURCE
+IS_PIPED=false
+if [ -z "${BASH_SOURCE[0]:-}" ]; then
   IS_PIPED=true
+fi
+
+if [ "$IS_PIPED" = "true" ]; then
   REPO_DIR=$(mktemp -d)
   echo "Downloading Agentic-Senior-Core repository..."
   curl -sSL https://github.com/fatidaprilian/Agentic-Senior-Core/archive/refs/heads/main.tar.gz | tar -xz -C "$REPO_DIR" --strip-components=1
+else
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  REPO_DIR="$(dirname "$SCRIPT_DIR")"
 fi
+
+set -euo pipefail
+
+# Cleanup on exit if we created a temp dir
+cleanup() {
+  if [ "$IS_PIPED" = "true" ] && [ -d "${REPO_DIR:-}" ]; then
+    rm -rf "$REPO_DIR"
+  fi
+}
+trap cleanup EXIT
 
 # Colors
 RED='\033[0;31m'
