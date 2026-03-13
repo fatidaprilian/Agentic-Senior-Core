@@ -44,10 +44,24 @@ AI:  *Creates properly layered modules with Zod validation, typed errors,
 bunx @fatidaprilian/agentic-senior-core init
 ```
 
-The CLI asks:
-1. What is your core stack?
-2. Which blueprint do you want to scaffold?
-3. Include CI/CD guardrails?
+If you are totally new, choose beginner mode when prompted.
+You do not need to understand stack, blueprint, or CI/CD first.
+
+Beginner mode uses safe defaults automatically:
+- Stack: `TypeScript`
+- Blueprint: `API Nextjs`
+- CI/CD guardrails: `enabled`
+
+You can also force beginner mode directly:
+
+```bash
+bunx @fatidaprilian/agentic-senior-core init --newbie
+```
+
+Advanced users can still choose manually:
+1. Core stack
+2. Blueprint template
+3. Include CI/CD guardrails or not
 
 After answers are provided, the CLI runs the Dynamic Context Compiler and generates compiled governance files (`.cursorrules` and `.windsurfrules`) in your target project root.
 
