@@ -160,6 +160,37 @@ bun run validate
 - [x] EPIC 5: Automated Guardrails & LLM-as-a-Judge
 - [x] EPIC 6: MCP & Self-Healing Loop (`mcp.json`)
 
+### V1.5 (Planned) — Newbie-First Experience and Reliability
+1. Zero-Conf onboarding for complete beginners
+      - Add plain-language prompts before technical choices.
+      - Keep a one-command path with recommended defaults.
+      - Show a non-technical summary after initialization.
+
+2. Smart auto-detection for existing projects
+      - Detect likely stack from project files.
+      - Suggest stack + blueprint with confidence hints.
+      - Fall back to guided prompts when confidence is low.
+
+3. Preset profiles for team maturity
+      - Provide `beginner`, `balanced`, and `strict` profiles.
+      - Map profile to checklist depth and CI gate strictness.
+      - Keep compatibility with `.agent-override.md`.
+
+4. LLM Judge output standardization
+      - Normalize findings into `critical/high/medium/low`.
+      - Add CI-friendly output formatting for annotations.
+      - Introduce a policy threshold file for pass/fail behavior.
+
+5. Documentation split for fast onboarding
+      - Keep Quick Start short and beginner-oriented.
+      - Add a focused FAQ for basic terms and decisions.
+      - Add a Deep Dive path for advanced users.
+
+6. Quality and UX verification
+      - Expand validation checks for all CLI modes.
+      - Add smoke tests for `--newbie`, auto-detect, and strict profile.
+      - Track setup completion time as an onboarding KPI.
+
 ---
 
 ## Contributing
