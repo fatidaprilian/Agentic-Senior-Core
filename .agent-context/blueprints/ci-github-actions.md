@@ -17,11 +17,11 @@
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    PR / Push Trigger                      │
-├──────────┬──────────┬──────────┬──────────┬─────────────┤
-│   Lint   │  Build   │   Test   │ Security │   Docs      │
-│ (ESLint/ │ (tsc /   │ (Vitest/ │ (Audit / │ (OpenAPI    │
-│  ruff)   │  build)  │  pytest) │  Trivy)  │  validate)  │
-├──────────┴──────────┴──────────┴──────────┴─────────────┤
+├──────────┬──────────┬──────────┬──────────┬─────────────┬─────────────┤
+│   Lint   │  Build   │   Test   │ Security │   Docs      │  LLM Judge  │
+│ (ESLint/ │ (tsc /   │ (Vitest/ │ (Audit / │ (OpenAPI    │ (Checklist  │
+│  ruff)   │  build)  │  pytest) │  Trivy)  │  validate)  │ enforcement)│
+├──────────┴──────────┴──────────┴──────────┴─────────────┴─────────────┤
 │              Gate: All jobs must pass                     │
 ├─────────────────────────────────────────────────────────┤
 │              Deploy (on main only)                       │
@@ -105,6 +105,26 @@ jobs:
         with:
           name: build
           path: dist/
+
+  llm-judge:
+    needs: [lint, test, security, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      GITHUB_HEAD_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@<pin-sha>
+        with:
+          fetch-depth: 0   # Full history required for accurate git diff
+      - uses: actions/setup-node@<pin-sha>
+        with:
+          node-version: '22'
+      - name: Run LLM Judge
+        run: node scripts/llm-judge.mjs
 ```
 
 ### 2. Deploy Workflow (`deploy.yml`)
@@ -154,6 +174,7 @@ jobs:
 4. **Never print secrets** — GitHub masks them in logs, but don't `echo` them
 5. **Restrict self-hosted runners** — ephemeral containers only, never persistent VMs
 6. **Require PR approval** for workflows from forks
+7. **Minimize prompt scope** — send diff + checklist only, never full secret-bearing config
 
 ## Efficiency Rules
 
@@ -187,3 +208,4 @@ When setting up GitHub Actions for a new project:
 - [ ] Configure environment protection rules for production
 - [ ] Create `.nvmrc` or `.tool-versions` for runtime version
 - [ ] Configure branch protection: require CI pass before merge
+- [ ] Add `llm-judge` job that evaluates PR against `pr-checklist.md`

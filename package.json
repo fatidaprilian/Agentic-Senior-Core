@@ -2,6 +2,25 @@
   "name": "@fatidaprilian/agentic-senior-core",
   "version": "1.4.0",
   "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
+  "bin": {
+    "agentic-senior-core": "./bin/agentic-senior-core.js"
+  },
+  "files": [
+    "bin/",
+    "scripts/",
+    ".agent-context/",
+    ".agents/",
+    ".github/",
+    ".gemini/",
+    ".cursorrules",
+    ".windsurfrules",
+    "AGENTS.md",
+    ".agent-override.md",
+    "mcp.json",
+    "README.md",
+    "LICENSE",
+    "CONTRIBUTING.md"
+  ],
   "author": "fatidaprilian",
   "license": "MIT",
   "repository": {
@@ -20,6 +39,7 @@
     "agentic"
   ],
   "scripts": {
+    "init": "node ./bin/agentic-senior-core.js init",
     "validate": "bun run ./scripts/validate.ts"
   },
   "devDependencies": {

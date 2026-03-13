@@ -20,6 +20,7 @@ stages:
   - test        # Unit + integration tests
   - security    # Dependency audit + SAST
   - build       # Compile, bundle, containerize
+  - judge       # LLM-as-a-Judge checklist gate
   - deploy      # Staging → Production
 ```
 
@@ -39,6 +40,7 @@ stages:
   - test
   - security
   - build
+  - judge
   - deploy
 
 # ─── VALIDATE ───────────────────────────────────────────
@@ -105,6 +107,23 @@ build:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
 
+# ─── LLM JUDGE ──────────────────────────────────────────
+llm:judge:
+  stage: judge
+  image: node:22-alpine
+  variables:
+    OPENAI_API_KEY: $OPENAI_API_KEY
+    ANTHROPIC_API_KEY: $ANTHROPIC_API_KEY
+    GEMINI_API_KEY: $GEMINI_API_KEY
+    # CI_MERGE_REQUEST_DIFF_BASE_SHA and CI_COMMIT_SHA are set automatically
+    # by GitLab for merge request pipelines — no manual configuration needed.
+  before_script:
+    - git fetch --unshallow || true  # Ensure full history for git diff
+  script:
+    - node scripts/llm-judge.mjs
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
 # ─── DEPLOY ─────────────────────────────────────────────
 deploy:staging:
   stage: deploy
@@ -150,6 +169,7 @@ deploy:production:
 3. **Include GitLab SAST/DAST** templates for automated scanning
 4. **Limit runner access** — use tags to route jobs to appropriate runners
 5. **Artifact expiration** — set `expire_in` on all artifacts
+6. **Limit LLM input scope** — send only merge diff + checklist context
 
 ## Scaffolding Checklist
 
@@ -163,3 +183,4 @@ deploy:production:
 - [ ] Configure branch protection rules
 - [ ] Add `timeout` to long-running jobs
 - [ ] Use `needs:` for DAG optimization where possible
+- [ ] Add `llm:judge` stage that enforces `pr-checklist.md`

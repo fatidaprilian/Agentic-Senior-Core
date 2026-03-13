@@ -89,6 +89,10 @@ If creating a new project or module, load the relevant blueprint from `.agent-co
 ### Step 4: Load Checklists (BEFORE COMPLETION)
 Before declaring any task "done", run self-review using `.agent-context/review-checklists/pr-checklist.md`.
 
+### Step 5: Load State + Overrides (V1.4)
+- Read `.agent-context/state/architecture-map.md` and `.agent-context/state/dependency-map.md` before significant refactors.
+- Apply `.agent-override.md` only for explicit scoped exceptions. Default policy remains strict.
+
 ---
 
 ## Zero Tolerance & Rejection Protocol

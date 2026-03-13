@@ -90,8 +90,12 @@ async function validateRequiredFiles(): Promise<void> {
   console.log("\n📂 Checking required files...");
 
   const requiredFiles = [
+    "bin/agentic-senior-core.js",
+    "scripts/llm-judge.mjs",
     ".cursorrules",
     ".windsurfrules",
+    ".agent-override.md",
+    "mcp.json",
     "AGENTS.md",
     ".github/copilot-instructions.md",
     ".gemini/instructions.md",
@@ -206,6 +210,26 @@ async function validateChecklistFiles(): Promise<void> {
   }
 }
 
+async function validateStateFiles(): Promise<void> {
+  console.log("\n🧠 Checking state awareness files...");
+
+  const expectedStateFiles = ["architecture-map.md", "dependency-map.md"];
+
+  for (const stateFile of expectedStateFiles) {
+    const filePath = join(AGENT_CONTEXT_DIR, "state", stateFile);
+    if (await fileExists(filePath)) {
+      const content = await readFileContent(filePath);
+      if (content.trim().length > 100) {
+        pass(`state/${stateFile} (${content.length} chars)`);
+      } else {
+        fail(`state/${stateFile} is suspiciously short (${content.length} chars)`);
+      }
+    } else {
+      fail(`Missing state file: state/${stateFile}`);
+    }
+  }
+}
+
 async function validateCrossReferences(): Promise<void> {
   console.log("\n🔗 Checking cross-references...");
 
@@ -289,6 +313,7 @@ async function main(): Promise<void> {
   await validateStackFiles();
   await validateBlueprintFiles();
   await validateChecklistFiles();
+  await validateStateFiles();
   await validateAgentsMdManifest();
   await validateCrossReferences();
 

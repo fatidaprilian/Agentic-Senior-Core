@@ -16,19 +16,19 @@ Works with Cursor · Windsurf · GitHub Copilot · Claude Code · Gemini · Any 
 
 ## What is This?
 
-This is **not** a boilerplate. It's a **knowledge base** — a set of strict engineering rules, blueprints, and checklists that AI agents read to produce **production-grade code** instead of "just make it work" code.
+This is **not** a boilerplate. It's a **dynamic governance engine**: strict engineering rules, stack profiles, blueprints, review checklists, override policies, and state maps that keep AI output production-grade.
 
-Think of it as giving your AI pair programmer **10 years of production experience** through carefully crafted instructions.
+Think of it as giving your AI pair programmer **10 years of production experience** through carefully crafted instructions and guardrails.
 
 ### Before Agentic-Senior-Core
-```
+```text
 You: "Build me a user registration API"
 AI:  *Creates a single file with no validation, any types, console.log,
       hardcoded secrets, no error handling, and 47 TODO comments*
 ```
 
 ### After Agentic-Senior-Core
-```
+```text
 You: "Build me a user registration API"
 AI:  *Creates properly layered modules with Zod validation, typed errors,
       structured logging, security headers, tests, and API documentation*
@@ -38,214 +38,69 @@ AI:  *Creates properly layered modules with Zod validation, typed errors,
 
 ## Quick Start
 
-### Option 1: One-Liner (Recommended)
+### Option 1: Interactive CLI (Recommended)
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/fatidaprilian/Agentic-Senior-Core/main/scripts/init-project.sh | bash -s -- .
+bunx @fatidaprilian/agentic-senior-core init
 ```
 
-### Option 2: Clone and Copy
+The CLI asks:
+1. What is your core stack?
+2. Which blueprint do you want to scaffold?
+3. Include CI/CD guardrails?
+
+After answers are provided, the CLI runs the Dynamic Context Compiler and generates compiled governance files (`.cursorrules` and `.windsurfrules`) in your target project root.
+
+### Option 2: Legacy Script (Compatibility Wrapper)
 
 ```bash
-git clone https://github.com/fatidaprilian/Agentic-Senior-Core.git
-./Agentic-Senior-Core/scripts/init-project.sh /path/to/your/project
+./scripts/init-project.sh /path/to/your/project
 ```
 
-> **Manual alternative:** Copy `.agent-context/` and the entry point files (`.cursorrules`, `AGENTS.md`, etc.) directly into your project root.
-
-### Zero-Prompt Setup (Start Coding Immediately)
-
-Thanks to the **Intent-Based Triggers** baked into this repository, you no longer need to copy-paste massive initiation prompts. The AI already knows what to do based on your intent.
-
-#### 1. For New Projects (Auto-Architect Trigger)
-Just open your AI IDE's chat (Cursor, Windsurf, Copilot, or Antigravity) and type any natural language request. For example:
-
-```text
-- "I want to build an e-commerce website with ERP integration."
-- "Create a microservice for processing payments."
-- "Start a new project for a real-time chat application."
-- "Halo, tolong buatkan sistem manajemen inventaris."
-```
-**What the AI will do automatically:**
-1. Detect your intent to start a new project.
-2. Quietly read ALL strict engineering rules, language stacks, and blueprints in `.agent-context/`.
-3. Act as a **Principal Architect** by proposing the most efficient stack for your specific requirements.
-4. Draft a high-level architecture plan and wait for your approval before generating any code.
-
-#### 2. For Existing Projects (Legacy Refactor Trigger)
-If you paste the `.agent-context` folder into an existing, messy codebase, you can just say:
-
-```text
-- "Refactor this login controller."
-- "Fix the bugs in the user service."
-- "Tolong perbaiki routing di aplikasi ini."
-```
-**What the AI will do automatically:**
-1. Detect your intent to refactor or fix existing code.
-2. Quietly read the specific rules for architecture and clean code (`architecture.md`, `naming-conv.md`, etc.).
-3. Analyze your legacy code and point out where it violates the standards.
-4. Propose a refactor plan before rewriting the code.
-
-> **Note:** Want to skip the architecture proposal and force the AI to use a specific framework right away? See the direct prompts in [`.agent-context/prompts/init-project.md`](.agent-context/prompts/init-project.md).
+The script now forwards execution to the interactive CLI.
 
 ---
 
 ## Core Capabilities
 
-Agentic-Senior-Core turns your AI into a strict Principal Engineer with these embedded protocols:
-
-- **Zero Tolerance Protocol**: If you ask the AI for "quick and dirty" code or to skip tests, it is instructed to **refuse** and enforce best practices.
-- **The Security Halt**: If the AI detects a critical vulnerability (e.g., hardcoded secrets, SQL injection) being introduced, it will halt all feature development until patched.
-- **The "Plan First" Rule**: For any non-trivial request, the AI is blocked from blindly generating full code immediately. It must provide an implementation plan first.
-- **Self-Correction Protocol**: AI is forced to "silently review" its own generated code against our security and clean-code standards before outputting it.
-- **Dependency Defense**: A strict 20-line `stdlib-first` rule. AI is trained to aggressively avoid bloated libraries if functionality can be cleanly implemented natively.
-- **Mandatory Reasoning Chain**: Every time the AI corrects your approach or enforces a rule, it must output a `Problem -> Solution -> Why Better` explanation to mentor you.
-- **Auto-Architect**: The AI will never blindly generate code right away. It reads the specific architecture rules and proposes a layered design first.
-- **Absolute Clean Code Laws**: Generic variables (`data`, `temp`, `val`) and the `any` type are strictly banned at the prompt level.
+- **Delivery Engine (CLI):** Interactive setup via `bunx`/`npx`.
+- **Dynamic Context Compiler:** Merges universal rules + selected stack + selected blueprint + optional CI guardrails into one dense, indexed rule file.
+- **Codebase Intelligence:** `.agent-context/state/` gives architecture/dependency boundaries so the agent understands high-risk areas.
+- **Override System:** `.agent-override.md` allows controlled enterprise exceptions without forking core rules.
+- **Automated Guardrails:** CI blueprints include LLM-as-a-Judge flow using `pr-checklist.md`.
+- **MCP Self-Healing Loop:** `mcp.json` defines diagnostics + fix proposal workflow when lint/CI fails.
 
 ---
 
 ## Repository Structure
 
-```
+```text
 .
-├── .cursorrules                    # Cursor AI entry point
-├── .windsurfrules                  # Windsurf entry point
+├── .cursorrules                    # Dynamic compiled governance entry point
+├── .windsurfrules                  # Dynamic compiled governance entry point
+├── .agent-override.md              # Team-specific exceptions (scoped + expiry)
+├── mcp.json                        # MCP self-healing workflow config
 ├── AGENTS.md                       # Universal agent discovery
 ├── .github/copilot-instructions.md # GitHub Copilot entry point
 ├── .gemini/instructions.md         # Antigravity / Gemini entry point
-├── .agents/workflows/              # Antigravity workflow definitions
-│   ├── init-project.md             # /init-project slash command
-│   ├── review-code.md              # /review-code slash command
-│   └── refactor.md                 # /refactor slash command
-│
-├── .agent-context/                 # The Knowledge Base
-│   ├── rules/                      # Universal engineering laws (12 files)
-│   │   ├── naming-conv.md          # Clean naming (no more x, data, temp)
-│   │   ├── architecture.md         # Layer separation & module structure
-│   │   ├── security.md             # Trust nothing, validate everything, OWASP 2025
-│   │   ├── performance.md          # N+1 death penalty, measure first
-│   │   ├── error-handling.md       # Never swallow, always context
-│   │   ├── testing.md              # Test pyramid, AAA, factories
-│   │   ├── git-workflow.md         # Conventional Commits, atomic PRs
-│   │   ├── efficiency-vs-hype.md   # Stable > trendy, justify deps
-│   │   ├── api-docs.md             # OpenAPI 3.1 mandatory, zero-doc death penalty
-│   │   ├── microservices.md        # When/how to split the monolith
-│   │   ├── event-driven.md         # Pub/sub, CQRS, event sourcing
-│   │   ├── database-design.md      # Normalization, indexing, migrations
-│   │   ├── realtime.md             # WebSockets scaling & strict pub/sub
-│   │   └── frontend-architecture.md# Smart/Dumb UI, TanStack Query vs Zustand
-│   │
-│   ├── stacks/                     # Language-specific profiles (6 files)
-│   │   ├── typescript.md           # Strict TS: no any, Zod, ESM
-│   │   ├── python.md               # Python 3.12+, Pydantic v2, ruff
-│   │   ├── java.md                 # Java 25 LTS, Spring Boot 4, Records
-│   │   ├── php.md                  # PHP 8.5, Laravel 12, strict types
-│   │   ├── go.md                   # stdlib-first, chi, explicit errors
-│   │   ├── csharp.md               # C# 14, .NET 10 LTS, Minimal APIs
-│   │   ├── rust.md                 # Rust, no panic!/unwrap, Axum
-│   │   └── ruby.md                 # Rails, Service Objects, N+1 death
-│   │
-│   ├── blueprints/                 # Project scaffolding templates (8 files)
-│   │   ├── api-nextjs.md           # Next.js App Router API
-│   │   ├── nestjs-logic.md         # NestJS module structure
-│   │   ├── fastapi-service.md      # FastAPI + Pydantic + SQLAlchemy
-│   │   ├── laravel-api.md          # Laravel 12 + Form Requests + Pest
-│   │   ├── spring-boot-api.md      # Spring Boot 4 + Bean Validation + Flyway
-│   │   ├── go-service.md           # Go chi/stdlib HTTP service
-│   │   ├── aspnet-api.md           # ASP.NET Minimal API (.NET 10)
-│   │   ├── ci-github-actions.md    # GitHub Actions CI/CD pipeline
-│   │   ├── ci-gitlab.md            # GitLab CI/CD pipeline
-│   │   ├── observability.md        # OpenTelemetry stack
-│   │   ├── graphql-grpc-api.md     # Schema-first, Dataloaders required
-│   │   ├── infrastructure-as-code.md # Terraform/Pulumi structure, remote state
-│   │   └── kubernetes-manifests.md # Prod-grade specs, no :latest tag
-│   │
-│   ├── review-checklists/          # AI self-audit guides (4 files)
-│   │   ├── pr-checklist.md         # 10-category quality gate
-│   │   ├── security-audit.md       # OWASP-aligned security review
-│   │   ├── performance-audit.md    # Query, I/O, caching, memory audit
-│   │   └── architecture-review.md  # Layer, module, dependency review
-│   │
-│   └── prompts/                    # Ready-to-use power prompts
-│       ├── init-project.md         # Scaffold a new project
-│       ├── review-code.md          # Trigger self-review
-│       └── refactor.md             # Refactor to follow rules
-│
+├── bin/
+│   └── agentic-senior-core.js      # Interactive CLI (Delivery Engine)
+├── .agent-context/
+│   ├── rules/                      # Universal engineering laws
+│   ├── stacks/                     # Language-specific profiles
+│   ├── blueprints/                 # Scaffolding and pipeline templates
+│   ├── review-checklists/          # AI self-audit guides
+│   ├── prompts/                    # Ready-to-use prompts
+│   └── state/                      # Architecture and dependency state maps
+│       ├── architecture-map.md
+│       └── dependency-map.md
 ├── scripts/
-│   ├── validate.ts                 # Bun-powered repo validator (56 checks)
-│   └── init-project.sh             # Copy rules into a new project
-│
-├── package.json                    # Project metadata & validate script
-├── CONTRIBUTING.md                 # How to contribute
-├── LICENSE                         # MIT
-└── README.md                       # You are here
-```
-
----
-
-## Key Features
-
-### The Reasoning Clause
-Every time the agent corrects your code, it **must explain why**:
-```
-REASONING CHAIN
-================
-Rule Violated: security.md > Injection Prevention
-Problem:       User input is interpolated into SQL query — SQL injection risk
-Solution:      Use parameterized query with $1 placeholder
-Why Better:    Parameterized queries are immune to SQL injection by design
-```
-
-The AI doesn't just fix your code — it **teaches you**.
-
-### "Galak" Rules (Opinionated & Strict)
-These aren't gentle suggestions. They're **enforceable standards**:
-
-| Rule | Stance |
-|------|--------|
-| `naming-conv.md` | Single-letter variables? **BANNED.** |
-| `architecture.md` | SQL in controller? **Architecture is broken.** |
-| `security.md` | Hardcoded secrets? **INSTANT REJECTION.** |
-| `performance.md` | N+1 queries? **Death penalty.** |
-| `error-handling.md` | Empty catch block? **Fireable offense.** |
-| `efficiency-vs-hype.md` | 50KB library for 5 lines of code? **REJECTED.** |
-| `api-docs.md` | Endpoint without OpenAPI spec? **Doesn't exist.** |
-
-### Multi-Agent Compatible
-One knowledge base, works everywhere:
-
-| Agent | Discovery File |
-|-------|---------------|
-| Cursor AI | `.cursorrules` |
-| Windsurf | `.windsurfrules` |
-| GitHub Copilot | `.github/copilot-instructions.md` |
-| Antigravity (Google) | `.gemini/instructions.md` + `.agents/workflows/` |
-| Claude Code / Gemini | `AGENTS.md` |
-
-### Blueprints, Not Boilerplate
-Blueprints are **instructions**, not code files. The AI reads the blueprint and generates fresh, up-to-date code following the latest patterns — not a stale template from 2 years ago.
-
----
-
-## The "Vibe Coding" Workflow
-
-```
-Step 1: Clone & Open
-  git clone → run init-project.sh → open in Cursor/Windsurf/Copilot
-
-Step 2: Zero-Prompt Initiation
-  "I want to build an e-commerce website."
-  (AI automatically reads rules, proposes architecture, and waits for approval)
-
-Step 3: Agent Builds Like a Pro
-  Proper layers, Zod validation, typed errors, structured logging, tests
-
-Step 4: Self-Correction
-  "Run review based on review-checklists/pr-checklist.md"
-  Agent audits and fixes its own code
-
-Step 5: Ship It
+│   ├── validate.ts                 # Repository validator
+│   └── init-project.sh             # Legacy compatibility wrapper
+├── package.json
+├── CONTRIBUTING.md
+├── LICENSE
+└── README.md
 ```
 
 ---
@@ -253,7 +108,7 @@ Step 5: Ship It
 ## Validation
 
 ```bash
-bun scripts/validate.ts
+bun run validate
 ```
 
 ---
@@ -261,58 +116,41 @@ bun scripts/validate.ts
 ## Roadmap
 
 ### V1.0 — TypeScript Focus
-- [x] 9 universal rule files (including api-docs)
+- [x] Universal rule foundations
 - [x] TypeScript stack profile
-- [x] Next.js & NestJS blueprints
-- [x] PR & security checklists
-- [x] Multi-agent compatibility (Cursor, Windsurf, Copilot, Antigravity, Claude Code)
+- [x] Next.js and NestJS blueprints
+- [x] PR and security checklists
+- [x] Multi-agent compatibility
 
 ### V1.1 (Complete) — Multi-Language
-- [x] Python stack + FastAPI blueprint
-- [x] Java stack + Spring Boot blueprint
-- [x] PHP stack + Laravel blueprint
-- [x] Go stack profile
-- [x] C#/.NET stack profile
-- [x] Performance & architecture review checklists
+- [x] Python, Java, PHP, Go, and C# stacks/blueprints
+- [x] Performance and architecture review checklists
 
-### V1.2 — Advanced Patterns (Complete)
-- [x] Microservices decision framework (when to split, how to split)
-- [x] Event-driven architecture patterns (pub/sub, CQRS, event sourcing)
-- [x] CI/CD pipeline blueprints (GitHub Actions, GitLab CI)
-- [x] Database design patterns (normalization rules, indexing strategy)
-- [x] Observability blueprint (metrics, tracing, alerting)
-- [x] Go blueprint (chi/stdlib HTTP service)
-- [x] C# blueprint (ASP.NET Minimal API service)
+### V1.2 (Complete) — Advanced Patterns
+- [x] Microservices decision framework
+- [x] Event-driven patterns
+- [x] CI/CD pipeline blueprints
+- [x] Database design patterns
+- [x] Observability blueprint
 
 ### V1.3 (Complete) — System Extensions & Infrastructure
-- [x] Language Stack: Rust profile (`rust.md`)
-- [x] Language Stack: Ruby on Rails profile (`ruby.md`)
-- [x] Architecture Rule: Real-time & WebSockets patterns (`realtime.md`)
-- [x] Architecture Rule: Frontend state & composition patterns (`frontend-architecture.md`)
-- [x] Blueprint: GraphQL / gRPC API definitions (`graphql-grpc-api.md`)
-- [x] Blueprint: Infrastructure as Code (`infrastructure-as-code.md`)
-- [x] Blueprint: Kubernetes manifests structure (`kubernetes-manifests.md`)
+- [x] Rust and Ruby stacks
+- [x] Realtime and frontend architecture rules
+- [x] GraphQL/gRPC, IaC, and Kubernetes blueprints
 
-### V1.4 (Current) — Dynamic Governance Engine
-- [ ] EPIC 1: **The Delivery Engine** (Interactive Bun/Node CLI replacing bash script)
-- [ ] EPIC 2: **Dynamic Context Compiler** (Merge rules and blueprints into a single optimized context file)
-- [ ] EPIC 3: **Codebase Intelligence** (Add `.agent-context/state/` for architecture and dependency mapping)
-- [ ] EPIC 4: **The Override System** (Enterprise Readiness: `.agent-override.md` support)
-- [ ] EPIC 5: **Automated Guardrails & LLM-as-a-Judge** (CI/CD integration using `pr-checklist.md`)
-- [ ] EPIC 6: **Model Context Protocol (MCP) & Self-Healing Loop** (Autonomous PR fixes via MCP)
+### V1.4 (Complete) — Dynamic Governance Engine
+- [x] EPIC 1: Delivery Engine (Interactive CLI)
+- [x] EPIC 2: Dynamic Context Compiler
+- [x] EPIC 3: Codebase Intelligence (`.agent-context/state/`)
+- [x] EPIC 4: Override System (`.agent-override.md`)
+- [x] EPIC 5: Automated Guardrails & LLM-as-a-Judge
+- [x] EPIC 6: MCP & Self-Healing Loop (`mcp.json`)
 
 ---
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines. The short version:
-
-1. Fork the repo
-2. Add your rule/stack/blueprint — must pass the **"galak" test** (opinionated, specific, enforceable)
-3. Run `bun scripts/validate.ts` to verify
-4. Open a PR
-
-If a rule can't make an AI agent argue with a developer, it's not strict enough.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution standards and workflow.
 
 ---
 

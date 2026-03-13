@@ -42,6 +42,19 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 | [`.agent-context/rules/realtime.md`](.agent-context/rules/realtime.md) | Real-time & WebSockets patterns |
 | [`.agent-context/rules/frontend-architecture.md`](.agent-context/rules/frontend-architecture.md) | Frontend state & composition patterns |
 
+### State Awareness (V1.4)
+
+| File | Purpose |
+|------|---------|
+| [`.agent-context/state/architecture-map.md`](.agent-context/state/architecture-map.md) | Critical-path boundaries and change risk zones |
+| [`.agent-context/state/dependency-map.md`](.agent-context/state/dependency-map.md) | Allowed module dependencies and anti-cycle guidance |
+
+### Overrides (V1.4)
+
+| File | Purpose |
+|------|---------|
+| [`.agent-override.md`](.agent-override.md) | Explicit, scoped rule exceptions with expiry and owner |
+
 ### Language Profiles (Load by Stack)
 
 | File | When |

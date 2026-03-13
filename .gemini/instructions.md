@@ -57,6 +57,10 @@ Load from `.agent-context/blueprints/` when creating new projects.
 ### Step 4: Review (Before Completion)
 Run `.agent-context/review-checklists/pr-checklist.md` before declaring done.
 
+### Step 5: State + Override (V1.4)
+- Read `.agent-context/state/architecture-map.md` and `.agent-context/state/dependency-map.md` before high-impact refactors.
+- Use `.agent-override.md` only for explicit scoped exceptions.
+
 ## The Reasoning Clause (MANDATORY)
 Every time you reject a code block, suggest a change, or enforce a rule, you MUST provide a Reasoning Chain:
 

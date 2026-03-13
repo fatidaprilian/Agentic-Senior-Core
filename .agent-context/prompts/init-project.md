@@ -1,6 +1,7 @@
 # Prompts: Initialize Project
 
 > Copy-paste one of these prompts to your AI agent (Cursor, Windsurf, Copilot, Antigravity) right after cloning this repository.
+> V1.4 recommendation: run `bunx @fatidaprilian/agentic-senior-core init` first to compile dynamic governance context.
 
 ---
 

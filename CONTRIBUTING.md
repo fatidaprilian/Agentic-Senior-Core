@@ -12,6 +12,9 @@ Thanks for wanting to make AI agents write better code. Here's how to contribute
 | New stack | `.agent-context/stacks/` | Language-specific profile (Python, Go, Java, etc.) |
 | New blueprint | `.agent-context/blueprints/` | Project scaffolding template |
 | New checklist | `.agent-context/review-checklists/` | Self-audit guide |
+| State intelligence update | `.agent-context/state/` | Architecture boundaries and dependency map |
+| Override policy update | `.agent-override.md` | Scoped enterprise rule exceptions |
+| MCP workflow update | `mcp.json` | Self-healing automation flow |
 | Bug fix | Any file | Typos, broken links, incorrect examples |
 | Improvement | Any file | Sharper wording, better examples |
 
@@ -120,10 +123,10 @@ git clone https://github.com/fatidaprilian/Agentic-Senior-Core.git
 cd Agentic-Senior-Core
 
 # Validate
-bun scripts/validate.ts
+bun run validate
 
-# Test init script
-./scripts/init-project.sh /tmp/test-project
+# Test interactive CLI
+node ./bin/agentic-senior-core.js init /tmp/test-project
 ```
 
 ---
