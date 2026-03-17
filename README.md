@@ -74,7 +74,7 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 
 ## Core Capabilities
 
-- **Delivery Engine (CLI):** Interactive setup via `bunx`/`npx`.
+- **Delivery Engine (CLI):** Interactive setup via `npx`.
 - **Dynamic Context Compiler:** Merges universal rules + selected stack + selected blueprint + optional CI guardrails into one dense, indexed rule file.
 - **Codebase Intelligence:** `.agent-context/state/` gives architecture/dependency boundaries so the agent understands high-risk areas.
 - **Override System:** `.agent-override.md` allows controlled enterprise exceptions without forking core rules.
@@ -106,8 +106,15 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 │       ├── architecture-map.md
 │       └── dependency-map.md
 ├── scripts/
-│   ├── validate.ts                 # Repository validator
+│   ├── validate.mjs                # Repository validator
+│   ├── llm-judge.mjs               # LLM-as-a-Judge CI gate
 │   └── init-project.sh             # Legacy compatibility wrapper
+├── docs/
+│   ├── faq.md
+│   └── deep-dive.md
+├── tests/
+│   ├── cli-smoke.test.mjs
+│   └── llm-judge.test.mjs
 ├── package.json
 ├── CONTRIBUTING.md
 ├── LICENSE
@@ -128,67 +135,35 @@ npm run validate
 
 ## Roadmap
 
-### V1.0 — TypeScript Focus
-- [x] Universal rule foundations
-- [x] TypeScript stack profile
-- [x] Next.js and NestJS blueprints
-- [x] PR and security checklists
-- [x] Multi-agent compatibility
+### Completed Milestones
+- V1.0 to V1.3: Core rules, multi-language stacks, advanced architecture patterns, and infrastructure blueprints.
+- V1.4: Dynamic Governance Engine (interactive CLI, context compiler, state maps, override system, guardrails, MCP self-healing).
+- V1.5: Newbie-First Experience (Node-first runtime, zero-install onboarding path, smart auto-detection, profile presets, LLM severity thresholds, docs split, smoke tests).
 
-### V1.1 (Complete) — Multi-Language
-- [x] Python, Java, PHP, Go, and C# stacks/blueprints
-- [x] Performance and architecture review checklists
+### V1.6 (Planned) — Enterprise Reliability and Team Workflow
+1. Team profile packs
+      - Add reusable profile bundles per team type (startup, regulated, platform).
+      - Allow organization-level defaults with local override boundaries.
 
-### V1.2 (Complete) — Advanced Patterns
-- [x] Microservices decision framework
-- [x] Event-driven patterns
-- [x] CI/CD pipeline blueprints
-- [x] Database design patterns
-- [x] Observability blueprint
+2. Stronger CI annotations
+      - Export LLM Judge findings into machine-friendly outputs for PR annotations.
+      - Standardize severity mapping across GitHub Actions and GitLab CI.
 
-### V1.3 (Complete) — System Extensions & Infrastructure
-- [x] Rust and Ruby stacks
-- [x] Realtime and frontend architecture rules
-- [x] GraphQL/gRPC, IaC, and Kubernetes blueprints
+3. Safer override governance
+      - Add override expiry validation and warning windows.
+      - Add explicit owner metadata checks for every override rule.
 
-### V1.4 (Complete) — Dynamic Governance Engine
-- [x] EPIC 1: Delivery Engine (Interactive CLI)
-- [x] EPIC 2: Dynamic Context Compiler
-- [x] EPIC 3: Codebase Intelligence (`.agent-context/state/`)
-- [x] EPIC 4: Override System (`.agent-override.md`)
-- [x] EPIC 5: Automated Guardrails & LLM-as-a-Judge
-- [x] EPIC 6: MCP & Self-Healing Loop (`mcp.json`)
+4. Better project detection accuracy
+      - Improve stack and blueprint confidence scoring for mixed repositories.
+      - Add transparent explanation output for why a stack was selected.
 
-### V1.5 (Planned) — Newbie-First Experience and Reliability
-1. Zero-Conf onboarding for complete beginners
-      - Add plain-language prompts before technical choices.
-      - Keep a one-command path with recommended defaults.
-      - Show a non-technical summary after initialization.
+5. Upgrade and migration assistant
+      - Add CLI command to upgrade existing repositories to latest rule packs.
+      - Show migration diff summary before writing changes.
 
-2. Smart auto-detection for existing projects
-      - Detect likely stack from project files.
-      - Suggest stack + blueprint with confidence hints.
-      - Fall back to guided prompts when confidence is low.
-
-3. Preset profiles for team maturity
-      - Provide `beginner`, `balanced`, and `strict` profiles.
-      - Map profile to checklist depth and CI gate strictness.
-      - Keep compatibility with `.agent-override.md`.
-
-4. LLM Judge output standardization
-      - Normalize findings into `critical/high/medium/low`.
-      - Add CI-friendly output formatting for annotations.
-      - Introduce a policy threshold file for pass/fail behavior.
-
-5. Documentation split for fast onboarding
-      - Keep Quick Start short and beginner-oriented.
-      - Add a focused FAQ for basic terms and decisions.
-      - Add a Deep Dive path for advanced users.
-
-6. Quality and UX verification
-      - Expand validation checks for all CLI modes.
-      - Add smoke tests for `--newbie`, auto-detect, and strict profile.
-      - Track setup completion time as an onboarding KPI.
+6. Quality gates and benchmarking
+      - Expand smoke tests to include profile-specific scenarios.
+      - Track setup success rate and initialization time trends.
 
 ---
 
