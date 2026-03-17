@@ -96,14 +96,19 @@ function collectPullRequestDiff() {
   console.log('  Source: local HEAD~1..HEAD fallback');
   try {
     return execSync('git diff HEAD~1 HEAD', execOptions);
-  } catch {
-    // Initial commit has no parent — diff against empty tree
-    const emptyTreeSha = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
-    return execSync(`git diff "${emptyTreeSha}" HEAD`, execOptions);
+  } catch (err) {
+    try {
+      // Initial commit has no parent — diff against empty tree
+      const emptyTreeSha = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
+      return execSync(`git diff "${emptyTreeSha}" HEAD`, execOptions);
+    } catch (e2) {
+      console.warn('  ⚠️   Unable to execute git diff. Defaulting to empty diff.');
+      return '';
+    }
   }
 }
 
-// ─── CHECKLIST LOADING ────────────────────────────────────────────────────────
+// ─── CHECKLIST & THRESHOLDS LOADING ───────────────────────────────────────────
 
 /**
  * Loads and returns the PR checklist markdown content.
@@ -117,6 +122,24 @@ function loadPrChecklist() {
   return readFileSync(PR_CHECKLIST_PATH, 'utf-8');
 }
 
+/**
+ * Loads the LLM judge thresholds.
+ *
+ * @returns {any} The thresholds object
+ */
+function loadThresholds() {
+  const thresholdsPath = resolve(REPOSITORY_ROOT, '.agent-context/policies/llm-judge-threshold.json');
+  if (!existsSync(thresholdsPath)) {
+    return {
+      selectedProfile: 'balanced',
+      profileThresholds: {
+        balanced: { blockingSeverities: ['critical', 'high'], failOnMalformedResponse: true, failOnProviderError: false }
+      }
+    };
+  }
+  return JSON.parse(readFileSync(thresholdsPath, 'utf-8'));
+}
+
 // ─── PROMPT CONSTRUCTION ─────────────────────────────────────────────────────
 
 /**
@@ -127,20 +150,14 @@ function loadPrChecklist() {
 function buildSystemPrompt() {
   return `You are a Senior Software Architect performing an automated code review for a CI/CD pipeline.
 
-Your job: evaluate a git diff against the provided PR checklist and identify CRITICAL violations that must block the merge.
+Your job: evaluate a git diff against the provided PR checklist and identify violations.
+You must categorize each violation with a severity level: critical, high, medium, or low.
 
-## Critical violations (always fail):
-- Security vulnerabilities: hardcoded secrets, SQL/command injection, missing auth checks, CORS *
-- N+1 database queries (queries inside loops without batching)
-- Swallowed errors: empty catch blocks, catch without re-throw or recovery
-- TypeScript \`any\` type used without a justification comment
-- Layer boundary violations: HTTP logic in service layer, DB queries in controller
-- Unvalidated external input at system boundaries
-
-## Non-critical issues (flag but PASS):
-- Style preferences, minor naming nitpicks, documentation suggestions
-- Performance micro-optimizations without measured evidence
-- Refactoring suggestions unrelated to the actual change
+## Severity classification:
+- critical: Security vulnerabilities (hardcoded secrets, SQL/command injection, missing auth checks, CORS), unvalidated external inputs.
+- high: N+1 database queries, swallowed errors (empty catch blocks without re-throw/recovery), layer boundary violations.
+- medium: TypeScript \`any\` type used without justification, missing test coverage, bad architectural patterns.
+- low: Style preferences, minor naming nitpicks, documentation suggestions, performance micro-optimizations.
 
 ## Mandatory output format:
 You MUST output your findings in EXACTLY this structure:
@@ -153,17 +170,16 @@ You MUST output your findings in EXACTLY this structure:
 ❌ [Section Name] — FAILS
    📌 Rule: [rule file and section]
    ❌ Problem: [exact description of the issue found in the diff]
+   ⚠️ Severity: [critical | high | medium | low]
    ✅ Fix: [specific actionable fix]
 
-VERDICT: PASS ✅
 \`\`\`
 
-OR if critical violations exist, end with: VERDICT: FAIL ❌
-
 Rules:
-- The word VERDICT followed by PASS or FAIL MUST be the absolute LAST line of your response.
-- Only use VERDICT: FAIL ❌ for CRITICAL violations listed above.
-- If the diff is empty, contains only documentation changes, or has no source code changes, output VERDICT: PASS ✅ immediately.`;
+- Then at the absolute LAST line of your response, output a JSON array of the failed checks. Each object should have 'rule', 'problem', 'severity'. If there are no failures, output an empty array [].
+- Make sure the JSON array is perfectly valid JSON on a single line starting with \`JSON_VERDICT: \`. For example:
+JSON_VERDICT: [{"rule": "Security", "problem": "Hardcoded secret", "severity": "critical"}]
+- If the diff is empty, contains only documentation changes, or has no source code changes, output JSON_VERDICT: [] immediately.`;
 }
 
 /**
@@ -326,20 +342,31 @@ function selectAvailableProvider() {
 // ─── VERDICT PARSING ─────────────────────────────────────────────────────────
 
 /**
- * Extracts the PASS/FAIL verdict from the LLM response.
- * Defaults to PASS if the LLM did not include a clear verdict line,
- * to avoid blocking CI on malformed model output.
+ * Extracts and parses the JSON verdict from the LLM response.
  *
  * @param {string} llmResponseText
- * @returns {'PASS' | 'FAIL'}
+ * @param {boolean} failOnMalformedResponse
+ * @returns {Array<{ rule: string, problem: string, severity: string }>}
  */
-function extractVerdict(llmResponseText) {
-  const verdictMatch = llmResponseText.match(/VERDICT\s*:\s*(PASS|FAIL)/i);
-  if (!verdictMatch) {
-    console.warn('⚠️  LLM response did not include a VERDICT line. Defaulting to PASS.');
-    return 'PASS';
+function extractVerdict(llmResponseText, failOnMalformedResponse) {
+  const match = llmResponseText.match(/JSON_VERDICT:\s*(\[.*\])/i);
+  if (!match) {
+    console.warn('⚠️  LLM response did not include a valid JSON_VERDICT line.');
+    if (failOnMalformedResponse) {
+      console.error('❌  Failing pipeline because malformed responses are not allowed by the profile.');
+      process.exit(1);
+    }
+    return [];
   }
-  return /** @type {'PASS' | 'FAIL'} */ (verdictMatch[1].toUpperCase());
+  try {
+    return JSON.parse(match[1]);
+  } catch (err) {
+    console.error('⚠️  Failed to parse JSON_VERDICT:', err.message);
+    if (failOnMalformedResponse) {
+      process.exit(1);
+    }
+    return [];
+  }
 }
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
@@ -350,9 +377,17 @@ async function main() {
   console.log('════════════════════════════════════════════');
   console.log('');
 
-  // ── Step 1: Load checklist ──────────────────────────────
+  // ── Step 1: Load checklist and thresholds ──────────────
   const prChecklistContent = loadPrChecklist();
+  const thresholdsObj = loadThresholds();
+  const selectedProfile = thresholdsObj.selectedProfile || 'balanced';
+  const profileConfig = thresholdsObj.profileThresholds[selectedProfile] || {};
+  const blockingSeverities = profileConfig.blockingSeverities || ['critical', 'high'];
+  const failOnMalformedResponse = profileConfig.failOnMalformedResponse !== false;
+  const failOnProviderError = profileConfig.failOnProviderError || false;
+
   console.log(`✅  PR checklist loaded (${prChecklistContent.length} chars)`);
+  console.log(`✅  Threshold profile loaded: ${selectedProfile} (blocking: ${blockingSeverities.join(', ')})`);
 
   // ── Step 2: Collect diff ────────────────────────────────
   const rawDiff = collectPullRequestDiff();
@@ -373,7 +408,7 @@ async function main() {
     console.log(userMessage.slice(0, 400) + '...');
     console.log('─────────────────────────────────────────────────────────');
     console.log('');
-    console.log('VERDICT: PASS ✅  (dry run — no LLM call made)');
+    console.log('VERDICT: JSON_VERDICT: []  (dry run — no LLM call made)');
     process.exit(0);
   }
 
@@ -403,8 +438,11 @@ async function main() {
     llmReviewText = await selectedProvider.invokeProvider(systemPrompt, userMessage);
   } catch (providerCallError) {
     console.warn(`⚠️   LLM call failed: ${/** @type {Error} */ (providerCallError).message}`);
+    if (failOnProviderError) {
+      console.error('❌  Failing pipeline because provider errors are not allowed by the profile.');
+      process.exit(1);
+    }
     console.warn('    Skipping LLM review — pipeline continues (PASS).');
-    console.warn('    Provider outages should not block merges.');
     process.exit(0);
   }
 
@@ -417,15 +455,17 @@ async function main() {
   console.log('');
 
   // ── Step 8: Enforce verdict ─────────────────────────────
-  const finalVerdict = extractVerdict(llmReviewText);
+  const finalViolations = extractVerdict(llmReviewText, failOnMalformedResponse);
 
-  if (finalVerdict === 'FAIL') {
-    console.error('❌  LLM Judge: CRITICAL violations found. Pipeline FAILED.');
+  const blockingFound = finalViolations.filter(v => blockingSeverities.includes(v.severity.toLowerCase()));
+
+  if (blockingFound.length > 0) {
+    console.error(`❌  LLM Judge: ${blockingFound.length} blocking violations found (severities: ${blockingSeverities.join(', ')}). Pipeline FAILED.`);
     console.error('    Fix the issues listed above before merging.');
     process.exit(1);
   }
 
-  console.log('✅  LLM Judge: No critical violations. Pipeline PASSED.');
+  console.log('✅  LLM Judge: No blocking violations. Pipeline PASSED.');
   process.exit(0);
 }
 

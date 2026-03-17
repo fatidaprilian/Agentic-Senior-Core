@@ -5,13 +5,13 @@
   "description": "MCP configuration for governance-aware diagnostics and self-healing workflows.",
   "servers": {
     "lint": {
-      "command": "bun",
-      "args": ["run", "./scripts/validate.ts"],
+      "command": "node",
+      "args": ["./scripts/validate.mjs"],
       "transport": "stdio"
     },
     "test": {
-      "command": "bun",
-      "args": ["test"],
+      "command": "node",
+      "args": ["--test", "./tests/cli-smoke.test.mjs", "./tests/llm-judge.test.mjs"],
       "transport": "stdio"
     }
   },

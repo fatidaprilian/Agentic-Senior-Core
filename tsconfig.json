@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "types": ["bun-types"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "allowJs": true,
+    "checkJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["scripts/**/*.ts"]
+  "include": ["bin/**/*.js", "scripts/**/*.mjs", "tests/**/*.mjs"]
 }

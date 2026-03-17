@@ -38,40 +38,37 @@ AI:  *Creates properly layered modules with Zod validation, typed errors,
 
 ## Quick Start
 
-### Option 1: Interactive CLI (Recommended)
+### Zero-Install: GitHub Template (New user friendly!)
+
+The absolute fastest way to start your next top-tier project is to use this repository as a template.
+Click the **[Use this template]** button on the GitHub UI at the top right of this repository.
+Your new repository will instantly possess all the rules, configurations, and AI context files directly out of the box — zero CLI needed.
+
+### Option 1: Interactive Auto-Setup (Recommended)
+
+If you have an existing project and want to infuse it with Staff-level context:
 
 ```bash
-bunx @fatidaprilian/agentic-senior-core init
+npx @fatidaprilian/agentic-senior-core init
 ```
 
-If you are totally new, choose beginner mode when prompted.
-You do not need to understand stack, blueprint, or CI/CD first.
+The CLI is smart. It auto-detects your current development stack, helps you build a governance profile (select from `beginner`, `balanced`, or `strict`), and writes the compiled rules straight to your root automatically!
 
-Beginner mode uses safe defaults automatically:
-- Stack: `TypeScript`
-- Blueprint: `API Nextjs`
-- CI/CD guardrails: `enabled`
-
-You can also force beginner mode directly:
-
+If you are totally new to concepts like blueprints and guardrails, no problem — just run:
 ```bash
-bunx @fatidaprilian/agentic-senior-core init --newbie
+npx @fatidaprilian/agentic-senior-core init --newbie
 ```
 
-Advanced users can still choose manually:
-1. Core stack
-2. Blueprint template
-3. Include CI/CD guardrails or not
+### Option 2: Clone and Play
+Want to poke around under the hood? Just clone the repo and `npx @fatidaprilian/agentic-senior-core init` locally. No runtime dependencies needed — everything uses native Node.js!
 
-After answers are provided, the CLI runs the Dynamic Context Compiler and generates compiled governance files (`.cursorrules` and `.windsurfrules`) in your target project root.
+---
 
-### Option 2: Legacy Script (Compatibility Wrapper)
+## Further Reading
 
-```bash
-./scripts/init-project.sh /path/to/your/project
-```
-
-The script now forwards execution to the interactive CLI.
+Our documentation has shifted into dedicated tracks to keep this README light:
+- **[FAQ / Concepts](docs/faq.md)**: Unfamiliar with Stacks, Blueprints, or Guardrails? Stalled on basic logic? Start here.
+- **[Deep Dive / Internals](docs/deep-dive.md)**: Explore the dynamic compiler, severity profiles, MCP integration, and granular LLM overrides here.
 
 ---
 
@@ -121,8 +118,10 @@ The script now forwards execution to the interactive CLI.
 
 ## Validation
 
+Ensure everything is running smoothly before merging rules patches:
+
 ```bash
-bun run validate
+npm run validate
 ```
 
 ---
