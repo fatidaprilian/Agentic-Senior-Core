@@ -141,29 +141,11 @@ npm run validate
 - V1.5: Newbie-First Experience (Node-first runtime, zero-install onboarding path, smart auto-detection, profile presets, LLM severity thresholds, docs split, smoke tests).
 
 ### V1.6 (Planned) — Enterprise Reliability and Team Workflow
-1. Team profile packs
-      - Add reusable profile bundles per team type (startup, regulated, platform).
-      - Allow organization-level defaults with local override boundaries.
+- Team profile packs and safer override governance.
+- CI annotation standardization and stronger detection accuracy.
+- Upgrade assistant, benchmark coverage, and onboarding KPIs.
 
-2. Stronger CI annotations
-      - Export LLM Judge findings into machine-friendly outputs for PR annotations.
-      - Standardize severity mapping across GitHub Actions and GitLab CI.
-
-3. Safer override governance
-      - Add override expiry validation and warning windows.
-      - Add explicit owner metadata checks for every override rule.
-
-4. Better project detection accuracy
-      - Improve stack and blueprint confidence scoring for mixed repositories.
-      - Add transparent explanation output for why a stack was selected.
-
-5. Upgrade and migration assistant
-      - Add CLI command to upgrade existing repositories to latest rule packs.
-      - Show migration diff summary before writing changes.
-
-6. Quality gates and benchmarking
-      - Expand smoke tests to include profile-specific scenarios.
-      - Track setup success rate and initialization time trends.
+Detailed timeline and success metrics: [docs/roadmap.md](docs/roadmap.md)
 
 ---
 
