@@ -17,3 +17,22 @@ Yes, use the `.agent-override.md` file in your repository root to declare explic
 
 ## Does this support Copilot?
 Yes, for GitHub Copilot in VS Code or Visual Studio, the repository supports importing `.github/copilot-instructions.md`.
+
+## Can I run the CLI before npm publish and still choose options interactively?
+Yes. Use GitHub source execution:
+
+```bash
+npm exec --yes --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior-core init .
+```
+
+This still shows interactive choices for profile, stack, blueprint, and CI.
+
+You can also use repository bootstrap scripts:
+- Windows: `scripts/init-project.ps1`
+- Linux/macOS: `scripts/init-project.sh`
+
+After the package is published, the shorter equivalent is:
+
+```bash
+npx @fatidaprilian/agentic-senior-core init
+```
