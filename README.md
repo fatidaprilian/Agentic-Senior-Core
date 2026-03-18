@@ -41,7 +41,8 @@ AI:  *Creates properly layered modules with Zod validation, typed errors,
 ### Zero-Install: GitHub Template (New user friendly!)
 
 The absolute fastest way to start your next top-tier project is to use this repository as a template.
-Click the **[Use this template]** button on the GitHub UI at the top right of this repository.
+The **Use this template** button is in the GitHub repository header (top-right area), not inside this README text.
+If you prefer a direct link, open: **[Create from template](https://github.com/fatidaprilian/Agentic-Senior-Core/generate)**.
 Your new repository will instantly possess all the rules, configurations, and AI context files directly out of the box — zero CLI needed.
 
 ### Option 1: Interactive via GitHub Source (Pre-publish friendly)
