@@ -99,6 +99,7 @@ async function validateRequiredFiles() {
     'scripts/validate.mjs',
     'scripts/llm-judge.mjs',
     'scripts/init-project.sh',
+    'scripts/init-project.ps1',
     '.cursorrules',
     '.windsurfrules',
     '.agent-override.md',
@@ -379,6 +380,8 @@ async function validateDocumentationFlow() {
   const readmeContent = await readTextFile(README_PATH);
   const requiredReadmeSnippets = [
     'GitHub Template',
+    'scripts/init-project.ps1',
+    'scripts/init-project.sh',
     'npx @fatidaprilian/agentic-senior-core init',
     'npm run validate',
     'docs/faq.md',

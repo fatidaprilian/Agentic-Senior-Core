@@ -44,7 +44,27 @@ The absolute fastest way to start your next top-tier project is to use this repo
 Click the **[Use this template]** button on the GitHub UI at the top right of this repository.
 Your new repository will instantly possess all the rules, configurations, and AI context files directly out of the box — zero CLI needed.
 
-### Option 1: Interactive Auto-Setup (Recommended)
+### Option 1: GitHub Bootstrap (No npx required)
+
+Run directly from this repository bootstrap script and inject rules into your project root.
+
+Bootstrap script paths: `scripts/init-project.ps1` (Windows) and `scripts/init-project.sh` (Linux/macOS).
+
+Windows PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\init-project.ps1 -TargetDirectory . -Profile balanced -Stack typescript -Blueprint api-nextjs -Ci true
+```
+
+Linux/macOS Bash:
+
+```bash
+bash ./scripts/init-project.sh . --profile balanced --stack typescript --blueprint api-nextjs --ci true
+```
+
+Both scripts clone Agentic-Senior-Core into a temporary directory, run the same CLI engine, then clean up automatically.
+
+### Option 2: Interactive Auto-Setup via npm/npx (Optional)
 
 If you have an existing project and want to infuse it with Staff-level context:
 
@@ -59,7 +79,7 @@ If you are totally new to concepts like blueprints and guardrails, no problem �
 npx @fatidaprilian/agentic-senior-core init --newbie
 ```
 
-### Option 2: Clone and Play
+### Option 3: Clone and Play
 Want to poke around under the hood? Just clone the repo and `npx @fatidaprilian/agentic-senior-core init` locally. No runtime dependencies needed — everything uses native Node.js!
 
 ---
@@ -74,7 +94,7 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 
 ## Core Capabilities
 
-- **Delivery Engine (CLI):** Interactive setup via `npx`.
+- **Delivery Engine (CLI):** Interactive setup via GitHub bootstrap script or `npx`.
 - **Dynamic Context Compiler:** Merges universal rules + selected stack + selected blueprint + optional CI guardrails into one dense, indexed rule file.
 - **Codebase Intelligence:** `.agent-context/state/` gives architecture/dependency boundaries so the agent understands high-risk areas.
 - **Override System:** `.agent-override.md` allows controlled enterprise exceptions without forking core rules.

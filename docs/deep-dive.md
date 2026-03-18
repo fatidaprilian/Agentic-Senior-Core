@@ -3,7 +3,7 @@
 Agentic-Senior-Core operates as a **Dynamic Governance Engine** that merges generalized best practices with project-specific structural definitions into files agents naturally read (like `.cursorrules`, `.windsurfrules`, or `AGENTS.md`).
 
 ## The Compiler Workflow
-When you run `npx @fatidaprilian/agentic-senior-core init`, the delivery CLI:
+When you run the init command (for example through `scripts/init-project.ps1`, `scripts/init-project.sh`, or `npx @fatidaprilian/agentic-senior-core init`), the delivery CLI:
 1. **Scans** your working directory heuristically out-of-the-box (looking for `package.json`, `pom.xml`, etc.).
 2. **Prompts** you to refine the Stack, Blueprint, and enforcement Profile if auto-detection confidence is low.
 3. **Compiles** modular knowledge components into dense rule files injected directly into your project.
