@@ -1,51 +1,66 @@
 # Product Roadmap
 
-This document contains the detailed, product-oriented roadmap for the next major iteration.
+This document tracks the product delivery plan and current execution reality.
 
 ## V1.6 (2026) — Enterprise Reliability and Team Workflow
 
-### Q2 2026 — Foundation and Governance
-1. Team profile packs
-   - Deliver reusable profile bundles for startup, regulated, and platform teams.
-   - Support organization-level defaults with local override boundaries.
-2. Override governance hardening
-   - Enforce owner metadata for every override entry.
-   - Add expiry validation with warning windows before expiry.
+Release status: Completed and released on 2026-03-19.
 
-Success metrics:
-- 90% of override entries include owner and expiry metadata.
-- 0 critical validation gaps for expired overrides in CI.
-- At least 3 profile packs adopted in real repositories.
+Original plan targeted Q2-Q4 2026, but implementation landed earlier (Q2 2026).
 
-### Q3 2026 — CI and Detection Quality
-1. Stronger CI annotations
-   - Export LLM Judge findings in machine-friendly output for PR annotations.
-   - Normalize severity mapping across GitHub Actions and GitLab CI.
-2. Better project detection accuracy
-   - Improve confidence scoring for mixed repositories.
-   - Print transparent reasoning for stack and blueprint suggestions.
+### Delivered Scope
+1. Foundation and governance
+   - Team profile packs shipped: startup, regulated, platform.
+   - CLI support shipped: `agentic-senior-core init --profile-pack <name>`.
+   - Override governance hardening shipped: required `Owner` and `Expiry` metadata, `YYYY-MM-DD` validation, expiry warning window, and expired-entry validation failure.
+2. CI and detection quality
+   - LLM Judge machine-readable reporting shipped: `JSON_REPORT` line output + artifact file `.agent-context/state/llm-judge-report.json`.
+   - Severity normalization shipped for CI parity across GitHub Actions and GitLab CI (`critical`, `high`, `medium`, `low`).
+   - Detection transparency shipped: confidence score, confidence gap, ranked candidates, and reasoning persisted in onboarding report.
+3. Upgrade and benchmarking
+   - Upgrade assistant shipped: `agentic-senior-core upgrade [target-directory] [--dry-run] [--yes]`.
+   - Expanded smoke tests shipped for profile matrix and upgrade dry-run.
+   - Benchmark command shipped: `npm run benchmark:detection`.
 
-Success metrics:
-- 95% severity mapping consistency across CI providers.
-- 85% top-1 stack detection accuracy on benchmark fixture repositories.
-- 50% reduction of manual stack correction during init flow.
+### V1.6 KPI Snapshot (Baseline)
+- Detection top-1 accuracy: 91.67% (fixture benchmark baseline).
+- Manual correction rate proxy: 8.33% (fixture benchmark baseline).
+- Smoke test pass rate: 100% on current suite.
 
-### Q4 2026 — Upgrade Experience and Benchmarking
-1. Upgrade and migration assistant
-   - Add CLI upgrade command for existing repositories.
-   - Show migration diff summary before writing files.
-2. Quality gates and onboarding benchmarks
-   - Expand smoke tests with profile-specific scenarios.
-   - Track initialization success rate and setup duration trends.
-
-Success metrics:
-- 90% successful automated upgrade runs on benchmark repositories.
-- Median setup time below 3 minutes for newbie initialization mode.
-- 99% pass rate for smoke tests on supported profiles.
-
-## Release Exit Criteria for V1.6
-
+### Release Exit Criteria for V1.6
 - Team profile packs and override governance validations are shipped and documented.
 - CI annotations are available for GitHub Actions and GitLab CI.
-- Detection accuracy benchmark and upgrade benchmark are published.
+- Detection accuracy benchmark command is published.
 - Smoke tests cover beginner, balanced, and strict profile scenarios.
+
+## V1.7 (H2 2026) — Frontend Product Experience
+
+This milestone is intentionally shifted to 2026 H2 to follow immediately after V1.6 completion.
+
+### Q3 2026 — Frontend System Foundation
+1. Visual language and token architecture
+   - Define a non-generic design language with intentional typography, color system, spacing scale, and motion tokens.
+   - Establish responsive breakpoints and density rules for docs and product surfaces.
+2. Frontend architecture baseline
+   - Define component layering (primitives, composites, page sections) and content-driven layout contracts.
+   - Add accessibility baseline: focus management, contrast, keyboard navigation, reduced-motion support.
+
+Success metrics:
+- 100% UI surfaces consume shared tokens (no ad-hoc style constants in page code).
+- WCAG AA contrast coverage for all primary UI text elements.
+
+### Q4 2026 — Human-Crafted UX, Responsiveness, and Conversion
+1. Homepage and docs shell redesign
+   - Replace generic block layouts with editorial, brand-forward composition and narrative flow.
+   - Build mobile-first navigation and responsive reading rhythm for technical docs.
+2. Interaction and motion quality
+   - Add purposeful transitions (page load, section reveal, hierarchy emphasis).
+   - Keep motion performant and compliant with reduced-motion preferences.
+3. Trust and conversion loop
+   - Improve onboarding CTA clarity (template, bootstrap scripts, npm paths) using user journey telemetry.
+   - Add visual regression checks and frontend usability checklist in release gates.
+
+Success metrics:
+- Lighthouse mobile performance >= 90 on core pages.
+- 0 critical responsive regressions across common viewport ranges.
+- 25% reduction in onboarding drop-off between landing and first successful init.

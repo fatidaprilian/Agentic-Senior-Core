@@ -85,6 +85,12 @@ If you have an existing project and want to infuse it with Staff-level context:
 npx @fatidaprilian/agentic-senior-core init
 ```
 
+Use team defaults (V1.6 track) with profile packs:
+
+```bash
+npx @fatidaprilian/agentic-senior-core init --profile-pack startup
+```
+
 The CLI is smart. It auto-detects your current development stack, helps you build a governance profile (select from `beginner`, `balanced`, or `strict`), and writes the compiled rules straight to your root automatically!
 
 If you are totally new to concepts like blueprints and guardrails, no problem — just run:
@@ -94,6 +100,20 @@ npx @fatidaprilian/agentic-senior-core init --newbie
 
 ### Option 4: Clone and Play
 Want to poke around under the hood? Just clone the repo and `npx @fatidaprilian/agentic-senior-core init` locally. No runtime dependencies needed — everything uses native Node.js!
+
+### Upgrade Existing Governance Packs (V1.6)
+
+Preview migration changes safely:
+
+```bash
+npx @fatidaprilian/agentic-senior-core upgrade --dry-run
+```
+
+Apply migration updates:
+
+```bash
+npx @fatidaprilian/agentic-senior-core upgrade --yes
+```
 
 ---
 
@@ -112,6 +132,7 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 - **Codebase Intelligence:** `.agent-context/state/` gives architecture/dependency boundaries so the agent understands high-risk areas.
 - **Override System:** `.agent-override.md` allows controlled enterprise exceptions without forking core rules.
 - **Automated Guardrails:** CI blueprints include LLM-as-a-Judge flow using `pr-checklist.md`.
+- **Machine-Readable CI Output:** LLM Judge emits `JSON_REPORT` payloads and writes `.agent-context/state/llm-judge-report.json` for PR/MR annotation tooling.
 - **MCP Self-Healing Loop:** `mcp.json` defines diagnostics + fix proposal workflow when lint/CI fails.
 
 ---
@@ -165,6 +186,12 @@ Ensure everything is running smoothly before merging rules patches:
 npm run validate
 ```
 
+Track stack-detection KPI trends:
+
+```bash
+npm run benchmark:detection
+```
+
 ---
 
 ## Roadmap
@@ -174,10 +201,13 @@ npm run validate
 - V1.4: Dynamic Governance Engine (interactive CLI, context compiler, state maps, override system, guardrails, MCP self-healing).
 - V1.5: Newbie-First Experience (Node-first runtime, zero-install onboarding path, smart auto-detection, profile presets, LLM severity thresholds, docs split, smoke tests).
 
-### V1.6 (Planned) — Enterprise Reliability and Team Workflow
-- Team profile packs and safer override governance.
-- CI annotation standardization and stronger detection accuracy.
-- Upgrade assistant, benchmark coverage, and onboarding KPIs.
+### V1.6 (Released) — Enterprise Reliability and Team Workflow
+- Team profile packs and safer override governance shipped.
+- CI annotation standardization and stronger detection transparency shipped.
+- Upgrade assistant and benchmark coverage shipped.
+
+### V1.7 (H2 2026) — Frontend Product Experience
+- Frontend system foundation, responsive UX polish, and conversion-focused docs experience.
 
 Detailed timeline and success metrics: [docs/roadmap.md](docs/roadmap.md)
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Agentic-Senior-Core CLI (V1.5)
+ * Agentic-Senior-Core CLI (V1.6)
  *
  * Newbie-first delivery engine for bootstrapping governance files with
  * profile selection, stack auto-detection, and plain-language summaries.
@@ -17,6 +17,19 @@ const PACKAGE_JSON_PATH = path.join(REPO_ROOT, "package.json");
 const CLI_VERSION = JSON.parse(fsSync.readFileSync(PACKAGE_JSON_PATH, "utf8")).version;
 const AGENT_CONTEXT_DIR = path.join(REPO_ROOT, ".agent-context");
 const POLICY_FILE_NAME = "llm-judge-threshold.json";
+const PROFILE_PACKS_DIRECTORY_NAME = "profiles";
+const PROFILE_PACK_REQUIRED_FIELDS = [
+  "slug",
+  "displayName",
+  "description",
+  "defaultProfile",
+  "defaultStack",
+  "defaultBlueprint",
+  "ciGuardrails",
+  "lockCi",
+  "blockingSeverities",
+];
+const ALLOWED_SEVERITY_LEVELS = new Set(["critical", "high", "medium", "low"]);
 const BLUEPRINT_RECOMMENDATIONS = {
   "typescript.md": "api-nextjs.md",
   "python.md": "fastapi-service.md",
@@ -73,17 +86,21 @@ function printUsage() {
   console.log("  bunx @fatidaprilian/agentic-senior-core init   # optional Bun path");
   console.log("");
   console.log("Usage:");
-  console.log("  agentic-senior-core init [target-directory] [--profile <beginner|balanced|strict>] [--stack <name>] [--blueprint <name>] [--ci <true|false>] [--newbie]");
+  console.log("  agentic-senior-core init [target-directory] [--profile <beginner|balanced|strict>] [--profile-pack <name>] [--stack <name>] [--blueprint <name>] [--ci <true|false>] [--newbie]");
+  console.log("  agentic-senior-core upgrade [target-directory] [--dry-run] [--yes]");
   console.log("  agentic-senior-core --version");
   console.log("");
   console.log("Options:");
   console.log("  --help       Show help");
   console.log("  --version    Show CLI version");
   console.log("  --profile    Choose beginner, balanced, or strict");
+  console.log("  --profile-pack  Apply a team profile pack (startup, regulated, platform)");
   console.log("  --newbie     Alias for --profile beginner");
   console.log("  --stack      Override stack selection");
   console.log("  --blueprint  Override blueprint selection");
   console.log("  --ci         Override CI/CD guardrails (true|false)");
+  console.log("  --dry-run    Preview upgrade without writing files");
+  console.log("  --yes        Skip confirmation prompts for upgrade");
 }
 
 async function pathExists(targetPath) {
@@ -121,6 +138,33 @@ async function copyDirectory(sourceDirectoryPath, targetDirectoryPath) {
     }
 
     await fs.copyFile(sourceEntryPath, targetEntryPath);
+  }
+}
+
+async function copyGovernanceAssetsToTarget(resolvedTargetDirectoryPath) {
+  for (const sourceDirectoryName of directoryCopies) {
+    const sourceDirectoryPath = path.join(REPO_ROOT, sourceDirectoryName);
+    if (!(await pathExists(sourceDirectoryPath))) {
+      continue;
+    }
+
+    await copyDirectory(sourceDirectoryPath, path.join(resolvedTargetDirectoryPath, sourceDirectoryName));
+  }
+
+  for (const entryPointFileName of entryPointFiles) {
+    const sourceFilePath = path.join(REPO_ROOT, entryPointFileName);
+    const targetFilePath = path.join(resolvedTargetDirectoryPath, entryPointFileName);
+
+    if (!(await pathExists(sourceFilePath))) {
+      continue;
+    }
+
+    if (path.resolve(sourceFilePath) === path.resolve(targetFilePath)) {
+      continue;
+    }
+
+    await ensureDirectory(path.dirname(targetFilePath));
+    await fs.copyFile(sourceFilePath, targetFilePath);
   }
 }
 
@@ -188,6 +232,112 @@ function matchFileNameFromInput(rawInput, fileNames) {
 function matchProfileNameFromInput(rawInput) {
   const normalizedInput = normalizeChoiceInput(rawInput);
   return Object.keys(PROFILE_PRESETS).find((profileName) => profileName === normalizedInput) || null;
+}
+
+function parseBooleanSetting(rawBooleanValue, contextLabel) {
+  const normalizedValue = normalizeChoiceInput(rawBooleanValue);
+
+  if (normalizedValue === "true") {
+    return true;
+  }
+
+  if (normalizedValue === "false") {
+    return false;
+  }
+
+  throw new Error(`Invalid boolean value for ${contextLabel}: ${rawBooleanValue}`);
+}
+
+function parseBlockingSeverities(rawSeverityValues, fileName) {
+  const parsedSeverities = rawSeverityValues
+    .split(",")
+    .map((severityValue) => normalizeChoiceInput(severityValue))
+    .filter(Boolean);
+
+  if (parsedSeverities.length === 0) {
+    throw new Error(`Profile pack ${fileName} must define at least one blocking severity.`);
+  }
+
+  const invalidSeverity = parsedSeverities.find((severityValue) => !ALLOWED_SEVERITY_LEVELS.has(severityValue));
+  if (invalidSeverity) {
+    throw new Error(`Profile pack ${fileName} uses unsupported severity: ${invalidSeverity}`);
+  }
+
+  return parsedSeverities;
+}
+
+function parseProfilePackContent(fileName, profilePackContent) {
+  const parsedFields = {};
+  const profilePackLines = profilePackContent.split(/\r?\n/);
+
+  for (const profilePackLine of profilePackLines) {
+    const lineMatch = profilePackLine.match(/^([A-Za-z][A-Za-z0-9 ]+):\s*(.+)$/);
+    if (!lineMatch) {
+      continue;
+    }
+
+    const fieldName = lineMatch[1].trim();
+    const fieldValue = lineMatch[2].trim();
+    parsedFields[fieldName] = fieldValue;
+  }
+
+  for (const requiredFieldName of PROFILE_PACK_REQUIRED_FIELDS) {
+    if (!parsedFields[requiredFieldName]) {
+      throw new Error(`Profile pack ${fileName} is missing required field: ${requiredFieldName}`);
+    }
+  }
+
+  const defaultProfileName = matchProfileNameFromInput(parsedFields.defaultProfile);
+  if (!defaultProfileName) {
+    throw new Error(`Profile pack ${fileName} has invalid defaultProfile: ${parsedFields.defaultProfile}`);
+  }
+
+  return {
+    fileName,
+    slug: normalizeChoiceInput(parsedFields.slug),
+    displayName: parsedFields.displayName,
+    description: parsedFields.description,
+    defaultProfileName,
+    defaultStackFileName: parsedFields.defaultStack.trim(),
+    defaultBlueprintFileName: parsedFields.defaultBlueprint.trim(),
+    defaultCi: parseBooleanSetting(parsedFields.ciGuardrails, `${fileName} ciGuardrails`),
+    lockCi: parseBooleanSetting(parsedFields.lockCi, `${fileName} lockCi`),
+    blockingSeverities: parseBlockingSeverities(parsedFields.blockingSeverities, fileName),
+    owner: parsedFields.owner || null,
+    lastUpdated: parsedFields.lastUpdated || null,
+  };
+}
+
+async function collectProfilePacks(targetDirectoryPath) {
+  const profilePackDirectoryPath = path.join(targetDirectoryPath, ".agent-context", PROFILE_PACKS_DIRECTORY_NAME);
+  if (!(await pathExists(profilePackDirectoryPath))) {
+    return [];
+  }
+
+  const profilePackFileNames = await collectFileNames(profilePackDirectoryPath);
+  const profilePackDefinitions = [];
+
+  for (const profilePackFileName of profilePackFileNames) {
+    const profilePackFilePath = path.join(profilePackDirectoryPath, profilePackFileName);
+    const profilePackContent = await fs.readFile(profilePackFilePath, "utf8");
+    profilePackDefinitions.push(parseProfilePackContent(profilePackFileName, profilePackContent));
+  }
+
+  return profilePackDefinitions;
+}
+
+function findProfilePackByInput(profilePackInput, profilePackDefinitions) {
+  const normalizedProfilePackInput = normalizeChoiceInput(profilePackInput);
+
+  return profilePackDefinitions.find((profilePackDefinition) => {
+    const normalizedFileName = normalizeChoiceInput(profilePackDefinition.fileName.replace(/\.md$/i, ""));
+    const normalizedSlug = normalizeChoiceInput(profilePackDefinition.slug);
+    const normalizedDisplayName = normalizeChoiceInput(profilePackDefinition.displayName);
+
+    return normalizedProfilePackInput === normalizedFileName
+      || normalizedProfilePackInput === normalizedSlug
+      || normalizedProfilePackInput === normalizedDisplayName;
+  }) || null;
 }
 
 async function collectFileNames(folderPath) {
@@ -311,6 +461,9 @@ async function detectProjectContext(targetDirectoryPath) {
       recommendedBlueprintFileName: null,
       confidenceLabel: null,
       confidenceScore: 0,
+      confidenceGap: 0,
+      detectionReasoning: "No known project markers were detected.",
+      rankedCandidates: [],
       evidence: [],
     };
   }
@@ -318,8 +471,11 @@ async function detectProjectContext(targetDirectoryPath) {
   detectionCandidates.sort((leftCandidate, rightCandidate) => rightCandidate.confidenceScore - leftCandidate.confidenceScore);
   const strongestCandidate = detectionCandidates[0];
   const secondStrongestCandidate = detectionCandidates[1];
+  const confidenceGap = secondStrongestCandidate
+    ? Number((strongestCandidate.confidenceScore - secondStrongestCandidate.confidenceScore).toFixed(2))
+    : Number(strongestCandidate.confidenceScore.toFixed(2));
   const isAmbiguous = secondStrongestCandidate
-    && strongestCandidate.confidenceScore - secondStrongestCandidate.confidenceScore < 0.08;
+    && confidenceGap < 0.08;
   const confidenceLabel = strongestCandidate.confidenceScore >= 0.9
     ? "high"
     : strongestCandidate.confidenceScore >= 0.78
@@ -328,6 +484,14 @@ async function detectProjectContext(targetDirectoryPath) {
   const evidence = isAmbiguous
     ? [...strongestCandidate.evidence, `multiple stack signals detected`]
     : strongestCandidate.evidence;
+  const rankedCandidates = detectionCandidates.slice(0, 3).map((detectionCandidate) => ({
+    stackFileName: detectionCandidate.stackFileName,
+    confidenceScore: Number(detectionCandidate.confidenceScore.toFixed(2)),
+    evidence: detectionCandidate.evidence,
+  }));
+  const detectionReasoning = isAmbiguous
+    ? `Top signal ${toTitleCase(strongestCandidate.stackFileName)} is close to ${toTitleCase(secondStrongestCandidate.stackFileName)} (confidence gap ${confidenceGap}).`
+    : `Top signal ${toTitleCase(strongestCandidate.stackFileName)} won with confidence ${strongestCandidate.confidenceScore.toFixed(2)} from markers: ${strongestCandidate.evidence.join(", ") || "none"}.`;
 
   return {
     hasExistingProjectFiles,
@@ -335,6 +499,9 @@ async function detectProjectContext(targetDirectoryPath) {
     recommendedBlueprintFileName: BLUEPRINT_RECOMMENDATIONS[strongestCandidate.stackFileName] || null,
     confidenceLabel,
     confidenceScore: strongestCandidate.confidenceScore,
+    confidenceGap,
+    detectionReasoning,
+    rankedCandidates,
     evidence,
   };
 }
@@ -357,7 +524,24 @@ function buildDetectionSummary(projectDetection) {
     ? projectDetection.evidence.join(", ")
     : "basic project markers";
 
-  return `This folder looks like ${toTitleCase(projectDetection.recommendedStackFileName)} with ${projectDetection.confidenceLabel} confidence based on ${readableEvidence}.`;
+  const confidenceGapSummary = typeof projectDetection.confidenceGap === "number"
+    ? ` Confidence gap: ${projectDetection.confidenceGap}.`
+    : "";
+
+  return `This folder looks like ${toTitleCase(projectDetection.recommendedStackFileName)} with ${projectDetection.confidenceLabel} confidence based on ${readableEvidence}.${confidenceGapSummary}`;
+}
+
+function formatDetectionCandidates(rankedCandidates) {
+  if (!rankedCandidates?.length) {
+    return "No ranked candidates available.";
+  }
+
+  return rankedCandidates
+    .map((candidate, candidateIndex) => {
+      const evidenceSummary = candidate.evidence?.length ? candidate.evidence.join(", ") : "no direct markers";
+      return `${candidateIndex + 1}. ${toTitleCase(candidate.stackFileName)} (score ${candidate.confidenceScore}) via ${evidenceSummary}`;
+    })
+    .join("\n");
 }
 
 async function writeSelectedPolicy(targetDirectoryPath, selectedProfileName) {
@@ -370,17 +554,26 @@ async function writeSelectedPolicy(targetDirectoryPath, selectedProfileName) {
 async function writeOnboardingReport({
   targetDirectoryPath,
   selectedProfileName,
+  selectedProfilePack,
   selectedStackFileName,
   selectedBlueprintFileName,
   includeCiGuardrails,
   setupDurationMs,
   projectDetection,
+  operationMode = "init",
 }) {
   const onboardingReportPath = path.join(targetDirectoryPath, ".agent-context", "state", "onboarding-report.json");
   const onboardingReport = {
     cliVersion: CLI_VERSION,
     generatedAt: new Date().toISOString(),
+    operationMode,
     selectedProfile: selectedProfileName,
+    selectedProfilePack: selectedProfilePack
+      ? {
+        name: selectedProfilePack.slug,
+        sourceFile: selectedProfilePack.fileName,
+      }
+      : null,
     selectedStack: selectedStackFileName,
     selectedBlueprint: selectedBlueprintFileName,
     ciGuardrailsEnabled: includeCiGuardrails,
@@ -389,6 +582,10 @@ async function writeOnboardingReport({
       recommendedStack: projectDetection.recommendedStackFileName,
       recommendedBlueprint: projectDetection.recommendedBlueprintFileName,
       confidenceLabel: projectDetection.confidenceLabel,
+      confidenceScore: projectDetection.confidenceScore,
+      confidenceGap: projectDetection.confidenceGap,
+      detectionReasoning: projectDetection.detectionReasoning,
+      rankedCandidates: projectDetection.rankedCandidates,
       evidence: projectDetection.evidence,
     },
   };
@@ -396,7 +593,17 @@ async function writeOnboardingReport({
   await fs.writeFile(onboardingReportPath, JSON.stringify(onboardingReport, null, 2) + "\n", "utf8");
 }
 
-async function compileDynamicContext({
+async function loadOnboardingReportIfExists(targetDirectoryPath) {
+  const onboardingReportPath = path.join(targetDirectoryPath, ".agent-context", "state", "onboarding-report.json");
+  if (!(await pathExists(onboardingReportPath))) {
+    return null;
+  }
+
+  const onboardingReportContent = await fs.readFile(onboardingReportPath, "utf8");
+  return JSON.parse(onboardingReportContent);
+}
+
+async function buildCompiledRulesContent({
   targetDirectoryPath,
   selectedProfileName,
   selectedStackFileName,
@@ -460,7 +667,7 @@ async function compileDynamicContext({
     `## REVIEW CHECKLIST: pr-checklist.md\nSource: .agent-context/review-checklists/pr-checklist.md\n\n${prChecklistContent.trim()}`
   );
 
-  const compiledRules = [
+  return [
     "# AGENTIC-SENIOR-CORE DYNAMIC GOVERNANCE RULESET",
     "",
     `Generated by Agentic-Senior-Core CLI v${CLI_VERSION}`,
@@ -482,6 +689,23 @@ async function compileDynamicContext({
     ...contextBlocks,
     "",
   ].join("\n");
+}
+
+async function compileDynamicContext({
+  targetDirectoryPath,
+  selectedProfileName,
+  selectedStackFileName,
+  selectedBlueprintFileName,
+  includeCiGuardrails,
+}) {
+  const resolvedTargetDirectoryPath = path.resolve(targetDirectoryPath);
+  const compiledRules = await buildCompiledRulesContent({
+    targetDirectoryPath: resolvedTargetDirectoryPath,
+    selectedProfileName,
+    selectedStackFileName,
+    selectedBlueprintFileName,
+    includeCiGuardrails,
+  });
 
   await fs.writeFile(path.join(resolvedTargetDirectoryPath, ".cursorrules"), compiledRules, "utf8");
   await fs.writeFile(path.join(resolvedTargetDirectoryPath, ".windsurfrules"), compiledRules, "utf8");
@@ -497,12 +721,16 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
   try {
     const stackFileNames = await collectFileNames(path.join(AGENT_CONTEXT_DIR, "stacks"));
     const blueprintFileNames = await collectFileNames(path.join(AGENT_CONTEXT_DIR, "blueprints"));
+    const profilePackDefinitions = await collectProfilePacks(REPO_ROOT);
 
     const selectedStackFileNameFromOption = initOptions.stack
       ? matchFileNameFromInput(initOptions.stack, stackFileNames)
       : null;
     const selectedBlueprintFileNameFromOption = initOptions.blueprint
       ? matchFileNameFromInput(initOptions.blueprint, blueprintFileNames)
+      : null;
+    const selectedProfilePack = initOptions.profilePack
+      ? findProfilePackByInput(initOptions.profilePack, profilePackDefinitions)
       : null;
 
     if (initOptions.stack && !selectedStackFileNameFromOption) {
@@ -513,6 +741,22 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
       throw new Error(`Unknown blueprint: ${initOptions.blueprint}`);
     }
 
+    if (initOptions.profilePack && !selectedProfilePack) {
+      throw new Error(`Unknown profile pack: ${initOptions.profilePack}`);
+    }
+
+    if (selectedProfilePack && !stackFileNames.includes(selectedProfilePack.defaultStackFileName)) {
+      throw new Error(
+        `Profile pack ${selectedProfilePack.fileName} references unknown stack file: ${selectedProfilePack.defaultStackFileName}`
+      );
+    }
+
+    if (selectedProfilePack && !blueprintFileNames.includes(selectedProfilePack.defaultBlueprintFileName)) {
+      throw new Error(
+        `Profile pack ${selectedProfilePack.fileName} references unknown blueprint file: ${selectedProfilePack.defaultBlueprintFileName}`
+      );
+    }
+
     console.log(`\nAgentic-Senior-Core CLI v${CLI_VERSION}`);
     console.log("I will copy governance files into your target folder and compile a single rulebook for your AI tools.");
 
@@ -520,6 +764,10 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
     if (projectDetection.hasExistingProjectFiles) {
       console.log("I found files in the target directory, so I checked whether this already looks like an existing project.");
       console.log(buildDetectionSummary(projectDetection));
+      console.log("Detection reasoning:");
+      console.log(projectDetection.detectionReasoning);
+      console.log("Top candidates:");
+      console.log(formatDetectionCandidates(projectDetection.rankedCandidates));
     } else {
       console.log("The target directory is empty, so I will guide you through a fresh setup.");
     }
@@ -528,6 +776,8 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
       ? initOptions.profile
       : initOptions.newbie
         ? "beginner"
+        : selectedProfilePack?.defaultProfileName
+          ? selectedProfilePack.defaultProfileName
         : normalizeChoiceInput(await askChoice(
           "How much guidance do you want?",
           Object.values(PROFILE_PRESETS).map((profilePreset) => `${profilePreset.displayName} — ${profilePreset.description}`),
@@ -542,6 +792,11 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
     console.log(`\nSelected profile: ${selectedProfile.displayName}`);
     console.log(`This profile will block these review severities in CI: ${formatBlockingSeverities(selectedProfile.blockingSeverities)}.`);
 
+    if (selectedProfilePack) {
+      console.log(`Applying team profile pack: ${selectedProfilePack.displayName}.`);
+      console.log(`Pack defaults: stack ${toTitleCase(selectedProfilePack.defaultStackFileName)}, blueprint ${toTitleCase(selectedProfilePack.defaultBlueprintFileName)}.`);
+    }
+
     const shouldApplyDetectedStack = projectDetection.recommendedStackFileName && !selectedStackFileNameFromOption
       ? await askYesNo(
         `Use the detected stack recommendation (${toTitleCase(projectDetection.recommendedStackFileName)})?`,
@@ -555,6 +810,7 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
 
     const selectedResolvedStackFileName = selectedStackFileNameFromOption
       || (shouldApplyDetectedStack ? projectDetection.recommendedStackFileName : null)
+      || selectedProfilePack?.defaultStackFileName
       || selectedProfile.defaultStackFileName
       || stackFileNames[
         stackDisplayChoices.indexOf(
@@ -572,6 +828,7 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
 
     const selectedResolvedBlueprintFileName = selectedBlueprintFileNameFromOption
       || recommendedBlueprintFileName
+      || selectedProfilePack?.defaultBlueprintFileName
       || selectedProfile.defaultBlueprintFileName
       || blueprintFileNames[
         blueprintDisplayChoices.indexOf(
@@ -581,38 +838,20 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
 
     const includeCiGuardrails = typeof initOptions.ci === "boolean"
       ? initOptions.ci
+      : selectedProfilePack?.lockCi
+        ? selectedProfilePack.defaultCi
+        : typeof selectedProfilePack?.defaultCi === "boolean"
+          ? selectedProfilePack.defaultCi
       : selectedProfile.lockCi
         ? selectedProfile.defaultCi
         : await askYesNo("Enable CI/CD guardrails and the LLM Judge policy?", userInterface, selectedProfile.defaultCi);
 
-    for (const sourceDirectoryName of directoryCopies) {
-      const sourceDirectoryPath = path.join(REPO_ROOT, sourceDirectoryName);
-      if (!(await pathExists(sourceDirectoryPath))) {
-        continue;
-      }
-
-      await copyDirectory(sourceDirectoryPath, path.join(resolvedTargetDirectoryPath, sourceDirectoryName));
-    }
-
-    for (const entryPointFileName of entryPointFiles) {
-      const sourceFilePath = path.join(REPO_ROOT, entryPointFileName);
-      const targetFilePath = path.join(resolvedTargetDirectoryPath, entryPointFileName);
-
-      if (!(await pathExists(sourceFilePath))) {
-        continue;
-      }
-
-      if (path.resolve(sourceFilePath) === path.resolve(targetFilePath)) {
-        continue;
-      }
-
-      await ensureDirectory(path.dirname(targetFilePath));
-      await fs.copyFile(sourceFilePath, targetFilePath);
-    }
+    await copyGovernanceAssetsToTarget(resolvedTargetDirectoryPath);
 
     await compileDynamicContext({
       targetDirectoryPath: resolvedTargetDirectoryPath,
       selectedProfileName,
+      selectedProfilePack,
       selectedStackFileName: selectedResolvedStackFileName,
       selectedBlueprintFileName: selectedResolvedBlueprintFileName,
       includeCiGuardrails,
@@ -624,16 +863,21 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
     await writeOnboardingReport({
       targetDirectoryPath: resolvedTargetDirectoryPath,
       selectedProfileName,
+      selectedProfilePack,
       selectedStackFileName: selectedResolvedStackFileName,
       selectedBlueprintFileName: selectedResolvedBlueprintFileName,
       includeCiGuardrails,
       setupDurationMs,
       projectDetection,
+      operationMode: "init",
     });
 
     console.log("\nInitialization complete.");
     console.log(`- Target directory: ${resolvedTargetDirectoryPath}`);
     console.log(`- Profile: ${selectedProfile.displayName}`);
+    if (selectedProfilePack) {
+      console.log(`- Team profile pack: ${selectedProfilePack.displayName}`);
+    }
     console.log(`- Stack: ${toTitleCase(selectedResolvedStackFileName)}`);
     console.log(`- Blueprint: ${toTitleCase(selectedResolvedBlueprintFileName)}`);
     console.log(`- CI/CD guardrails: ${includeCiGuardrails ? "enabled" : "disabled"}`);
@@ -648,9 +892,110 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
   }
 }
 
+async function runUpgradeCommand(targetDirectoryArgument, upgradeOptions = {}) {
+  const resolvedTargetDirectoryPath = path.resolve(targetDirectoryArgument || ".");
+  const setupStartedAt = Date.now();
+  await ensureDirectory(resolvedTargetDirectoryPath);
+
+  const userInterface = readline.createInterface({ input, output });
+
+  try {
+    console.log(`\nAgentic-Senior-Core CLI v${CLI_VERSION}`);
+    console.log("Running upgrade assistant for an existing repository.");
+
+    await copyGovernanceAssetsToTarget(resolvedTargetDirectoryPath);
+
+    const stackFileNames = await collectFileNames(path.join(AGENT_CONTEXT_DIR, "stacks"));
+    const blueprintFileNames = await collectFileNames(path.join(AGENT_CONTEXT_DIR, "blueprints"));
+    const existingOnboardingReport = await loadOnboardingReportIfExists(resolvedTargetDirectoryPath);
+    const projectDetection = await detectProjectContext(resolvedTargetDirectoryPath);
+
+    const selectedProfileName = PROFILE_PRESETS[existingOnboardingReport?.selectedProfile]
+      ? existingOnboardingReport.selectedProfile
+      : "balanced";
+
+    const selectedStackFileName = stackFileNames.includes(existingOnboardingReport?.selectedStack)
+      ? existingOnboardingReport.selectedStack
+      : projectDetection.recommendedStackFileName || "typescript.md";
+
+    const selectedBlueprintFileName = blueprintFileNames.includes(existingOnboardingReport?.selectedBlueprint)
+      ? existingOnboardingReport.selectedBlueprint
+      : BLUEPRINT_RECOMMENDATIONS[selectedStackFileName] || "api-nextjs.md";
+
+    const includeCiGuardrails = typeof existingOnboardingReport?.ciGuardrailsEnabled === "boolean"
+      ? existingOnboardingReport.ciGuardrailsEnabled
+      : true;
+
+    const currentRulesPath = path.join(resolvedTargetDirectoryPath, ".cursorrules");
+    const currentRulesContent = await pathExists(currentRulesPath)
+      ? await fs.readFile(currentRulesPath, "utf8")
+      : "";
+
+    const plannedRulesContent = await buildCompiledRulesContent({
+      targetDirectoryPath: resolvedTargetDirectoryPath,
+      selectedProfileName,
+      selectedStackFileName,
+      selectedBlueprintFileName,
+      includeCiGuardrails,
+    });
+
+    const isRulesContentChanged = currentRulesContent !== plannedRulesContent;
+    const currentRuleLineCount = currentRulesContent ? currentRulesContent.split(/\r?\n/).length : 0;
+    const plannedRuleLineCount = plannedRulesContent.split(/\r?\n/).length;
+
+    console.log("\nUpgrade preview:");
+    console.log(`- Target directory: ${resolvedTargetDirectoryPath}`);
+    console.log(`- Profile: ${toTitleCase(selectedProfileName)}`);
+    console.log(`- Stack: ${toTitleCase(selectedStackFileName)}`);
+    console.log(`- Blueprint: ${toTitleCase(selectedBlueprintFileName)}`);
+    console.log(`- CI/CD guardrails: ${includeCiGuardrails ? "enabled" : "disabled"}`);
+    console.log(`- Existing rules lines: ${currentRuleLineCount}`);
+    console.log(`- Planned rules lines: ${plannedRuleLineCount}`);
+    console.log(`- Rules changed: ${isRulesContentChanged ? "yes" : "no"}`);
+
+    if (upgradeOptions.dryRun) {
+      console.log("\nDry run enabled. No files were modified.");
+      return;
+    }
+
+    const shouldApplyUpgrade = upgradeOptions.skipConfirmation
+      ? true
+      : await askYesNo("Apply upgrade and write migrated files?", userInterface, true);
+
+    if (!shouldApplyUpgrade) {
+      console.log("Upgrade cancelled by user.");
+      return;
+    }
+
+    await fs.writeFile(currentRulesPath, plannedRulesContent, "utf8");
+    await fs.writeFile(path.join(resolvedTargetDirectoryPath, ".windsurfrules"), plannedRulesContent, "utf8");
+    await writeSelectedPolicy(resolvedTargetDirectoryPath, selectedProfileName);
+
+    const setupDurationMs = Date.now() - setupStartedAt;
+    await writeOnboardingReport({
+      targetDirectoryPath: resolvedTargetDirectoryPath,
+      selectedProfileName,
+      selectedProfilePack: existingOnboardingReport?.selectedProfilePack || null,
+      selectedStackFileName,
+      selectedBlueprintFileName,
+      includeCiGuardrails,
+      setupDurationMs,
+      projectDetection,
+      operationMode: "upgrade",
+    });
+
+    console.log("\nUpgrade complete.");
+    console.log(`- Rules rewritten: ${isRulesContentChanged ? "yes" : "no (metadata refreshed)"}`);
+    console.log(`- Setup time: ${formatDuration(setupDurationMs)}`);
+    console.log("- Updated files: .cursorrules, .windsurfrules, .agent-context/state/onboarding-report.json");
+  } finally {
+    userInterface.close();
+  }
+}
+
 async function main() {
   const commandArgument = process.argv[2];
-  const initArguments = process.argv.slice(3);
+  const commandArguments = process.argv.slice(3);
 
   if (!commandArgument || commandArgument === "--help" || commandArgument === "-h") {
     printUsage();
@@ -662,23 +1007,56 @@ async function main() {
     return;
   }
 
-  if (commandArgument !== "init") {
+  if (commandArgument !== "init" && commandArgument !== "upgrade") {
     console.error(`Unknown command: ${commandArgument}`);
     printUsage();
     exit(1);
   }
 
+  if (commandArgument === "upgrade") {
+    const parsedUpgradeOptions = {
+      targetDirectory: ".",
+      dryRun: false,
+      skipConfirmation: false,
+    };
+
+    for (let argumentIndex = 0; argumentIndex < commandArguments.length; argumentIndex++) {
+      const currentArgument = commandArguments[argumentIndex];
+
+      if (!currentArgument.startsWith("--")) {
+        parsedUpgradeOptions.targetDirectory = currentArgument;
+        continue;
+      }
+
+      if (currentArgument === "--dry-run") {
+        parsedUpgradeOptions.dryRun = true;
+        continue;
+      }
+
+      if (currentArgument === "--yes") {
+        parsedUpgradeOptions.skipConfirmation = true;
+        continue;
+      }
+
+      throw new Error(`Unknown option: ${currentArgument}`);
+    }
+
+    await runUpgradeCommand(parsedUpgradeOptions.targetDirectory, parsedUpgradeOptions);
+    return;
+  }
+
   const parsedInitOptions = {
     targetDirectory: ".",
     profile: undefined,
+    profilePack: undefined,
     stack: undefined,
     blueprint: undefined,
     ci: undefined,
     newbie: false,
   };
 
-  for (let argumentIndex = 0; argumentIndex < initArguments.length; argumentIndex++) {
-    const currentArgument = initArguments[argumentIndex];
+  for (let argumentIndex = 0; argumentIndex < commandArguments.length; argumentIndex++) {
+    const currentArgument = commandArguments[argumentIndex];
 
     if (!currentArgument.startsWith("--")) {
       parsedInitOptions.targetDirectory = currentArgument;
@@ -686,7 +1064,7 @@ async function main() {
     }
 
     if (currentArgument === "--profile") {
-      parsedInitOptions.profile = matchProfileNameFromInput(initArguments[argumentIndex + 1] || "");
+      parsedInitOptions.profile = matchProfileNameFromInput(commandArguments[argumentIndex + 1] || "");
       argumentIndex += 1;
       continue;
     }
@@ -696,8 +1074,19 @@ async function main() {
       continue;
     }
 
+    if (currentArgument === "--profile-pack") {
+      parsedInitOptions.profilePack = commandArguments[argumentIndex + 1];
+      argumentIndex += 1;
+      continue;
+    }
+
+    if (currentArgument.startsWith("--profile-pack=")) {
+      parsedInitOptions.profilePack = currentArgument.split("=")[1];
+      continue;
+    }
+
     if (currentArgument === "--stack") {
-      parsedInitOptions.stack = initArguments[argumentIndex + 1];
+      parsedInitOptions.stack = commandArguments[argumentIndex + 1];
       argumentIndex += 1;
       continue;
     }
@@ -708,7 +1097,7 @@ async function main() {
     }
 
     if (currentArgument === "--blueprint") {
-      parsedInitOptions.blueprint = initArguments[argumentIndex + 1];
+      parsedInitOptions.blueprint = commandArguments[argumentIndex + 1];
       argumentIndex += 1;
       continue;
     }
@@ -719,7 +1108,7 @@ async function main() {
     }
 
     if (currentArgument === "--ci") {
-      const ciRawValue = initArguments[argumentIndex + 1];
+      const ciRawValue = commandArguments[argumentIndex + 1];
       parsedInitOptions.ci = ciRawValue?.toLowerCase() === "true";
       argumentIndex += 1;
       continue;
@@ -744,6 +1133,7 @@ async function main() {
 
   await runInitCommand(parsedInitOptions.targetDirectory, {
     profile: parsedInitOptions.profile,
+    profilePack: parsedInitOptions.profilePack,
     stack: parsedInitOptions.stack,
     blueprint: parsedInitOptions.blueprint,
     ci: parsedInitOptions.ci,

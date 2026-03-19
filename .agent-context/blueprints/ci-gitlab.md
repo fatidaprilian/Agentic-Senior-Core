@@ -121,6 +121,11 @@ llm:judge:
     - git fetch --unshallow || true  # Ensure full history for git diff
   script:
     - node scripts/llm-judge.mjs
+  artifacts:
+    when: always
+    paths:
+      - .agent-context/state/llm-judge-report.json
+    expire_in: 7 days
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
@@ -184,3 +189,12 @@ deploy:production:
 - [ ] Add `timeout` to long-running jobs
 - [ ] Use `needs:` for DAG optimization where possible
 - [ ] Add `llm:judge` stage that enforces `pr-checklist.md`
+
+## LLM Judge Annotation Contract
+
+For MR annotations and dashboards, parse either:
+
+- Log line: `JSON_REPORT: { ... }`
+- Artifact: `.agent-context/state/llm-judge-report.json`
+
+Severity values are normalized by the judge to: `critical`, `high`, `medium`, `low`.

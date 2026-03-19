@@ -125,6 +125,12 @@ jobs:
           node-version: '22'
       - name: Run LLM Judge
         run: node scripts/llm-judge.mjs
+      - name: Upload LLM Judge machine report
+        if: always()
+        uses: actions/upload-artifact@<pin-sha>
+        with:
+          name: llm-judge-report
+          path: .agent-context/state/llm-judge-report.json
 ```
 
 ### 2. Deploy Workflow (`deploy.yml`)
@@ -175,6 +181,15 @@ jobs:
 5. **Restrict self-hosted runners** — ephemeral containers only, never persistent VMs
 6. **Require PR approval** for workflows from forks
 7. **Minimize prompt scope** — send diff + checklist only, never full secret-bearing config
+
+## LLM Judge Annotation Contract
+
+The judge emits a machine-friendly payload line and artifact that can be consumed by annotation scripts:
+
+- Log line: `JSON_REPORT: { ... }`
+- Artifact file: `.agent-context/state/llm-judge-report.json`
+- Normalized severity values: `critical`, `high`, `medium`, `low`
+- Override artifact path (optional): `LLM_JUDGE_OUTPUT_PATH`
 
 ## Efficiency Rules
 

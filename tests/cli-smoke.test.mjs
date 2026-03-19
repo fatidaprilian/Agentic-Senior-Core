@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync } from 'node:child_process';
-import { existsSync, rmSync, readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 test('CLI Smoke Tests', async (t) => {
@@ -11,21 +12,90 @@ test('CLI Smoke Tests', async (t) => {
     const output = execSync(`node ${cliPath} --help`).toString();
     assert.match(output, /Usage:/);
     assert.match(output, /init/);
+    assert.match(output, /--profile-pack/);
   });
 
-  await t.test('detects failure playfully using --newbie option', () => {
-    // --newbie option doesn't exist natively for CLI process if without target directory in init 
-    // unless you give it `init --newbie` but since tests shouldn't pollute workspace too heavily
-    // we'll run init to generate an onboarding report on current root (which might contain its own logic)
-    const reportPath = join(process.cwd(), 'onboarding-report.json');
-    if (existsSync(reportPath)) {
-      rmSync(reportPath);
+  await t.test('initializes with a team profile pack', () => {
+    const temporaryTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-'));
+
+    try {
+      const initOutput = execSync(
+        `node ${cliPath} init ${temporaryTargetDirectory} --profile-pack startup --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+
+      assert.match(initOutput, /Initialization complete/);
+      assert.match(initOutput, /Team profile pack: Startup Team/);
+
+      const onboardingReportPath = join(temporaryTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
+      const onboardingReport = JSON.parse(readFileSync(onboardingReportPath, 'utf8'));
+
+      assert.equal(onboardingReport.selectedProfile, 'balanced');
+      assert.equal(onboardingReport.selectedProfilePack?.name, 'startup');
+      assert.equal(onboardingReport.selectedProfilePack?.sourceFile, 'startup.md');
+      assert.equal(onboardingReport.selectedStack, 'typescript.md');
+      assert.equal(onboardingReport.selectedBlueprint, 'api-nextjs.md');
+      assert.equal(onboardingReport.ciGuardrailsEnabled, true);
+    } finally {
+      rmSync(temporaryTargetDirectory, { recursive: true, force: true });
     }
-    
-    // We will simulate process with input because of readline in the code if we don't pass arguments.
-    // However, our code has `if (args.includes('--newbie'))` or `if (args.includes('--strict'))` etc...
-    // Let's test the script validate.mjs instead as our core CLI verification test
+  });
+
+  await t.test('initializes beginner and strict profiles non-interactively', () => {
+    const beginnerTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-beginner-'));
+    const strictTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-strict-'));
+
+    try {
+      const beginnerOutput = execSync(
+        `node ${cliPath} init ${beginnerTargetDirectory} --profile beginner --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+      assert.match(beginnerOutput, /Profile: Beginner/);
+
+      const strictOutput = execSync(
+        `node ${cliPath} init ${strictTargetDirectory} --profile strict --stack go --blueprint go-service --ci true`
+      ).toString();
+      assert.match(strictOutput, /Profile: Strict/);
+
+      const strictReportPath = join(strictTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
+      const strictReport = JSON.parse(readFileSync(strictReportPath, 'utf8'));
+      assert.equal(strictReport.selectedProfile, 'strict');
+      assert.equal(strictReport.selectedStack, 'go.md');
+      assert.equal(strictReport.selectedBlueprint, 'go-service.md');
+      assert.equal(strictReport.operationMode, 'init');
+    } finally {
+      rmSync(beginnerTargetDirectory, { recursive: true, force: true });
+      rmSync(strictTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('upgrade command supports dry-run preview', () => {
+    const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-'));
+
+    try {
+      execSync(
+        `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --dry-run`).toString();
+      assert.match(upgradeOutput, /Upgrade preview/);
+      assert.match(upgradeOutput, /Dry run enabled/);
+    } finally {
+      rmSync(upgradeTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('validator checks override governance', () => {
     const validationOutput = execSync(`node ${join(process.cwd(), 'scripts', 'validate.mjs')}`).toString();
     assert.match(validationOutput, /RESULTS/);
+    assert.match(validationOutput, /Checking override governance/);
+  });
+
+  await t.test('detection benchmark prints machine-readable metrics', () => {
+    const benchmarkOutput = execSync(`node ${join(process.cwd(), 'scripts', 'detection-benchmark.mjs')}`).toString();
+    const benchmarkReport = JSON.parse(benchmarkOutput);
+
+    assert.ok(typeof benchmarkReport.top1Accuracy === 'number');
+    assert.ok(typeof benchmarkReport.manualCorrectionRate === 'number');
+    assert.ok(Array.isArray(benchmarkReport.fixtures));
+    assert.ok(benchmarkReport.fixtureCount >= 1);
   });
 });

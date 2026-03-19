@@ -24,8 +24,10 @@ const PACKAGE_JSON_PATH = join(ROOT_DIR, 'package.json');
 const CHANGELOG_PATH = join(ROOT_DIR, 'CHANGELOG.md');
 const README_PATH = join(ROOT_DIR, 'README.md');
 const POLICY_FILE_PATH = join(ROOT_DIR, '.agent-context', 'policies', 'llm-judge-threshold.json');
+const OVERRIDE_FILE_PATH = join(ROOT_DIR, '.agent-override.md');
 const GENERATED_RULE_FILES = ['.cursorrules', '.windsurfrules'];
 const ALLOWED_SEVERITIES = new Set(['critical', 'high', 'medium', 'low']);
+const OVERRIDE_WARNING_WINDOW_DAYS = 30;
 
 const validationResult = {
   passed: 0,
@@ -98,6 +100,7 @@ async function validateRequiredFiles() {
     'bin/agentic-senior-core.js',
     'scripts/validate.mjs',
     'scripts/llm-judge.mjs',
+    'scripts/detection-benchmark.mjs',
     'scripts/init-project.sh',
     'scripts/init-project.ps1',
     '.cursorrules',
@@ -187,6 +190,9 @@ async function validateRuleFiles() {
     'blueprints/graphql-grpc-api.md',
     'blueprints/infrastructure-as-code.md',
     'blueprints/kubernetes-manifests.md',
+    'profiles/startup.md',
+    'profiles/regulated.md',
+    'profiles/platform.md',
     'review-checklists/pr-checklist.md',
     'review-checklists/security-audit.md',
     'review-checklists/performance-audit.md',
@@ -210,6 +216,87 @@ async function validateRuleFiles() {
     }
 
     pass(`.agent-context/${expectedPath}`);
+  }
+}
+
+function stripMarkdownCodeBlocks(markdownText) {
+  return markdownText.replace(/```[\s\S]*?```/g, '');
+}
+
+function parseOverrideExpiryDate(rawExpiryValue) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(rawExpiryValue)) {
+    return null;
+  }
+
+  const parsedDate = new Date(`${rawExpiryValue}T00:00:00.000Z`);
+  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+}
+
+async function validateOverrideGovernance() {
+  console.log('\nChecking override governance...');
+
+  const overrideContent = await readTextFile(OVERRIDE_FILE_PATH);
+  const overrideContentWithoutCodeBlocks = stripMarkdownCodeBlocks(overrideContent);
+  const overrideEntryPattern = /\[Rule:\s*([^\]]+)\]([\s\S]*?)(?=\n\[Rule:|$)/g;
+  const overrideEntries = [];
+  let overrideEntryMatch = overrideEntryPattern.exec(overrideContentWithoutCodeBlocks);
+
+  while (overrideEntryMatch) {
+    const ruleName = overrideEntryMatch[1].trim();
+    const entryBody = overrideEntryMatch[2];
+    const ownerMatch = entryBody.match(/(?:^|\n)Owner:\s*(.+)/);
+    const expiryMatch = entryBody.match(/(?:^|\n)Expiry:\s*(.+)/);
+
+    overrideEntries.push({
+      ruleName,
+      owner: ownerMatch ? ownerMatch[1].trim() : '',
+      expiry: expiryMatch ? expiryMatch[1].trim() : '',
+    });
+
+    overrideEntryMatch = overrideEntryPattern.exec(overrideContentWithoutCodeBlocks);
+  }
+
+  if (overrideEntries.length === 0) {
+    pass('No active override entries found; governance baseline remains strict');
+    return;
+  }
+
+  const currentDate = new Date();
+
+  for (const overrideEntry of overrideEntries) {
+    const overrideContextLabel = `[Rule: ${overrideEntry.ruleName}]`;
+
+    if (!overrideEntry.owner) {
+      fail(`${overrideContextLabel} is missing Owner metadata`);
+      continue;
+    }
+
+    pass(`${overrideContextLabel} owner is defined`);
+
+    if (!overrideEntry.expiry) {
+      fail(`${overrideContextLabel} is missing Expiry metadata`);
+      continue;
+    }
+
+    const expiryDate = parseOverrideExpiryDate(overrideEntry.expiry);
+    if (!expiryDate) {
+      fail(`${overrideContextLabel} has invalid Expiry format (expected YYYY-MM-DD)`);
+      continue;
+    }
+
+    const remainingMilliseconds = expiryDate.getTime() - currentDate.getTime();
+    const remainingDays = Math.floor(remainingMilliseconds / (1000 * 60 * 60 * 24));
+
+    if (remainingMilliseconds < 0) {
+      fail(`${overrideContextLabel} is expired (${overrideEntry.expiry})`);
+      continue;
+    }
+
+    pass(`${overrideContextLabel} expiry is valid (${overrideEntry.expiry})`);
+
+    if (remainingDays <= OVERRIDE_WARNING_WINDOW_DAYS) {
+      warn(`${overrideContextLabel} expires in ${remainingDays} day(s); renew or remove soon`);
+    }
   }
 }
 
@@ -425,6 +512,7 @@ async function main() {
   await validateRequiredFiles();
   await validateMarkdownFiles();
   await validateRuleFiles();
+  await validateOverrideGovernance();
   await validateAgentsManifest();
   await validateCrossReferences();
   await validatePackageMetadata();

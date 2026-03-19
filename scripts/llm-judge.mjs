@@ -36,7 +36,7 @@
  */
 
 import { execSync } from 'node:child_process';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -47,11 +47,99 @@ const __dirname = dirname(__filename);
 
 const REPOSITORY_ROOT = resolve(__dirname, '..');
 const PR_CHECKLIST_PATH = resolve(REPOSITORY_ROOT, '.agent-context/review-checklists/pr-checklist.md');
+const DEFAULT_MACHINE_REPORT_PATH = resolve(REPOSITORY_ROOT, '.agent-context/state/llm-judge-report.json');
 const MAX_DIFF_CHARS = parseInt(process.env.LLM_MAX_DIFF_CHARS ?? '12000', 10);
 const IS_DRY_RUN = process.argv.includes('--dry-run');
+const SHOULD_EMIT_MACHINE_REPORT = process.env.LLM_JUDGE_EMIT_JSON !== 'false';
+const MACHINE_REPORT_PATH = process.env.LLM_JUDGE_OUTPUT_PATH || DEFAULT_MACHINE_REPORT_PATH;
 
 /** @type {string[]} Source code file extensions to include in the diff */
 const SOURCE_CODE_EXTENSIONS = ['*.ts', '*.tsx', '*.js', '*.mjs', '*.cjs', '*.py', '*.go', '*.java', '*.cs', '*.rb', '*.php'];
+
+/** @type {Record<string, string>} */
+const SEVERITY_NORMALIZATION_TABLE = {
+  critical: 'critical',
+  blocker: 'critical',
+  severe: 'critical',
+  high: 'high',
+  major: 'high',
+  medium: 'medium',
+  moderate: 'medium',
+  low: 'low',
+  minor: 'low',
+  info: 'low',
+  informational: 'low',
+};
+
+/**
+ * @typedef {{
+ *   rule: string,
+ *   problem: string,
+ *   severity: string,
+ * }} Violation
+ */
+
+/**
+ * @typedef {{
+ *   generatedAt: string,
+ *   schemaVersion: string,
+ *   profile: string,
+ *   provider: string,
+ *   ciProvider: string,
+ *   blockingSeverities: string[],
+ *   failDecision: boolean,
+ *   malformedVerdict: boolean,
+ *   providerError: boolean,
+ *   dryRun: boolean,
+ *   summary: {
+ *     totalViolations: number,
+ *     blockingViolations: number,
+ *   },
+ *   violations: Violation[],
+ * }} MachineReportPayload
+ */
+
+function detectCiProvider() {
+  if (process.env.GITHUB_ACTIONS === 'true') {
+    return 'github';
+  }
+
+  if (process.env.GITLAB_CI === 'true') {
+    return 'gitlab';
+  }
+
+  return 'local';
+}
+
+/**
+ * @param {string | undefined} rawSeverityValue
+ * @returns {string}
+ */
+function normalizeSeverity(rawSeverityValue) {
+  const normalizedSeverityKey = String(rawSeverityValue || '').trim().toLowerCase();
+  return SEVERITY_NORMALIZATION_TABLE[normalizedSeverityKey] || 'low';
+}
+
+/**
+ * @param {MachineReportPayload} machineReportPayload
+ * @returns {string}
+ */
+function formatMachineReadableLine(machineReportPayload) {
+  return `JSON_REPORT: ${JSON.stringify(machineReportPayload)}`;
+}
+
+/**
+ * @param {MachineReportPayload} machineReportPayload
+ */
+function emitMachineReadableReport(machineReportPayload) {
+  if (!SHOULD_EMIT_MACHINE_REPORT) {
+    return;
+  }
+
+  writeFileSync(MACHINE_REPORT_PATH, `${JSON.stringify(machineReportPayload, null, 2)}\n`, 'utf-8');
+  console.log(formatMachineReadableLine(machineReportPayload));
+  console.log(`📎  Machine report saved: ${MACHINE_REPORT_PATH}`);
+}
 
 // ─── GIT DIFF COLLECTION ──────────────────────────────────────────────────────
 
@@ -361,12 +449,67 @@ function extractVerdict(llmResponseText, failOnMalformedResponse) {
   try {
     return JSON.parse(match[1]);
   } catch (err) {
-    console.error('⚠️  Failed to parse JSON_VERDICT:', err.message);
+    const parseError = /** @type {Error} */ (err);
+    console.error('⚠️  Failed to parse JSON_VERDICT:', parseError.message);
     if (failOnMalformedResponse) {
       process.exit(1);
     }
     return [];
   }
+}
+
+/**
+ * @param {Array<{ rule?: string, problem?: string, severity?: string }>} violations
+ * @returns {Violation[]}
+ */
+function normalizeViolations(violations) {
+  return violations.map((violationItem) => ({
+    rule: String(violationItem.rule || 'Unknown Rule'),
+    problem: String(violationItem.problem || 'No problem description provided.'),
+    severity: normalizeSeverity(violationItem.severity),
+  }));
+}
+
+/**
+ * @param {{
+ *   provider: string,
+ *   selectedProfile: string,
+ *   blockingSeverities: string[],
+ *   finalViolations: Violation[],
+ *   blockingFound: Violation[],
+ *   isDryRun: boolean,
+ *   malformedVerdict: boolean,
+ *   providerError: boolean,
+ * }} payloadInput
+ * @returns {MachineReportPayload}
+ */
+function buildMachineReportPayload({
+  provider,
+  selectedProfile,
+  blockingSeverities,
+  finalViolations,
+  blockingFound,
+  isDryRun,
+  malformedVerdict,
+  providerError,
+}) {
+  return {
+    generatedAt: new Date().toISOString(),
+    schemaVersion: '1.0',
+    profile: selectedProfile,
+    provider,
+    ciProvider: detectCiProvider(),
+    blockingSeverities,
+    failDecision: blockingFound.length > 0 || malformedVerdict || providerError,
+    malformedVerdict,
+    providerError,
+    dryRun: isDryRun,
+    summary: {
+      totalViolations: finalViolations.length,
+      blockingViolations: blockingFound.length,
+    },
+    violations: finalViolations,
+  };
 }
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
@@ -408,6 +551,17 @@ async function main() {
     console.log(userMessage.slice(0, 400) + '...');
     console.log('─────────────────────────────────────────────────────────');
     console.log('');
+    const dryRunReportPayload = buildMachineReportPayload({
+      provider: 'dry-run',
+      selectedProfile,
+      blockingSeverities,
+      finalViolations: [],
+      blockingFound: [],
+      isDryRun: true,
+      malformedVerdict: false,
+      providerError: false,
+    });
+    emitMachineReadableReport(dryRunReportPayload);
     console.log('VERDICT: JSON_VERDICT: []  (dry run — no LLM call made)');
     process.exit(0);
   }
@@ -421,6 +575,17 @@ async function main() {
     console.warn('    to enable automated code review.');
     console.warn('');
     console.warn('⏭️   Skipping LLM review — pipeline continues (PASS).');
+    const skippedReportPayload = buildMachineReportPayload({
+      provider: 'none',
+      selectedProfile,
+      blockingSeverities,
+      finalViolations: [],
+      blockingFound: [],
+      isDryRun: false,
+      malformedVerdict: false,
+      providerError: false,
+    });
+    emitMachineReadableReport(skippedReportPayload);
     process.exit(0);
   }
 
@@ -438,6 +603,17 @@ async function main() {
     llmReviewText = await selectedProvider.invokeProvider(systemPrompt, userMessage);
   } catch (providerCallError) {
     console.warn(`⚠️   LLM call failed: ${/** @type {Error} */ (providerCallError).message}`);
+    const providerErrorReportPayload = buildMachineReportPayload({
+      provider: selectedProvider.providerName,
+      selectedProfile,
+      blockingSeverities,
+      finalViolations: [],
+      blockingFound: [],
+      isDryRun: false,
+      malformedVerdict: false,
+      providerError: Boolean(failOnProviderError),
+    });
+    emitMachineReadableReport(providerErrorReportPayload);
     if (failOnProviderError) {
       console.error('❌  Failing pipeline because provider errors are not allowed by the profile.');
       process.exit(1);
@@ -455,9 +631,22 @@ async function main() {
   console.log('');
 
   // ── Step 8: Enforce verdict ─────────────────────────────
-  const finalViolations = extractVerdict(llmReviewText, failOnMalformedResponse);
+  const rawVerdictViolations = extractVerdict(llmReviewText, failOnMalformedResponse);
+  const finalViolations = normalizeViolations(rawVerdictViolations);
+  const hasMalformedVerdict = !/JSON_VERDICT:\s*\[/i.test(llmReviewText);
 
   const blockingFound = finalViolations.filter(v => blockingSeverities.includes(v.severity.toLowerCase()));
+  const machineReportPayload = buildMachineReportPayload({
+    provider: selectedProvider.providerName,
+    selectedProfile,
+    blockingSeverities,
+    finalViolations,
+    blockingFound,
+    isDryRun: false,
+    malformedVerdict: hasMalformedVerdict,
+    providerError: false,
+  });
+  emitMachineReadableReport(machineReportPayload);
 
   if (blockingFound.length > 0) {
     console.error(`❌  LLM Judge: ${blockingFound.length} blocking violations found (severities: ${blockingSeverities.join(', ')}). Pipeline FAILED.`);
