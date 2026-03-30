@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.7.0 - 2026-03-30
+### Added
+- Frontend usability checklist for release gating (`.agent-context/review-checklists/frontend-usability.md`).
+- V1.7 execution playbook (`docs/v1.7-execution-playbook.md`).
+- Frontend usability audit script (`scripts/frontend-usability-audit.mjs`) and npm command (`npm run audit:frontend-usability`).
+- Frontend usability CI workflow that publishes audit report artifacts (`.github/workflows/frontend-usability-gate.yml`).
+- GitHub issue template for V1.7 frontend work items (`.github/ISSUE_TEMPLATE/v1.7-frontend-work-item.yml`).
+
+### Changed
+- Repository validator now enforces V1.7 frontend governance assets.
+- Roadmap now marks V1.7 as delivered governance and execution-quality pack for downstream frontend implementations.
+
 ## 1.6.0 - 2026-03-19
 ### Added
 - Team profile packs for `startup`, `regulated`, and `platform` in `.agent-context/profiles/`.

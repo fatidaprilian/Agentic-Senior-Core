@@ -48,4 +48,9 @@ We bundle Model Context Protocol capabilities. `mcp.json` establishes diagnostic
 - The same payload is written to `.agent-context/state/llm-judge-report.json` (override path with `LLM_JUDGE_OUTPUT_PATH`).
 - Severity values are normalized to `critical|high|medium|low` for consistent behavior in GitHub Actions and GitLab CI parsing.
 
+## Frontend Usability Gate (V1.7)
+- Frontend governance release adds `.agent-context/review-checklists/frontend-usability.md` as the release quality baseline.
+- `scripts/frontend-usability-audit.mjs` validates required frontend execution assets and outputs a machine-readable audit report.
+- `.github/workflows/frontend-usability-gate.yml` runs the audit and publishes report artifacts per workflow run.
+
 Use `.agent-override.md` carefully to carve explicit exceptions bounded by `reason` and `expiry` parameters.

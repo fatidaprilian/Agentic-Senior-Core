@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Agentic-Senior-Core CLI (V1.6)
+ * Agentic-Senior-Core CLI (V1.7)
  *
  * Newbie-first delivery engine for bootstrapping governance files with
  * profile selection, stack auto-detection, and plain-language summaries.

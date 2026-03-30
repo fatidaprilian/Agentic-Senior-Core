@@ -35,32 +35,30 @@ Original plan targeted Q2-Q4 2026, but implementation landed earlier (Q2 2026).
 
 ## V1.7 (H2 2026) — Frontend Product Experience
 
-This milestone is intentionally shifted to 2026 H2 to follow immediately after V1.6 completion.
+Release status: Completed and released on 2026-03-30.
 
-### Q3 2026 — Frontend System Foundation
-1. Visual language and token architecture
-   - Define a non-generic design language with intentional typography, color system, spacing scale, and motion tokens.
-   - Establish responsive breakpoints and density rules for docs and product surfaces.
-2. Frontend architecture baseline
-   - Define component layering (primitives, composites, page sections) and content-driven layout contracts.
-   - Add accessibility baseline: focus management, contrast, keyboard navigation, reduced-motion support.
+Note: this repository is a governance and enablement engine, not a runtime frontend app. V1.7 therefore ships a frontend execution-quality pack (standards, gates, templates, and CI artifacts) that downstream projects use to implement UI work.
 
-Success metrics:
-- 100% UI surfaces consume shared tokens (no ad-hoc style constants in page code).
-- WCAG AA contrast coverage for all primary UI text elements.
+### Delivered Scope
+1. Frontend quality gate assets
+   - Frontend usability checklist shipped: `.agent-context/review-checklists/frontend-usability.md`.
+   - Frontend execution playbook shipped: `docs/v1.7-execution-playbook.md`.
+   - V1.7 issue decomposition shipped: `docs/v1.7-issue-breakdown.md`.
+2. Frontend audit and CI automation
+   - Frontend usability audit script shipped: `scripts/frontend-usability-audit.mjs`.
+   - CI workflow shipped: `.github/workflows/frontend-usability-gate.yml`.
+   - Frontend audit report artifact generation shipped for each run.
+3. Execution workflow tooling
+   - GitHub issue template shipped: `.github/ISSUE_TEMPLATE/v1.7-frontend-work-item.yml`.
+   - NPM command shipped: `npm run audit:frontend-usability`.
 
-### Q4 2026 — Human-Crafted UX, Responsiveness, and Conversion
-1. Homepage and docs shell redesign
-   - Replace generic block layouts with editorial, brand-forward composition and narrative flow.
-   - Build mobile-first navigation and responsive reading rhythm for technical docs.
-2. Interaction and motion quality
-   - Add purposeful transitions (page load, section reveal, hierarchy emphasis).
-   - Keep motion performant and compliant with reduced-motion preferences.
-3. Trust and conversion loop
-   - Improve onboarding CTA clarity (template, bootstrap scripts, npm paths) using user journey telemetry.
-   - Add visual regression checks and frontend usability checklist in release gates.
+### V1.7 KPI Snapshot (Governance Baseline)
+- Frontend usability gate assets: present and validated.
+- Frontend audit workflow: present and configured to upload report artifacts.
+- Execution planning coverage: Q3 and Q4 issue breakdown fully enumerated.
 
-Success metrics:
-- Lighthouse mobile performance >= 90 on core pages.
-- 0 critical responsive regressions across common viewport ranges.
-- 25% reduction in onboarding drop-off between landing and first successful init.
+### Release Exit Criteria for V1.7
+- Frontend usability checklist is versioned and validated in repository checks.
+- Frontend usability CI workflow publishes report artifacts.
+- V1.7 issue breakdown and execution playbook are published.
+- Issue template for V1.7 frontend work is available.

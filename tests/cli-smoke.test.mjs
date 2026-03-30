@@ -98,4 +98,14 @@ test('CLI Smoke Tests', async (t) => {
     assert.ok(Array.isArray(benchmarkReport.fixtures));
     assert.ok(benchmarkReport.fixtureCount >= 1);
   });
+
+  await t.test('frontend usability audit outputs machine-readable report', () => {
+    const auditOutput = execSync(`node ${join(process.cwd(), 'scripts', 'frontend-usability-audit.mjs')}`).toString();
+    const auditReport = JSON.parse(auditOutput);
+
+    assert.equal(auditReport.auditName, 'frontend-usability-audit');
+    assert.equal(auditReport.passed, true);
+    assert.equal(auditReport.failureCount, 0);
+    assert.ok(Array.isArray(auditReport.failures));
+  });
 });

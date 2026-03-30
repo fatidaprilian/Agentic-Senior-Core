@@ -206,8 +206,9 @@ npm run benchmark:detection
 - CI annotation standardization and stronger detection transparency shipped.
 - Upgrade assistant and benchmark coverage shipped.
 
-### V1.7 (H2 2026) — Frontend Product Experience
-- Frontend system foundation, responsive UX polish, and conversion-focused docs experience.
+### V1.7 (Released) — Frontend Product Experience Governance Pack
+- Frontend usability checklist, execution playbook, and issue template shipped.
+- Frontend usability audit script and CI artifact workflow shipped.
 
 Detailed timeline and success metrics: [docs/roadmap.md](docs/roadmap.md)
 
