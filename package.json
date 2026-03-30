@@ -1,6 +1,6 @@
 {
   "name": "@fatidaprilian/agentic-senior-core",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
   "bin": {
     "agentic-senior-core": "./bin/agentic-senior-core.js"
@@ -41,8 +41,10 @@
   "scripts": {
     "init": "node ./bin/agentic-senior-core.js init",
     "audit:frontend-usability": "node ./scripts/frontend-usability-audit.mjs",
+    "gate:release": "node ./scripts/release-gate.mjs",
+    "sbom:generate": "node ./scripts/generate-sbom.mjs",
     "benchmark:detection": "node ./scripts/detection-benchmark.mjs",
     "validate": "node ./scripts/validate.mjs",
-    "test": "node --test ./tests/cli-smoke.test.mjs ./tests/llm-judge.test.mjs"
+    "test": "node --test ./tests/cli-smoke.test.mjs ./tests/llm-judge.test.mjs ./tests/enterprise-ops.test.mjs"
   }
 }

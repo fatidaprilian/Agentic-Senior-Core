@@ -53,4 +53,11 @@ We bundle Model Context Protocol capabilities. `mcp.json` establishes diagnostic
 - `scripts/frontend-usability-audit.mjs` validates required frontend execution assets and outputs a machine-readable audit report.
 - `.github/workflows/frontend-usability-gate.yml` runs the audit and publishes report artifacts per workflow run.
 
+## Release Operations and Compliance (V1.8)
+- `scripts/release-gate.mjs` enforces version/changelog/roadmap consistency and required enterprise assets.
+- `.github/workflows/release-gate.yml` publishes machine-readable release-gate reports for every CI run.
+- `scripts/generate-sbom.mjs` emits a CycloneDX 1.5 JSON payload for supply-chain evidence.
+- `.github/workflows/sbom-compliance.yml` publishes SBOM artifacts for audit traceability.
+- `.agent-context/review-checklists/release-operations.md` and `docs/v1.8-operations-playbook.md` define operational release controls.
+
 Use `.agent-override.md` carefully to carve explicit exceptions bounded by `reason` and `expiry` parameters.

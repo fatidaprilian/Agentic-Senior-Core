@@ -210,6 +210,11 @@ npm run benchmark:detection
 - Frontend usability checklist, execution playbook, and issue template shipped.
 - Frontend usability audit script and CI artifact workflow shipped.
 
+### V1.8 (Released) — Enterprise Release Operations and Compliance
+- Release-gate automation shipped with machine-readable artifact output.
+- CycloneDX SBOM generation and compliance artifact workflow shipped.
+- Operations playbook and release-operations checklist shipped.
+
 Detailed timeline and success metrics: [docs/roadmap.md](docs/roadmap.md)
 
 ---

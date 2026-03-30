@@ -62,3 +62,34 @@ Note: this repository is a governance and enablement engine, not a runtime front
 - Frontend usability CI workflow publishes report artifacts.
 - V1.7 issue breakdown and execution playbook are published.
 - Issue template for V1.7 frontend work is available.
+
+## V1.8 (2026) — Enterprise Release Operations and Compliance
+
+Release status: Completed and released on 2026-03-30.
+
+V1.8 upgrades release governance from policy-only to CI-enforced evidence with machine-readable outputs and compliance artifacts.
+
+### Delivered Scope
+1. Release governance gate
+   - Release gate script shipped: `scripts/release-gate.mjs`.
+   - NPM command shipped: `npm run gate:release`.
+   - CI workflow shipped: `.github/workflows/release-gate.yml` with artifact upload.
+2. Supply-chain compliance baseline
+   - CycloneDX SBOM generator shipped: `scripts/generate-sbom.mjs`.
+   - NPM command shipped: `npm run sbom:generate`.
+   - CI workflow shipped: `.github/workflows/sbom-compliance.yml` with SBOM artifact upload.
+3. Operational readiness standards
+   - Release operations checklist shipped: `.agent-context/review-checklists/release-operations.md`.
+   - Operations execution guide shipped: `docs/v1.8-operations-playbook.md`.
+   - Enterprise operations automated tests shipped: `tests/enterprise-ops.test.mjs`.
+
+### V1.8 KPI Snapshot (Operations Baseline)
+- Release gate report generation: pass and artifact-ready.
+- SBOM generation: pass and artifact-ready.
+- Validator enforcement: V1.8 required assets validated.
+
+### Release Exit Criteria for V1.8
+- `npm run gate:release` passes with zero failed checks.
+- `npm run sbom:generate` emits valid CycloneDX JSON payload.
+- Release and SBOM CI workflows publish artifacts each run.
+- Release operations checklist and playbook are published.

@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.8.0 - 2026-03-30
+### Added
+- Enterprise release operations checklist (`.agent-context/review-checklists/release-operations.md`).
+- V1.8 operations playbook (`docs/v1.8-operations-playbook.md`).
+- Release gate script with machine-readable output (`scripts/release-gate.mjs`) and npm command (`npm run gate:release`).
+- CycloneDX SBOM generator (`scripts/generate-sbom.mjs`) and npm command (`npm run sbom:generate`).
+- CI release gate artifact workflow (`.github/workflows/release-gate.yml`).
+- CI SBOM compliance artifact workflow (`.github/workflows/sbom-compliance.yml`).
+- Enterprise operations test suite (`tests/enterprise-ops.test.mjs`).
+
+### Changed
+- Repository validator now enforces V1.8 release-governance and compliance assets.
+- Test command now includes enterprise operations checks.
+
 ## 1.7.0 - 2026-03-30
 ### Added
 - Frontend usability checklist for release gating (`.agent-context/review-checklists/frontend-usability.md`).
