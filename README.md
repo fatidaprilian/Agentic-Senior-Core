@@ -50,8 +50,8 @@ Your new repository will instantly possess all the rules, configurations, and AI
 If you already know you want the CLI from npm, use one of these paths:
 
 ```bash
-npm exec --yes @fatidaprilian/agentic-senior-core init
-npm install -g @fatidaprilian/agentic-senior-core
+npm exec --yes @ryuenn3123/agentic-senior-core init
+npm install -g @ryuenn3123/agentic-senior-core
 agentic-senior-core init
 ```
 
@@ -68,9 +68,9 @@ This gives the same interactive prompts to choose your profile (`beginner`, `bal
 If you want a plug-and-play starter instead of answering every question, use a preset:
 
 ```bash
-npx @fatidaprilian/agentic-senior-core init --preset frontend-web
-npx @fatidaprilian/agentic-senior-core init --preset backend-api
-npx @fatidaprilian/agentic-senior-core init --preset mobile-react-native
+npx @ryuenn3123/agentic-senior-core init --preset frontend-web
+npx @ryuenn3123/agentic-senior-core init --preset backend-api
+npx @ryuenn3123/agentic-senior-core init --preset mobile-react-native
 ```
 
 ### Option 2: GitHub Bootstrap Scripts (No npx required)
@@ -100,20 +100,20 @@ If you want interactive selection, omit `-Profile`, `-Stack`, `-Blueprint`, and 
 If you have an existing project and want to infuse it with Staff-level context:
 
 ```bash
-npx @fatidaprilian/agentic-senior-core init
+npx @ryuenn3123/agentic-senior-core init
 ```
 
 Use team defaults (V1.8 track) with profile packs:
 
 ```bash
-npx @fatidaprilian/agentic-senior-core init --profile-pack startup
+npx @ryuenn3123/agentic-senior-core init --profile-pack startup
 ```
 
 The CLI is smart. It auto-detects your current development stack, helps you build a governance profile (select from `beginner`, `balanced`, or `strict`), and writes the compiled rules straight to your root automatically!
 
 If you are totally new to concepts like blueprints and guardrails, no problem — just run:
 ```bash
-npx @fatidaprilian/agentic-senior-core init --newbie
+npx @ryuenn3123/agentic-senior-core init --newbie
 ```
 
 ### Skill Selector
@@ -168,7 +168,7 @@ Use the stack that matches the project you are actually starting:
 | Review quality | Pattern-oriented | Checklist-oriented | Gate-oriented | Planning/security/benchmark review model with CI integration |
 
 ### Option 4: Clone and Play
-Want to poke around under the hood? Just clone the repo and `npx @fatidaprilian/agentic-senior-core init` locally. No runtime dependencies needed — everything uses native Node.js!
+Want to poke around under the hood? Just clone the repo and `npx @ryuenn3123/agentic-senior-core init` locally. No runtime dependencies needed — everything uses native Node.js!
 
 ### Upgrade Existing Governance Packs (V1.8)
 
@@ -177,13 +177,13 @@ Yes, the upgrade flow still works. Use `--dry-run` first to preview changes, the
 Preview migration changes safely:
 
 ```bash
-npx @fatidaprilian/agentic-senior-core upgrade --dry-run
+npx @ryuenn3123/agentic-senior-core upgrade --dry-run
 ```
 
 Apply migration updates:
 
 ```bash
-npx @fatidaprilian/agentic-senior-core upgrade --yes
+npx @ryuenn3123/agentic-senior-core upgrade --yes
 ```
 
 ---

@@ -137,10 +137,10 @@ function printUsage() {
   console.log("Agentic-Senior-Core CLI");
   console.log("");
   console.log("Local runtime:");
-  console.log("  npm exec --yes @fatidaprilian/agentic-senior-core init");
-  console.log("  npx @fatidaprilian/agentic-senior-core init");
-  console.log("  npm install -g @fatidaprilian/agentic-senior-core && agentic-senior-core init");
-  console.log("  bunx @fatidaprilian/agentic-senior-core init   # optional Bun path");
+  console.log("  npm exec --yes @ryuenn3123/agentic-senior-core init");
+  console.log("  npx @ryuenn3123/agentic-senior-core init");
+  console.log("  npm install -g @ryuenn3123/agentic-senior-core && agentic-senior-core init");
+  console.log("  bunx @ryuenn3123/agentic-senior-core init   # optional Bun path");
   console.log("  open GitHub template: https://github.com/fatidaprilian/Agentic-Senior-Core/generate");
   console.log("");
   console.log("Usage:");
@@ -299,9 +299,9 @@ async function runLaunchCommand() {
 
     if (launchChoice === "npm / npx path") {
       console.log("\nChoose one of these package paths:");
-      console.log("npm exec --yes @fatidaprilian/agentic-senior-core init");
-      console.log("npx @fatidaprilian/agentic-senior-core init");
-      console.log("npm install -g @fatidaprilian/agentic-senior-core && agentic-senior-core init");
+      console.log("npm exec --yes @ryuenn3123/agentic-senior-core init");
+      console.log("npx @ryuenn3123/agentic-senior-core init");
+      console.log("npm install -g @ryuenn3123/agentic-senior-core && agentic-senior-core init");
       return;
     }
 

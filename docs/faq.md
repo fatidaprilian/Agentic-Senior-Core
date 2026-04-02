@@ -34,5 +34,5 @@ You can also use repository bootstrap scripts:
 After the package is published, the shorter equivalent is:
 
 ```bash
-npx @fatidaprilian/agentic-senior-core init
+npx @ryuenn3123/agentic-senior-core init
 ```

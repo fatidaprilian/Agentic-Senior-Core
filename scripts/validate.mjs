@@ -560,7 +560,7 @@ async function validateDocumentationFlow() {
     'GitHub Template',
     'scripts/init-project.ps1',
     'scripts/init-project.sh',
-    'npx @fatidaprilian/agentic-senior-core init',
+    'npx @ryuenn3123/agentic-senior-core init',
     'npm run validate',
     'docs/faq.md',
     'docs/deep-dive.md',
