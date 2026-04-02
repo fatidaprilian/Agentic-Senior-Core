@@ -24,6 +24,12 @@ Planning quality determines implementation quality. Non-trivial work should star
 - Split high-risk work into isolated checkpoints.
 - Preserve public API compatibility unless explicitly versioned.
 
+## Evidence Discipline
+
+- Attach command output for validation and test evidence.
+- Keep assumption logs explicit so reviewers can challenge unknowns early.
+- Ensure rollback path is documented before implementation starts.
+
 ## Review Checklist
 
 - [ ] Plan includes explicit success criteria.

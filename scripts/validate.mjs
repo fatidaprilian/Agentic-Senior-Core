@@ -25,9 +25,16 @@ const CHANGELOG_PATH = join(ROOT_DIR, 'CHANGELOG.md');
 const README_PATH = join(ROOT_DIR, 'README.md');
 const POLICY_FILE_PATH = join(ROOT_DIR, '.agent-context', 'policies', 'llm-judge-threshold.json');
 const OVERRIDE_FILE_PATH = join(ROOT_DIR, '.agent-override.md');
+const SKILLS_DIR = join(AGENT_CONTEXT_DIR, 'skills');
 const GENERATED_RULE_FILES = ['.cursorrules', '.windsurfrules'];
 const ALLOWED_SEVERITIES = new Set(['critical', 'high', 'medium', 'low']);
 const OVERRIDE_WARNING_WINDOW_DAYS = 30;
+const SKILL_TIER_MINIMUMS = {
+  standard: { minWords: 60, minHeadings: 1, minChecklistItems: 0, minCodeBlocks: 0 },
+  advance: { minWords: 100, minHeadings: 2, minChecklistItems: 1, minCodeBlocks: 0 },
+  expert: { minWords: 130, minHeadings: 3, minChecklistItems: 1, minCodeBlocks: 0 },
+  above: { minWords: 240, minHeadings: 3, minChecklistItems: 1, minCodeBlocks: 1 },
+};
 
 const validationResult = {
   passed: 0,
@@ -248,6 +255,98 @@ async function validateRuleFiles() {
     }
 
     pass(`.agent-context/${expectedPath}`);
+  }
+}
+
+function countWords(markdownContent) {
+  return markdownContent
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/[^A-Za-z0-9_\-\s]/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+}
+
+function countMarkdownHeadings(markdownContent) {
+  const headingMatches = markdownContent.match(/^#{2,6}\s+/gm);
+  return headingMatches ? headingMatches.length : 0;
+}
+
+function countChecklistItems(markdownContent) {
+  const checklistMatches = markdownContent.match(/^\s*[-*]\s+\[[ xX]\]\s+/gm);
+  return checklistMatches ? checklistMatches.length : 0;
+}
+
+function countCodeBlocks(markdownContent) {
+  const fenceMatches = markdownContent.match(/```/g);
+  if (!fenceMatches) {
+    return 0;
+  }
+
+  return Math.floor(fenceMatches.length / 2);
+}
+
+function extractSkillTier(markdownContent) {
+  const normalizedMarkdownContent = markdownContent.replace(/\*\*/g, '');
+  const tierMatch = normalizedMarkdownContent.match(/\bTier\s*:\s*`?(standard|advance|expert|above)`?\b/i);
+  return tierMatch ? tierMatch[1].toLowerCase() : null;
+}
+
+async function validateSkillTierQuality() {
+  console.log('\nChecking skill tier quality...');
+
+  const skillMarkdownFiles = await collectFiles(SKILLS_DIR, (fileName) => fileName.endsWith('.md'));
+  const scopedSkillTopicFiles = skillMarkdownFiles.filter((skillFilePath) => {
+    if (skillFilePath.endsWith('README.md')) {
+      return false;
+    }
+
+    const relativeSkillPath = relative(SKILLS_DIR, skillFilePath);
+    return /[\\/]/.test(relativeSkillPath);
+  });
+
+  for (const skillTopicPath of scopedSkillTopicFiles) {
+    const skillTopicContent = await readTextFile(skillTopicPath);
+    const relativeSkillTopicPath = relative(ROOT_DIR, skillTopicPath);
+    const detectedTier = extractSkillTier(skillTopicContent);
+
+    if (!detectedTier) {
+      fail(`${relativeSkillTopicPath} is missing explicit Tier metadata`);
+      continue;
+    }
+
+    const minimumRules = SKILL_TIER_MINIMUMS[detectedTier];
+    if (!minimumRules) {
+      fail(`${relativeSkillTopicPath} has unsupported tier: ${detectedTier}`);
+      continue;
+    }
+
+    const wordCount = countWords(skillTopicContent);
+    const headingCount = countMarkdownHeadings(skillTopicContent);
+    const checklistCount = countChecklistItems(skillTopicContent);
+    const codeBlockCount = countCodeBlocks(skillTopicContent);
+
+    if (wordCount < minimumRules.minWords) {
+      fail(`${relativeSkillTopicPath} tier ${detectedTier} must include at least ${minimumRules.minWords} words (found ${wordCount})`);
+      continue;
+    }
+
+    if (headingCount < minimumRules.minHeadings) {
+      fail(`${relativeSkillTopicPath} tier ${detectedTier} must include at least ${minimumRules.minHeadings} section headings (found ${headingCount})`);
+      continue;
+    }
+
+    if (checklistCount < minimumRules.minChecklistItems) {
+      fail(`${relativeSkillTopicPath} tier ${detectedTier} must include at least ${minimumRules.minChecklistItems} checklist item(s) (found ${checklistCount})`);
+      continue;
+    }
+
+    if (codeBlockCount < minimumRules.minCodeBlocks) {
+      fail(`${relativeSkillTopicPath} tier ${detectedTier} must include at least ${minimumRules.minCodeBlocks} code block(s) (found ${codeBlockCount})`);
+      continue;
+    }
+
+    pass(`${relativeSkillTopicPath} tier ${detectedTier} quality gate passed`);
   }
 }
 
@@ -545,6 +644,7 @@ async function main() {
   await validateRequiredFiles();
   await validateMarkdownFiles();
   await validateRuleFiles();
+  await validateSkillTierQuality();
   await validateOverrideGovernance();
   await validateAgentsManifest();
   await validateCrossReferences();
