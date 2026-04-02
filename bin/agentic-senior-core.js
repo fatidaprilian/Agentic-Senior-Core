@@ -16,6 +16,8 @@ const REPO_ROOT = path.resolve(__dirname, "..");
 const PACKAGE_JSON_PATH = path.join(REPO_ROOT, "package.json");
 const CLI_VERSION = JSON.parse(fsSync.readFileSync(PACKAGE_JSON_PATH, "utf8")).version;
 const AGENT_CONTEXT_DIR = path.join(REPO_ROOT, ".agent-context");
+const SKILL_PLATFORM_DIRECTORY = path.join(AGENT_CONTEXT_DIR, "skills");
+const SKILL_PLATFORM_INDEX_PATH = path.join(SKILL_PLATFORM_DIRECTORY, "index.json");
 const POLICY_FILE_NAME = "llm-judge-threshold.json";
 const PROFILE_PACKS_DIRECTORY_NAME = "profiles";
 const PROFILE_PACK_REQUIRED_FIELDS = [
@@ -88,6 +90,7 @@ function printUsage() {
   console.log("Usage:");
   console.log("  agentic-senior-core init [target-directory] [--profile <beginner|balanced|strict>] [--profile-pack <name>] [--stack <name>] [--blueprint <name>] [--ci <true|false>] [--newbie]");
   console.log("  agentic-senior-core upgrade [target-directory] [--dry-run] [--yes]");
+  console.log("  agentic-senior-core skill [domain] [--tier <standard|advance|expert|above>] [--json]");
   console.log("  agentic-senior-core --version");
   console.log("");
   console.log("Options:");
@@ -101,6 +104,8 @@ function printUsage() {
   console.log("  --ci         Override CI/CD guardrails (true|false)");
   console.log("  --dry-run    Preview upgrade without writing files");
   console.log("  --yes        Skip confirmation prompts for upgrade");
+  console.log("  --tier       Choose a skill tier for the skill selector");
+  console.log("  --json       Emit machine-readable skill selection output");
 }
 
 async function pathExists(targetPath) {
@@ -340,6 +345,185 @@ function findProfilePackByInput(profilePackInput, profilePackDefinitions) {
   }) || null;
 }
 
+async function loadSkillPlatformIndex() {
+  const skillPlatformIndexContent = await fs.readFile(SKILL_PLATFORM_INDEX_PATH, "utf8");
+  return JSON.parse(skillPlatformIndexContent);
+}
+
+function normalizeSkillTierInput(rawTierInput) {
+  const normalizedTierInput = normalizeChoiceInput(rawTierInput);
+  const allowedTierNames = new Set(["standard", "advance", "expert", "above"]);
+
+  if (!allowedTierNames.has(normalizedTierInput)) {
+    return null;
+  }
+
+  return normalizedTierInput;
+}
+
+function findSkillDomainByInput(skillDomainInput, skillDomainEntries) {
+  const normalizedSkillDomainInput = normalizeChoiceInput(skillDomainInput);
+
+  return skillDomainEntries.find((skillDomainEntry) => {
+    const normalizedDomainName = normalizeChoiceInput(skillDomainEntry.name);
+    const normalizedDisplayName = normalizeChoiceInput(skillDomainEntry.displayName);
+
+    return normalizedSkillDomainInput === normalizedDomainName || normalizedSkillDomainInput === normalizedDisplayName;
+  }) || null;
+}
+
+function formatSkillTierList(skillPlatformIndex) {
+  return skillPlatformIndex.tiers.map((tierDefinition) => `${tierDefinition.name} (${tierDefinition.description})`).join("\n");
+}
+
+function inferSkillDomainNamesFromSelection(selectedStackFileName, selectedBlueprintFileName) {
+  const inferredDomainNames = new Set();
+
+  if (selectedBlueprintFileName === "api-nextjs.md" || selectedBlueprintFileName === "fastapi-service.md") {
+    inferredDomainNames.add("frontend");
+    inferredDomainNames.add("fullstack");
+    inferredDomainNames.add("cli");
+  }
+
+  if (selectedBlueprintFileName === "go-service.md"
+    || selectedBlueprintFileName === "spring-boot-api.md"
+    || selectedBlueprintFileName === "laravel-api.md"
+    || selectedBlueprintFileName === "aspnet-api.md") {
+    inferredDomainNames.add("backend");
+    inferredDomainNames.add("fullstack");
+    inferredDomainNames.add("cli");
+  }
+
+  if (selectedStackFileName === "typescript.md") {
+    inferredDomainNames.add("frontend");
+    inferredDomainNames.add("cli");
+  }
+
+  if (selectedStackFileName === "go.md"
+    || selectedStackFileName === "java.md"
+    || selectedStackFileName === "php.md"
+    || selectedStackFileName === "csharp.md"
+    || selectedStackFileName === "python.md"
+    || selectedStackFileName === "ruby.md"
+    || selectedStackFileName === "rust.md") {
+    inferredDomainNames.add("backend");
+  }
+
+  if (inferredDomainNames.size === 0) {
+    inferredDomainNames.add("fullstack");
+    inferredDomainNames.add("cli");
+  }
+
+  return Array.from(inferredDomainNames);
+}
+
+async function buildSkillPackSection(skillDomainEntry, selectedTierName) {
+  const resolvedPackFileName = skillDomainEntry.tierToPackFileNames?.[selectedTierName]
+    || skillDomainEntry.tierToPackFileNames?.[skillDomainEntry.defaultTier]
+    || skillDomainEntry.defaultPackFileName;
+  const skillPackFilePath = path.join(SKILL_PLATFORM_DIRECTORY, resolvedPackFileName);
+  const skillPackContent = await fs.readFile(skillPackFilePath, "utf8");
+
+  return [
+    `## SKILL PACK: ${skillDomainEntry.displayName}`,
+    `Source: .agent-context/skills/${resolvedPackFileName}`,
+    `Default tier: ${skillDomainEntry.defaultTier}`,
+    `Selected tier: ${selectedTierName}`,
+    `Evidence: ${skillDomainEntry.evidence}`,
+    "",
+    skillPackContent.trim(),
+    "",
+  ].join("\n");
+}
+
+async function runSkillCommand(commandArguments) {
+  const parsedSkillOptions = {
+    domain: null,
+    tier: null,
+    tierProvided: false,
+    json: false,
+  };
+
+  for (let argumentIndex = 0; argumentIndex < commandArguments.length; argumentIndex++) {
+    const currentArgument = commandArguments[argumentIndex];
+
+    if (!currentArgument.startsWith("--")) {
+      parsedSkillOptions.domain = currentArgument;
+      continue;
+    }
+
+    if (currentArgument === "--tier") {
+      parsedSkillOptions.tier = normalizeSkillTierInput(commandArguments[argumentIndex + 1] || "");
+      parsedSkillOptions.tierProvided = true;
+      argumentIndex += 1;
+      continue;
+    }
+
+    if (currentArgument.startsWith("--tier=")) {
+      parsedSkillOptions.tier = normalizeSkillTierInput(currentArgument.split("=")[1]);
+      parsedSkillOptions.tierProvided = true;
+      continue;
+    }
+
+    if (currentArgument === "--json") {
+      parsedSkillOptions.json = true;
+      continue;
+    }
+
+    throw new Error(`Unknown option: ${currentArgument}`);
+  }
+
+  const skillPlatformIndex = await loadSkillPlatformIndex();
+  const skillDomainEntries = Object.values(skillPlatformIndex.domains || {});
+  const selectedSkillDomain = parsedSkillOptions.domain
+    ? findSkillDomainByInput(parsedSkillOptions.domain, skillDomainEntries)
+    : null;
+
+  if (parsedSkillOptions.domain && !selectedSkillDomain) {
+    throw new Error(`Unknown skill domain: ${parsedSkillOptions.domain}`);
+  }
+
+  if (parsedSkillOptions.tierProvided && !parsedSkillOptions.tier) {
+    throw new Error(`Unknown skill tier: ${commandArguments.join(" ")}`);
+  }
+
+  const selectedTierName = parsedSkillOptions.tier || skillPlatformIndex.defaultTier || "advance";
+  const recommendedPackFileName = selectedSkillDomain
+    ? selectedSkillDomain.tierToPackFileNames?.[selectedTierName]
+      || selectedSkillDomain.tierToPackFileNames?.[selectedSkillDomain.defaultTier]
+      || selectedSkillDomain.defaultPackFileName
+      || null
+    : null;
+
+  if (parsedSkillOptions.json) {
+    console.log(JSON.stringify({
+      defaultTier: skillPlatformIndex.defaultTier,
+      selectedTier: selectedTierName,
+      selectedDomain: selectedSkillDomain,
+      recommendedPackFileName,
+    }, null, 2));
+    return;
+  }
+
+  console.log("Skill platform selector");
+  console.log(`Default tier: ${skillPlatformIndex.defaultTier}`);
+  console.log(`Available tiers:\n${formatSkillTierList(skillPlatformIndex)}`);
+
+  if (!selectedSkillDomain) {
+    console.log("\nAvailable domains:");
+    for (const skillDomainEntry of skillDomainEntries) {
+      console.log(`- ${skillDomainEntry.name}: ${skillDomainEntry.description}`);
+    }
+    return;
+  }
+
+  console.log(`\nSelected domain: ${selectedSkillDomain.displayName}`);
+  console.log(`Selected tier: ${selectedTierName}`);
+  console.log(`Recommended pack: ${recommendedPackFileName}`);
+  console.log(`Purpose: ${selectedSkillDomain.description}`);
+  console.log(`Evidence: ${selectedSkillDomain.evidence}`);
+}
+
 async function collectFileNames(folderPath) {
   const fileNames = await fs.readdir(folderPath, { withFileTypes: true });
   return fileNames
@@ -560,6 +744,7 @@ async function writeOnboardingReport({
   includeCiGuardrails,
   setupDurationMs,
   projectDetection,
+  selectedSkillDomains = [],
   operationMode = "init",
 }) {
   const onboardingReportPath = path.join(targetDirectoryPath, ".agent-context", "state", "onboarding-report.json");
@@ -578,6 +763,7 @@ async function writeOnboardingReport({
     selectedBlueprint: selectedBlueprintFileName,
     ciGuardrailsEnabled: includeCiGuardrails,
     setupDurationMs,
+    selectedSkillDomains,
     autoDetection: {
       recommendedStack: projectDetection.recommendedStackFileName,
       recommendedBlueprint: projectDetection.recommendedBlueprintFileName,
@@ -616,6 +802,8 @@ async function buildCompiledRulesContent({
   const selectedBlueprintsDirectoryPath = path.join(resolvedTargetDirectoryPath, ".agent-context", "blueprints");
   const selectedStateDirectoryPath = path.join(resolvedTargetDirectoryPath, ".agent-context", "state");
   const selectedReviewDirectoryPath = path.join(resolvedTargetDirectoryPath, ".agent-context", "review-checklists");
+  const skillPlatformIndex = JSON.parse(await fs.readFile(SKILL_PLATFORM_INDEX_PATH, "utf8"));
+  const selectedSkillDomainNames = inferSkillDomainNamesFromSelection(selectedStackFileName, selectedBlueprintFileName);
 
   const universalRuleFileNames = await collectFileNames(selectedRulesDirectoryPath);
   const contextBlocks = [];
@@ -651,6 +839,15 @@ async function buildCompiledRulesContent({
     contextBlocks.push(
       `## CI/CD GUARDRAILS: ci-gitlab.md\nSource: .agent-context/blueprints/ci-gitlab.md\n\n${gitlabCiBlueprintContent.trim()}`
     );
+  }
+
+  for (const selectedSkillDomainName of selectedSkillDomainNames) {
+    const skillDomainEntry = skillPlatformIndex.domains?.[selectedSkillDomainName];
+    if (!skillDomainEntry) {
+      continue;
+    }
+
+    contextBlocks.push(await buildSkillPackSection(skillDomainEntry, skillPlatformIndex.defaultTier || "advance"));
   }
 
   const architectureMapContent = await fs.readFile(path.join(selectedStateDirectoryPath, "architecture-map.md"), "utf8");
@@ -869,6 +1066,7 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
       includeCiGuardrails,
       setupDurationMs,
       projectDetection,
+      selectedSkillDomains: inferSkillDomainNamesFromSelection(selectedResolvedStackFileName, selectedResolvedBlueprintFileName),
       operationMode: "init",
     });
 
@@ -1007,10 +1205,15 @@ async function main() {
     return;
   }
 
-  if (commandArgument !== "init" && commandArgument !== "upgrade") {
+  if (commandArgument !== "init" && commandArgument !== "upgrade" && commandArgument !== "skill") {
     console.error(`Unknown command: ${commandArgument}`);
     printUsage();
     exit(1);
+  }
+
+  if (commandArgument === "skill") {
+    await runSkillCommand(commandArguments);
+    return;
   }
 
   if (commandArgument === "upgrade") {

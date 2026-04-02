@@ -24,4 +24,24 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(sbomPayload.metadata?.component?.name);
     assert.ok(Array.isArray(sbomPayload.components));
   });
+
+  await t.test('benchmark gate outputs machine-readable report', () => {
+    const benchmarkGateOutput = execSync(`node ${join(process.cwd(), 'scripts', 'benchmark-gate.mjs')}`).toString();
+    const benchmarkGateReport = JSON.parse(benchmarkGateOutput);
+
+    assert.equal(benchmarkGateReport.gateName, 'benchmark-gate');
+    assert.equal(typeof benchmarkGateReport.passed, 'boolean');
+    assert.ok(Array.isArray(benchmarkGateReport.results));
+    assert.ok(benchmarkGateReport.results.length >= 2);
+  });
+
+  await t.test('benchmark intelligence outputs machine-readable report', () => {
+    const benchmarkIntelligenceOutput = execSync(`node ${join(process.cwd(), 'scripts', 'benchmark-intelligence.mjs')}`).toString();
+    const benchmarkIntelligenceReport = JSON.parse(benchmarkIntelligenceOutput);
+
+    assert.equal(benchmarkIntelligenceReport.reportName, 'benchmark-intelligence');
+    assert.equal(typeof benchmarkIntelligenceReport.passed, 'boolean');
+    assert.ok(Array.isArray(benchmarkIntelligenceReport.watchlist));
+    assert.ok(benchmarkIntelligenceReport.watchlist.length >= 3);
+  });
 });

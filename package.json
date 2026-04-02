@@ -1,9 +1,9 @@
 {
-  "name": "@fatidaprilian/agentic-senior-core",
+  "name": "@ryuenn3123/agentic-senior-core",
   "version": "1.8.0",
   "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
   "bin": {
-    "agentic-senior-core": "./bin/agentic-senior-core.js"
+    "agentic-senior-core": "bin/agentic-senior-core.js"
   },
   "files": [
     "bin/",
@@ -25,7 +25,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fatidaprilian/Agentic-Senior-Core.git"
+    "url": "git+https://github.com/fatidaprilian/Agentic-Senior-Core.git"
   },
   "keywords": [
     "ai",
@@ -44,6 +44,8 @@
     "gate:release": "node ./scripts/release-gate.mjs",
     "sbom:generate": "node ./scripts/generate-sbom.mjs",
     "benchmark:detection": "node ./scripts/detection-benchmark.mjs",
+    "benchmark:gate": "node ./scripts/benchmark-gate.mjs",
+    "benchmark:intelligence": "node ./scripts/benchmark-intelligence.mjs",
     "validate": "node ./scripts/validate.mjs",
     "test": "node --test ./tests/cli-smoke.test.mjs ./tests/llm-judge.test.mjs ./tests/enterprise-ops.test.mjs"
   }

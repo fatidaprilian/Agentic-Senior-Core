@@ -35,6 +35,11 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(onboardingReport.selectedStack, 'typescript.md');
       assert.equal(onboardingReport.selectedBlueprint, 'api-nextjs.md');
       assert.equal(onboardingReport.ciGuardrailsEnabled, true);
+      assert.deepEqual(onboardingReport.selectedSkillDomains, ['frontend', 'fullstack', 'cli']);
+
+      const compiledRulesContent = readFileSync(join(temporaryTargetDirectory, '.cursorrules'), 'utf8');
+      assert.match(compiledRulesContent, /SKILL PACK: Frontend/);
+      assert.match(compiledRulesContent, /SKILL PACK: Fullstack/);
     } finally {
       rmSync(temporaryTargetDirectory, { recursive: true, force: true });
     }
@@ -107,5 +112,15 @@ test('CLI Smoke Tests', async (t) => {
     assert.equal(auditReport.passed, true);
     assert.equal(auditReport.failureCount, 0);
     assert.ok(Array.isArray(auditReport.failures));
+  });
+
+  await t.test('skill selector outputs recommended pack', () => {
+    const skillOutput = execSync(`node ${cliPath} skill frontend --tier advance --json`).toString();
+    const skillReport = JSON.parse(skillOutput);
+
+    assert.equal(skillReport.defaultTier, 'advance');
+    assert.equal(skillReport.selectedTier, 'advance');
+    assert.equal(skillReport.selectedDomain?.name, 'frontend');
+    assert.equal(skillReport.recommendedPackFileName, 'frontend.md');
   });
 });
