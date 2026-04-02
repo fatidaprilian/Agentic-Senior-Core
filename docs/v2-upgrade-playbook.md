@@ -50,6 +50,8 @@ This playbook defines how Agentic-Senior-Core stays ahead of benchmark repositor
 - Link parity checks to release gate and validator requirements.
 - Add benchmark baseline references in roadmap.
 - Add plug-and-play init presets for common stack and blueprint combinations.
+- Add a numbered launch path so first-run setup is guided instead of command-heavy.
+- Extend starter coverage for mobile and observability presets where the stack inventory supports them.
 
 ### Phase B: Competitive Quality Gates
 - Add benchmark scan cadence and owner assignment.

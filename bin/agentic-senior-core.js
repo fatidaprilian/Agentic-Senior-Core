@@ -39,6 +39,8 @@ const BLUEPRINT_RECOMMENDATIONS = {
   "php.md": "laravel-api.md",
   "go.md": "go-service.md",
   "csharp.md": "aspnet-api.md",
+  "react-native.md": "mobile-app.md",
+  "flutter.md": "mobile-app.md",
 };
 const INIT_PRESETS = {
   "frontend-web": {
@@ -68,6 +70,27 @@ const INIT_PRESETS = {
     blueprint: "go-service.md",
     ci: true,
     description: "Strict release and platform governance starter",
+  },
+  "mobile-react-native": {
+    profile: "balanced",
+    stack: "react-native.md",
+    blueprint: "mobile-app.md",
+    ci: true,
+    description: "Mobile app starter for React Native",
+  },
+  "mobile-flutter": {
+    profile: "balanced",
+    stack: "flutter.md",
+    blueprint: "mobile-app.md",
+    ci: true,
+    description: "Mobile app starter for Flutter",
+  },
+  "observability-platform": {
+    profile: "strict",
+    stack: "go.md",
+    blueprint: "observability.md",
+    ci: true,
+    description: "Observability and platform starter",
   },
 };
 const PROFILE_PRESETS = {
@@ -121,6 +144,7 @@ function printUsage() {
   console.log("  open GitHub template: https://github.com/fatidaprilian/Agentic-Senior-Core/generate");
   console.log("");
   console.log("Usage:");
+  console.log("  agentic-senior-core launch");
   console.log("  agentic-senior-core init [target-directory] [--preset <name>] [--profile <beginner|balanced|strict>] [--profile-pack <name>] [--stack <name>] [--blueprint <name>] [--ci <true|false>] [--newbie]");
   console.log("  agentic-senior-core upgrade [target-directory] [--dry-run] [--yes]");
   console.log("  agentic-senior-core skill [domain] [--tier <standard|advance|expert|above>] [--json]");
@@ -130,7 +154,7 @@ function printUsage() {
   console.log("  --help       Show help");
   console.log("  --version    Show CLI version");
   console.log("  --profile    Choose beginner, balanced, or strict");
-  console.log("  --preset     Use a plug-and-play starter preset (frontend-web, backend-api, fullstack-product, platform-governance)");
+  console.log("  --preset     Use a plug-and-play starter preset (frontend-web, backend-api, fullstack-product, platform-governance, mobile-react-native, mobile-flutter, observability-platform)");
   console.log("  --profile-pack  Apply a team profile pack (startup, regulated, platform)");
   console.log("  --newbie     Alias for --profile beginner");
   console.log("  --stack      Override stack selection");
@@ -243,6 +267,76 @@ async function askYesNo(promptMessage, userInterface, defaultValue) {
     if (normalizedAnswer === "n" || normalizedAnswer === "no") return false;
 
     console.log("Please answer with 'y' or 'n'.");
+  }
+}
+
+async function runLaunchCommand() {
+  const userInterface = readline.createInterface({ input, output });
+
+  try {
+    console.log(`\nAgentic-Senior-Core CLI v${CLI_VERSION}`);
+    console.log("Start with a numbered choice. You can still use commands later if you want direct control.");
+
+    const launchChoice = await askChoice(
+      "How do you want to start?",
+      [
+        "GitHub template (zero install)",
+        "npm / npx path",
+        "Bootstrap scripts",
+        "Preset starter",
+        "Interactive init wizard",
+        "Skill selector",
+        "Exit",
+      ],
+      userInterface
+    );
+
+    if (launchChoice === "GitHub template (zero install)") {
+      console.log("\nOpen the GitHub template here:");
+      console.log("https://github.com/fatidaprilian/Agentic-Senior-Core/generate");
+      return;
+    }
+
+    if (launchChoice === "npm / npx path") {
+      console.log("\nChoose one of these package paths:");
+      console.log("npm exec --yes @fatidaprilian/agentic-senior-core init");
+      console.log("npx @fatidaprilian/agentic-senior-core init");
+      console.log("npm install -g @fatidaprilian/agentic-senior-core && agentic-senior-core init");
+      return;
+    }
+
+    if (launchChoice === "Bootstrap scripts") {
+      console.log("\nUse the repository bootstrap scripts:");
+      console.log("Windows: powershell -ExecutionPolicy Bypass -File .\\scripts\\init-project.ps1 -TargetDirectory .");
+      console.log("Linux/macOS: bash ./scripts/init-project.sh .");
+      return;
+    }
+
+    if (launchChoice === "Preset starter") {
+      const presetNames = Object.keys(INIT_PRESETS);
+      const selectedPresetName = await askChoice(
+        "Choose a starter preset:",
+        presetNames.map((presetName) => `${presetName} - ${INIT_PRESETS[presetName].description}`),
+        userInterface
+      );
+
+      await runInitCommand(".", { preset: normalizeChoiceInput(selectedPresetName.split(" - ")[0]) });
+      return;
+    }
+
+    if (launchChoice === "Interactive init wizard") {
+      await runInitCommand(".", {});
+      return;
+    }
+
+    if (launchChoice === "Skill selector") {
+      await runSkillCommand([]);
+      return;
+    }
+
+    console.log("Exit selected.");
+  } finally {
+    userInterface.close();
   }
 }
 
@@ -441,6 +535,24 @@ function inferSkillDomainNamesFromSelection(selectedStackFileName, selectedBluep
     || selectedStackFileName === "ruby.md"
     || selectedStackFileName === "rust.md") {
     inferredDomainNames.add("backend");
+  }
+
+  if (selectedStackFileName === "react-native.md" || selectedStackFileName === "flutter.md") {
+    inferredDomainNames.add("frontend");
+    inferredDomainNames.add("fullstack");
+    inferredDomainNames.add("cli");
+  }
+
+  if (selectedBlueprintFileName === "mobile-app.md") {
+    inferredDomainNames.add("frontend");
+    inferredDomainNames.add("fullstack");
+    inferredDomainNames.add("cli");
+  }
+
+  if (selectedBlueprintFileName === "observability.md") {
+    inferredDomainNames.add("backend");
+    inferredDomainNames.add("fullstack");
+    inferredDomainNames.add("cli");
   }
 
   if (inferredDomainNames.size === 0) {
@@ -669,6 +781,22 @@ async function detectProjectContext(targetDirectoryPath) {
       stackFileName: "csharp.md",
       confidenceScore: 0.95,
       evidence: [".sln or .csproj file"],
+    });
+  }
+
+  if (markerNames.has("package.json") && (markerNames.has("android") || markerNames.has("ios") || markerNames.has("react-native.config.js"))) {
+    detectionCandidates.push({
+      stackFileName: "react-native.md",
+      confidenceScore: 0.9,
+      evidence: ["package.json", "mobile runtime markers"],
+    });
+  }
+
+  if (markerNames.has("pubspec.yaml")) {
+    detectionCandidates.push({
+      stackFileName: "flutter.md",
+      confidenceScore: 0.94,
+      evidence: ["pubspec.yaml"],
     });
   }
 
@@ -1250,7 +1378,12 @@ async function main() {
   const commandArgument = process.argv[2];
   const commandArguments = process.argv.slice(3);
 
-  if (!commandArgument || commandArgument === "--help" || commandArgument === "-h") {
+  if (!commandArgument) {
+    await runLaunchCommand();
+    return;
+  }
+
+  if (commandArgument === "--help" || commandArgument === "-h") {
     printUsage();
     return;
   }
@@ -1260,10 +1393,15 @@ async function main() {
     return;
   }
 
-  if (commandArgument !== "init" && commandArgument !== "upgrade" && commandArgument !== "skill") {
+  if (commandArgument !== "init" && commandArgument !== "upgrade" && commandArgument !== "skill" && commandArgument !== "launch") {
     console.error(`Unknown command: ${commandArgument}`);
     printUsage();
     exit(1);
+  }
+
+  if (commandArgument === "launch") {
+    await runLaunchCommand();
+    return;
   }
 
   if (commandArgument === "skill") {

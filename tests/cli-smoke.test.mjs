@@ -15,6 +15,13 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(output, /--profile-pack/);
   });
 
+  await t.test('launch command shows numbered startup choices', () => {
+    const launchOutput = execSync(`node ${cliPath} launch`, { input: '7\n' }).toString();
+    assert.match(launchOutput, /How do you want to start\?/);
+    assert.match(launchOutput, /1\. GitHub template/);
+    assert.match(launchOutput, /Exit selected\./);
+  });
+
   await t.test('initializes with a team profile pack', () => {
     const temporaryTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-'));
 

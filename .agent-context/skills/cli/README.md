@@ -23,6 +23,7 @@ This domain covers command design, safe mutation workflows, and machine-readable
 
 Choose the path that fits your workflow:
 
+- `agentic-senior-core launch` for a numbered interactive chooser.
 - `npm install -g @fatidaprilian/agentic-senior-core` for a global command.
 - `npm exec --yes @fatidaprilian/agentic-senior-core init` for a one-off run.
 - `npx @fatidaprilian/agentic-senior-core init` for a package-managed local run.
@@ -36,10 +37,14 @@ Use presets when you want fewer choices at the start:
 - `backend-api` - Python + FastAPI + balanced profile.
 - `fullstack-product` - TypeScript + API Next.js + balanced profile.
 - `platform-governance` - Go + Go service + strict profile.
+- `mobile-react-native` - React Native + mobile app + balanced profile.
+- `mobile-flutter` - Flutter + mobile app + balanced profile.
+- `observability-platform` - Go + observability + strict profile.
 
 Example:
 
 ```bash
 agentic-senior-core init --preset frontend-web
 agentic-senior-core init --preset backend-api --ci true
+agentic-senior-core launch
 ```

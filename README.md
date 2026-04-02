@@ -70,6 +70,7 @@ If you want a plug-and-play starter instead of answering every question, use a p
 ```bash
 npx @fatidaprilian/agentic-senior-core init --preset frontend-web
 npx @fatidaprilian/agentic-senior-core init --preset backend-api
+npx @fatidaprilian/agentic-senior-core init --preset mobile-react-native
 ```
 
 ### Option 2: GitHub Bootstrap Scripts (No npx required)
@@ -133,6 +134,7 @@ The CLI now supports a smaller decision surface for first-time setup:
 
 | Path | Best for |
 |------|----------|
+| `agentic-senior-core launch` | Numbered interactive chooser for install and preset paths |
 | GitHub Template | Zero-install project bootstrap |
 | npm exec / npx | One-off setup on an existing repo |
 | npm install -g | Repeated local use from the shell |
@@ -152,6 +154,8 @@ Use the stack that matches the project you are actually starting:
 | C# | aspnet-api | Microsoft stack services and enterprise apps |
 | Rust | go-service | Performance-sensitive backend work |
 | Ruby | laravel-api | Mature product services and backend workflows |
+| React Native | mobile-app | Cross-platform mobile applications |
+| Flutter | mobile-app | Cross-platform mobile applications |
 
 ### Benchmark Comparison (Current State)
 
