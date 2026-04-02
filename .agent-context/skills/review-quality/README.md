@@ -1,14 +1,19 @@
-# Review Quality Domain
+# Review Quality Skills
 
 Default tier: `expert`
 
-This domain splits review practice into planning, security, and benchmark interpretation.
+This domain formalizes review quality across planning discipline, security enforcement, and benchmark-driven decision making.
 
 ## Topics
-- [Planning](planning.md)
-- [Security](security.md)
-- [Benchmarking](benchmark.md)
+- [Planning](planning.md) - Plan quality, scope control, and change strategy
+- [Security](security.md) - Critical vulnerability policy and boundary safeguards
+- [Benchmarking](benchmark.md) - Regression detection and evidence-based comparison
 
-## Default Pack Behavior
-- Use `expert` for most review work.
-- Escalate to `above` when release or governance risk is high.
+## Operating Model
+- Use `expert` for standard review workflows.
+- Escalate to `above` for release-critical or governance-sensitive changes.
+
+## Above-Line Additions
+- Security halt protocol for critical findings.
+- Benchmark gate thresholds integrated in CI.
+- Review evidence bundle for auditability.

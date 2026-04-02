@@ -110,6 +110,16 @@ agentic-senior-core skill fullstack --json
 
 When you run `init`, the CLI now auto-activates the matching skill packs for the chosen stack and blueprint, so the compiled governance context includes the relevant frontend, backend, fullstack, and CLI guidance by default.
 
+### Benchmark Comparison (Current State)
+
+| Capability | antigravity-awesome-skills | awesome-copilot | MiniMax-AI/skills | Agentic-Senior-Core |
+|------------|----------------------------|-----------------|-------------------|---------------------|
+| Skill organization | Large curated library | Resource catalog + governance docs | Domain-focused packs | Unified folder-based domain packs with tier routing |
+| Architecture guidance | Strong practical patterns | Strong SoC and layered architecture | Strong applied templates | Consolidated architecture + domain enforcement |
+| CLI governance | Limited | Moderate | Moderate | Init/upgrade/output governance with dry-run and structured reports |
+| Distribution operations | Basic | Moderate | Strong release checklists | Publish, rollback, compatibility gates plus benchmark/sbom flows |
+| Review quality | Pattern-oriented | Checklist-oriented | Gate-oriented | Planning/security/benchmark review model with CI integration |
+
 ### Option 4: Clone and Play
 Want to poke around under the hood? Just clone the repo and `npx @fatidaprilian/agentic-senior-core init` locally. No runtime dependencies needed — everything uses native Node.js!
 
