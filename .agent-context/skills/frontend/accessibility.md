@@ -1,106 +1,107 @@
-# Accessibility (WCAG Compliance)
+# Accessibility and Inclusive Interaction
 
-**Tier:** ADVANCE | **Source:** awesome-copilot (WCAG) + minimax (motion and dark mode) + antigravity (UX patterns)
+**Tier:** EXPERT | **Source:** awesome-copilot (WCAG) + minimax (motion and dark mode) + antigravity (UX patterns)
 
-## Rule: Accessibility Is Part of Core Quality
+## Purpose
 
-- Web Content Accessibility Guidelines (WCAG) 2.1 AA is the minimum baseline.
-- Accessible implementations reduce rework and production risk.
-- Accessibility defects should be treated as quality defects, not cosmetic issues.
+Accessibility is a production requirement. Inclusive interaction reduces support burden, improves usability, and prevents last-minute retrofit work.
 
----
+## Part 1: Semantic Structure
 
-## Part 1: Semantic HTML
+Use native HTML elements first. They provide keyboard support, roles, and state semantics without extra work.
 
-Bad (non-semantic structure):
-```javascript
-<div onClick={handleOpen} className="menu-trigger">Menu</div>
-<div className="menu">
-	<div onClick={() => navigate('/')}>Home</div>
-	<div onClick={() => navigate('/about')}>About</div>
-</div>
-```
-
-Good (semantic structure):
 ```javascript
 <nav>
-	<button aria-expanded={isOpen} aria-controls="menu">Menu</button>
-	<ul id="menu" hidden={!isOpen}>
-		<li><a href="/">Home</a></li>
-		<li><a href="/about">About</a></li>
-	</ul>
+  <button aria-expanded={isOpen} aria-controls="menu-panel">Menu</button>
+  <ul id="menu-panel" hidden={!isOpen}>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
 </nav>
 ```
 
----
+Avoid replacing native controls with generic containers unless there is a specific reason.
 
-## Part 2: Keyboard Navigation
+## Part 2: Keyboard Support
 
-All interactive controls must be reachable and operable from keyboard.
+Every interactive control must be reachable and operable by keyboard.
+
+- Tab order should follow the visual order.
+- Enter and Space should activate buttons and custom controls.
+- Focus should never get trapped unless a modal or dialog deliberately manages it.
+- Skip links should exist on content-heavy pages.
 
 ```javascript
-// Native button is keyboard accessible by default.
-<button onClick={handleDelete}>Delete</button>
-
-// If non-semantic element is required, add role and keyboard handling.
 <div
-	onClick={handleDelete}
-	onKeyDown={e => e.key === 'Enter' && handleDelete()}
-	tabIndex={0}
-	role="button"
+  role="button"
+  tabIndex={0}
+  onClick={handleDelete}
+  onKeyDown={(event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      handleDelete();
+    }
+  }}
 >
-	Delete
+  Delete
 </div>
 ```
 
----
+## Part 3: Contrast and Text Scaling
 
-## Part 3: Contrast and Readability
+- Normal text contrast should meet WCAG AA minimums.
+- Large text may use the relaxed large-text ratio, but still needs clear contrast.
+- Layouts should survive zoom and text scaling without truncation.
+- Avoid fixed-height containers that clip longer translated content.
 
-- Normal text contrast ratio: at least 4.5:1
-- Large text contrast ratio: at least 3:1
-- Avoid low-contrast gray-on-white variants for body content
+## Part 4: Screen Reader Support
 
-```javascript
-<p style={{ color: '#333333', backgroundColor: '#ffffff' }}>
-	High-contrast text for readable content.
-</p>
-```
-
----
-
-## Part 4: ARIA Labels
+Use accessible names and state descriptions.
 
 ```javascript
-<button onClick={handleClose} aria-label="Close menu">
-	X
+<button aria-label="Close menu" onClick={handleClose}>
+  X
 </button>
 ```
 
-Use explicit labels for icon-only controls so screen readers announce intent.
+If content updates dynamically, use live regions only when needed and keep them concise.
 
----
+## Part 5: Motion and Reduced Motion
 
-## Part 5: Reduced Motion Support
+Animations should respect reduced-motion settings. Motion must support understanding, not create distraction.
 
 ```javascript
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const variants = {
-	visible: {
-		opacity: 1,
-		transition: prefersReducedMotion ? { duration: 0 } : { duration: 0.3 }
-	}
+const menuVariants = {
+  open: {
+    opacity: 1,
+    transition: prefersReducedMotion ? { duration: 0 } : { duration: 0.2 }
+  }
 };
 ```
 
----
+## Part 6: Forms and Error Messaging
 
-## Checklist
+- Every input needs a visible label.
+- Error messages should describe the problem and how to fix it.
+- Validation should be announced in a way screen readers can reach.
+- Do not rely on color alone to communicate state.
 
-- [ ] Semantic HTML for navigation, controls, and form structures
-- [ ] Full keyboard support for interactive elements
-- [ ] Color contrast meets WCAG AA thresholds
-- [ ] Icon-only controls include aria-label
-- [ ] Visible focus indicators are preserved
-- [ ] Reduced-motion user preference is respected
+## Part 7: Testing Approach
+
+Test accessibility with a mix of manual and automated checks.
+
+- Automated scans for contrast, labels, and roles.
+- Keyboard-only navigation passes for critical flows.
+- Screen-reader spot checks for key screens.
+- Motion tests for reduced-motion behavior.
+
+## Review Checklist
+
+- [ ] Semantic elements are used first.
+- [ ] Keyboard operation is complete.
+- [ ] Contrast and zoom behavior are acceptable.
+- [ ] Accessible names exist for icon-only controls.
+- [ ] Reduced-motion behavior is implemented.
+- [ ] Form labels and errors are clear.
+- [ ] Critical flows are tested with keyboard and screen readers.

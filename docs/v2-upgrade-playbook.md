@@ -49,11 +49,13 @@ This playbook defines how Agentic-Senior-Core stays ahead of benchmark repositor
 - Add and enforce frontend skill parity checklist.
 - Link parity checks to release gate and validator requirements.
 - Add benchmark baseline references in roadmap.
+- Add plug-and-play init presets for common stack and blueprint combinations.
 
 ### Phase B: Competitive Quality Gates
 - Add benchmark scan cadence and owner assignment.
 - Add anti-regression quality thresholds for benchmark deltas.
 - Add replay fixtures for prior benchmark failures.
+- Keep frontend accessibility and UI architecture packs aligned with expert-tier guidance.
 
 ### Phase C: Trust and Distribution Ops
 - Add trust tiers (`verified`, `community`, `experimental`).

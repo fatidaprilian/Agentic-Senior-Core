@@ -45,6 +45,16 @@ The **Use this template** button is in the GitHub repository header (top-right a
 If you prefer a direct link, open: **[Create from template](https://github.com/fatidaprilian/Agentic-Senior-Core/generate)**.
 Your new repository will instantly possess all the rules, configurations, and AI context files directly out of the box — zero CLI needed.
 
+### Option 0: NPM Install (Local or Global)
+
+If you already know you want the CLI from npm, use one of these paths:
+
+```bash
+npm exec --yes @fatidaprilian/agentic-senior-core init
+npm install -g @fatidaprilian/agentic-senior-core
+agentic-senior-core init
+```
+
 ### Option 1: Interactive via GitHub Source (Pre-publish friendly)
 
 If npm package publication is not ready yet, run the CLI directly from GitHub and still keep the full interactive experience.
@@ -54,6 +64,13 @@ npm exec --yes --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior
 ```
 
 This gives the same interactive prompts to choose your profile (`beginner`, `balanced`, `strict`), stack, blueprint, and CI guardrails.
+
+If you want a plug-and-play starter instead of answering every question, use a preset:
+
+```bash
+npx @fatidaprilian/agentic-senior-core init --preset frontend-web
+npx @fatidaprilian/agentic-senior-core init --preset backend-api
+```
 
 ### Option 2: GitHub Bootstrap Scripts (No npx required)
 
@@ -109,6 +126,32 @@ agentic-senior-core skill fullstack --json
 ```
 
 When you run `init`, the CLI now auto-activates the matching skill packs for the chosen stack and blueprint, so the compiled governance context includes the relevant frontend, backend, fullstack, and CLI guidance by default.
+
+### Install and Setup Choices
+
+The CLI now supports a smaller decision surface for first-time setup:
+
+| Path | Best for |
+|------|----------|
+| GitHub Template | Zero-install project bootstrap |
+| npm exec / npx | One-off setup on an existing repo |
+| npm install -g | Repeated local use from the shell |
+| `--preset` | Fast bootstrap with a curated stack and blueprint |
+
+### Supported Stack Map
+
+Use the stack that matches the project you are actually starting:
+
+| Stack | Recommended Blueprint | Best Fit |
+|-------|-----------------------|----------|
+| TypeScript | api-nextjs | Web app, fullstack product, CLI tooling |
+| Python | fastapi-service | API service, automation, data-heavy backend |
+| Go | go-service | Small, fast services and platform tooling |
+| Java | spring-boot-api | Enterprise APIs and service-oriented systems |
+| PHP | laravel-api | Conventional product backends |
+| C# | aspnet-api | Microsoft stack services and enterprise apps |
+| Rust | go-service | Performance-sensitive backend work |
+| Ruby | laravel-api | Mature product services and backend workflows |
 
 ### Benchmark Comparison (Current State)
 

@@ -18,8 +18,8 @@ The frontend domain covers component architecture, state management, performance
 ## Recommended Reading Order
 
 1. `ui-architecture.md` - Mental models first (EXPERT)
-2. `accessibility.md` - Compliance baseline (ADVANCE)
-3. `motion.md` - Design patterns and optimization (ADVANCE)
+2. `accessibility.md` - Compliance baseline (EXPERT)
+3. `motion.md` - Design patterns and optimization (EXPERT)
 4. `performance.md` - Profiling and gates (EXPERT)
 
 ## Coverage vs 3 Repos
@@ -33,4 +33,4 @@ The frontend domain covers component architecture, state management, performance
 
 ## Default Tier Behavior
 - Use `advance` for typical web apps (1500+ employees)
-- Escalate to `expert` when component library, state complexity, or performance tuning critical
+- Escalate to `expert` when component library, state complexity, or accessibility/performance tuning is critical

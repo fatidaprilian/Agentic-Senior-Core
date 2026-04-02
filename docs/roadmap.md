@@ -110,6 +110,7 @@ This release shifts from governance pack distribution to a verified skill market
    - Define public trust tiers: `verified`, `community`, `experimental`.
    - Publish a weighted acceptance scorecard for skills and plugins.
    - Require machine-readable evidence bundles for each accepted artifact.
+   - Add plug-and-play init presets so the first install stays simple while still offering stack-specific choice.
 2. Installer and distribution hardening
    - Add transactional install flow with preflight checks, backup points, and automatic rollback.
    - Enforce plugin-safe packaging and forbidden-content detection before publish.
@@ -121,6 +122,7 @@ This release shifts from governance pack distribution to a verified skill market
    - Require frontend parity gates aligned to `MiniMax-AI/skills` `frontend-dev` quality profile.
    - Add visual motion, accessibility, responsive behavior, and conversion narrative checks.
    - Enforce frontend skill parity checklist in CI for release eligibility.
+   - Keep the frontend expert pack aligned with the validation gate and README guidance.
 
 ### V2.0 Success Metrics
 - At least 95% of published marketplace artifacts include complete evidence bundles.

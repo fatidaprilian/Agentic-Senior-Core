@@ -40,6 +40,36 @@ const BLUEPRINT_RECOMMENDATIONS = {
   "go.md": "go-service.md",
   "csharp.md": "aspnet-api.md",
 };
+const INIT_PRESETS = {
+  "frontend-web": {
+    profile: "balanced",
+    stack: "typescript.md",
+    blueprint: "api-nextjs.md",
+    ci: true,
+    description: "Frontend-first web app starter",
+  },
+  "backend-api": {
+    profile: "balanced",
+    stack: "python.md",
+    blueprint: "fastapi-service.md",
+    ci: true,
+    description: "Backend API starter with safe defaults",
+  },
+  "fullstack-product": {
+    profile: "balanced",
+    stack: "typescript.md",
+    blueprint: "api-nextjs.md",
+    ci: true,
+    description: "Product delivery starter with fullstack governance",
+  },
+  "platform-governance": {
+    profile: "strict",
+    stack: "go.md",
+    blueprint: "go-service.md",
+    ci: true,
+    description: "Strict release and platform governance starter",
+  },
+};
 const PROFILE_PRESETS = {
   beginner: {
     displayName: "Beginner",
@@ -84,11 +114,14 @@ function printUsage() {
   console.log("Agentic-Senior-Core CLI");
   console.log("");
   console.log("Local runtime:");
+  console.log("  npm exec --yes @fatidaprilian/agentic-senior-core init");
   console.log("  npx @fatidaprilian/agentic-senior-core init");
+  console.log("  npm install -g @fatidaprilian/agentic-senior-core && agentic-senior-core init");
   console.log("  bunx @fatidaprilian/agentic-senior-core init   # optional Bun path");
+  console.log("  open GitHub template: https://github.com/fatidaprilian/Agentic-Senior-Core/generate");
   console.log("");
   console.log("Usage:");
-  console.log("  agentic-senior-core init [target-directory] [--profile <beginner|balanced|strict>] [--profile-pack <name>] [--stack <name>] [--blueprint <name>] [--ci <true|false>] [--newbie]");
+  console.log("  agentic-senior-core init [target-directory] [--preset <name>] [--profile <beginner|balanced|strict>] [--profile-pack <name>] [--stack <name>] [--blueprint <name>] [--ci <true|false>] [--newbie]");
   console.log("  agentic-senior-core upgrade [target-directory] [--dry-run] [--yes]");
   console.log("  agentic-senior-core skill [domain] [--tier <standard|advance|expert|above>] [--json]");
   console.log("  agentic-senior-core --version");
@@ -97,6 +130,7 @@ function printUsage() {
   console.log("  --help       Show help");
   console.log("  --version    Show CLI version");
   console.log("  --profile    Choose beginner, balanced, or strict");
+  console.log("  --preset     Use a plug-and-play starter preset (frontend-web, backend-api, fullstack-product, platform-governance)");
   console.log("  --profile-pack  Apply a team profile pack (startup, regulated, platform)");
   console.log("  --newbie     Alias for --profile beginner");
   console.log("  --stack      Override stack selection");
@@ -739,6 +773,7 @@ async function writeOnboardingReport({
   targetDirectoryPath,
   selectedProfileName,
   selectedProfilePack,
+  selectedPreset,
   selectedStackFileName,
   selectedBlueprintFileName,
   includeCiGuardrails,
@@ -759,6 +794,7 @@ async function writeOnboardingReport({
         sourceFile: selectedProfilePack.fileName,
       }
       : null,
+    selectedPreset,
     selectedStack: selectedStackFileName,
     selectedBlueprint: selectedBlueprintFileName,
     ciGuardrailsEnabled: includeCiGuardrails,
@@ -919,6 +955,7 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
     const stackFileNames = await collectFileNames(path.join(AGENT_CONTEXT_DIR, "stacks"));
     const blueprintFileNames = await collectFileNames(path.join(AGENT_CONTEXT_DIR, "blueprints"));
     const profilePackDefinitions = await collectProfilePacks(REPO_ROOT);
+    const selectedPreset = initOptions.preset ? INIT_PRESETS[initOptions.preset] || null : null;
 
     const selectedStackFileNameFromOption = initOptions.stack
       ? matchFileNameFromInput(initOptions.stack, stackFileNames)
@@ -942,6 +979,10 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
       throw new Error(`Unknown profile pack: ${initOptions.profilePack}`);
     }
 
+    if (initOptions.preset && !selectedPreset) {
+      throw new Error(`Unknown preset: ${initOptions.preset}`);
+    }
+
     if (selectedProfilePack && !stackFileNames.includes(selectedProfilePack.defaultStackFileName)) {
       throw new Error(
         `Profile pack ${selectedProfilePack.fileName} references unknown stack file: ${selectedProfilePack.defaultStackFileName}`
@@ -957,6 +998,10 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
     console.log(`\nAgentic-Senior-Core CLI v${CLI_VERSION}`);
     console.log("I will copy governance files into your target folder and compile a single rulebook for your AI tools.");
 
+    if (selectedPreset) {
+      console.log(`Using preset: ${initOptions.preset} (${selectedPreset.description}).`);
+    }
+
     const projectDetection = await detectProjectContext(resolvedTargetDirectoryPath);
     if (projectDetection.hasExistingProjectFiles) {
       console.log("I found files in the target directory, so I checked whether this already looks like an existing project.");
@@ -971,6 +1016,8 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
 
     const selectedProfileName = initOptions.profile
       ? initOptions.profile
+      : selectedPreset?.profile
+        ? selectedPreset.profile
       : initOptions.newbie
         ? "beginner"
         : selectedProfilePack?.defaultProfileName
@@ -1006,6 +1053,7 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
     const blueprintDisplayChoices = blueprintFileNames.map((blueprintFileName) => toTitleCase(blueprintFileName));
 
     const selectedResolvedStackFileName = selectedStackFileNameFromOption
+      || selectedPreset?.stack
       || (shouldApplyDetectedStack ? projectDetection.recommendedStackFileName : null)
       || selectedProfilePack?.defaultStackFileName
       || selectedProfile.defaultStackFileName
@@ -1024,6 +1072,7 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
     }
 
     const selectedResolvedBlueprintFileName = selectedBlueprintFileNameFromOption
+      || selectedPreset?.blueprint
       || recommendedBlueprintFileName
       || selectedProfilePack?.defaultBlueprintFileName
       || selectedProfile.defaultBlueprintFileName
@@ -1035,6 +1084,8 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
 
     const includeCiGuardrails = typeof initOptions.ci === "boolean"
       ? initOptions.ci
+      : typeof selectedPreset?.ci === "boolean"
+        ? selectedPreset.ci
       : selectedProfilePack?.lockCi
         ? selectedProfilePack.defaultCi
         : typeof selectedProfilePack?.defaultCi === "boolean"
@@ -1061,6 +1112,7 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
       targetDirectoryPath: resolvedTargetDirectoryPath,
       selectedProfileName,
       selectedProfilePack,
+      selectedPreset: initOptions.preset || null,
       selectedStackFileName: selectedResolvedStackFileName,
       selectedBlueprintFileName: selectedResolvedBlueprintFileName,
       includeCiGuardrails,
@@ -1073,6 +1125,9 @@ async function runInitCommand(targetDirectoryArgument, initOptions = {}) {
     console.log("\nInitialization complete.");
     console.log(`- Target directory: ${resolvedTargetDirectoryPath}`);
     console.log(`- Profile: ${selectedProfile.displayName}`);
+    if (initOptions.preset) {
+      console.log(`- Preset: ${initOptions.preset}`);
+    }
     if (selectedProfilePack) {
       console.log(`- Team profile pack: ${selectedProfilePack.displayName}`);
     }
@@ -1250,6 +1305,7 @@ async function main() {
 
   const parsedInitOptions = {
     targetDirectory: ".",
+    preset: undefined,
     profile: undefined,
     profilePack: undefined,
     stack: undefined,
@@ -1269,6 +1325,17 @@ async function main() {
     if (currentArgument === "--profile") {
       parsedInitOptions.profile = matchProfileNameFromInput(commandArguments[argumentIndex + 1] || "");
       argumentIndex += 1;
+      continue;
+    }
+
+    if (currentArgument === "--preset") {
+      parsedInitOptions.preset = normalizeChoiceInput(commandArguments[argumentIndex + 1] || "");
+      argumentIndex += 1;
+      continue;
+    }
+
+    if (currentArgument.startsWith("--preset=")) {
+      parsedInitOptions.preset = normalizeChoiceInput(currentArgument.split("=")[1]);
       continue;
     }
 
@@ -1335,6 +1402,7 @@ async function main() {
   }
 
   await runInitCommand(parsedInitOptions.targetDirectory, {
+    preset: parsedInitOptions.preset,
     profile: parsedInitOptions.profile,
     profilePack: parsedInitOptions.profilePack,
     stack: parsedInitOptions.stack,

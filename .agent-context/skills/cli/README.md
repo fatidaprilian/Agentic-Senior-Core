@@ -17,3 +17,29 @@ This domain covers command design, safe mutation workflows, and machine-readable
 - Mandatory dry-run support for mutating commands.
 - Structured error payloads for CI/CD and bots.
 - Explicit rollback plans for upgrade paths.
+- Plug-and-play init presets for common stacks and blueprints.
+
+## Installation and Entry Paths
+
+Choose the path that fits your workflow:
+
+- `npm install -g @fatidaprilian/agentic-senior-core` for a global command.
+- `npm exec --yes @fatidaprilian/agentic-senior-core init` for a one-off run.
+- `npx @fatidaprilian/agentic-senior-core init` for a package-managed local run.
+- GitHub template for zero-install project bootstrap.
+
+## Preset Starts
+
+Use presets when you want fewer choices at the start:
+
+- `frontend-web` - TypeScript + API Next.js + balanced profile.
+- `backend-api` - Python + FastAPI + balanced profile.
+- `fullstack-product` - TypeScript + API Next.js + balanced profile.
+- `platform-governance` - Go + Go service + strict profile.
+
+Example:
+
+```bash
+agentic-senior-core init --preset frontend-web
+agentic-senior-core init --preset backend-api --ci true
+```

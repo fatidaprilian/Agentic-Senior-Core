@@ -1,222 +1,128 @@
-# Component Architecture & State Management
+# Component Architecture and State Management
 
 **Tier:** EXPERT | **Source:** awesome-copilot (smart/dumb) + minimax (design systems) + antigravity (React patterns)
 
-## Part 1: Smart/Dumb Component Separation
+## Purpose
 
-### The Model
+UI architecture decides how state, behavior, and presentation are split. Good structure reduces re-render churn, keeps component boundaries stable, and makes features easier to test.
 
-```
-┌─────────────────────────────────────────────┐
-│  SMART Component: Logic, State, Side Effects │
-│  - Manages useState, useContext              │
-│  - Calls APIs, handles business logic        │
-│  - Passes clean props DOWN                   │
-└────────────────┬────────────────────────────┘
-                 │ props + callbacks
-                 ↓
-┌─────────────────────────────────────────────┐
-│  DUMB Component: Pure Presentation           │
-│  - Receives all data via props               │
-│  - No side effects, no API calls             │
-│  - Renders UI, calls props.on*() handlers    │
-└─────────────────────────────────────────────┘
-```
+## Part 1: Smart and Dumb Separation
 
-### Example: Payment Form
+A smart component owns data flow, side effects, and orchestration. A dumb component renders input and emits events.
 
- **CORRECT (Smart + Dumb):**
-
-**Smart Container:**
 ```javascript
 function PaymentFormContainer() {
   const [amount, setAmount] = useState('');
   const [status, setStatus] = useState('idle');
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const handleSubmit = async (value) => {
+  const handleSubmit = async (submittedAmount) => {
     setStatus('loading');
     try {
-      const res = await fetch('/api/payments', {
+      const response = await fetch('/api/payments', {
         method: 'POST',
-        body: JSON.stringify({ amount: value })
+        body: JSON.stringify({ amount: submittedAmount })
       });
-      if (!res.ok) throw new Error('Payment failed');
+
+      if (!response.ok) {
+        throw new Error('Payment request failed');
+      }
+
       setStatus('success');
-    } catch (err) {
-      setError(err.message);
+    } catch (caughtError) {
+      setErrorMessage(caughtError.message);
       setStatus('error');
     }
   };
 
   return (
-    <PaymentFormUI
-      onSubmit={handleSubmit}
+    <PaymentFormView
+      amount={amount}
       isLoading={status === 'loading'}
-      error={error}
+      errorMessage={errorMessage}
+      onAmountChange={setAmount}
+      onSubmit={handleSubmit}
     />
   );
 }
 ```
 
-**Dumb UI Component (Testable):**
 ```javascript
-function PaymentFormUI({ onSubmit, isLoading, error }) {
-  const [amount, setAmount] = useState('');
-
+function PaymentFormView({ amount, isLoading, errorMessage, onAmountChange, onSubmit }) {
   return (
-    <form onSubmit={e => { e.preventDefault(); onSubmit(amount); }}>
+    <form onSubmit={(event) => { event.preventDefault(); onSubmit(amount); }}>
       <input
         value={amount}
-        onChange={e => setAmount(e.target.value)}
+        onChange={(event) => onAmountChange(event.target.value)}
         disabled={isLoading}
       />
       <button disabled={isLoading}>
-        {isLoading ? 'Processing...' : 'Pay'}
+        {isLoading ? 'Processing' : 'Pay'}
       </button>
-      {error && <p style={{ color: 'var(--color-error)' }}>{error}</p>}
+      {errorMessage ? <p>{errorMessage}</p> : null}
     </form>
   );
 }
 ```
 
-**Benefits:**
-- Dumb component testable without API mocking
-- Reuse PaymentFormUI with different handlers
-- Clear responsibility separation
+## Part 2: State Ownership Rules
 
----
+Use the smallest useful state scope.
 
-## Part 2: State Management Trade-Offs
+- Local component state: form fields, toggles, ephemeral UI state.
+- Shared UI state: theme, sidebar state, modal visibility.
+- Server state: remote data, caching, invalidation, refetching.
+- Derived state: compute from existing data instead of duplicating it.
 
-### When to Use What
+Recommended mapping:
+- `useState` for local state.
+- `Zustand` or context for global UI state.
+- `TanStack Query` for server state.
+- Avoid context for high-frequency server data when query caching is the better fit.
 
-| Use Case | Solution | Why |
-|----------|----------|-----|
-| Form input | `useState()` | Scoped to component, simplest |
-| Global UI state (theme) | `Zustand` | Centralized, performant |
-| Server data (API responses) | `TanStack Query` | Caching, invalidation, sync |
-| Complex workflows | `Redux` or `Zustand` | Structured, debuggable |
+## Part 3: Composition and Contracts
 
-###  Anti-Pattern: Context for Everything
-
-```javascript
-// WRONG: Using context for list data
-const DataContext = createContext();
-function App() {
-  const [items, setItems] = useState([]);  // <- Entire app re-renders on list update
-  return <DataContext.Provider value={{ items }}><App /></DataContext.Provider>;
-}
-```
-
-###  CORRECT: TanStack Query for Server State
-
-```javascript
-import { useQuery } from '@tanstack/react-query';
-
-function ItemList() {
-  const { data: items } = useQuery({
-    queryKey: ['items'],
-    queryFn: async () => {
-      const res = await fetch('/api/items');
-      return res.json();
-    },
-  });
-
-  return (
-    <ul>
-      {items?.map(item => <li key={item.id}>{item.name}</li>)}
-    </ul>
-  );
-}
-```
-
-**Benefits:**  Automatic caching, background sync, stale data handling
-
----
-
-## Part 3: Component Contracts (Props Interface)
+A component contract should define what it accepts, what it renders, and what events it emits.
 
 ```javascript
 interface ButtonProps {
-  // Design tokens (not hardcoded colors/sizes)
   variant?: 'primary' | 'secondary' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
-
-  // Content
-  children: React.ReactNode;
-
-  // Behavior
-  onClick: () => void;
   loading?: boolean;
-}
-
-function Button({
-  variant = 'primary',
-  size = 'md',
-  disabled = false,
-  children,
-  onClick,
-  loading = false
-}: ButtonProps) {
-  return (
-    <button
-      className={`btn btn--${variant} btn--${size}`}
-      disabled={disabled || loading}
-      onClick={onClick}
-    >
-      {loading && <Spinner />}
-      {children}
-    </button>
-  );
+  onClick: () => void;
+  children: React.ReactNode;
 }
 ```
 
-**Rule:** Props describe WHAT to render, not HOW.
+Keep public component APIs stable. If the component grows many optional props, split it into smaller feature-specific components instead of adding more flags.
 
----
+## Part 4: Anti-Patterns
 
-## Part 4: Anti-Patterns to Avoid
+- Prop drilling across many levels.
+- Global context for everything.
+- Mixing network calls into presentational views.
+- Repeating derived values in both state and render.
+- Reaching into another feature's internals instead of using the feature public API.
 
-### Prop Drilling (Passing Through Many Levels)
+## Part 5: Design System Integration
 
- WRONG  ​​​​​​​​​​​​​​​​​​​​​​:
+Design tokens should drive spacing, color, and sizing. Avoid one-off values unless the design system explicitly allows them.
+
 ```javascript
-function App() {
-  const [theme, setTheme] = useState('light');
-  return <Layout theme={theme} setTheme={setTheme} />;  // Level 1->2
-}
-function Layout({ theme, setTheme }) {
-  return <Header theme={theme} setTheme={setTheme} />;  // Level 2->3
-}
-function Header({ theme, setTheme }) {
-  return <ThemeToggle theme={theme} setTheme={setTheme} />;  // Level 3->4
-}
+const buttonStyles = {
+  primary: 'bg-primary text-on-primary',
+  secondary: 'bg-surface text-primary',
+  danger: 'bg-danger text-on-danger'
+};
 ```
 
- CORRECT: Use Zustand
-```javascript
-const useTheme = create(set => ({
-  theme: 'light',
-  setTheme: (t) => set({ theme: t })
-}));
+## Review Checklist
 
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme();  // Direct access, no drilling
-  return <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>Toggle</button>;
-}
-```
-
----
-
-## Checklist
-
-- [ ] Components split into Smart (logic) + Dumb (UI)
-- [ ] No prop drilling beyond 2 levels
-- [ ] Server state handled by TanStack Query
-- [ ] Context only for global UI state (theme, user)
-- [ ] Design tokens used (no hardcoded colors/sizes)
-- [ ] Component props clearly documented
-- [ ] Dumb components testable without mocks
-- Avoid prop drilling when composition is cleaner.
+- [ ] Smart and dumb layers are separated.
+- [ ] State ownership is minimal and deliberate.
+- [ ] Server state uses a cache-aware tool.
+- [ ] Component contracts are explicit and stable.
+- [ ] Feature boundaries are respected.
+- [ ] Design tokens are used consistently.
+- [ ] Prop drilling does not replace composition or shared state.

@@ -45,6 +45,28 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
+  await t.test('initializes with a plug-and-play preset', () => {
+    const presetTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-preset-'));
+
+    try {
+      const presetOutput = execSync(
+        `node ${cliPath} init ${presetTargetDirectory} --preset frontend-web`
+      ).toString();
+
+      assert.match(presetOutput, /Using preset: frontend-web/);
+
+      const presetReportPath = join(presetTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
+      const presetReport = JSON.parse(readFileSync(presetReportPath, 'utf8'));
+
+      assert.equal(presetReport.selectedPreset, 'frontend-web');
+      assert.equal(presetReport.selectedProfile, 'balanced');
+      assert.equal(presetReport.selectedStack, 'typescript.md');
+      assert.equal(presetReport.selectedBlueprint, 'api-nextjs.md');
+    } finally {
+      rmSync(presetTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
   await t.test('initializes beginner and strict profiles non-interactively', () => {
     const beginnerTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-beginner-'));
     const strictTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-strict-'));

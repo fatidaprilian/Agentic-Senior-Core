@@ -47,6 +47,6 @@
     "benchmark:gate": "node ./scripts/benchmark-gate.mjs",
     "benchmark:intelligence": "node ./scripts/benchmark-intelligence.mjs",
     "validate": "node ./scripts/validate.mjs",
-    "test": "node --test ./tests/cli-smoke.test.mjs ./tests/llm-judge.test.mjs ./tests/enterprise-ops.test.mjs"
+    "test": "node --test ./tests/cli-smoke.test.mjs ./tests/llm-judge.test.mjs ./tests/enterprise-ops.test.mjs ./tests/skill-tier-gate.test.mjs"
   }
 }
