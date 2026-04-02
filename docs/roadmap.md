@@ -116,6 +116,7 @@ This release shifts from governance pack distribution to a verified skill market
    - Add transactional install flow with preflight checks, backup points, and automatic rollback.
    - Enforce plugin-safe packaging and forbidden-content detection before publish.
    - Introduce compatibility manifest checks by IDE and runtime target.
+   - Require local security auditing before introducing new third-party packages or dependency updates.
 3. Governance observability
    - Emit quality trend artifacts (pass rates, rejection categories, rollback frequency).
    - Add weekly governance report generation for maintainers.
@@ -154,6 +155,8 @@ This release focuses on staying ahead by proving sustained quality gains against
    - Add reproducible benchmark scenarios for planning, refactor, security, and delivery workflows.
    - Compare output quality across multiple model providers with the same rule packs.
    - Persist benchmark histories for trend and regression detection.
+   - Separate code generation and judge roles so the writer and auditor are not the same trust source.
+   - Require cross-model verification for benchmark and judge workflows to reduce confirmation bias.
 2. Anti-regression quality gates
    - Block releases when benchmark deltas cross configured quality thresholds.
    - Add deterministic replay fixtures for previously failed benchmark runs.
@@ -192,6 +195,10 @@ This release aims to move beyond repository-level governance toward federated en
    - Deliver portfolio-level dashboards for quality, security, and policy conformance.
    - Add controlled rollout and rollback channels for governance updates.
    - Define incident playbooks for governance failures and policy breaches.
+4. Dynamic context delivery modernization
+   - Evaluate MCP-native domain retrieval for rule packs that are only needed during specific edits.
+   - Revisit RAG-style retrieval when compiled context becomes too dense for the current compiler model.
+   - Keep compiled rule files as the default until retrieval proves lower-friction and more reliable.
 
 ### V3.0 Success Metrics
 - Policy drift detection coverage reaches 100% for onboarded repositories.

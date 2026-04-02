@@ -103,7 +103,7 @@ If you have an existing project and want to infuse it with Staff-level context:
 npx @fatidaprilian/agentic-senior-core init
 ```
 
-Use team defaults (V1.6 track) with profile packs:
+Use team defaults (V1.8 track) with profile packs:
 
 ```bash
 npx @fatidaprilian/agentic-senior-core init --profile-pack startup
@@ -170,7 +170,9 @@ Use the stack that matches the project you are actually starting:
 ### Option 4: Clone and Play
 Want to poke around under the hood? Just clone the repo and `npx @fatidaprilian/agentic-senior-core init` locally. No runtime dependencies needed — everything uses native Node.js!
 
-### Upgrade Existing Governance Packs (V1.6)
+### Upgrade Existing Governance Packs (V1.8)
+
+Yes, the upgrade flow still works. Use `--dry-run` first to preview changes, then apply with `--yes` when you are ready.
 
 Preview migration changes safely:
 
@@ -286,6 +288,11 @@ npm run benchmark:detection
 - Release-gate automation shipped with machine-readable artifact output.
 - CycloneDX SBOM generation and compliance artifact workflow shipped.
 - Operations playbook and release-operations checklist shipped.
+
+### Current Forward Plan
+- V2.0: Skill marketplace trust tiers, transactional installs, rollback safety, and launch-menu onboarding.
+- V2.5: Cross-model benchmark harness and anti-regression quality gates.
+- V3.0: Enterprise governance cloud, policy drift detection, and org-level override registry.
 
 Detailed timeline and success metrics: [docs/roadmap.md](docs/roadmap.md)
 
