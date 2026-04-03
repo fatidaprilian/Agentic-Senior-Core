@@ -85,7 +85,40 @@ All engineering rules are located in `.agent-context/`. Load them before generat
 | [`.agent-context/blueprints/graphql-grpc-api.md`](.agent-context/blueprints/graphql-grpc-api.md) | GraphQL / gRPC API definitions |
 | [`.agent-context/blueprints/infrastructure-as-code.md`](.agent-context/blueprints/infrastructure-as-code.md) | Infrastructure as Code pipeline |
 | [`.agent-context/blueprints/kubernetes-manifests.md`](.agent-context/blueprints/kubernetes-manifests.md) | Kubernetes manifests structure |
+### Domain Skills (Load by Context)
 
+Domain expertise packs to auto-load when relevant:
+
+| File | Domain | When Loaded |
+|------|--------|-------------|
+| [`.agent-context/skills/backend.md`](.agent-context/skills/backend.md) | Backend architecture & services | Any backend project or service design |
+| [`.agent-context/skills/frontend.md`](.agent-context/skills/frontend.md) | Frontend UI/UX & state management | Any frontend or web app project |
+| [`.agent-context/skills/cli.md`](.agent-context/skills/cli.md) | CLI tool design & scripting | Any CLI or automation tool |
+| [`.agent-context/skills/distribution.md`](.agent-context/skills/distribution.md) | Packaging, deployment & release | Any publish/deploy/package scenario |
+| [`.agent-context/skills/fullstack.md`](.agent-context/skills/fullstack.md) | Full-stack integration patterns | Any full-stack feature |
+| [`.agent-context/skills/review-quality.md`](.agent-context/skills/review-quality.md) | Code review & quality standards | Any code review or QA gate |
+
+### Prompts (Specialized Request Templates)
+
+| File | Purpose | When Used |
+|------|---------|----------|
+| [`.agent-context/prompts/init-project.md`](.agent-context/prompts/init-project.md) | Project initialization & scaffolding | When user says "create new project" |
+| [`.agent-context/prompts/refactor.md`](.agent-context/prompts/refactor.md) | Code refactoring with safety | When user says "refactor" or "improve" |
+| [`.agent-context/prompts/review-code.md`](.agent-context/prompts/review-code.md) | Architectural code review | When user says "review this" |
+
+### Team Profiles (Governance Defaults)
+
+| File | Profile | Default Stack | CI Guardrails |
+|------|---------|---------------|---------------|
+| [`.agent-context/profiles/platform.md`](.agent-context/profiles/platform.md) | **Platform** — Shared infrastructure team | Go | Strict (critical, high) |
+| [`.agent-context/profiles/regulated.md`](.agent-context/profiles/regulated.md) | **Regulated** — Financial/healthcare compliance | TypeScript + Java | Blocking (all severities) |
+| [`.agent-context/profiles/startup.md`](.agent-context/profiles/startup.md) | **Startup** — Speed + pragmatism | TypeScript + Next.js | Permissive (critical only) |
+
+### Policies (Governance Rules)
+
+| File | Scope |
+|------|-------|
+| [`.agent-context/policies/llm-judge-threshold.json`](.agent-context/policies/llm-judge-threshold.json) | LLM quality gates & skill tier thresholds |
 ### Review Checklists (Load Before Completion)
 
 | File | Purpose |
@@ -129,3 +162,20 @@ If the user asks to install a new library, or if you feel the need to use one, e
 
 ## Definition of Done
 **NEVER** declare a task "done" or ready for review without explicitly running and passing `.agent-context/review-checklists/pr-checklist.md`.
+
+---
+
+## Knowledge Inventory Checklist
+
+**AUDIT REQUIREMENT**: Every agent session MUST verify all 8 knowledge layers are loaded:
+
+- [ ] **Layer 1: Rules** (14 files) — Mandatory governance & clean code standards
+- [ ] **Layer 2: Stacks** (10 profiles) — Language-specific tooling & conventions
+- [ ] **Layer 3: Blueprints** (14 templates) — Scaffolding & architecture patterns
+- [ ] **Layer 4: Skills** (6 packs) — Domain expertise by scenario
+- [ ] **Layer 5: Prompts** (3 templates) — Request-specific workflows
+- [ ] **Layer 6: Profiles** (3 teams) — Governance defaults by org type
+- [ ] **Layer 7: State** (benchmarks, maps) — Codebase-aware decisions
+- [ ] **Layer 8: Policies** (thresholds) — Enforcement & quality gates
+
+WARNING: If any layer is missing, this indicates incomplete injection. Report to maintain context integrity.

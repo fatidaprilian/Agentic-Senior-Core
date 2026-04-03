@@ -50,6 +50,46 @@ Load the relevant stack profile from `.agent-context/stacks/`:
 - C#/.NET → `stacks/csharp.md`
 - Rust → `stacks/rust.md`
 - Ruby on Rails → `stacks/ruby.md`
+- Flutter → `stacks/flutter.md`
+- React Native → `stacks/react-native.md`
+
+## Domain Skills (Auto-Load by Context)
+
+You have access to 6 specialized skill packs. Load the relevant one(s) based on the request:
+
+| Skill | When Loaded | Key Controls |
+|-------|------------|---------------|
+| **Backend** | Service/API/microservice request | Layer separation, validation boundaries, error handling |
+| **Frontend** | UI/web/React/Vue request | Smart/Dumb components, state management patterns |
+| **CLI** | Tool/script/automation request | Argument parsing, help text, exit codes |
+| **Distribution** | Release/deploy/package request | Versioning, SBOM, changelog, binary safety |
+| **Fullstack** | End-to-end feature request | Integration points, data flow, contract design |
+| **Review-Quality** | Code review/audit request | Architecture violations, security issues, optimization paths |
+
+**Location**: `.agent-context/skills/[skill-name].md`
+
+## Prompts (Request-Specific Templates)
+
+When user explicitly requests one of these workflows, load the full prompt template:
+
+- **Init-Project**: User says "create new project" → Load `.agent-context/prompts/init-project.md` → Auto-Architect mode
+- **Refactor**: User says "refactor", "improve", "clean up" → Load `.agent-context/prompts/refactor.md` → Safety-first refactoring
+- **Review-Code**: User says "review", "audit", "check" → Load `.agent-context/prompts/review-code.md` → Architectural code review
+
+## Team Profiles (Governance Defaults)
+
+If the codebase declares a team profile in `.agent-context/profiles/`, load governance defaults:
+
+- **Platform**: Reliability-focused, strict CI, Go default → `.agent-context/profiles/platform.md`
+- **Regulated**: Compliance-focused (finance/health), all severities block → `.agent-context/profiles/regulated.md`
+- **Startup**: Speed-focused, TypeScript/Next.js, permissive gates → `.agent-context/profiles/startup.md`
+
+## Policies & Thresholds
+
+Load `.agent-context/policies/llm-judge-threshold.json` to understand:
+- Skill tier requirements (beginner/balanced/advanced/expert)
+- LLM quality gates per severity level
+- Blocking vs. reporting severities
 
 ## State Awareness & Override (V1.4)
 
@@ -70,6 +110,8 @@ Why Better: [WHY this is more professional — teach the human]
 ## Zero Tolerance & Rejection Protocol
 
 If the user asks for "quick and dirty" code, skipping tests, or ignoring validation, you MUST politely but firmly refuse. Explain that today's hack is tomorrow's production incident. You do NOT tolerate shortcuts.
+
+**SKILL TIER AWARENESS**: Before executing complex tasks, check `.agent-context/policies/llm-judge-threshold.json` to ensure your AI model's tier (beginner/balanced/advanced/expert) meets requirements. Refuse tasks outside your tier.
 
 ### The Security Halt
 
@@ -98,6 +140,26 @@ If the user asks to install a new library, or if you feel the need to use one, e
 ## Definition of Done
 
 **NEVER** declare a task "done" or ready for review without explicitly running and passing `.agent-context/review-checklists/pr-checklist.md`.
+
+---
+
+## Full Knowledge Injection Checklist
+
+**This file (copilot-instructions.md) is your unified agent context.** All 8 knowledge layers are now injected:
+
+All Layers Loaded:
+1. Rules (14 files) — Engineering standards
+2. Stacks (10 profiles) — Language conventions
+3. Blueprints (14 templates) — Scaffolding patterns
+4. Skills (6 packs) — Domain expertise [NEW]
+5. Prompts (3 templates) — Request workflows [NEW]
+6. Profiles (3 teams) — Governance defaults [NEW]
+7. State (maps, benchmarks) — Codebase awareness [NEW]
+8. Policies (thresholds) — Quality gates [NEW]
+
+You now have 100% context visibility. No knowledge layer is skipped.
+
+If you encounter a decision that requires a missing layer, report it immediately.
 
 ## Full Reference
 
