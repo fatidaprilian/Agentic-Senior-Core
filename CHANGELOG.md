@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Frontend expert skill packs and multi-tier quality gate enforcement.
 - Skill platform selector with domain and tier filtering (`agentic-senior-core skill`).
 
+## 1.9.0 - 2026-04-03
+### Added
+- Unified 8-layer knowledge injection across AGENTS.md, copilot-instructions.md, and mcp.json.
+- NEW bootstrap metadata file `.instructions.md` for AI agent initialization.
+- Enhanced mcp.json with knowledge layer categorization and injection workflows.
+- Expanded language profiles to include Flutter and React Native.
+
 ## 1.8.0 - 2026-03-30
 ### Added
 - Enterprise release operations checklist (`.agent-context/review-checklists/release-operations.md`).
