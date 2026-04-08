@@ -43,7 +43,8 @@
   "scripts": {
     "init": "node ./bin/agentic-senior-core.js init",
     "audit:frontend-usability": "node ./scripts/frontend-usability-audit.mjs",
-    "gate:release": "node ./scripts/release-gate.mjs",
+    "gate:release": "node ./scripts/release-gate.mjs && node ./scripts/forbidden-content-check.mjs",
+    "prepublishOnly": "npm run gate:release",
     "sbom:generate": "node ./scripts/generate-sbom.mjs",
     "benchmark:detection": "node ./scripts/detection-benchmark.mjs",
     "benchmark:gate": "node ./scripts/benchmark-gate.mjs",

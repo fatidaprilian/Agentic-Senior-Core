@@ -206,6 +206,7 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 - **Codebase Intelligence:** `.agent-context/state/` gives architecture/dependency boundaries so the agent understands high-risk areas.
 - **Override System:** `.agent-override.md` allows controlled enterprise exceptions without forking core rules.
 - **Automated Guardrails:** CI blueprints include LLM-as-a-Judge flow using `pr-checklist.md`.
+- **Pre-Publish Safety:** Built-in forbidden content checks detect hardcoded secrets and stray debugger artifacts before hitting the NPM registry.
 - **Machine-Readable CI Output:** LLM Judge emits `JSON_REPORT` payloads and writes `.agent-context/state/llm-judge-report.json` for PR/MR annotation tooling.
 - **MCP Self-Healing Loop:** `mcp.json` defines diagnostics + fix proposal workflow when lint/CI fails.
 
