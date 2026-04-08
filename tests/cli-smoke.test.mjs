@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -151,5 +151,23 @@ test('CLI Smoke Tests', async (t) => {
     assert.equal(skillReport.selectedTier, 'advance');
     assert.equal(skillReport.selectedDomain?.name, 'frontend');
     assert.equal(skillReport.recommendedPackFileName, 'frontend.md');
+  });
+
+  await t.test('preflight checks abort installation on conflict', () => {
+    const preflightTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-preflight-'));
+    
+    // Create a conflicting file
+    writeFileSync(join(preflightTargetDirectory, '.cursorrules'), 'Conflict');
+
+    try {
+      execSync(`node ${cliPath} init ${preflightTargetDirectory} --preset frontend-web`);
+      assert.fail('Should have thrown an error due to preflight failure');
+    } catch (error) {
+      const errorOutput = error.stderr ? error.stderr.toString() : error.stdout.toString();
+      assert.match(errorOutput, /\[FATAL\] Preflight checks failed/);
+      assert.match(errorOutput, /Conflicting governance files already exist during init/);
+    } finally {
+      rmSync(preflightTargetDirectory, { recursive: true, force: true });
+    }
   });
 });
