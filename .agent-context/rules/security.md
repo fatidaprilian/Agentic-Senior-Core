@@ -177,6 +177,96 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 
 ---
 
+## .gitignore Enforcement (Mandatory)
+
+**If the user's INTENT is to create a new project, push to GitHub, or initialize source control, you MUST generate or verify a `.gitignore` file exists.**
+
+### Minimum Required Entries
+```gitignore
+# ── Secrets & Environment ──
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+
+# ── Dependencies ──
+node_modules/
+vendor/
+venv/
+.venv/
+__pycache__/
+.gradle/
+target/
+bin/  # Go binaries
+pkg/
+
+# ── Build Output ──
+dist/
+build/
+out/
+*.min.js
+*.min.css
+.next/
+.nuxt/
+.output/
+
+# ── IDE & Editor ──
+.idea/
+.vscode/settings.json
+.vscode/launch.json
+*.swp
+*.swo
+*~
+
+# ── OS Artifacts ──
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.lnk
+
+# ── Logs ──
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ── Testing & Coverage ──
+coverage/
+.nyc_output/
+*.lcov
+
+# ── Runtime Data ──
+*.pid
+*.seed
+*.pid.lock
+
+# ── Secrets & Keys ──
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+```
+
+### Rules
+1. **NEVER commit `.env`** — only `.env.example` with placeholder values
+2. **Check for leaks before push** — `git diff --cached --name-only | grep -E '\.(env|pem|key)$'` should return empty
+3. **If the project has NO `.gitignore`**, create one immediately before any `git add`
+4. **Extend per-stack** — add language-specific patterns (e.g., `__pycache__/` for Python, `target/` for Java/Rust, `.gradle/` for Kotlin)
+5. **Reference**: See `.agent-context/rules/git-workflow.md` for the full `.gitignore Standards` section
+
+### MUST Commit (Whitelist)
+```
+.env.example           # Template with placeholder values ONLY
+.editorconfig          # Consistent formatting across IDEs
+.gitignore             # This file itself
+docker-compose.yml     # Dev environment definition
+Makefile / Taskfile    # Standard dev commands
+```
+
+---
+
 ## The Security Checklist (Quick Reference)
 
 Before any code is "done", verify:
@@ -184,6 +274,7 @@ Before any code is "done", verify:
 - [ ] All inputs validated at boundaries with schemas
 - [ ] No string concatenation in queries/commands
 - [ ] No secrets in source code
+- [ ] `.gitignore` exists and covers `.env`, `node_modules/`, build output, and IDE files
 - [ ] Authentication uses established libraries
 - [ ] Password hashing uses argon2id (or bcrypt for legacy)
 - [ ] Authorization enforced server-side
@@ -193,3 +284,4 @@ Before any code is "done", verify:
 - [ ] Error responses don't leak internal details
 - [ ] Logging includes security events (login failures, permission denials)
 - [ ] Dependencies audited for known vulnerabilities
+

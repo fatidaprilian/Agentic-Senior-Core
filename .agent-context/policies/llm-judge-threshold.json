@@ -1,18 +1,27 @@
 {
-  "selectedProfile": "balanced",
+  "selectedProfile": "beginner",
   "profileThresholds": {
     "beginner": {
-      "blockingSeverities": ["critical"],
+      "blockingSeverities": [
+        "critical"
+      ],
       "failOnMalformedResponse": false,
       "failOnProviderError": false
     },
     "balanced": {
-      "blockingSeverities": ["critical", "high"],
+      "blockingSeverities": [
+        "critical",
+        "high"
+      ],
       "failOnMalformedResponse": true,
       "failOnProviderError": false
     },
     "strict": {
-      "blockingSeverities": ["critical", "high", "medium"],
+      "blockingSeverities": [
+        "critical",
+        "high",
+        "medium"
+      ],
       "failOnMalformedResponse": true,
       "failOnProviderError": true
     }

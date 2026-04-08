@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.9.2 - 2026-04-08
+### Changed
+- CLI modularization (V2.0-001): split 1557-line monolith `bin/agentic-senior-core.js` into 9 ESM modules under `lib/cli/`. Entry point reduced to 61 lines.
+- Migrated entire package from CommonJS to ESM (`"type": "module"` in package.json).
+- Added `lib/` to npm publish manifest.
+
+### Added
+- Mandatory `.gitignore` enforcement rules in `.agent-context/rules/security.md` with 70+ patterns covering secrets, dependencies, build output, IDE files, and keys.
+- Knowledge injection test suite (`tests/knowledge-injection.test.mjs`) with 55 test cases verifying all 8 layers across every IDE entry point.
+- `.gitignore` verification added to security checklist.
+
 ## 1.8.2 - 2026-04-02
 ### Fixed
 - Standardized NPM package name references to `@ryuenn3123/agentic-senior-core` to resolve 404 errors in documentation and CLI help.
