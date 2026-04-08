@@ -1,6 +1,6 @@
 {
-  "cliVersion": "1.9.2",
-  "generatedAt": "2026-04-08T01:58:51.014Z",
+  "cliVersion": "1.9.3",
+  "generatedAt": "2026-04-08T02:11:52.436Z",
   "operationMode": "init",
   "selectedProfile": "beginner",
   "selectedProfilePack": null,
@@ -8,7 +8,7 @@
   "selectedStack": "typescript.md",
   "selectedBlueprint": "api-nextjs.md",
   "ciGuardrailsEnabled": true,
-  "setupDurationMs": 16396,
+  "setupDurationMs": 84447,
   "selectedSkillDomains": [
     "frontend",
     "fullstack",

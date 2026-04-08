@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 1.9.2 - 2026-04-08
+## 1.9.3 - 2026-04-08
 ### Changed
 - CLI modularization (V2.0-001): split 1557-line monolith `bin/agentic-senior-core.js` into 9 ESM modules under `lib/cli/`. Entry point reduced to 61 lines.
 - Migrated entire package from CommonJS to ESM (`"type": "module"` in package.json).
