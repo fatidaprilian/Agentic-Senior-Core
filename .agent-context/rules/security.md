@@ -236,10 +236,11 @@ coverage/
 .nyc_output/
 *.lcov
 
-# ── Runtime Data ──
+# ── Runtime & Backup Data ──
 *.pid
 *.seed
 *.pid.lock
+.agentic-backup/
 
 # ── Secrets & Keys ──
 *.pem

@@ -10,6 +10,7 @@ import { exit } from 'node:process';
 import { CLI_VERSION } from '../lib/cli/constants.mjs';
 import { printUsage } from '../lib/cli/utils.mjs';
 import { runLaunchCommand } from '../lib/cli/commands/launch.mjs';
+import { runRollbackCommand } from '../lib/cli/commands/rollback.mjs';
 import { runInitCommand, parseInitArguments } from '../lib/cli/commands/init.mjs';
 import { runUpgradeCommand, parseUpgradeArguments } from '../lib/cli/commands/upgrade.mjs';
 import { runSkillCommand } from '../lib/cli/skill-selector.mjs';
@@ -47,6 +48,11 @@ async function main() {
   if (commandArgument === 'init') {
     const initOptions = parseInitArguments(commandArguments);
     await runInitCommand(initOptions.targetDirectory, initOptions);
+    return;
+  }
+
+  if (commandArgument === 'rollback') {
+    await runRollbackCommand(commandArguments);
     return;
   }
 

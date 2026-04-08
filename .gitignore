@@ -19,3 +19,4 @@ bun.lockb
 # Env
 .env
 .env.local
+.agentic-backup/
