@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.9.4 - 2026-04-08
+### Added
+- Marketplace Trust Tiers (V2.0-002) with 4-dimension scorecard and automated acceptance checklist validation.
+- Preflight Safety Checks (V2.0-005) to assert Node.js versions, directory write permissions, disk space availability, and to abort without touch state on file conflicts.
+- Transactional Install & Rollback Safety (V2.0-006, V2.0-007) via new `lib/cli/backup.mjs` and `lib/cli/rollback.mjs` modules with a manual `rollback` CLI command.
+
 ## 1.9.3 - 2026-04-08
 ### Changed
 - CLI modularization (V2.0-001): split 1557-line monolith `bin/agentic-senior-core.js` into 9 ESM modules under `lib/cli/`. Entry point reduced to 61 lines.
