@@ -105,18 +105,18 @@ This release shifts from governance pack distribution to a verified skill market
 - `github/awesome-copilot`: governance-driven contribution model, role-based planning and review loops.
 - `MiniMax-AI/skills`: mandatory frontend delivery patterns via `frontend-dev` and multi-tool installation support.
 
-### Planned Scope
+### Delivered Scope
 1. Marketplace trust framework
-   - Define public trust tiers: `verified`, `community`, `experimental`.
-   - Publish a weighted acceptance scorecard for skills and plugins.
-   - Require machine-readable evidence bundles for each accepted artifact.
-   - Add plug-and-play init presets so the first install stays simple while still offering stack-specific choice.
-   - Add a numbered launcher so GitHub, npm, bootstrap, and preset paths are selectable without memorizing commands.
+   - DEFINED public trust tiers: `verified`, `community`, `experimental`.
+   - SHIPPED a weighted acceptance scorecard for skills and plugins.
+   - SHIPPED machine-readable evidence bundles requirement for accepted artifacts.
+   - SHIPPED plug-and-play init presets for fast, stack-specific installations.
+   - SHIPPED a numbered interactive launcher for seamless bootstrapping.
 2. Installer and distribution hardening
-   - Add transactional install flow with preflight checks, backup points, and automatic rollback.
-   - Enforce plugin-safe packaging and forbidden-content detection before publish.
-   - Introduce compatibility manifest checks by IDE and runtime target.
-   - Require local security auditing before introducing new third-party packages or dependency updates.
+   - SHIPPED transactional install flow with preflight checks, backup points, and automatic rollback.
+   - SHIPPED forbidden-content detection (API keys, stray paths, debuggers) as a strict publish gate.
+   - [Pending] Introduce compatibility manifest checks by IDE and runtime target.
+   - [Pending] Require local security auditing before introducing new third-party packages or dependency updates.
 3. Governance observability
    - Emit quality trend artifacts (pass rates, rejection categories, rollback frequency).
    - Add weekly governance report generation for maintainers.

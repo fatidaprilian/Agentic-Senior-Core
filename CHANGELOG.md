@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.1 - 2026-04-08
+### Fixed
+- Fixed a fatal bug where running Windows npm via WSL (`npx`) on UNC network paths defaulted execution to `C:\Windows`, causing CLI crashes (`EPERM` during backup/init). The CLI now catches this fallback proactively and aborts with clear instructions to use a native Linux Node.js environment.
+
 ## 2.0.0 - 2026-04-08
 ### Added
 - Publish Gate & Pre-Publish Safety (V2.0-008) automated forbidden content detection preventing API keys, passwords, and absolute paths to leak into production.

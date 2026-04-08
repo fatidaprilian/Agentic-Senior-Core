@@ -103,7 +103,7 @@ If you have an existing project and want to infuse it with Staff-level context:
 npx @ryuenn3123/agentic-senior-core init
 ```
 
-Use team defaults (V1.8 track) with profile packs:
+Use team defaults (V2.0 track) with profile packs:
 
 ```bash
 npx @ryuenn3123/agentic-senior-core init --profile-pack startup
@@ -170,7 +170,7 @@ Use the stack that matches the project you are actually starting:
 ### Option 4: Clone and Play
 Want to poke around under the hood? Just clone the repo and `npx @ryuenn3123/agentic-senior-core init` locally. No runtime dependencies needed — everything uses native Node.js!
 
-### Upgrade Existing Governance Packs (V1.8)
+### Upgrade Existing Governance Packs (V1.x to V2.x)
 
 Yes, the upgrade flow still works. Use `--dry-run` first to preview changes, then apply with `--yes` when you are ready.
 
@@ -201,7 +201,8 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 
 ## Core Capabilities
 
-- **Delivery Engine (CLI):** Interactive setup via GitHub source, bootstrap scripts, or `npx` after publish.
+- **Delivery Engine (CLI):** Interactive setup via GitHub source, bootstrap scripts, or `npx` after publish. Supported by a robust transactional installer with rollback protection.
+- **Verified Skill Marketplace:** Distribute and validate plugins securely with automated 4-dimension Trust Scoring and Evidence Bundles constraint validation.
 - **Dynamic Context Compiler:** Merges universal rules + selected stack + selected blueprint + optional CI guardrails into one dense, indexed rule file.
 - **Codebase Intelligence:** `.agent-context/state/` gives architecture/dependency boundaries so the agent understands high-risk areas.
 - **Override System:** `.agent-override.md` allows controlled enterprise exceptions without forking core rules.
