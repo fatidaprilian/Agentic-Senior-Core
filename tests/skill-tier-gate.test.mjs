@@ -19,7 +19,7 @@ function collectSkillTopicPaths() {
         continue;
       }
 
-      if (directoryEntry.isFile() && directoryEntry.name.endsWith('.md') && directoryEntry.name !== 'README.md') {
+      if (directoryEntry.isFile() && directoryEntry.name.endsWith('.md') && directoryEntry.name !== 'README.md' && directoryEntry.name !== 'CHANGELOG.md') {
         topicFilePaths.push(entryPath);
       }
     }

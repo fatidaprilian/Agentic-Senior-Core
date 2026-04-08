@@ -17,6 +17,7 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateSkillTopicContent } from './skill-tier-policy.mjs';
+import { calculateTrustScore } from './trust-scorer.mjs';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
 const ROOT_DIR = resolve(dirname(SCRIPT_FILE_PATH), '..');
@@ -260,7 +261,7 @@ async function validateSkillTierQuality() {
 
   const skillMarkdownFiles = await collectFiles(SKILLS_DIR, (fileName) => fileName.endsWith('.md'));
   const scopedSkillTopicFiles = skillMarkdownFiles.filter((skillFilePath) => {
-    if (skillFilePath.endsWith('README.md')) {
+    if (skillFilePath.endsWith('README.md') || skillFilePath.endsWith('CHANGELOG.md')) {
       return false;
     }
 
@@ -657,6 +658,41 @@ async function validateTrustTierSchema() {
   }
 }
 
+async function validateEvidenceBundles() {
+  console.log('\nChecking skill evidence bundles and trust scores...');
+  
+  const skillsDir = join(AGENT_CONTEXT_DIR, 'skills');
+  const skillDirs = (await readdir(skillsDir, { withFileTypes: true }))
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => dirent.name);
+
+  // We only DEMAND evidence from official skills if they want to be considered "Verified".
+  // Let's at least enforce they don't throw errors when scored.
+  // And specifically, 'cli' has a mocked evidence bundle, so it should score Verified.
+  for (const skillName of skillDirs) {
+      if (skillName === 'cli') {
+          try {
+             const result = await calculateTrustScore(join(skillsDir, skillName));
+             if (result.tier === 'verified') {
+                 pass(`Skill "${skillName}" achieved Verified trust tier (Score: ${result.score})`);
+             } else {
+                 fail(`Skill "${skillName}" failed to reach Verified tier. Got ${result.tier} (Score: ${result.score})`);
+                 console.log(result.dimensions);
+             }
+          } catch (err) {
+             fail(`Skill "${skillName}" scorer crashed: ${err.message}`);
+          }
+      } else {
+          try {
+             const result = await calculateTrustScore(join(skillsDir, skillName));
+             pass(`Skill "${skillName}" parses successfully as ${result.tier} tier`);
+          } catch (err) {
+             fail(`Skill "${skillName}" scorer crashed: ${err.message}`);
+          }
+      }
+  }
+}
+
 async function main() {
   console.log('===============================================');
   console.log('  Agentic-Senior-Core Repository Validator');
@@ -675,6 +711,7 @@ async function main() {
   await validateDocumentationFlow();
   await validateMcpConfiguration();
   await validateTrustTierSchema();
+  await validateEvidenceBundles();
 
   console.log('\n===============================================');
   console.log('  RESULTS');
