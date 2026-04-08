@@ -5,11 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 1.9.4 - 2026-04-08
+## 1.9.5 - 2026-04-08
 ### Added
 - Marketplace Trust Tiers (V2.0-002) with 4-dimension scorecard and automated acceptance checklist validation.
 - Preflight Safety Checks (V2.0-005) to assert Node.js versions, directory write permissions, disk space availability, and to abort without touch state on file conflicts.
 - Transactional Install & Rollback Safety (V2.0-006, V2.0-007) via new `lib/cli/backup.mjs` and `lib/cli/rollback.mjs` modules with a manual `rollback` CLI command.
+- Evidence Bundle Validation & Trust Scorer (V2.0-003, V2.0-004) calculating readiness limits and preventing unverified skill components from passing tests.
+
+## 1.9.4 - 2026-04-08
 
 ## 1.9.3 - 2026-04-08
 ### Changed
