@@ -137,6 +137,7 @@ async function validateRequiredFiles() {
     'tests/enterprise-ops.test.mjs',
     'LICENSE',
     '.gitignore',
+    '.agent-context/marketplace/trust-tiers.json',
   ];
 
   for (const requiredFilePath of requiredFiles) {
@@ -218,6 +219,7 @@ async function validateRuleFiles() {
     'review-checklists/security-audit.md',
     'review-checklists/performance-audit.md',
     'review-checklists/architecture-review.md',
+    'review-checklists/marketplace-acceptance.md',
     'skills/README.md',
     'skills/frontend/README.md',
     'skills/backend/README.md',
@@ -596,6 +598,65 @@ async function validateMcpConfiguration() {
   }
 }
 
+async function validateTrustTierSchema() {
+  console.log('\nChecking marketplace trust tier schema...');
+
+  const trustTierPath = join(AGENT_CONTEXT_DIR, 'marketplace', 'trust-tiers.json');
+  const trustTierContent = await readTextFile(trustTierPath);
+  const trustTierSchema = JSON.parse(trustTierContent);
+
+  const expectedTierNames = ['verified', 'community', 'experimental'];
+  for (const expectedTierName of expectedTierNames) {
+    if (trustTierSchema.tiers?.[expectedTierName]) {
+      pass(`Trust tier "${expectedTierName}" is defined`);
+    } else {
+      fail(`Trust tier "${expectedTierName}" is missing from trust-tiers.json`);
+    }
+  }
+
+  const scorecardDimensions = trustTierSchema.scorecard?.dimensions;
+  if (!scorecardDimensions || typeof scorecardDimensions !== 'object') {
+    fail('Trust tier scorecard must define dimensions');
+    return;
+  }
+
+  const dimensionNames = Object.keys(scorecardDimensions);
+  let totalWeight = 0;
+
+  for (const dimensionName of dimensionNames) {
+    const dimensionWeight = scorecardDimensions[dimensionName].weight;
+    if (typeof dimensionWeight !== 'number' || dimensionWeight <= 0) {
+      fail(`Scorecard dimension "${dimensionName}" must have a positive weight`);
+      continue;
+    }
+    totalWeight += dimensionWeight;
+    pass(`Scorecard dimension "${dimensionName}" weight: ${dimensionWeight}`);
+  }
+
+  if (totalWeight === 100) {
+    pass(`Scorecard weights sum to 100`);
+  } else {
+    fail(`Scorecard weights must sum to 100 (got ${totalWeight})`);
+  }
+
+  for (const dimensionName of dimensionNames) {
+    const gates = scorecardDimensions[dimensionName].gates;
+    if (!Array.isArray(gates) || gates.length === 0) {
+      fail(`Scorecard dimension "${dimensionName}" must define at least one gate`);
+      continue;
+    }
+    pass(`Scorecard dimension "${dimensionName}" has ${gates.length} gates`);
+  }
+
+  for (const [tierName, tierDefinition] of Object.entries(trustTierSchema.tiers)) {
+    if (typeof tierDefinition.minimumScore !== 'number') {
+      fail(`Tier "${tierName}" must define a numeric minimumScore`);
+      continue;
+    }
+    pass(`Tier "${tierName}" minimumScore: ${tierDefinition.minimumScore}`);
+  }
+}
+
 async function main() {
   console.log('===============================================');
   console.log('  Agentic-Senior-Core Repository Validator');
@@ -613,6 +674,7 @@ async function main() {
   await validateVersionConsistency();
   await validateDocumentationFlow();
   await validateMcpConfiguration();
+  await validateTrustTierSchema();
 
   console.log('\n===============================================');
   console.log('  RESULTS');
