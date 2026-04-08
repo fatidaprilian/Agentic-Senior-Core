@@ -1,13 +1,13 @@
 {
-  "cliVersion": "1.9.5",
-  "generatedAt": "2026-04-08T03:45:54.099Z",
+  "cliVersion": "2.0.0",
+  "generatedAt": "2026-04-08T03:56:54.149Z",
   "operationMode": "upgrade",
   "selectedProfile": "beginner",
   "selectedProfilePack": null,
   "selectedStack": "typescript.md",
   "selectedBlueprint": "api-nextjs.md",
   "ciGuardrailsEnabled": true,
-  "setupDurationMs": 105,
+  "setupDurationMs": 86,
   "selectedSkillDomains": [],
   "autoDetection": {
     "recommendedStack": "typescript.md",
