@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-11
-Current Version: 2.0.3
+Current Version: 2.0.4
 Status: Stable and release-ready
 
 ---
@@ -12,7 +12,7 @@ Status: Stable and release-ready
 
 | Gate | Result |
 |------|--------|
-| npm run validate | pass (target: 423 checks, 0 failed, 0 warnings) |
+| npm run validate | pass (target: 424 checks, 0 failed, 0 warnings) |
 | npm test | pass (target: 25 tests, 0 failed) |
 | Version consistency | package.json, CHANGELOG, .cursorrules, .windsurfrules aligned |
 | Release gate | machine-readable JSON report, blocking failures supported |
@@ -126,7 +126,10 @@ Acceptance:
 - [x] Native fallback guidance and command rewrite matrix
 - [x] Local benchmark harness (`benchmark:token`)
 - [x] README benchmark transparency table
-- [ ] RTK runtime benchmark population (blocked until RTK binary is installed on benchmark host)
+- [x] RTK runtime benchmark population on Windows benchmark host (`rtk` v0.35.0)
+
+Current benchmark note:
+- Latest benchmark artifact reports native savings average `83.64%` and RTK savings average `18.95%` on current Windows host profile.
 
 ---
 

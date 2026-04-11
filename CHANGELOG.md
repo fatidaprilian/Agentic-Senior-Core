@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.4 - 2026-04-11
+### Changed
+- Updated token efficiency benchmark snapshot with live RTK (`v0.35.0`) measurements on the Windows benchmark host.
+- Switched benchmark scenarios to deterministic RTK-compatible git workflows to reduce host-specific command noise.
+- Synced backlog and RTK audit documentation with the latest benchmark artifact averages (`83.64%` native savings and `18.95%` RTK savings).
+
 ## 2.0.3 - 2026-04-11
 ### Changed
 - Token optimization is now enabled by default for all `init` flows (`npx`, `npm exec`, global CLI install, presets, and interactive wizard).

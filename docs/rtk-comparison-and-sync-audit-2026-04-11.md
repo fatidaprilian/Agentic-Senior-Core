@@ -95,11 +95,13 @@ Implemented:
 - README token benchmark snapshot table
 
 Current runtime state:
-- RTK binary is not detected on this environment, so RTK comparison columns are marked `N/A`.
-- Native optimization benchmark average savings from latest run: `61.09%` (estimate model).
+- RTK binary is detected on this environment (`v0.35.0`, local tools path).
+- Native optimization benchmark average savings from latest run: `83.64%` (estimate model).
+- RTK benchmark average savings from latest run: `18.95%` (estimate model).
+- On Windows hosts without GNU `grep` or `ls`, RTK scenarios should prefer `rtk git ...` pathways to avoid command-not-found noise.
 
 Next benchmark step:
-- Install RTK on benchmark host and rerun `npm run benchmark:token` to populate RTK comparison values.
+- Add Linux benchmark host replay to compare against Windows-specific command availability behavior.
 
 ## Acceptance Snapshot After Audit
 

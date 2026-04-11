@@ -159,14 +159,15 @@ Latest local benchmark (2026-04-11) from `.agent-context/state/token-optimizatio
 
 | Scenario | Baseline Token Estimate | Agentic Native Token Estimate | Native Savings | RTK Token Estimate | RTK Status |
 |----------|-------------------------|-------------------------------|----------------|--------------------|------------|
-| Repository file listing | 1635 | 1144 | 30.03% | N/A | RTK not detected |
-| Commit history review | 3746 | 898 | 76.03% | N/A | RTK not detected |
-| Search result scan | 4996 | 1138 | 77.22% | N/A | RTK not detected |
-| Average | - | - | 61.09% | N/A | RTK not detected |
+| Latest commit detail review | 3798 | 177 | 95.34% | 3798 | Detected (`rtk` v0.35.0) |
+| Commit history review | 3730 | 889 | 76.17% | 1610 | Detected (`rtk` v0.35.0) |
+| Search result scan | 5339 | 1099 | 79.42% | 5339 | Detected (`rtk` v0.35.0) |
+| Average | - | - | 83.64% | 18.95% savings | Detected (`rtk` v0.35.0) |
 
 Method note:
 - Estimate formula is `ceil(output_chars / 4)`.
 - This is a command-output estimate, not provider-specific tokenizer output.
+- RTK results depend on host utilities. On Windows hosts without GNU `grep` or `ls`, RTK may fall back to `rtk git ...` paths for some scenarios.
 
 Reproduce and refresh this table:
 
