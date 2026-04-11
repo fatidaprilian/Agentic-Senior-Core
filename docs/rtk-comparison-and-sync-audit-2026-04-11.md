@@ -65,6 +65,8 @@ Adopt now:
 - Explicit token optimization policy in governance output.
 - Optional RTK detection and setup guidance per agent.
 - Safe fallback mode for environments without RTK.
+- Token efficiency benchmark script with machine-readable output at `.agent-context/state/token-optimization-benchmark.json`.
+- README benchmark snapshot table sourced from `npm run benchmark:token`.
 
 Adopt next:
 - Hook bootstrap helpers per agent as optional setup command.
@@ -83,6 +85,21 @@ Defer:
    - local dependency security audit integration
 2. Move to `V2.5` benchmark harness with regression blocking.
 3. Keep RTK benchmark clone local under `.benchmarks/` and update comparison quarterly.
+
+## Benchmark Status Update (2.0.3)
+
+Implemented:
+- `scripts/token-optimization-benchmark.mjs`
+- npm script: `benchmark:token`
+- machine-readable artifact: `.agent-context/state/token-optimization-benchmark.json`
+- README token benchmark snapshot table
+
+Current runtime state:
+- RTK binary is not detected on this environment, so RTK comparison columns are marked `N/A`.
+- Native optimization benchmark average savings from latest run: `61.09%` (estimate model).
+
+Next benchmark step:
+- Install RTK on benchmark host and rerun `npm run benchmark:token` to populate RTK comparison values.
 
 ## Acceptance Snapshot After Audit
 

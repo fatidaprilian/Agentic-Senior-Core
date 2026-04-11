@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-04-11T06:08:37.657Z",
+  "reportName": "token-optimization-benchmark",
+  "methodology": {
+    "tokenEstimate": "estimated_tokens = ceil(output_chars / 4)",
+    "scope": "command-output estimate only; model-specific tokenization differs by provider",
+    "repositoryRoot": "E:\\Project\\Agentic-Senior-Core"
+  },
+  "environment": {
+    "nodeVersion": "v22.22.0",
+    "platform": "win32",
+    "rtk": {
+      "isAvailable": false,
+      "version": null,
+      "reason": "spawnSync rtk ENOENT"
+    }
+  },
+  "scenarios": [
+    {
+      "scenarioId": "file-listing",
+      "scenarioName": "Repository file listing",
+      "baseline": {
+        "command": "git ls-files",
+        "exitCode": 0,
+        "outputChars": 6538,
+        "outputLines": 181,
+        "estimatedTokens": 1635
+      },
+      "nativeOptimized": {
+        "command": "git ls-files .agent-context",
+        "exitCode": 0,
+        "outputChars": 4576,
+        "outputLines": 107,
+        "estimatedTokens": 1144
+      },
+      "nativeSavings": {
+        "tokenDelta": 491,
+        "savingsPercent": 30.03
+      },
+      "rtk": null,
+      "rtkSavings": null
+    },
+    {
+      "scenarioId": "git-log",
+      "scenarioName": "Commit history review",
+      "baseline": {
+        "command": "git log -n 50",
+        "exitCode": 0,
+        "outputChars": 14984,
+        "outputLines": 385,
+        "estimatedTokens": 3746
+      },
+      "nativeOptimized": {
+        "command": "git log --oneline -n 50",
+        "exitCode": 0,
+        "outputChars": 3589,
+        "outputLines": 50,
+        "estimatedTokens": 898
+      },
+      "nativeSavings": {
+        "tokenDelta": 2848,
+        "savingsPercent": 76.03
+      },
+      "rtk": null,
+      "rtkSavings": null
+    },
+    {
+      "scenarioId": "search-token",
+      "scenarioName": "Search result scan",
+      "baseline": {
+        "command": "git grep -n token",
+        "exitCode": 0,
+        "outputChars": 19983,
+        "outputLines": 177,
+        "estimatedTokens": 4996
+      },
+      "nativeOptimized": {
+        "command": "git grep -n token README.md docs",
+        "exitCode": 0,
+        "outputChars": 4552,
+        "outputLines": 39,
+        "estimatedTokens": 1138
+      },
+      "nativeSavings": {
+        "tokenDelta": 3858,
+        "savingsPercent": 77.22
+      },
+      "rtk": null,
+      "rtkSavings": null
+    }
+  ],
+  "summary": {
+    "scenarioCount": 3,
+    "averageNativeSavingsPercent": 61.09,
+    "averageRtkSavingsPercent": null
+  },
+  "artifact": {
+    "path": "E:\\Project\\Agentic-Senior-Core\\.agent-context\\state\\token-optimization-benchmark.json",
+    "writeMode": "stdout-and-file"
+  }
+}

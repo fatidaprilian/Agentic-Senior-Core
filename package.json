@@ -47,6 +47,7 @@
     "prepublishOnly": "npm run gate:release",
     "sbom:generate": "node ./scripts/generate-sbom.mjs",
     "benchmark:detection": "node ./scripts/detection-benchmark.mjs",
+    "benchmark:token": "node ./scripts/token-optimization-benchmark.mjs",
     "benchmark:gate": "node ./scripts/benchmark-gate.mjs",
     "benchmark:intelligence": "node ./scripts/benchmark-intelligence.mjs",
     "validate": "node ./scripts/validate.mjs",

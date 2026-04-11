@@ -153,6 +153,27 @@ npx @ryuenn3123/agentic-senior-core init --no-token-optimize
 When enabled, the CLI writes `.agent-context/state/token-optimization.json`, regenerates compiled rules, and adds compact command guidance to `.cursorrules` and `.windsurfrules`.
 If an external token proxy is available, the CLI prints setup hints. If not, native fallback guidance stays active, so outside users are not forced to install extra tooling.
 
+### Token Efficiency Benchmark Snapshot
+
+Latest local benchmark (2026-04-11) from `.agent-context/state/token-optimization-benchmark.json`:
+
+| Scenario | Baseline Token Estimate | Agentic Native Token Estimate | Native Savings | RTK Token Estimate | RTK Status |
+|----------|-------------------------|-------------------------------|----------------|--------------------|------------|
+| Repository file listing | 1635 | 1144 | 30.03% | N/A | RTK not detected |
+| Commit history review | 3746 | 898 | 76.03% | N/A | RTK not detected |
+| Search result scan | 4996 | 1138 | 77.22% | N/A | RTK not detected |
+| Average | - | - | 61.09% | N/A | RTK not detected |
+
+Method note:
+- Estimate formula is `ceil(output_chars / 4)`.
+- This is a command-output estimate, not provider-specific tokenizer output.
+
+Reproduce and refresh this table:
+
+```bash
+npm run benchmark:token
+```
+
 ### Install and Setup Choices
 
 The CLI now supports a smaller decision surface for first-time setup:

@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-11
-Current Version: 2.0.2
+Current Version: 2.0.3
 Status: Stable and release-ready
 
 ---
@@ -13,7 +13,7 @@ Status: Stable and release-ready
 | Gate | Result |
 |------|--------|
 | npm run validate | pass (target: 423 checks, 0 failed, 0 warnings) |
-| npm test | pass (target: 23 tests, 0 failed) |
+| npm test | pass (target: 25 tests, 0 failed) |
 | Version consistency | package.json, CHANGELOG, .cursorrules, .windsurfrules aligned |
 | Release gate | machine-readable JSON report, blocking failures supported |
 | Forbidden content gate | integrated in npm run gate:release |
@@ -29,10 +29,10 @@ Note: final numbers are re-validated before each release commit.
 | Blueprints | 14 | includes mobile-app and observability |
 | Review checklists | 8 | includes marketplace-acceptance |
 | Skill domains | 6 | backend, frontend, fullstack, cli, distribution, review-quality |
-| Scripts | 14 | validate, release gate, benchmark, trust, evidence, security checks |
+| Scripts | 15 | validate, release gate, benchmark, trust, evidence, security checks |
 | CI workflows | 6 | publish + release + benchmark + sbom + frontend gates |
 | Tests | 5 files | smoke, enterprise ops, knowledge injection, llm judge, skill tier |
-| State files | 7 | maps, benchmark state, onboarding, skill platform |
+| State files | 8 | maps, benchmark state, onboarding, skill platform, token benchmark report |
 | Docs | 12 | includes deep analysis and semantic audit docs |
 
 ### 1.3 Maturity by Subsystem
@@ -57,6 +57,7 @@ Completed:
 - Forbidden content publish protection
 - Token optimization mode with optional external proxy detection and native fallback
 - Init auto-enable token optimization flags
+- Init default-on token optimization for all init paths, with `--no-token-optimize` opt-out
 - Compatibility manifests for all six skill domains
 - Compatibility warnings in init/upgrade
 - Strict compatibility validation in release gate for publish-time blocking
@@ -96,6 +97,7 @@ Acceptance:
 #### V2.0-019: Progressive Compatibility Policy (User-Friendly)
 
 Priority: P1
+Status: done
 
 Scope:
 - Keep init and upgrade compatibility feedback as warnings for onboarding comfort.
@@ -106,6 +108,26 @@ Acceptance:
 - New users are not blocked during setup.
 - Maintainers cannot publish with invalid compatibility metadata.
 
+### 2.3 Completion Checklist (2.0.x)
+
+- [x] Token optimization command and state/report wiring
+- [x] Compatibility manifests + strict publish gate validation
+- [x] Init defaults to token optimization on all entry paths
+- [x] Token optimization opt-out via `--no-token-optimize`
+- [x] Token optimization benchmark script + JSON artifact
+- [x] README token usage comparison table from benchmark snapshot
+- [ ] Instruction adapter consolidation (V2.0-018)
+- [ ] Frontend parity CI hard enforcement (V2.0-014)
+- [ ] Quality trend artifacts (V2.0-012)
+
+### 2.4 Token Optimization Focus Track
+
+- [x] Default token optimization enabled on init
+- [x] Native fallback guidance and command rewrite matrix
+- [x] Local benchmark harness (`benchmark:token`)
+- [x] README benchmark transparency table
+- [ ] RTK runtime benchmark population (blocked until RTK binary is installed on benchmark host)
+
 ---
 
 ## Part 3: Recommended Next Steps (Pragmatic and Friendly for External Users)
@@ -113,12 +135,7 @@ Acceptance:
 1. Do instruction adapter consolidation first (V2.0-018).
 - This reduces maintenance drift without changing user-facing CLI behavior.
 
-2. Keep compatibility policy progressive (V2.0-019).
-- Setup flow: warn-only.
-- Publish flow: strict blocking.
-- This gives a smooth onboarding experience while keeping registry quality high.
-
-3. Continue with two high-impact quality tasks after that.
+2. Continue with two high-impact quality tasks after that.
 - V2.0-014 frontend parity CI hard gate.
 - V2.0-012 quality trend artifact generation.
 

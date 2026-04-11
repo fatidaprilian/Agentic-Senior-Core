@@ -50,4 +50,14 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(Array.isArray(benchmarkIntelligenceReport.watchlist));
     assert.ok(benchmarkIntelligenceReport.watchlist.length >= 3);
   });
+
+  await t.test('token optimization benchmark outputs machine-readable report', () => {
+    const tokenBenchmarkOutput = execSync(`node ${join(process.cwd(), 'scripts', 'token-optimization-benchmark.mjs')} --stdout-only`).toString();
+    const tokenBenchmarkReport = JSON.parse(tokenBenchmarkOutput);
+
+    assert.equal(tokenBenchmarkReport.reportName, 'token-optimization-benchmark');
+    assert.ok(Array.isArray(tokenBenchmarkReport.scenarios));
+    assert.ok(tokenBenchmarkReport.scenarios.length >= 3);
+    assert.equal(typeof tokenBenchmarkReport.summary.averageNativeSavingsPercent, 'number');
+  });
 });

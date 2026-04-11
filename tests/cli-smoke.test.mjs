@@ -192,6 +192,51 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
+  await t.test('init enables token optimization by default and supports opt-out', () => {
+    const defaultOptimizationTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-default-optimize-'));
+    const optOutOptimizationTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-optout-optimize-'));
+
+    try {
+      const defaultInitOutput = execSync(
+        `node ${cliPath} init ${defaultOptimizationTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+
+      assert.match(defaultInitOutput, /Token optimization policy enabled for agent/);
+
+      const defaultTokenStatePath = join(
+        defaultOptimizationTargetDirectory,
+        '.agent-context',
+        'state',
+        'token-optimization.json'
+      );
+      const defaultTokenState = JSON.parse(readFileSync(defaultTokenStatePath, 'utf8'));
+      assert.equal(defaultTokenState.enabled, true);
+
+      const defaultCompiledRules = readFileSync(join(defaultOptimizationTargetDirectory, '.cursorrules'), 'utf8');
+      assert.match(defaultCompiledRules, /TOKEN OPTIMIZATION PROFILE/);
+
+      const optOutInitOutput = execSync(
+        `node ${cliPath} init ${optOutOptimizationTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize`
+      ).toString();
+
+      assert.match(optOutInitOutput, /Token optimization policy: disabled \(--no-token-optimize\)/);
+
+      const optOutTokenStatePath = join(
+        optOutOptimizationTargetDirectory,
+        '.agent-context',
+        'state',
+        'token-optimization.json'
+      );
+      assert.equal(existsSync(optOutTokenStatePath), false);
+
+      const optOutCompiledRules = readFileSync(join(optOutOptimizationTargetDirectory, '.cursorrules'), 'utf8');
+      assert.doesNotMatch(optOutCompiledRules, /TOKEN OPTIMIZATION PROFILE/);
+    } finally {
+      rmSync(defaultOptimizationTargetDirectory, { recursive: true, force: true });
+      rmSync(optOutOptimizationTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
   await t.test('validator checks override governance', () => {
     const validationOutput = execSync(`node ${join(process.cwd(), 'scripts', 'validate.mjs')}`).toString();
     assert.match(validationOutput, /RESULTS/);
