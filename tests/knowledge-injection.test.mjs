@@ -140,6 +140,10 @@ const THIN_ADAPTER_ENTRY_POINTS = [
   { name: '.gemini/instructions.md', path: '.gemini/instructions.md' },
 ];
 
+function normalizeLineEndings(content) {
+  return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+}
+
 // ── Test: All layer files exist on disk ─────────────────────────────────────
 
 describe('Knowledge Layer File Existence', () => {
@@ -255,7 +259,7 @@ describe('Delegating Entry Point Chain', () => {
 
 describe('Thin Adapter Drift Metadata', () => {
   const canonicalInstructionPath = join(ROOT, '.instructions.md');
-  const canonicalInstructionContent = readFileSync(canonicalInstructionPath, 'utf-8');
+  const canonicalInstructionContent = normalizeLineEndings(readFileSync(canonicalInstructionPath, 'utf-8'));
   const canonicalSnapshotHash = createHash('sha256').update(canonicalInstructionContent).digest('hex');
 
   for (const adapterEntryPoint of THIN_ADAPTER_ENTRY_POINTS) {
