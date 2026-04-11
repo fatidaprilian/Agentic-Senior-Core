@@ -109,6 +109,10 @@ function warn(message) {
   console.log(`  WARN ${message}`);
 }
 
+function normalizeLineEndings(content) {
+  return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+}
+
 async function validateRequiredFiles() {
   console.log('\nChecking required files...');
 
@@ -686,7 +690,7 @@ async function validateMcpConfiguration() {
 async function validateInstructionAdapters() {
   console.log('\nChecking instruction adapter consolidation...');
 
-  const canonicalInstructionContent = await readTextFile(CANONICAL_INSTRUCTION_PATH);
+  const canonicalInstructionContent = normalizeLineEndings(await readTextFile(CANONICAL_INSTRUCTION_PATH));
   const canonicalSnapshotHash = createHash('sha256').update(canonicalInstructionContent).digest('hex');
 
   for (const thinAdapterPath of THIN_ADAPTER_PATHS) {

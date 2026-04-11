@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.7 - 2026-04-11
+### Fixed
+- Fixed cross-platform instruction adapter hash drift by normalizing line endings before canonical SHA256 computation in validation and knowledge-injection tests.
+- Updated AGENTS, Copilot, and Gemini thin-adapter hash metadata to match normalized canonical hash so CI/Linux and Windows environments stay consistent.
+
 ## 2.0.6 - 2026-04-11
 ### Added
 - Added weekly governance reporting (`report:governance-weekly`) with state artifact generation and scheduled CI workflow publishing.
