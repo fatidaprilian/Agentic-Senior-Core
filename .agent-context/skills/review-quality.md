@@ -11,18 +11,21 @@ Turn code review, planning, and benchmark output into explicit quality decisions
 - Benchmark interpretation
 - Security and architecture audits
 - Evidence-driven approval
+- Explicit release decisions with blocker tracking and ownership
 
 ## Must-Have Checks
 - Every rejection includes a reason and a fix
 - Every approval includes evidence
 - Benchmark deltas are explicit
 - Security findings stop release when critical
+- Release readiness verdict includes blockers, owner, and due date
 
 ## Evidence
 - PR review report
 - Security audit output
 - Benchmark report
 - Approval or rejection rationale
+- Weekly governance report and release readiness summary
 
 ## Fallback
 - Standard mode can be used only for low-risk maintenance and still requires written evidence.

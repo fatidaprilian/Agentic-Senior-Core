@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-11
-Current Version: 2.0.5
+Current Version: 2.0.6
 Status: Stable and release-ready
 
 ---
@@ -12,8 +12,8 @@ Status: Stable and release-ready
 
 | Gate | Result |
 |------|--------|
-| npm run validate | pass (target: 369 checks, 0 failed, 0 warnings) |
-| npm test | pass (target: 26 tests, 0 failed) |
+| npm run validate | pass (target: 393 checks, 0 failed, 0 warnings) |
+| npm test | pass (target: 28 tests, 0 failed) |
 | Version consistency | package.json, CHANGELOG, .cursorrules, .windsurfrules aligned |
 | Release gate | machine-readable JSON report, blocking failures supported |
 | Forbidden content gate | integrated in npm run gate:release |
@@ -29,10 +29,10 @@ Note: final numbers are re-validated before each release commit.
 | Blueprints | 14 | includes mobile-app and observability |
 | Review checklists | 8 | includes marketplace-acceptance |
 | Skill domains | 6 | backend, frontend, fullstack, cli, distribution, review-quality |
-| Scripts | 15 | validate, release gate, benchmark, trust, evidence, security checks |
-| CI workflows | 6 | publish + release + benchmark + sbom + frontend gates |
+| Scripts | 17 | includes quality trend and weekly governance reporting |
+| CI workflows | 7 | publish + release + benchmark + sbom + frontend + weekly governance |
 | Tests | 5 files | smoke, enterprise ops, knowledge injection, llm judge, skill tier |
-| State files | 8 | maps, benchmark state, onboarding, skill platform, token benchmark report |
+| State files | 10 | includes token, quality-trend, and weekly governance reports |
 | Docs | 12 | includes deep analysis and semantic audit docs |
 
 ### 1.3 Maturity by Subsystem
@@ -42,7 +42,7 @@ Note: final numbers are re-validated before each release commit.
 | Rule engine | mature | stable and complete |
 | Stack and blueprint system | mature | broad language and delivery coverage |
 | Validator and release safety | mature | strict checks, publish-time blocking enabled |
-| Skill platform | growing | broad coverage, some depth expansion still pending |
+| Skill platform | mature | domain depth expanded with verified trust tier on key release domains |
 | CLI engine | growing | modularized, optimize/init/upgrade safety now strong |
 | Benchmark system | growing | ready for multi-model expansion in V2.5 |
 | Marketplace trust layer | growing | trust tiers and evidence are available |
@@ -61,6 +61,10 @@ Completed:
 - Compatibility manifests for all six skill domains
 - Compatibility warnings in init/upgrade
 - Strict compatibility validation in release gate for publish-time blocking
+- Weekly governance reporting artifact and scheduled CI workflow
+- Expanded stack-specific preset catalog (Java, .NET, Laravel, NestJS, Kubernetes)
+- Mobile-app blueprint depth expansion with offline/testing/release governance coverage
+- Verified trust-tier uplift for frontend/fullstack/distribution/review-quality domains
 
 ---
 
@@ -71,13 +75,13 @@ Completed:
 | Issue | Title | Priority | Status | Notes |
 |------|-------|----------|--------|-------|
 | V2.0-010 | Numbered launcher UX | P1 | done | launch menu exists and tested |
-| V2.0-011 | Preset expansion | P1 | partial | base presets exist, expansion can continue |
+| V2.0-011 | Preset expansion | P1 | done | expanded preset catalog includes Java, .NET, Laravel, NestJS, and Kubernetes paths |
 | V2.0-012 | Quality trend artifacts | P2 | done | `report:quality-trend` now emits machine-readable state artifact |
-| V2.0-013 | Weekly governance report | P3 | pending | depends on V2.0-012 |
+| V2.0-013 | Weekly governance report | P3 | done | `report:governance-weekly` + scheduled CI artifact workflow shipped |
 | V2.0-014 | Frontend parity CI hard enforcement | P1 | done | release gate now blocks on frontend parity checklist and frontend usability audit |
-| V2.0-015 | Expand mobile-app blueprint depth | P3 | pending | blueprint still relatively thin |
-| V2.0-016 | Frontend skill depth to advance tier | P1 | pending | high user-facing value |
-| V2.0-017 | Fullstack/CLI/distribution/review depth | P2 | pending | content depth and examples |
+| V2.0-015 | Expand mobile-app blueprint depth | P3 | done | mobile blueprint upgraded with architecture, offline, testing, and release governance patterns |
+| V2.0-016 | Frontend skill depth to advance tier | P1 | done | frontend domain expanded (responsive + conversion) and promoted to verified trust tier |
+| V2.0-017 | Fullstack/CLI/distribution/review depth | P2 | done | cross-domain depth topics + evidence bundles promoted domains to verified trust tier |
 
 ### 2.2 New Action Items from Semantic Scan and Ops Feedback
 
@@ -121,6 +125,10 @@ Acceptance:
 - [x] Instruction adapter consolidation (V2.0-018)
 - [x] Frontend parity CI hard enforcement (V2.0-014)
 - [x] Quality trend artifacts (V2.0-012)
+- [x] Weekly governance report generation (V2.0-013)
+- [x] Preset expansion across stack-specific starts (V2.0-011)
+- [x] Mobile blueprint depth expansion (V2.0-015)
+- [x] Frontend/fullstack/distribution/review skill-depth expansion (V2.0-016, V2.0-017)
 
 ### 2.4 Token Optimization Focus Track
 
@@ -137,11 +145,12 @@ Current benchmark note:
 
 ## Part 3: Recommended Next Steps (Pragmatic and Friendly for External Users)
 
-1. Do instruction adapter consolidation first (V2.0-018).
-- This reduces maintenance drift without changing user-facing CLI behavior.
+1. Freeze V2.0 stable baseline with release cut and publish evidence.
+- Keep weekly governance artifact, release gate, and quality trend reports attached to release evidence.
 
-2. Continue with one high-impact quality task after that.
-- V2.0-014 frontend parity CI hard gate.
+2. Start V2.5 preparation immediately.
+- Define reproducible benchmark fixture matrix and writer-judge separation architecture.
+- Stage anti-regression threshold calibration before enabling hard-block rollout in CI.
 
 ---
 

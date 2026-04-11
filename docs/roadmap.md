@@ -115,17 +115,17 @@ This release shifts from governance pack distribution to a verified skill market
 2. Installer and distribution hardening
    - SHIPPED transactional install flow with preflight checks, backup points, and automatic rollback.
    - SHIPPED forbidden-content detection (API keys, stray paths, debuggers) as a strict publish gate.
-   - [Pending] Introduce compatibility manifest checks by IDE and runtime target.
+   - SHIPPED compatibility manifest checks by IDE and runtime target in release and validation gates.
    - [Pending] Require local security auditing before introducing new third-party packages or dependency updates.
 3. Governance observability
-   - Emit quality trend artifacts (pass rates, rejection categories, rollback frequency).
-   - Add weekly governance report generation for maintainers.
+   - SHIPPED quality trend artifacts (pass rates, rejection categories, rollback frequency).
+   - SHIPPED weekly governance report generation for maintainers.
 4. Frontend mandate track
-   - Require frontend parity gates aligned to `MiniMax-AI/skills` `frontend-dev` quality profile.
-   - Add visual motion, accessibility, responsive behavior, and conversion narrative checks.
-   - Enforce frontend skill parity checklist in CI for release eligibility.
-   - Keep the frontend expert pack aligned with the validation gate and README guidance.
-   - Extend starter coverage for mobile and observability flows so new presets map to real stack and blueprint assets.
+   - SHIPPED frontend parity gates aligned to `MiniMax-AI/skills` `frontend-dev` quality profile.
+   - SHIPPED visual motion, accessibility, responsive behavior, and conversion narrative checks in frontend skill depth packs.
+   - SHIPPED frontend skill parity checklist hard enforcement in release eligibility gates.
+   - SHIPPED frontend/fullstack/distribution/review depth expansion with verified trust-tier evidence on required release domains.
+   - SHIPPED starter coverage extension for mobile and observability flows with additional stack-specific presets.
 
 ### V2.0 Success Metrics
 - At least 95% of published marketplace artifacts include complete evidence bundles.

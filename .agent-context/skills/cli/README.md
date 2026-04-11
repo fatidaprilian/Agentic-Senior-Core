@@ -8,6 +8,7 @@ This domain covers command design, safe mutation workflows, and machine-readable
 - [Init Flow](init.md) - Deterministic project initialization with explicit write plans
 - [Upgrade Flow](upgrade.md) - Safe upgrades with dry-run, rollback, and compatibility checks
 - [Machine-Readable Output](output.md) - Stable JSON output and deterministic exit semantics
+- [Safety and Telemetry](safety-telemetry.md) - Operational signal capture and release-facing CLI governance summaries
 
 ## Operating Model
 - Use `advance` for normal command work.
@@ -40,6 +41,11 @@ Use presets when you want fewer choices at the start:
 - `mobile-react-native` - React Native + mobile app + balanced profile.
 - `mobile-flutter` - Flutter + mobile app + balanced profile.
 - `observability-platform` - Go + observability + strict profile.
+- `typescript-nestjs-service` - TypeScript + NestJS module blueprint + balanced profile.
+- `java-enterprise-api` - Java + Spring Boot API + strict profile.
+- `dotnet-enterprise-api` - C# + ASP.NET API + strict profile.
+- `php-laravel-api` - PHP + Laravel API + balanced profile.
+- `kubernetes-platform` - Go + Kubernetes manifests + strict profile.
 
 Example:
 

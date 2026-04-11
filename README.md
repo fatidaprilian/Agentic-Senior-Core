@@ -71,7 +71,15 @@ If you want a plug-and-play starter instead of answering every question, use a p
 npx @ryuenn3123/agentic-senior-core init --preset frontend-web
 npx @ryuenn3123/agentic-senior-core init --preset backend-api
 npx @ryuenn3123/agentic-senior-core init --preset mobile-react-native
+npx @ryuenn3123/agentic-senior-core init --preset java-enterprise-api
+npx @ryuenn3123/agentic-senior-core init --preset dotnet-enterprise-api
 ```
+
+Expanded preset catalog:
+
+- `frontend-web`, `backend-api`, `fullstack-product`, `platform-governance`
+- `mobile-react-native`, `mobile-flutter`, `observability-platform`
+- `typescript-nestjs-service`, `java-enterprise-api`, `dotnet-enterprise-api`, `php-laravel-api`, `kubernetes-platform`
 
 ### Option 2: GitHub Bootstrap Scripts (No npx required)
 
@@ -314,6 +322,13 @@ Track stack-detection KPI trends:
 
 ```bash
 npm run benchmark:detection
+```
+
+Generate governance observability artifacts:
+
+```bash
+npm run report:quality-trend
+npm run report:governance-weekly
 ```
 
 ---

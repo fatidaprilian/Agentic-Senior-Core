@@ -7,6 +7,8 @@ The frontend domain covers component architecture, state management, performance
 - [Accessibility](accessibility.md) - WCAG compliance, keyboard navigation, semantic HTML, color contrast
 - [Motion](motion.md) - Animation patterns, performance, CSS containment
 - [Performance](performance.md) - Memoization, code splitting, bundle gates, profiling
+- [Responsive Delivery](responsive-delivery.md) - Breakpoint behavior, content hierarchy, and interaction ergonomics
+- [Conversion Clarity](conversion-clarity.md) - First-viewport messaging, CTA placement, and friction removal
 
 ## What Makes Ours Different
 
@@ -21,6 +23,8 @@ The frontend domain covers component architecture, state management, performance
 2. `accessibility.md` - Compliance baseline (EXPERT)
 3. `motion.md` - Design patterns and optimization (EXPERT)
 4. `performance.md` - Profiling and gates (EXPERT)
+5. `responsive-delivery.md` - Mobile and desktop behavior contracts (ADVANCE)
+6. `conversion-clarity.md` - UX narrative and action path quality (ADVANCE)
 
 ## Coverage vs 3 Repos
 
@@ -34,3 +38,12 @@ The frontend domain covers component architecture, state management, performance
 ## Default Tier Behavior
 - Use `advance` for typical web apps (1500+ employees)
 - Escalate to `expert` when component library, state complexity, or accessibility/performance tuning is critical
+
+## Usage Example
+
+Use frontend guidance in onboarding and release checkpoints:
+
+```bash
+agentic-senior-core init --preset frontend-web
+node ./scripts/frontend-usability-audit.mjs
+```

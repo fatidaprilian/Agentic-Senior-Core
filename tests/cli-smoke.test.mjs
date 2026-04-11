@@ -14,6 +14,7 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(output, /Usage:/);
     assert.match(output, /init/);
     assert.match(output, /--profile-pack/);
+    assert.match(output, /java-enterprise-api/);
   });
 
   await t.test('launch command shows numbered startup choices', () => {
@@ -72,6 +73,28 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(presetReport.selectedBlueprint, 'api-nextjs.md');
     } finally {
       rmSync(presetTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('initializes with expanded Java enterprise preset', () => {
+    const javaPresetTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-java-preset-'));
+
+    try {
+      const javaPresetOutput = execSync(
+        `node ${cliPath} init ${javaPresetTargetDirectory} --preset java-enterprise-api`
+      ).toString();
+
+      assert.match(javaPresetOutput, /Using preset: java-enterprise-api/);
+
+      const javaPresetReportPath = join(javaPresetTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
+      const javaPresetReport = JSON.parse(readFileSync(javaPresetReportPath, 'utf8'));
+
+      assert.equal(javaPresetReport.selectedPreset, 'java-enterprise-api');
+      assert.equal(javaPresetReport.selectedProfile, 'strict');
+      assert.equal(javaPresetReport.selectedStack, 'java.md');
+      assert.equal(javaPresetReport.selectedBlueprint, 'spring-boot-api.md');
+    } finally {
+      rmSync(javaPresetTargetDirectory, { recursive: true, force: true });
     }
   });
 

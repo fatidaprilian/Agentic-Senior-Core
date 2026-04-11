@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-11T09:46:02.646Z",
+  "generatedAt": "2026-04-11T12:21:35.779Z",
   "reportName": "quality-trend-report",
   "methodology": {
     "gateSources": [
@@ -19,7 +19,7 @@
         "passed": true,
         "parseError": null,
         "failureCount": 0,
-        "generatedAt": "2026-04-11T09:46:02.441Z"
+        "generatedAt": "2026-04-11T12:21:35.292Z"
       },
       {
         "scriptPath": "scripts/benchmark-gate.mjs",
@@ -28,7 +28,7 @@
         "passed": true,
         "parseError": null,
         "failureCount": 0,
-        "generatedAt": "2026-04-11T09:46:02.545Z"
+        "generatedAt": "2026-04-11T12:21:35.433Z"
       },
       {
         "scriptPath": "scripts/benchmark-intelligence.mjs",
@@ -37,7 +37,7 @@
         "passed": true,
         "parseError": null,
         "failureCount": 0,
-        "generatedAt": "2026-04-11T09:46:02.595Z"
+        "generatedAt": "2026-04-11T12:21:35.480Z"
       }
     ],
     "availableGateCount": 3,
@@ -47,9 +47,9 @@
   "rejectionCategories": [],
   "rollbackSignals": {
     "windowDays": 30,
-    "commitCount": 44,
+    "commitCount": 46,
     "rollbackCommitCount": 1,
-    "rollbackFrequencyPercent": 2.27,
+    "rollbackFrequencyPercent": 2.17,
     "source": "git-log",
     "error": null
   },
@@ -71,6 +71,16 @@
       "passedGateCount": 3,
       "availableGateCount": 3,
       "rollbackFrequencyPercent": 2.27,
+      "averageNativeSavingsPercent": 83.64,
+      "averageRtkSavingsPercent": 18.95,
+      "rejectionCategoryCount": 0
+    },
+    {
+      "generatedAt": "2026-04-11T12:21:35.779Z",
+      "gatePassRatePercent": 100,
+      "passedGateCount": 3,
+      "availableGateCount": 3,
+      "rollbackFrequencyPercent": 2.17,
       "averageNativeSavingsPercent": 83.64,
       "averageRtkSavingsPercent": 18.95,
       "rejectionCategoryCount": 0

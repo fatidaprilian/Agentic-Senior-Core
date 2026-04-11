@@ -11,6 +11,7 @@ Create smart command-line workflows that guide users efficiently and safely.
 - Machine-readable output for automation
 - Validation and self-healing hooks
 - Cross-platform shell behavior
+- Preset ergonomics and operational telemetry outputs
 
 ## Must-Have Checks
 - Explicit command help and examples
@@ -18,12 +19,14 @@ Create smart command-line workflows that guide users efficiently and safely.
 - Safe destructive-action guards
 - Validation before mutation
 - Exit codes reflect success and failure clearly
+- Preset catalog remains discoverable and tested in smoke tests
 
 ## Evidence
 - CLI smoke tests
 - Machine-readable report output
 - Upgrade dry-run output
 - Cross-platform execution notes
+- Weekly governance report references CLI trust tier and release posture
 
 ## Fallback
 - Standard mode can remain available for compatibility, but advance is the default user experience.

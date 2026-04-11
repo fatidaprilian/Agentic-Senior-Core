@@ -134,6 +134,8 @@ function runReleaseGate() {
     'docs/v1.8-operations-playbook.md',
     '.github/workflows/release-gate.yml',
     '.github/workflows/sbom-compliance.yml',
+    '.github/workflows/governance-weekly-report.yml',
+    'scripts/governance-weekly-report.mjs',
   ];
 
   for (const requiredEnterpriseFile of requiredEnterpriseFiles) {

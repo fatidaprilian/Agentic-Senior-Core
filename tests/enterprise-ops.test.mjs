@@ -85,4 +85,17 @@ test('Enterprise Operations Tests', async (t) => {
     assert.equal(typeof qualityTrendReport.tokenEfficiency.isAvailable, 'boolean');
     assert.ok(Array.isArray(qualityTrendReport.history));
   });
+
+  await t.test('weekly governance report outputs machine-readable report', () => {
+    const weeklyGovernanceOutput = execSync(`node ${join(process.cwd(), 'scripts', 'governance-weekly-report.mjs')} --stdout-only`).toString();
+    const weeklyGovernanceReport = JSON.parse(weeklyGovernanceOutput);
+
+    assert.equal(weeklyGovernanceReport.reportName, 'weekly-governance-report');
+    assert.equal(typeof weeklyGovernanceReport.releaseReadiness.isReady, 'boolean');
+    assert.ok(Array.isArray(weeklyGovernanceReport.releaseReadiness.blockers));
+    assert.equal(typeof weeklyGovernanceReport.skillTrust.allRequiredVerified, 'boolean');
+    assert.ok(Array.isArray(weeklyGovernanceReport.skillTrust.domains));
+    assert.equal(typeof weeklyGovernanceReport.commitSignals.windowDays, 'number');
+    assert.ok(Array.isArray(weeklyGovernanceReport.history));
+  });
 });

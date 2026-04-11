@@ -119,6 +119,7 @@ async function validateRequiredFiles() {
     'scripts/detection-benchmark.mjs',
     'scripts/benchmark-gate.mjs',
     'scripts/benchmark-intelligence.mjs',
+    'scripts/governance-weekly-report.mjs',
     'scripts/frontend-usability-audit.mjs',
     'scripts/release-gate.mjs',
     'scripts/generate-sbom.mjs',
@@ -146,6 +147,7 @@ async function validateRequiredFiles() {
     '.github/workflows/release-gate.yml',
     '.github/workflows/sbom-compliance.yml',
     '.github/workflows/benchmark-intelligence.yml',
+    '.github/workflows/governance-weekly-report.yml',
     'tests/cli-smoke.test.mjs',
     'tests/llm-judge.test.mjs',
     'tests/enterprise-ops.test.mjs',
@@ -794,29 +796,32 @@ async function validateEvidenceBundles() {
       .filter(dirent => dirent.isDirectory())
       .map(dirent => dirent.name);
 
-  // We only DEMAND evidence from official skills if they want to be considered "Verified".
-  // Let's at least enforce they don't throw errors when scored.
-  // And specifically, 'cli' has a mocked evidence bundle, so it should score Verified.
+  const requiredVerifiedSkillNames = new Set([
+    'cli',
+    'frontend',
+    'fullstack',
+    'distribution',
+    'review-quality',
+  ]);
+
   for (const skillName of skillDirs) {
-      if (skillName === 'cli') {
-          try {
-             const result = await calculateTrustScore(join(skillsDir, skillName));
-             if (result.tier === 'verified') {
-                 pass(`Skill "${skillName}" achieved Verified trust tier (Score: ${result.score})`);
-             } else {
-                 fail(`Skill "${skillName}" failed to reach Verified tier. Got ${result.tier} (Score: ${result.score})`);
-                 console.log(result.dimensions);
-             }
-          } catch (err) {
-             fail(`Skill "${skillName}" scorer crashed: ${err.message}`);
-          }
-      } else {
-          try {
-             const result = await calculateTrustScore(join(skillsDir, skillName));
-             pass(`Skill "${skillName}" parses successfully as ${result.tier} tier`);
-          } catch (err) {
-             fail(`Skill "${skillName}" scorer crashed: ${err.message}`);
-          }
+      try {
+         const result = await calculateTrustScore(join(skillsDir, skillName));
+
+         if (requiredVerifiedSkillNames.has(skillName)) {
+           if (result.tier === 'verified') {
+             pass(`Skill "${skillName}" achieved Verified trust tier (Score: ${result.score})`);
+           } else {
+             fail(`Skill "${skillName}" failed to reach Verified tier. Got ${result.tier} (Score: ${result.score})`);
+             continue;
+           }
+
+           continue;
+         }
+
+         pass(`Skill "${skillName}" parses successfully as ${result.tier} tier`);
+      } catch (err) {
+         fail(`Skill "${skillName}" scorer crashed: ${err.message}`);
       }
   }
 }

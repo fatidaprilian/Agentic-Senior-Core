@@ -8,6 +8,7 @@ This domain connects frontend and backend implementation into a single feature-d
 - [Feature Slicing](feature-slicing.md) - Organize UI, service, repository, and tests around one business capability
 - [Contracts](contracts.md) - Keep API schemas, DTOs, and frontend types synchronized
 - [End-to-End](end-to-end.md) - Release readiness by verified user journeys and operational gates
+- [Release Coordination](release-coordination.md) - Multi-service rollout ordering, rollback thresholds, and evidence handoff
 
 ## Operating Model
 - Use `advance` for normal feature development.
@@ -17,3 +18,10 @@ This domain connects frontend and backend implementation into a single feature-d
 - Contract drift detection in CI before merge.
 - Backward-compatibility checks for API changes.
 - Release evidence bundle for end-to-end readiness.
+
+## Usage Example
+
+```bash
+agentic-senior-core init --preset fullstack-product
+node ./scripts/quality-trend-report.mjs
+```

@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.6 - 2026-04-11
+### Added
+- Added weekly governance reporting (`report:governance-weekly`) with state artifact generation and scheduled CI workflow publishing.
+- Added expanded init presets: `typescript-nestjs-service`, `java-enterprise-api`, `dotnet-enterprise-api`, `php-laravel-api`, and `kubernetes-platform`.
+- Added mobile blueprint depth for architecture, offline behavior, testing baseline, and release governance.
+- Added advanced skill topics for frontend, fullstack, distribution, review-quality, and CLI operational telemetry.
+
+### Changed
+- Upgraded trust-tier evidence enforcement so `cli`, `frontend`, `fullstack`, `distribution`, and `review-quality` domains must reach Verified tier in validation.
+- Upgraded frontend/fullstack/distribution/review-quality skill domains with evidence bundles, maintenance metadata, and test placeholders for stable marketplace readiness.
+- Updated roadmap and deep backlog status to mark V2.0 backlog items complete and shift focus to V2.5/V3.0 preparation.
+
 ## 2.0.5 - 2026-04-11
 ### Added
 - Added instruction adapter drift detection in repository validation via canonical SHA256 metadata checks for AGENTS, Copilot, and Gemini entrypoints.
