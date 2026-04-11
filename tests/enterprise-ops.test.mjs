@@ -60,4 +60,17 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(tokenBenchmarkReport.scenarios.length >= 3);
     assert.equal(typeof tokenBenchmarkReport.summary.averageNativeSavingsPercent, 'number');
   });
+
+  await t.test('quality trend report outputs machine-readable report', () => {
+    const qualityTrendOutput = execSync(`node ${join(process.cwd(), 'scripts', 'quality-trend-report.mjs')} --stdout-only`).toString();
+    const qualityTrendReport = JSON.parse(qualityTrendOutput);
+
+    assert.equal(qualityTrendReport.reportName, 'quality-trend-report');
+    assert.equal(typeof qualityTrendReport.governanceHealth.gatePassRatePercent, 'number');
+    assert.ok(Array.isArray(qualityTrendReport.governanceHealth.gateSummaries));
+    assert.ok(Array.isArray(qualityTrendReport.rejectionCategories));
+    assert.equal(typeof qualityTrendReport.rollbackSignals.windowDays, 'number');
+    assert.equal(typeof qualityTrendReport.tokenEfficiency.isAvailable, 'boolean');
+    assert.ok(Array.isArray(qualityTrendReport.history));
+  });
 });

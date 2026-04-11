@@ -72,7 +72,7 @@ Completed:
 |------|-------|----------|--------|-------|
 | V2.0-010 | Numbered launcher UX | P1 | done | launch menu exists and tested |
 | V2.0-011 | Preset expansion | P1 | partial | base presets exist, expansion can continue |
-| V2.0-012 | Quality trend artifacts | P2 | pending | report generation not finalized |
+| V2.0-012 | Quality trend artifacts | P2 | done | `report:quality-trend` now emits machine-readable state artifact |
 | V2.0-013 | Weekly governance report | P3 | pending | depends on V2.0-012 |
 | V2.0-014 | Frontend parity CI hard enforcement | P1 | pending | recommended before next major release |
 | V2.0-015 | Expand mobile-app blueprint depth | P3 | pending | blueprint still relatively thin |
@@ -118,7 +118,7 @@ Acceptance:
 - [x] README token usage comparison table from benchmark snapshot
 - [ ] Instruction adapter consolidation (V2.0-018)
 - [ ] Frontend parity CI hard enforcement (V2.0-014)
-- [ ] Quality trend artifacts (V2.0-012)
+- [x] Quality trend artifacts (V2.0-012)
 
 ### 2.4 Token Optimization Focus Track
 
@@ -138,9 +138,8 @@ Current benchmark note:
 1. Do instruction adapter consolidation first (V2.0-018).
 - This reduces maintenance drift without changing user-facing CLI behavior.
 
-2. Continue with two high-impact quality tasks after that.
+2. Continue with one high-impact quality task after that.
 - V2.0-014 frontend parity CI hard gate.
-- V2.0-012 quality trend artifact generation.
 
 ---
 
