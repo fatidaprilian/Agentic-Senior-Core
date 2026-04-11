@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.2 - 2026-04-11
+### Added
+- Added token optimization command flow with optional external proxy detection and fallback guidance for shell-heavy sessions.
+- Added init flags `--token-optimize`, `--token-agent`, and `--no-token-optimize` for auto-enabling token optimization at onboarding time.
+- Added compatibility manifests for all six skill domains and integrated compatibility warnings into init/upgrade onboarding output.
+- Added strict compatibility-manifest checks in release gate so publish-time validation blocks incomplete compatibility metadata.
+
+### Changed
+- Updated README onboarding guidance to introduce token optimization as optional and beginner-friendly.
+- Added updated deep analysis and roadmap backlog document aligned to current 2.0.x state.
+
 ## 2.0.1 - 2026-04-08
 ### Fixed
 - Fixed a fatal bug where running Windows npm via WSL (`npx`) on UNC network paths defaulted execution to `C:\Windows`, causing CLI crashes (`EPERM` during backup/init). The CLI now catches this fallback proactively and aborts with clear instructions to use a native Linux Node.js environment.

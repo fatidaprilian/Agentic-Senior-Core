@@ -31,6 +31,7 @@ const SKILLS_DIR = join(AGENT_CONTEXT_DIR, 'skills');
 const GENERATED_RULE_FILES = ['.cursorrules', '.windsurfrules'];
 const ALLOWED_SEVERITIES = new Set(['critical', 'high', 'medium', 'low']);
 const OVERRIDE_WARNING_WINDOW_DAYS = 30;
+const SUPPORTED_COMPATIBILITY_PLATFORMS = new Set(['windows', 'linux', 'macos']);
 
 const validationResult = {
   passed: 0,
@@ -59,7 +60,12 @@ async function collectFiles(directoryPath, fileExtensionMatcher) {
     const directoryEntries = await readdir(currentDirectoryPath, { withFileTypes: true });
 
     for (const directoryEntry of directoryEntries) {
-      if (directoryEntry.name === '.git' || directoryEntry.name === 'node_modules') {
+      if (
+        directoryEntry.name === '.git'
+        || directoryEntry.name === 'node_modules'
+        || directoryEntry.name === '.agentic-backup'
+        || directoryEntry.name === '.benchmarks'
+      ) {
         continue;
       }
 
@@ -310,6 +316,75 @@ async function validateSkillTierQuality() {
     }
 
     pass(`${relativeSkillTopicPath} tier ${validationResult.detectedTier} quality gate passed`);
+  }
+}
+
+async function validateSkillCompatibilityManifests() {
+  console.log('\nChecking skill compatibility manifests...');
+
+  const skillDomainEntries = await readdir(SKILLS_DIR, { withFileTypes: true });
+  const skillDomainDirectoryNames = skillDomainEntries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort((leftName, rightName) => leftName.localeCompare(rightName));
+
+  let validManifestCount = 0;
+
+  for (const skillDomainDirectoryName of skillDomainDirectoryNames) {
+    const compatibilityManifestPath = join(
+      SKILLS_DIR,
+      skillDomainDirectoryName,
+      'compatibility-manifest.json'
+    );
+
+    if (!(await fileExists(compatibilityManifestPath))) {
+      fail(`Missing compatibility manifest: .agent-context/skills/${skillDomainDirectoryName}/compatibility-manifest.json`);
+      continue;
+    }
+
+    let parsedCompatibilityManifest;
+    try {
+      parsedCompatibilityManifest = JSON.parse(await readTextFile(compatibilityManifestPath));
+    } catch (error) {
+      fail(`Invalid JSON compatibility manifest for ${skillDomainDirectoryName}: ${error.message}`);
+      continue;
+    }
+
+    if (!Array.isArray(parsedCompatibilityManifest.ides) || parsedCompatibilityManifest.ides.length === 0) {
+      fail(`Compatibility manifest for ${skillDomainDirectoryName} must include non-empty "ides" array`);
+      continue;
+    }
+
+    if (!Array.isArray(parsedCompatibilityManifest.platforms) || parsedCompatibilityManifest.platforms.length === 0) {
+      fail(`Compatibility manifest for ${skillDomainDirectoryName} must include non-empty "platforms" array`);
+      continue;
+    }
+
+    const unsupportedPlatform = parsedCompatibilityManifest.platforms.find(
+      (platformName) => !SUPPORTED_COMPATIBILITY_PLATFORMS.has(platformName)
+    );
+
+    if (unsupportedPlatform) {
+      fail(`Compatibility manifest for ${skillDomainDirectoryName} has unsupported platform: ${unsupportedPlatform}`);
+      continue;
+    }
+
+    if (
+      typeof parsedCompatibilityManifest.nodeMin !== 'string'
+      || !/^\d+(\.\d+)?$/.test(parsedCompatibilityManifest.nodeMin)
+    ) {
+      fail(`Compatibility manifest for ${skillDomainDirectoryName} must include string nodeMin (for example "18" or "18.0")`);
+      continue;
+    }
+
+    validManifestCount += 1;
+    pass(`Compatibility manifest validated: .agent-context/skills/${skillDomainDirectoryName}/compatibility-manifest.json`);
+  }
+
+  if (validManifestCount >= 6) {
+    pass(`Compatibility manifest coverage is valid (${validManifestCount} skill domains)`);
+  } else {
+    fail(`Compatibility manifest coverage is insufficient (${validManifestCount}/6 skill domains)`);
   }
 }
 
@@ -702,6 +777,7 @@ async function main() {
   await validateMarkdownFiles();
   await validateRuleFiles();
   await validateSkillTierQuality();
+  await validateSkillCompatibilityManifests();
   await validateOverrideGovernance();
   await validateAgentsManifest();
   await validateCrossReferences();

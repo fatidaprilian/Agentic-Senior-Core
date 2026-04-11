@@ -128,6 +128,27 @@ agentic-senior-core skill fullstack --json
 
 When you run `init`, the CLI now auto-activates the matching skill packs for the chosen stack and blueprint, so the compiled governance context includes the relevant frontend, backend, fullstack, and CLI guidance by default.
 
+### Token Optimization Mode (Optional and User-Friendly)
+
+Use this mode when your AI session is shell-heavy and context usage is high.
+It is optional by design and works in two modes:
+- Native fallback mode (no external dependency required)
+- External proxy mode (auto-detected when available)
+
+Quick start:
+
+```bash
+agentic-senior-core optimize . --agent copilot --enable
+agentic-senior-core optimize . --show
+agentic-senior-core optimize . --disable
+
+# Auto-enable during project initialization
+npx @ryuenn3123/agentic-senior-core init --token-optimize --token-agent copilot
+```
+
+When enabled, the CLI writes `.agent-context/state/token-optimization.json`, regenerates compiled rules, and adds compact command guidance to `.cursorrules` and `.windsurfrules`.
+If an external token proxy is available, the CLI prints setup hints. If not, native fallback guidance stays active, so outside users are not forced to install extra tooling.
+
 ### Install and Setup Choices
 
 The CLI now supports a smaller decision surface for first-time setup:
@@ -139,6 +160,7 @@ The CLI now supports a smaller decision surface for first-time setup:
 | npm exec / npx | One-off setup on an existing repo |
 | npm install -g | Repeated local use from the shell |
 | `--preset` | Fast bootstrap with a curated stack and blueprint |
+| `optimize` | Optional token-aware shell output guidance with native fallback |
 
 ### Supported Stack Map
 

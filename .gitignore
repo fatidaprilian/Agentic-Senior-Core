@@ -20,3 +20,4 @@ bun.lockb
 .env
 .env.local
 .agentic-backup/
+.benchmarks/

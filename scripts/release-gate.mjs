@@ -16,6 +16,16 @@ const __dirname = dirname(__filename);
 const REPOSITORY_ROOT = resolve(__dirname, '..');
 
 const VERSION_PATTERN = /^\d+\.\d+\.\d+$/;
+const NODE_MIN_PATTERN = /^\d+(\.\d+)?$/;
+const SUPPORTED_COMPATIBILITY_PLATFORMS = new Set(['windows', 'linux', 'macos']);
+const REQUIRED_SKILL_DOMAINS = [
+  'backend',
+  'frontend',
+  'fullstack',
+  'cli',
+  'distribution',
+  'review-quality',
+];
 
 function readText(relativeFilePath) {
   const absolutePath = resolve(REPOSITORY_ROOT, relativeFilePath);
@@ -32,6 +42,32 @@ function pushResult(results, isPassed, checkName, details) {
     passed: isPassed,
     details,
   });
+}
+
+function validateCompatibilityManifestShape(parsedManifest, skillDomainName) {
+  const validationErrors = [];
+
+  if (!Array.isArray(parsedManifest.ides) || parsedManifest.ides.length === 0) {
+    validationErrors.push(`Domain ${skillDomainName} must define non-empty ides[]`);
+  }
+
+  if (!Array.isArray(parsedManifest.platforms) || parsedManifest.platforms.length === 0) {
+    validationErrors.push(`Domain ${skillDomainName} must define non-empty platforms[]`);
+  } else {
+    const unsupportedPlatformName = parsedManifest.platforms.find(
+      (platformName) => !SUPPORTED_COMPATIBILITY_PLATFORMS.has(platformName)
+    );
+
+    if (unsupportedPlatformName) {
+      validationErrors.push(`Domain ${skillDomainName} has unsupported platform: ${unsupportedPlatformName}`);
+    }
+  }
+
+  if (typeof parsedManifest.nodeMin !== 'string' || !NODE_MIN_PATTERN.test(parsedManifest.nodeMin)) {
+    validationErrors.push(`Domain ${skillDomainName} must define nodeMin as "18" or "18.0" style string`);
+  }
+
+  return validationErrors;
 }
 
 function runReleaseGate() {
@@ -98,6 +134,58 @@ function runReleaseGate() {
     }
 
     pushResult(results, true, 'required-enterprise-file', `${requiredEnterpriseFile} is present`);
+  }
+
+  let validatedCompatibilityManifestCount = 0;
+
+  for (const skillDomainName of REQUIRED_SKILL_DOMAINS) {
+    const compatibilityManifestPath = `.agent-context/skills/${skillDomainName}/compatibility-manifest.json`;
+    const compatibilityManifestContent = readText(compatibilityManifestPath);
+
+    if (!compatibilityManifestContent) {
+      pushResult(results, false, 'compatibility-manifest', `Missing ${compatibilityManifestPath}`);
+      continue;
+    }
+
+    let parsedCompatibilityManifest;
+    try {
+      parsedCompatibilityManifest = JSON.parse(compatibilityManifestContent);
+    } catch (compatibilityManifestParseError) {
+      const parseErrorMessage = compatibilityManifestParseError instanceof Error
+        ? compatibilityManifestParseError.message
+        : 'Unknown parse error';
+      pushResult(results, false, 'compatibility-manifest', `Invalid JSON in ${compatibilityManifestPath}: ${parseErrorMessage}`);
+      continue;
+    }
+
+    const compatibilityValidationErrors = validateCompatibilityManifestShape(
+      parsedCompatibilityManifest,
+      skillDomainName
+    );
+
+    if (compatibilityValidationErrors.length > 0) {
+      pushResult(results, false, 'compatibility-manifest', compatibilityValidationErrors.join('; '));
+      continue;
+    }
+
+    validatedCompatibilityManifestCount += 1;
+    pushResult(results, true, 'compatibility-manifest', `${compatibilityManifestPath} is valid`);
+  }
+
+  if (validatedCompatibilityManifestCount === REQUIRED_SKILL_DOMAINS.length) {
+    pushResult(
+      results,
+      true,
+      'compatibility-manifest-coverage',
+      `Validated ${validatedCompatibilityManifestCount}/${REQUIRED_SKILL_DOMAINS.length} required skill compatibility manifests`
+    );
+  } else {
+    pushResult(
+      results,
+      false,
+      'compatibility-manifest-coverage',
+      `Validated ${validatedCompatibilityManifestCount}/${REQUIRED_SKILL_DOMAINS.length} required skill compatibility manifests`
+    );
   }
 
   const failureCount = results.filter((checkResult) => !checkResult.passed).length;

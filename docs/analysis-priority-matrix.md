@@ -1,135 +1,128 @@
 # Analysis Priority Matrix
 
-This document captures the strategic analysis for the next execution phases of Agentic-Senior-Core.
+This document captures the execution priorities after the `2.0.2` release and the latest deep-scan audit.
 
 ## Version Status
 
-- Current released version: `1.8.0`
-- No `1.9` milestone is currently defined in the roadmap.
-- The next planned horizons are `V2.0`, `V2.5`, and `V3.0`.
+- Current released version: `2.0.2`
+- `V2.0` core capabilities are shipped and stable.
+- The highest-value forward horizons are `V2.5` and `V3.0`, with selective `2.0.x` hardening.
 
 ## Executive Summary
 
-Agentic-Senior-Core is already a strong repository-level governance engine for AI-assisted code generation.
-The next step is to evolve it into a more verifiable, transactional, and enterprise-scalable governance platform.
+Agentic-Senior-Core has moved beyond repository-level governance into a verified, transactional governance platform.
+The current bottleneck is no longer foundational architecture.
+The bottleneck is execution hygiene: token efficiency adoption, compatibility policy closure, benchmark anti-regression, and documentation synchronization.
 
-The highest-value work is not adding more rules first.
-It is tightening the delivery path, the trust model, the benchmark model, and the governance distribution model.
+The highest-return strategy is:
+1. Finish high-impact `2.0.x` hardening.
+2. Lock measurable quality gates.
+3. Move to `V2.5` benchmark rigor.
 
 ## Priority Matrix
 
-### 1. Skill Distribution and Verification Platform
+### 1. Token Optimization Adoption and Safety
 
 Risk
-- Current installation and skill adoption remain too local and too direct.
-- There is no formal trust-scored marketplace model for skills or plugins.
+- Shell-heavy sessions still burn unnecessary tokens when compact command paths are not enforced.
+- Teams may assume all tool calls are filtered, while built-in read/grep/glob flows can bypass shell proxy behavior.
 
 Impact
-- Unverified artifacts can enter the workspace too easily.
-- Installation failures may require manual cleanup.
-- The platform cannot yet prove which artifacts are trusted.
+- Faster context exhaustion and higher API limit pressure in long sessions.
+- Lower signal-to-noise in command outputs can reduce review quality.
 
 Recommendation
-- Move to a skill marketplace model with `verified`, `community`, and `experimental` trust tiers.
-- Make installation transactional with preflight checks, backup points, and automatic rollback.
-- Add compatibility and integrity validation before any new skill or plugin is accepted.
+- Keep token optimization as an optional policy layer with safe fallback behavior.
+- Maintain explicit command rewrite guidance in compiled governance rules.
+- Add installation and hook guidance without forcing hard dependency on external binaries.
 
-### 2. Benchmarking and Anti-Regression Controls
+### 2. Compatibility and Evidence Closure
 
 Risk
-- Existing LLM judge and detection scripts are useful, but they do not yet form a full cross-model evaluation harness.
-- A single-model judge can create confirmation bias.
+- Compatibility checks exist in evidence-level validation, but coverage is not yet uniformly enforced across all artifact entry points.
+- Some roadmap language remains marked as pending despite partial implementation.
 
 Impact
-- Quality drift may go unnoticed when the same model writes and evaluates the code.
-- Regression detection remains local and incomplete.
-- The release gate cannot yet compare model families under the same rule pack.
+- Marketplace trust signals can become inconsistent between artifacts.
+- Maintainers may receive mixed signals about what is done versus in-progress.
 
 Recommendation
-- Build a benchmark harness that runs the same rule packs across multiple models.
-- Add anti-regression quality gates in CI/CD that block release when quality drops.
-- Enforce multi-model evaluation for judge workflows so audit and generation are not the same trust source.
+- Promote compatibility manifest checks from partial to explicit release-gate policy.
+- Require compatibility declarations for all target skill domains and blueprints.
+- Update roadmap wording from binary pending status to clear completion state labels.
 
-### 3. Enterprise Governance Cloud
+### 3. Release Gate Hardening (Frontend + Security)
 
 Risk
-- Governance assets still operate primarily at repository scope.
-- Policy drift across many repositories is not yet centrally detectable.
+- Frontend parity checklist is present but not yet a strict release blocker in all release paths.
+- Local dependency security auditing is still policy intent and not operationalized in tooling.
 
 Impact
-- Teams may diverge from the standard without visibility.
-- Override handling becomes difficult to audit at scale.
-- Portfolio-level quality and architecture governance cannot be measured consistently.
+- Release quality can drift between CI flows.
+- Supply-chain risk review can remain reactive instead of preventative.
 
 Recommendation
-- Create an enterprise governance layer for centrally distributed policies.
-- Add policy drift detection across repositories.
-- Introduce an organization-level override registry with expiry enforcement and audit trail.
-- Add a portfolio dashboard for quality, compliance, and architecture conformance.
+- Integrate frontend parity and dependency security checks directly into release gate scripts.
+- Fail release when mandatory hardening checks are missing.
+- Add test coverage for new gate logic before enabling strict mode by default.
 
-### 4. Frontend Parity and Accessibility Enforcement
+### 4. V2.5 Benchmark and Anti-Regression Engine
 
 Risk
-- Frontend work can drift into design-system opinionation if the scope is not constrained.
-- Accessibility and reduced-motion requirements are not yet enforced as hard gates everywhere.
+- Existing benchmarking is strong but still single-system-biased for cross-model quality control.
+- Regression deltas are not yet blocked by deterministic, model-agnostic scenarios.
 
 Impact
-- The project can overreach its role as a governance engine.
-- UX and a11y regressions can ship without strong release-level protection.
-- Protected pages may change visually without review.
+- Quality declines can pass unnoticed between releases.
+- Writer and judge confirmation bias risk remains material.
 
 Recommendation
-- Keep frontend governance focused on universal standards, not on dictating visual style.
-- Enforce a Frontend Parity Checklist in CI.
-- Add visual regression checks for protected pages.
-- Require reduced-motion safe alternatives and accessibility verification for motion-heavy flows.
+- Build reproducible benchmark scenarios for planning, refactor, security, and delivery flows.
+- Enforce writer and judge separation by model role.
+- Block releases on threshold regressions with replay fixtures.
 
-### 5. Shift-Left Security and Supply Chain Discipline
+### 5. Documentation and Repository Hygiene Synchronization
 
 Risk
-- SBOM generation exists, but the security posture can still be too reactive.
-- New third-party dependencies may be introduced without enough local scrutiny.
+- Strategic documents can lag behind shipped functionality.
+- Local benchmark clones and generated artifacts can pollute repository context if not ignored.
 
 Impact
-- Security issues can enter the tree before CI catches them.
-- Dependency growth can become harder to audit.
-- AI agents may add packages without deliberate approval.
+- Contributors can prioritize the wrong backlog.
+- Agent context becomes noisier and less deterministic.
 
 Recommendation
-- Require local security auditing before new package introduction.
-- Treat dependency changes as a security-sensitive action.
-- Strengthen repository instructions so agents verify supply-chain impact before commit.
+- Keep roadmap and matrix documents synchronized with shipped version and test baselines.
+- Keep local benchmark work under ignored directories.
+- Remove generated artifacts from tracked sources unless explicitly required.
 
-### 6. Dynamic Context Delivery
+### 6. V3.0 Enterprise Federation Preparation
 
 Risk
-- Compiled rule files can grow large and become harder to reason about.
-- Static context may become inefficient when only one domain is relevant.
+- Cross-repo policy drift controls and signed bundle distribution are not yet operational.
+- Enterprise migration can stall without early schema and governance registry decisions.
 
 Impact
-- Context windows may be wasted on unrelated rules.
-- Agents may lose focus when the compiled file becomes too dense.
-- Long-term scalability of the governance engine may be constrained.
+- Portfolio governance at scale remains manual.
+- Override policies can become difficult to audit across multiple repositories.
 
 Recommendation
-- Keep the current compiler model for now, but segment it aggressively by domain and skill pack.
-- Evaluate MCP-based retrieval for domain-specific rule loading once the rule corpus grows further.
-- Consider RAG or targeted retrieval only after the domain segmentation proves insufficient.
+- Start design contracts early for signed bundle metadata and override registry inheritance.
+- Keep `V3.0` design artifacts machine-readable and validation-friendly from day one.
 
 ## Suggested Sequence
 
-1. Finish the guided launcher and onboarding simplification.
-2. Deliver the V2.0 marketplace, trust scoring, and transactional install model.
-3. Add the V2.5 benchmark harness and anti-regression gates with multi-model evaluation.
-4. Build the V3.0 enterprise governance layer with drift detection and org-level policy controls.
-5. Revisit RAG or MCP-native rule retrieval after the rule corpus grows beyond the current compiler model.
+1. Close `2.0.x` hardening gaps: compatibility closure, frontend parity gate, dependency audit enforcement.
+2. Operationalize token optimization adoption with explicit integration guidance and fallback policy.
+3. Build and gate `V2.5` benchmark harness with regression blocking.
+4. Prepare `V3.0` federation contracts for signed bundles, drift detection, and override governance.
 
 ## Bottom Line
 
-The project should not move to a `1.9` framing right now.
-The clearer path is to treat `1.8.0` as the final repository-governance baseline and execute the next phase as `V2.0` platform hardening.
+The platform is no longer in `1.x` transition mode.
+`2.0.2` should be treated as the stable baseline, with immediate focus on hardening and measurable anti-regression.
 
-That keeps the roadmap coherent:
-- `V2.0` for trust, transactionality, and onboarding clarity
-- `V2.5` for benchmark rigor and anti-regression control
-- `V3.0` for enterprise-scale governance distribution
+That keeps execution coherent:
+- `2.0.x` for closure and quality hardening
+- `V2.5` for model-agnostic benchmark control
+- `V3.0` for enterprise federated governance operations

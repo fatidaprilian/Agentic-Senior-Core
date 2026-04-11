@@ -17,7 +17,7 @@ test('CLI Smoke Tests', async (t) => {
   });
 
   await t.test('launch command shows numbered startup choices', () => {
-    const launchOutput = execSync(`node ${cliPath} launch`, { input: '7\n' }).toString();
+    const launchOutput = execSync(`node ${cliPath} launch`, { input: '8\n' }).toString();
     assert.match(launchOutput, /How do you want to start\?/);
     assert.match(launchOutput, /1\. GitHub template/);
     assert.match(launchOutput, /Exit selected\./);
@@ -115,6 +115,80 @@ test('CLI Smoke Tests', async (t) => {
       assert.match(upgradeOutput, /Dry run enabled/);
     } finally {
       rmSync(upgradeTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('optimize command enables token optimization policy and regenerates rules', () => {
+    const optimizationTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-optimize-'));
+
+    try {
+      execSync(
+        `node ${cliPath} init ${optimizationTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+
+      const optimizeOutput = execSync(
+        `node ${cliPath} optimize ${optimizationTargetDirectory} --agent copilot --enable`
+      ).toString();
+
+      assert.match(optimizeOutput, /Token optimization enabled/);
+
+      const tokenStatePath = join(
+        optimizationTargetDirectory,
+        '.agent-context',
+        'state',
+        'token-optimization.json'
+      );
+      const tokenState = JSON.parse(readFileSync(tokenStatePath, 'utf8'));
+
+      assert.equal(tokenState.enabled, true);
+      assert.equal(tokenState.selectedAgent, 'copilot');
+      assert.ok(Array.isArray(tokenState.commandRewriteMappings));
+      assert.ok(tokenState.commandRewriteMappings.length >= 10);
+
+      const tokenRulesContent = readFileSync(join(optimizationTargetDirectory, '.cursorrules'), 'utf8');
+      assert.match(tokenRulesContent, /TOKEN OPTIMIZATION PROFILE/);
+
+      const tokenReportPath = join(
+        optimizationTargetDirectory,
+        '.agent-context',
+        'state',
+        'token-optimization-report.json'
+      );
+      const tokenReport = JSON.parse(readFileSync(tokenReportPath, 'utf8'));
+      assert.equal(tokenReport.enabled, true);
+      assert.equal(tokenReport.selectedAgent, 'copilot');
+      assert.ok(typeof tokenReport.externalProxy === 'object');
+    } finally {
+      rmSync(optimizationTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('init can auto-enable token optimization with flags', () => {
+    const initOptimizationTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-optimize-'));
+
+    try {
+      const initOutput = execSync(
+        `node ${cliPath} init ${initOptimizationTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --token-optimize --token-agent cursor`
+      ).toString();
+
+      assert.match(initOutput, /Token optimization policy enabled for agent cursor/);
+
+      const initTokenStatePath = join(
+        initOptimizationTargetDirectory,
+        '.agent-context',
+        'state',
+        'token-optimization.json'
+      );
+      const initTokenState = JSON.parse(readFileSync(initTokenStatePath, 'utf8'));
+
+      assert.equal(initTokenState.enabled, true);
+      assert.equal(initTokenState.selectedAgent, 'cursor');
+      assert.ok(typeof initTokenState.externalProxy === 'object');
+
+      const initCompiledRulesContent = readFileSync(join(initOptimizationTargetDirectory, '.cursorrules'), 'utf8');
+      assert.match(initCompiledRulesContent, /TOKEN OPTIMIZATION PROFILE/);
+    } finally {
+      rmSync(initOptimizationTargetDirectory, { recursive: true, force: true });
     }
   });
 

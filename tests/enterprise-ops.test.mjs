@@ -13,6 +13,12 @@ test('Enterprise Operations Tests', async (t) => {
     assert.equal(releaseGateReport.failureCount, 0);
     assert.ok(Array.isArray(releaseGateReport.results));
     assert.ok(releaseGateReport.results.length >= 6);
+
+    const compatibilityCoverageResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'compatibility-manifest-coverage'
+    );
+    assert.ok(compatibilityCoverageResult);
+    assert.equal(compatibilityCoverageResult.passed, true);
   });
 
   await t.test('SBOM generator emits CycloneDX payload', () => {

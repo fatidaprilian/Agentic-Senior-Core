@@ -11,6 +11,7 @@ import { CLI_VERSION } from '../lib/cli/constants.mjs';
 import { printUsage } from '../lib/cli/utils.mjs';
 import { runLaunchCommand } from '../lib/cli/commands/launch.mjs';
 import { runRollbackCommand } from '../lib/cli/commands/rollback.mjs';
+import { runOptimizeCommand, parseOptimizeArguments } from '../lib/cli/commands/optimize.mjs';
 import { runInitCommand, parseInitArguments } from '../lib/cli/commands/init.mjs';
 import { runUpgradeCommand, parseUpgradeArguments } from '../lib/cli/commands/upgrade.mjs';
 import { runSkillCommand } from '../lib/cli/skill-selector.mjs';
@@ -42,6 +43,12 @@ async function main() {
   if (commandArgument === 'upgrade') {
     const upgradeOptions = parseUpgradeArguments(commandArguments);
     await runUpgradeCommand(upgradeOptions.targetDirectory, upgradeOptions);
+    return;
+  }
+
+  if (commandArgument === 'optimize') {
+    const optimizeOptions = parseOptimizeArguments(commandArguments);
+    await runOptimizeCommand(optimizeOptions.targetDirectory, optimizeOptions);
     return;
   }
 
