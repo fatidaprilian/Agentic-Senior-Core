@@ -19,6 +19,18 @@ test('Enterprise Operations Tests', async (t) => {
     );
     assert.ok(compatibilityCoverageResult);
     assert.equal(compatibilityCoverageResult.passed, true);
+
+    const frontendParityChecklistResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'frontend-parity-checklist-coverage'
+    );
+    assert.ok(frontendParityChecklistResult);
+    assert.equal(frontendParityChecklistResult.passed, true);
+
+    const frontendAuditResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'frontend-usability-audit'
+    );
+    assert.ok(frontendAuditResult);
+    assert.equal(frontendAuditResult.passed, true);
   });
 
   await t.test('SBOM generator emits CycloneDX payload', () => {

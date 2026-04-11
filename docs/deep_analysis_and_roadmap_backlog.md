@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-11
-Current Version: 2.0.4
+Current Version: 2.0.5
 Status: Stable and release-ready
 
 ---
@@ -12,8 +12,8 @@ Status: Stable and release-ready
 
 | Gate | Result |
 |------|--------|
-| npm run validate | pass (target: 424 checks, 0 failed, 0 warnings) |
-| npm test | pass (target: 25 tests, 0 failed) |
+| npm run validate | pass (target: 369 checks, 0 failed, 0 warnings) |
+| npm test | pass (target: 26 tests, 0 failed) |
 | Version consistency | package.json, CHANGELOG, .cursorrules, .windsurfrules aligned |
 | Release gate | machine-readable JSON report, blocking failures supported |
 | Forbidden content gate | integrated in npm run gate:release |
@@ -74,7 +74,7 @@ Completed:
 | V2.0-011 | Preset expansion | P1 | partial | base presets exist, expansion can continue |
 | V2.0-012 | Quality trend artifacts | P2 | done | `report:quality-trend` now emits machine-readable state artifact |
 | V2.0-013 | Weekly governance report | P3 | pending | depends on V2.0-012 |
-| V2.0-014 | Frontend parity CI hard enforcement | P1 | pending | recommended before next major release |
+| V2.0-014 | Frontend parity CI hard enforcement | P1 | done | release gate now blocks on frontend parity checklist and frontend usability audit |
 | V2.0-015 | Expand mobile-app blueprint depth | P3 | pending | blueprint still relatively thin |
 | V2.0-016 | Frontend skill depth to advance tier | P1 | pending | high user-facing value |
 | V2.0-017 | Fullstack/CLI/distribution/review depth | P2 | pending | content depth and examples |
@@ -84,6 +84,7 @@ Completed:
 #### V2.0-018: Instruction Adapter Consolidation
 
 Priority: P1
+Status: done
 
 Scope:
 - Keep one canonical policy source.
@@ -91,8 +92,9 @@ Scope:
 - Add drift detection rule for adapter files.
 
 Acceptance:
-- High-overlap instruction duplication reduced.
-- No behavior regression in Copilot/Cursor/Gemini entrypoints.
+- [x] High-overlap instruction duplication reduced.
+- [x] No behavior regression in Copilot/Cursor/Gemini entrypoints.
+- [x] Drift detection enforced via canonical hash metadata validation.
 
 #### V2.0-019: Progressive Compatibility Policy (User-Friendly)
 
@@ -116,8 +118,8 @@ Acceptance:
 - [x] Token optimization opt-out via `--no-token-optimize`
 - [x] Token optimization benchmark script + JSON artifact
 - [x] README token usage comparison table from benchmark snapshot
-- [ ] Instruction adapter consolidation (V2.0-018)
-- [ ] Frontend parity CI hard enforcement (V2.0-014)
+- [x] Instruction adapter consolidation (V2.0-018)
+- [x] Frontend parity CI hard enforcement (V2.0-014)
 - [x] Quality trend artifacts (V2.0-012)
 
 ### 2.4 Token Optimization Focus Track

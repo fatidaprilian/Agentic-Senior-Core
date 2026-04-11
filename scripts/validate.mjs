@@ -16,12 +16,14 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { validateSkillTopicContent } from './skill-tier-policy.mjs';
 import { calculateTrustScore } from './trust-scorer.mjs';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
 const ROOT_DIR = resolve(dirname(SCRIPT_FILE_PATH), '..');
 const AGENT_CONTEXT_DIR = join(ROOT_DIR, '.agent-context');
+const CANONICAL_INSTRUCTION_PATH = join(ROOT_DIR, '.instructions.md');
 const PACKAGE_JSON_PATH = join(ROOT_DIR, 'package.json');
 const CHANGELOG_PATH = join(ROOT_DIR, 'CHANGELOG.md');
 const README_PATH = join(ROOT_DIR, 'README.md');
@@ -32,6 +34,11 @@ const GENERATED_RULE_FILES = ['.cursorrules', '.windsurfrules'];
 const ALLOWED_SEVERITIES = new Set(['critical', 'high', 'medium', 'low']);
 const OVERRIDE_WARNING_WINDOW_DAYS = 30;
 const SUPPORTED_COMPATIBILITY_PLATFORMS = new Set(['windows', 'linux', 'macos']);
+const THIN_ADAPTER_PATHS = [
+  'AGENTS.md',
+  '.github/copilot-instructions.md',
+  '.gemini/instructions.md',
+];
 
 const validationResult = {
   passed: 0,
@@ -674,6 +681,52 @@ async function validateMcpConfiguration() {
   }
 }
 
+async function validateInstructionAdapters() {
+  console.log('\nChecking instruction adapter consolidation...');
+
+  const canonicalInstructionContent = await readTextFile(CANONICAL_INSTRUCTION_PATH);
+  const canonicalSnapshotHash = createHash('sha256').update(canonicalInstructionContent).digest('hex');
+
+  for (const thinAdapterPath of THIN_ADAPTER_PATHS) {
+    const absoluteAdapterPath = join(ROOT_DIR, thinAdapterPath);
+
+    if (!(await fileExists(absoluteAdapterPath))) {
+      fail(`Missing thin adapter file: ${thinAdapterPath}`);
+      continue;
+    }
+
+    const thinAdapterContent = await readTextFile(absoluteAdapterPath);
+
+    if (
+      thinAdapterContent.includes('Adapter Mode: thin')
+      && thinAdapterContent.includes('Adapter Source: .instructions.md')
+    ) {
+      pass(`${thinAdapterPath} declares thin adapter metadata`);
+    } else {
+      fail(`${thinAdapterPath} must declare Adapter Mode: thin and Adapter Source: .instructions.md`);
+    }
+
+    const hashMatch = thinAdapterContent.match(/Canonical Snapshot SHA256:\s*([a-f0-9]{64})/);
+    if (!hashMatch) {
+      fail(`${thinAdapterPath} must declare Canonical Snapshot SHA256`);
+      continue;
+    }
+
+    if (hashMatch[1] === canonicalSnapshotHash) {
+      pass(`${thinAdapterPath} canonical hash matches .instructions.md`);
+    } else {
+      fail(`${thinAdapterPath} canonical hash drift detected (expected ${canonicalSnapshotHash})`);
+    }
+
+    const thinAdapterLineCount = thinAdapterContent.split(/\r?\n/u).length;
+    if (thinAdapterLineCount <= 80) {
+      pass(`${thinAdapterPath} remains thin (${thinAdapterLineCount} lines)`);
+    } else {
+      fail(`${thinAdapterPath} is too large for thin-adapter mode (${thinAdapterLineCount} lines)`);
+    }
+  }
+}
+
 async function validateTrustTierSchema() {
   console.log('\nChecking marketplace trust tier schema...');
 
@@ -786,6 +839,7 @@ async function main() {
   await validateVersionConsistency();
   await validateDocumentationFlow();
   await validateMcpConfiguration();
+  await validateInstructionAdapters();
   await validateTrustTierSchema();
   await validateEvidenceBundles();
 

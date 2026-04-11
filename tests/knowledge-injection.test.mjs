@@ -2,6 +2,7 @@ import { describe, it } from 'node:test';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 
 const ROOT = process.cwd();
 
@@ -116,24 +117,8 @@ const LAYERS = [
  * IDE entry points — the files each AI agent reads on init.
  * Each entry must reference ALL 8 layers.
  */
-const IDE_ENTRY_POINTS = [
-  { name: 'AGENTS.md', path: 'AGENTS.md' },
-  { name: '.instructions.md', path: '.instructions.md' },
-  { name: 'copilot-instructions.md', path: '.github/copilot-instructions.md' },
-  // .cursorrules and .windsurfrules delegate layers 4-8 via
-  // ".cursorrules" → AGENTS.md and ".instructions.md", so they only need
-  // to reference .agent-context/rules/, stacks/, blueprints/, and state/.
-  // Full 8-layer injection is guaranteed via the bootstrap chain.
-];
-
-/**
- * These are the "full 8-layer" entry points that must reference every
- * single layer directory.
- */
 const FULL_INJECTION_ENTRY_POINTS = [
-  { name: 'AGENTS.md', path: 'AGENTS.md' },
   { name: '.instructions.md', path: '.instructions.md' },
-  { name: 'copilot-instructions.md', path: '.github/copilot-instructions.md' },
 ];
 
 /**
@@ -142,9 +127,17 @@ const FULL_INJECTION_ENTRY_POINTS = [
  * to AGENTS.md or .instructions.md for the rest.
  */
 const DELEGATING_ENTRY_POINTS = [
-  { name: '.cursorrules', path: '.cursorrules', delegatesTo: ['AGENTS.md', '.cursorrules'] },
-  { name: '.windsurfrules', path: '.windsurfrules', delegatesTo: ['AGENTS.md', '.cursorrules'] },
-  { name: '.gemini/instructions.md', path: '.gemini/instructions.md', delegatesTo: ['AGENTS.md'] },
+  { name: 'AGENTS.md', path: 'AGENTS.md', delegatesTo: ['.instructions.md'] },
+  { name: 'copilot-instructions.md', path: '.github/copilot-instructions.md', delegatesTo: ['.instructions.md'] },
+  { name: '.cursorrules', path: '.cursorrules', delegatesTo: ['.cursorrules'] },
+  { name: '.windsurfrules', path: '.windsurfrules', delegatesTo: ['.cursorrules'] },
+  { name: '.gemini/instructions.md', path: '.gemini/instructions.md', delegatesTo: ['.instructions.md'] },
+];
+
+const THIN_ADAPTER_ENTRY_POINTS = [
+  { name: 'AGENTS.md', path: 'AGENTS.md' },
+  { name: 'copilot-instructions.md', path: '.github/copilot-instructions.md' },
+  { name: '.gemini/instructions.md', path: '.gemini/instructions.md' },
 ];
 
 // ── Test: All layer files exist on disk ─────────────────────────────────────
@@ -246,6 +239,45 @@ describe('Delegating Entry Point Chain', () => {
       assert.ok(
         fileContent.includes('.agent-context/state/') || fileContent.includes('architecture-map'),
         `${entryPoint.name} does not reference state awareness`
+      );
+    });
+
+    for (const delegateTarget of entryPoint.delegatesTo) {
+      it(`${entryPoint.name} delegates to ${delegateTarget}`, () => {
+        assert.ok(
+          fileContent.includes(delegateTarget),
+          `${entryPoint.name} does not delegate to ${delegateTarget}`
+        );
+      });
+    }
+  }
+});
+
+describe('Thin Adapter Drift Metadata', () => {
+  const canonicalInstructionPath = join(ROOT, '.instructions.md');
+  const canonicalInstructionContent = readFileSync(canonicalInstructionPath, 'utf-8');
+  const canonicalSnapshotHash = createHash('sha256').update(canonicalInstructionContent).digest('hex');
+
+  for (const adapterEntryPoint of THIN_ADAPTER_ENTRY_POINTS) {
+    const adapterEntryPointPath = join(ROOT, adapterEntryPoint.path);
+
+    it(`${adapterEntryPoint.name} is explicitly thin adapter`, () => {
+      const adapterContent = readFileSync(adapterEntryPointPath, 'utf-8');
+      assert.ok(
+        adapterContent.includes('Adapter Mode: thin')
+        && adapterContent.includes('Adapter Source: .instructions.md'),
+        `${adapterEntryPoint.name} must declare thin adapter metadata`
+      );
+    });
+
+    it(`${adapterEntryPoint.name} hash matches canonical snapshot`, () => {
+      const adapterContent = readFileSync(adapterEntryPointPath, 'utf-8');
+      const hashMatch = adapterContent.match(/Canonical Snapshot SHA256:\s*([a-f0-9]{64})/);
+      assert.ok(hashMatch, `${adapterEntryPoint.name} must declare Canonical Snapshot SHA256`);
+      assert.equal(
+        hashMatch[1],
+        canonicalSnapshotHash,
+        `${adapterEntryPoint.name} hash metadata drifted from .instructions.md`
       );
     });
   }

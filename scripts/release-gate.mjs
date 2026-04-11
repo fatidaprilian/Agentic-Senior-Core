@@ -10,6 +10,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -25,6 +26,15 @@ const REQUIRED_SKILL_DOMAINS = [
   'cli',
   'distribution',
   'review-quality',
+];
+const FRONTEND_PARITY_CHECKLIST_PATH = '.agent-context/review-checklists/frontend-skill-parity.md';
+const FRONTEND_AUDIT_SCRIPT_PATH = 'scripts/frontend-usability-audit.mjs';
+const REQUIRED_FRONTEND_PARITY_SNIPPETS = [
+  'Architecture and Composition',
+  'Interaction and Motion',
+  'Accessibility and Responsiveness',
+  'UX Narrative and Conversion Clarity',
+  'Release Evidence',
 ];
 
 function readText(relativeFilePath) {
@@ -186,6 +196,51 @@ function runReleaseGate() {
       'compatibility-manifest-coverage',
       `Validated ${validatedCompatibilityManifestCount}/${REQUIRED_SKILL_DOMAINS.length} required skill compatibility manifests`
     );
+  }
+
+  const frontendParityChecklistContent = readText(FRONTEND_PARITY_CHECKLIST_PATH);
+  if (!frontendParityChecklistContent) {
+    pushResult(results, false, 'frontend-parity-checklist-exists', `Missing ${FRONTEND_PARITY_CHECKLIST_PATH}`);
+  } else {
+    pushResult(results, true, 'frontend-parity-checklist-exists', `${FRONTEND_PARITY_CHECKLIST_PATH} is present`);
+
+    const missingFrontendParitySnippets = REQUIRED_FRONTEND_PARITY_SNIPPETS.filter(
+      (requiredSnippet) => !frontendParityChecklistContent.includes(requiredSnippet)
+    );
+
+    if (missingFrontendParitySnippets.length === 0) {
+      pushResult(results, true, 'frontend-parity-checklist-coverage', 'Frontend parity checklist sections are complete');
+    } else {
+      pushResult(
+        results,
+        false,
+        'frontend-parity-checklist-coverage',
+        `Missing frontend parity checklist sections: ${missingFrontendParitySnippets.join(', ')}`
+      );
+    }
+  }
+
+  try {
+    const frontendAuditRawOutput = execFileSync('node', [FRONTEND_AUDIT_SCRIPT_PATH], {
+      cwd: REPOSITORY_ROOT,
+      encoding: 'utf8',
+      maxBuffer: 1024 * 1024,
+    });
+    const frontendAuditReport = JSON.parse(frontendAuditRawOutput);
+
+    if (frontendAuditReport.passed === true) {
+      pushResult(results, true, 'frontend-usability-audit', 'frontend-usability-audit report passed');
+    } else {
+      const failureDetails = Array.isArray(frontendAuditReport.failures)
+        ? frontendAuditReport.failures.join('; ')
+        : 'Unknown frontend audit failures';
+      pushResult(results, false, 'frontend-usability-audit', `frontend-usability-audit reported failures: ${failureDetails}`);
+    }
+  } catch (frontendAuditError) {
+    const frontendAuditErrorMessage = frontendAuditError instanceof Error
+      ? frontendAuditError.message
+      : 'Unknown frontend audit execution error';
+    pushResult(results, false, 'frontend-usability-audit', `Failed to execute frontend usability audit: ${frontendAuditErrorMessage}`);
   }
 
   const failureCount = results.filter((checkResult) => !checkResult.passed).length;

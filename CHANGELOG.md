@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.5 - 2026-04-11
+### Added
+- Added instruction adapter drift detection in repository validation via canonical SHA256 metadata checks for AGENTS, Copilot, and Gemini entrypoints.
+- Added release-gate hard enforcement for frontend parity checklist coverage and frontend usability audit execution.
+
+### Changed
+- Consolidated AGENTS, Copilot instructions, and Gemini instructions into thin adapters pointing to `.instructions.md` as the canonical policy source.
+- Updated knowledge injection and enterprise operations tests to enforce the new adapter-chain and frontend parity release checks.
+- Synced backlog statuses for V2.0-018 (Instruction Adapter Consolidation) and V2.0-014 (Frontend parity CI hard enforcement) to done.
+
 ## 2.0.4 - 2026-04-11
 ### Changed
 - Updated token efficiency benchmark snapshot with live RTK (`v0.35.0`) measurements on the Windows benchmark host.
