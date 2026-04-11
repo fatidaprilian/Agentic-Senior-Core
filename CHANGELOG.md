@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.3 - 2026-04-11
+### Changed
+- Token optimization is now enabled by default for all `init` flows (`npx`, `npm exec`, global CLI install, presets, and interactive wizard).
+- Added explicit opt-out behavior with `--no-token-optimize` so onboarding remains flexible for external users.
+- Updated CLI help text and README guidance to reflect default-on optimization behavior.
+
+### Added
+- Added smoke-test coverage verifying default token optimization on init and `--no-token-optimize` opt-out behavior.
+
 ## 2.0.2 - 2026-04-11
 ### Added
 - Added token optimization command flow with optional external proxy detection and fallback guidance for shell-heavy sessions.

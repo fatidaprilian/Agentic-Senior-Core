@@ -128,10 +128,11 @@ agentic-senior-core skill fullstack --json
 
 When you run `init`, the CLI now auto-activates the matching skill packs for the chosen stack and blueprint, so the compiled governance context includes the relevant frontend, backend, fullstack, and CLI guidance by default.
 
-### Token Optimization Mode (Optional and User-Friendly)
+### Token Optimization Mode (Enabled by Default on Init)
 
 Use this mode when your AI session is shell-heavy and context usage is high.
-It is optional by design and works in two modes:
+By default, every `init` flow enables token optimization automatically (npx, npm exec, global CLI, preset, and interactive wizard).
+The optimization engine works in two modes:
 - Native fallback mode (no external dependency required)
 - External proxy mode (auto-detected when available)
 
@@ -144,6 +145,9 @@ agentic-senior-core optimize . --disable
 
 # Auto-enable during project initialization
 npx @ryuenn3123/agentic-senior-core init --token-optimize --token-agent copilot
+
+# Opt out when needed
+npx @ryuenn3123/agentic-senior-core init --no-token-optimize
 ```
 
 When enabled, the CLI writes `.agent-context/state/token-optimization.json`, regenerates compiled rules, and adds compact command guidance to `.cursorrules` and `.windsurfrules`.
