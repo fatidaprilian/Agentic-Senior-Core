@@ -123,10 +123,11 @@ test('CLI Smoke Tests', async (t) => {
       );
 
       assert.equal(workspaceMcpConfig.$schema, 'vscode://schemas/mcp');
-      assert.equal(workspaceMcpConfig.servers?.['agentic-senior-core']?.command, 'npx');
+      assert.equal(workspaceMcpConfig.servers?.['agentic-senior-core']?.command, 'node');
+      assert.equal(workspaceMcpConfig.servers?.['agentic-senior-core']?.cwd, '${workspaceFolder}');
       assert.deepEqual(
         workspaceMcpConfig.servers?.['agentic-senior-core']?.args,
-        ['-y', '@ryuenn3123/agentic-senior-core', 'mcp']
+        ['./scripts/mcp-server.mjs']
       );
     } finally {
       rmSync(defaultInitTargetDirectory, { recursive: true, force: true });

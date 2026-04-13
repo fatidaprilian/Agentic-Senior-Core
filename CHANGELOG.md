@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.11 - 2026-04-13
+### Fixed
+- Hardened workspace MCP launch configuration by enforcing `cwd: ${workspaceFolder}` to avoid path resolution ambiguity in VS Code local process startup.
+- Updated `init --mcp-template` output to use local `node ./scripts/mcp-server.mjs` runtime with explicit workspace cwd for more reliable initialize handshake.
+
+### Changed
+- Updated MCP documentation in README, FAQ, and deep-dive to match the node-based workspace runtime model.
+- Clarified release publish notes as maintainer and fork guidance.
+
 ## 2.0.10 - 2026-04-13
 ### Fixed
 - Fixed MCP initialize handshake reliability by accepting both CRLF and LF framed headers in the local MCP server runtime.

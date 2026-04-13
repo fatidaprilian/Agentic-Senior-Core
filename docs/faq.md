@@ -13,7 +13,7 @@ Guardrails are built-in workflow rules (like `scripts/llm-judge.mjs` and GitHub 
 No. By default, `init` does not copy repository workflows from Agentic-Senior-Core into your target repository. The workflow files in this repository are for this repository's own release and maintenance lifecycle.
 
 ## Is MCP server setup automatic?
-No. MCP server registration is manual in your IDE. If you want a starter MCP configuration file in your project, run `init` with `--mcp-template`, then open `MCP: Open Workspace Folder Configuration` and confirm `.vscode/mcp.json` (server command: `npx -y @ryuenn3123/agentic-senior-core mcp`).
+No. MCP server registration is manual in your IDE. If you want a starter MCP configuration file in your project, run `init` with `--mcp-template`, then open `MCP: Open Workspace Folder Configuration` and confirm `.vscode/mcp.json` (server command: `node ./scripts/mcp-server.mjs`, `cwd: ${workspaceFolder}`).
 
 ## Why is there no "pick file" option when I add MCP server?
 That is expected. VS Code MCP setup uses server registration (command/http/npm), not arbitrary file import. The recommended flow is:
@@ -27,10 +27,13 @@ That means the MCP handshake did not complete. Use this recovery flow:
 
 1. Upgrade to the latest package version.
 2. Regenerate workspace MCP config with `init --mcp-template`.
-3. Confirm `.vscode/mcp.json` still points to `npx -y @ryuenn3123/agentic-senior-core mcp`.
+3. Confirm `.vscode/mcp.json` points to `node ./scripts/mcp-server.mjs` and `cwd: ${workspaceFolder}`.
 4. Restart the MCP server from Chat Customizations.
 
 If the issue persists, run `agentic-senior-core mcp` directly in terminal to verify the process starts without local environment errors.
+
+## Does this support Ollama?
+Yes. The governance engine is model-agnostic and works with local-model workflows, including Ollama-based usage, as long as your IDE or toolchain can connect to your selected model provider.
 
 ## Why do I see untrusted schema warning in root mcp.json?
 The root `mcp.json` is governance metadata for this repository, not the VS Code MCP workspace registration file. The actual VS Code MCP config is `.vscode/mcp.json`, which uses the trusted built-in schema (`vscode://schemas/mcp`).

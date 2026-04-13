@@ -41,7 +41,7 @@ Agentic-Senior-Core enables configurable rigidness:
 - Detection benchmark snapshots can be generated with `npm run benchmark:detection`.
 
 ## System Intelligence & MCP
-We bundle Model Context Protocol capabilities with a local stdio runtime (`scripts/mcp-server.mjs`) and a workspace registration template (`.vscode/mcp.json`). IDE MCP server registration is still manual for trust/start lifecycle, but `init --mcp-template` writes the workspace configuration in the exact location VS Code expects, using command `npx -y @ryuenn3123/agentic-senior-core mcp`.
+We bundle Model Context Protocol capabilities with a local stdio runtime (`scripts/mcp-server.mjs`) and a workspace registration template (`.vscode/mcp.json`). IDE MCP server registration is still manual for trust/start lifecycle, but `init --mcp-template` writes the workspace configuration in the exact location VS Code expects, using command `node ./scripts/mcp-server.mjs` with `cwd: ${workspaceFolder}`.
 
 ## CI Annotation Contract (V1.6)
 - `scripts/llm-judge.mjs` now emits a machine-readable payload line: `JSON_REPORT: {...}`.

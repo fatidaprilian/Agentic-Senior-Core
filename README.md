@@ -134,10 +134,10 @@ npx @ryuenn3123/agentic-senior-core init --mcp-template
 
 2. Open Command Palette and run `MCP: Open Workspace Folder Configuration`.
 3. Confirm the file is `.vscode/mcp.json` with server `agentic-senior-core`.
-4. The generated server command is `npx -y @ryuenn3123/agentic-senior-core mcp`.
+4. The generated server command is `node ./scripts/mcp-server.mjs` with `cwd` set to `${workspaceFolder}`.
 5. Open Chat Customizations > MCP Servers, then trust/start the server.
 
-If logs repeatedly show `Waiting for server to respond to initialize request`, upgrade to the latest package version and regenerate the workspace config with `--mcp-template`.
+If logs repeatedly show `Waiting for server to respond to initialize request`, upgrade to the latest package version, regenerate the workspace config with `--mcp-template`, and restart the MCP server.
 
 ### CLI Command Reference
 
@@ -374,7 +374,7 @@ Release checklist:
 2. Add matching release notes in `CHANGELOG.md`.
 3. Push to `main`.
 
-Important notes:
+Important notes for maintainers and forks:
 - If the npm version already exists, publish will fail.
 - Publish requires valid `NPM_TOKEN` in repository secrets.
 

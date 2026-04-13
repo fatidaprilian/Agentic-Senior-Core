@@ -730,6 +730,12 @@ async function validateMcpConfiguration() {
     fail('Workspace MCP server command must use Node');
   }
 
+  if (workspaceServerConfig?.cwd === '${workspaceFolder}') {
+    pass('Workspace MCP server cwd uses ${workspaceFolder}');
+  } else {
+    fail('Workspace MCP server cwd must be ${workspaceFolder}');
+  }
+
   if (Array.isArray(workspaceServerConfig?.args) && workspaceServerConfig.args.includes('./scripts/mcp-server.mjs')) {
     pass('Workspace MCP server points to scripts/mcp-server.mjs');
   } else {
