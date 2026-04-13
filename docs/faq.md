@@ -22,6 +22,16 @@ That is expected. VS Code MCP setup uses server registration (command/http/npm),
 2. Open MCP workspace configuration from Command Palette.
 3. Start and trust the server from Chat Customizations.
 
+## Why does MCP stay on "Waiting for server to respond to initialize request"?
+That means the MCP handshake did not complete. Use this recovery flow:
+
+1. Upgrade to the latest package version.
+2. Regenerate workspace MCP config with `init --mcp-template`.
+3. Confirm `.vscode/mcp.json` still points to `npx -y @ryuenn3123/agentic-senior-core mcp`.
+4. Restart the MCP server from Chat Customizations.
+
+If the issue persists, run `agentic-senior-core mcp` directly in terminal to verify the process starts without local environment errors.
+
 ## Why do I see untrusted schema warning in root mcp.json?
 The root `mcp.json` is governance metadata for this repository, not the VS Code MCP workspace registration file. The actual VS Code MCP config is `.vscode/mcp.json`, which uses the trusted built-in schema (`vscode://schemas/mcp`).
 

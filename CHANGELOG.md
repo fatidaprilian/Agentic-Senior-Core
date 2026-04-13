@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.10 - 2026-04-13
+### Fixed
+- Fixed MCP initialize handshake reliability by accepting both CRLF and LF framed headers in the local MCP server runtime.
+- Added regression tests to prevent MCP initialize timeout from returning in future releases.
+
+### Changed
+- Restructured README onboarding for clearer newbie flow with npm-first setup as the primary path and GitHub-based setup as secondary path.
+- Added complete CLI command reference and release automation notes (auto publish on push to main still requires semantic version bump).
+- Expanded V2.5 roadmap with frontend excellence focus, including advanced UI and UX quality targets beyond baseline benchmark references.
+
 ## 2.0.9 - 2026-04-13
 ### Fixed
 - Fixed MCP onboarding confusion by adding a real MCP stdio runtime command (`agentic-senior-core mcp`) and workspace MCP config support.

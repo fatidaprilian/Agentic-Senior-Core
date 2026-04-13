@@ -67,6 +67,28 @@ const TOOL_DEFINITIONS = [
 
 let incomingBuffer = Buffer.alloc(0);
 
+function findHeaderTerminator(buffer) {
+  const crlfHeaderEndIndex = buffer.indexOf('\r\n\r\n');
+  if (crlfHeaderEndIndex !== -1) {
+    return {
+      headerEndIndex: crlfHeaderEndIndex,
+      delimiterLength: 4,
+      lineSeparator: '\r\n',
+    };
+  }
+
+  const lfHeaderEndIndex = buffer.indexOf('\n\n');
+  if (lfHeaderEndIndex !== -1) {
+    return {
+      headerEndIndex: lfHeaderEndIndex,
+      delimiterLength: 2,
+      lineSeparator: '\n',
+    };
+  }
+
+  return null;
+}
+
 function writeMessage(payload) {
   const serializedPayload = JSON.stringify(payload);
   const payloadLength = Buffer.byteLength(serializedPayload, 'utf8');
@@ -270,13 +292,15 @@ async function handleRequest(requestMessage) {
 }
 
 function readNextFramedMessage() {
-  const headerEndIndex = incomingBuffer.indexOf('\r\n\r\n');
-  if (headerEndIndex === -1) {
+  const headerTerminator = findHeaderTerminator(incomingBuffer);
+  if (!headerTerminator) {
     return null;
   }
 
+  const { headerEndIndex, delimiterLength, lineSeparator } = headerTerminator;
+
   const rawHeader = incomingBuffer.slice(0, headerEndIndex).toString('utf8');
-  const headerLines = rawHeader.split('\r\n');
+  const headerLines = rawHeader.split(lineSeparator);
   let contentLength = null;
 
   for (const headerLine of headerLines) {
@@ -299,7 +323,7 @@ function readNextFramedMessage() {
     return null;
   }
 
-  const bodyStartIndex = headerEndIndex + 4;
+  const bodyStartIndex = headerEndIndex + delimiterLength;
   const frameEndIndex = bodyStartIndex + contentLength;
 
   if (incomingBuffer.length < frameEndIndex) {

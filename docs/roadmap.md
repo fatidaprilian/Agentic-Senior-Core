@@ -165,16 +165,24 @@ This release focuses on staying ahead by proving sustained quality gains against
    - Add scheduled scan workflow to monitor benchmark repos and detect new patterns.
    - Produce actionable adopt or adapt recommendations with owner assignment.
    - Treat frontend skill updates from `MiniMax-AI/skills` as mandatory inputs for each cycle.
+4. Frontend excellence track
+   - Define an advanced frontend quality rubric inspired by high-end frontend references (including Builder.io quality signals) and manual design workflow standards.
+   - Enforce non-template visual outputs through explicit diversity checks for color systems, typography pairings, spacing rhythm, and layout composition.
+   - Extend frontend skill packs with expert-level UI and UX patterns, interaction choreography, and responsive behavior quality gates.
+   - Treat `MiniMax-AI/skills` frontend depth as a minimum baseline and require measurable improvements above that baseline in each release cycle.
 
 ### V2.5 Success Metrics
 - Benchmark coverage reaches at least 85% for core workflow categories.
 - Quality regression escape rate is below 2% per release cycle.
 - Competitive scan to action SLA is at most 14 days.
+- Frontend benchmark outputs achieve at least 90% pass rate on advanced design rubric checks (visual diversity, UX clarity, responsiveness, and accessibility).
+- At least one frontend quality uplift sourced from competitive intelligence lands in each V2.5 cycle.
 
 ### V2.5 Exit Criteria
 - Benchmark harness and anti-regression gates are mandatory in CI.
 - Competitive intelligence reports are generated on schedule and tracked.
 - At least two benchmark-driven improvements land each cycle.
+- Frontend excellence rubric is enforced in CI and linked to release eligibility.
 
 ## V3.0 (2026) - Enterprise Governance Cloud and Federated Policy Ops
 

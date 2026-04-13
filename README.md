@@ -38,34 +38,61 @@ AI:  *Creates properly layered modules with Zod validation, typed errors,
 
 ## Quick Start
 
-### Zero-Install: GitHub Template (New user friendly!)
+### Method 1 (Recommended): npm package
 
-The absolute fastest way to start your next top-tier project is to use this repository as a template.
-The **Use this template** button is in the GitHub repository header (top-right area), not inside this README text.
-If you prefer a direct link, open: **[Create from template](https://github.com/fatidaprilian/Agentic-Senior-Core/generate)**.
-Your new repository will instantly possess all the rules, configurations, and AI context files directly out of the box — zero CLI needed.
-
-### Option 0: NPM Install (Local or Global)
-
-If you already know you want the CLI from npm, use one of these paths:
+The npm package is already published. For most users, this is the default path.
 
 ```bash
+npm exec --yes @ryuenn3123/agentic-senior-core launch
 npm exec --yes @ryuenn3123/agentic-senior-core init
+npx @ryuenn3123/agentic-senior-core init
+```
+
+If you prefer a global install:
+
+```bash
 npm install -g @ryuenn3123/agentic-senior-core
 agentic-senior-core init
 ```
 
-### Option 1: Interactive via GitHub Source (Pre-publish friendly)
+Use team defaults with profile packs:
 
-If npm package publication is not ready yet, run the CLI directly from GitHub and still keep the full interactive experience.
+```bash
+npx @ryuenn3123/agentic-senior-core init --profile-pack startup
+```
+
+### Method 2: GitHub template and source execution
+
+Use this method if your team prefers source-based bootstrap or template-first onboarding.
+
+GitHub template:
+- **[Create from template](https://github.com/fatidaprilian/Agentic-Senior-Core/generate)**
+
+GitHub source execution (interactive):
 
 ```bash
 npm exec --yes --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior-core init .
 ```
 
-This gives the same interactive prompts to choose your profile (`beginner`, `balanced`, `strict`), stack, blueprint, and CI guardrails.
+GitHub bootstrap scripts:
+- Windows: `scripts/init-project.ps1`
+- Linux/macOS: `scripts/init-project.sh`
 
-If you want a plug-and-play starter instead of answering every question, use a preset:
+Windows PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\init-project.ps1 -TargetDirectory . -Profile balanced -Stack typescript -Blueprint api-nextjs -Ci true
+```
+
+Linux/macOS Bash:
+
+```bash
+bash ./scripts/init-project.sh . --profile balanced --stack typescript --blueprint api-nextjs --ci true
+```
+
+### Preset starters
+
+Use presets when you want faster onboarding with less manual selection.
 
 ```bash
 npx @ryuenn3123/agentic-senior-core init --preset frontend-web
@@ -81,48 +108,19 @@ Expanded preset catalog:
 - `mobile-react-native`, `mobile-flutter`, `observability-platform`
 - `typescript-nestjs-service`, `java-enterprise-api`, `dotnet-enterprise-api`, `php-laravel-api`, `kubernetes-platform`
 
-### Option 2: GitHub Bootstrap Scripts (No npx required)
+### Newbie mode
 
-Run directly from this repository bootstrap script and inject rules into your project root.
-
-Bootstrap script paths: `scripts/init-project.ps1` (Windows) and `scripts/init-project.sh` (Linux/macOS).
-
-Windows PowerShell:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\init-project.ps1 -TargetDirectory . -Profile balanced -Stack typescript -Blueprint api-nextjs -Ci true
-```
-
-Linux/macOS Bash:
+If you are new to stacks, blueprints, and guardrails, run:
 
 ```bash
-bash ./scripts/init-project.sh . --profile balanced --stack typescript --blueprint api-nextjs --ci true
+npx @ryuenn3123/agentic-senior-core init --newbie
 ```
 
-Both scripts clone Agentic-Senior-Core into a temporary directory, run the same CLI engine, then clean up automatically.
+### Important behavior
 
-If you want interactive selection, omit `-Profile`, `-Stack`, `-Blueprint`, and `-Ci` on the script command.
-
-### Option 3: Interactive Auto-Setup via npm/npx (Post-publish)
-
-If you have an existing project and want to infuse it with Staff-level context:
-
-```bash
-npx @ryuenn3123/agentic-senior-core init
-```
-
-Use team defaults (V2.0 track) with profile packs:
-
-```bash
-npx @ryuenn3123/agentic-senior-core init --profile-pack startup
-```
-
-The CLI is smart. It auto-detects your current development stack, helps you build a governance profile (select from `beginner`, `balanced`, or `strict`), and writes the compiled rules straight to your root automatically!
-
-Important behavior:
 - `init` does not copy repository workflows from this project into your target repository.
-- MCP server registration and trust/start are managed manually in IDE settings.
-- If you want the MCP workspace scaffold, run `init` with `--mcp-template` (creates `.vscode/mcp.json`).
+- MCP server registration and trust/start are manual in IDE settings.
+- MCP workspace scaffold is opt-in via `--mcp-template` and creates `.vscode/mcp.json`.
 
 ### MCP Setup in VS Code (No File Picker)
 
@@ -139,10 +137,22 @@ npx @ryuenn3123/agentic-senior-core init --mcp-template
 4. The generated server command is `npx -y @ryuenn3123/agentic-senior-core mcp`.
 5. Open Chat Customizations > MCP Servers, then trust/start the server.
 
-If you are totally new to concepts like blueprints and guardrails, no problem — just run:
-```bash
-npx @ryuenn3123/agentic-senior-core init --newbie
-```
+If logs repeatedly show `Waiting for server to respond to initialize request`, upgrade to the latest package version and regenerate the workspace config with `--mcp-template`.
+
+### CLI Command Reference
+
+All available commands:
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `launch` | Numbered onboarding launcher | `agentic-senior-core launch` |
+| `init` | Initialize governance in a project | `agentic-senior-core init . --profile balanced` |
+| `upgrade` | Upgrade existing governance safely | `agentic-senior-core upgrade . --dry-run` |
+| `optimize` | Manage token optimization profile | `agentic-senior-core optimize . --show` |
+| `mcp` | Start local MCP stdio server runtime | `agentic-senior-core mcp` |
+| `rollback` | Roll back from backup snapshot | `agentic-senior-core rollback .` |
+| `skill` | Select domain skill pack by tier | `agentic-senior-core skill frontend --tier advance` |
+| `--version` | Print CLI version | `agentic-senior-core --version` |
 
 ### Skill Selector
 
@@ -355,6 +365,19 @@ npm run report:quality-trend
 npm run report:governance-weekly
 ```
 
+## Release and npm Publish Flow
+
+This repository publishes to npm automatically through GitHub Actions on every push to `main`.
+
+Release checklist:
+1. Bump `package.json` version.
+2. Add matching release notes in `CHANGELOG.md`.
+3. Push to `main`.
+
+Important notes:
+- If the npm version already exists, publish will fail.
+- Publish requires valid `NPM_TOKEN` in repository secrets.
+
 ---
 
 ## Roadmap
@@ -380,7 +403,7 @@ npm run report:governance-weekly
 
 ### Current Forward Plan
 - V2.0: Skill marketplace trust tiers, transactional installs, rollback safety, and launch-menu onboarding.
-- V2.5: Cross-model benchmark harness and anti-regression quality gates.
+- V2.5: Cross-model benchmark harness, anti-regression quality gates, and advanced frontend design quality track (non-template UI direction, stronger UX craft, and frontend parity beyond baseline benchmark repos).
 - V3.0: Enterprise governance cloud, policy drift detection, and org-level override registry.
 
 Detailed timeline and success metrics: [docs/roadmap.md](docs/roadmap.md)

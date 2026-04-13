@@ -182,6 +182,7 @@ async function validateRequiredFiles() {
     '.github/workflows/benchmark-intelligence.yml',
     '.github/workflows/governance-weekly-report.yml',
     'tests/cli-smoke.test.mjs',
+    'tests/mcp-server.test.mjs',
     'tests/llm-judge.test.mjs',
     'tests/enterprise-ops.test.mjs',
     'LICENSE',
