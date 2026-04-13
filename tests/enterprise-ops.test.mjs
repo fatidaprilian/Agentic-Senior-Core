@@ -63,6 +63,19 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(benchmarkIntelligenceReport.watchlist.length >= 3);
   });
 
+  await t.test('benchmark evidence bundle outputs machine-readable report', () => {
+    const benchmarkEvidenceBundleOutput = execSync(`node ${join(process.cwd(), 'scripts', 'benchmark-evidence-bundle.mjs')} --stdout-only`).toString();
+    const benchmarkEvidenceBundleReport = JSON.parse(benchmarkEvidenceBundleOutput);
+
+    assert.equal(benchmarkEvidenceBundleReport.reportName, 'benchmark-evidence-bundle');
+    assert.equal(typeof benchmarkEvidenceBundleReport.passed, 'boolean');
+    assert.ok(Array.isArray(benchmarkEvidenceBundleReport.commandExamples));
+    assert.ok(Array.isArray(benchmarkEvidenceBundleReport.rerunInstructions));
+    assert.ok(Array.isArray(benchmarkEvidenceBundleReport.rawInputs.scenarios));
+    assert.ok(Array.isArray(benchmarkEvidenceBundleReport.executions));
+    assert.ok(benchmarkEvidenceBundleReport.executions.length >= 3);
+  });
+
   await t.test('token optimization benchmark outputs machine-readable report', () => {
     const tokenBenchmarkOutput = execSync(`node ${join(process.cwd(), 'scripts', 'token-optimization-benchmark.mjs')} --stdout-only`).toString();
     const tokenBenchmarkReport = JSON.parse(tokenBenchmarkOutput);

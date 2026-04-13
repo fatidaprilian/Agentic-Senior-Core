@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-13
-Current Version: 2.0.14
+Current Version: 2.0.15
 Status: Stable and release-ready
 
 ---

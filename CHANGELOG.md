@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.15 - 2026-04-13
+### Added
+- Added enterprise operations test coverage for benchmark evidence bundle output contract (`tests/enterprise-ops.test.mjs`) to keep release evidence claims fully verifiable.
+
 ## 2.0.14 - 2026-04-13
 ### Added
 - Added V2.5.1 reproducibility baseline assets: `.agent-context/state/benchmark-reproducibility.json` and `scripts/benchmark-evidence-bundle.mjs`.
