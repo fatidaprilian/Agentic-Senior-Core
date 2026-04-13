@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.13 - 2026-04-13
+### Fixed
+- Fixed MCP transport protocol to support dual-framing: automatically detects and parses both Content-Length headers (LSP-style, backward compatible) and line-delimited JSON (MCP standard modern format).
+- MCP initialize handshake now works reliably with all client types: Claude Desktop, Cursor, Windsurf, and custom clients that use either framing style.
+- Cleaned up unused framing detection functions; kept simple, robust dual-mode parser.
+
 ## 2.0.12 - 2026-04-13
 ### Changed
 - Clarified Quick Start documentation: distinguished npx/npm exec (temporary download, per-project) from global install (system-wide convenience).

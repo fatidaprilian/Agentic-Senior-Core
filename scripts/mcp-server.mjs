@@ -67,32 +67,10 @@ const TOOL_DEFINITIONS = [
 
 let incomingBuffer = Buffer.alloc(0);
 
-function findHeaderTerminator(buffer) {
-  const crlfHeaderEndIndex = buffer.indexOf('\r\n\r\n');
-  if (crlfHeaderEndIndex !== -1) {
-    return {
-      headerEndIndex: crlfHeaderEndIndex,
-      delimiterLength: 4,
-      lineSeparator: '\r\n',
-    };
-  }
-
-  const lfHeaderEndIndex = buffer.indexOf('\n\n');
-  if (lfHeaderEndIndex !== -1) {
-    return {
-      headerEndIndex: lfHeaderEndIndex,
-      delimiterLength: 2,
-      lineSeparator: '\n',
-    };
-  }
-
-  return null;
-}
-
 function writeMessage(payload) {
   const serializedPayload = JSON.stringify(payload);
-  const payloadLength = Buffer.byteLength(serializedPayload, 'utf8');
-  process.stdout.write(`Content-Length: ${payloadLength}\r\n\r\n${serializedPayload}`);
+  // MCP standard: line-delimited JSON (no Content-Length header)
+  process.stdout.write(serializedPayload + '\n');
 }
 
 function sendResponse(id, result) {
@@ -291,69 +269,94 @@ async function handleRequest(requestMessage) {
   }
 }
 
-function readNextFramedMessage() {
-  const headerTerminator = findHeaderTerminator(incomingBuffer);
-  if (!headerTerminator) {
-    return null;
-  }
-
-  const { headerEndIndex, delimiterLength, lineSeparator } = headerTerminator;
-
-  const rawHeader = incomingBuffer.slice(0, headerEndIndex).toString('utf8');
-  const headerLines = rawHeader.split(lineSeparator);
-  let contentLength = null;
-
-  for (const headerLine of headerLines) {
-    const separatorIndex = headerLine.indexOf(':');
-    if (separatorIndex === -1) {
-      continue;
-    }
-
-    const headerName = headerLine.slice(0, separatorIndex).trim().toLowerCase();
-    const headerValue = headerLine.slice(separatorIndex + 1).trim();
-
-    if (headerName === 'content-length') {
-      contentLength = Number.parseInt(headerValue, 10);
-      break;
-    }
-  }
-
-  if (!Number.isFinite(contentLength) || contentLength < 0) {
-    incomingBuffer = Buffer.alloc(0);
-    return null;
-  }
-
-  const bodyStartIndex = headerEndIndex + delimiterLength;
-  const frameEndIndex = bodyStartIndex + contentLength;
-
-  if (incomingBuffer.length < frameEndIndex) {
-    return null;
-  }
-
-  const rawMessage = incomingBuffer.slice(bodyStartIndex, frameEndIndex).toString('utf8');
-  incomingBuffer = incomingBuffer.slice(frameEndIndex);
-  return rawMessage;
-}
-
 function processIncomingBuffer() {
-  while (true) {
-    const framedMessage = readNextFramedMessage();
-    if (framedMessage === null) {
+  const fullContent = incomingBuffer.toString('utf8');
+  
+  // Try to parse as line-delimited JSON first (modern MCP standard)
+  let parseMode = 'line-delimited';
+  let contentToProcess = fullContent;
+  
+  // Check if Content-Length header is present (LSP-style for backward compatibility)
+  if (fullContent.includes('Content-Length:')) {
+    parseMode = 'content-length';
+  }
+  
+  if (parseMode === 'content-length') {
+    // LSP-style: Parse Content-Length headers
+    const headerTerminatorIndex = Math.max(
+      fullContent.indexOf('\r\n\r\n'),
+      fullContent.indexOf('\n\n')
+    );
+    
+    if (headerTerminatorIndex === -1) {
+      return; // Incomplete header, wait for more data
+    }
+    
+    const headerText = fullContent.slice(0, headerTerminatorIndex);
+    const contentLengthMatch = headerText.match(/Content-Length:\s*(\d+)/i);
+    
+    if (!contentLengthMatch) {
+      incomingBuffer = Buffer.alloc(0);
       return;
     }
-
-    let parsedRequest;
-    try {
-      parsedRequest = JSON.parse(framedMessage);
-    } catch {
-      continue;
+    
+    const contentLength = parseInt(contentLengthMatch[1], 10);
+    const headerEndLength = fullContent[headerTerminatorIndex] === '\r' ? 4 : 2;
+    const bodyStartIndex = headerTerminatorIndex + headerEndLength;
+    const bodyEndIndex = bodyStartIndex + contentLength;
+    
+    if (fullContent.length < bodyEndIndex) {
+      return; // Body not yet complete
     }
-
-    Promise.resolve(handleRequest(parsedRequest)).catch((error) => {
-      if (typeof parsedRequest?.id !== 'undefined') {
-        sendError(parsedRequest.id, -32603, 'Internal error', String(error?.message || error));
+    
+    const messageBody = fullContent.slice(bodyStartIndex, bodyEndIndex);
+    incomingBuffer = Buffer.from(fullContent.slice(bodyEndIndex), 'utf8');
+    
+    try {
+      const parsedRequest = JSON.parse(messageBody);
+      Promise.resolve(handleRequest(parsedRequest)).catch((error) => {
+        if (typeof parsedRequest?.id !== 'undefined') {
+          sendError(parsedRequest.id, -32603, 'Internal error', String(error?.message || error));
+        }
+      });
+    } catch {
+      // Ignore parse errors
+    }
+    
+    // Recursively process if there's more data
+    if (incomingBuffer.length > 0) {
+      processIncomingBuffer();
+    }
+  } else {
+    // Line-delimited: parse one JSON per line
+    const lines = fullContent.split('\n');
+    
+    // Keep incomplete last line in buffer
+    if (fullContent.endsWith('\n')) {
+      incomingBuffer = Buffer.alloc(0);
+    } else {
+      const lastLine = lines.pop() || '';
+      incomingBuffer = Buffer.from(lastLine, 'utf8');
+    }
+    
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+      
+      let parsedRequest;
+      try {
+        parsedRequest = JSON.parse(trimmed);
+      } catch {
+        // Ignore non-JSON lines
+        continue;
       }
-    });
+      
+      Promise.resolve(handleRequest(parsedRequest)).catch((error) => {
+        if (typeof parsedRequest?.id !== 'undefined') {
+          sendError(parsedRequest.id, -32603, 'Internal error', String(error?.message || error));
+        }
+      });
+    }
   }
 }
 
