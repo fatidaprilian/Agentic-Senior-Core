@@ -3,9 +3,9 @@
 > PHP 8.x is a different language from PHP 5.
 > If your AI writes PHP without type declarations, reject it immediately.
 
-## Language Version: PHP 8.5+ (Latest Stable)
+## Language Version: PHP 8.3+ (Laravel 13 Baseline, 8.5 Recommended)
 
-PHP 8.5 is stable since November 2025. Use modern PHP features including the pipe operator (`|>`), `Clone With`, and readonly classes.
+Laravel 13 requires PHP 8.3+. Use PHP 8.5 when your runtime supports it, but avoid forcing 8.5-only syntax in shared packages unless project constraints explicitly require it.
 
 ### Strict Types Everywhere
 ```php
@@ -42,7 +42,7 @@ enum OrderStatus: string {
 }
 ```
 
-### Readonly Properties and Classes (PHP 8.2+) and Pipe Operator (PHP 8.5+)
+### Readonly Properties and Classes (PHP 8.2+)
 ```php
 // Readonly for DTOs and value objects
 readonly class CreateUserDto {
@@ -52,8 +52,11 @@ readonly class CreateUserDto {
         public int $age,
     ) {}
 }
+```
 
-// Pipe operator for cleaner function chains (PHP 8.5)
+### Optional on PHP 8.5+: Pipe Operator
+```php
+// Use when your project runtime is locked to PHP 8.5+
 $result = $input
     |> 'trim'
     |> 'strtolower'
@@ -151,7 +154,7 @@ parameters:
 
 | Need | Library | Why |
 |------|---------|-----|
-| Framework | Laravel 12 | Most productive PHP framework, auto eager loading, GraphQL |
+| Framework | Laravel 13 | Most productive PHP framework with AI SDK, JSON:API resources, and stronger security defaults |
 | Validation | Laravel Form Requests | Built-in, declarative |
 | ORM | Eloquent | Convention over configuration |
 | Testing | PHPUnit / Pest | Pest preferred for readability |
@@ -161,6 +164,17 @@ parameters:
 | Auth | Laravel Sanctum / Passport | Token-based auth |
 | Queue | Laravel Queues | Built-in, multiple drivers |
 | API docs | Scribe or L5-Swagger | Auto-generated OpenAPI |
+
+---
+
+## Laravel 13 Guardrails
+
+- Use `PreventRequestForgery` for explicit CSRF middleware references (old aliases still exist but are deprecated).
+- Ensure `upsert(..., uniqueBy: ...)` always passes a non-empty `uniqueBy` value.
+- Prefer first-party JSON:API resources when you need JSON:API-compliant responses.
+- If caching objects, configure `cache.serializable_classes` allow-list explicitly.
+- For AI-assisted Laravel projects, use `laravel/boost` `^2.0` and run `php artisan boost:install`.
+- Laravel 12 projects are still supported: keep `VerifyCsrfToken` and avoid 13-only API assumptions until framework upgrade is complete.
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "2.0.13",
+  "version": "2.0.14",
   "type": "module",
   "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
   "bin": {
@@ -48,6 +48,7 @@
     "sbom:generate": "node ./scripts/generate-sbom.mjs",
     "benchmark:detection": "node ./scripts/detection-benchmark.mjs",
     "benchmark:token": "node ./scripts/token-optimization-benchmark.mjs",
+    "benchmark:bundle": "node ./scripts/benchmark-evidence-bundle.mjs",
     "benchmark:gate": "node ./scripts/benchmark-gate.mjs",
     "benchmark:intelligence": "node ./scripts/benchmark-intelligence.mjs",
     "report:quality-trend": "node ./scripts/quality-trend-report.mjs",

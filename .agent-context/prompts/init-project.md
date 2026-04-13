@@ -74,7 +74,7 @@ Every dependency MUST be justified per rules/efficiency-vs-hype.md.
 | `api-nextjs` | Next.js App Router API project |
 | `nestjs-logic` | NestJS backend service |
 | `fastapi-service` | Python FastAPI backend service |
-| `laravel-api` | PHP Laravel 12 API |
+| `laravel-api` | PHP Laravel 13 API |
 | `spring-boot-api`| Java Spring Boot 4 API |
 | `go-service` | Go chi HTTP service |
 | `aspnet-api` | C# ASP.NET Minimal API |

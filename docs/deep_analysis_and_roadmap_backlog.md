@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-13
-Current Version: 2.0.11
+Current Version: 2.0.14
 Status: Stable and release-ready
 
 ---
@@ -12,8 +12,8 @@ Status: Stable and release-ready
 
 | Gate | Result |
 |------|--------|
-| npm run validate | pass (target: 393 checks, 0 failed, 0 warnings) |
-| npm test | pass (target: 28 tests, 0 failed) |
+| npm run validate | pass (target: 419 checks, 0 failed, 0 warnings) |
+| npm test | pass (target: 32 tests, 0 failed) |
 | Version consistency | package.json, CHANGELOG, .cursorrules, .windsurfrules aligned |
 | Release gate | machine-readable JSON report, blocking failures supported |
 | Forbidden content gate | integrated in npm run gate:release |
@@ -29,10 +29,10 @@ Note: final numbers are re-validated before each release commit.
 | Blueprints | 14 | includes mobile-app and observability |
 | Review checklists | 8 | includes marketplace-acceptance |
 | Skill domains | 6 | backend, frontend, fullstack, cli, distribution, review-quality |
-| Scripts | 17 | includes quality trend and weekly governance reporting |
+| Scripts | 19 | includes benchmark evidence bundle and governance reporting |
 | CI workflows | 7 | publish + release + benchmark + sbom + frontend + weekly governance |
 | Tests | 5 files | smoke, enterprise ops, knowledge injection, llm judge, skill tier |
-| State files | 10 | includes token, quality-trend, and weekly governance reports |
+| State files | 12 | includes benchmark reproducibility and benchmark evidence bundle snapshots |
 | Docs | 12 | includes deep analysis and semantic audit docs |
 
 ### 1.3 Maturity by Subsystem
@@ -208,68 +208,59 @@ Top goals:
 - practical onboarding and ecosystem integration (CI/CD + IDE)
 - security and reliability signal in benchmark outputs
 - advanced frontend quality track with non-template visual output diversity and expert UX standards
+- framework currency and migration readiness for major ecosystem releases (starting with Laravel 13)
 
-Execution tracks (incremental):
-1. Reproducibility and transparency baseline
-- lock benchmark fixtures and deterministic runtime settings
-- publish rerun instructions, raw inputs, rubric, outputs, and command examples
-- define before-vs-after comparison schema (quality, bug signal, runtime, token)
+Execution tracks (incremental, ordered, and checklist-driven):
 
-2. Multi-model writer-judge architecture
-- separate writer and judge pipelines with independent configuration
-- run blind scoring to reduce self-bias
-- emit side-by-side comparison matrix for multiple models per scenario
+1. Reproducibility and transparency baseline (Phase 2.5.1)
+- [x] lock benchmark fixtures and deterministic runtime settings
+- [x] publish rerun instructions, raw inputs, rubric, outputs, and command examples
+- [ ] define before-vs-after comparison schema (quality, bug signal, runtime, token)
+- [x] kickoff artifact implemented: `scripts/benchmark-evidence-bundle.mjs` with deterministic profile in `.agent-context/state/benchmark-reproducibility.json`
 
-3. Release blocking and anti-regression gates
-- define minimum thresholds for quality and efficiency dimensions
-- integrate threshold checks into release gate and CI workflows
-- fail release on regression and emit machine-readable diagnostics
+2. Multi-model writer-judge architecture (Phase 2.5.1)
+- [x] writer lane and judge lane architecture drafted in preparation snapshot
+- [x] blind review mode objective documented
+- [ ] separate writer and judge pipelines with independent runtime configuration
+- [ ] emit side-by-side comparison matrix for multiple models per scenario
 
-4. History and visualization
-- append benchmark state artifact per run/release
-- generate trend tables and chart-ready JSON/CSV outputs
-- surface release-over-release changes for quick decision review
+3. Release blocking and anti-regression gates (Phase 2.5.2)
+- [x] minimum threshold baseline defined in `.agent-context/state/benchmark-thresholds.json`
+- [ ] integrate threshold checks into release gate and CI workflows
+- [ ] fail release on regression and emit machine-readable diagnostics
 
-5. Adoption and integrations
-- provide quickstart benchmark paths for new users
-- add profile/preset guidance for common usage patterns
-- maintain integration playbooks for GitHub Actions, Jenkins, VS Code, and JetBrains
+4. History and visualization (Phase 2.5.2)
+- [ ] append benchmark state artifact per run and release
+- [ ] generate trend tables and chart-ready JSON and CSV outputs
+- [ ] surface release-over-release changes for quick decision review
 
-6. Security and reliability checks
-- include bug/vulnerability scan indicators in benchmark report bundle
-- add reliability checks to highlight risky output degradation early
+5. Adoption and integrations (Phase 2.5.3)
+- [ ] provide quickstart benchmark paths for new users
+- [ ] add profile and preset guidance for common usage patterns
+- [ ] maintain integration playbooks for GitHub Actions, Jenkins, VS Code, and JetBrains
 
-7. Frontend excellence and design quality
-- define frontend scoring rubric for visual direction, typography quality, color strategy diversity, and interaction quality
-- require non-template UI outputs with measurable variation in layout and style systems
-- treat MiniMax frontend references as baseline and enforce stricter quality targets above baseline
-- align frontend output expectations to advanced design workflow quality comparable to high-signal manual design teams
+6. Security and reliability checks (Phase 2.5.3)
+- [ ] include bug and vulnerability scan indicators in benchmark report bundle
+- [ ] add reliability checks to highlight risky output degradation early
 
-Suggested rollout order:
-- Phase 2.5.1: Tracks 1 and 2 (foundation and objectivity)
-- Phase 2.5.2: Tracks 3 and 4 (release gates and trend intelligence)
-- Phase 2.5.3: Tracks 5, 6, and 7 (adoption, trust hardening, and frontend excellence)
+7. Frontend excellence and design quality (Phase 2.5.3)
+- [ ] define frontend scoring rubric for visual direction, typography quality, color strategy diversity, and interaction quality
+- [ ] require non-template UI outputs with measurable variation in layout and style systems
+- [ ] treat MiniMax frontend references as baseline and enforce stricter quality targets above baseline
+- [ ] align frontend output expectations to advanced design workflow quality comparable to high-signal manual design teams
 
-### V3.0 (Federated Governance)
-
-Top goals:
-- signed governance bundle distribution
-- org-level override registry with expiry governance
-- policy drift detection across repositories
-- provenance and portfolio-level quality reporting
-
----
-
-## Working Assumptions
-
-- Node.js 18+ remains baseline.
-- Package remains ESM-first.
-- Trust and compatibility metadata are mandatory for publish safety.
-- User onboarding remains simple: strictness increases by lifecycle stage, not by first-run friction.
-
----
+8. Framework currency and migration readiness (Phase 2.5.1)
+- [x] refresh PHP stack profile and Laravel blueprint to Laravel 13 baseline (PHP 8.3+)
+- [x] codify high-impact 12.x to 13.x migration checks (CSRF middleware rename, `upsert` `uniqueBy`, cache `serializable_classes`)
+- [x] align onboarding prompts and setup references to Laravel 13 target state
+- [ ] add annual Laravel major-release watch with owner and response SLA
 
 ## Part 6: Documentation and Explanation Standards (Mandatory)
+
+Status in V2.5:
+- [x] treated as a critical gate inside V2.5 execution
+- [x] explicit mention retained in repository validation expectations
+- [ ] add dedicated CI artifact for documentation-quality drift over time
 
 Scope:
 - This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.
@@ -303,3 +294,26 @@ Additional critical rules:
 
 Final quality check:
 - Read the text out loud before publishing. If it sounds stiff or robotic, rewrite it.
+
+Suggested rollout order:
+- Phase 2.5.1: Tracks 1, 2, and 8 (foundation, objectivity, and framework currency)
+- Phase 2.5.2: Tracks 3 and 4 (release gates and trend intelligence)
+- Phase 2.5.3: Tracks 5, 6, and 7 (adoption, trust hardening, and frontend excellence)
+
+### V3.0 (Federated Governance)
+
+Top goals:
+- signed governance bundle distribution
+- org-level override registry with expiry governance
+- policy drift detection across repositories
+- provenance and portfolio-level quality reporting
+
+---
+
+## Working Assumptions
+
+- Node.js 18+ remains baseline.
+- Package remains ESM-first.
+- Trust and compatibility metadata are mandatory for publish safety.
+- User onboarding remains simple: strictness increases by lifecycle stage, not by first-run friction.
+

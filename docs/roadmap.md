@@ -170,6 +170,10 @@ This release focuses on staying ahead by proving sustained quality gains against
    - Enforce non-template visual outputs through explicit diversity checks for color systems, typography pairings, spacing rhythm, and layout composition.
    - Extend frontend skill packs with expert-level UI and UX patterns, interaction choreography, and responsive behavior quality gates.
    - Treat `MiniMax-AI/skills` frontend depth as a minimum baseline and require measurable improvements above that baseline in each release cycle.
+5. Framework currency and ecosystem refresh
+   - Upgrade PHP stack and Laravel blueprint defaults to Laravel 13 with a PHP 8.3+ baseline.
+   - Add migration guardrails for common 12.x to 13.x issues (CSRF middleware rename, non-empty `uniqueBy` for `upsert`, cache `serializable_classes` policy).
+   - Keep dependency guidance in sync with Laravel 13 targets (`laravel/framework:^13.0`, `laravel/tinker:^3.0`, `phpunit/phpunit:^12.0`, `pestphp/pest:^4.0`).
 
 ### V2.5 Success Metrics
 - Benchmark coverage reaches at least 85% for core workflow categories.
@@ -177,12 +181,14 @@ This release focuses on staying ahead by proving sustained quality gains against
 - Competitive scan to action SLA is at most 14 days.
 - Frontend benchmark outputs achieve at least 90% pass rate on advanced design rubric checks (visual diversity, UX clarity, responsiveness, and accessibility).
 - At least one frontend quality uplift sourced from competitive intelligence lands in each V2.5 cycle.
+- Laravel guidance is fully migrated to 13.x across stack profiles, blueprints, and setup prompts.
 
 ### V2.5 Exit Criteria
 - Benchmark harness and anti-regression gates are mandatory in CI.
 - Competitive intelligence reports are generated on schedule and tracked.
 - At least two benchmark-driven improvements land each cycle.
 - Frontend excellence rubric is enforced in CI and linked to release eligibility.
+- Laravel 13 migration guardrails are published and referenced by onboarding and upgrade flows.
 
 ## V3.0 (2026) - Enterprise Governance Cloud and Federated Policy Ops
 

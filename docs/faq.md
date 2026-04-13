@@ -9,6 +9,17 @@ A "Blueprint" is an architectural starting point. If you use Next.js, the bluepr
 ## What are Guardrails?
 Guardrails are built-in workflow rules (like `scripts/llm-judge.mjs` and GitHub Actions) that enforce our rule sets before any PR is merged. The agent knows these exist and won't write "lazy" code knowing it will be blocked.
 
+## My project is still on Laravel 12. Is it safe to use this repository?
+Yes. It is safe to use this repository with Laravel 12 projects.
+
+What this means in practice:
+1. You can still run `init` and `upgrade` to get governance, rules, and checklists.
+2. Keep your runtime dependencies on Laravel 12 until your app is ready for framework upgrade.
+3. Do not apply Laravel-13-only code blindly into Laravel 12 apps.
+4. Use version-aware edits during migration, especially around CSRF middleware names and other framework-specific APIs.
+
+The Laravel 13 blueprint and stack profile are the default target-state for new projects and planned upgrades, not a forced runtime switch for existing Laravel 12 repositories.
+
 ## Does `init` copy this repository's GitHub workflows into my project?
 No. By default, `init` does not copy repository workflows from Agentic-Senior-Core into your target repository. The workflow files in this repository are for this repository's own release and maintenance lifecycle.
 

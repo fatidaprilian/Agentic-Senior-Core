@@ -244,6 +244,23 @@ Reproduce and refresh this table:
 npm run benchmark:token
 ```
 
+### Benchmark Evidence Bundle (V2.5.1 Baseline)
+
+Generate a reproducible benchmark evidence artifact (inputs, rubric, rerun instructions, and outputs):
+
+```bash
+npm run benchmark:bundle
+```
+
+This command writes:
+- `.agent-context/state/benchmark-evidence-bundle.json`
+
+For CI pipelines that only need stdout JSON:
+
+```bash
+node ./scripts/benchmark-evidence-bundle.mjs --stdout-only
+```
+
 ### Install and Setup Choices
 
 The CLI now supports a smaller decision surface for first-time setup:

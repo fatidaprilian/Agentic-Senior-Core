@@ -1,12 +1,12 @@
 # Blueprint: Laravel API
 
-> PHP backend API service using Laravel 12, PHP 8.5+, Form Requests, Eloquent, and Scribe for docs.
+> PHP backend API service using Laravel 13, PHP 8.3+, Form Requests, Eloquent, and Scribe for docs.
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | Laravel 12 |
+| Framework | Laravel 13 |
 | Validation | Form Requests |
 | ORM | Eloquent |
 | Migration | Laravel Migrations |
@@ -14,6 +14,14 @@
 | Static analysis | PHPStan (level 8) |
 | Formatting | Laravel Pint |
 | API docs | Scribe |
+
+## Laravel 13 Upgrade Guardrails
+
+- Target `laravel/framework:^13.0` with PHP 8.3+.
+- Use `PreventRequestForgery` when explicitly disabling or excluding CSRF middleware in tests and routes.
+- Keep `upsert` calls explicit with a non-empty `uniqueBy` value for MySQL and MariaDB paths.
+- Decide cache object strategy up front: primitive payloads, or explicit `serializable_classes` allow-list.
+- For existing Laravel 12 projects, keep framework-12-compatible middleware and APIs until upgrade is done; treat this blueprint as target-state guidance.
 
 ---
 
@@ -210,7 +218,9 @@ final class UserResource extends JsonResource
 
 ## Scaffolding Checklist
 
-- [ ] Create Laravel project: `composer create-project laravel/laravel`
+- [ ] Create Laravel project: `composer create-project laravel/laravel:^13.0`
+- [ ] Confirm core dependencies: `laravel/framework:^13.0`, `laravel/tinker:^3.0`, `phpunit/phpunit:^12.0`, `pestphp/pest:^4.0`
+- [ ] Optional AI workflow: install `laravel/boost:^2.0` and run `php artisan boost:install`
 - [ ] Set up modular structure under `app/Modules/`
 - [ ] Create shared error handler with consistent JSON responses
 - [ ] Create shared `ApiResponse` trait for standard response format

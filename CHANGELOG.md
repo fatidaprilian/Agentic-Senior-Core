@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.14 - 2026-04-13
+### Added
+- Added V2.5.1 reproducibility baseline assets: `.agent-context/state/benchmark-reproducibility.json` and `scripts/benchmark-evidence-bundle.mjs`.
+- Added `benchmark:bundle` command to emit machine-readable benchmark evidence bundles with rerun instructions, rubric inputs, and output snapshots.
+- Added enterprise test coverage for benchmark evidence bundle output contract.
+
+### Changed
+- Updated Laravel guidance to Laravel 13 target state while explicitly documenting Laravel 12 compatibility during staged upgrades.
+- Reordered V2.5 backlog execution tracks into checklist format by phase and moved Documentation and Explanation Standards into V2.5 critical scope.
+- Updated validation required-file checks for new benchmark reproducibility assets.
+
 ## 2.0.13 - 2026-04-13
 ### Fixed
 - Fixed MCP transport protocol to support dual-framing: automatically detects and parses both Content-Length headers (LSP-style, backward compatible) and line-delimited JSON (MCP standard modern format).
