@@ -151,6 +151,7 @@ async function validateRequiredFiles() {
     'scripts/benchmark-gate.mjs',
     'scripts/benchmark-intelligence.mjs',
     'scripts/governance-weekly-report.mjs',
+    'scripts/mcp-server.mjs',
     'scripts/frontend-usability-audit.mjs',
     'scripts/release-gate.mjs',
     'scripts/generate-sbom.mjs',
@@ -175,6 +176,7 @@ async function validateRequiredFiles() {
     '.agent-context/state/benchmark-watchlist.json',
     '.agent-context/state/skill-platform.json',
     '.agent-context/skills/index.json',
+    '.vscode/mcp.json',
     '.github/workflows/release-gate.yml',
     '.github/workflows/sbom-compliance.yml',
     '.github/workflows/benchmark-intelligence.yml',
@@ -700,6 +702,8 @@ async function validateMcpConfiguration() {
   const mcpConfiguration = JSON.parse(await readTextFile(join(ROOT_DIR, 'mcp.json')));
   const lintServerCommand = mcpConfiguration.servers?.lint?.command;
   const testServerCommand = mcpConfiguration.servers?.test?.command;
+  const workspaceMcpConfiguration = JSON.parse(await readTextFile(join(ROOT_DIR, '.vscode', 'mcp.json')));
+  const workspaceServerConfig = workspaceMcpConfiguration.servers?.['agentic-senior-core'];
 
   if (lintServerCommand === 'node') {
     pass('MCP lint server uses Node');
@@ -711,6 +715,24 @@ async function validateMcpConfiguration() {
     pass('MCP test server uses Node');
   } else {
     fail('MCP test server must use Node');
+  }
+
+  if (workspaceMcpConfiguration.$schema === 'vscode://schemas/mcp') {
+    pass('Workspace MCP config uses trusted VS Code schema');
+  } else {
+    fail('Workspace MCP config must use $schema: vscode://schemas/mcp');
+  }
+
+  if (workspaceServerConfig?.command === 'node') {
+    pass('Workspace MCP server command uses Node');
+  } else {
+    fail('Workspace MCP server command must use Node');
+  }
+
+  if (Array.isArray(workspaceServerConfig?.args) && workspaceServerConfig.args.includes('./scripts/mcp-server.mjs')) {
+    pass('Workspace MCP server points to scripts/mcp-server.mjs');
+  } else {
+    fail('Workspace MCP server must include ./scripts/mcp-server.mjs argument');
   }
 }
 

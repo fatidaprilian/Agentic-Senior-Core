@@ -1,0 +1,12 @@
+{
+  "$schema": "vscode://schemas/mcp",
+  "servers": {
+    "agentic-senior-core": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "./scripts/mcp-server.mjs"
+      ]
+    }
+  }
+}

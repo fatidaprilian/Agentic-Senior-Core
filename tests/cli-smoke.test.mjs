@@ -115,7 +115,19 @@ test('CLI Smoke Tests', async (t) => {
         `node ${cliPath} init ${mcpTemplateTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize --mcp-template`
       ).toString();
 
-      assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'mcp.json')), true);
+      assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'mcp.json')), false);
+      assert.equal(existsSync(join(mcpTemplateTargetDirectory, '.vscode', 'mcp.json')), true);
+
+      const workspaceMcpConfig = JSON.parse(
+        readFileSync(join(mcpTemplateTargetDirectory, '.vscode', 'mcp.json'), 'utf8')
+      );
+
+      assert.equal(workspaceMcpConfig.$schema, 'vscode://schemas/mcp');
+      assert.equal(workspaceMcpConfig.servers?.['agentic-senior-core']?.command, 'npx');
+      assert.deepEqual(
+        workspaceMcpConfig.servers?.['agentic-senior-core']?.args,
+        ['-y', '@ryuenn3123/agentic-senior-core', 'mcp']
+      );
     } finally {
       rmSync(defaultInitTargetDirectory, { recursive: true, force: true });
       rmSync(mcpTemplateTargetDirectory, { recursive: true, force: true });

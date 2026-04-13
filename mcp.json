@@ -1,5 +1,4 @@
 {
-  "$schema": "https://modelcontextprotocol.io/schemas/mcp.json",
   "version": "1.0",
   "name": "agentic-senior-core",
   "description": "MCP configuration for governance-aware diagnostics and self-healing workflows with full knowledge injection.",

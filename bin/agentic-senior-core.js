@@ -11,6 +11,7 @@ import { CLI_VERSION } from '../lib/cli/constants.mjs';
 import { printUsage } from '../lib/cli/utils.mjs';
 import { runLaunchCommand } from '../lib/cli/commands/launch.mjs';
 import { runRollbackCommand } from '../lib/cli/commands/rollback.mjs';
+import { runMcpServerCommand } from '../lib/cli/commands/mcp.mjs';
 import { runOptimizeCommand, parseOptimizeArguments } from '../lib/cli/commands/optimize.mjs';
 import { runInitCommand, parseInitArguments } from '../lib/cli/commands/init.mjs';
 import { runUpgradeCommand, parseUpgradeArguments } from '../lib/cli/commands/upgrade.mjs';
@@ -60,6 +61,11 @@ async function main() {
 
   if (commandArgument === 'rollback') {
     await runRollbackCommand(commandArguments);
+    return;
+  }
+
+  if (commandArgument === 'mcp') {
+    await runMcpServerCommand();
     return;
   }
 

@@ -121,8 +121,23 @@ The CLI is smart. It auto-detects your current development stack, helps you buil
 
 Important behavior:
 - `init` does not copy repository workflows from this project into your target repository.
-- MCP server registration is manual in IDE settings.
-- If you want the MCP file scaffold, run `init` with `--mcp-template`.
+- MCP server registration and trust/start are managed manually in IDE settings.
+- If you want the MCP workspace scaffold, run `init` with `--mcp-template` (creates `.vscode/mcp.json`).
+
+### MCP Setup in VS Code (No File Picker)
+
+If you are looking for a file picker in the MCP UI, that is expected because VS Code uses MCP server registration, not generic JSON file import.
+
+1. Generate workspace MCP config:
+
+```bash
+npx @ryuenn3123/agentic-senior-core init --mcp-template
+```
+
+2. Open Command Palette and run `MCP: Open Workspace Folder Configuration`.
+3. Confirm the file is `.vscode/mcp.json` with server `agentic-senior-core`.
+4. The generated server command is `npx -y @ryuenn3123/agentic-senior-core mcp`.
+5. Open Chat Customizations > MCP Servers, then trust/start the server.
 
 If you are totally new to concepts like blueprints and guardrails, no problem — just run:
 ```bash
@@ -270,8 +285,8 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 - **Automated Guardrails:** CI blueprints include LLM-as-a-Judge flow using `pr-checklist.md`.
 - **Pre-Publish Safety:** Built-in forbidden content checks detect hardcoded secrets and stray debugger artifacts before hitting the NPM registry.
 - **Machine-Readable CI Output:** LLM Judge emits `JSON_REPORT` payloads and writes `.agent-context/state/llm-judge-report.json` for PR/MR annotation tooling.
-- **MCP Self-Healing Loop:** `mcp.json` defines diagnostics + fix proposal workflow when lint/CI fails.
-- **MCP Registration Model:** IDE MCP server registration is manual; `mcp.json` is an optional template file (`--mcp-template`).
+- **MCP Runtime Server:** `scripts/mcp-server.mjs` exposes validate/test/release checks as MCP tools.
+- **MCP Registration Model:** IDE MCP server registration is manual; workspace config lives in `.vscode/mcp.json` (`--mcp-template`).
 
 ---
 
@@ -282,7 +297,9 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 ├── .cursorrules                    # Dynamic compiled governance entry point
 ├── .windsurfrules                  # Dynamic compiled governance entry point
 ├── .agent-override.md              # Team-specific exceptions (scoped + expiry)
-├── mcp.json                        # Optional MCP template file (copied with --mcp-template)
+├── mcp.json                        # Governance metadata and knowledge-layer contract
+├── .vscode/
+│   └── mcp.json                    # VS Code MCP workspace server configuration
 ├── AGENTS.md                       # Universal agent discovery
 ├── .github/copilot-instructions.md # GitHub Copilot entry point
 ├── .gemini/instructions.md         # Antigravity / Gemini entry point
@@ -300,6 +317,7 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 ├── scripts/
 │   ├── validate.mjs                # Repository validator
 │   ├── llm-judge.mjs               # LLM-as-a-Judge CI gate
+│   ├── mcp-server.mjs              # Local MCP stdio server (validate/test/release tools)
 │   ├── init-project.sh             # GitHub bootstrap script (Linux/macOS)
 │   └── init-project.ps1            # GitHub bootstrap script (Windows)
 ├── docs/

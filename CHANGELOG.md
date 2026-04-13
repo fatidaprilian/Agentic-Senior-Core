@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.9 - 2026-04-13
+### Fixed
+- Fixed MCP onboarding confusion by adding a real MCP stdio runtime command (`agentic-senior-core mcp`) and workspace MCP config support.
+- Fixed `--mcp-template` output so it now creates `.vscode/mcp.json` (the location VS Code MCP actually reads), instead of writing an unrelated root file.
+- Fixed untrusted remote schema warning in root `mcp.json` by removing the external `$schema` URL.
+
+### Added
+- Added local MCP server runtime script (`scripts/mcp-server.mjs`) exposing validate/test/release checks as MCP tools.
+- Added repository workspace MCP config file at `.vscode/mcp.json` using trusted `vscode://schemas/mcp` schema.
+
 ## 2.0.8 - 2026-04-13
 ### Fixed
 - Fixed `init` and `upgrade` behavior so repository-internal GitHub workflows are no longer copied into target projects by default.
