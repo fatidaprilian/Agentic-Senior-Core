@@ -42,20 +42,39 @@ AI:  *Creates properly layered modules with Zod validation, typed errors,
 
 The npm package is already published. For most users, this is the default path.
 
+**Step 1: Navigate to your project folder**
 ```bash
-npm exec --yes @ryuenn3123/agentic-senior-core launch
-npm exec --yes @ryuenn3123/agentic-senior-core init
-npx @ryuenn3123/agentic-senior-core init
+cd /path/to/your-project
 ```
 
-If you prefer a global install:
+**Step 2: Run initialization (does not require install)**
+
+Use `npx` or `npm exec` — both download the package temporarily, run it in your project folder, then clean up automatically.
+
+```bash
+npx @ryuenn3123/agentic-senior-core init
+# or
+npm exec --yes @ryuenn3123/agentic-senior-core init
+```
+
+**Alternative: Global install (optional)**
+
+If you want the tool available system-wide without repeating `npx`:
 
 ```bash
 npm install -g @ryuenn3123/agentic-senior-core
+# Then from any project folder:
 agentic-senior-core init
 ```
 
-Use team defaults with profile packs:
+| Approach | Installation | Where to Run | Use Case |
+|----------|--------------|---|---|
+| **npx (default)** | None — temporary download | Inside your project folder | Clearest workflow; no system pollution |
+| **Global install** | System-wide | From anywhere | Convenience if using frequently across many projects |
+
+> Note: Both approaches do the same thing: create `.cursorrules`, `.instructions.md`, `.agent-context/` **in your current project folder**. The only difference is convenience. Use `npx` if unsure — it's clearer and doesn't clutter your system.
+
+**Use team defaults with profile packs:**
 
 ```bash
 npx @ryuenn3123/agentic-senior-core init --profile-pack startup
@@ -118,9 +137,21 @@ npx @ryuenn3123/agentic-senior-core init --newbie
 
 ### Important behavior
 
+- `init` creates governance files **in your project folder** (the folder where you run the command).
 - `init` does not copy repository workflows from this project into your target repository.
 - MCP server registration and trust/start are manual in IDE settings.
 - MCP workspace scaffold is opt-in via `--mcp-template` and creates `.vscode/mcp.json`.
+
+**What files are created?**
+```
+your-project/
+├── .cursorrules          (agent instructions for Cursor)
+├── .windsurfrules        (agent instructions for Windsurf)
+├── .instructions.md      (canonical governance and AI behavior policy)
+├── .agent-context/       (blueprints, skills, rules, profiles, state maps)
+└── .vscode/
+    └── mcp.json          (only if --mcp-template is used)
+```
 
 ### MCP Setup in VS Code (No File Picker)
 
