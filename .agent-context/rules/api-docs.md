@@ -25,6 +25,40 @@ REQUIRED: Documentation MUST be updated in the SAME commit as the endpoint chang
 
 ---
 
+## Human Writing Standard (Mandatory)
+
+This standard applies to API docs, README updates, release notes, and technical explanations.
+
+### Style Baseline
+1. Write for native English speakers.
+2. Target an 8th-grade reading level.
+3. Use clear, direct, plain language.
+4. Keep sentence rhythm natural with short and medium sentences.
+5. Sound confident, practical, and conversational.
+
+### Required Behavior
+1. Explain decisions the way a competent coworker would explain them out loud.
+2. Cut unnecessary words and remove filler.
+3. Use concrete verbs and everyday phrasing.
+4. Rewrite and reorder content when flow is weak.
+
+### Hard Bans
+1. No emoji in formal artifacts.
+2. No AI cliches: delve, leverage, robust, utilize, seamless.
+3. No inflated, academic, or performative language.
+4. No padding, hedging, or redundant phrasing.
+
+### Critical Controls
+1. Any claim about quality, performance, or reliability must include a measurable source and timestamp.
+2. Expand acronyms on first use, then use terms consistently.
+3. Separate facts from assumptions explicitly.
+4. End major explanations with a clear next action.
+
+### Final Check
+Read the text out loud before shipping. If it sounds robotic, rewrite it.
+
+---
+
 ## Documentation Format: OpenAPI 3.1 (Non-Negotiable)
 
 All APIs produce an OpenAPI 3.1 specification. Not 3.0, not proprietary formats, not "we'll add Swagger later."

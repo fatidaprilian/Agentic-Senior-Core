@@ -39,6 +39,33 @@ const THIN_ADAPTER_PATHS = [
   '.github/copilot-instructions.md',
   '.gemini/instructions.md',
 ];
+const FORMAL_ARTIFACT_PATHS = [
+  '.instructions.md',
+  'README.md',
+  'CHANGELOG.md',
+  'docs/deep_analysis_and_roadmap_backlog.md',
+  '.agent-context/rules/api-docs.md',
+  '.agent-context/review-checklists/pr-checklist.md',
+  '.agent-context/prompts/review-code.md',
+  '.agent-context/skills/review-quality.md',
+  'AGENTS.md',
+  '.github/copilot-instructions.md',
+  '.gemini/instructions.md',
+];
+const REQUIRED_HUMAN_WRITING_SNIPPETS = [
+  {
+    path: '.agent-context/rules/api-docs.md',
+    snippets: ['## Human Writing Standard (Mandatory)', 'No emoji in formal artifacts.'],
+  },
+  {
+    path: '.agent-context/review-checklists/pr-checklist.md',
+    snippets: ['No emoji in formal documentation or review summaries', 'Documentation uses plain English and avoids AI cliches'],
+  },
+  {
+    path: 'docs/deep_analysis_and_roadmap_backlog.md',
+    snippets: ['## Part 6: Documentation and Explanation Standards (Mandatory)', 'No emoji in formal artifacts. This is mandatory.'],
+  },
+];
 
 const validationResult = {
   passed: 0,
@@ -687,6 +714,46 @@ async function validateMcpConfiguration() {
   }
 }
 
+async function validateHumanWritingGovernance() {
+  console.log('\nChecking human writing governance...');
+
+  const disallowedEmojiPattern = /[\u2705\u274C\u26A0\u{1F4CC}\u{1F536}\u{1F4CE}\u{1F534}\u{1F7E0}\u{1F7E1}\u{1F7E2}]/u;
+
+  for (const formalArtifactPath of FORMAL_ARTIFACT_PATHS) {
+    const absoluteFormalArtifactPath = join(ROOT_DIR, formalArtifactPath);
+
+    if (!(await fileExists(absoluteFormalArtifactPath))) {
+      fail(`Missing formal artifact for writing governance: ${formalArtifactPath}`);
+      continue;
+    }
+
+    const formalArtifactContent = await readTextFile(absoluteFormalArtifactPath);
+
+    if (disallowedEmojiPattern.test(formalArtifactContent)) {
+      fail(`${formalArtifactPath} contains disallowed emoji symbols in formal text`);
+    } else {
+      pass(`${formalArtifactPath} has no disallowed emoji symbols`);
+    }
+  }
+
+  for (const snippetRule of REQUIRED_HUMAN_WRITING_SNIPPETS) {
+    const absoluteRulePath = join(ROOT_DIR, snippetRule.path);
+    if (!(await fileExists(absoluteRulePath))) {
+      fail(`Missing writing governance source: ${snippetRule.path}`);
+      continue;
+    }
+
+    const writingRuleContent = await readTextFile(absoluteRulePath);
+    for (const requiredSnippet of snippetRule.snippets) {
+      if (writingRuleContent.includes(requiredSnippet)) {
+        pass(`${snippetRule.path} includes writing governance snippet: ${requiredSnippet}`);
+      } else {
+        fail(`${snippetRule.path} is missing writing governance snippet: ${requiredSnippet}`);
+      }
+    }
+  }
+}
+
 async function validateInstructionAdapters() {
   console.log('\nChecking instruction adapter consolidation...');
 
@@ -848,6 +915,7 @@ async function main() {
   await validateVersionConsistency();
   await validateDocumentationFlow();
   await validateMcpConfiguration();
+  await validateHumanWritingGovernance();
   await validateInstructionAdapters();
   await validateTrustTierSchema();
   await validateEvidenceBundles();

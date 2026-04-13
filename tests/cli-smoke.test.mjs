@@ -98,6 +98,30 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
+  await t.test('init does not copy repository workflows and copies MCP template only when requested', () => {
+    const defaultInitTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-workflow-default-'));
+    const mcpTemplateTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-workflow-mcp-'));
+
+    try {
+      execSync(
+        `node ${cliPath} init ${defaultInitTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize`
+      ).toString();
+
+      assert.equal(existsSync(join(defaultInitTargetDirectory, '.github', 'workflows', 'release-gate.yml')), false);
+      assert.equal(existsSync(join(defaultInitTargetDirectory, '.github', 'copilot-instructions.md')), true);
+      assert.equal(existsSync(join(defaultInitTargetDirectory, 'mcp.json')), false);
+
+      execSync(
+        `node ${cliPath} init ${mcpTemplateTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize --mcp-template`
+      ).toString();
+
+      assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'mcp.json')), true);
+    } finally {
+      rmSync(defaultInitTargetDirectory, { recursive: true, force: true });
+      rmSync(mcpTemplateTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
   await t.test('initializes beginner and strict profiles non-interactively', () => {
     const beginnerTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-beginner-'));
     const strictTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-strict-'));

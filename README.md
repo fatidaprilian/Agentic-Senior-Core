@@ -119,6 +119,11 @@ npx @ryuenn3123/agentic-senior-core init --profile-pack startup
 
 The CLI is smart. It auto-detects your current development stack, helps you build a governance profile (select from `beginner`, `balanced`, or `strict`), and writes the compiled rules straight to your root automatically!
 
+Important behavior:
+- `init` does not copy repository workflows from this project into your target repository.
+- MCP server registration is manual in IDE settings.
+- If you want the MCP file scaffold, run `init` with `--mcp-template`.
+
 If you are totally new to concepts like blueprints and guardrails, no problem — just run:
 ```bash
 npx @ryuenn3123/agentic-senior-core init --newbie
@@ -266,6 +271,7 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 - **Pre-Publish Safety:** Built-in forbidden content checks detect hardcoded secrets and stray debugger artifacts before hitting the NPM registry.
 - **Machine-Readable CI Output:** LLM Judge emits `JSON_REPORT` payloads and writes `.agent-context/state/llm-judge-report.json` for PR/MR annotation tooling.
 - **MCP Self-Healing Loop:** `mcp.json` defines diagnostics + fix proposal workflow when lint/CI fails.
+- **MCP Registration Model:** IDE MCP server registration is manual; `mcp.json` is an optional template file (`--mcp-template`).
 
 ---
 
@@ -276,7 +282,7 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 ├── .cursorrules                    # Dynamic compiled governance entry point
 ├── .windsurfrules                  # Dynamic compiled governance entry point
 ├── .agent-override.md              # Team-specific exceptions (scoped + expiry)
-├── mcp.json                        # MCP self-healing workflow config
+├── mcp.json                        # Optional MCP template file (copied with --mcp-template)
 ├── AGENTS.md                       # Universal agent discovery
 ├── .github/copilot-instructions.md # GitHub Copilot entry point
 ├── .gemini/instructions.md         # Antigravity / Gemini entry point

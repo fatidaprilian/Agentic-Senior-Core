@@ -22,11 +22,11 @@ For EVERY violation found:
 
 Output format:
 ## PR REVIEW RESULTS
-✅ [Item] — Passes
-❌ [Item] — FAILS (with Reasoning Chain)
+PASS [Item]
+FAIL [Item] (with Reasoning Chain)
 
 ## SECURITY AUDIT RESULTS
-🔴/🟠/🟡/🟢 [Finding] — severity + fix
+CRITICAL/HIGH/MEDIUM/LOW [Finding] — severity + fix
 
 VERDICT: PASS / FAIL
 ```

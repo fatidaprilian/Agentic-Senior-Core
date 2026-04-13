@@ -13,13 +13,13 @@ Output format:
 ## PR REVIEW RESULTS
 ━━━━━━━━━━━━━━━━━━━
 
-✅ [Item] — Passes
-❌ [Item] — FAILS
-   📌 Rule: [rule file + section]
-   ❌ Problem: [specific issue found]
-   ✅ Fix: [what to change]
+PASS [Item]
+FAIL [Item]
+   Rule: [rule file + section]
+   Problem: [specific issue found]
+   Fix: [what to change]
 
-VERDICT: PASS ✅ / FAIL ❌ (X/Y items passed)
+VERDICT: PASS / FAIL (X/Y items passed)
 ```
 
 ---
@@ -95,3 +95,8 @@ VERDICT: PASS ✅ / FAIL ❌ (X/Y items passed)
 - [ ] Complex business logic has comments explaining WHY
 - [ ] Public functions/methods have JSDoc/docstrings
 - [ ] README updated if new setup steps required
+- [ ] No emoji in formal documentation or review summaries
+- [ ] Documentation uses plain English and avoids AI cliches
+- [ ] Performance/quality claims include source and timestamp
+- [ ] Acronyms are expanded on first use
+- [ ] Facts and assumptions are explicitly separated

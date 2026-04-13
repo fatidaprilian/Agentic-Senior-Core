@@ -19,6 +19,9 @@ Turn code review, planning, and benchmark output into explicit quality decisions
 - Benchmark deltas are explicit
 - Security findings stop release when critical
 - Release readiness verdict includes blockers, owner, and due date
+- Formal review artifacts use plain, human-first language and avoid AI cliches
+- No emoji in formal review output, release notes, and governance summaries
+- Claims include measurable evidence with source and timestamp
 
 ## Evidence
 - PR review report

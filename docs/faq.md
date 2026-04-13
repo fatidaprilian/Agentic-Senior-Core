@@ -9,6 +9,12 @@ A "Blueprint" is an architectural starting point. If you use Next.js, the bluepr
 ## What are Guardrails?
 Guardrails are built-in workflow rules (like `scripts/llm-judge.mjs` and GitHub Actions) that enforce our rule sets before any PR is merged. The agent knows these exist and won't write "lazy" code knowing it will be blocked.
 
+## Does `init` copy this repository's GitHub workflows into my project?
+No. By default, `init` does not copy repository workflows from Agentic-Senior-Core into your target repository. The workflow files in this repository are for this repository's own release and maintenance lifecycle.
+
+## Is MCP server setup automatic?
+No. MCP server registration is manual in your IDE. If you want a starter MCP configuration file in your project, run `init` with `--mcp-template`, then register the server paths in your IDE MCP settings.
+
 ## Why does my agent still output bad code occasionally?
 While Agentic-Senior-Core aggressively curates the agent's system prompt and workspace rules (`.cursorrules`, `AGENTS.md`, etc.), some models can still hallucinate under high context load or complex queries. Make sure you are using top-tier models (GPT-4o, Claude 3.5 Sonnet, Gemini 2.0 Pro) and try to chunk your prompts.
 

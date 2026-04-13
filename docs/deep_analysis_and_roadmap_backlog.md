@@ -1,6 +1,6 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
-Date: 2026-04-11
+Date: 2026-04-13
 Current Version: 2.0.7
 Status: Stable and release-ready
 
@@ -145,22 +145,50 @@ Current benchmark note:
 
 ## Part 3: Recommended Next Steps (Pragmatic and Friendly for External Users)
 
-1. Freeze V2.0 stable baseline with release cut and publish evidence.
-- Keep weekly governance artifact, release gate, and quality trend reports attached to release evidence.
+Execution status (2026-04-12):
+- [x] Freeze V2.0 stable baseline with release cut and publish evidence.
+- [x] Keep weekly governance artifact, release gate, and quality trend reports attached to release evidence.
+- [x] Start V2.5 preparation immediately.
+- [x] Define reproducible benchmark fixture matrix and writer-judge separation architecture.
+- [x] Stage anti-regression threshold calibration before enabling hard-block rollout in CI.
 
-2. Start V2.5 preparation immediately.
-- Define reproducible benchmark fixture matrix and writer-judge separation architecture.
-- Stage anti-regression threshold calibration before enabling hard-block rollout in CI.
+Completion note:
+- Part 3 is complete for preparation scope (planning, baseline, calibration setup).
+- Full implementation and rollout execution continue under Part 5 V2.5 phases.
+
+V2.5 preparation snapshot (ready to execute):
+
+1. Reproducible benchmark fixture matrix (initial)
+- Detection benchmark fixtures are fixed via `scripts/detection-benchmark.mjs` and cover multi-stack markers (TypeScript, Python, Java, PHP, Go, .NET, Rust, Ruby, mixed markers).
+- Token optimization benchmark scenarios are tracked in state artifacts and can be re-run with machine-readable outputs.
+- Governance benchmark signals are emitted through `scripts/benchmark-gate.mjs` and `scripts/benchmark-intelligence.mjs` for repeatable pass/fail checks.
+
+2. Writer-judge separation architecture (initial)
+- Writer lane: model-under-test generates outputs per scenario and profile.
+- Judge lane: independent scoring path evaluates outputs against rubric dimensions.
+- Comparison output: side-by-side score matrix per scenario/model pair, designed for blind review mode.
+
+3. Anti-regression threshold calibration (staged)
+- Current calibrated thresholds are defined in `.agent-context/state/benchmark-thresholds.json`:
+	- `minimumTop1Accuracy`: `0.90`
+	- `maximumManualCorrectionRate`: `0.12`
+	- `maximumTop1AccuracyDrop`: `0.02`
+	- `maximumManualCorrectionIncrease`: `0.03`
+	- baseline: `top1Accuracy=0.9167`, `manualCorrectionRate=0.0833`
+- Rollout policy:
+	- Phase 2.5.1: monitor mode and baseline stabilization
+	- Phase 2.5.2: hard-block release on threshold regression
+	- Phase 2.5.3: tighten thresholds after trend confidence is stable
 
 ---
 
 ## Part 4: Versioning Policy for Auto Publish
 
 Because GitHub push triggers npm publish, every release-intent push must include:
-- package version bump (semantic versioning)
-- CHANGELOG entry for the same version
-- compiled rule markers synced to the same version in .cursorrules and .windsurfrules
-- passing validate and test gates before push
+- [x] package version bump (semantic versioning)
+- [x] CHANGELOG entry for the same version
+- [x] compiled rule markers synced to the same version in .cursorrules and .windsurfrules
+- [x] passing validate and test gates before push
 
 Recommended release cadence:
 - Docs-only non-release updates: keep local or batch them.
@@ -173,10 +201,47 @@ Recommended release cadence:
 ### V2.5 (Benchmark Expansion)
 
 Top goals:
-- reproducible benchmark scenarios
-- writer-judge separation across multiple models
-- anti-regression release blocking
-- benchmark history trend analysis
+- reproducible and transparent benchmark foundation
+- objective writer-judge separation across multiple models
+- anti-regression release protection with explicit quality thresholds
+- benchmark history and trend observability
+- practical onboarding and ecosystem integration (CI/CD + IDE)
+- security and reliability signal in benchmark outputs
+
+Execution tracks (incremental):
+1. Reproducibility and transparency baseline
+- lock benchmark fixtures and deterministic runtime settings
+- publish rerun instructions, raw inputs, rubric, outputs, and command examples
+- define before-vs-after comparison schema (quality, bug signal, runtime, token)
+
+2. Multi-model writer-judge architecture
+- separate writer and judge pipelines with independent configuration
+- run blind scoring to reduce self-bias
+- emit side-by-side comparison matrix for multiple models per scenario
+
+3. Release blocking and anti-regression gates
+- define minimum thresholds for quality and efficiency dimensions
+- integrate threshold checks into release gate and CI workflows
+- fail release on regression and emit machine-readable diagnostics
+
+4. History and visualization
+- append benchmark state artifact per run/release
+- generate trend tables and chart-ready JSON/CSV outputs
+- surface release-over-release changes for quick decision review
+
+5. Adoption and integrations
+- provide quickstart benchmark paths for new users
+- add profile/preset guidance for common usage patterns
+- maintain integration playbooks for GitHub Actions, Jenkins, VS Code, and JetBrains
+
+6. Security and reliability checks
+- include bug/vulnerability scan indicators in benchmark report bundle
+- add reliability checks to highlight risky output degradation early
+
+Suggested rollout order:
+- Phase 2.5.1: Tracks 1 and 2 (foundation and objectivity)
+- Phase 2.5.2: Tracks 3 and 4 (release gates and trend intelligence)
+- Phase 2.5.3: Tracks 5 and 6 (adoption and trust hardening)
 
 ### V3.0 (Federated Governance)
 
@@ -194,3 +259,40 @@ Top goals:
 - Package remains ESM-first.
 - Trust and compatibility metadata are mandatory for publish safety.
 - User onboarding remains simple: strictness increases by lifecycle stage, not by first-run friction.
+
+---
+
+## Part 6: Documentation and Explanation Standards (Mandatory)
+
+Scope:
+- This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.
+
+Writing style baseline:
+- Write for native English speakers.
+- Target an 8th-grade reading level.
+- Use clear, direct, plain language.
+- Keep natural sentence rhythm with short and medium sentences.
+- Keep tone confident, practical, and conversational.
+
+Required behavior:
+- Explain decisions the way a competent coworker would explain them out loud.
+- Cut unnecessary words and remove filler.
+- Use concrete verbs and everyday phrasing.
+- Rewrite, reorder, merge, or split sentences when it improves flow.
+
+Hard bans:
+- No emoji in formal artifacts. This is mandatory.
+- No AI cliches such as: delve, leverage, robust, utilize, seamless.
+- No inflated, academic, or performative language.
+- No padding, hedging, or redundant phrases.
+- Avoid bullet lists unless they clearly improve clarity.
+
+Additional critical rules:
+- Any performance, quality, or reliability claim must include a measurable source and timestamp.
+- Expand acronyms on first use, then use the short form consistently.
+- Separate facts from assumptions explicitly.
+- End each major explanation with a clear next action.
+- Keep terminology stable across docs for the same concept.
+
+Final quality check:
+- Read the text out loud before publishing. If it sounds stiff or robotic, rewrite it.
