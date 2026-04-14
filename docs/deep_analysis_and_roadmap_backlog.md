@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-13
-Current Version: 2.0.15
+Current Version: 2.0.16
 Status: Stable and release-ready
 
 ---
@@ -269,21 +269,23 @@ Writing style baseline:
 - Write for native English speakers.
 - Target an 8th-grade reading level.
 - Use clear, direct, plain language.
-- Keep natural sentence rhythm with short and medium sentences.
+- Keep sentence rhythm natural with short and medium sentences.
 - Keep tone confident, practical, and conversational.
+- Say the main point first, then supporting detail.
 
 Required behavior:
 - Explain decisions the way a competent coworker would explain them out loud.
 - Cut unnecessary words and remove filler.
 - Use concrete verbs and everyday phrasing.
 - Rewrite, reorder, merge, or split sentences when it improves flow.
+- Keep explanations short by default; expand only when complexity requires it.
 
-Hard bans:
+Non-negotiable rules:
 - No emoji in formal artifacts. This is mandatory.
-- No AI cliches such as: delve, leverage, robust, utilize, seamless.
-- No inflated, academic, or performative language.
-- No padding, hedging, or redundant phrases.
-- Avoid bullet lists unless they clearly improve clarity.
+- Avoid AI cliches and buzzwords such as: delve, leverage, robust, utilize, seamless.
+- Avoid inflated, academic, or performative language.
+- Avoid padding, hedging, and redundant phrasing.
+- Use bullet lists only when they improve clarity.
 
 Additional critical rules:
 - Any performance, quality, or reliability claim must include a measurable source and timestamp.

@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.16 - 2026-04-14
+### Changed
+- Refined Human Writing Standard wording to be clearer and more natural while keeping strict enforcement for formal artifacts.
+- Added explicit guidance to state the main point first and keep explanations short by default.
+- Replaced harsher section phrasing with professional non-negotiable language for consistency across governance docs.
+
 ## 2.0.15 - 2026-04-13
 ### Added
 - Added enterprise operations test coverage for benchmark evidence bundle output contract (`tests/enterprise-ops.test.mjs`) to keep release evidence claims fully verifiable.

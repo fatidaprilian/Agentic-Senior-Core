@@ -35,18 +35,20 @@ This standard applies to API docs, README updates, release notes, and technical 
 3. Use clear, direct, plain language.
 4. Keep sentence rhythm natural with short and medium sentences.
 5. Sound confident, practical, and conversational.
+6. State the main point first, then supporting detail.
 
 ### Required Behavior
 1. Explain decisions the way a competent coworker would explain them out loud.
 2. Cut unnecessary words and remove filler.
 3. Use concrete verbs and everyday phrasing.
 4. Rewrite and reorder content when flow is weak.
+5. Keep explanations short by default; expand only when complexity requires it.
 
-### Hard Bans
+### Non-Negotiables
 1. No emoji in formal artifacts.
-2. No AI cliches: delve, leverage, robust, utilize, seamless.
-3. No inflated, academic, or performative language.
-4. No padding, hedging, or redundant phrasing.
+2. Avoid AI cliches and buzzwords: delve, leverage, robust, utilize, seamless.
+3. Avoid inflated, academic, or performative language.
+4. Avoid padding, hedging, and redundant phrasing.
 
 ### Critical Controls
 1. Any claim about quality, performance, or reliability must include a measurable source and timestamp.
