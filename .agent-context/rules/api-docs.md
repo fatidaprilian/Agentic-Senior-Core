@@ -27,7 +27,8 @@ REQUIRED: Documentation MUST be updated in the SAME commit as the endpoint chang
 
 ## Human Writing Standard (Mandatory)
 
-This standard applies to API docs, README updates, release notes, and technical explanations.
+This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.
+API docs and README updates are included in this scope.
 
 ### Style Baseline
 1. Write for native English speakers.

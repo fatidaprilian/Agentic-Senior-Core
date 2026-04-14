@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
-Date: 2026-04-13
-Current Version: 2.0.16
+Date: 2026-04-14
+Current Version: 2.0.17
 Status: Stable and release-ready
 
 ---
@@ -12,8 +12,8 @@ Status: Stable and release-ready
 
 | Gate | Result |
 |------|--------|
-| npm run validate | pass (target: 419 checks, 0 failed, 0 warnings) |
-| npm test | pass (target: 32 tests, 0 failed) |
+| npm run validate | pass (target: 424 checks, 0 failed, 0 warnings) |
+| npm test | pass (target: 33 tests, 0 failed) |
 | Version consistency | package.json, CHANGELOG, .cursorrules, .windsurfrules aligned |
 | Release gate | machine-readable JSON report, blocking failures supported |
 | Forbidden content gate | integrated in npm run gate:release |
@@ -29,10 +29,10 @@ Note: final numbers are re-validated before each release commit.
 | Blueprints | 14 | includes mobile-app and observability |
 | Review checklists | 8 | includes marketplace-acceptance |
 | Skill domains | 6 | backend, frontend, fullstack, cli, distribution, review-quality |
-| Scripts | 19 | includes benchmark evidence bundle and governance reporting |
+| Scripts | 20 | includes benchmark evidence bundle, writer-judge matrix, and governance reporting |
 | CI workflows | 7 | publish + release + benchmark + sbom + frontend + weekly governance |
 | Tests | 5 files | smoke, enterprise ops, knowledge injection, llm judge, skill tier |
-| State files | 12 | includes benchmark reproducibility and benchmark evidence bundle snapshots |
+| State files | 14 | includes reproducibility, writer-judge configuration, and benchmark evidence snapshots |
 | Docs | 12 | includes deep analysis and semantic audit docs |
 
 ### 1.3 Maturity by Subsystem
@@ -221,8 +221,8 @@ Execution tracks (incremental, ordered, and checklist-driven):
 2. Multi-model writer-judge architecture (Phase 2.5.1)
 - [x] writer lane and judge lane architecture drafted in preparation snapshot
 - [x] blind review mode objective documented
-- [ ] separate writer and judge pipelines with independent runtime configuration
-- [ ] emit side-by-side comparison matrix for multiple models per scenario
+- [x] separate writer and judge pipelines with independent runtime configuration (`.agent-context/state/benchmark-writer-judge-config.json`)
+- [x] emit side-by-side comparison matrix for multiple models per scenario (`scripts/benchmark-writer-judge-matrix.mjs` -> `.agent-context/state/benchmark-writer-judge-matrix.json`)
 
 3. Release blocking and anti-regression gates (Phase 2.5.2)
 - [x] minimum threshold baseline defined in `.agent-context/state/benchmark-thresholds.json`

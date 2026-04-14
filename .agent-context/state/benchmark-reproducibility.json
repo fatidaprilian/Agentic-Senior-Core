@@ -73,13 +73,15 @@
     "Run npm run benchmark:detection to regenerate detection benchmark output.",
     "Run npm run benchmark:gate to validate benchmark anti-regression thresholds.",
     "Run npm run benchmark:intelligence to validate benchmark watchlist freshness.",
-    "Run npm run benchmark:bundle to emit a reproducible benchmark evidence bundle."
+    "Run npm run benchmark:bundle to emit a reproducible benchmark evidence bundle.",
+    "Run npm run benchmark:writer-judge to emit writer-judge side-by-side matrix output."
   ],
   "commandExamples": [
     "npm run benchmark:detection",
     "npm run benchmark:gate",
     "npm run benchmark:intelligence",
     "npm run benchmark:bundle",
+    "npm run benchmark:writer-judge",
     "node ./scripts/benchmark-evidence-bundle.mjs --stdout-only"
   ]
 }

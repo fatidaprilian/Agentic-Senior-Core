@@ -76,6 +76,19 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(benchmarkEvidenceBundleReport.executions.length >= 3);
   });
 
+  await t.test('benchmark writer-judge matrix outputs machine-readable report', () => {
+    const writerJudgeOutput = execSync(`node ${join(process.cwd(), 'scripts', 'benchmark-writer-judge-matrix.mjs')} --stdout-only`).toString();
+    const writerJudgeReport = JSON.parse(writerJudgeOutput);
+
+    assert.equal(writerJudgeReport.reportName, 'benchmark-writer-judge-matrix');
+    assert.equal(typeof writerJudgeReport.passed, 'boolean');
+    assert.equal(typeof writerJudgeReport.methodology.blindReviewMode, 'boolean');
+    assert.ok(Array.isArray(writerJudgeReport.writerDirectory));
+    assert.ok(Array.isArray(writerJudgeReport.comparisonMatrix));
+    assert.ok(writerJudgeReport.comparisonMatrix.length >= 1);
+    assert.equal(typeof writerJudgeReport.summary.passRatePercent, 'number');
+  });
+
   await t.test('token optimization benchmark outputs machine-readable report', () => {
     const tokenBenchmarkOutput = execSync(`node ${join(process.cwd(), 'scripts', 'token-optimization-benchmark.mjs')} --stdout-only`).toString();
     const tokenBenchmarkReport = JSON.parse(tokenBenchmarkOutput);

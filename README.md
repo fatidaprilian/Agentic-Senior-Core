@@ -261,6 +261,26 @@ For CI pipelines that only need stdout JSON:
 node ./scripts/benchmark-evidence-bundle.mjs --stdout-only
 ```
 
+### Writer-Judge Comparison Matrix (V2.5.1)
+
+Generate a blind-review writer-judge matrix with independent lane configuration:
+
+```bash
+npm run benchmark:writer-judge
+```
+
+This command writes:
+- `.agent-context/state/benchmark-writer-judge-matrix.json`
+
+Writer and judge lane configuration is stored in:
+- `.agent-context/state/benchmark-writer-judge-config.json`
+
+For CI pipelines that only need stdout JSON:
+
+```bash
+node ./scripts/benchmark-writer-judge-matrix.mjs --stdout-only
+```
+
 ### Install and Setup Choices
 
 The CLI now supports a smaller decision surface for first-time setup:

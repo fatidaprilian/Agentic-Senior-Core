@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.17 - 2026-04-14
+### Added
+- Added writer-judge lane configuration file `.agent-context/state/benchmark-writer-judge-config.json` for independent model routing and blind review mode.
+- Added `scripts/benchmark-writer-judge-matrix.mjs` and `npm run benchmark:writer-judge` to emit side-by-side writer-judge matrix reports.
+- Added generated state artifact `.agent-context/state/benchmark-writer-judge-matrix.json` as the machine-readable snapshot for V2.5.1 track 2.
+- Added enterprise operations test coverage for writer-judge matrix output contract in `tests/enterprise-ops.test.mjs`.
+
+### Changed
+- Updated `scripts/validate.mjs` required-file checks to include writer-judge script and configuration assets.
+- Updated reproducibility command examples, README benchmark documentation, and roadmap backlog checklist to include writer-judge matrix execution and outputs.
+
 ## 2.0.16 - 2026-04-14
 ### Changed
 - Refined Human Writing Standard wording to be clearer and more natural while keeping strict enforcement for formal artifacts.

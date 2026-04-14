@@ -55,15 +55,27 @@ const FORMAL_ARTIFACT_PATHS = [
 const REQUIRED_HUMAN_WRITING_SNIPPETS = [
   {
     path: '.agent-context/rules/api-docs.md',
-    snippets: ['## Human Writing Standard (Mandatory)', 'No emoji in formal artifacts.'],
+    snippets: [
+      '## Human Writing Standard (Mandatory)',
+      'This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.',
+      'No emoji in formal artifacts.',
+    ],
   },
   {
     path: '.agent-context/review-checklists/pr-checklist.md',
-    snippets: ['No emoji in formal documentation or review summaries', 'Documentation uses plain English and avoids AI cliches'],
+    snippets: [
+      'Scope applied: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations',
+      'No emoji in formal documentation or review summaries',
+      'Documentation uses plain English and avoids AI cliches',
+    ],
   },
   {
     path: 'docs/deep_analysis_and_roadmap_backlog.md',
-    snippets: ['## Part 6: Documentation and Explanation Standards (Mandatory)', 'No emoji in formal artifacts. This is mandatory.'],
+    snippets: [
+      '## Part 6: Documentation and Explanation Standards (Mandatory)',
+      'This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.',
+      'No emoji in formal artifacts. This is mandatory.',
+    ],
   },
 ];
 
@@ -149,6 +161,7 @@ async function validateRequiredFiles() {
     'scripts/llm-judge.mjs',
     'scripts/detection-benchmark.mjs',
     'scripts/benchmark-evidence-bundle.mjs',
+    'scripts/benchmark-writer-judge-matrix.mjs',
     'scripts/benchmark-gate.mjs',
     'scripts/benchmark-intelligence.mjs',
     'scripts/governance-weekly-report.mjs',
@@ -175,6 +188,7 @@ async function validateRequiredFiles() {
     'docs/v1.8-operations-playbook.md',
     'docs/v2-upgrade-playbook.md',
     '.agent-context/state/benchmark-reproducibility.json',
+    '.agent-context/state/benchmark-writer-judge-config.json',
     '.agent-context/state/benchmark-watchlist.json',
     '.agent-context/state/skill-platform.json',
     '.agent-context/skills/index.json',

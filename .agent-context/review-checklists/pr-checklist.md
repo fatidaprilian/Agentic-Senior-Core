@@ -91,6 +91,7 @@ VERDICT: PASS / FAIL (X/Y items passed)
 - [ ] `.env` not committed
 
 ### 10. Documentation
+- [ ] Scope applied: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations
 - [ ] API endpoints have OpenAPI/Swagger documentation
 - [ ] Complex business logic has comments explaining WHY
 - [ ] Public functions/methods have JSDoc/docstrings
