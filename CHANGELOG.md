@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.20 - 2026-04-15
+### Added
+- Added Auto-Docs-on-Init project scaffolding logic (`lib/cli/project-scaffolder.mjs`).
+- Added CLI scaffolding flags (`--scaffold-docs`, `--no-scaffold-docs`, `--docs-lang`, `--project-config`) to the `init` command.
+- Added dynamic parameterized context templates (`project-brief.md.tmpl`, `architecture-decision-record.md.tmpl`, `database-schema.md.tmpl`, `api-contract.md.tmpl`, `flow-overview.md.tmpl`).
+- Added Layer 9 (Project Context) injection into internal state and compiled rulebook workflows.
+- Added `scripts/bump-version.mjs` script for automated version bumping across `package.json`, `CHANGELOG.md`, `.cursorrules`, `.windsurfrules`, and roadmap backlog.
+
+### Changed
+- Standardized cross-IDE instructions (`AGENTS.md`, `.gemini/instructions.md`, `.github/copilot-instructions.md`) to point to 9 knowledge layers instead of 8.
+- Updated docs/deep_analysis_and_roadmap_backlog.md to mark Track 9 Project Context Scaffolding items as complete.
+
+### Fixed
+- Fixed CLI adapter canonical hash drift mismatches during validation test suites.
+
 ## 2.0.19 - 2026-04-15
 ### Added
 - Added profile and preset guidance matrix for common usage patterns in `docs/v2-upgrade-playbook.md`, including practical command templates for startup, platform, regulated, and enterprise API scenarios.

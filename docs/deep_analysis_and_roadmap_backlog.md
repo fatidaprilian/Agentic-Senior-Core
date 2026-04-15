@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-15
-Current Version: 2.0.19
+Current Version: 2.0.20
 Status: Stable and release-ready
 
 ---
@@ -215,7 +215,7 @@ Execution tracks (incremental, ordered, and checklist-driven):
 1. Reproducibility and transparency baseline (Phase 2.5.1)
 - [x] lock benchmark fixtures and deterministic runtime settings
 - [x] publish rerun instructions, raw inputs, rubric, outputs, and command examples
-- [ ] define before-vs-after comparison schema (quality, bug signal, runtime, token)
+- [x] define before-vs-after comparison schema (quality, bug signal, runtime, token) in `.agent-context/state/benchmark-comparison-schema.json`
 - [x] kickoff artifact implemented: `scripts/benchmark-evidence-bundle.mjs` with deterministic profile in `.agent-context/state/benchmark-reproducibility.json`
 
 2. Multi-model writer-judge architecture (Phase 2.5.1)
@@ -253,7 +253,16 @@ Execution tracks (incremental, ordered, and checklist-driven):
 - [x] refresh PHP stack profile and Laravel blueprint to Laravel 13 baseline (PHP 8.3+)
 - [x] codify high-impact 12.x to 13.x migration checks (CSRF middleware rename, `upsert` `uniqueBy`, cache `serializable_classes`)
 - [x] align onboarding prompts and setup references to Laravel 13 target state
-- [ ] add annual Laravel major-release watch with owner and response SLA
+- [x] add annual Laravel major-release watch with owner and response SLA
+
+9. Project context scaffolding (Phase 2.5.1)
+- [x] build project discovery interview with domain, database, auth, and feature questions
+- [x] create parameterized doc templates (project-brief, ADR, database-schema, api-contract, flow-overview)
+- [x] integrate scaffolder into init flow with `--scaffold-docs`, `--no-scaffold-docs`, `--project-config` flags
+- [x] add Layer 9 PROJECT CONTEXT to compiled governance rulebook (`.cursorrules`, `.windsurfrules`)
+- [x] add Layer 9 reference to `.instructions.md` for all non-Cursor/Windsurf IDEs
+- [ ] add template versioning header and upgrade-time staleness detection
+- [ ] add `--docs-lang` multi-language template support (initial: en, id)
 
 ## Part 6: Documentation and Explanation Standards (Mandatory)
 
