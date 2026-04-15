@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.22 - 2026-04-15
+### Added
+- Added an init-time informational message when project config requests non-English docs but output remains English unless explicitly overridden with `--docs-lang`.
+
+### Changed
+- Changed project documentation scaffolding behavior to keep English as the default output language for writing-scope consistency.
+- Updated CLI smoke coverage to assert English-default doc generation even when project config includes `docsLang: id`.
+
+### Fixed
+- Fixed implicit language override behavior where `project-config` `docsLang` could change output language without explicit CLI intent.
+
 ## 2.0.21 - 2026-04-15
 ### Added
 - Added Indonesian project documentation templates (`*.md.id.tmpl`) for `project-brief`, `architecture-decision-record`, `database-schema`, `api-contract`, and `flow-overview`.

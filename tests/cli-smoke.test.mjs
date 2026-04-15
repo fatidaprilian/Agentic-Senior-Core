@@ -178,7 +178,7 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
-  await t.test('init auto-generates project docs with project config and compiles Layer 9 in same run', () => {
+  await t.test('init auto-generates docs in English by default and compiles Layer 9 in same run', () => {
     const scaffoldingTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-scaffold-config-'));
 
     try {
@@ -201,11 +201,11 @@ test('CLI Smoke Tests', async (t) => {
       ).toString();
 
       assert.match(initOutput, /Project docs: 5 files generated in docs\//);
-      assert.match(initOutput, /Project docs language: id/);
+      assert.match(initOutput, /Project docs language: en/);
 
       const generatedProjectBrief = readFileSync(join(scaffoldingTargetDirectory, 'docs', 'project-brief.md'), 'utf8');
-      assert.match(generatedProjectBrief, /# Ringkasan Proyek: Nusantara API/);
-      assert.match(generatedProjectBrief, /Versi template: 1\.1\.0/);
+      assert.match(generatedProjectBrief, /# Project Brief: Nusantara API/);
+      assert.match(generatedProjectBrief, /Template version: 1\.1\.0/);
 
       const compiledRulesContent = readFileSync(join(scaffoldingTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
