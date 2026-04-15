@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.23 - 2026-04-15
+### Added
+- Added cross-tool integration guidance in `docs/integration-playbook.md` for GitHub Actions, Jenkins, VS Code, and JetBrains.
+
+### Changed
+- Updated Layer 9 project-context governance so latest user prompts drive feature scope while architecture constraints remain anchored to project docs unless migration is explicitly requested.
+- Updated roadmap backlog and README Further Reading to include the new integration playbook and mark the adoption/integration track item complete.
+
+### Fixed
+- Fixed ambiguity between static init-generated docs and dynamic prompt-driven implementation by enforcing same-change docs synchronization when scope evolves.
+- Expanded CLI smoke assertions to verify compiled rules include the dynamic-scope and docs-alignment guidance.
+
 ## 2.0.22 - 2026-04-15
 ### Added
 - Added an init-time informational message when project config requests non-English docs but output remains English unless explicitly overridden with `--docs-lang`.
