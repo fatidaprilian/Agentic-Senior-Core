@@ -92,6 +92,7 @@ VERDICT: PASS / FAIL (X/Y items passed)
 
 ### 10. Documentation
 - [ ] Scope applied: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations
+- [ ] Style scope review is advisory and does not block merge when API docs are synced in the same commit and contract details are correct
 - [ ] API endpoints have OpenAPI/Swagger documentation
 - [ ] Complex business logic has comments explaining WHY
 - [ ] Public functions/methods have JSDoc/docstrings

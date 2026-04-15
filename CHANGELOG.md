@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.18 - 2026-04-15
+### Changed
+- Clarified API documentation scope behavior so style findings are advisory by default and must not block same-commit endpoint documentation sync.
+- Updated documentation checklist and review prompt to treat scope-style findings as advisory unless they hide factual or contract issues.
+- Refactored dynamic context compiler output from monolithic inline dumps into a compact modular bootstrap index that still enforces full layer loading.
+- Added benchmark quickstart path in README and marked roadmap adoption quickstart item complete.
+
+### Added
+- Added explicit sync-rule precedence text in API docs governance to keep contract updates blocking while style polish stays non-blocking.
+
 ## 2.0.17 - 2026-04-14
 ### Added
 - Added writer-judge lane configuration file `.agent-context/state/benchmark-writer-judge-config.json` for independent model routing and blind review mode.

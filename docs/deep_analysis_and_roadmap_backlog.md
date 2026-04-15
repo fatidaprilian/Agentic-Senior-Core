@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
-Date: 2026-04-14
-Current Version: 2.0.17
+Date: 2026-04-15
+Current Version: 2.0.18
 Status: Stable and release-ready
 
 ---
@@ -12,7 +12,7 @@ Status: Stable and release-ready
 
 | Gate | Result |
 |------|--------|
-| npm run validate | pass (target: 424 checks, 0 failed, 0 warnings) |
+| npm run validate | pass (target: 426 checks, 0 failed, 0 warnings) |
 | npm test | pass (target: 33 tests, 0 failed) |
 | Version consistency | package.json, CHANGELOG, .cursorrules, .windsurfrules aligned |
 | Release gate | machine-readable JSON report, blocking failures supported |
@@ -235,7 +235,7 @@ Execution tracks (incremental, ordered, and checklist-driven):
 - [ ] surface release-over-release changes for quick decision review
 
 5. Adoption and integrations (Phase 2.5.3)
-- [ ] provide quickstart benchmark paths for new users
+- [x] provide quickstart benchmark paths for new users (README benchmark quickstart sequence)
 - [ ] add profile and preset guidance for common usage patterns
 - [ ] maintain integration playbooks for GitHub Actions, Jenkins, VS Code, and JetBrains
 
@@ -258,8 +258,9 @@ Execution tracks (incremental, ordered, and checklist-driven):
 ## Part 6: Documentation and Explanation Standards (Mandatory)
 
 Status in V2.5:
-- [x] treated as a critical gate inside V2.5 execution
+- [x] treated as a mandatory style standard with advisory severity (non-blocking for merge timing)
 - [x] explicit mention retained in repository validation expectations
+- [x] scope style checks do not delay same-commit API docs sync when contract details are correct
 - [ ] add dedicated CI artifact for documentation-quality drift over time
 
 Scope:

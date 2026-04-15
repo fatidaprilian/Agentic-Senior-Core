@@ -281,6 +281,18 @@ For CI pipelines that only need stdout JSON:
 node ./scripts/benchmark-writer-judge-matrix.mjs --stdout-only
 ```
 
+### Benchmark Quickstart Path (V2.5)
+
+For new users, run this minimal sequence first:
+
+```bash
+npm run benchmark:detection
+npm run benchmark:writer-judge
+npm run benchmark:bundle
+```
+
+This gives a fast baseline of accuracy, writer-judge comparison, and evidence packaging in one pass.
+
 ### Install and Setup Choices
 
 The CLI now supports a smaller decision surface for first-time setup:
@@ -357,7 +369,7 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 
 - **Delivery Engine (CLI):** Interactive setup via GitHub source, bootstrap scripts, or `npx` after publish. Supported by a robust transactional installer with rollback protection.
 - **Verified Skill Marketplace:** Distribute and validate plugins securely with automated 4-dimension Trust Scoring and Evidence Bundles constraint validation.
-- **Dynamic Context Compiler:** Merges universal rules + selected stack + selected blueprint + optional CI guardrails into one dense, indexed rule file.
+- **Dynamic Context Compiler:** Builds a compact modular bootstrap index that points to all required governance layers before execution.
 - **Codebase Intelligence:** `.agent-context/state/` gives architecture/dependency boundaries so the agent understands high-risk areas.
 - **Override System:** `.agent-override.md` allows controlled enterprise exceptions without forking core rules.
 - **Automated Guardrails:** CI blueprints include LLM-as-a-Judge flow using `pr-checklist.md`.

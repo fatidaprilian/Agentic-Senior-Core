@@ -14,6 +14,7 @@ Use these checklists:
 1. Read .agent-context/review-checklists/pr-checklist.md — apply every item.
 2. Read .agent-context/review-checklists/security-audit.md — apply every item.
 3. Apply documentation scope rules exactly: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.
+4. Treat scope-style findings as advisory unless they hide factual errors, contract mismatches, or non-negotiable violations.
 
 For EVERY violation found:
 - State the exact file and line

@@ -45,6 +45,12 @@ API docs and README updates are included in this scope.
 4. Rewrite and reorder content when flow is weak.
 5. Keep explanations short by default; expand only when complexity requires it.
 
+### Scope Severity and Merge Behavior
+1. Scope style guidance controls readability and consistency.
+2. Style baseline findings are advisory by default and must not block endpoint-change commits that already include accurate docs/spec updates.
+3. Hard blockers remain contract failures: missing same-commit docs sync, incorrect schema, missing required responses, or factual inaccuracies.
+4. If style polish is still needed, open a follow-up task instead of delaying the contract update.
+
 ### Non-Negotiables
 1. No emoji in formal artifacts.
 2. Avoid AI cliches and buzzwords: delve, leverage, robust, utilize, seamless.
@@ -197,6 +203,9 @@ This schema MUST be documented in OpenAPI as a reusable component (`#/components
 
 ```
 Endpoint changed + docs NOT updated = PR REJECTED.
+
+This sync rule has higher priority than style polish timing.
+Do not delay same-commit documentation sync only to iterate writing tone.
 
 The spec is a contract. If the contract is wrong, consumers will break.
 "I'll update the docs later" means "the docs will never be updated."
