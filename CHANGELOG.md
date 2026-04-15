@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.21 - 2026-04-15
+### Added
+- Added Indonesian project documentation templates (`*.md.id.tmpl`) for `project-brief`, `architecture-decision-record`, `database-schema`, `api-contract`, and `flow-overview`.
+- Added CLI smoke coverage for project-config scaffolding, same-run Layer 9 compilation, and project-doc template staleness reporting.
+
+### Changed
+- Updated project-doc templates to use dynamic `{{templateVersion}}` headers.
+- Updated roadmap backlog to mark Track 9 template-versioning/staleness detection and docs-lang (`en`, `id`) support as complete.
+
+### Fixed
+- Fixed init flow sequencing so project docs are scaffolded before compile, allowing Layer 9 PROJECT CONTEXT to appear in the same init run.
+- Fixed non-interactive init regression by skipping default scaffolding prompts unless explicitly configured.
+- Fixed upgrade staleness detection to parse both `Template version:` and `Versi template:` headers.
+
 ## 2.0.20 - 2026-04-15
 ### Added
 - Added Auto-Docs-on-Init project scaffolding logic (`lib/cli/project-scaffolder.mjs`).

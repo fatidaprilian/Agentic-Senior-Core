@@ -1,0 +1,143 @@
+# Kontrak API: {{projectName}}
+
+Dibuat oleh Agentic-Senior-Core CLI v{{cliVersion}}
+Dibuat pada: {{generatedAt}}
+Versi template: {{templateVersion}}
+
+---
+
+## Prinsip Desain API
+
+Mengacu ke `.agent-context/rules/api-docs.md`:
+- OpenAPI 3.1 wajib untuk semua HTTP API.
+- Setiap endpoint harus mendokumentasikan skema request/response.
+- Error response harus pakai error code terstruktur, bukan string mentah.
+- Validasi input wajib di semua endpoint.
+
+## Base URL
+
+```
+{{baseUrl}}
+```
+
+---
+
+## Endpoint
+
+### Health Check
+
+```
+GET /health
+```
+
+Response `200`:
+```json
+{
+  "status": "ok",
+  "version": "1.0.0",
+  "timestamp": "2026-01-01T00:00:00Z"
+}
+```
+
+{{#if hasAuth}}
+### Autentikasi
+
+```
+POST /auth/register
+```
+Request:
+```json
+{
+  "email": "user@example.com",
+  "password": "secure-password",
+  "displayName": "User Name"
+}
+```
+
+```
+POST /auth/login
+```
+Request:
+```json
+{
+  "email": "user@example.com",
+  "password": "secure-password"
+}
+```
+Response `200`:
+```json
+{
+  "token": "jwt-token-here",
+  "expiresIn": 3600
+}
+```
+
+{{/if}}
+### Endpoint Fitur
+
+Berdasarkan fitur proyek, rencanakan grup endpoint berikut:
+
+{{#each features}}
+#### {{this}}
+
+```
+GET    /api/[resource]         - List
+GET    /api/[resource]/:id     - Detail
+POST   /api/[resource]         - Create
+PUT    /api/[resource]/:id     - Update
+DELETE /api/[resource]/:id     - Delete
+```
+
+{{/each}}
+
+---
+
+## Format Error Response
+
+Semua error response mengikuti struktur ini:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Deskripsi yang bisa dibaca manusia",
+    "details": []
+  }
+}
+```
+
+Kode error standar:
+- `VALIDATION_ERROR` (400)
+- `UNAUTHORIZED` (401)
+- `FORBIDDEN` (403)
+- `NOT_FOUND` (404)
+- `CONFLICT` (409)
+- `INTERNAL_ERROR` (500)
+
+---
+
+## Pagination
+
+Endpoint list menggunakan cursor-based atau offset-based pagination:
+
+```
+GET /api/[resource]?page=1&limit=20
+```
+
+Response mencakup:
+```json
+{
+  "data": [],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 100,
+    "totalPages": 5
+  }
+}
+```
+
+---
+
+Dokumen ini adalah referensi hidup. Perbarui saat endpoint API diimplementasikan.
+Jaga file OpenAPI 3.1 tetap sinkron dengan dokumen ini.

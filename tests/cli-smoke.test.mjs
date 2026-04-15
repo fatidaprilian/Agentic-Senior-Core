@@ -178,6 +178,83 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
+  await t.test('init auto-generates project docs with project config and compiles Layer 9 in same run', () => {
+    const scaffoldingTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-scaffold-config-'));
+
+    try {
+      const projectConfigPath = join(scaffoldingTargetDirectory, 'project-config.yml');
+      writeFileSync(projectConfigPath, [
+        'projectName: Nusantara API',
+        'projectDescription: Internal service for transaction processing',
+        'primaryDomain: API service',
+        'databaseChoice: SQL (PostgreSQL, MySQL, SQLite)',
+        'authStrategy: JWT (stateless token auth)',
+        'docsLang: id',
+        'features:',
+        '- Manajemen pengguna',
+        '- Laporan transaksi',
+        'additionalContext: Digunakan tim operasional internal.',
+      ].join('\n'));
+
+      const initOutput = execSync(
+        `node ${cliPath} init ${scaffoldingTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --project-config ${projectConfigPath} --no-token-optimize`
+      ).toString();
+
+      assert.match(initOutput, /Project docs: 5 files generated in docs\//);
+      assert.match(initOutput, /Project docs language: id/);
+
+      const generatedProjectBrief = readFileSync(join(scaffoldingTargetDirectory, 'docs', 'project-brief.md'), 'utf8');
+      assert.match(generatedProjectBrief, /# Ringkasan Proyek: Nusantara API/);
+      assert.match(generatedProjectBrief, /Versi template: 1\.1\.0/);
+
+      const compiledRulesContent = readFileSync(join(scaffoldingTargetDirectory, '.cursorrules'), 'utf8');
+      assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
+      assert.match(compiledRulesContent, /docs\/project-brief\.md/);
+
+      const upgradePreviewOutput = execSync(`node ${cliPath} upgrade ${scaffoldingTargetDirectory} --dry-run`).toString();
+      assert.match(upgradePreviewOutput, /Project docs stale files: 0/);
+    } finally {
+      rmSync(scaffoldingTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('upgrade dry-run warns about stale project doc templates', () => {
+    const staleDocsTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-stale-docs-'));
+
+    try {
+      const projectConfigPath = join(staleDocsTargetDirectory, 'project-config.yml');
+      writeFileSync(projectConfigPath, [
+        'projectName: Upgrade Docs Check',
+        'projectDescription: Verifies stale template reporting',
+        'primaryDomain: API service',
+        'databaseChoice: SQL (PostgreSQL, MySQL, SQLite)',
+        'authStrategy: JWT (stateless token auth)',
+        'docsLang: en',
+        'features:',
+        '- Audit trail',
+        '- Invoice summary',
+      ].join('\n'));
+
+      execSync(
+        `node ${cliPath} init ${staleDocsTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --project-config ${projectConfigPath} --no-token-optimize`
+      ).toString();
+
+      const projectBriefPath = join(staleDocsTargetDirectory, 'docs', 'project-brief.md');
+      const projectBriefContent = readFileSync(projectBriefPath, 'utf8');
+      writeFileSync(
+        projectBriefPath,
+        projectBriefContent.replace('Template version: 1.1.0', 'Template version: 1.0.0')
+      );
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${staleDocsTargetDirectory} --dry-run`).toString();
+      assert.match(upgradeOutput, /Project docs stale files: 1/);
+      assert.match(upgradeOutput, /Some project docs were generated from older template versions/);
+      assert.match(upgradeOutput, /docs\/project-brief\.md \(detected: 1\.0\.0, expected: 1\.1\.0\)/);
+    } finally {
+      rmSync(staleDocsTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
   await t.test('optimize command enables token optimization policy and regenerates rules', () => {
     const optimizationTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-optimize-'));
 

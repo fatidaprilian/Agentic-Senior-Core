@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-15
-Current Version: 2.0.20
+Current Version: 2.0.21
 Status: Stable and release-ready
 
 ---
@@ -65,6 +65,7 @@ Completed:
 - Expanded stack-specific preset catalog (Java, .NET, Laravel, NestJS, Kubernetes)
 - Mobile-app blueprint depth expansion with offline/testing/release governance coverage
 - Verified trust-tier uplift for frontend/fullstack/distribution/review-quality domains
+- Project context scaffolding hardening: template version headers, upgrade-time staleness detection, and docs-lang support (en, id)
 
 ---
 
@@ -261,8 +262,8 @@ Execution tracks (incremental, ordered, and checklist-driven):
 - [x] integrate scaffolder into init flow with `--scaffold-docs`, `--no-scaffold-docs`, `--project-config` flags
 - [x] add Layer 9 PROJECT CONTEXT to compiled governance rulebook (`.cursorrules`, `.windsurfrules`)
 - [x] add Layer 9 reference to `.instructions.md` for all non-Cursor/Windsurf IDEs
-- [ ] add template versioning header and upgrade-time staleness detection
-- [ ] add `--docs-lang` multi-language template support (initial: en, id)
+- [x] add template versioning header and upgrade-time staleness detection
+- [x] add `--docs-lang` multi-language template support (initial: en, id)
 
 ## Part 6: Documentation and Explanation Standards (Mandatory)
 
