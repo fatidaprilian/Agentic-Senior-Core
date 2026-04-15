@@ -210,6 +210,8 @@ test('CLI Smoke Tests', async (t) => {
       const compiledRulesContent = readFileSync(join(scaffoldingTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
       assert.match(compiledRulesContent, /docs\/project-brief\.md/);
+      assert.match(compiledRulesContent, /Latest user prompt defines current feature scope and product direction\./);
+      assert.match(compiledRulesContent, /When scope changes, implement the new request and update docs\/\* in the same change/);
 
       const upgradePreviewOutput = execSync(`node ${cliPath} upgrade ${scaffoldingTargetDirectory} --dry-run`).toString();
       assert.match(upgradePreviewOutput, /Project docs stale files: 0/);

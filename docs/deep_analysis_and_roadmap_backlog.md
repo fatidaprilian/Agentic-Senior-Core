@@ -66,6 +66,7 @@ Completed:
 - Mobile-app blueprint depth expansion with offline/testing/release governance coverage
 - Verified trust-tier uplift for frontend/fullstack/distribution/review-quality domains
 - Project context scaffolding hardening: template version headers, upgrade-time staleness detection, and docs-lang support (en, id)
+- Integration playbook coverage for GitHub Actions, Jenkins, VS Code, and JetBrains
 
 ---
 
@@ -238,7 +239,7 @@ Execution tracks (incremental, ordered, and checklist-driven):
 5. Adoption and integrations (Phase 2.5.3)
 - [x] provide quickstart benchmark paths for new users (README benchmark quickstart sequence)
 - [x] add profile and preset guidance for common usage patterns (`docs/v2-upgrade-playbook.md` guidance matrix)
-- [ ] maintain integration playbooks for GitHub Actions, Jenkins, VS Code, and JetBrains
+- [x] maintain integration playbooks for GitHub Actions, Jenkins, VS Code, and JetBrains (`docs/integration-playbook.md`)
 
 6. Security and reliability checks (Phase 2.5.3)
 - [ ] include bug and vulnerability scan indicators in benchmark report bundle

@@ -360,6 +360,7 @@ Our documentation has shifted into dedicated tracks to keep this README light:
 - **[FAQ / Concepts](docs/faq.md)**: Unfamiliar with Stacks, Blueprints, or Guardrails? Stalled on basic logic? Start here.
 - **[Deep Dive / Internals](docs/deep-dive.md)**: Explore the dynamic compiler, severity profiles, MCP integration, and granular LLM overrides here.
 - **[V2 Upgrade Playbook](docs/v2-upgrade-playbook.md)**: Benchmark-driven execution plus profile and preset guidance for common usage patterns.
+- **[Integration Playbook](docs/integration-playbook.md)**: Practical integration paths for GitHub Actions, Jenkins, VS Code, and JetBrains.
 - **[Skill Platform](.agent-context/skills/README.md)**: Unified skill packs for frontend, backend, fullstack, CLI, distribution, and review quality with `advance` as the default tier.
       The skill platform is now folder-based, so each domain has its own README and topic docs like a curated skills library.
 
