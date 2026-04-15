@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-15
-Current Version: 2.0.18
+Current Version: 2.0.19
 Status: Stable and release-ready
 
 ---
@@ -236,7 +236,7 @@ Execution tracks (incremental, ordered, and checklist-driven):
 
 5. Adoption and integrations (Phase 2.5.3)
 - [x] provide quickstart benchmark paths for new users (README benchmark quickstart sequence)
-- [ ] add profile and preset guidance for common usage patterns
+- [x] add profile and preset guidance for common usage patterns (`docs/v2-upgrade-playbook.md` guidance matrix)
 - [ ] maintain integration playbooks for GitHub Actions, Jenkins, VS Code, and JetBrains
 
 6. Security and reliability checks (Phase 2.5.3)

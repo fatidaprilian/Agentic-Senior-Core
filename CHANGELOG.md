@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.19 - 2026-04-15
+### Added
+- Added profile and preset guidance matrix for common usage patterns in `docs/v2-upgrade-playbook.md`, including practical command templates for startup, platform, regulated, and enterprise API scenarios.
+
+### Changed
+- Updated roadmap backlog status to mark profile/preset adoption guidance as completed in V2.5 track 5.
+- Updated README further-reading description to highlight profile and preset guidance in the V2 upgrade playbook.
+
 ## 2.0.18 - 2026-04-15
 ### Changed
 - Clarified API documentation scope behavior so style findings are advisory by default and must not block same-commit endpoint documentation sync.

@@ -79,3 +79,30 @@ npm test
 npm run gate:release
 npm run audit:frontend-usability
 ```
+
+## Profile and Preset Guidance (Common Usage Patterns)
+
+Use presets when you want fast, low-friction onboarding. Use profile packs when you need team governance defaults.
+
+### Quick Decision Rule
+- Use `--preset` when you know the project shape.
+- Use `--profile-pack` when your team already has governance expectations.
+- Use `--profile` + `--stack` + `--blueprint` only for custom combinations.
+
+### Recommended Starting Commands
+
+| Scenario | Recommended Command | Why |
+|----------|---------------------|-----|
+| Web product startup | `npx @ryuenn3123/agentic-senior-core init --preset frontend-web` | Fast fullstack default with balanced guardrails |
+| Backend API service | `npx @ryuenn3123/agentic-senior-core init --preset backend-api` | API-oriented baseline with safe defaults |
+| Enterprise Java API | `npx @ryuenn3123/agentic-senior-core init --preset java-enterprise-api` | Strict profile and enterprise-ready Spring stack |
+| .NET enterprise API | `npx @ryuenn3123/agentic-senior-core init --preset dotnet-enterprise-api` | Strict governance tuned for C# service teams |
+| Laravel API delivery | `npx @ryuenn3123/agentic-senior-core init --preset php-laravel-api` | Laravel blueprint aligned to current migration guidance |
+| Platform team module | `npx @ryuenn3123/agentic-senior-core init --profile-pack platform` | Reuses platform defaults (Go + service blueprint) |
+| Regulated domain project | `npx @ryuenn3123/agentic-senior-core init --profile-pack regulated` | Compliance-first defaults and locked CI guardrails |
+| Startup team governance | `npx @ryuenn3123/agentic-senior-core init --profile-pack startup` | Balanced defaults with speed-oriented onboarding |
+
+### Practical Overrides
+- To keep a profile pack but switch delivery shape, add `--stack` and `--blueprint`.
+- To force CI behavior, add `--ci true` or `--ci false`.
+- To keep migration safe for existing repos, use `upgrade --dry-run` before `upgrade --yes`.
