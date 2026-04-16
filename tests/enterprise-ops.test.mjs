@@ -112,6 +112,19 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(Array.isArray(qualityTrendReport.history));
   });
 
+  await t.test('docs quality drift report outputs machine-readable report', () => {
+    const docsQualityOutput = execSync(`node ${join(process.cwd(), 'scripts', 'docs-quality-drift-report.mjs')} --stdout-only`).toString();
+    const docsQualityReport = JSON.parse(docsQualityOutput);
+
+    assert.equal(docsQualityReport.reportName, 'docs-quality-drift-report');
+    assert.equal(typeof docsQualityReport.passed, 'boolean');
+    assert.equal(typeof docsQualityReport.summary.documentCount, 'number');
+    assert.equal(typeof docsQualityReport.summary.qualityScore, 'number');
+    assert.equal(typeof docsQualityReport.summary.averageWordsPerSentence, 'number');
+    assert.ok(Array.isArray(docsQualityReport.fileSummaries));
+    assert.ok(Array.isArray(docsQualityReport.history));
+  });
+
   await t.test('weekly governance report outputs machine-readable report', () => {
     const weeklyGovernanceOutput = execSync(`node ${join(process.cwd(), 'scripts', 'governance-weekly-report.mjs')} --stdout-only`).toString();
     const weeklyGovernanceReport = JSON.parse(weeklyGovernanceOutput);

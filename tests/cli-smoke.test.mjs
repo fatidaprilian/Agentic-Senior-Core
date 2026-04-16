@@ -202,6 +202,8 @@ test('CLI Smoke Tests', async (t) => {
 
       assert.match(initOutput, /Project docs: 5 files generated in docs\//);
       assert.match(initOutput, /Project docs language: en/);
+      assert.match(initOutput, /Prompt starter examples \(copy and adapt in your IDE\):/);
+      assert.match(initOutput, /Build an MVP for Nusantara API\./);
 
       const generatedProjectBrief = readFileSync(join(scaffoldingTargetDirectory, 'docs', 'project-brief.md'), 'utf8');
       assert.match(generatedProjectBrief, /# Project Brief: Nusantara API/);

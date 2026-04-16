@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.24 - 2026-04-16
+### Added
+- Added quick-choice project discovery mode for empty-target `init` flow with preset feature bundles and optional custom typing.
+- Added prompt starter examples at the end of docs scaffolding to help users continue via short iterative prompts.
+- Added documentation quality drift artifact tooling with `scripts/docs-quality-drift-report.mjs` and CI workflow `.github/workflows/docs-quality-drift-report.yml`.
+
+### Changed
+- Updated discovery prompts to explicitly allow non-English user answers while keeping CLI prompts in English.
+- Updated choice input UX so pressing Enter selects the first option by default for faster onboarding.
+- Updated README onboarding and reporting sections to stay in sync with quick discovery mode, language behavior, and docs quality drift reporting commands.
+- Updated roadmap backlog to mark documentation-quality drift CI artifact as completed.
+
+### Fixed
+- Fixed onboarding friction by reducing required free-text answers in fresh-project setup without removing custom-answer flexibility.
+- Added enterprise/validator coverage for docs-quality-drift script and workflow to prevent regression in release checks.
+
 ## 2.0.23 - 2026-04-15
 ### Added
 - Added cross-tool integration guidance in `docs/integration-playbook.md` for GitHub Actions, Jenkins, VS Code, and JetBrains.

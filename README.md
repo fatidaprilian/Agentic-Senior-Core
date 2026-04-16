@@ -57,6 +57,9 @@ npx @ryuenn3123/agentic-senior-core init
 npm exec --yes @ryuenn3123/agentic-senior-core init
 ```
 
+If the target folder is empty, `init` now offers a quick-choice discovery mode by default.
+You can finish setup using numbered options (Enter selects the first option), and switch to detailed typing when needed.
+
 **Alternative: Global install (optional)**
 
 If you want the tool available system-wide without repeating `npx`:
@@ -139,6 +142,9 @@ npx @ryuenn3123/agentic-senior-core init --newbie
 
 - `init` creates governance files **in your project folder** (the folder where you run the command).
 - `init` does not copy repository workflows from this project into your target repository.
+- `init` project discovery accepts answers in any language; prompts stay in English, but non-English answers are supported.
+- Generated docs default to English for consistency; use `--docs-lang` only when you explicitly need a different output language.
+- After docs scaffolding, CLI prints prompt starter examples so users can iterate by prompt without rewriting full project context.
 - MCP server registration and trust/start are manual in IDE settings.
 - MCP workspace scaffold is opt-in via `--mcp-template` and creates `.vscode/mcp.json`.
 
@@ -292,6 +298,20 @@ npm run benchmark:bundle
 ```
 
 This gives a fast baseline of accuracy, writer-judge comparison, and evidence packaging in one pass.
+
+### Documentation Quality Drift Report
+
+Generate a machine-readable documentation-quality drift artifact:
+
+```bash
+npm run report:docs-quality-drift
+```
+
+For CI pipelines that only need stdout JSON:
+
+```bash
+node ./scripts/docs-quality-drift-report.mjs --stdout-only
+```
 
 ### Install and Setup Choices
 

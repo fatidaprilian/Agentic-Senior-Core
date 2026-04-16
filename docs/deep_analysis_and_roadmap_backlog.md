@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-15
-Current Version: 2.0.23
+Current Version: 2.0.24
 Status: Stable and release-ready
 
 ---
@@ -67,6 +67,8 @@ Completed:
 - Verified trust-tier uplift for frontend/fullstack/distribution/review-quality domains
 - Project context scaffolding hardening: template version headers, upgrade-time staleness detection, and docs-lang support (en, id)
 - Integration playbook coverage for GitHub Actions, Jenkins, VS Code, and JetBrains
+- Project discovery UX hardening: quick-choice mode, multilingual answer guidance, Enter-to-default selection, and prompt starter examples
+- Documentation quality drift artifact automation: machine-readable report script plus dedicated CI workflow
 
 ---
 
@@ -272,7 +274,7 @@ Status in V2.5:
 - [x] treated as a mandatory style standard with advisory severity (non-blocking for merge timing)
 - [x] explicit mention retained in repository validation expectations
 - [x] scope style checks do not delay same-commit API docs sync when contract details are correct
-- [ ] add dedicated CI artifact for documentation-quality drift over time
+- [x] add dedicated CI artifact for documentation-quality drift over time (`scripts/docs-quality-drift-report.mjs` + `.github/workflows/docs-quality-drift-report.yml`)
 
 Scope:
 - This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.
