@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.25 - 2026-04-16
+### Added
+- Added benchmark gate diagnostics embedding in `scripts/release-gate.mjs` so release reports include threshold-gate evidence.
+- Added benchmark anti-regression execution to `.github/workflows/benchmark-detection.yml` with uploaded `benchmark-gate-report.json` artifact.
+- Added enterprise release-gate assertions for benchmark threshold and regression-block checks in `tests/enterprise-ops.test.mjs`.
+
+### Changed
+- Updated V2.5 Phase 2.5.2 Track 3 roadmap checklist to completed status for release-blocking benchmark integration.
+- Updated deep analysis backlog snapshot date/version metadata for the 2.0.25 release cut.
+
+### Fixed
+- Fixed detailed discovery flow to fall back to folder name when project name is left empty during docs scaffolding.
+- Added smoke-test regression coverage to prevent future fallback breakage in project discovery.
+
 ## 2.0.24 - 2026-04-16
 ### Added
 - Added quick-choice project discovery mode for empty-target `init` flow with preset feature bundles and optional custom typing.

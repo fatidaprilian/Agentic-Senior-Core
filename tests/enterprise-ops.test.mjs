@@ -31,6 +31,22 @@ test('Enterprise Operations Tests', async (t) => {
     );
     assert.ok(frontendAuditResult);
     assert.equal(frontendAuditResult.passed, true);
+
+    const benchmarkThresholdGateResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'benchmark-threshold-gate'
+    );
+    assert.ok(benchmarkThresholdGateResult);
+    assert.equal(benchmarkThresholdGateResult.passed, true);
+
+    const benchmarkRegressionBlockResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'benchmark-regression-block'
+    );
+    assert.ok(benchmarkRegressionBlockResult);
+    assert.equal(benchmarkRegressionBlockResult.passed, true);
+
+    assert.equal(typeof releaseGateReport.diagnostics, 'object');
+    assert.equal(releaseGateReport.diagnostics?.benchmarkGate?.gateName, 'benchmark-gate');
+    assert.equal(releaseGateReport.diagnostics?.benchmarkGate?.passed, true);
   });
 
   await t.test('SBOM generator emits CycloneDX payload', () => {

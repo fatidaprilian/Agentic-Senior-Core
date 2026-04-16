@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
-Date: 2026-04-15
-Current Version: 2.0.24
+Date: 2026-04-16
+Current Version: 2.0.25
 Status: Stable and release-ready
 
 ---
@@ -69,6 +69,7 @@ Completed:
 - Integration playbook coverage for GitHub Actions, Jenkins, VS Code, and JetBrains
 - Project discovery UX hardening: quick-choice mode, multilingual answer guidance, Enter-to-default selection, and prompt starter examples
 - Documentation quality drift artifact automation: machine-readable report script plus dedicated CI workflow
+- Release gate benchmark hard-blocking: threshold checks embedded in release gate diagnostics and benchmark-detection CI workflow
 
 ---
 
@@ -230,8 +231,8 @@ Execution tracks (incremental, ordered, and checklist-driven):
 
 3. Release blocking and anti-regression gates (Phase 2.5.2)
 - [x] minimum threshold baseline defined in `.agent-context/state/benchmark-thresholds.json`
-- [ ] integrate threshold checks into release gate and CI workflows
-- [ ] fail release on regression and emit machine-readable diagnostics
+- [x] integrate threshold checks into release gate and CI workflows
+- [x] fail release on regression and emit machine-readable diagnostics
 
 4. History and visualization (Phase 2.5.2)
 - [ ] append benchmark state artifact per run and release

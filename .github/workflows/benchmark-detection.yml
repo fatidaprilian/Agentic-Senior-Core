@@ -30,9 +30,16 @@ jobs:
           node ./scripts/detection-benchmark.mjs > detection-benchmark-report.json
           test -s detection-benchmark-report.json
 
+      - name: Run benchmark anti-regression gate
+        run: |
+          node ./scripts/benchmark-gate.mjs > benchmark-gate-report.json
+          test -s benchmark-gate-report.json
+
       - name: Upload benchmark artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: detection-benchmark-report
-          path: detection-benchmark-report.json
+          path: |
+            detection-benchmark-report.json
+            benchmark-gate-report.json

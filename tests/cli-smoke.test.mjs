@@ -5,6 +5,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync, existsSync
 import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { runProjectDiscovery } from '../lib/cli/project-scaffolder.mjs';
 
 test('CLI Smoke Tests', async (t) => {
   const cliPath = join(process.cwd(), 'bin', 'agentic-senior-core.js');
@@ -22,6 +23,32 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(launchOutput, /How do you want to start\?/);
     assert.match(launchOutput, /1\. GitHub template/);
     assert.match(launchOutput, /Exit selected\./);
+  });
+
+  await t.test('project discovery falls back to folder name when project name is empty', async () => {
+    const queuedAnswers = [
+      '2',
+      '',
+      '',
+      '1',
+      '1',
+      '1',
+      '',
+      '',
+    ];
+
+    const mockUserInterface = {
+      async question() {
+        return queuedAnswers.shift() ?? '';
+      },
+    };
+
+    const discoveryAnswers = await runProjectDiscovery(mockUserInterface, {
+      defaultProjectName: 'AutomatedLicensePlateReaders',
+    });
+
+    assert.equal(discoveryAnswers.projectName, 'AutomatedLicensePlateReaders');
+    assert.equal(discoveryAnswers.projectDescription, 'A AutomatedLicensePlateReaders project.');
   });
 
   await t.test('initializes with a team profile pack', () => {

@@ -36,6 +36,7 @@ const REQUIRED_FRONTEND_PARITY_SNIPPETS = [
   'UX Narrative and Conversion Clarity',
   'Release Evidence',
 ];
+const BENCHMARK_GATE_SCRIPT_PATH = 'scripts/benchmark-gate.mjs';
 
 function readText(relativeFilePath) {
   const absolutePath = resolve(REPOSITORY_ROOT, relativeFilePath);
@@ -52,6 +53,46 @@ function pushResult(results, isPassed, checkName, details) {
     passed: isPassed,
     details,
   });
+}
+
+function parseMachineReadableReport(rawOutput) {
+  if (typeof rawOutput !== 'string' || rawOutput.trim().length === 0) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawOutput);
+  } catch {
+    return null;
+  }
+}
+
+function runMachineReadableScript(scriptRelativePath) {
+  try {
+    const rawOutput = execFileSync('node', [scriptRelativePath], {
+      cwd: REPOSITORY_ROOT,
+      encoding: 'utf8',
+      maxBuffer: 1024 * 1024,
+    });
+
+    return {
+      report: parseMachineReadableReport(rawOutput),
+      executionErrorMessage: null,
+    };
+  } catch (scriptExecutionError) {
+    const rawOutput = scriptExecutionError && typeof scriptExecutionError === 'object' && 'stdout' in scriptExecutionError
+      ? String(scriptExecutionError.stdout ?? '')
+      : '';
+    const parsedReport = parseMachineReadableReport(rawOutput);
+    const executionErrorMessage = scriptExecutionError instanceof Error
+      ? scriptExecutionError.message
+      : 'Unknown execution error';
+
+    return {
+      report: parsedReport,
+      executionErrorMessage,
+    };
+  }
 }
 
 function validateCompatibilityManifestShape(parsedManifest, skillDomainName) {
@@ -82,6 +123,7 @@ function validateCompatibilityManifestShape(parsedManifest, skillDomainName) {
 
 function runReleaseGate() {
   const results = [];
+  const diagnostics = {};
   const packageJsonPath = 'package.json';
   const changelogPath = 'CHANGELOG.md';
   const roadmapPath = 'docs/roadmap.md';
@@ -245,12 +287,48 @@ function runReleaseGate() {
     pushResult(results, false, 'frontend-usability-audit', `Failed to execute frontend usability audit: ${frontendAuditErrorMessage}`);
   }
 
+  const benchmarkGateExecution = runMachineReadableScript(BENCHMARK_GATE_SCRIPT_PATH);
+  if (!benchmarkGateExecution.report) {
+    const failureDetails = benchmarkGateExecution.executionErrorMessage
+      ? `Benchmark gate execution failed before producing a machine-readable report: ${benchmarkGateExecution.executionErrorMessage}`
+      : 'Benchmark gate did not produce machine-readable JSON output';
+    pushResult(results, false, 'benchmark-threshold-gate', failureDetails);
+  } else {
+    diagnostics.benchmarkGate = benchmarkGateExecution.report;
+    pushResult(
+      results,
+      true,
+      'benchmark-threshold-gate',
+      `Benchmark threshold gate executed (passed=${benchmarkGateExecution.report.passed}, failures=${benchmarkGateExecution.report.failureCount})`
+    );
+
+    if (benchmarkGateExecution.report.passed === true) {
+      pushResult(results, true, 'benchmark-regression-block', 'Benchmark thresholds are healthy; release remains eligible');
+    } else {
+      const failedBenchmarkChecks = Array.isArray(benchmarkGateExecution.report.results)
+        ? benchmarkGateExecution.report.results
+          .filter((benchmarkCheckResult) => !benchmarkCheckResult.passed)
+          .map((benchmarkCheckResult) => `${benchmarkCheckResult.checkName}: ${benchmarkCheckResult.details}`)
+        : [];
+      const failureSummary = failedBenchmarkChecks.length > 0
+        ? failedBenchmarkChecks.join('; ')
+        : 'Benchmark gate failed but did not report individual failed checks';
+      pushResult(
+        results,
+        false,
+        'benchmark-regression-block',
+        `Benchmark threshold regression detected. ${failureSummary}`
+      );
+    }
+  }
+
   const failureCount = results.filter((checkResult) => !checkResult.passed).length;
   const releaseGateReport = {
     generatedAt: new Date().toISOString(),
     gateName: 'release-gate',
     passed: failureCount === 0,
     failureCount,
+    diagnostics,
     results,
   };
 
