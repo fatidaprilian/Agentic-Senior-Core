@@ -28,6 +28,7 @@ const REQUIRED_SKILL_DOMAINS = [
   'review-quality',
 ];
 const FRONTEND_PARITY_CHECKLIST_PATH = '.agent-context/review-checklists/frontend-skill-parity.md';
+const FRONTEND_EXCELLENCE_RUBRIC_PATH = '.agent-context/review-checklists/frontend-excellence-rubric.md';
 const FRONTEND_AUDIT_SCRIPT_PATH = 'scripts/frontend-usability-audit.mjs';
 const REQUIRED_FRONTEND_PARITY_SNIPPETS = [
   'Architecture and Composition',
@@ -35,6 +36,13 @@ const REQUIRED_FRONTEND_PARITY_SNIPPETS = [
   'Accessibility and Responsiveness',
   'UX Narrative and Conversion Clarity',
   'Release Evidence',
+];
+const REQUIRED_FRONTEND_EXCELLENCE_RUBRIC_SNIPPETS = [
+  'Visual Direction and Identity',
+  'Typography Quality',
+  'Color System Diversity and Contrast',
+  'Interaction Choreography',
+  'Awwwards-level reference quality',
 ];
 const BENCHMARK_GATE_SCRIPT_PATH = 'scripts/benchmark-gate.mjs';
 
@@ -260,6 +268,28 @@ function runReleaseGate() {
         false,
         'frontend-parity-checklist-coverage',
         `Missing frontend parity checklist sections: ${missingFrontendParitySnippets.join(', ')}`
+      );
+    }
+  }
+
+  const frontendExcellenceRubricContent = readText(FRONTEND_EXCELLENCE_RUBRIC_PATH);
+  if (!frontendExcellenceRubricContent) {
+    pushResult(results, false, 'frontend-excellence-rubric-exists', `Missing ${FRONTEND_EXCELLENCE_RUBRIC_PATH}`);
+  } else {
+    pushResult(results, true, 'frontend-excellence-rubric-exists', `${FRONTEND_EXCELLENCE_RUBRIC_PATH} is present`);
+
+    const missingFrontendExcellenceSnippets = REQUIRED_FRONTEND_EXCELLENCE_RUBRIC_SNIPPETS.filter(
+      (requiredSnippet) => !frontendExcellenceRubricContent.includes(requiredSnippet)
+    );
+
+    if (missingFrontendExcellenceSnippets.length === 0) {
+      pushResult(results, true, 'frontend-excellence-rubric-coverage', 'Frontend excellence rubric sections are complete');
+    } else {
+      pushResult(
+        results,
+        false,
+        'frontend-excellence-rubric-coverage',
+        `Missing frontend excellence rubric sections: ${missingFrontendExcellenceSnippets.join(', ')}`
       );
     }
   }

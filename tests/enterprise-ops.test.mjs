@@ -32,6 +32,12 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(frontendAuditResult);
     assert.equal(frontendAuditResult.passed, true);
 
+    const frontendExcellenceRubricResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'frontend-excellence-rubric-coverage'
+    );
+    assert.ok(frontendExcellenceRubricResult);
+    assert.equal(frontendExcellenceRubricResult.passed, true);
+
     const benchmarkThresholdGateResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'benchmark-threshold-gate'
     );

@@ -4,6 +4,7 @@ Default tier: `advance`
 
 ## Purpose
 Deliver frontend experiences that are visually intentional, accessible, and efficient.
+Target designer-grade quality comparable to high-signal manual design workflows.
 
 ## In Scope
 - UI architecture and component composition
@@ -21,6 +22,8 @@ Deliver frontend experiences that are visually intentional, accessible, and effi
 - Reduced-motion fallback
 - Accessibility baseline pass
 - Responsive behavior verified on mobile and desktop
+- Visual direction is explicit and not a generic AI template pattern
+- Typography and color system choices are intentional and contrast-safe
 - First viewport communicates value proposition and primary action clearly
 - Error and empty states provide explicit next actions
 - Performance budget and regression thresholds are documented per release
@@ -29,6 +32,7 @@ Deliver frontend experiences that are visually intentional, accessible, and effi
 - Usability audit result
 - Visual regression output
 - Accessibility checklist result
+- Frontend excellence rubric scorecard
 - Release notes for motion and interaction changes
 - Performance trend snapshot and remediation notes when regressions occur
 

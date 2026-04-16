@@ -12,6 +12,18 @@ Template version: {{templateVersion}}
 **Domain**: {{primaryDomain}}
 **Stack**: {{stackDisplayName}}
 **Blueprint**: {{blueprintDisplayName}}
+**Runtime target**: {{runtimeEnvironmentLabel}}
+**Containerization**: {{dockerStrategy}}
+
+{{#if hasDocker}}
+## Container Flow (Dynamic Dev and Prod)
+
+- Container setup is generated dynamically by AI from current dependencies, not from static canned templates.
+{{dockerDevelopmentGuidance}}
+{{dockerProductionGuidance}}
+- Keep dev and prod container concerns explicitly separated.
+
+{{/if}}
 
 ## High-Level Architecture
 

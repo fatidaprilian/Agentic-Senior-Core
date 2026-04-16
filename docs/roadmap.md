@@ -145,6 +145,10 @@ Target window: Q3 2026.
 
 This release focuses on staying ahead by proving sustained quality gains against benchmark repositories and model families.
 
+Execution progress update (2026-04-16):
+- Initial frontend excellence rubric and release-enforced checklist hooks are implemented.
+- Init onboarding now supports scope-first stack filtering, runtime environment hinting, Docker dev/prod strategy capture, and dual-web blueprint context capture.
+
 ### Benchmark Baseline Sources
 - `sickn33/antigravity-awesome-skills`
 - `github/awesome-copilot`

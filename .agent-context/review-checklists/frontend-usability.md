@@ -31,3 +31,4 @@ Run this checklist before claiming frontend work is production-ready.
 - [ ] Frontend architecture decision is documented.
 - [ ] Visual baseline update process is documented.
 - [ ] Release note includes usability and responsiveness evidence.
+- [ ] Frontend excellence rubric scorecard is attached with release evidence.

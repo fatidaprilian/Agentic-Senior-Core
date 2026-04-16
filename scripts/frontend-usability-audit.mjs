@@ -21,6 +21,7 @@ const REQUIRED_FILES = [
   'docs/v1.7-issue-breakdown.md',
   'docs/v1.7-execution-playbook.md',
   '.agent-context/review-checklists/frontend-usability.md',
+  '.agent-context/review-checklists/frontend-excellence-rubric.md',
 ];
 
 const REQUIRED_ROADMAP_SNIPPETS = [
@@ -35,6 +36,14 @@ const REQUIRED_CHECKLIST_SNIPPETS = [
   'Accessibility',
   'Performance',
   'Documentation and Release Evidence',
+];
+
+const REQUIRED_EXCELLENCE_RUBRIC_SNIPPETS = [
+  'Visual Direction and Identity',
+  'Typography Quality',
+  'Color System Diversity and Contrast',
+  'Interaction Choreography',
+  'Awwwards-level reference quality',
 ];
 
 function assertFileExists(relativeFilePath, failures) {
@@ -61,6 +70,7 @@ function runAudit() {
 
   const roadmapPath = 'docs/roadmap.md';
   const checklistPath = '.agent-context/review-checklists/frontend-usability.md';
+  const excellenceRubricPath = '.agent-context/review-checklists/frontend-excellence-rubric.md';
 
   if (existsSync(resolve(REPOSITORY_ROOT, roadmapPath))) {
     const roadmapContent = readFileSync(resolve(REPOSITORY_ROOT, roadmapPath), 'utf8');
@@ -70,6 +80,17 @@ function runAudit() {
   if (existsSync(resolve(REPOSITORY_ROOT, checklistPath))) {
     const checklistContent = readFileSync(resolve(REPOSITORY_ROOT, checklistPath), 'utf8');
     assertContains('Checklist', checklistPath, checklistContent, REQUIRED_CHECKLIST_SNIPPETS, failures);
+  }
+
+  if (existsSync(resolve(REPOSITORY_ROOT, excellenceRubricPath))) {
+    const excellenceRubricContent = readFileSync(resolve(REPOSITORY_ROOT, excellenceRubricPath), 'utf8');
+    assertContains(
+      'Frontend excellence rubric',
+      excellenceRubricPath,
+      excellenceRubricContent,
+      REQUIRED_EXCELLENCE_RUBRIC_SNIPPETS,
+      failures
+    );
   }
 
   const reportPayload = {

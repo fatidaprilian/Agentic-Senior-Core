@@ -15,9 +15,35 @@ Template version: {{templateVersion}}
 ## Technology Decisions
 
 **Stack**: {{stackDisplayName}}
+{{#if additionalStackDisplayNames}}
+**Additional stacks**:
+{{#each additionalStackDisplayNames}}
+- {{this}}
+{{/each}}
+{{/if}}
 **Blueprint**: {{blueprintDisplayName}}
+{{#if additionalBlueprintDisplayNames}}
+**Additional blueprints**:
+{{#each additionalBlueprintDisplayNames}}
+- {{this}}
+{{/each}}
+{{/if}}
 **Database**: {{databaseChoice}}
 **Auth strategy**: {{authStrategy}}
+**Runtime environment target**: {{runtimeEnvironmentLabel}}
+**Containerization strategy**: {{dockerStrategy}}
+
+{{#if hasDocker}}
+## Containerization Workflow (Dynamic)
+
+- Docker is enabled for this project: **{{dockerStrategy}}**.
+- Docker setup must be generated dynamically by AI based on current dependencies and runtime constraints.
+- Do not use fixed boilerplate templates that ignore actual project structure.
+{{dockerDevelopmentGuidance}}
+{{dockerProductionGuidance}}
+
+- Keep development and production container strategy separated to avoid environment drift.
+{{/if}}
 
 ## Key Features
 

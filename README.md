@@ -142,6 +142,13 @@ npx @ryuenn3123/agentic-senior-core init --newbie
 
 - `init` creates governance files **in your project folder** (the folder where you run the command).
 - `init` does not copy repository workflows from this project into your target repository.
+- For fresh projects, `init` asks what you are building first (API, web, mobile, CLI, library) and filters stack choices to match that scope.
+- For mobile scope, stack choices are limited to mobile-relevant options (`react-native`, `flutter`).
+- For existing projects, `init` auto-applies detected stack signals (including additional stack signals for polyglot repositories) so you do not need to re-select language manually.
+- For web projects, `init` can capture separate frontend and backend stacks plus separate frontend/backend blueprints, and keeps this dual architecture context in the onboarding report.
+- `init` detects runtime environment (Linux/WSL, Windows, macOS) and supports explicit override with `--runtime-env`.
+- Project discovery now captures Docker strategy (none, development-only, production-only, both) and keeps development and production container intent separated.
+- Docker setup is expected to be generated dynamically by AI from real project context, not fixed static templates.
 - `init` project discovery accepts answers in any language; prompts stay in English, but non-English answers are supported.
 - Generated docs default to English for consistency; use `--docs-lang` only when you explicitly need a different output language.
 - After docs scaffolding, CLI prints prompt starter examples so users can iterate by prompt without rewriting full project context.

@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.26 - 2026-04-16
+### Added
+- Added domain-first init selection upgrades with web frontend/backend stack split, dual-blueprint capture, and existing-project auto stack reuse.
+- Added runtime environment awareness in init (`auto`, `linux-wsl`, `linux`, `windows`, `macos`) with auto-detection and override support.
+- Added Docker strategy capture in project discovery (`none`, `dev-only`, `prod-only`, `both`) plus dynamic AI guidance for separate development and production container paths.
+- Added frontend excellence governance assets with `.agent-context/review-checklists/frontend-excellence-rubric.md` and `.agent-context/rules/docker-runtime.md`.
+
+### Changed
+- Updated compiler/onboarding outputs to preserve additional stacks and additional blueprints, including `LAYER 3A: ADDITIONAL BLUEPRINT PROFILES` in compiled rules.
+- Updated project scaffolding templates (version `1.2.0`) to include runtime/container metadata and dynamic Docker guidance text for generated project docs.
+- Updated release, validation, and frontend usability audit scripts to enforce frontend excellence rubric coverage and Docker runtime rule availability.
+- Updated README and roadmap/backlog docs to reflect the new init orchestration, frontend excellence track progress, and release status.
+
+### Fixed
+- Fixed template rendering issues by replacing nested conditional Docker guidance blocks with precomputed context placeholders.
+- Fixed forbidden-content release gate failure caused by blocked wording in scaffolder guidance text.
+- Added and aligned smoke/enterprise test coverage for scope filtering, runtime normalization, additional blueprint propagation, and frontend rubric gate enforcement.
+
 ## 2.0.25 - 2026-04-16
 ### Added
 - Added benchmark gate diagnostics embedding in `scripts/release-gate.mjs` so release reports include threshold-gate evidence.

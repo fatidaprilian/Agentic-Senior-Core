@@ -25,4 +25,5 @@ Use this checklist to enforce mandatory frontend parity aligned with benchmark-d
 ## Release Evidence
 - [ ] Frontend parity checklist artifact is attached to release evidence.
 - [ ] Frontend usability audit report is attached to release evidence.
+- [ ] Frontend excellence rubric scorecard is attached to release evidence.
 - [ ] Any parity waiver includes owner, expiry, and risk statement.

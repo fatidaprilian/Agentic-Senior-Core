@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-16
-Current Version: 2.0.25
+Current Version: 2.0.26
 Status: Stable and release-ready
 
 ---
@@ -70,6 +70,9 @@ Completed:
 - Project discovery UX hardening: quick-choice mode, multilingual answer guidance, Enter-to-default selection, and prompt starter examples
 - Documentation quality drift artifact automation: machine-readable report script plus dedicated CI workflow
 - Release gate benchmark hard-blocking: threshold checks embedded in release gate diagnostics and benchmark-detection CI workflow
+- Init flow domain-first stack orchestration: scope-based stack filtering, existing-project auto stack reuse, and web dual-stack metadata capture
+- Init selection intelligence expansion: web dual-blueprint architecture capture, runtime environment hinting (Linux/WSL or Windows), and Docker dev/prod strategy capture for dynamic container generation
+- Frontend excellence rubric enforcement: designer-grade scoring checklist plus release-gate/frontend-audit validation hooks
 
 ---
 
@@ -118,6 +121,41 @@ Scope:
 Acceptance:
 - New users are not blocked during setup.
 - Maintainers cannot publish with invalid compatibility metadata.
+
+#### V2.0-020: Init Selection Intelligence Hardening
+
+Priority: P1
+Status: done
+
+Scope:
+- Ask project scope before manual stack selection and filter stacks to that scope.
+- Auto-reuse detected stack signals for existing projects to avoid repeated language prompts.
+- Capture frontend/backend split stack metadata for web projects.
+- Capture frontend/backend split blueprint metadata for web projects and compile both architecture references.
+- Add runtime environment hinting with optional override (`--runtime-env`) for Windows vs Linux/WSL command context.
+- Add Docker strategy capture (none, development-only, production-only, both) to project discovery.
+
+Acceptance:
+- Mobile setup path does not surface unrelated backend stacks in manual choices.
+- Existing project initialization can proceed without manual stack re-selection when detection confidence is reliable.
+- Onboarding report stores additional stack signals for polyglot repositories.
+- Onboarding report stores additional blueprint context for dual-architecture web projects.
+- Project docs include Docker strategy and runtime target context.
+
+#### V2.0-021: Docker and Runtime Workflow Guidance
+
+Priority: P1
+Status: done
+
+Scope:
+- Add dedicated Docker governance rules that enforce dynamic generation and separation of development and production container lanes.
+- Add frontend excellence rubric checklist aligned to designer-grade quality expectations.
+- Enforce rubric/checklist presence in frontend audit and release gate workflows.
+
+Acceptance:
+- Docker guidance explicitly bans static one-size-fits-all templates.
+- Frontend release checks fail when excellence rubric requirements are missing.
+- Validation enforces presence of Docker rule and frontend excellence rubric artifacts.
 
 ### 2.3 Completion Checklist (2.0.x)
 
@@ -249,10 +287,10 @@ Execution tracks (incremental, ordered, and checklist-driven):
 - [ ] add reliability checks to highlight risky output degradation early
 
 7. Frontend excellence and design quality (Phase 2.5.3)
-- [ ] define frontend scoring rubric for visual direction, typography quality, color strategy diversity, and interaction quality
-- [ ] require non-template UI outputs with measurable variation in layout and style systems
-- [ ] treat MiniMax frontend references as baseline and enforce stricter quality targets above baseline
-- [ ] align frontend output expectations to advanced design workflow quality comparable to high-signal manual design teams
+- [x] define frontend scoring rubric for visual direction, typography quality, color strategy diversity, and interaction quality
+- [x] require non-template UI outputs with measurable variation in layout and style systems
+- [x] treat MiniMax frontend references as baseline and enforce stricter quality targets above baseline
+- [x] align frontend output expectations to advanced design workflow quality comparable to high-signal manual design teams
 
 8. Framework currency and migration readiness (Phase 2.5.1)
 - [x] refresh PHP stack profile and Laravel blueprint to Laravel 13 baseline (PHP 8.3+)
@@ -268,6 +306,9 @@ Execution tracks (incremental, ordered, and checklist-driven):
 - [x] add Layer 9 reference to `.instructions.md` for all non-Cursor/Windsurf IDEs
 - [x] add template versioning header and upgrade-time staleness detection
 - [x] add `--docs-lang` multi-language template support (initial: en, id)
+- [x] add Docker strategy capture (development and production lanes) with dynamic containerization guidance in generated docs
+- [x] add runtime environment hinting for Linux/WSL, Windows, and macOS with optional CLI override
+- [x] add dual-web blueprint selection path so frontend and backend architecture references compile together
 
 ## Part 6: Documentation and Explanation Standards (Mandatory)
 

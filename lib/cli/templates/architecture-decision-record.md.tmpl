@@ -18,9 +18,23 @@ This project requires a {{primaryDomain}} solution. The team evaluated available
 ### Decision
 
 - **Language/Runtime**: {{stackDisplayName}} (source: `.agent-context/stacks/{{stackFileName}}`)
+{{#if additionalStackDisplayNames}}
+- **Additional runtime context**:
+{{#each additionalStackDisplayNames}}
+  - {{this}}
+{{/each}}
+{{/if}}
 - **Architecture blueprint**: {{blueprintDisplayName}} (source: `.agent-context/blueprints/{{blueprintFileName}}`)
+{{#if additionalBlueprintDisplayNames}}
+- **Additional architecture blueprints**:
+{{#each additionalBlueprintDisplayNames}}
+  - {{this}}
+{{/each}}
+{{/if}}
 - **Database**: {{databaseChoice}}
 - **Auth**: {{authStrategy}}
+- **Runtime environment target**: {{runtimeEnvironmentLabel}}
+- **Containerization strategy**: {{dockerStrategy}}
 
 ### Rationale
 
@@ -35,6 +49,31 @@ The {{stackDisplayName}} stack was selected because:
 - Module boundaries must follow `.agent-context/blueprints/{{blueprintFileName}}`.
 - Database access must follow `.agent-context/rules/database-design.md`.
 - API contracts must follow `.agent-context/rules/api-docs.md`.
+
+{{#if hasDocker}}
+---
+
+## ADR-004: Containerization Strategy (Dynamic)
+
+**Status**: Accepted
+**Date**: {{generatedDate}}
+
+### Context
+
+This project requires container support with separated development and production concerns.
+
+### Decision
+
+- Follow dynamic container generation based on real project dependencies and runtime profile.
+- Do not rely on static Docker templates copied from unrelated repositories.
+{{dockerDevelopmentGuidance}}
+{{dockerProductionGuidance}}
+
+### Consequences
+
+- Development and production Docker artifacts are treated as separate deliverables.
+- Changes in package/runtime dependencies must regenerate container setup instructions in the same change.
+{{/if}}
 
 ---
 

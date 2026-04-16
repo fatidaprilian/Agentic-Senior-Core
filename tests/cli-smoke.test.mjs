@@ -6,6 +6,19 @@ import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { runProjectDiscovery } from '../lib/cli/project-scaffolder.mjs';
+import {
+  filterStackFileNamesByCandidates,
+  filterBlueprintFileNamesByCandidates,
+  resolveProjectScopeKeyFromLabel,
+  normalizeAdditionalStackSelection,
+  normalizeAdditionalBlueprintSelection,
+  normalizeRuntimeEnvironmentKey,
+} from '../lib/cli/commands/init.mjs';
+import {
+  PROJECT_SCOPE_STACK_FILTERS,
+  WEB_FRONTEND_BLUEPRINT_CANDIDATES,
+  WEB_BACKEND_BLUEPRINT_CANDIDATES,
+} from '../lib/cli/constants.mjs';
 
 test('CLI Smoke Tests', async (t) => {
   const cliPath = join(process.cwd(), 'bin', 'agentic-senior-core.js');
@@ -49,6 +62,124 @@ test('CLI Smoke Tests', async (t) => {
 
     assert.equal(discoveryAnswers.projectName, 'AutomatedLicensePlateReaders');
     assert.equal(discoveryAnswers.projectDescription, 'A AutomatedLicensePlateReaders project.');
+  });
+
+  await t.test('init scope mapping and stack filtering remain deterministic', () => {
+    const knownStacks = [
+      'csharp.md',
+      'flutter.md',
+      'go.md',
+      'java.md',
+      'php.md',
+      'python.md',
+      'react-native.md',
+      'ruby.md',
+      'rust.md',
+      'typescript.md',
+    ];
+
+    const mobileScopeStacks = filterStackFileNamesByCandidates(
+      knownStacks,
+      PROJECT_SCOPE_STACK_FILTERS['mobile-app']
+    );
+
+    assert.equal(resolveProjectScopeKeyFromLabel('Web application'), 'web-application');
+    assert.equal(resolveProjectScopeKeyFromLabel('Unknown scope label'), 'other');
+    assert.deepEqual(mobileScopeStacks, ['react-native.md', 'flutter.md']);
+    assert.equal(mobileScopeStacks.includes('python.md'), false);
+  });
+
+  await t.test('init auto-detects existing project stack and additional stack signals', () => {
+    const existingProjectTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-existing-stack-detect-'));
+
+    try {
+      writeFileSync(
+        join(existingProjectTargetDirectory, 'package.json'),
+        JSON.stringify({ name: 'polyglot-web', version: '1.0.0' }, null, 2)
+      );
+      writeFileSync(join(existingProjectTargetDirectory, 'tsconfig.json'), '{"compilerOptions":{}}\n');
+      writeFileSync(
+        join(existingProjectTargetDirectory, 'pyproject.toml'),
+        '[project]\nname = "polyglot-web"\nversion = "1.0.0"\n'
+      );
+
+      const initOutput = execSync(
+        `node ${cliPath} init ${existingProjectTargetDirectory} --profile balanced --ci true --no-scaffold-docs --no-token-optimize`
+      ).toString();
+
+      assert.match(initOutput, /Using detected stack automatically for this existing project: Python\./);
+
+      const onboardingReportPath = join(existingProjectTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
+      const onboardingReport = JSON.parse(readFileSync(onboardingReportPath, 'utf8'));
+
+      assert.equal(onboardingReport.selectedStack, 'python.md');
+      assert.ok(Array.isArray(onboardingReport.selectedAdditionalStacks));
+      assert.ok(onboardingReport.selectedAdditionalStacks.includes('typescript.md'));
+      assert.ok(onboardingReport.autoDetection.recommendedAdditionalStacks.includes('typescript.md'));
+      assert.ok(Array.isArray(onboardingReport.selectedAdditionalBlueprints));
+      assert.ok(onboardingReport.selectedAdditionalBlueprints.includes('api-nextjs.md'));
+
+      const compiledRulesContent = readFileSync(join(existingProjectTargetDirectory, '.cursorrules'), 'utf8');
+      assert.match(compiledRulesContent, /## LAYER 3A: ADDITIONAL BLUEPRINT PROFILES/);
+      assert.match(compiledRulesContent, /\.agent-context\/blueprints\/api-nextjs\.md/);
+    } finally {
+      rmSync(existingProjectTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('init additional stack normalization removes primary and duplicates', () => {
+    const normalizedAdditionalStacks = normalizeAdditionalStackSelection('python.md', [
+      'typescript.md',
+      'python.md',
+      'typescript.md',
+      'go.md',
+    ]);
+
+    assert.deepEqual(normalizedAdditionalStacks, ['typescript.md', 'go.md']);
+  });
+
+  await t.test('init additional blueprint normalization removes primary and duplicates', () => {
+    const normalizedAdditionalBlueprints = normalizeAdditionalBlueprintSelection('fastapi-service.md', [
+      'api-nextjs.md',
+      'fastapi-service.md',
+      'api-nextjs.md',
+      'nestjs-logic.md',
+    ]);
+
+    assert.deepEqual(normalizedAdditionalBlueprints, ['api-nextjs.md', 'nestjs-logic.md']);
+  });
+
+  await t.test('init blueprint filtering supports web dual-blueprint candidates', () => {
+    const knownBlueprints = [
+      'api-nextjs.md',
+      'aspnet-api.md',
+      'fastapi-service.md',
+      'go-service.md',
+      'graphql-grpc-api.md',
+      'laravel-api.md',
+      'nestjs-logic.md',
+      'spring-boot-api.md',
+    ];
+
+    const frontendBlueprintChoices = filterBlueprintFileNamesByCandidates(
+      knownBlueprints,
+      WEB_FRONTEND_BLUEPRINT_CANDIDATES
+    );
+    const backendBlueprintChoices = filterBlueprintFileNamesByCandidates(
+      knownBlueprints,
+      WEB_BACKEND_BLUEPRINT_CANDIDATES
+    );
+
+    assert.deepEqual(frontendBlueprintChoices, ['api-nextjs.md']);
+    assert.equal(backendBlueprintChoices.includes('fastapi-service.md'), true);
+    assert.equal(backendBlueprintChoices.includes('nestjs-logic.md'), true);
+  });
+
+  await t.test('init runtime environment normalization accepts supported keys', () => {
+    assert.equal(normalizeRuntimeEnvironmentKey('linux-wsl'), 'linux-wsl');
+    assert.equal(normalizeRuntimeEnvironmentKey('Windows'), 'windows');
+    assert.equal(normalizeRuntimeEnvironmentKey('auto'), 'auto');
+    assert.equal(normalizeRuntimeEnvironmentKey('unsupported-env'), null);
   });
 
   await t.test('initializes with a team profile pack', () => {
@@ -216,6 +347,7 @@ test('CLI Smoke Tests', async (t) => {
         'primaryDomain: API service',
         'databaseChoice: SQL (PostgreSQL, MySQL, SQLite)',
         'authStrategy: JWT (stateless token auth)',
+        'dockerStrategy: Docker for both development and production',
         'docsLang: id',
         'features:',
         '- Manajemen pengguna',
@@ -234,7 +366,9 @@ test('CLI Smoke Tests', async (t) => {
 
       const generatedProjectBrief = readFileSync(join(scaffoldingTargetDirectory, 'docs', 'project-brief.md'), 'utf8');
       assert.match(generatedProjectBrief, /# Project Brief: Nusantara API/);
-      assert.match(generatedProjectBrief, /Template version: 1\.1\.0/);
+      assert.match(generatedProjectBrief, /Template version: 1\.2\.0/);
+      assert.match(generatedProjectBrief, /\*\*Containerization strategy\*\*: Docker for both development and production/);
+      assert.match(generatedProjectBrief, /Docker setup must be generated dynamically by AI/);
 
       const compiledRulesContent = readFileSync(join(scaffoldingTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
@@ -274,13 +408,13 @@ test('CLI Smoke Tests', async (t) => {
       const projectBriefContent = readFileSync(projectBriefPath, 'utf8');
       writeFileSync(
         projectBriefPath,
-        projectBriefContent.replace('Template version: 1.1.0', 'Template version: 1.0.0')
+        projectBriefContent.replace('Template version: 1.2.0', 'Template version: 1.0.0')
       );
 
       const upgradeOutput = execSync(`node ${cliPath} upgrade ${staleDocsTargetDirectory} --dry-run`).toString();
       assert.match(upgradeOutput, /Project docs stale files: 1/);
       assert.match(upgradeOutput, /Some project docs were generated from older template versions/);
-      assert.match(upgradeOutput, /docs\/project-brief\.md \(detected: 1\.0\.0, expected: 1\.1\.0\)/);
+      assert.match(upgradeOutput, /docs\/project-brief\.md \(detected: 1\.0\.0, expected: 1\.2\.0\)/);
     } finally {
       rmSync(staleDocsTargetDirectory, { recursive: true, force: true });
     }

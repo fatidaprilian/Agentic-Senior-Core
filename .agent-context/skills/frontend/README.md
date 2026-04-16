@@ -16,6 +16,7 @@ The frontend domain covers component architecture, state management, performance
 - Anti-Slop Enforcer (ABOVE LINE) - Detect forbidden visual patterns and style drift
 - Accessibility Auditor (ABOVE LINE) - Detect contrast failures, ARIA issues, and keyboard navigation gaps
 - Performance Budget Enforcer (ABOVE LINE) - Bundle size gates and LCP/FID/CLS thresholds
+- Frontend Excellence Rubric (ABOVE LINE) - Designer-grade scoring for visual direction, typography, color diversity, and interaction choreography
 
 ## Recommended Reading Order
 
