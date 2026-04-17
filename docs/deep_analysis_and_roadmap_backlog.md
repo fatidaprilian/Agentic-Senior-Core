@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-17
-Current Version: 2.5.13
+Current Version: 2.5.14
 Status: Stable and release-ready
 
 ---
@@ -507,16 +507,16 @@ Acceptance:
 #### V3.0-008: Rules as Guardian (Cross-Session Consistency)
 
 Priority: P1
-Status: planned
+Status: done
 
 Scope:
 - Persist architecture and pattern decisions across sessions.
 - Detect drift and request explicit confirmation before changing declared stack or core patterns.
 
 Acceptance:
-- [ ] Session handoff includes active architecture contract summary.
-- [ ] Drift detection warns before direction changes.
-- [ ] Direction changes require explicit user confirmation.
+- [x] Session handoff includes active architecture contract summary.
+- [x] Drift detection warns before direction changes.
+- [x] Direction changes require explicit user confirmation.
 
 #### Phase 3: Quality of Life and State Management
 

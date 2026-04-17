@@ -17,6 +17,7 @@ Use these checklists:
 4. Treat scope-style findings as advisory unless they hide factual errors, contract mismatches, or non-negotiable violations.
 5. Enforce documentation hard blockers on changed boundaries: public surface changes, API contract changes, and database structure changes must include synchronized documentation updates.
 6. Enforce context-triggered strict audits: review requests, PR-intent workflows, and major feature completion must run strict security and performance audits; small edits stay lightweight unless strict mode is explicitly forced.
+7. Enforce cross-session consistency guardian: session handoff must include active architecture contract summary, drift detection must warn before direction changes, and direction changes require explicit user confirmation.
 
 For EVERY violation found:
 - State the exact file and line

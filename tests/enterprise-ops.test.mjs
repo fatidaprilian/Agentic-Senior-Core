@@ -68,6 +68,30 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(contextTriggeredHardRuleResult);
     assert.equal(contextTriggeredHardRuleResult.passed, true);
 
+    const rulesGuardianAuditResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'rules-guardian-audit'
+    );
+    assert.ok(rulesGuardianAuditResult);
+    assert.equal(rulesGuardianAuditResult.passed, true);
+
+    const rulesGuardianSessionHandoffResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'rules-guardian-session-handoff'
+    );
+    assert.ok(rulesGuardianSessionHandoffResult);
+    assert.equal(rulesGuardianSessionHandoffResult.passed, true);
+
+    const rulesGuardianConfirmationPolicyResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'rules-guardian-confirmation-policy'
+    );
+    assert.ok(rulesGuardianConfirmationPolicyResult);
+    assert.equal(rulesGuardianConfirmationPolicyResult.passed, true);
+
+    const rulesGuardianDriftConfirmationResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'rules-guardian-drift-confirmation'
+    );
+    assert.ok(rulesGuardianDriftConfirmationResult);
+    assert.equal(rulesGuardianDriftConfirmationResult.passed, true);
+
     const frontendParityChecklistResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'frontend-parity-checklist-coverage'
     );
@@ -103,6 +127,8 @@ test('Enterprise Operations Tests', async (t) => {
     assert.equal(releaseGateReport.diagnostics?.benchmarkGate?.passed, true);
     assert.equal(releaseGateReport.diagnostics?.contextTriggeredAudit?.auditName, 'context-triggered-audit');
     assert.equal(releaseGateReport.diagnostics?.contextTriggeredAudit?.strictAuditMode, true);
+    assert.equal(releaseGateReport.diagnostics?.rulesGuardianAudit?.auditName, 'rules-guardian-audit');
+    assert.equal(releaseGateReport.diagnostics?.rulesGuardianAudit?.sessionHandoff?.included, true);
   });
 
   await t.test('SBOM generator emits CycloneDX payload', () => {

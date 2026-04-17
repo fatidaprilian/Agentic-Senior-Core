@@ -798,6 +798,47 @@ test('CLI Smoke Tests', async (t) => {
     assert.equal(forcedStrictAuditReport.passed, true);
   });
 
+  await t.test('rules guardian audit enforces session handoff summary and explicit direction-change confirmation', () => {
+    const rulesGuardianAuditOutput = execSync(
+      `node ${join(process.cwd(), 'scripts', 'rules-guardian-audit.mjs')}`
+    ).toString();
+    const rulesGuardianAuditReport = JSON.parse(rulesGuardianAuditOutput);
+
+    assert.equal(rulesGuardianAuditReport.auditName, 'rules-guardian-audit');
+    assert.equal(rulesGuardianAuditReport.passed, true);
+    assert.equal(rulesGuardianAuditReport.sessionHandoff?.included, true);
+    assert.equal(typeof rulesGuardianAuditReport.sessionHandoff?.contractSummary, 'string');
+    assert.match(rulesGuardianAuditReport.sessionHandoff?.contractSummary, /stack=/);
+
+    const activeStack = rulesGuardianAuditReport.sessionHandoff?.activeArchitectureContract?.stack;
+    const proposedDifferentStack = activeStack === 'python.md' ? 'go.md' : 'python.md';
+
+    try {
+      execSync(
+        `node ${join(process.cwd(), 'scripts', 'rules-guardian-audit.mjs')} --workflow direction-change --proposed-stack ${proposedDifferentStack}`
+      );
+      assert.fail('Expected rules guardian audit to fail when direction change is not explicitly confirmed');
+    } catch (error) {
+      const failedAuditOutput = error && typeof error === 'object' && 'stdout' in error
+        ? String(error.stdout ?? '')
+        : '';
+      const failedAuditReport = JSON.parse(failedAuditOutput);
+
+      assert.equal(failedAuditReport.passed, false);
+      assert.equal(failedAuditReport.driftDetection?.driftDetected, true);
+      assert.match(failedAuditReport.failures.join(' '), /Direction change detected without explicit user confirmation/);
+    }
+
+    const confirmedRulesGuardianAuditOutput = execSync(
+      `node ${join(process.cwd(), 'scripts', 'rules-guardian-audit.mjs')} --workflow direction-change --proposed-stack ${proposedDifferentStack} --confirm-direction-change`
+    ).toString();
+    const confirmedRulesGuardianAuditReport = JSON.parse(confirmedRulesGuardianAuditOutput);
+
+    assert.equal(confirmedRulesGuardianAuditReport.passed, true);
+    assert.equal(confirmedRulesGuardianAuditReport.driftDetection?.driftDetected, true);
+    assert.equal(confirmedRulesGuardianAuditReport.confirmationPolicy?.confirmationProvided, true);
+  });
+
   await t.test('skill selector outputs recommended pack', () => {
     const skillOutput = execSync(`node ${cliPath} skill frontend --tier advance --json`).toString();
     const skillReport = JSON.parse(skillOutput);

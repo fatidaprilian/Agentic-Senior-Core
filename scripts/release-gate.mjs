@@ -32,6 +32,7 @@ const FRONTEND_EXCELLENCE_RUBRIC_PATH = '.agent-context/review-checklists/fronte
 const FRONTEND_AUDIT_SCRIPT_PATH = 'scripts/frontend-usability-audit.mjs';
 const DOCUMENTATION_BOUNDARY_AUDIT_SCRIPT_PATH = 'scripts/documentation-boundary-audit.mjs';
 const CONTEXT_TRIGGERED_AUDIT_SCRIPT_PATH = 'scripts/context-triggered-audit.mjs';
+const RULES_GUARDIAN_AUDIT_SCRIPT_PATH = 'scripts/rules-guardian-audit.mjs';
 const BACKEND_ARCHITECTURE_RULE_PATH = '.agent-context/rules/architecture.md';
 const BACKEND_REVIEW_CHECKLIST_PATH = '.agent-context/review-checklists/pr-checklist.md';
 const REFACTOR_PROMPT_PATH = '.agent-context/prompts/refactor.md';
@@ -427,6 +428,83 @@ function runReleaseGate() {
         false,
         'context-triggered-security-performance-hard-rule',
         `Context-triggered audit failed: ${failedAuditDetails}`
+      );
+    }
+  }
+
+  const rulesGuardianAuditExecution = runMachineReadableScript(
+    RULES_GUARDIAN_AUDIT_SCRIPT_PATH,
+    ['--workflow', 'pr-preparation']
+  );
+  if (!rulesGuardianAuditExecution.report) {
+    const failureDetails = rulesGuardianAuditExecution.executionErrorMessage
+      ? `Rules guardian audit execution failed before producing a machine-readable report: ${rulesGuardianAuditExecution.executionErrorMessage}`
+      : 'Rules guardian audit did not produce machine-readable JSON output';
+    pushResult(results, false, 'rules-guardian-audit', failureDetails);
+  } else {
+    diagnostics.rulesGuardianAudit = rulesGuardianAuditExecution.report;
+    pushResult(
+      results,
+      true,
+      'rules-guardian-audit',
+      `rules-guardian-audit executed (passed=${rulesGuardianAuditExecution.report.passed}, driftDetected=${rulesGuardianAuditExecution.report?.driftDetection?.driftDetected}, failures=${rulesGuardianAuditExecution.report.failureCount})`
+    );
+
+    const sessionHandoffSummary = rulesGuardianAuditExecution.report?.sessionHandoff?.contractSummary;
+    const sessionHandoffIncluded = rulesGuardianAuditExecution.report?.sessionHandoff?.included === true
+      && typeof sessionHandoffSummary === 'string'
+      && sessionHandoffSummary.trim().length > 0;
+
+    if (sessionHandoffIncluded) {
+      pushResult(
+        results,
+        true,
+        'rules-guardian-session-handoff',
+        'Session handoff includes active architecture contract summary'
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'rules-guardian-session-handoff',
+        'Rules guardian report is missing session handoff architecture contract summary'
+      );
+    }
+
+    const requiresExplicitConfirmation = rulesGuardianAuditExecution.report?.confirmationPolicy?.requiresExplicitUserConfirmation === true;
+
+    if (requiresExplicitConfirmation) {
+      pushResult(
+        results,
+        true,
+        'rules-guardian-confirmation-policy',
+        'Direction change policy requires explicit user confirmation'
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'rules-guardian-confirmation-policy',
+        'Rules guardian report does not enforce explicit user confirmation policy'
+      );
+    }
+
+    if (rulesGuardianAuditExecution.report.passed === true) {
+      pushResult(
+        results,
+        true,
+        'rules-guardian-drift-confirmation',
+        'Rules guardian drift detection and confirmation checks passed'
+      );
+    } else {
+      const failedAuditDetails = Array.isArray(rulesGuardianAuditExecution.report.failures)
+        ? rulesGuardianAuditExecution.report.failures.join('; ')
+        : 'Unknown rules guardian audit failures';
+      pushResult(
+        results,
+        false,
+        'rules-guardian-drift-confirmation',
+        `Rules guardian audit failed: ${failedAuditDetails}`
       );
     }
   }

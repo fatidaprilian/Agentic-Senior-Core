@@ -13,6 +13,16 @@ These principles are mandatory for backend and shared core modules.
 
 If a short and a clear implementation are functionally equivalent, choose the clear implementation.
 
+## Rules as Guardian (Cross-Session Consistency)
+
+These guardrails are mandatory to preserve architecture direction across sessions.
+
+- Session handoff must include active architecture contract summary.
+- Contract summary must include declared stack, blueprint, profile, and active core patterns.
+- Detect drift before changing declared stack or core patterns.
+- Direction changes require explicit user confirmation before applying changes.
+- When confirmation is provided, record the rationale in session notes or PR context.
+
 ## The Core Principle
 
 **Every layer has ONE job. Layer leaks are bugs — not "pragmatic shortcuts."**

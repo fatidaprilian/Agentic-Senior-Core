@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.14 - 2026-04-17
+### Added
+- Added `rules-guardian-audit` script with machine-readable output for cross-session architecture contract handoff, drift detection, and explicit direction-change confirmation.
+- Added Rules as Guardian (Cross-Session Consistency) governance sections in architecture rules, PR checklist, and review prompt guidance.
+
+### Changed
+- Changed release gate diagnostics to execute rules-guardian audit in PR-preparation mode and block release when session handoff summary or explicit confirmation policy is missing.
+- Expanded validator and test coverage to enforce rules-guardian audit integration and drift-confirmation behavior.
+
 ## 2.5.13 - 2026-04-17
 ### Added
 - Added `context-triggered-audit` script with machine-readable output to enforce workflow-aware strict security and performance audits.

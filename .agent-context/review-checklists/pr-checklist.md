@@ -114,3 +114,8 @@ VERDICT: PASS / FAIL (X/Y items passed)
 - [ ] Strict audit mode activates automatically on review and PR-intent workflows
 - [ ] Small edits avoid heavy checks by default unless strict mode is explicitly requested
 - [ ] User can always force strict audit mode manually
+
+### 12. Rules as Guardian (Cross-Session Consistency)
+- [ ] Session handoff includes active architecture contract summary
+- [ ] Drift detection warns before direction changes
+- [ ] Direction changes require explicit user confirmation
