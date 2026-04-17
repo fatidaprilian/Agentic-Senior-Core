@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "2.5.14",
+  "version": "2.5.15",
   "type": "module",
   "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
   "bin": {
@@ -46,6 +46,7 @@
     "audit:documentation-boundary": "node ./scripts/documentation-boundary-audit.mjs",
     "audit:context-triggered": "node ./scripts/context-triggered-audit.mjs",
     "audit:rules-guardian": "node ./scripts/rules-guardian-audit.mjs",
+    "audit:explain-on-demand": "node ./scripts/explain-on-demand-audit.mjs",
     "gate:release": "node ./scripts/release-gate.mjs && node ./scripts/forbidden-content-check.mjs",
     "prepublishOnly": "npm run gate:release",
     "sbom:generate": "node ./scripts/generate-sbom.mjs",

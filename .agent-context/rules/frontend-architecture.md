@@ -16,6 +16,13 @@ Mandatory behavior when triggered:
 - score and review generated UI work against visual intent, interaction quality, and conversion clarity
 - reject template-only repetitive outputs and force a distinct layout direction
 
+## UI Consistency Guardrails (Mandatory)
+
+- Content language must stay consistent per screen and flow unless user requests multilingual output.
+- Text color must remain contrast-safe against its background; no color collisions.
+- Layout must avoid overlap, clipped text, and misaligned key actions across breakpoints.
+- Keep spacing and positioning token-driven so repeated outputs stay stable.
+
 ## 1. File Structure (Feature-Driven Design)
 Organize your application by feature domain, not by file type.
 - **BANNED:** Monolithic directories like `/components` (with 500 files), `/hooks`, `/api`.

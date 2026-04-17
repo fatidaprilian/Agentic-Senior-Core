@@ -92,6 +92,36 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(rulesGuardianDriftConfirmationResult);
     assert.equal(rulesGuardianDriftConfirmationResult.passed, true);
 
+    const explainOnDemandAuditResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'explain-on-demand-audit'
+    );
+    assert.ok(explainOnDemandAuditResult);
+    assert.equal(explainOnDemandAuditResult.passed, true);
+
+    const explainOnDemandDefaultHiddenResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'explain-on-demand-default-hidden-state'
+    );
+    assert.ok(explainOnDemandDefaultHiddenResult);
+    assert.equal(explainOnDemandDefaultHiddenResult.passed, true);
+
+    const explainOnDemandExplicitRequestGateResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'explain-on-demand-explicit-request-gate'
+    );
+    assert.ok(explainOnDemandExplicitRequestGateResult);
+    assert.equal(explainOnDemandExplicitRequestGateResult.passed, true);
+
+    const explainOnDemandDiagnosticExplainabilityResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'explain-on-demand-diagnostic-explainability'
+    );
+    assert.ok(explainOnDemandDiagnosticExplainabilityResult);
+    assert.equal(explainOnDemandDiagnosticExplainabilityResult.passed, true);
+
+    const explainOnDemandHardRuleResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'explain-on-demand-hard-rule'
+    );
+    assert.ok(explainOnDemandHardRuleResult);
+    assert.equal(explainOnDemandHardRuleResult.passed, true);
+
     const frontendParityChecklistResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'frontend-parity-checklist-coverage'
     );
@@ -129,6 +159,9 @@ test('Enterprise Operations Tests', async (t) => {
     assert.equal(releaseGateReport.diagnostics?.contextTriggeredAudit?.strictAuditMode, true);
     assert.equal(releaseGateReport.diagnostics?.rulesGuardianAudit?.auditName, 'rules-guardian-audit');
     assert.equal(releaseGateReport.diagnostics?.rulesGuardianAudit?.sessionHandoff?.included, true);
+    assert.equal(releaseGateReport.diagnostics?.explainOnDemandAudit?.auditName, 'explain-on-demand-audit');
+    assert.equal(releaseGateReport.diagnostics?.explainOnDemandAudit?.responsePolicy?.defaultModeExposesStateInternals, false);
+    assert.equal(releaseGateReport.diagnostics?.explainOnDemandAudit?.responsePolicy?.diagnosticRequiresExplicitRequest, true);
   });
 
   await t.test('SBOM generator emits CycloneDX payload', () => {

@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.15 - 2026-04-17
+### Added
+- Added `explain-on-demand-audit` script with machine-readable output to enforce invisible state management defaults and explicit diagnostic visibility requests.
+- Added Invisible State Management (Explain-on-Demand) governance sections in architecture rules, PR checklist, and review prompt guidance.
+
+### Changed
+- Changed release gate diagnostics to execute explain-on-demand audit and block release when default state visibility, explicit diagnostic gating, or diagnostic explainability checks fail.
+- Changed frontend architecture and frontend excellence rubric to enforce content-language consistency, text contrast/collision safety, and overlap-safe layout positioning for responsive UI outputs.
+- Expanded frontend usability audit and automated test coverage for explain-on-demand behavior and UI consistency guardrails so repeated reminders are no longer required.
+
 ## 2.5.14 - 2026-04-17
 ### Added
 - Added `rules-guardian-audit` script with machine-readable output for cross-session architecture contract handoff, drift detection, and explicit direction-change confirmation.

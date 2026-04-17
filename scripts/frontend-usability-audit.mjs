@@ -44,6 +44,8 @@ const REQUIRED_EXCELLENCE_RUBRIC_SNIPPETS = [
   'Typography Quality',
   'Color System Diversity and Contrast',
   'Interaction Choreography',
+  'Language and Content Consistency',
+  'Text Contrast and Collision Safety',
   'UX Narrative and Conversion Clarity',
   'Template Diversity and Originality',
   'Low-Diversity Template Output Policy',
@@ -55,6 +57,9 @@ const REQUIRED_FRONTEND_RULE_SNIPPETS = [
   'UI scope trigger signals',
   'visual intent, interaction quality, and conversion clarity',
   'template-only repetitive outputs',
+  'UI Consistency Guardrails (Mandatory)',
+  'Content language must stay consistent per screen and flow unless user requests multilingual output.',
+  'Text color must remain contrast-safe against its background; no color collisions.',
 ];
 
 function assertFileExists(relativeFilePath, failures) {

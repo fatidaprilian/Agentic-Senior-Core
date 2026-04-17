@@ -33,6 +33,7 @@ const FRONTEND_AUDIT_SCRIPT_PATH = 'scripts/frontend-usability-audit.mjs';
 const DOCUMENTATION_BOUNDARY_AUDIT_SCRIPT_PATH = 'scripts/documentation-boundary-audit.mjs';
 const CONTEXT_TRIGGERED_AUDIT_SCRIPT_PATH = 'scripts/context-triggered-audit.mjs';
 const RULES_GUARDIAN_AUDIT_SCRIPT_PATH = 'scripts/rules-guardian-audit.mjs';
+const EXPLAIN_ON_DEMAND_AUDIT_SCRIPT_PATH = 'scripts/explain-on-demand-audit.mjs';
 const BACKEND_ARCHITECTURE_RULE_PATH = '.agent-context/rules/architecture.md';
 const BACKEND_REVIEW_CHECKLIST_PATH = '.agent-context/review-checklists/pr-checklist.md';
 const REFACTOR_PROMPT_PATH = '.agent-context/prompts/refactor.md';
@@ -63,6 +64,8 @@ const REQUIRED_FRONTEND_EXCELLENCE_RUBRIC_SNIPPETS = [
   'Typography Quality',
   'Color System Diversity and Contrast',
   'Interaction Choreography',
+  'Language and Content Consistency',
+  'Text Contrast and Collision Safety',
   'UX Narrative and Conversion Clarity',
   'Template Diversity and Originality',
   'Low-Diversity Template Output Policy',
@@ -505,6 +508,99 @@ function runReleaseGate() {
         false,
         'rules-guardian-drift-confirmation',
         `Rules guardian audit failed: ${failedAuditDetails}`
+      );
+    }
+  }
+
+  const explainOnDemandAuditExecution = runMachineReadableScript(
+    EXPLAIN_ON_DEMAND_AUDIT_SCRIPT_PATH,
+    ['--mode', 'default', '--workflow', 'pr-preparation']
+  );
+  if (!explainOnDemandAuditExecution.report) {
+    const failureDetails = explainOnDemandAuditExecution.executionErrorMessage
+      ? `Explain-on-demand audit execution failed before producing a machine-readable report: ${explainOnDemandAuditExecution.executionErrorMessage}`
+      : 'Explain-on-demand audit did not produce machine-readable JSON output';
+    pushResult(results, false, 'explain-on-demand-audit', failureDetails);
+  } else {
+    diagnostics.explainOnDemandAudit = explainOnDemandAuditExecution.report;
+    pushResult(
+      results,
+      true,
+      'explain-on-demand-audit',
+      `explain-on-demand-audit executed (passed=${explainOnDemandAuditExecution.report.passed}, mode=${explainOnDemandAuditExecution.report.mode}, failures=${explainOnDemandAuditExecution.report.failureCount})`
+    );
+
+    const defaultHiddenStatePolicyPassed = explainOnDemandAuditExecution.report?.responsePolicy?.defaultModeExposesStateInternals === false
+      && explainOnDemandAuditExecution.report?.defaultResponse?.containsStateInternals === false;
+
+    if (defaultHiddenStatePolicyPassed) {
+      pushResult(
+        results,
+        true,
+        'explain-on-demand-default-hidden-state',
+        'Default response mode hides unnecessary state-file internals'
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'explain-on-demand-default-hidden-state',
+        'Default response mode exposes state internals or visibility flags are inconsistent'
+      );
+    }
+
+    const diagnosticExplicitRequestPolicyPassed = explainOnDemandAuditExecution.report?.responsePolicy?.diagnosticRequiresExplicitRequest === true;
+
+    if (diagnosticExplicitRequestPolicyPassed) {
+      pushResult(
+        results,
+        true,
+        'explain-on-demand-explicit-request-gate',
+        'State internals are gated behind explicit diagnostic request'
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'explain-on-demand-explicit-request-gate',
+        'Explain-on-demand policy does not require explicit diagnostic request'
+      );
+    }
+
+    const diagnosticExplainabilityPassed = explainOnDemandAuditExecution.report?.diagnosticMode?.canExplainStateDecisions === true;
+
+    if (diagnosticExplainabilityPassed) {
+      pushResult(
+        results,
+        true,
+        'explain-on-demand-diagnostic-explainability',
+        'Diagnostic mode can explain relevant state decisions when requested'
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'explain-on-demand-diagnostic-explainability',
+        'Explain-on-demand audit cannot provide diagnostic state decision explanations'
+      );
+    }
+
+    if (explainOnDemandAuditExecution.report.passed === true) {
+      pushResult(
+        results,
+        true,
+        'explain-on-demand-hard-rule',
+        'Explain-on-demand hard-rule passed'
+      );
+    } else {
+      const failedAuditDetails = Array.isArray(explainOnDemandAuditExecution.report.failures)
+        ? explainOnDemandAuditExecution.report.failures.join('; ')
+        : 'Unknown explain-on-demand audit failures';
+      pushResult(
+        results,
+        false,
+        'explain-on-demand-hard-rule',
+        `Explain-on-demand audit failed: ${failedAuditDetails}`
       );
     }
   }

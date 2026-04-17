@@ -716,6 +716,11 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(frontendRuleContent, /Frontend Designer Mode \(Auto Activation\)/);
     assert.match(frontendRuleContent, /UI scope trigger signals/);
     assert.match(frontendRuleContent, /template-only repetitive outputs/);
+    assert.match(frontendRuleContent, /UI Consistency Guardrails \(Mandatory\)/);
+    assert.match(frontendRuleContent, /Content language must stay consistent per screen and flow unless user requests multilingual output\./);
+    assert.match(frontendRuleContent, /Text color must remain contrast-safe against its background; no color collisions\./);
+    assert.match(frontendRubricContent, /Language and Content Consistency/);
+    assert.match(frontendRubricContent, /Text Contrast and Collision Safety/);
     assert.match(frontendRubricContent, /Template Diversity and Originality/);
     assert.match(frontendRubricContent, /Low-Diversity Template Output Policy/);
   });
@@ -837,6 +842,48 @@ test('CLI Smoke Tests', async (t) => {
     assert.equal(confirmedRulesGuardianAuditReport.passed, true);
     assert.equal(confirmedRulesGuardianAuditReport.driftDetection?.driftDetected, true);
     assert.equal(confirmedRulesGuardianAuditReport.confirmationPolicy?.confirmationProvided, true);
+  });
+
+  await t.test('explain-on-demand audit keeps default output compact and gates diagnostic internals', () => {
+    const defaultExplainAuditOutput = execSync(
+      `node ${join(process.cwd(), 'scripts', 'explain-on-demand-audit.mjs')} --mode default`
+    ).toString();
+    const defaultExplainAuditReport = JSON.parse(defaultExplainAuditOutput);
+
+    assert.equal(defaultExplainAuditReport.auditName, 'explain-on-demand-audit');
+    assert.equal(defaultExplainAuditReport.mode, 'default');
+    assert.equal(defaultExplainAuditReport.passed, true);
+    assert.equal(defaultExplainAuditReport.responsePolicy?.defaultModeExposesStateInternals, false);
+    assert.equal(defaultExplainAuditReport.defaultResponse?.containsStateInternals, false);
+    assert.equal(defaultExplainAuditReport.responsePolicy?.diagnosticRequiresExplicitRequest, true);
+    assert.equal(defaultExplainAuditReport.diagnosticMode?.canExplainStateDecisions, true);
+
+    try {
+      execSync(
+        `node ${join(process.cwd(), 'scripts', 'explain-on-demand-audit.mjs')} --mode diagnostic`
+      );
+      assert.fail('Expected explain-on-demand audit to fail when diagnostic mode is requested without explicit state request');
+    } catch (error) {
+      const failedAuditOutput = error && typeof error === 'object' && 'stdout' in error
+        ? String(error.stdout ?? '')
+        : '';
+      const failedAuditReport = JSON.parse(failedAuditOutput);
+
+      assert.equal(failedAuditReport.passed, false);
+      assert.match(failedAuditReport.failures.join(' '), /Diagnostic mode requested without explicit state request/);
+    }
+
+    const diagnosticExplainAuditOutput = execSync(
+      `node ${join(process.cwd(), 'scripts', 'explain-on-demand-audit.mjs')} --mode diagnostic --state-debug`
+    ).toString();
+    const diagnosticExplainAuditReport = JSON.parse(diagnosticExplainAuditOutput);
+
+    assert.equal(diagnosticExplainAuditReport.mode, 'diagnostic');
+    assert.equal(diagnosticExplainAuditReport.passed, true);
+    assert.equal(diagnosticExplainAuditReport.responsePolicy?.explicitStateRequestReceived, true);
+    assert.equal(diagnosticExplainAuditReport.diagnosticMode?.canExplainStateDecisions, true);
+    assert.ok(Array.isArray(diagnosticExplainAuditReport.diagnosticMode?.stateDecisionExplanations));
+    assert.ok(diagnosticExplainAuditReport.diagnosticMode?.stateDecisionExplanations.length >= 1);
   });
 
   await t.test('skill selector outputs recommended pack', () => {

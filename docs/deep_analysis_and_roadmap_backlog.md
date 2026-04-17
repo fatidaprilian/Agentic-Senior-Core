@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-17
-Current Version: 2.5.14
+Current Version: 2.5.15
 Status: Stable and release-ready
 
 ---
@@ -523,16 +523,16 @@ Acceptance:
 #### V3.0-009: Invisible State Management with Explain-on-Demand
 
 Priority: P2
-Status: planned
+Status: done
 
 Scope:
 - Keep JSON state complexity in background for normal user experience.
 - Allow explicit debug visibility when user asks state-level questions.
 
 Acceptance:
-- [ ] Default responses avoid unnecessary state-file internals.
-- [ ] State internals are exposed only on explicit request.
-- [ ] Diagnostic mode can explain relevant state decisions when needed.
+- [x] Default responses avoid unnecessary state-file internals.
+- [x] State internals are exposed only on explicit request.
+- [x] Diagnostic mode can explain relevant state decisions when needed.
 
 #### V3.0-010: Single Source of Truth and Lazy Rule Loading
 

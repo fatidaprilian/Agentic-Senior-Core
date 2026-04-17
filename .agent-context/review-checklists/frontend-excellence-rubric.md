@@ -38,12 +38,22 @@ Release recommendation:
 - [ ] Breakpoint transitions preserve hierarchy, spacing rhythm, and action clarity.
 - [ ] Navigation and key CTA remain explicit across viewport sizes.
 
-## 6. UX Narrative and Conversion Clarity
+## 6. Language and Content Consistency
+- [ ] Content language is consistent across headline, body, CTA, and system messages for the same screen flow.
+- [ ] Mixed-language output appears only when requested by user or product requirement.
+- [ ] Terminology stays stable for repeated actions and labels.
+
+## 7. Text Contrast and Collision Safety
+- [ ] Text-to-background contrast is checked for every semantic token pair used in UI.
+- [ ] No text color clashes with gradients, images, or accent surfaces.
+- [ ] Primary and secondary text remain readable in all supported breakpoints.
+
+## 8. UX Narrative and Conversion Clarity
 - [ ] First viewport communicates value proposition and primary action immediately.
 - [ ] Error, empty, and loading states provide clear next actions.
 - [ ] User journey avoids dead ends and hidden critical actions.
 
-## 7. Template Diversity and Originality
+## 9. Template Diversity and Originality
 - [ ] Output is not a copy of a generic starter template or repeated AI layout pattern.
 - [ ] Layout composition shows intentional variation in structure and hierarchy.
 - [ ] Visual intent, interaction quality, and conversion clarity are all explicitly reviewed together.

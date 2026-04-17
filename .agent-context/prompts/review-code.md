@@ -18,6 +18,7 @@ Use these checklists:
 5. Enforce documentation hard blockers on changed boundaries: public surface changes, API contract changes, and database structure changes must include synchronized documentation updates.
 6. Enforce context-triggered strict audits: review requests, PR-intent workflows, and major feature completion must run strict security and performance audits; small edits stay lightweight unless strict mode is explicitly forced.
 7. Enforce cross-session consistency guardian: session handoff must include active architecture contract summary, drift detection must warn before direction changes, and direction changes require explicit user confirmation.
+8. Enforce explain-on-demand state visibility: default responses must avoid unnecessary state-file internals, state internals are exposed only on explicit request, and diagnostic mode must explain relevant state decisions when needed.
 
 For EVERY violation found:
 - State the exact file and line

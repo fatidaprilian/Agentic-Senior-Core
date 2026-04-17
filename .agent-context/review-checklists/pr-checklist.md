@@ -119,3 +119,8 @@ VERDICT: PASS / FAIL (X/Y items passed)
 - [ ] Session handoff includes active architecture contract summary
 - [ ] Drift detection warns before direction changes
 - [ ] Direction changes require explicit user confirmation
+
+### 13. Invisible State Management (Explain-on-Demand)
+- [ ] Default responses avoid unnecessary state-file internals
+- [ ] State internals are exposed only on explicit request
+- [ ] Diagnostic mode can explain relevant state decisions when needed

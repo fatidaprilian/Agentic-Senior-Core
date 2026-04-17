@@ -23,6 +23,15 @@ These guardrails are mandatory to preserve architecture direction across session
 - Direction changes require explicit user confirmation before applying changes.
 - When confirmation is provided, record the rationale in session notes or PR context.
 
+## Invisible State Management with Explain-on-Demand
+
+State internals must stay invisible by default.
+
+- Default responses must avoid unnecessary state-file internals.
+- State internals are exposed only on explicit user request.
+- Diagnostic mode explains relevant state decisions when needed.
+- Keep default explanations concise and outcome-first; show raw state details only in diagnostic mode.
+
 ## The Core Principle
 
 **Every layer has ONE job. Layer leaks are bugs — not "pragmatic shortcuts."**

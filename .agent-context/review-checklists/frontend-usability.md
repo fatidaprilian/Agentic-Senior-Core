@@ -6,6 +6,7 @@ Run this checklist before claiming frontend work is production-ready.
 - [ ] Typography scale is consistent and tokenized.
 - [ ] Color usage follows design tokens and avoids ad-hoc values.
 - [ ] Spacing and layout rhythm is coherent across pages.
+- [ ] Language and terminology stay consistent across headline, body, and CTA for the same flow.
 
 ## 2. Responsiveness
 - [ ] Core pages are usable at mobile, tablet, and desktop breakpoints.
