@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.5 - 2026-04-17
+### Added
+- Added automatic cross-IDE MCP configuration support out-of-the-box (VS Code, Cursor, Zed, and Gemini/Antigravity).
+- Added `.gemini/instructions.md` and `.github/copilot-instructions.md` output to dynamic rule compilation to expand native global prompt injection to more IDEs.
+- Added Zed IDE contextual awareness confirming `.cursorrules` and `.windsurfrules` are natively read as Assistant prompts.
+- Added `--no-mcp-template` CLI flag to strictly opt-out of auto-configuring MCP across IDEs.
+
+### Changed
+- Changed `init` default behavior so `--mcp-template` functionality is enabled automatically rather than requiring opt-in.
+- Changed MCP template injection to write directly into Antigravity global configurations (`~/.gemini/antigravity/mcp_config.json`) with absolute path enforcement.
+- Updated `docs/deep_analysis_and_roadmap_backlog.md` with the newly delivered MCP and multi-IDE alignment states.
+
+### Fixed
+- 
+
 ## 2.5.4 - 2026-04-17
 ### Added
 - Added roadmap-first V3.0 intake policy in roadmap documentation so optimization, refactor, reliability, and DX ideas are captured as top goals before execution.

@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-17
-Current Version: 2.5.4
+Current Version: 2.5.5
 Status: Stable and release-ready
 
 ---
@@ -306,7 +306,8 @@ Execution tracks (incremental, ordered, and checklist-driven):
 - [x] create parameterized doc templates (project-brief, ADR, database-schema, api-contract, flow-overview)
 - [x] integrate scaffolder into init flow with `--scaffold-docs`, `--no-scaffold-docs`, `--project-config` flags
 - [x] add Layer 9 PROJECT CONTEXT to compiled governance rulebook (`.cursorrules`, `.windsurfrules`)
-- [x] add Layer 9 reference to `.instructions.md` for all non-Cursor/Windsurf IDEs
+- [x] add compiled rules generation for Antigravity/Gemini (`.gemini/instructions.md`) and Copilot (`.github/copilot-instructions.md`)
+- [x] add Layer 9 reference to `.instructions.md` for all non-Cursor/Windsurf IDEs (including Zed which reads natively)
 - [x] add template versioning header and upgrade-time staleness detection
 - [x] add `--docs-lang` multi-language template support (initial: en, id)
 - [x] add Docker strategy capture (development and production lanes) with dynamic containerization guidance in generated docs
@@ -318,6 +319,7 @@ Execution tracks (incremental, ordered, and checklist-driven):
 - [x] implement adapter contract for Claude Code, Gemini CLI, and VS Code chat memory ingestion/retrieval
 - [x] add privacy tagging and redaction controls before persistence
 - [x] add continuity benchmark that validates new chat hydration from prior sessions
+- [x] expand cross-IDE MCP auto-configuration support out of the box (VS Code, Cursor, Zed workspace configs, and Gemini global auto-registration)
 
 ## Part 6: Documentation and Explanation Standards (Mandatory)
 

@@ -257,21 +257,21 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
-  await t.test('init does not copy repository workflows and copies MCP template only when requested', () => {
-    const defaultInitTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-workflow-default-'));
+  await t.test('init does not copy repository workflows and configures MCP templates by default', () => {
+    const optOutMcpTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-workflow-optout-mcp-'));
     const mcpTemplateTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-workflow-mcp-'));
 
     try {
       execSync(
-        `node ${cliPath} init ${defaultInitTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize`
+        `node ${cliPath} init ${optOutMcpTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize --no-mcp-template`
       ).toString();
 
-      assert.equal(existsSync(join(defaultInitTargetDirectory, '.github', 'workflows', 'release-gate.yml')), false);
-      assert.equal(existsSync(join(defaultInitTargetDirectory, '.github', 'copilot-instructions.md')), true);
-      assert.equal(existsSync(join(defaultInitTargetDirectory, 'mcp.json')), false);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.github', 'workflows', 'release-gate.yml')), false);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.github', 'copilot-instructions.md')), true);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.vscode', 'mcp.json')), false);
 
       execSync(
-        `node ${cliPath} init ${mcpTemplateTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize --mcp-template`
+        `node ${cliPath} init ${mcpTemplateTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize`
       ).toString();
 
       assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'mcp.json')), false);
@@ -289,7 +289,7 @@ test('CLI Smoke Tests', async (t) => {
         ['./scripts/mcp-server.mjs']
       );
     } finally {
-      rmSync(defaultInitTargetDirectory, { recursive: true, force: true });
+      rmSync(optOutMcpTargetDirectory, { recursive: true, force: true });
       rmSync(mcpTemplateTargetDirectory, { recursive: true, force: true });
     }
   });
