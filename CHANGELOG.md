@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.4 - 2026-04-17
+### Added
+- Added roadmap-first V3.0 intake policy in roadmap documentation so optimization, refactor, reliability, and DX ideas are captured as top goals before execution.
+- Added MCP auto-start guidance in docs (`chat.mcp.autoStart`, Experimental) while keeping trust/start expectations explicit.
+
+### Changed
+- Updated roadmap and README status framing to mark V2.5 as released and move active planning focus to V3.0.
+- Changed generated workspace MCP template (`.vscode/mcp.json`) to omit optional `$schema` for compatibility with current VS Code MCP schema validation.
+- Changed validation logic to accept workspace MCP config with omitted `$schema` (or trusted `vscode://schemas/mcp` when present).
+
+### Fixed
+- Fixed VS Code MCP config warning path (`Property $schema is not allowed`) by aligning template and guidance with current schema behavior.
+- Updated smoke test coverage to lock new MCP template shape and prevent schema-warning regression.
+
 ## 2.5.3 - 2026-04-17
 ### Added
 - Added init-time memory continuity state generation (`.agent-context/state/memory-continuity.json`) with progressive-disclosure defaults and supported adapter metadata.

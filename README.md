@@ -152,7 +152,8 @@ npx @ryuenn3123/agentic-senior-core init --newbie
 - `init` project discovery accepts answers in any language; prompts stay in English, but non-English answers are supported.
 - Generated docs default to English for consistency; use `--docs-lang` only when you explicitly need a different output language.
 - After docs scaffolding, CLI prints prompt starter examples so users can iterate by prompt without rewriting full project context.
-- MCP server registration and trust/start are manual in IDE settings.
+- MCP server trust approval is manual in IDE settings (initial start).
+- Optional MCP auto-restart on config changes is available via `chat.mcp.autoStart` (Experimental setting in VS Code).
 - MCP workspace scaffold is opt-in via `--mcp-template` and creates `.vscode/mcp.json`.
 
 **What files are created?**
@@ -180,6 +181,9 @@ npx @ryuenn3123/agentic-senior-core init --mcp-template
 3. Confirm the file is `.vscode/mcp.json` with server `agentic-senior-core`.
 4. The generated server command is `node ./scripts/mcp-server.mjs` with `cwd` set to `${workspaceFolder}`.
 5. Open Chat Customizations > MCP Servers, then trust/start the server.
+6. Optional: enable `chat.mcp.autoStart` in VS Code Settings to auto-restart MCP servers when config changes are detected.
+
+If VS Code shows `Property $schema is not allowed` for `.vscode/mcp.json`, remove the `$schema` field. Newer MCP configuration schema versions infer this automatically.
 
 If logs repeatedly show `Waiting for server to respond to initialize request`, upgrade to the latest package version, regenerate the workspace config with `--mcp-template`, and restart the MCP server.
 
@@ -553,9 +557,14 @@ Important notes for maintainers and forks:
 - Operations playbook and release-operations checklist shipped.
 
 ### Current Forward Plan
-- V2.0: Skill marketplace trust tiers, transactional installs, rollback safety, and launch-menu onboarding.
-- V2.5: Cross-model benchmark harness, anti-regression quality gates, and advanced frontend design quality track (non-template UI direction, stronger UX craft, and frontend parity beyond baseline benchmark repos).
-- V3.0: Enterprise governance cloud, policy drift detection, and org-level override registry.
+- V2.0: Delivered baseline maintained. Skill marketplace trust tiers, transactional installs, rollback safety, and launch-menu onboarding are active foundations.
+- V2.5: Released. Benchmark anti-regression track, frontend excellence enforcement, and memory continuity pilot are complete.
+- V3.0: Planning and intake phase for enterprise governance cloud, policy drift detection, and org-level override registry.
+
+Roadmap-first execution policy for V3.0:
+1. Record ideas (optimization, refactor, reliability, security, DX) in roadmap top goals first.
+2. Define measurable success metrics and explicit exit criteria before execution.
+3. Bump to `3.0.0` only after V3.0 exit criteria are fully satisfied.
 
 Detailed timeline and success metrics: [docs/roadmap.md](docs/roadmap.md)
 

@@ -281,7 +281,7 @@ test('CLI Smoke Tests', async (t) => {
         readFileSync(join(mcpTemplateTargetDirectory, '.vscode', 'mcp.json'), 'utf8')
       );
 
-      assert.equal(workspaceMcpConfig.$schema, 'vscode://schemas/mcp');
+      assert.equal(Object.prototype.hasOwnProperty.call(workspaceMcpConfig, '$schema'), false);
       assert.equal(workspaceMcpConfig.servers?.['agentic-senior-core']?.command, 'node');
       assert.equal(workspaceMcpConfig.servers?.['agentic-senior-core']?.cwd, '${workspaceFolder}');
       assert.deepEqual(

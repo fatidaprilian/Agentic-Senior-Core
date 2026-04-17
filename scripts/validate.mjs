@@ -743,10 +743,12 @@ async function validateMcpConfiguration() {
     fail('MCP test server must use Node');
   }
 
-  if (workspaceMcpConfiguration.$schema === 'vscode://schemas/mcp') {
+  if (typeof workspaceMcpConfiguration.$schema === 'undefined') {
+    pass('Workspace MCP config omits $schema (supported by current VS Code MCP schema inference)');
+  } else if (workspaceMcpConfiguration.$schema === 'vscode://schemas/mcp') {
     pass('Workspace MCP config uses trusted VS Code schema');
   } else {
-    fail('Workspace MCP config must use $schema: vscode://schemas/mcp');
+    fail('Workspace MCP config $schema must be omitted or set to vscode://schemas/mcp');
   }
 
   if (workspaceServerConfig?.command === 'node') {

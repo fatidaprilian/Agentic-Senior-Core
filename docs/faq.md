@@ -24,7 +24,9 @@ The Laravel 13 blueprint and stack profile are the default target-state for new 
 No. By default, `init` does not copy repository workflows from Agentic-Senior-Core into your target repository. The workflow files in this repository are for this repository's own release and maintenance lifecycle.
 
 ## Is MCP server setup automatic?
-No. MCP server registration is manual in your IDE. If you want a starter MCP configuration file in your project, run `init` with `--mcp-template`, then open `MCP: Open Workspace Folder Configuration` and confirm `.vscode/mcp.json` (server command: `node ./scripts/mcp-server.mjs`, `cwd: ${workspaceFolder}`).
+Partially. MCP server trust/registration is manual in your IDE for the first start. If you want a starter MCP configuration file in your project, run `init` with `--mcp-template`, then open `MCP: Open Workspace Folder Configuration` and confirm `.vscode/mcp.json` (server command: `node ./scripts/mcp-server.mjs`, `cwd: ${workspaceFolder}`).
+
+After that, you can enable VS Code setting `chat.mcp.autoStart` (Experimental) to auto-restart MCP servers when config changes are detected.
 
 ## Why is there no "pick file" option when I add MCP server?
 That is expected. VS Code MCP setup uses server registration (command/http/npm), not arbitrary file import. The recommended flow is:
@@ -48,6 +50,9 @@ Yes. The governance engine is model-agnostic and works with local-model workflow
 
 ## Why do I see untrusted schema warning in root mcp.json?
 The root `mcp.json` is governance metadata for this repository, not the VS Code MCP workspace registration file. The actual VS Code MCP config is `.vscode/mcp.json`, which uses the trusted built-in schema (`vscode://schemas/mcp`).
+
+## Why does `.vscode/mcp.json` show `Property $schema is not allowed`?
+This can happen on newer VS Code MCP schema validation where `$schema` is not required. For workspace MCP config, remove `$schema` and keep the `servers` object. MCP discovery and startup still work.
 
 ## Why does my agent still output bad code occasionally?
 While Agentic-Senior-Core aggressively curates the agent's system prompt and workspace rules (`.cursorrules`, `AGENTS.md`, etc.), some models can still hallucinate under high context load or complex queries. Make sure you are using top-tier models (GPT-4o, Claude 3.5 Sonnet, Gemini 2.0 Pro) and try to chunk your prompts.

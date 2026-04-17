@@ -141,15 +141,17 @@ This release shifts from governance pack distribution to a verified skill market
 
 ## V2.5 (2026) - Model-Agnostic Benchmark and Anti-Regressions
 
-Target window: Q3 2026.
+Release status: Completed and released on 2026-04-17.
+
+Original plan targeted Q3 2026, but implementation landed earlier (Q2 2026).
 
 This release focuses on staying ahead by proving sustained quality gains against benchmark repositories and model families.
 
-Execution progress update (2026-04-16):
-- Initial frontend excellence rubric and release-enforced checklist hooks are implemented.
-- Init onboarding now supports scope-first stack filtering, runtime environment hinting, Docker dev/prod strategy capture, and dual-web blueprint context capture.
-- Benchmark evidence bundle now appends per-run history snapshots and emits chart-ready trend outputs (JSON and CSV) with release-over-release deltas.
-- Benchmark evidence bundle now includes bug/vulnerability indicators plus reliability early-warning checks for risky quality degradation.
+Final delivery snapshot (2026-04-17):
+- Frontend excellence rubric and release-enforced checklist hooks are implemented.
+- Init onboarding supports scope-first stack filtering, runtime environment hinting, Docker dev/prod strategy capture, and dual-web blueprint context capture.
+- Benchmark evidence bundle appends per-run history snapshots and emits chart-ready trend outputs (JSON and CSV) with release-over-release deltas.
+- Benchmark evidence bundle includes bug/vulnerability indicators plus reliability early-warning checks for risky quality degradation.
 - Cross-agent memory continuity pilot baseline is implemented with provider-agnostic schema, adapter contract, privacy redaction controls, and continuity benchmark reporting.
 
 ### Benchmark Baseline Sources
@@ -157,7 +159,7 @@ Execution progress update (2026-04-16):
 - `github/awesome-copilot`
 - `MiniMax-AI/skills`
 
-### Planned Scope
+### Delivered Scope
 1. Benchmark harness expansion
    - Add reproducible benchmark scenarios for planning, refactor, security, and delivery workflows.
    - Compare output quality across multiple model providers with the same rule packs.
@@ -227,6 +229,11 @@ This release aims to move beyond repository-level governance toward federated en
    - Evaluate MCP-native domain retrieval for rule packs that are only needed during specific edits.
    - Revisit RAG-style retrieval when compiled context becomes too dense for the current compiler model.
    - Keep compiled rule files as the default until retrieval proves lower-friction and more reliable.
+
+### V3.0 Top Goals Intake Policy (Roadmap-First)
+- All candidate work for V3.0 (optimization, refactor, reliability, security, and DX improvements) must be recorded in roadmap top goals before implementation starts.
+- Every candidate goal must define measurable success metrics and a clear exit condition before being moved to execution.
+- Version bump to `3.0.0` is allowed only after V3.0 exit criteria are fully satisfied.
 
 ### V3.0 Success Metrics
 - Policy drift detection coverage reaches 100% for onboarded repositories.
