@@ -1,6 +1,6 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
-Date: 2026-04-16
+Date: 2026-04-17
 Current Version: 2.0.26
 Status: Stable and release-ready
 
@@ -73,6 +73,8 @@ Completed:
 - Init flow domain-first stack orchestration: scope-based stack filtering, existing-project auto stack reuse, and web dual-stack metadata capture
 - Init selection intelligence expansion: web dual-blueprint architecture capture, runtime environment hinting (Linux/WSL or Windows), and Docker dev/prod strategy capture for dynamic container generation
 - Frontend excellence rubric enforcement: designer-grade scoring checklist plus release-gate/frontend-audit validation hooks
+- Benchmark history and trend visibility: per-run state history, chart-ready JSON/CSV trend artifacts, and release-over-release delta summaries
+- Benchmark security and reliability signals: forbidden-content plus vulnerability indicators and early-risk reliability checks in evidence bundle
 
 ---
 
@@ -273,9 +275,9 @@ Execution tracks (incremental, ordered, and checklist-driven):
 - [x] fail release on regression and emit machine-readable diagnostics
 
 4. History and visualization (Phase 2.5.2)
-- [ ] append benchmark state artifact per run and release
-- [ ] generate trend tables and chart-ready JSON and CSV outputs
-- [ ] surface release-over-release changes for quick decision review
+- [x] append benchmark state artifact per run and release
+- [x] generate trend tables and chart-ready JSON and CSV outputs
+- [x] surface release-over-release changes for quick decision review
 
 5. Adoption and integrations (Phase 2.5.3)
 - [x] provide quickstart benchmark paths for new users (README benchmark quickstart sequence)
@@ -283,8 +285,8 @@ Execution tracks (incremental, ordered, and checklist-driven):
 - [x] maintain integration playbooks for GitHub Actions, Jenkins, VS Code, and JetBrains (`docs/integration-playbook.md`)
 
 6. Security and reliability checks (Phase 2.5.3)
-- [ ] include bug and vulnerability scan indicators in benchmark report bundle
-- [ ] add reliability checks to highlight risky output degradation early
+- [x] include bug and vulnerability scan indicators in benchmark report bundle
+- [x] add reliability checks to highlight risky output degradation early
 
 7. Frontend excellence and design quality (Phase 2.5.3)
 - [x] define frontend scoring rubric for visual direction, typography quality, color strategy diversity, and interaction quality
@@ -309,6 +311,12 @@ Execution tracks (incremental, ordered, and checklist-driven):
 - [x] add Docker strategy capture (development and production lanes) with dynamic containerization guidance in generated docs
 - [x] add runtime environment hinting for Linux/WSL, Windows, and macOS with optional CLI override
 - [x] add dual-web blueprint selection path so frontend and backend architecture references compile together
+
+10. Cross-agent memory continuity pilot (Phase 2.5.3)
+- [ ] define a provider-agnostic memory schema for observations, summaries, and timeline metadata
+- [ ] implement adapter contract for Claude Code, Gemini CLI, and VS Code chat memory ingestion/retrieval
+- [ ] add privacy tagging and redaction controls before persistence
+- [ ] add continuity benchmark that validates new chat hydration from prior sessions
 
 ## Part 6: Documentation and Explanation Standards (Mandatory)
 

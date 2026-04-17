@@ -91,11 +91,25 @@ test('Enterprise Operations Tests', async (t) => {
 
     assert.equal(benchmarkEvidenceBundleReport.reportName, 'benchmark-evidence-bundle');
     assert.equal(typeof benchmarkEvidenceBundleReport.passed, 'boolean');
+    assert.equal(typeof benchmarkEvidenceBundleReport.releaseVersion, 'string');
     assert.ok(Array.isArray(benchmarkEvidenceBundleReport.commandExamples));
     assert.ok(Array.isArray(benchmarkEvidenceBundleReport.rerunInstructions));
     assert.ok(Array.isArray(benchmarkEvidenceBundleReport.rawInputs.scenarios));
     assert.ok(Array.isArray(benchmarkEvidenceBundleReport.executions));
     assert.ok(benchmarkEvidenceBundleReport.executions.length >= 3);
+    assert.ok(Array.isArray(benchmarkEvidenceBundleReport.history));
+    assert.ok(benchmarkEvidenceBundleReport.history.length >= 1);
+
+    assert.equal(typeof benchmarkEvidenceBundleReport.reliabilitySignals.passed, 'boolean');
+    assert.ok(Array.isArray(benchmarkEvidenceBundleReport.reliabilitySignals.checks));
+    assert.equal(typeof benchmarkEvidenceBundleReport.bugIndicators.incorrectDetectionRate, 'number');
+
+    assert.equal(typeof benchmarkEvidenceBundleReport.securityIndicators.forbiddenContent.passed, 'boolean');
+    assert.equal(typeof benchmarkEvidenceBundleReport.securityIndicators.vulnerabilityScan.isAvailable, 'boolean');
+
+    assert.equal(benchmarkEvidenceBundleReport.trendReport.reportName, 'benchmark-trend-report');
+    assert.ok(Array.isArray(benchmarkEvidenceBundleReport.trendReport.trendTable));
+    assert.ok(Array.isArray(benchmarkEvidenceBundleReport.trendReport.chartSeries.top1Accuracy));
   });
 
   await t.test('benchmark writer-judge matrix outputs machine-readable report', () => {

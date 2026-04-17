@@ -148,6 +148,8 @@ This release focuses on staying ahead by proving sustained quality gains against
 Execution progress update (2026-04-16):
 - Initial frontend excellence rubric and release-enforced checklist hooks are implemented.
 - Init onboarding now supports scope-first stack filtering, runtime environment hinting, Docker dev/prod strategy capture, and dual-web blueprint context capture.
+- Benchmark evidence bundle now appends per-run history snapshots and emits chart-ready trend outputs (JSON and CSV) with release-over-release deltas.
+- Benchmark evidence bundle now includes bug/vulnerability indicators plus reliability early-warning checks for risky quality degradation.
 
 ### Benchmark Baseline Sources
 - `sickn33/antigravity-awesome-skills`
@@ -178,6 +180,11 @@ Execution progress update (2026-04-16):
    - Upgrade PHP stack and Laravel blueprint defaults to Laravel 13 with a PHP 8.3+ baseline.
    - Add migration guardrails for common 12.x to 13.x issues (CSRF middleware rename, non-empty `uniqueBy` for `upsert`, cache `serializable_classes` policy).
    - Keep dependency guidance in sync with Laravel 13 targets (`laravel/framework:^13.0`, `laravel/tinker:^3.0`, `phpunit/phpunit:^12.0`, `pestphp/pest:^4.0`).
+6. Cross-agent memory continuity pilot
+   - Define a vendor-agnostic memory schema for observations, summaries, and action traces.
+   - Build adapter contracts so Claude Code, Gemini CLI, and VS Code chat workflows can write/read the same local memory store.
+   - Add privacy controls and redaction tags so sensitive context can be excluded before persistence.
+   - Hydrate new chat sessions with concise relevant memory context to reduce cold-start behavior without provider lock-in.
 
 ### V2.5 Success Metrics
 - Benchmark coverage reaches at least 85% for core workflow categories.
@@ -186,6 +193,7 @@ Execution progress update (2026-04-16):
 - Frontend benchmark outputs achieve at least 90% pass rate on advanced design rubric checks (visual diversity, UX clarity, responsiveness, and accessibility).
 - At least one frontend quality uplift sourced from competitive intelligence lands in each V2.5 cycle.
 - Laravel guidance is fully migrated to 13.x across stack profiles, blueprints, and setup prompts.
+- Cross-agent memory reuse reaches at least 80% relevant recall on benchmarked continuity scenarios.
 
 ### V2.5 Exit Criteria
 - Benchmark harness and anti-regression gates are mandatory in CI.
@@ -193,6 +201,7 @@ Execution progress update (2026-04-16):
 - At least two benchmark-driven improvements land each cycle.
 - Frontend excellence rubric is enforced in CI and linked to release eligibility.
 - Laravel 13 migration guardrails are published and referenced by onboarding and upgrade flows.
+- Cross-agent memory pilot can persist and retrieve session context through a provider-agnostic interface.
 
 ## V3.0 (2026) - Enterprise Governance Cloud and Federated Policy Ops
 
