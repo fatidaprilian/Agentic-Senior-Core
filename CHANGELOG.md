@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.3 - 2026-04-17
+### Added
+- Added init-time memory continuity state generation (`.agent-context/state/memory-continuity.json`) with progressive-disclosure defaults and supported adapter metadata.
+- Added `MEMORY CONTINUITY PROFILE` injection into compiled governance outputs (`.cursorrules`, `.windsurfrules`) for retrieval, privacy, and host-compatibility guidance.
+
+### Changed
+- Changed `init` defaults so memory continuity is enabled automatically across all init paths (with opt-out), aligned with token optimization default behavior.
+- Changed onboarding report output to persist both token optimization and memory continuity status snapshots for post-init traceability.
+- Updated CLI help and README command reference with `--memory-continuity` and `--no-memory-continuity` options plus local/CLI/cloud host compatibility notes.
+
+### Fixed
+- Added smoke-test coverage to lock default-on memory continuity behavior, opt-out behavior, and compiled-rule profile injection against regression.
+
 ## 2.0.27 - 2026-04-17
 ### Added
 - Added cross-agent memory continuity pilot core with provider-agnostic schema (`.agent-context/state/memory-schema-v1.json`) and adapter contract (`.agent-context/state/memory-adapter-contract.json`) for Claude Code, Gemini CLI, and VS Code chat hosts.

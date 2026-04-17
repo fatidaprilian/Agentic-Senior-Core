@@ -28,6 +28,7 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(output, /Usage:/);
     assert.match(output, /init/);
     assert.match(output, /--profile-pack/);
+    assert.match(output, /--no-memory-continuity/);
     assert.match(output, /java-enterprise-api/);
   });
 
@@ -494,7 +495,7 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
-  await t.test('init enables token optimization by default and supports opt-out', () => {
+  await t.test('init enables memory continuity and token optimization by default and supports opt-out', () => {
     const defaultOptimizationTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-default-optimize-'));
     const optOutOptimizationTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-optout-optimize-'));
 
@@ -503,7 +504,20 @@ test('CLI Smoke Tests', async (t) => {
         `node ${cliPath} init ${defaultOptimizationTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
       ).toString();
 
+      assert.match(defaultInitOutput, /Memory continuity policy enabled/);
       assert.match(defaultInitOutput, /Token optimization policy enabled for agent/);
+
+      const defaultMemoryStatePath = join(
+        defaultOptimizationTargetDirectory,
+        '.agent-context',
+        'state',
+        'memory-continuity.json'
+      );
+      const defaultMemoryState = JSON.parse(readFileSync(defaultMemoryStatePath, 'utf8'));
+      assert.equal(defaultMemoryState.enabled, true);
+      assert.equal(defaultMemoryState.hydrationMode, 'progressive-disclosure');
+      assert.ok(Array.isArray(defaultMemoryState.adapters));
+      assert.ok(defaultMemoryState.adapters.length >= 3);
 
       const defaultTokenStatePath = join(
         defaultOptimizationTargetDirectory,
@@ -515,13 +529,29 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(defaultTokenState.enabled, true);
 
       const defaultCompiledRules = readFileSync(join(defaultOptimizationTargetDirectory, '.cursorrules'), 'utf8');
+      assert.match(defaultCompiledRules, /MEMORY CONTINUITY PROFILE/);
       assert.match(defaultCompiledRules, /TOKEN OPTIMIZATION PROFILE/);
 
+      const defaultOnboardingReport = JSON.parse(
+        readFileSync(join(defaultOptimizationTargetDirectory, '.agent-context', 'state', 'onboarding-report.json'), 'utf8')
+      );
+      assert.equal(defaultOnboardingReport.memoryContinuity?.enabled, true);
+      assert.equal(defaultOnboardingReport.tokenOptimization?.enabled, true);
+
       const optOutInitOutput = execSync(
-        `node ${cliPath} init ${optOutOptimizationTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize`
+        `node ${cliPath} init ${optOutOptimizationTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize --no-memory-continuity`
       ).toString();
 
+      assert.match(optOutInitOutput, /Memory continuity policy: disabled \(--no-memory-continuity\)/);
       assert.match(optOutInitOutput, /Token optimization policy: disabled \(--no-token-optimize\)/);
+
+      const optOutMemoryStatePath = join(
+        optOutOptimizationTargetDirectory,
+        '.agent-context',
+        'state',
+        'memory-continuity.json'
+      );
+      assert.equal(existsSync(optOutMemoryStatePath), false);
 
       const optOutTokenStatePath = join(
         optOutOptimizationTargetDirectory,
@@ -532,7 +562,14 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(existsSync(optOutTokenStatePath), false);
 
       const optOutCompiledRules = readFileSync(join(optOutOptimizationTargetDirectory, '.cursorrules'), 'utf8');
+      assert.doesNotMatch(optOutCompiledRules, /MEMORY CONTINUITY PROFILE/);
       assert.doesNotMatch(optOutCompiledRules, /TOKEN OPTIMIZATION PROFILE/);
+
+      const optOutOnboardingReport = JSON.parse(
+        readFileSync(join(optOutOptimizationTargetDirectory, '.agent-context', 'state', 'onboarding-report.json'), 'utf8')
+      );
+      assert.equal(optOutOnboardingReport.memoryContinuity?.enabled, false);
+      assert.equal(optOutOnboardingReport.tokenOptimization?.enabled, false);
     } finally {
       rmSync(defaultOptimizationTargetDirectory, { recursive: true, force: true });
       rmSync(optOutOptimizationTargetDirectory, { recursive: true, force: true });

@@ -235,6 +235,27 @@ npx @ryuenn3123/agentic-senior-core init --no-token-optimize
 When enabled, the CLI writes `.agent-context/state/token-optimization.json`, regenerates compiled rules, and adds compact command guidance to `.cursorrules` and `.windsurfrules`.
 If an external token proxy is available, the CLI prints setup hints. If not, native fallback guidance stays active, so outside users are not forced to install extra tooling.
 
+### Memory Continuity Mode (Enabled by Default on Init)
+
+By default, every `init` flow also enables memory continuity automatically.
+This allows cross-session context carryover through compact index-first retrieval plus selective hydration.
+
+Quick start:
+
+```bash
+# Default behavior (explicit flag optional)
+npx @ryuenn3123/agentic-senior-core init --memory-continuity
+
+# Opt out when needed
+npx @ryuenn3123/agentic-senior-core init --no-memory-continuity
+```
+
+When enabled, the CLI writes `.agent-context/state/memory-continuity.json`, regenerates compiled rules, and injects `MEMORY CONTINUITY PROFILE` guidance into `.cursorrules` and `.windsurfrules`.
+
+Compatibility note:
+- Works for local IDE, CLI, and cloud IDE chat runtimes that support the adapter contract or MCP retrieval path.
+- Generic web chat runtimes without repository tool hooks cannot auto-hydrate memory at runtime and should use manual summary handoff.
+
 ### Token Efficiency Benchmark Snapshot
 
 Latest local benchmark (2026-04-11) from `.agent-context/state/token-optimization-benchmark.json`:
