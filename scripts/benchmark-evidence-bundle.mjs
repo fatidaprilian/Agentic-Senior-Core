@@ -23,6 +23,8 @@ const PACKAGE_JSON_PATH = join(REPOSITORY_ROOT, 'package.json');
 const REPRO_PROFILE_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'benchmark-reproducibility.json');
 const BENCHMARK_THRESHOLD_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'benchmark-thresholds.json');
 const BENCHMARK_WATCHLIST_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'benchmark-watchlist.json');
+const MEMORY_SCHEMA_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'memory-schema-v1.json');
+const MEMORY_ADAPTER_CONTRACT_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'memory-adapter-contract.json');
 const OUTPUT_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'benchmark-evidence-bundle.json');
 const HISTORY_OUTPUT_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'benchmark-history.json');
 const TREND_JSON_OUTPUT_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'benchmark-trend-report.json');
@@ -211,7 +213,18 @@ function summarizeExecution(scriptExecutionResult) {
   };
 }
 
-function buildRubricSummary(thresholdConfiguration, intelligenceReport) {
+function appendUniqueTextValues(baseValues, additionalValues) {
+  const mergedValues = [...baseValues];
+  for (const additionalValue of additionalValues) {
+    if (!mergedValues.includes(additionalValue)) {
+      mergedValues.push(additionalValue);
+    }
+  }
+
+  return mergedValues;
+}
+
+function buildRubricSummary(thresholdConfiguration, intelligenceReport, memoryContinuityReport) {
   return {
     benchmarkThresholds: {
       minimumTop1Accuracy: thresholdConfiguration?.minimumTop1Accuracy ?? null,
@@ -221,6 +234,7 @@ function buildRubricSummary(thresholdConfiguration, intelligenceReport) {
     },
     intelligenceSlaDays: intelligenceReport?.reviewSlaDays ?? null,
     reliabilityThresholds: RELIABILITY_THRESHOLDS,
+    continuityThresholds: memoryContinuityReport?.thresholds || null,
   };
 }
 
@@ -490,11 +504,14 @@ async function runBenchmarkEvidenceBundle() {
   const reproducibilityProfile = readJsonOrNull(REPRO_PROFILE_PATH);
   const thresholdConfiguration = readJsonOrNull(BENCHMARK_THRESHOLD_PATH);
   const watchlistConfiguration = readJsonOrNull(BENCHMARK_WATCHLIST_PATH);
+  const memorySchemaConfiguration = readJsonOrNull(MEMORY_SCHEMA_PATH);
+  const memoryAdapterContractConfiguration = readJsonOrNull(MEMORY_ADAPTER_CONTRACT_PATH);
   const releaseVersion = readReleaseVersion();
 
   const detectionBenchmarkExecution = runJsonScript('scripts/detection-benchmark.mjs');
   const benchmarkGateExecution = runJsonScript('scripts/benchmark-gate.mjs');
   const benchmarkIntelligenceExecution = runJsonScript('scripts/benchmark-intelligence.mjs');
+  const memoryContinuityExecution = runJsonScript('scripts/memory-continuity-benchmark.mjs');
   const forbiddenContentExecution = runNodeScript('scripts/forbidden-content-check.mjs');
   const npmAuditIndicator = runNpmAuditIndicator();
 
@@ -502,6 +519,7 @@ async function runBenchmarkEvidenceBundle() {
     summarizeExecution(detectionBenchmarkExecution),
     summarizeExecution(benchmarkGateExecution),
     summarizeExecution(benchmarkIntelligenceExecution),
+    summarizeExecution(memoryContinuityExecution),
   ];
 
   const executionFailureCount = executionSummaries.filter((executionSummary) => {
@@ -562,6 +580,19 @@ async function runBenchmarkEvidenceBundle() {
   };
 
   const trendCsvPayload = convertTrendTableToCsv(trendTable);
+  const baseRerunInstructions = Array.isArray(reproducibilityProfile?.rerunInstructions)
+    ? reproducibilityProfile.rerunInstructions
+    : [];
+  const baseCommandExamples = Array.isArray(reproducibilityProfile?.commandExamples)
+    ? reproducibilityProfile.commandExamples
+    : [];
+  const rerunInstructions = appendUniqueTextValues(baseRerunInstructions, [
+    'Run npm run benchmark:continuity to validate cross-agent memory hydration, privacy redaction, and token-savings behavior.',
+  ]);
+  const commandExamples = appendUniqueTextValues(baseCommandExamples, [
+    'npm run benchmark:continuity',
+    'node ./scripts/memory-continuity-benchmark.mjs --stdout-only',
+  ]);
 
   const evidenceBundleReport = {
     generatedAt,
@@ -573,22 +604,24 @@ async function runBenchmarkEvidenceBundle() {
     methodology: {
       deterministicRuntime: reproducibilityProfile?.deterministicRuntime || null,
       scenarioCount: Array.isArray(reproducibilityProfile?.scenarios) ? reproducibilityProfile.scenarios.length : 0,
-      commandCount: Array.isArray(reproducibilityProfile?.commandExamples) ? reproducibilityProfile.commandExamples.length : 0,
+      commandCount: commandExamples.length,
     },
-    rerunInstructions: Array.isArray(reproducibilityProfile?.rerunInstructions)
-      ? reproducibilityProfile.rerunInstructions
-      : [],
-    commandExamples: Array.isArray(reproducibilityProfile?.commandExamples)
-      ? reproducibilityProfile.commandExamples
-      : [],
+    rerunInstructions,
+    commandExamples,
     rawInputs: {
       scenarios: Array.isArray(reproducibilityProfile?.scenarios) ? reproducibilityProfile.scenarios : [],
       benchmarkThresholds: thresholdConfiguration,
       benchmarkWatchlist: Array.isArray(watchlistConfiguration?.repositories)
         ? watchlistConfiguration.repositories
         : [],
+      memorySchema: memorySchemaConfiguration,
+      memoryAdapterContract: memoryAdapterContractConfiguration,
     },
-    rubric: buildRubricSummary(thresholdConfiguration, benchmarkIntelligenceExecution.parsedReport),
+    rubric: buildRubricSummary(
+      thresholdConfiguration,
+      benchmarkIntelligenceExecution.parsedReport,
+      memoryContinuityExecution.parsedReport
+    ),
     bugIndicators,
     reliabilitySignals,
     securityIndicators,
@@ -599,6 +632,7 @@ async function runBenchmarkEvidenceBundle() {
       detectionBenchmark: detectionBenchmarkExecution.parsedReport,
       benchmarkGate: benchmarkGateExecution.parsedReport,
       benchmarkIntelligence: benchmarkIntelligenceExecution.parsedReport,
+      memoryContinuityBenchmark: memoryContinuityExecution.parsedReport,
     },
     executions: executionSummaries,
   };

@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.27 - 2026-04-17
+### Added
+- Added cross-agent memory continuity pilot core with provider-agnostic schema (`.agent-context/state/memory-schema-v1.json`) and adapter contract (`.agent-context/state/memory-adapter-contract.json`) for Claude Code, Gemini CLI, and VS Code chat hosts.
+- Added reusable memory continuity utilities in `lib/cli/memory-continuity.mjs` for observation normalization, privacy redaction, lightweight index generation, and selective hydration.
+- Added continuity benchmark command `npm run benchmark:continuity` backed by `scripts/memory-continuity-benchmark.mjs`, with machine-readable artifact output in `.agent-context/state/memory-continuity-benchmark.json`.
+
+### Changed
+- Updated benchmark evidence bundling to include continuity benchmark execution, continuity thresholds, and memory schema/adapter raw input snapshots.
+- Updated enterprise operations tests, repository validator required-files checks, and README benchmark quickstart/docs coverage for the new continuity benchmark path.
+- Updated roadmap and deep backlog execution status to mark V2.5 cross-agent memory continuity pilot tracks as delivered.
+
+### Fixed
+- Fixed continuity benchmark token-efficiency modeling so session-start index payload reflects compact progressive disclosure instead of oversized summaries.
+- Fixed continuity benchmark threshold calibration to align with realistic hydration behavior while preserving strict relevance and privacy-safety checks.
+
 ## 2.0.26 - 2026-04-16
 ### Added
 - Added domain-first init selection upgrades with web frontend/backend stack split, dual-blueprint capture, and existing-project auto stack reuse.

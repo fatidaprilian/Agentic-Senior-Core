@@ -294,6 +294,27 @@ For CI pipelines that only need stdout JSON:
 node ./scripts/benchmark-writer-judge-matrix.mjs --stdout-only
 ```
 
+### Memory Continuity Benchmark (V2.5.3 Pilot)
+
+Validate cross-agent memory hydration quality, privacy redaction safety, and session-start token savings:
+
+```bash
+npm run benchmark:continuity
+```
+
+This command writes:
+- `.agent-context/state/memory-continuity-benchmark.json`
+
+Reference artifacts:
+- `.agent-context/state/memory-schema-v1.json`
+- `.agent-context/state/memory-adapter-contract.json`
+
+For CI pipelines that only need stdout JSON:
+
+```bash
+node ./scripts/memory-continuity-benchmark.mjs --stdout-only
+```
+
 ### Benchmark Quickstart Path (V2.5)
 
 For new users, run this minimal sequence first:
@@ -302,6 +323,7 @@ For new users, run this minimal sequence first:
 npm run benchmark:detection
 npm run benchmark:writer-judge
 npm run benchmark:bundle
+npm run benchmark:continuity
 ```
 
 This gives a fast baseline of accuracy, writer-judge comparison, and evidence packaging in one pass.

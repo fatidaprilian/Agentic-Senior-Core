@@ -110,6 +110,22 @@ test('Enterprise Operations Tests', async (t) => {
     assert.equal(benchmarkEvidenceBundleReport.trendReport.reportName, 'benchmark-trend-report');
     assert.ok(Array.isArray(benchmarkEvidenceBundleReport.trendReport.trendTable));
     assert.ok(Array.isArray(benchmarkEvidenceBundleReport.trendReport.chartSeries.top1Accuracy));
+    assert.equal(benchmarkEvidenceBundleReport.outputs.memoryContinuityBenchmark.reportName, 'memory-continuity-benchmark');
+  });
+
+  await t.test('memory continuity benchmark outputs machine-readable report', () => {
+    const continuityOutput = execSync(`node ${join(process.cwd(), 'scripts', 'memory-continuity-benchmark.mjs')} --stdout-only`).toString();
+    const continuityReport = JSON.parse(continuityOutput);
+
+    assert.equal(continuityReport.reportName, 'memory-continuity-benchmark');
+    assert.equal(typeof continuityReport.passed, 'boolean');
+    assert.equal(typeof continuityReport.continuitySummary.averageRelevantRecall, 'number');
+    assert.equal(typeof continuityReport.continuitySummary.averageSessionStartTokenSavingsPercent, 'number');
+    assert.equal(typeof continuityReport.adapterCoverage.passed, 'boolean');
+    assert.ok(Array.isArray(continuityReport.adapterCoverage.requiredAdapterIds));
+    assert.ok(Array.isArray(continuityReport.scenarios));
+    assert.ok(continuityReport.scenarios.length >= 3);
+    assert.ok(Array.isArray(continuityReport.checks));
   });
 
   await t.test('benchmark writer-judge matrix outputs machine-readable report', () => {
