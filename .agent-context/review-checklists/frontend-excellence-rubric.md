@@ -43,6 +43,15 @@ Release recommendation:
 - [ ] Error, empty, and loading states provide clear next actions.
 - [ ] User journey avoids dead ends and hidden critical actions.
 
+## 7. Template Diversity and Originality
+- [ ] Output is not a copy of a generic starter template or repeated AI layout pattern.
+- [ ] Layout composition shows intentional variation in structure and hierarchy.
+- [ ] Visual intent, interaction quality, and conversion clarity are all explicitly reviewed together.
+
+## Low-Diversity Template Output Policy
+- If output is judged as low-diversity template output, release is blocked until layout direction is revised.
+- Reviewer must record the failing dimensions and expected redesign direction before re-run.
+
 ## Benchmark Expectation
 - Treat MiniMax frontend references as baseline, not target ceiling.
 - Target visual and interaction quality aligned with top award-grade manual design workflows (Awwwards-level reference quality).

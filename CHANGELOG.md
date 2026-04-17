@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.10 - 2026-04-17
+### Added
+- Added Frontend Designer Mode auto-activation policy in frontend architecture rules, including UI scope trigger signals and mandatory rubric application.
+- Added explicit low-diversity template output policy and Template Diversity and Originality scoring section in the frontend excellence rubric.
+
+### Changed
+- Changed frontend usability audit to enforce frontend auto-activation rule snippets plus conversion and anti-template rubric coverage.
+- Changed release gate frontend rubric coverage checks to include conversion clarity and low-diversity template policy snippets.
+- Expanded smoke-test coverage to assert frontend auto-activation and anti-template governance signals remain enforced.
+
 ## 2.5.9 - 2026-04-17
 ### Added
 - Added project-description-first architecture recommendation engine for `init`, including stack and blueprint proposal, confidence label, uncertainty notes, and one-line alternatives.

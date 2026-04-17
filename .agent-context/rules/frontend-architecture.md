@@ -2,6 +2,20 @@
 
 > A complex UI is built from simple, mathematically robust functions. State is dangerous; isolate it.
 
+## 0. Frontend Designer Mode (Auto Activation)
+When the user request is UI-facing, frontend design governance activates automatically. No manual mode toggle is required.
+
+UI scope trigger signals (any one is enough):
+- keywords such as: ui, ux, page, screen, component, layout, landing, dashboard, form, onboarding, animation, interaction
+- explicit requests to improve visual quality, conversion clarity, or interaction behavior
+- feature requests that include frontend deliverables even when backend changes are also included
+
+Mandatory behavior when triggered:
+- apply frontend excellence rubric checks from `.agent-context/review-checklists/frontend-excellence-rubric.md`
+- apply usability checks from `.agent-context/review-checklists/frontend-usability.md`
+- score and review generated UI work against visual intent, interaction quality, and conversion clarity
+- reject template-only repetitive outputs and force a distinct layout direction
+
 ## 1. File Structure (Feature-Driven Design)
 Organize your application by feature domain, not by file type.
 - **BANNED:** Monolithic directories like `/components` (with 500 files), `/hooks`, `/api`.

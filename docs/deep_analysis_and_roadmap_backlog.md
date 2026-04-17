@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-17
-Current Version: 2.5.9
+Current Version: 2.5.10
 Status: Stable and release-ready
 
 ---
@@ -450,7 +450,7 @@ Acceptance:
 #### V3.0-004: Frontend Designer Mode (Auto Activation)
 
 Priority: P1
-Status: planned
+Status: done
 
 Scope:
 - Auto-activate frontend design rules when UI scope is detected.
@@ -458,9 +458,9 @@ Scope:
 - Prevent template-only repetitive outputs.
 
 Acceptance:
-- [ ] UI tasks trigger frontend design rubric without manual toggle.
-- [ ] Generated UI work is evaluated against conversion, interaction, and visual intent checks.
-- [ ] Release checks can flag low-diversity template output.
+- [x] UI tasks trigger frontend design rubric without manual toggle.
+- [x] Generated UI work is evaluated against conversion, interaction, and visual intent checks.
+- [x] Release checks can flag low-diversity template output.
 
 #### V3.0-005: Backend Universal Principles Hardening
 

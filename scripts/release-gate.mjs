@@ -42,6 +42,9 @@ const REQUIRED_FRONTEND_EXCELLENCE_RUBRIC_SNIPPETS = [
   'Typography Quality',
   'Color System Diversity and Contrast',
   'Interaction Choreography',
+  'UX Narrative and Conversion Clarity',
+  'Template Diversity and Originality',
+  'Low-Diversity Template Output Policy',
   'Awwwards-level reference quality',
 ];
 const BENCHMARK_GATE_SCRIPT_PATH = 'scripts/benchmark-gate.mjs';

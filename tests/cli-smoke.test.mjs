@@ -700,10 +700,24 @@ test('CLI Smoke Tests', async (t) => {
     const auditOutput = execSync(`node ${join(process.cwd(), 'scripts', 'frontend-usability-audit.mjs')}`).toString();
     const auditReport = JSON.parse(auditOutput);
 
+    const frontendRuleContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'rules', 'frontend-architecture.md'),
+      'utf8'
+    );
+    const frontendRubricContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'review-checklists', 'frontend-excellence-rubric.md'),
+      'utf8'
+    );
+
     assert.equal(auditReport.auditName, 'frontend-usability-audit');
     assert.equal(auditReport.passed, true);
     assert.equal(auditReport.failureCount, 0);
     assert.ok(Array.isArray(auditReport.failures));
+    assert.match(frontendRuleContent, /Frontend Designer Mode \(Auto Activation\)/);
+    assert.match(frontendRuleContent, /UI scope trigger signals/);
+    assert.match(frontendRuleContent, /template-only repetitive outputs/);
+    assert.match(frontendRubricContent, /Template Diversity and Originality/);
+    assert.match(frontendRubricContent, /Low-Diversity Template Output Policy/);
   });
 
   await t.test('skill selector outputs recommended pack', () => {
