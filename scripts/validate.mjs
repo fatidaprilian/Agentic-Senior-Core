@@ -171,6 +171,7 @@ async function validateRequiredFiles() {
     'scripts/governance-weekly-report.mjs',
     'scripts/mcp-server.mjs',
     'scripts/frontend-usability-audit.mjs',
+    'scripts/documentation-boundary-audit.mjs',
     'scripts/release-gate.mjs',
     'scripts/generate-sbom.mjs',
     'scripts/init-project.sh',

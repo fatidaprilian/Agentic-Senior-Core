@@ -30,6 +30,7 @@ const REQUIRED_SKILL_DOMAINS = [
 const FRONTEND_PARITY_CHECKLIST_PATH = '.agent-context/review-checklists/frontend-skill-parity.md';
 const FRONTEND_EXCELLENCE_RUBRIC_PATH = '.agent-context/review-checklists/frontend-excellence-rubric.md';
 const FRONTEND_AUDIT_SCRIPT_PATH = 'scripts/frontend-usability-audit.mjs';
+const DOCUMENTATION_BOUNDARY_AUDIT_SCRIPT_PATH = 'scripts/documentation-boundary-audit.mjs';
 const BACKEND_ARCHITECTURE_RULE_PATH = '.agent-context/rules/architecture.md';
 const BACKEND_REVIEW_CHECKLIST_PATH = '.agent-context/review-checklists/pr-checklist.md';
 const REFACTOR_PROMPT_PATH = '.agent-context/prompts/refactor.md';
@@ -333,6 +334,44 @@ function runReleaseGate() {
         false,
         'backend-universal-principles-refactor-guidance-coverage',
         `Missing backend refactor guidance snippets: ${missingRefactorPromptSnippets.join(', ')}`
+      );
+    }
+  }
+
+  const documentationBoundaryAuditExecution = runMachineReadableScript(DOCUMENTATION_BOUNDARY_AUDIT_SCRIPT_PATH);
+  if (!documentationBoundaryAuditExecution.report) {
+    const failureDetails = documentationBoundaryAuditExecution.executionErrorMessage
+      ? `Documentation boundary audit execution failed before producing a machine-readable report: ${documentationBoundaryAuditExecution.executionErrorMessage}`
+      : 'Documentation boundary audit did not produce machine-readable JSON output';
+    pushResult(results, false, 'documentation-boundary-audit', failureDetails);
+  } else {
+    diagnostics.documentationBoundaryAudit = documentationBoundaryAuditExecution.report;
+    pushResult(
+      results,
+      true,
+      'documentation-boundary-audit',
+      `documentation-boundary-audit executed (passed=${documentationBoundaryAuditExecution.report.passed}, failures=${documentationBoundaryAuditExecution.report.failureCount})`
+    );
+
+    if (documentationBoundaryAuditExecution.report.passed === true) {
+      pushResult(
+        results,
+        true,
+        'documentation-boundary-hard-rule',
+        'Documentation hard-rule passed for all triggered boundaries'
+      );
+    } else {
+      const failedDocumentationBoundaries = Array.isArray(documentationBoundaryAuditExecution.report.failures)
+        ? documentationBoundaryAuditExecution.report.failures
+        : [];
+      const failureSummary = failedDocumentationBoundaries.length > 0
+        ? failedDocumentationBoundaries.join('; ')
+        : 'Documentation boundary audit failed without boundary failure details';
+      pushResult(
+        results,
+        false,
+        'documentation-boundary-hard-rule',
+        `Documentation hard-rule failed: ${failureSummary}`
       );
     }
   }

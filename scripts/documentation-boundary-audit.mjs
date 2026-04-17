@@ -1,0 +1,201 @@
+#!/usr/bin/env node
+
+/**
+ * documentation-boundary-audit.mjs
+ *
+ * Enforces documentation sync only on changed scope boundaries.
+ * If public surface, API contract, or database structure files change,
+ * matching documentation updates must be present in the same change scope.
+ */
+
+import { execFileSync } from 'node:child_process';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const REPOSITORY_ROOT = resolve(__dirname, '..');
+
+const CORE_DOCUMENTATION_FILES = new Set(['README.md', 'CHANGELOG.md']);
+
+const BOUNDARY_RULES = [
+  {
+    boundaryName: 'public-surface',
+    requirement: 'Public surface changes must update README.md, CHANGELOG.md, or docs/* in the same scope.',
+    trigger(filePath) {
+      return /^(bin\/|lib\/|scripts\/)/.test(filePath) && !isDocumentationFilePath(filePath);
+    },
+    docsMatcher(filePath) {
+      return filePath === 'README.md' || filePath === 'CHANGELOG.md' || filePath.startsWith('docs/');
+    },
+  },
+  {
+    boundaryName: 'api-contract',
+    requirement: 'API endpoint or contract changes must update API/OpenAPI documentation in the same scope.',
+    trigger(filePath) {
+      return !isDocumentationFilePath(filePath)
+        && /(api|openapi|contract|controller|route|endpoint)/i.test(filePath);
+    },
+    docsMatcher(filePath) {
+      return filePath === '.agent-context/rules/api-docs.md'
+        || /^(docs\/.*(api|contract|openapi))/i.test(filePath)
+        || filePath === 'README.md';
+    },
+  },
+  {
+    boundaryName: 'database-structure',
+    requirement: 'Database structure changes must update schema or migration documentation in the same scope.',
+    trigger(filePath) {
+      return !isDocumentationFilePath(filePath)
+        && /(database|schema|migration|repository|sql|prisma|typeorm|knex)/i.test(filePath);
+    },
+    docsMatcher(filePath) {
+      return filePath === '.agent-context/rules/database-design.md'
+        || /^(docs\/.*(database|schema|migration))/i.test(filePath)
+        || filePath === 'README.md';
+    },
+  },
+];
+
+function normalizeFilePath(filePath) {
+  return filePath.replace(/\\/g, '/').replace(/^\.\//, '');
+}
+
+function parseGitFileList(rawOutput) {
+  if (typeof rawOutput !== 'string' || rawOutput.trim().length === 0) {
+    return [];
+  }
+
+  return rawOutput
+    .split(/\r?\n/)
+    .map((filePath) => filePath.trim())
+    .filter((filePath) => filePath.length > 0)
+    .map(normalizeFilePath);
+}
+
+function runGitFileQuery(commandArguments) {
+  try {
+    const rawOutput = execFileSync('git', commandArguments, {
+      cwd: REPOSITORY_ROOT,
+      encoding: 'utf8',
+      maxBuffer: 1024 * 1024,
+    });
+
+    return parseGitFileList(rawOutput);
+  } catch {
+    return [];
+  }
+}
+
+function uniqueSorted(filePaths) {
+  return Array.from(new Set(filePaths)).sort((leftPath, rightPath) => leftPath.localeCompare(rightPath));
+}
+
+function collectChangedFiles() {
+  const workingTreeFiles = runGitFileQuery(['diff', '--name-only']);
+  const stagedFiles = runGitFileQuery(['diff', '--name-only', '--cached']);
+  const workingScopeFiles = uniqueSorted([...workingTreeFiles, ...stagedFiles]);
+
+  if (workingScopeFiles.length > 0) {
+    return {
+      source: 'working-tree-and-index',
+      files: workingScopeFiles,
+    };
+  }
+
+  const latestCommitRangeFiles = runGitFileQuery(['diff', '--name-only', 'HEAD~1..HEAD']);
+  if (latestCommitRangeFiles.length > 0) {
+    return {
+      source: 'latest-commit-range',
+      files: uniqueSorted(latestCommitRangeFiles),
+    };
+  }
+
+  const headCommitFiles = runGitFileQuery(['show', '--pretty=format:', '--name-only', 'HEAD']);
+  if (headCommitFiles.length > 0) {
+    return {
+      source: 'head-commit',
+      files: uniqueSorted(headCommitFiles),
+    };
+  }
+
+  return {
+    source: 'none',
+    files: [],
+  };
+}
+
+function isDocumentationFilePath(filePath) {
+  return CORE_DOCUMENTATION_FILES.has(filePath)
+    || filePath.startsWith('docs/')
+    || filePath.startsWith('.agent-context/review-checklists/')
+    || filePath === '.agent-context/rules/api-docs.md'
+    || filePath === '.agent-context/rules/database-design.md';
+}
+
+function evaluateBoundary(boundaryRule, changedFiles, changedDocumentationFiles) {
+  const boundaryChangedFiles = changedFiles.filter((filePath) => boundaryRule.trigger(filePath));
+
+  if (boundaryChangedFiles.length === 0) {
+    return {
+      boundaryName: boundaryRule.boundaryName,
+      requirement: boundaryRule.requirement,
+      triggered: false,
+      passed: true,
+      changedFiles: [],
+      documentationFiles: [],
+      details: 'Boundary not triggered by changed scope.',
+    };
+  }
+
+  const matchingDocumentationFiles = changedDocumentationFiles.filter((filePath) => boundaryRule.docsMatcher(filePath));
+  const boundaryPassed = matchingDocumentationFiles.length > 0;
+
+  const details = boundaryPassed
+    ? `Boundary triggered and synchronized with documentation updates: ${matchingDocumentationFiles.join(', ')}`
+    : 'Boundary triggered without required documentation updates.';
+
+  return {
+    boundaryName: boundaryRule.boundaryName,
+    requirement: boundaryRule.requirement,
+    triggered: true,
+    passed: boundaryPassed,
+    changedFiles: boundaryChangedFiles,
+    documentationFiles: matchingDocumentationFiles,
+    details,
+  };
+}
+
+function runDocumentationBoundaryAudit() {
+  const changedScope = collectChangedFiles();
+  const changedFiles = changedScope.files;
+  const changedDocumentationFiles = changedFiles.filter(isDocumentationFilePath);
+
+  const boundaryResults = BOUNDARY_RULES.map((boundaryRule) => (
+    evaluateBoundary(boundaryRule, changedFiles, changedDocumentationFiles)
+  ));
+
+  const failures = boundaryResults
+    .filter((boundaryResult) => boundaryResult.triggered && !boundaryResult.passed)
+    .map((boundaryResult) => {
+      const affectedFiles = boundaryResult.changedFiles.join(', ');
+      return `${boundaryResult.boundaryName}: ${boundaryResult.requirement} Changed files: ${affectedFiles}`;
+    });
+
+  const reportPayload = {
+    generatedAt: new Date().toISOString(),
+    auditName: 'documentation-boundary-audit',
+    source: changedScope.source,
+    changedFileCount: changedFiles.length,
+    changedFiles,
+    boundaryResults,
+    passed: failures.length === 0,
+    failureCount: failures.length,
+    failures,
+  };
+
+  console.log(JSON.stringify(reportPayload, null, 2));
+  process.exit(reportPayload.passed ? 0 : 1);
+}
+
+runDocumentationBoundaryAudit();

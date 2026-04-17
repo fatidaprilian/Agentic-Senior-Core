@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-17
-Current Version: 2.5.11
+Current Version: 2.5.12
 Status: Stable and release-ready
 
 ---
@@ -479,16 +479,16 @@ Acceptance:
 #### V3.0-006: Documentation as Hard Rule (Boundary-Aware)
 
 Priority: P1
-Status: planned
+Status: done
 
 Scope:
 - Require automatic documentation updates for public functions, database structures, and API endpoints when changed.
 - Apply boundary-aware scope to avoid unnecessary token overhead on untouched areas.
 
 Acceptance:
-- [ ] Public surface changes fail review if docs are missing or stale.
-- [ ] API and database changes include synchronized documentation updates.
-- [ ] Documentation checks stay focused on changed scope.
+- [x] Public surface changes fail review if docs are missing or stale.
+- [x] API and database changes include synchronized documentation updates.
+- [x] Documentation checks stay focused on changed scope.
 
 #### V3.0-007: Context-Triggered Security and Performance Checks
 

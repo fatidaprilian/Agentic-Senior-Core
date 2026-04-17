@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.12 - 2026-04-17
+### Added
+- Added `documentation-boundary-audit` script with machine-readable output to enforce boundary-aware documentation sync for public surface, API contract, and database structure changes.
+- Added explicit Documentation as Hard Rule (Boundary-Aware) section to API documentation governance rules.
+
+### Changed
+- Changed release gate diagnostics to execute documentation boundary audit and block release when triggered boundaries miss synchronized documentation updates.
+- Changed PR checklist and review prompt guidance to enforce boundary-aware documentation hard blockers on changed scopes.
+- Expanded CLI smoke and enterprise operations tests to cover documentation boundary audit and release gate hard-rule diagnostics.
+
 ## 2.5.11 - 2026-04-17
 ### Added
 - Added explicit backend universal principles in architecture rules for backend and shared core modules: no clever hacks, no premature abstraction, and readability over brevity.

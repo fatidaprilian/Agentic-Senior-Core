@@ -15,6 +15,7 @@ Use these checklists:
 2. Read .agent-context/review-checklists/security-audit.md — apply every item.
 3. Apply documentation scope rules exactly: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.
 4. Treat scope-style findings as advisory unless they hide factual errors, contract mismatches, or non-negotiable violations.
+5. Enforce documentation hard blockers on changed boundaries: public surface changes, API contract changes, and database structure changes must include synchronized documentation updates.
 
 For EVERY violation found:
 - State the exact file and line

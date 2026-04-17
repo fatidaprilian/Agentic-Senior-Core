@@ -211,6 +211,25 @@ The spec is a contract. If the contract is wrong, consumers will break.
 "I'll update the docs later" means "the docs will never be updated."
 ```
 
+## Documentation as Hard Rule (Boundary-Aware)
+
+Documentation checks are hard-blocking for contract accuracy, but scope-aware to avoid unnecessary overhead.
+
+### Boundary Triggers
+1. Public surface boundary: exported/public behavior changes in CLI, library, or runtime scripts.
+2. API contract boundary: endpoint, route, controller, or OpenAPI contract changes.
+3. Database structure boundary: schema, migration, repository contract, or persistence model changes.
+
+### Boundary-Aware Enforcement
+1. Only triggered boundaries require synchronized documentation updates.
+2. Untouched boundaries are ignored during the same review run.
+3. Missing docs for a triggered boundary is a blocking failure.
+
+### Required Same-Scope Sync
+1. Public surface changes must update user-facing docs (`README.md`, `CHANGELOG.md`, or `docs/*`).
+2. API contract changes must update API/OpenAPI docs in the same scope.
+3. Database structure changes must update schema/migration documentation in the same scope.
+
 ### Enforcement
 1. API docs live next to the code (same module, same directory)
 2. Docs update in the SAME commit as the endpoint change

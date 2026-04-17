@@ -743,6 +743,30 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(refactorPromptContent, /Prioritize maintainability over compressed one-liners\./);
   });
 
+  await t.test('documentation boundary audit outputs machine-readable report', () => {
+    const documentationAuditOutput = execSync(
+      `node ${join(process.cwd(), 'scripts', 'documentation-boundary-audit.mjs')}`
+    ).toString();
+    const documentationAuditReport = JSON.parse(documentationAuditOutput);
+
+    const apiDocsRuleContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'rules', 'api-docs.md'),
+      'utf8'
+    );
+    const prChecklistContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'review-checklists', 'pr-checklist.md'),
+      'utf8'
+    );
+
+    assert.equal(documentationAuditReport.auditName, 'documentation-boundary-audit');
+    assert.equal(documentationAuditReport.passed, true);
+    assert.equal(typeof documentationAuditReport.source, 'string');
+    assert.ok(Array.isArray(documentationAuditReport.boundaryResults));
+    assert.match(apiDocsRuleContent, /Documentation as Hard Rule \(Boundary-Aware\)/);
+    assert.match(prChecklistContent, /Public surface changes fail review if documentation updates are missing or stale in the same scope/);
+    assert.match(prChecklistContent, /Documentation checks stay boundary-aware and only enforce touched scopes/);
+  });
+
   await t.test('skill selector outputs recommended pack', () => {
     const skillOutput = execSync(`node ${cliPath} skill frontend --tier advance --json`).toString();
     const skillReport = JSON.parse(skillOutput);

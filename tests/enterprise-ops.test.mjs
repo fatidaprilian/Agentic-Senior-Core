@@ -38,6 +38,18 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(backendRefactorGuidanceCoverageResult);
     assert.equal(backendRefactorGuidanceCoverageResult.passed, true);
 
+    const documentationBoundaryAuditResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'documentation-boundary-audit'
+    );
+    assert.ok(documentationBoundaryAuditResult);
+    assert.equal(documentationBoundaryAuditResult.passed, true);
+
+    const documentationBoundaryHardRuleResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'documentation-boundary-hard-rule'
+    );
+    assert.ok(documentationBoundaryHardRuleResult);
+    assert.equal(documentationBoundaryHardRuleResult.passed, true);
+
     const frontendParityChecklistResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'frontend-parity-checklist-coverage'
     );
