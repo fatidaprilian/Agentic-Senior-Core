@@ -321,6 +321,29 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
+  await t.test('init uses Golden Standard profile by default', () => {
+    const goldenStandardTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-golden-standard-'));
+
+    try {
+      const goldenStandardOutput = execSync(
+        `node ${cliPath} init ${goldenStandardTargetDirectory} --stack typescript --blueprint api-nextjs --ci true --no-scaffold-docs --no-token-optimize`
+      ).toString();
+
+      assert.match(goldenStandardOutput, /Golden Standard mode enabled/);
+      assert.match(goldenStandardOutput, /Profile: Balanced/);
+      assert.doesNotMatch(goldenStandardOutput, /How much guidance do you want/);
+
+      const onboardingReportPath = join(goldenStandardTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
+      const onboardingReport = JSON.parse(readFileSync(onboardingReportPath, 'utf8'));
+
+      assert.equal(onboardingReport.selectedProfile, 'balanced');
+      assert.equal(onboardingReport.selectedStack, 'typescript.md');
+      assert.equal(onboardingReport.selectedBlueprint, 'api-nextjs.md');
+    } finally {
+      rmSync(goldenStandardTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
   await t.test('upgrade command supports dry-run preview', () => {
     const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-'));
 

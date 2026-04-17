@@ -22,6 +22,8 @@ npx @ryuenn3123/agentic-senior-core init
 
 That one command initializes your project with compiled rules, review checklists, and state context.
 
+Golden Standard mode is now the default path: init applies the recommended quality profile automatically, without a beginner/balanced/strict prompt on first run.
+
 Optional team default path:
 
 ```bash
@@ -71,6 +73,17 @@ If you see `Property $schema is not allowed`, keep `.vscode/mcp.json` without `$
 | `agentic-senior-core optimize --show` | Show token optimization state |
 | `agentic-senior-core skill frontend --tier advance` | Select skill packs |
 | `agentic-senior-core mcp` | Start local MCP stdio runtime |
+
+---
+
+## Upgrade Existing Governance Pack
+
+```bash
+npx @ryuenn3123/agentic-senior-core upgrade --dry-run
+npx @ryuenn3123/agentic-senior-core upgrade --yes
+```
+
+Use `--dry-run` first to preview changes safely, then apply with `--yes`.
 
 ---
 

@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.8 - 2026-04-17
+### Added
+- Added Golden Standard init behavior as the default path, so first-run onboarding no longer asks users to choose beginner, balanced, or strict profile levels.
+- Added CLI smoke-test coverage to lock Golden Standard default profile behavior and prevent regression.
+
+### Changed
+- Updated init command logic to keep legacy profile overrides (`--profile`, `--newbie`, presets, and profile packs) while defaulting to the Golden Standard profile when no explicit profile is supplied.
+- Updated CLI help text to document profile flags as legacy overrides and clarify the Golden Standard default path.
+- Updated README with explicit upgrade command examples to make update workflow visible again.
+
 ## 2.5.7 - 2026-04-17
 ### Added
 - Added final terminology mapping tables to README and roadmap to enforce canonical enterprise naming with developer-facing aliases.

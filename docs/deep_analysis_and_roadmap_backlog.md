@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-17
-Current Version: 2.5.7
+Current Version: 2.5.8
 Status: Stable and release-ready
 
 ---
@@ -411,7 +411,7 @@ Acceptance:
 #### V3.0-002: Golden Standard Init Mode
 
 Priority: P1
-Status: planned
+Status: done
 
 Scope:
 - Make one Golden Standard mode the default user path.
@@ -419,9 +419,9 @@ Scope:
 - Keep legacy profile engine internally for compatibility and migration safety.
 
 Acceptance:
-- [ ] Default init flow has one recommended quality path with no profile selection prompt.
-- [ ] Existing repositories using older profile metadata remain compatible.
-- [ ] Upgrade flow does not break historical policy states.
+- [x] Default init flow has one recommended quality path with no profile selection prompt.
+- [x] Existing repositories using older profile metadata remain compatible.
+- [x] Upgrade flow does not break historical policy states.
 
 #### V3.0-003: AI as Architect with User Veto Control
 
