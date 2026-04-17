@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-17
-Current Version: 2.5.6
+Current Version: 2.5.7
 Status: Stable and release-ready
 
 ---
@@ -376,6 +376,304 @@ Top goals:
 - org-level override registry with expiry governance
 - policy drift detection across repositories
 - provenance and portfolio-level quality reporting
+- staged rollout safety across pilot, canary, and global phases
+- explicit rollback governance with clear trigger conditions per issue
+- budget-aware AI orchestration (token budget, latency budget, and response-noise budget)
+- evidence-first quality reporting with measurable metrics and timestamps
+
+Execution policy:
+- V3.0 implementation is staged and issue-by-issue, not one-shot.
+- Version `3.0.0` is locked until all V3.0 acceptance items below are complete.
+- Patch/minor releases continue on 2.x track during V3.0 execution.
+- Every V3.0 issue must define rollout strategy: pilot, canary, then global.
+- Every V3.0 issue must define rollback trigger and rollback owner.
+- AI-heavy flows must define token, latency, and response-noise guardrails.
+- Every quality claim must include measurable source and timestamp.
+- AI as Architect flow must include explicit failure-mode checklist.
+
+#### Phase 1: Critical Overhaul (Onboarding and Initialization)
+
+#### V3.0-001: Onboarding Compression and README Minimal Start
+
+Priority: P1
+Status: done
+
+Scope:
+- Reduce README onboarding surface significantly and move benchmark-heavy content to docs.
+- Keep only strong positioning, one quick install command, and one before/after demo in the first screen.
+- Keep advanced tables and benchmark details in dedicated docs files.
+
+Acceptance:
+- [x] New users can understand value proposition in less than 60 seconds.
+- [x] Main README first-screen content can be scanned without scrolling overload.
+- [x] Detailed benchmark references remain available in docs with explicit links.
+
+#### V3.0-002: Golden Standard Init Mode
+
+Priority: P1
+Status: planned
+
+Scope:
+- Make one Golden Standard mode the default user path.
+- Hide beginner, balanced, and strict profile choices from first-run onboarding flow.
+- Keep legacy profile engine internally for compatibility and migration safety.
+
+Acceptance:
+- [ ] Default init flow has one recommended quality path with no profile selection prompt.
+- [ ] Existing repositories using older profile metadata remain compatible.
+- [ ] Upgrade flow does not break historical policy states.
+
+#### V3.0-003: AI as Architect with User Veto Control
+
+Priority: P1
+Status: planned
+
+Scope:
+- Replace manual stack and blueprint selection with project-description-first initialization.
+- Require AI to propose stack and blueprint with technical rationale and trade-off notes.
+- Require explicit user confirmation before applying architecture decision.
+- Enforce user veto rule: if user chooses a different stack, AI must comply immediately.
+- Define bounded research budget before first recommendation output (token ceiling and timeout).
+- Enforce concise recommendation format to keep onboarding response fast and readable.
+- Define failure-mode checklist for low-confidence recommendation, data conflict, and repeated user override.
+
+Acceptance:
+- [ ] Init supports single project-description input for architecture recommendation.
+- [ ] Recommendation output is concise: stack declaration, rationale in 3-5 sentences, and alternatives in one line each.
+- [ ] Recommendation output includes confidence label and uncertainty notes when evidence is weak.
+- [ ] Research phase does not exceed configured token ceiling and timeout before outputting recommendation.
+- [ ] Failure-mode handling is explicit: low-confidence and data-conflict scenarios trigger caution labels; repeated user override updates preference and skips debate.
+- [ ] User rejection path applies selected override without argumentative loop.
+
+#### Phase 2: Execution Rules (Behavior and Quality)
+
+#### V3.0-004: Frontend Designer Mode (Auto Activation)
+
+Priority: P1
+Status: planned
+
+Scope:
+- Auto-activate frontend design rules when UI scope is detected.
+- Enforce designer mindset: conversion clarity, interaction quality, and transition intent.
+- Prevent template-only repetitive outputs.
+
+Acceptance:
+- [ ] UI tasks trigger frontend design rubric without manual toggle.
+- [ ] Generated UI work is evaluated against conversion, interaction, and visual intent checks.
+- [ ] Release checks can flag low-diversity template output.
+
+#### V3.0-005: Backend Universal Principles Hardening
+
+Priority: P1
+Status: planned
+
+Scope:
+- Add explicit universal rules: no clever hacks, no premature abstraction, readability over brevity.
+- Apply consistently across backend and shared core modules.
+
+Acceptance:
+- [ ] Review checklists include readability-first and anti-cleverness enforcement.
+- [ ] Refactor guidance prioritizes maintainability over compressed one-liners.
+- [ ] Violations are visible in review diagnostics.
+
+#### V3.0-006: Documentation as Hard Rule (Boundary-Aware)
+
+Priority: P1
+Status: planned
+
+Scope:
+- Require automatic documentation updates for public functions, database structures, and API endpoints when changed.
+- Apply boundary-aware scope to avoid unnecessary token overhead on untouched areas.
+
+Acceptance:
+- [ ] Public surface changes fail review if docs are missing or stale.
+- [ ] API and database changes include synchronized documentation updates.
+- [ ] Documentation checks stay focused on changed scope.
+
+#### V3.0-007: Context-Triggered Security and Performance Checks
+
+Priority: P1
+Status: planned
+
+Scope:
+- Trigger strict security and performance audits on review requests, PR preparation, and major feature completion.
+- Avoid heavy audit mode on small edits unless explicitly requested.
+
+Acceptance:
+- [ ] Strict audit mode activates automatically on review and PR-intent workflows.
+- [ ] Small edits avoid unnecessary heavy checks by default.
+- [ ] User can always force strict audit mode manually.
+
+#### V3.0-008: Rules as Guardian (Cross-Session Consistency)
+
+Priority: P1
+Status: planned
+
+Scope:
+- Persist architecture and pattern decisions across sessions.
+- Detect drift and request explicit confirmation before changing declared stack or core patterns.
+
+Acceptance:
+- [ ] Session handoff includes active architecture contract summary.
+- [ ] Drift detection warns before direction changes.
+- [ ] Direction changes require explicit user confirmation.
+
+#### Phase 3: Quality of Life and State Management
+
+#### V3.0-009: Invisible State Management with Explain-on-Demand
+
+Priority: P2
+Status: planned
+
+Scope:
+- Keep JSON state complexity in background for normal user experience.
+- Allow explicit debug visibility when user asks state-level questions.
+
+Acceptance:
+- [ ] Default responses avoid unnecessary state-file internals.
+- [ ] State internals are exposed only on explicit request.
+- [ ] Diagnostic mode can explain relevant state decisions when needed.
+
+#### V3.0-010: Single Source of Truth and Lazy Rule Loading
+
+Priority: P1
+Status: planned
+
+Scope:
+- Keep one canonical rule source and reduce active entrypoint ambiguity.
+- Load language-specific rules on demand during initialization and task execution.
+
+Acceptance:
+- [ ] Canonical rule source is explicitly defined and enforced.
+- [ ] Language-specific guidance is loaded lazily based on detected scope.
+- [ ] No conflicting duplicate rule instructions during normal flow.
+
+#### V3.0-011: Terminology Rebrand (Developer-Friendly)
+
+Priority: P2
+Status: planned
+
+Scope:
+- Rebrand bureaucratic terms into developer-friendly language.
+- Map old terms to new terms with compatibility aliases during transition.
+- Keep enterprise canonical term `Federated Governance` for compliance and audit contexts.
+- Introduce developer-facing alias `Federated Rules Operations` in onboarding and day-to-day guidance.
+- Publish dual-term mapping reference (legacy term, developer term, canonical enterprise term, usage context).
+
+Acceptance:
+- [ ] Primary docs use new terminology consistently.
+- [ ] Transition aliases keep older references understandable.
+- [ ] Validation and onboarding text remain stable during migration.
+- [ ] Dual-term mapping reference is published and linked from README and roadmap.
+- [ ] Compliance and audit artifacts keep canonical enterprise terms unchanged.
+- [ ] Developer-facing docs can use friendly aliases but include canonical term on first mention.
+
+#### V3.0-012: Existing Project Detection Transparency
+
+Priority: P1
+Status: planned
+
+Scope:
+- Make existing-project detection more vocal at session start.
+- Declare detected stack, active rules, and major constraints clearly.
+
+Acceptance:
+- [ ] Existing project sessions show detected stack and active rule summary up front.
+- [ ] User can confirm or override detected setup quickly.
+- [ ] Onboarding report captures declared detection and user confirmation result.
+
+#### Phase 4: Long-Horizon Intelligence
+
+#### V3.0-013: Data-Backed Stack Research Engine
+
+Priority: P2
+Status: planned
+
+Scope:
+- Build data-backed architecture recommendation support using ecosystem signals.
+- Start with reproducible snapshot-based inputs before optional real-time enrichment.
+- Prevent hallucination-only recommendations for architecture justification.
+
+Acceptance:
+- [ ] Architecture recommendations cite measurable sources and timestamps.
+- [ ] Snapshot-based mode runs deterministically for release validation.
+- [ ] Optional real-time mode is gated and does not block baseline operation.
+
+#### V3.0-014: V3 Release Lock and Exit Gate
+
+Priority: P1
+Status: planned
+
+Scope:
+- Define explicit V3 release lock policy tied to completion of V3.0 issue acceptance.
+- Keep 2.x release stream active until all V3.0 criteria are complete.
+
+Acceptance:
+- [ ] `3.0.0` release is blocked while any V3.0 acceptance checklist remains incomplete.
+- [ ] Exit report enumerates pass/fail for each V3.0 issue before release cut.
+- [ ] Release note for `3.0.0` references full V3.0 completion evidence.
+
+#### Phase 5: Federated Governance Core
+
+#### V3.0-015: Signed Governance Bundle Distribution
+
+Priority: P1
+Status: planned
+
+Scope:
+- Deliver signed, versioned governance bundles for controlled policy distribution.
+- Add verification checks so init and upgrade only consume trusted bundle signatures.
+- Support staged rollout channels (pilot, canary, global) for bundle promotion.
+
+Acceptance:
+- [ ] Governance bundles are signed and versioned with reproducible metadata.
+- [ ] Init and upgrade reject untrusted or invalid bundle signatures.
+- [ ] Rollout channel promotion is auditable from pilot to global.
+
+#### V3.0-016: Org-Level Override Registry with Expiry Governance
+
+Priority: P1
+Status: planned
+
+Scope:
+- Build centralized override registry with owner, scope, rationale, and expiry metadata.
+- Enforce expiry lifecycle and approval flow for sensitive override categories.
+- Provide audit trail for create, update, renew, and revoke actions.
+
+Acceptance:
+- [ ] Registry records owner, scope, reason, and expiry for all overrides.
+- [ ] Expired overrides are flagged and blocked by policy checks.
+- [ ] Audit trail can reconstruct override history end-to-end.
+
+#### V3.0-017: Cross-Repository Policy Drift Detection
+
+Priority: P1
+Status: planned
+
+Scope:
+- Detect drift between canonical policy baseline and repository-applied policy state.
+- Produce machine-readable drift reports with severity classification and owner routing.
+- Add scheduled and on-demand drift scans for enterprise repositories.
+
+Acceptance:
+- [ ] Drift report includes delta summary, severity, and owner action path.
+- [ ] Scheduled scans run automatically with artifact outputs.
+- [ ] Release checks can block on critical drift findings.
+
+#### V3.0-018: Provenance and Portfolio-Level Quality Reporting
+
+Priority: P2
+Status: planned
+
+Scope:
+- Attach provenance evidence to governance bundles and major release artifacts.
+- Aggregate quality, reliability, and policy conformance across repository portfolio.
+- Provide portfolio dashboard and exportable machine-readable reports.
+
+Acceptance:
+- [ ] Provenance evidence is attached to release-bound governance artifacts.
+- [ ] Portfolio report aggregates quality and conformance by repository.
+- [ ] Dashboard and report exports are generated with timestamps and source references.
 
 ---
 

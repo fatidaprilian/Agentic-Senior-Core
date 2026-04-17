@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.7 - 2026-04-17
+### Added
+- Added final terminology mapping tables to README and roadmap to enforce canonical enterprise naming with developer-facing aliases.
+- Added dedicated benchmark reference document in `docs/benchmark-reference.md` so detailed performance and stack-fit data remain available outside onboarding.
+
+### Changed
+- Compressed README onboarding to a minimal-start structure centered on one init command, one before/after example, and short MCP quick setup.
+- Updated deep analysis backlog to mark `V3.0-001` as done and align current version metadata.
+
 ## 2.5.6 - 2026-04-17
 ### Fixed
 - Fixed critical test pollution issue where automated CLI smoke tests recursively wrote mock projects into the user's global Gemini IDE `mcp_config.json`, causing the IDE to crash with directory-not-found errors on ghost entries.

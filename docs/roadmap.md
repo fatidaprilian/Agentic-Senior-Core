@@ -212,6 +212,16 @@ Target window: Q4 2026.
 
 This release aims to move beyond repository-level governance toward federated enterprise operations.
 
+### Terminology Mapping (Final)
+
+| Canonical Enterprise Term | Developer-Facing Alias | Usage Rule |
+|---------------------------|------------------------|------------|
+| Federated Governance | Federated Rules Operations | Use canonical term in compliance and audit artifacts. |
+| Governance Engine | Rules Engine | Use alias in onboarding and day-to-day developer docs. |
+| Guardrails | Quality Checks | Use alias in implementation guidance and quickstart docs. |
+
+Rule: on first mention in developer-facing docs, include canonical term in parentheses.
+
 ### Planned Scope
 1. Federated governance operations
    - Support centralized policy distribution with signed versioned governance bundles.
