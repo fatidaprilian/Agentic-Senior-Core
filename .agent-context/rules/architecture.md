@@ -3,6 +3,16 @@
 > If your service file imports an HTTP library, your architecture is broken.
 > If your controller contains SQL, you've already lost.
 
+## Universal Backend Principles (Mandatory)
+
+These principles are mandatory for backend and shared core modules.
+
+- No clever hacks. Prefer explicit control flow over language tricks that hide intent.
+- No premature abstraction. Extract shared utilities or base types only after repeated, stable patterns appear.
+- Readability over brevity. Reject compressed one-liners when clearer multi-line logic is easier to review.
+
+If a short and a clear implementation are functionally equivalent, choose the clear implementation.
+
 ## The Core Principle
 
 **Every layer has ONE job. Layer leaks are bugs — not "pragmatic shortcuts."**

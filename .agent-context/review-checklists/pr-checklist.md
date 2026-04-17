@@ -40,6 +40,9 @@ VERDICT: PASS / FAIL (X/Y items passed)
 - [ ] Dependencies flow inward (transport → service → repository)
 - [ ] Module boundaries respected (no reaching into another module's internals)
 - [ ] Domain layer has zero external dependencies
+- [ ] No clever hacks in backend and shared core modules (prefer explicit control flow)
+- [ ] No premature abstraction (base classes/util layers created only after repeated stable patterns)
+- [ ] Readability over brevity for maintainability (no compressed one-liners that hide intent)
 
 ### 3. Type Safety (→ stacks/typescript.md)
 - [ ] No `any` type anywhere (use `unknown` + narrowing)

@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.11 - 2026-04-17
+### Added
+- Added explicit backend universal principles in architecture rules for backend and shared core modules: no clever hacks, no premature abstraction, and readability over brevity.
+- Added readability-first and anti-cleverness checks in architecture review and PR review checklists.
+
+### Changed
+- Changed refactor prompt guidance to prioritize maintainability over compressed one-liners and avoid premature abstraction.
+- Changed release gate diagnostics to validate backend universal principles coverage in rules, review checklist, and refactor guidance sources.
+- Expanded enterprise and CLI smoke tests to lock backend universal principles governance coverage.
+
 ## 2.5.10 - 2026-04-17
 ### Added
 - Added Frontend Designer Mode auto-activation policy in frontend architecture rules, including UI scope trigger signals and mandatory rubric application.

@@ -20,6 +20,24 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(compatibilityCoverageResult);
     assert.equal(compatibilityCoverageResult.passed, true);
 
+    const backendRuleCoverageResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'backend-universal-principles-rule-coverage'
+    );
+    assert.ok(backendRuleCoverageResult);
+    assert.equal(backendRuleCoverageResult.passed, true);
+
+    const backendChecklistCoverageResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'backend-universal-principles-checklist-coverage'
+    );
+    assert.ok(backendChecklistCoverageResult);
+    assert.equal(backendChecklistCoverageResult.passed, true);
+
+    const backendRefactorGuidanceCoverageResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'backend-universal-principles-refactor-guidance-coverage'
+    );
+    assert.ok(backendRefactorGuidanceCoverageResult);
+    assert.equal(backendRefactorGuidanceCoverageResult.passed, true);
+
     const frontendParityChecklistResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'frontend-parity-checklist-coverage'
     );

@@ -14,11 +14,17 @@ Before making changes:
 2. Read .agent-context/rules/naming-conv.md — fix all naming violations.
 3. Read .agent-context/rules/error-handling.md — fix error handling patterns.
 4. Read .agent-context/stacks/typescript.md — fix TypeScript-specific issues.
+5. Enforce backend universal principles: no clever hacks, no premature abstraction, readability over brevity.
 
 For every change you make, provide a Reasoning Chain:
 - What was wrong (rule reference)
 - Why it was wrong (explain the risk/problem)
 - What you changed (show the improvement)
+
+Refactor guidance:
+- Prioritize maintainability over compressed one-liners.
+- Prefer explicit readable control flow when short forms hide intent.
+- Do not introduce shared abstractions before patterns are repeated and stable.
 
 Maintain ALL existing functionality. This is a refactor, not a rewrite.
 Add or update tests if the refactored code changes behavior contracts.

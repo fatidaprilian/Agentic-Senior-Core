@@ -29,6 +29,12 @@ Evaluate every item against the current project structure. For each violation, e
 - [ ] **Shared code is genuinely shared** — Not domain-specific code disguised as "common"
 - [ ] **Module size is reasonable** — If a module has 20+ files, consider splitting
 
+## Backend Universal Principles
+
+- [ ] **No clever hacks in backend and shared core modules** — Prefer explicit flow over language tricks that hide intent
+- [ ] **No premature abstraction** — Introduce shared abstractions only after repeated, stable patterns emerge
+- [ ] **Readability over brevity** — Prefer clear multi-line logic over compressed one-liners
+
 ## Dependency Management
 
 - [ ] **No God classes** — No class/file with 500+ lines or 10+ dependencies

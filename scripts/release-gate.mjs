@@ -30,12 +30,30 @@ const REQUIRED_SKILL_DOMAINS = [
 const FRONTEND_PARITY_CHECKLIST_PATH = '.agent-context/review-checklists/frontend-skill-parity.md';
 const FRONTEND_EXCELLENCE_RUBRIC_PATH = '.agent-context/review-checklists/frontend-excellence-rubric.md';
 const FRONTEND_AUDIT_SCRIPT_PATH = 'scripts/frontend-usability-audit.mjs';
+const BACKEND_ARCHITECTURE_RULE_PATH = '.agent-context/rules/architecture.md';
+const BACKEND_REVIEW_CHECKLIST_PATH = '.agent-context/review-checklists/pr-checklist.md';
+const REFACTOR_PROMPT_PATH = '.agent-context/prompts/refactor.md';
 const REQUIRED_FRONTEND_PARITY_SNIPPETS = [
   'Architecture and Composition',
   'Interaction and Motion',
   'Accessibility and Responsiveness',
   'UX Narrative and Conversion Clarity',
   'Release Evidence',
+];
+const REQUIRED_BACKEND_ARCHITECTURE_RULE_SNIPPETS = [
+  'No clever hacks.',
+  'No premature abstraction.',
+  'Readability over brevity.',
+  'backend and shared core modules',
+];
+const REQUIRED_BACKEND_REVIEW_CHECKLIST_SNIPPETS = [
+  'No clever hacks in backend and shared core modules',
+  'No premature abstraction (base classes/util layers created only after repeated stable patterns)',
+  'Readability over brevity for maintainability',
+];
+const REQUIRED_REFACTOR_PROMPT_SNIPPETS = [
+  'Enforce backend universal principles: no clever hacks, no premature abstraction, readability over brevity.',
+  'Prioritize maintainability over compressed one-liners.',
 ];
 const REQUIRED_FRONTEND_EXCELLENCE_RUBRIC_SNIPPETS = [
   'Visual Direction and Identity',
@@ -251,6 +269,72 @@ function runReleaseGate() {
       'compatibility-manifest-coverage',
       `Validated ${validatedCompatibilityManifestCount}/${REQUIRED_SKILL_DOMAINS.length} required skill compatibility manifests`
     );
+  }
+
+  const backendArchitectureRuleContent = readText(BACKEND_ARCHITECTURE_RULE_PATH);
+  if (!backendArchitectureRuleContent) {
+    pushResult(results, false, 'backend-universal-principles-rule-exists', `Missing ${BACKEND_ARCHITECTURE_RULE_PATH}`);
+  } else {
+    pushResult(results, true, 'backend-universal-principles-rule-exists', `${BACKEND_ARCHITECTURE_RULE_PATH} is present`);
+
+    const missingBackendArchitectureRuleSnippets = REQUIRED_BACKEND_ARCHITECTURE_RULE_SNIPPETS.filter(
+      (requiredSnippet) => !backendArchitectureRuleContent.includes(requiredSnippet)
+    );
+
+    if (missingBackendArchitectureRuleSnippets.length === 0) {
+      pushResult(results, true, 'backend-universal-principles-rule-coverage', 'Backend universal rule snippets are complete');
+    } else {
+      pushResult(
+        results,
+        false,
+        'backend-universal-principles-rule-coverage',
+        `Missing backend universal rule snippets: ${missingBackendArchitectureRuleSnippets.join(', ')}`
+      );
+    }
+  }
+
+  const backendReviewChecklistContent = readText(BACKEND_REVIEW_CHECKLIST_PATH);
+  if (!backendReviewChecklistContent) {
+    pushResult(results, false, 'backend-universal-principles-checklist-exists', `Missing ${BACKEND_REVIEW_CHECKLIST_PATH}`);
+  } else {
+    pushResult(results, true, 'backend-universal-principles-checklist-exists', `${BACKEND_REVIEW_CHECKLIST_PATH} is present`);
+
+    const missingBackendChecklistSnippets = REQUIRED_BACKEND_REVIEW_CHECKLIST_SNIPPETS.filter(
+      (requiredSnippet) => !backendReviewChecklistContent.includes(requiredSnippet)
+    );
+
+    if (missingBackendChecklistSnippets.length === 0) {
+      pushResult(results, true, 'backend-universal-principles-checklist-coverage', 'Backend review checklist snippets are complete');
+    } else {
+      pushResult(
+        results,
+        false,
+        'backend-universal-principles-checklist-coverage',
+        `Missing backend review checklist snippets: ${missingBackendChecklistSnippets.join(', ')}`
+      );
+    }
+  }
+
+  const refactorPromptContent = readText(REFACTOR_PROMPT_PATH);
+  if (!refactorPromptContent) {
+    pushResult(results, false, 'backend-universal-principles-refactor-guidance-exists', `Missing ${REFACTOR_PROMPT_PATH}`);
+  } else {
+    pushResult(results, true, 'backend-universal-principles-refactor-guidance-exists', `${REFACTOR_PROMPT_PATH} is present`);
+
+    const missingRefactorPromptSnippets = REQUIRED_REFACTOR_PROMPT_SNIPPETS.filter(
+      (requiredSnippet) => !refactorPromptContent.includes(requiredSnippet)
+    );
+
+    if (missingRefactorPromptSnippets.length === 0) {
+      pushResult(results, true, 'backend-universal-principles-refactor-guidance-coverage', 'Backend refactor guidance snippets are complete');
+    } else {
+      pushResult(
+        results,
+        false,
+        'backend-universal-principles-refactor-guidance-coverage',
+        `Missing backend refactor guidance snippets: ${missingRefactorPromptSnippets.join(', ')}`
+      );
+    }
   }
 
   const frontendParityChecklistContent = readText(FRONTEND_PARITY_CHECKLIST_PATH);

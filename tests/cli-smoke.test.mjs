@@ -720,6 +720,29 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(frontendRubricContent, /Low-Diversity Template Output Policy/);
   });
 
+  await t.test('backend universal principles governance snippets are present', () => {
+    const architectureRuleContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'rules', 'architecture.md'),
+      'utf8'
+    );
+    const prChecklistContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'review-checklists', 'pr-checklist.md'),
+      'utf8'
+    );
+    const refactorPromptContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'prompts', 'refactor.md'),
+      'utf8'
+    );
+
+    assert.match(architectureRuleContent, /No clever hacks\./);
+    assert.match(architectureRuleContent, /No premature abstraction\./);
+    assert.match(architectureRuleContent, /Readability over brevity\./);
+    assert.match(prChecklistContent, /No clever hacks in backend and shared core modules/);
+    assert.match(prChecklistContent, /No premature abstraction/);
+    assert.match(prChecklistContent, /Readability over brevity for maintainability/);
+    assert.match(refactorPromptContent, /Prioritize maintainability over compressed one-liners\./);
+  });
+
   await t.test('skill selector outputs recommended pack', () => {
     const skillOutput = execSync(`node ${cliPath} skill frontend --tier advance --json`).toString();
     const skillReport = JSON.parse(skillOutput);
