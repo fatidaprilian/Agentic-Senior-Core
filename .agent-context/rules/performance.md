@@ -7,6 +7,16 @@
 
 **Do NOT optimize without evidence.** CPU time is cheap. Developer time is expensive.
 
+## Context-Triggered Strict Audit Mode
+
+Strict performance audits must activate automatically for:
+- review requests
+- PR-intent workflows (pull request preparation and merge readiness)
+- major feature completion
+
+Small edits stay in lightweight mode by default to avoid unnecessary heavy checks.
+Users can always force strict performance mode manually.
+
 BUT — there are patterns so obviously bad that they don't need benchmarks to reject.
 Those are listed below as **Death Penalties**.
 

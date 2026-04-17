@@ -11,6 +11,12 @@ Evaluate every item below. For each finding, rate impact:
 - **MEDIUM** — Wasted resources, fix in this sprint
 - **LOW** — Optimization opportunity, track for later
 
+## Context Trigger Policy
+
+- Strict performance audit auto-runs for review requests, PR-intent workflows, and major feature completion.
+- Small edits default to lightweight mode unless strict mode is explicitly forced.
+- User can force strict mode manually at any time.
+
 ---
 
 ## Database & Queries

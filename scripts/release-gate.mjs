@@ -31,6 +31,7 @@ const FRONTEND_PARITY_CHECKLIST_PATH = '.agent-context/review-checklists/fronten
 const FRONTEND_EXCELLENCE_RUBRIC_PATH = '.agent-context/review-checklists/frontend-excellence-rubric.md';
 const FRONTEND_AUDIT_SCRIPT_PATH = 'scripts/frontend-usability-audit.mjs';
 const DOCUMENTATION_BOUNDARY_AUDIT_SCRIPT_PATH = 'scripts/documentation-boundary-audit.mjs';
+const CONTEXT_TRIGGERED_AUDIT_SCRIPT_PATH = 'scripts/context-triggered-audit.mjs';
 const BACKEND_ARCHITECTURE_RULE_PATH = '.agent-context/rules/architecture.md';
 const BACKEND_REVIEW_CHECKLIST_PATH = '.agent-context/review-checklists/pr-checklist.md';
 const REFACTOR_PROMPT_PATH = '.agent-context/prompts/refactor.md';
@@ -97,9 +98,9 @@ function parseMachineReadableReport(rawOutput) {
   }
 }
 
-function runMachineReadableScript(scriptRelativePath) {
+function runMachineReadableScript(scriptRelativePath, scriptArguments = []) {
   try {
-    const rawOutput = execFileSync('node', [scriptRelativePath], {
+    const rawOutput = execFileSync('node', [scriptRelativePath, ...scriptArguments], {
       cwd: REPOSITORY_ROOT,
       encoding: 'utf8',
       maxBuffer: 1024 * 1024,
@@ -372,6 +373,60 @@ function runReleaseGate() {
         false,
         'documentation-boundary-hard-rule',
         `Documentation hard-rule failed: ${failureSummary}`
+      );
+    }
+  }
+
+  const contextTriggeredAuditExecution = runMachineReadableScript(
+    CONTEXT_TRIGGERED_AUDIT_SCRIPT_PATH,
+    ['--workflow', 'pr-preparation']
+  );
+  if (!contextTriggeredAuditExecution.report) {
+    const failureDetails = contextTriggeredAuditExecution.executionErrorMessage
+      ? `Context-triggered audit execution failed before producing a machine-readable report: ${contextTriggeredAuditExecution.executionErrorMessage}`
+      : 'Context-triggered audit did not produce machine-readable JSON output';
+    pushResult(results, false, 'context-triggered-audit', failureDetails);
+  } else {
+    diagnostics.contextTriggeredAudit = contextTriggeredAuditExecution.report;
+    pushResult(
+      results,
+      true,
+      'context-triggered-audit',
+      `context-triggered-audit executed (passed=${contextTriggeredAuditExecution.report.passed}, strict=${contextTriggeredAuditExecution.report.strictAuditMode}, failures=${contextTriggeredAuditExecution.report.failureCount})`
+    );
+
+    if (contextTriggeredAuditExecution.report.strictAuditMode === true) {
+      pushResult(
+        results,
+        true,
+        'context-triggered-strict-mode-auto',
+        `Strict audit mode activated automatically for workflow=${contextTriggeredAuditExecution.report.workflow}`
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'context-triggered-strict-mode-auto',
+        `Strict audit mode was not activated for workflow=${contextTriggeredAuditExecution.report.workflow}`
+      );
+    }
+
+    if (contextTriggeredAuditExecution.report.passed === true) {
+      pushResult(
+        results,
+        true,
+        'context-triggered-security-performance-hard-rule',
+        'Context-triggered security and performance audit hard-rule passed'
+      );
+    } else {
+      const failedAuditDetails = Array.isArray(contextTriggeredAuditExecution.report.failures)
+        ? contextTriggeredAuditExecution.report.failures.join('; ')
+        : 'Unknown context-triggered audit failures';
+      pushResult(
+        results,
+        false,
+        'context-triggered-security-performance-hard-rule',
+        `Context-triggered audit failed: ${failedAuditDetails}`
       );
     }
   }

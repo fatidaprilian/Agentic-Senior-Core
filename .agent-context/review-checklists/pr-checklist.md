@@ -109,3 +109,8 @@ VERDICT: PASS / FAIL (X/Y items passed)
 - [ ] Performance/quality claims include source and timestamp
 - [ ] Acronyms are expanded on first use
 - [ ] Facts and assumptions are explicitly separated
+
+### 11. Context-Triggered Audit Mode
+- [ ] Strict audit mode activates automatically on review and PR-intent workflows
+- [ ] Small edits avoid heavy checks by default unless strict mode is explicitly requested
+- [ ] User can always force strict audit mode manually

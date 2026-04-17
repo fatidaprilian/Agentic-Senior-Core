@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.13 - 2026-04-17
+### Added
+- Added `context-triggered-audit` script with machine-readable output to enforce workflow-aware strict security and performance audits.
+- Added explicit context-trigger policy sections to security and performance audit checklists, including strict trigger rules and manual override support.
+
+### Changed
+- Changed release gate diagnostics to run context-triggered audit in PR-preparation mode and block release when strict mode is not auto-activated or audit checks fail.
+- Changed security and performance governance rules, PR checklist, and review prompt to enforce context-triggered strict audit behavior.
+- Expanded CLI smoke and enterprise operations tests to verify strict-mode auto activation, lightweight default for small edits, and manual force strict override.
+
 ## 2.5.12 - 2026-04-17
 ### Added
 - Added `documentation-boundary-audit` script with machine-readable output to enforce boundary-aware documentation sync for public surface, API contract, and database structure changes.

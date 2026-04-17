@@ -16,6 +16,7 @@ Use these checklists:
 3. Apply documentation scope rules exactly: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.
 4. Treat scope-style findings as advisory unless they hide factual errors, contract mismatches, or non-negotiable violations.
 5. Enforce documentation hard blockers on changed boundaries: public surface changes, API contract changes, and database structure changes must include synchronized documentation updates.
+6. Enforce context-triggered strict audits: review requests, PR-intent workflows, and major feature completion must run strict security and performance audits; small edits stay lightweight unless strict mode is explicitly forced.
 
 For EVERY violation found:
 - State the exact file and line

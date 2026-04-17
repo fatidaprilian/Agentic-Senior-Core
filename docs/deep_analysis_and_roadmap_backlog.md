@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-17
-Current Version: 2.5.12
+Current Version: 2.5.13
 Status: Stable and release-ready
 
 ---
@@ -493,16 +493,16 @@ Acceptance:
 #### V3.0-007: Context-Triggered Security and Performance Checks
 
 Priority: P1
-Status: planned
+Status: done
 
 Scope:
 - Trigger strict security and performance audits on review requests, PR preparation, and major feature completion.
 - Avoid heavy audit mode on small edits unless explicitly requested.
 
 Acceptance:
-- [ ] Strict audit mode activates automatically on review and PR-intent workflows.
-- [ ] Small edits avoid unnecessary heavy checks by default.
-- [ ] User can always force strict audit mode manually.
+- [x] Strict audit mode activates automatically on review and PR-intent workflows.
+- [x] Small edits avoid unnecessary heavy checks by default.
+- [x] User can always force strict audit mode manually.
 
 #### V3.0-008: Rules as Guardian (Cross-Session Consistency)
 

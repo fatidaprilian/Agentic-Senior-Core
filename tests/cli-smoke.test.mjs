@@ -767,6 +767,37 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(prChecklistContent, /Documentation checks stay boundary-aware and only enforce touched scopes/);
   });
 
+  await t.test('context-triggered audit enforces strict mode by workflow and manual override', () => {
+    const reviewWorkflowAuditOutput = execSync(
+      `node ${join(process.cwd(), 'scripts', 'context-triggered-audit.mjs')} --workflow review-request`
+    ).toString();
+    const reviewWorkflowAuditReport = JSON.parse(reviewWorkflowAuditOutput);
+
+    assert.equal(reviewWorkflowAuditReport.auditName, 'context-triggered-audit');
+    assert.equal(reviewWorkflowAuditReport.workflow, 'review-request');
+    assert.equal(reviewWorkflowAuditReport.strictAuditMode, true);
+    assert.equal(reviewWorkflowAuditReport.passed, true);
+
+    const smallEditAuditOutput = execSync(
+      `node ${join(process.cwd(), 'scripts', 'context-triggered-audit.mjs')} --workflow small-edit`
+    ).toString();
+    const smallEditAuditReport = JSON.parse(smallEditAuditOutput);
+
+    assert.equal(smallEditAuditReport.workflow, 'small-edit');
+    assert.equal(smallEditAuditReport.strictAuditMode, false);
+    assert.equal(smallEditAuditReport.passed, true);
+
+    const forcedStrictAuditOutput = execSync(
+      `node ${join(process.cwd(), 'scripts', 'context-triggered-audit.mjs')} --workflow small-edit --strict`
+    ).toString();
+    const forcedStrictAuditReport = JSON.parse(forcedStrictAuditOutput);
+
+    assert.equal(forcedStrictAuditReport.workflow, 'small-edit');
+    assert.equal(forcedStrictAuditReport.userForcedStrictMode, true);
+    assert.equal(forcedStrictAuditReport.strictAuditMode, true);
+    assert.equal(forcedStrictAuditReport.passed, true);
+  });
+
   await t.test('skill selector outputs recommended pack', () => {
     const skillOutput = execSync(`node ${cliPath} skill frontend --tier advance --json`).toString();
     const skillReport = JSON.parse(skillOutput);

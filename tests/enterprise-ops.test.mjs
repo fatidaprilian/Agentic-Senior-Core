@@ -50,6 +50,24 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(documentationBoundaryHardRuleResult);
     assert.equal(documentationBoundaryHardRuleResult.passed, true);
 
+    const contextTriggeredAuditResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'context-triggered-audit'
+    );
+    assert.ok(contextTriggeredAuditResult);
+    assert.equal(contextTriggeredAuditResult.passed, true);
+
+    const contextTriggeredStrictModeResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'context-triggered-strict-mode-auto'
+    );
+    assert.ok(contextTriggeredStrictModeResult);
+    assert.equal(contextTriggeredStrictModeResult.passed, true);
+
+    const contextTriggeredHardRuleResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'context-triggered-security-performance-hard-rule'
+    );
+    assert.ok(contextTriggeredHardRuleResult);
+    assert.equal(contextTriggeredHardRuleResult.passed, true);
+
     const frontendParityChecklistResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'frontend-parity-checklist-coverage'
     );
@@ -83,6 +101,8 @@ test('Enterprise Operations Tests', async (t) => {
     assert.equal(typeof releaseGateReport.diagnostics, 'object');
     assert.equal(releaseGateReport.diagnostics?.benchmarkGate?.gateName, 'benchmark-gate');
     assert.equal(releaseGateReport.diagnostics?.benchmarkGate?.passed, true);
+    assert.equal(releaseGateReport.diagnostics?.contextTriggeredAudit?.auditName, 'context-triggered-audit');
+    assert.equal(releaseGateReport.diagnostics?.contextTriggeredAudit?.strictAuditMode, true);
   });
 
   await t.test('SBOM generator emits CycloneDX payload', () => {

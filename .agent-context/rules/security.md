@@ -7,6 +7,16 @@
 
 **ALL data crossing a system boundary is untrusted until validated.**
 
+## Context-Triggered Strict Audit Mode
+
+Strict security audits must activate automatically for:
+- review requests
+- PR-intent workflows (pull request preparation and merge readiness)
+- major feature completion
+
+Small edits stay in lightweight mode by default to avoid unnecessary heavy checks.
+Users can always force strict security mode manually.
+
 System boundaries include:
 - HTTP request bodies, query params, headers, cookies
 - URL path parameters

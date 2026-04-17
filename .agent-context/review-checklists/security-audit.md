@@ -24,6 +24,12 @@ Output format:
 VERDICT: X findings (🔴 N critical, 🟠 N high, 🟡 N medium, 🟢 N low)
 ```
 
+## Context Trigger Policy
+
+- Strict security audit auto-runs for review requests, PR-intent workflows, and major feature completion.
+- Small edits default to lightweight mode unless strict mode is explicitly forced.
+- User can force strict mode manually at any time.
+
 ---
 
 ## A1: Injection (SQL, NoSQL, OS, LDAP)
