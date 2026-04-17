@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.9 - 2026-04-17
+### Added
+- Added project-description-first architecture recommendation engine for `init`, including stack and blueprint proposal, confidence label, uncertainty notes, and one-line alternatives.
+- Added recommendation guardrails for token-budget and timeout envelopes (`--architect-token-budget`, `--architect-timeout-ms`) plus non-interactive project input via `--project-description`.
+- Added onboarding report architecture metadata (`architectRecommendation`) to persist recommendation, failure-mode labels, veto outcome, and guardrail usage.
+- Added CLI smoke coverage for project-description-first recommendation flow and repeated-override preference behavior.
+
+### Changed
+- Changed init flow to prioritize AI-as-Architect recommendation when stack/blueprint is not explicitly provided.
+- Changed veto handling so user override is applied immediately without debate and can update reusable preference state for repeated overrides.
+- Updated README quickstart with project-description-first init example.
+
 ## 2.5.8 - 2026-04-17
 ### Added
 - Added Golden Standard init behavior as the default path, so first-run onboarding no longer asks users to choose beginner, balanced, or strict profile levels.

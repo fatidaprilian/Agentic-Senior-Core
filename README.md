@@ -30,6 +30,12 @@ Optional team default path:
 npx @ryuenn3123/agentic-senior-core init --profile-pack startup
 ```
 
+Project-description-first path (AI as Architect with veto control):
+
+```bash
+npx @ryuenn3123/agentic-senior-core init --project-description "Machine learning API for fraud detection"
+```
+
 ---
 
 ## Before / After

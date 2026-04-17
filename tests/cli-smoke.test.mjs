@@ -19,6 +19,12 @@ import {
   WEB_FRONTEND_BLUEPRINT_CANDIDATES,
   WEB_BACKEND_BLUEPRINT_CANDIDATES,
 } from '../lib/cli/constants.mjs';
+import {
+  recommendArchitecture,
+  formatArchitectureRecommendation,
+  createUpdatedArchitectPreference,
+  shouldApplyRepeatedOverridePreference,
+} from '../lib/cli/architect.mjs';
 
 test('CLI Smoke Tests', async (t) => {
   const cliPath = join(process.cwd(), 'bin', 'agentic-senior-core.js');
@@ -342,6 +348,81 @@ test('CLI Smoke Tests', async (t) => {
     } finally {
       rmSync(goldenStandardTargetDirectory, { recursive: true, force: true });
     }
+  });
+
+  await t.test('init supports project-description-first architecture recommendation', () => {
+    const architectTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-architect-'));
+    const architectPreferenceFilePath = join(architectTargetDirectory, 'architect-pref.json');
+
+    try {
+      const architectOutput = execSync(
+        `node ${cliPath} init ${architectTargetDirectory} --project-description "Machine learning API for image classification and model serving" --ci true --no-scaffold-docs --no-token-optimize --no-memory-continuity`,
+        {
+          env: {
+            ...process.env,
+            AGENTIC_ARCHITECT_PREF_FILE: architectPreferenceFilePath,
+          },
+        }
+      ).toString();
+
+      assert.match(architectOutput, /Architecture recommendation \(project-description-first\):/);
+      assert.match(architectOutput, /Confidence:/);
+      assert.match(architectOutput, /Rationale:/);
+      assert.match(architectOutput, /Alternatives:/);
+      assert.match(architectOutput, /Research guardrails:/);
+
+      const onboardingReportPath = join(architectTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
+      const onboardingReport = JSON.parse(readFileSync(onboardingReportPath, 'utf8'));
+
+      assert.equal(onboardingReport.selectedStack, 'python.md');
+      assert.equal(onboardingReport.selectedBlueprint, 'fastapi-service.md');
+      assert.equal(onboardingReport.architectRecommendation?.recommendedStackFileName, 'python.md');
+      assert.equal(onboardingReport.architectRecommendation?.recommendedBlueprintFileName, 'fastapi-service.md');
+      assert.ok(['high', 'medium', 'low'].includes(onboardingReport.architectRecommendation?.confidenceLabel));
+      assert.ok(Array.isArray(onboardingReport.architectRecommendation?.rationaleSentences));
+      assert.ok(onboardingReport.architectRecommendation?.rationaleSentences.length >= 3);
+      assert.ok(onboardingReport.architectRecommendation?.rationaleSentences.length <= 5);
+      assert.equal(onboardingReport.architectRecommendation?.userVeto?.applied, false);
+      assert.ok(
+        onboardingReport.architectRecommendation?.researchBudget?.usedTokens
+          <= onboardingReport.architectRecommendation?.researchBudget?.tokenBudget
+      );
+    } finally {
+      rmSync(architectTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('architect recommendation surfaces low-confidence caution and repeated-override policy', () => {
+    const lowSignalRecommendation = recommendArchitecture({
+      projectDescription: 'Build software',
+      projectDetection: {
+        rankedCandidates: [],
+      },
+      stackFileNames: ['typescript.md', 'python.md', 'go.md'],
+      blueprintFileNames: ['api-nextjs.md', 'fastapi-service.md', 'go-service.md'],
+      tokenBudget: 900,
+      timeoutMs: 1500,
+    });
+
+    assert.equal(lowSignalRecommendation.failureModes.lowConfidence, true);
+    assert.equal(typeof lowSignalRecommendation.failureModes.dataConflict, 'boolean');
+
+    const renderedRecommendation = formatArchitectureRecommendation(lowSignalRecommendation);
+    assert.match(renderedRecommendation, /Caution labels: low-confidence/);
+
+    let architectPreference = null;
+    architectPreference = createUpdatedArchitectPreference(architectPreference, {
+      selectedStackFileName: 'python.md',
+      selectedBlueprintFileName: 'fastapi-service.md',
+    });
+    architectPreference = createUpdatedArchitectPreference(architectPreference, {
+      selectedStackFileName: 'python.md',
+      selectedBlueprintFileName: 'fastapi-service.md',
+    });
+
+    assert.equal(architectPreference.overrideCount, 2);
+    assert.equal(shouldApplyRepeatedOverridePreference(architectPreference, 'typescript.md'), true);
+    assert.equal(shouldApplyRepeatedOverridePreference(architectPreference, 'python.md'), false);
   });
 
   await t.test('upgrade command supports dry-run preview', () => {

@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-17
-Current Version: 2.5.8
+Current Version: 2.5.9
 Status: Stable and release-ready
 
 ---
@@ -426,7 +426,7 @@ Acceptance:
 #### V3.0-003: AI as Architect with User Veto Control
 
 Priority: P1
-Status: planned
+Status: done
 
 Scope:
 - Replace manual stack and blueprint selection with project-description-first initialization.
@@ -438,12 +438,12 @@ Scope:
 - Define failure-mode checklist for low-confidence recommendation, data conflict, and repeated user override.
 
 Acceptance:
-- [ ] Init supports single project-description input for architecture recommendation.
-- [ ] Recommendation output is concise: stack declaration, rationale in 3-5 sentences, and alternatives in one line each.
-- [ ] Recommendation output includes confidence label and uncertainty notes when evidence is weak.
-- [ ] Research phase does not exceed configured token ceiling and timeout before outputting recommendation.
-- [ ] Failure-mode handling is explicit: low-confidence and data-conflict scenarios trigger caution labels; repeated user override updates preference and skips debate.
-- [ ] User rejection path applies selected override without argumentative loop.
+- [x] Init supports single project-description input for architecture recommendation.
+- [x] Recommendation output is concise: stack declaration, rationale in 3-5 sentences, and alternatives in one line each.
+- [x] Recommendation output includes confidence label and uncertainty notes when evidence is weak.
+- [x] Research phase does not exceed configured token ceiling and timeout before outputting recommendation.
+- [x] Failure-mode handling is explicit: low-confidence and data-conflict scenarios trigger caution labels; repeated user override updates preference and skips debate.
+- [x] User rejection path applies selected override without argumentative loop.
 
 #### Phase 2: Execution Rules (Behavior and Quality)
 
