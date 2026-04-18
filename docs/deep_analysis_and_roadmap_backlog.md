@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-18
-Current Version: 2.5.20
+Current Version: 2.5.21
 Status: Stable and release-ready
 
 ---
@@ -611,7 +611,7 @@ Scope:
 
 Execution note (2026-04-18):
 - Architect engine now uses deterministic snapshot evidence from `.agent-context/state/stack-research-snapshot.json` as baseline mode.
-- Optional realtime mode is explicitly gated (`--architect-research-mode realtime` + `--enable-realtime-research`) with safe fallback to snapshot when realtime payload is unavailable.
+- Init now defaults to gated realtime research attempt, with safe fallback to deterministic snapshot when realtime payload is unavailable (`--disable-realtime-research` can force snapshot-only mode).
 - Recommendations now persist measurable `evidenceCitations` with timestamps and normalized `designGuidance` with anti-copy policy (`copiedExternalProse: false`).
 - Validator and CLI smoke tests now lock coverage for snapshot determinism, gated realtime behavior, citation output, and anti-DESIGN.md-copy policy.
 

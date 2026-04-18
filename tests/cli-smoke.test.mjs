@@ -37,6 +37,7 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(output, /--no-memory-continuity/);
     assert.match(output, /--architect-research-mode/);
     assert.match(output, /--enable-realtime-research/);
+    assert.match(output, /--disable-realtime-research/);
     assert.match(output, /quality checks \(guardrails\)/i);
     assert.match(output, /java-enterprise-api/);
   });
@@ -399,9 +400,11 @@ test('CLI Smoke Tests', async (t) => {
       assert.ok(Array.isArray(onboardingReport.architectRecommendation?.rationaleSentences));
       assert.ok(onboardingReport.architectRecommendation?.rationaleSentences.length >= 3);
       assert.ok(onboardingReport.architectRecommendation?.rationaleSentences.length <= 5);
-      assert.equal(onboardingReport.architectRecommendation?.research?.requestedMode, 'snapshot');
+      assert.equal(onboardingReport.architectRecommendation?.research?.requestedMode, 'realtime');
       assert.equal(onboardingReport.architectRecommendation?.research?.effectiveMode, 'snapshot');
       assert.equal(onboardingReport.architectRecommendation?.research?.deterministic, true);
+      assert.equal(onboardingReport.architectRecommendation?.failureModes?.realtimeGated, false);
+      assert.equal(onboardingReport.architectRecommendation?.failureModes?.realtimeUnavailable, true);
       assert.equal(Array.isArray(onboardingReport.architectRecommendation?.evidenceCitations), true);
       assert.ok(onboardingReport.architectRecommendation?.evidenceCitations?.length >= 1);
       assert.equal(onboardingReport.architectRecommendation?.designGuidance?.sourcePolicy?.copiedExternalProse, false);

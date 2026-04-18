@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.21 - 2026-04-18
+### Changed
+- Changed init architecture recommendation defaults to request realtime research mode first, with realtime ingestion enabled by default and automatic fallback to deterministic snapshot when trusted realtime payload is unavailable.
+- Changed CLI help text to document realtime-first init behavior and explicit snapshot override via `--disable-realtime-research` or `--architect-research-mode snapshot`.
+- Changed CLI smoke expectations so project-description-first init now records `requestedMode: realtime` while preserving deterministic fallback behavior when realtime evidence is missing.
+- Changed roadmap execution note for V3.0-013 to reflect realtime-first init with guarded fallback semantics.
+
 ## 2.5.20 - 2026-04-18
 ### Added
 - Added deterministic stack research snapshot artifact at `.agent-context/state/stack-research-snapshot.json` for reproducible architecture recommendation baselines.
