@@ -100,6 +100,61 @@ const REQUIRED_TERMINOLOGY_ROW_PATTERNS = [
 ];
 const REQUIRED_TERMINOLOGY_RULE_SNIPPET =
   'Rule: on first mention in developer-facing docs, include canonical term in parentheses.';
+const TERMINOLOGY_REFERENCE_DOCUMENT_PATH = 'docs/terminology-mapping.md';
+const REQUIRED_DEVELOPER_FIRST_MENTION_PATTERNS = [
+  {
+    path: 'README.md',
+    label: 'Rules Engine first mention includes Governance Engine',
+    pattern: /Rules Engine\s*\(Governance Engine\)/u,
+  },
+  {
+    path: 'docs/deep-dive.md',
+    label: 'Dynamic Rules Engine first mention includes Governance Engine',
+    pattern: /Dynamic Rules Engine\s*\(Governance Engine\)/u,
+  },
+  {
+    path: 'docs/faq.md',
+    label: 'Quality Checks first mention includes Guardrails',
+    pattern: /Quality Checks\s*\(Guardrails\)/u,
+  },
+  {
+    path: '.agent-context/prompts/init-project.md',
+    label: 'Init prompt first mention includes Federated Governance baseline',
+    pattern: /rules operations context\s*\(Federated Governance baseline\)/iu,
+  },
+  {
+    path: 'lib/cli/commands/init.mjs',
+    label: 'Init command wording includes Federated Governance baseline',
+    pattern: /rules operations\s+(assets|pack)[^\n]*\(Federated Governance baseline\)/iu,
+  },
+  {
+    path: 'lib/cli/commands/upgrade.mjs',
+    label: 'Upgrade command wording includes Federated Governance baseline',
+    pattern: /rules operations upgrade assistant\s*\(Federated Governance baseline\)/iu,
+  },
+  {
+    path: 'lib/cli/utils.mjs',
+    label: 'CLI help wording includes quality checks and guardrails',
+    pattern: /quality checks\s*\(guardrails\)/iu,
+  },
+];
+const COMPLIANCE_TERMINOLOGY_BOUNDARY_PATHS = [
+  '.agent-context/review-checklists/security-audit.md',
+  '.agent-context/review-checklists/performance-audit.md',
+  '.agent-context/review-checklists/release-operations.md',
+  'scripts/release-gate.mjs',
+  'scripts/forbidden-content-check.mjs',
+];
+const COMPLIANCE_ALIAS_TERMS = [
+  'Federated Rules Operations',
+];
+const REQUIRED_COMPLIANCE_CANONICAL_SNIPPETS = [
+  {
+    path: '.agent-context/review-checklists/release-operations.md',
+    snippet: 'Federated Governance',
+    label: 'release operations checklist keeps canonical term Federated Governance',
+  },
+];
 
 const validationResult = {
   passed: 0,
@@ -212,6 +267,7 @@ async function validateRequiredFiles() {
     'CHANGELOG.md',
     'docs/faq.md',
     'docs/deep-dive.md',
+    'docs/terminology-mapping.md',
     'docs/v1.7-execution-playbook.md',
     'docs/v1.7-issue-breakdown.md',
     'docs/v1.8-operations-playbook.md',
@@ -750,6 +806,40 @@ async function validateDocumentationFlow() {
 async function validateTerminologyMapping() {
   console.log('\nChecking terminology mapping consistency...');
 
+  const terminologyReferenceDocumentPath = join(ROOT_DIR, TERMINOLOGY_REFERENCE_DOCUMENT_PATH);
+
+  if (!(await fileExists(terminologyReferenceDocumentPath))) {
+    fail(`Missing terminology reference document: ${TERMINOLOGY_REFERENCE_DOCUMENT_PATH}`);
+  } else {
+    const terminologyReferenceContent = await readTextFile(terminologyReferenceDocumentPath);
+
+    if (terminologyReferenceContent.includes('Dual-Term Mapping')) {
+      pass(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} includes Dual-Term Mapping section`);
+    } else {
+      fail(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} must include Dual-Term Mapping section`);
+    }
+
+    for (const terminologyRowRule of REQUIRED_TERMINOLOGY_ROW_PATTERNS) {
+      if (terminologyRowRule.pattern.test(terminologyReferenceContent)) {
+        pass(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} includes mapping row: ${terminologyRowRule.label}`);
+      } else {
+        fail(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} is missing mapping row: ${terminologyRowRule.label}`);
+      }
+    }
+
+    if (terminologyReferenceContent.includes('first mention must include canonical term in parentheses')) {
+      pass(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} defines first-mention canonical term rule`);
+    } else {
+      fail(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} must define first-mention canonical term rule`);
+    }
+
+    if (terminologyReferenceContent.includes('Compliance and audit artifacts must keep canonical enterprise terminology')) {
+      pass(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} defines compliance terminology boundary`);
+    } else {
+      fail(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} must define compliance terminology boundary`);
+    }
+  }
+
   for (const terminologyReferencePath of TERMINOLOGY_REFERENCE_PATHS) {
     const absoluteReferencePath = join(ROOT_DIR, terminologyReferencePath);
 
@@ -778,6 +868,62 @@ async function validateTerminologyMapping() {
       pass(`${terminologyReferencePath} includes first-mention canonical term rule`);
     } else {
       fail(`${terminologyReferencePath} must include first-mention canonical term rule`);
+    }
+
+    if (referenceContent.includes(TERMINOLOGY_REFERENCE_DOCUMENT_PATH)) {
+      pass(`${terminologyReferencePath} links to ${TERMINOLOGY_REFERENCE_DOCUMENT_PATH}`);
+    } else {
+      fail(`${terminologyReferencePath} must link to ${TERMINOLOGY_REFERENCE_DOCUMENT_PATH}`);
+    }
+  }
+
+  for (const firstMentionRule of REQUIRED_DEVELOPER_FIRST_MENTION_PATTERNS) {
+    const absoluteFirstMentionPath = join(ROOT_DIR, firstMentionRule.path);
+
+    if (!(await fileExists(absoluteFirstMentionPath))) {
+      fail(`Missing developer-facing first-mention source: ${firstMentionRule.path}`);
+      continue;
+    }
+
+    const firstMentionContent = await readTextFile(absoluteFirstMentionPath);
+    if (firstMentionRule.pattern.test(firstMentionContent)) {
+      pass(`${firstMentionRule.path} keeps first-mention rule: ${firstMentionRule.label}`);
+    } else {
+      fail(`${firstMentionRule.path} must keep first-mention rule: ${firstMentionRule.label}`);
+    }
+  }
+
+  for (const compliancePath of COMPLIANCE_TERMINOLOGY_BOUNDARY_PATHS) {
+    const absoluteCompliancePath = join(ROOT_DIR, compliancePath);
+
+    if (!(await fileExists(absoluteCompliancePath))) {
+      fail(`Missing compliance/audit artifact for terminology boundary: ${compliancePath}`);
+      continue;
+    }
+
+    const complianceContent = await readTextFile(absoluteCompliancePath);
+    for (const aliasTerm of COMPLIANCE_ALIAS_TERMS) {
+      if (complianceContent.includes(aliasTerm)) {
+        fail(`${compliancePath} must not use developer-facing alias in compliance context: ${aliasTerm}`);
+      } else {
+        pass(`${compliancePath} keeps canonical terminology boundary for alias: ${aliasTerm}`);
+      }
+    }
+  }
+
+  for (const complianceRule of REQUIRED_COMPLIANCE_CANONICAL_SNIPPETS) {
+    const absoluteComplianceRulePath = join(ROOT_DIR, complianceRule.path);
+
+    if (!(await fileExists(absoluteComplianceRulePath))) {
+      fail(`Missing compliance canonical source: ${complianceRule.path}`);
+      continue;
+    }
+
+    const complianceRuleContent = await readTextFile(absoluteComplianceRulePath);
+    if (complianceRuleContent.includes(complianceRule.snippet)) {
+      pass(`${complianceRule.path} keeps canonical terminology rule: ${complianceRule.label}`);
+    } else {
+      fail(`${complianceRule.path} must keep canonical terminology rule: ${complianceRule.label}`);
     }
   }
 }

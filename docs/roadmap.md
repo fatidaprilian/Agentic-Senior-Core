@@ -210,7 +210,7 @@ Final delivery snapshot (2026-04-17):
 
 Target window: Q4 2026.
 
-This release aims to move beyond repository-level governance toward federated enterprise operations.
+This release aims to move beyond repository-level governance toward federated rules operations (Federated Governance).
 
 ### Terminology Mapping (Final)
 
@@ -222,8 +222,10 @@ This release aims to move beyond repository-level governance toward federated en
 
 Rule: on first mention in developer-facing docs, include canonical term in parentheses.
 
+Reference: docs/terminology-mapping.md
+
 ### Planned Scope
-1. Federated governance operations
+1. Federated rules operations (Federated Governance)
    - Support centralized policy distribution with signed versioned governance bundles.
    - Add organization-level override registry with expiry enforcement and audit trails.
    - Provide policy drift detection across multiple repositories.
@@ -251,6 +253,6 @@ Rule: on first mention in developer-facing docs, include canonical term in paren
 - Mean time to governance rollback is below 15 minutes.
 
 ### V3.0 Exit Criteria
-- Federated policy operations are production-ready with signed bundle distribution.
+- Federated rules operations are production-ready with signed bundle distribution.
 - Portfolio dashboard and incident playbooks are published and tested.
 - Compliance and provenance artifacts are generated and retained by default.

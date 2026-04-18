@@ -6,8 +6,8 @@ A "Stack" refers to the core programming language or technology framework your p
 ## What is a Blueprint?
 A "Blueprint" is an architectural starting point. If you use Next.js, the blueprint contains structural rules about Next.js components, file routing, and data fetching loops so your agent doesn't hallucinate outdated paradigms.
 
-## What are Guardrails?
-Guardrails are built-in workflow rules (like `scripts/llm-judge.mjs` and GitHub Actions) that enforce our rule sets before any PR is merged. The agent knows these exist and won't write "lazy" code knowing it will be blocked.
+## What are Quality Checks (Guardrails)?
+Quality checks (guardrails) are built-in workflow rules (like `scripts/llm-judge.mjs` and GitHub Actions) that enforce our rule sets before any PR is merged. The agent knows these exist and won't write "lazy" code knowing it will be blocked.
 
 ## My project is still on Laravel 12. Is it safe to use this repository?
 Yes. It is safe to use this repository with Laravel 12 projects.
@@ -46,7 +46,7 @@ That means the MCP handshake did not complete. Use this recovery flow:
 If the issue persists, run `agentic-senior-core mcp` directly in terminal to verify the process starts without local environment errors.
 
 ## Does this support Ollama?
-Yes. The governance engine is model-agnostic and works with local-model workflows, including Ollama-based usage, as long as your IDE or toolchain can connect to your selected model provider.
+Yes. The rules engine (Governance Engine) is model-agnostic and works with local-model workflows, including Ollama-based usage, as long as your IDE or toolchain can connect to your selected model provider.
 
 ## Why do I see untrusted schema warning in root mcp.json?
 The root `mcp.json` is governance metadata for this repository, not the VS Code MCP workspace registration file. The actual VS Code MCP config is `.vscode/mcp.json`, which uses the trusted built-in schema (`vscode://schemas/mcp`).

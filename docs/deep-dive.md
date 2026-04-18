@@ -1,6 +1,6 @@
-# Deep Dive: Dynamic Governance Engine
+# Deep Dive: Dynamic Rules Engine (Governance Engine)
 
-Agentic-Senior-Core operates as a **Dynamic Governance Engine** that merges generalized best practices with project-specific structural definitions into files agents naturally read (like `.cursorrules`, `.windsurfrules`, or `AGENTS.md`).
+Agentic-Senior-Core operates as a **Dynamic Rules Engine (Governance Engine)** that merges generalized best practices with project-specific structural definitions into files agents naturally read (like `.cursorrules`, `.windsurfrules`, or `AGENTS.md`).
 
 ## The Compiler Workflow
 When you run the init command (for example through `npm exec --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior-core init`, `scripts/init-project.ps1`, `scripts/init-project.sh`, or `npx @ryuenn3123/agentic-senior-core init` after npm publish), the delivery CLI:
@@ -26,7 +26,7 @@ When you run the init command (for example through `npm exec --package=github:fa
 
 ## Profile Enforcement Strategies
 Agentic-Senior-Core enables configurable rigidness:
-- **beginner**: The CLI opts out of difficult architectural prompts, setting safe defaults (`node`, `balanced` guardrails, lenient AI reviews).
+- **beginner**: The CLI opts out of difficult architectural prompts, setting safe defaults (`node`, `balanced` quality checks (guardrails), lenient AI reviews).
 - **balanced**: Standard operation. The CI enforces `critical` and `high` violations via LLM judge, skipping nitpicks around style.
 - **strict**: Fails on any deviation. Enforces test isolation, architectural violations, security problems, and fails standard CI runs when the AI Judge API becomes unresponsive.
 

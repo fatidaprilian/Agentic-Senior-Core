@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-18
-Current Version: 2.5.17
+Current Version: 2.5.18
 Status: Stable and release-ready
 
 ---
@@ -551,7 +551,7 @@ Acceptance:
 #### V3.0-011: Terminology Rebrand (Developer-Friendly)
 
 Priority: P2
-Status: in-progress
+Status: done
 
 Scope:
 - Rebrand bureaucratic terms into developer-friendly language.
@@ -561,16 +561,17 @@ Scope:
 - Publish dual-term mapping reference (legacy term, developer term, canonical enterprise term, usage context).
 
 Execution note (2026-04-18):
-- Terminology mapping table is already present in README and roadmap.
-- Remaining work focuses on consistency enforcement and migration checks in validator/onboarding surfaces.
+- Terminology mapping reference is now published at `docs/terminology-mapping.md` and linked from README + roadmap.
+- Validator now enforces mapping rows, first-mention canonical-term examples in developer-facing surfaces, and compliance/audit alias boundary checks.
+- Runtime onboarding and help surfaces keep developer-friendly aliases while retaining canonical compatibility hints.
 
 Acceptance:
-- [ ] Primary docs use new terminology consistently.
-- [ ] Transition aliases keep older references understandable.
-- [ ] Validation and onboarding text remain stable during migration.
+- [x] Primary docs use new terminology consistently.
+- [x] Transition aliases keep older references understandable.
+- [x] Validation and onboarding text remain stable during migration.
 - [x] Dual-term mapping reference is published and linked from README and roadmap.
-- [ ] Compliance and audit artifacts keep canonical enterprise terms unchanged.
-- [ ] Developer-facing docs can use friendly aliases but include canonical term on first mention.
+- [x] Compliance and audit artifacts keep canonical enterprise terms unchanged.
+- [x] Developer-facing docs can use friendly aliases but include canonical term on first mention.
 
 #### V3.0-012: Existing Project Detection Transparency
 

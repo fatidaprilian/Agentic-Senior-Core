@@ -2,6 +2,10 @@
 
 Use this checklist before promoting any release tag or package publish operation.
 
+## 0) Terminology Boundary (Compliance and Audit)
+- Compliance and audit artifacts keep the canonical enterprise term: `Federated Governance`.
+- Developer-facing aliases are allowed outside compliance artifacts when first mention includes the canonical term in parentheses.
+
 ## 1) Versioning and Changelog Integrity
 - `package.json` version is valid semantic version (`x.y.z`).
 - `CHANGELOG.md` has a matching release header for the package version.

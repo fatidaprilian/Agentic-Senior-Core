@@ -35,6 +35,7 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(output, /init/);
     assert.match(output, /--profile-pack/);
     assert.match(output, /--no-memory-continuity/);
+    assert.match(output, /quality checks \(guardrails\)/i);
     assert.match(output, /java-enterprise-api/);
   });
 
@@ -691,6 +692,8 @@ test('CLI Smoke Tests', async (t) => {
     const validationOutput = execSync(`node ${join(process.cwd(), 'scripts', 'validate.mjs')}`).toString();
     assert.match(validationOutput, /RESULTS/);
     assert.match(validationOutput, /Checking override governance/);
+    assert.match(validationOutput, /Checking terminology mapping consistency/);
+    assert.match(validationOutput, /docs\/terminology-mapping\.md includes Dual-Term Mapping section/);
   });
 
   await t.test('detection benchmark prints machine-readable metrics', () => {

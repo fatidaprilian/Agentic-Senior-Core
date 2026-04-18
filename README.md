@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**Production-grade rules engine for AI coding agents.**
+**Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
 </div>
@@ -103,6 +103,8 @@ Use `--dry-run` first to preview changes safely, then apply with `--yes`.
 
 Rule: on first mention in developer-facing docs, include canonical term in parentheses.
 
+Full mapping reference: docs/terminology-mapping.md
+
 ---
 
 ## Reference Docs
@@ -115,6 +117,7 @@ Rule: on first mention in developer-facing docs, include canonical term in paren
 - V2 upgrade playbook: docs/v2-upgrade-playbook.md
 - Integration playbook: docs/integration-playbook.md
 - Benchmark and stack reference: docs/benchmark-reference.md
+- Terminology mapping reference: docs/terminology-mapping.md
 - Product roadmap: docs/roadmap.md
 
 ---

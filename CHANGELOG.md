@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.18 - 2026-04-18
+### Added
+- Added dedicated terminology reference in `docs/terminology-mapping.md` and linked it from README and roadmap.
+- Added terminology boundary checks in `scripts/validate.mjs` for developer first-mention patterns and compliance/audit alias restrictions.
+- Added CLI smoke assertions to lock terminology migration behavior in help output and validator checks.
+
+### Changed
+- Changed primary docs (`README.md`, `docs/deep-dive.md`, `docs/faq.md`, `docs/roadmap.md`) to use developer-friendly aliases with canonical first mention.
+- Changed release operations checklist to include explicit compliance terminology boundary guidance.
+- Changed roadmap backlog status for `V3.0-011` from in-progress to done with all acceptance criteria checked.
+
 ## 2.5.17 - 2026-04-18
 ### Added
 - Added terminology mapping consistency checks in `scripts/validate.mjs` for README and roadmap mapping tables.
