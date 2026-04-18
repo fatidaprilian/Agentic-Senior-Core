@@ -556,6 +556,49 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
+  await t.test('upgrade dry-run reports stale managed files without deleting them', () => {
+    const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-dry-stale-'));
+
+    try {
+      execSync(
+        `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+
+      const staleManagedDirectory = join(upgradeTargetDirectory, '.agent-context', 'legacy-upgrade-test');
+      const staleManagedFilePath = join(staleManagedDirectory, 'obsolete.md');
+      mkdirSync(staleManagedDirectory, { recursive: true });
+      writeFileSync(staleManagedFilePath, '# Obsolete managed file\n');
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --dry-run`).toString();
+      assert.match(upgradeOutput, /Managed surface stale files: 1/);
+      assert.equal(existsSync(staleManagedFilePath), true);
+    } finally {
+      rmSync(upgradeTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('upgrade prunes stale managed files by default', () => {
+    const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-prune-'));
+
+    try {
+      execSync(
+        `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+
+      const staleManagedDirectory = join(upgradeTargetDirectory, '.agent-context', 'legacy-upgrade-test');
+      const staleManagedFilePath = join(staleManagedDirectory, 'obsolete.md');
+      mkdirSync(staleManagedDirectory, { recursive: true });
+      writeFileSync(staleManagedFilePath, '# Obsolete managed file\n');
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
+      assert.match(upgradeOutput, /Managed stale files removed: 1/);
+      assert.equal(existsSync(staleManagedFilePath), false);
+      assert.equal(existsSync(staleManagedDirectory), false);
+    } finally {
+      rmSync(upgradeTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
   await t.test('init generates AI bootstrap prompts in English by default and compiles Layer 9 bootstrap flow in same run', () => {
     const scaffoldingTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-scaffold-config-'));
 

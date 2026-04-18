@@ -21,63 +21,16 @@ Highlights in 3.0.0:
 
 ---
 
+
 ## 60-Second Start
 
 ```bash
 npx @ryuenn3123/agentic-senior-core init
 ```
 
-That one command initializes your project with compiled rules, review checklists, and state context.
+Satu perintah untuk inisialisasi rules, checklist, dan context AI coding guidelines.
 
-Golden Standard mode is now the default path: init applies the recommended quality profile automatically, without a beginner/balanced/strict prompt on first run.
-
-Optional team default path:
-
-```bash
-npx @ryuenn3123/agentic-senior-core init --profile-pack startup
-```
-
-Project-description-first path (AI as Architect with veto control):
-
-```bash
-npx @ryuenn3123/agentic-senior-core init --project-description "Machine learning API for fraud detection"
-```
-
-Default init path now attempts trusted realtime stack research first (with automatic snapshot fallback):
-
-```bash
-npx @ryuenn3123/agentic-senior-core init --project-description "Event-driven payments platform"
-```
-
-Force deterministic snapshot-only mode:
-
-```bash
-npx @ryuenn3123/agentic-senior-core init --project-description "Event-driven payments platform" --architect-research-mode snapshot
-```
-
-Optional trusted realtime enrichment (explicitly gated):
-
-```bash
-npx @ryuenn3123/agentic-senior-core init --project-description "Modern conversion-focused product website" --architect-research-mode realtime --enable-realtime-research --architect-realtime-signal-file ./realtime-signals.json
-```
-
-AI-first project context bootstrap (no static docs template rendering):
-
-- Init now generates bootstrap prompts under `.agent-context/prompts/`.
-- On first IDE chat, execute `bootstrap-project-context.md` when `docs/project-brief.md` is missing.
-- For UI-first projects, execute `bootstrap-design.md` when `docs/DESIGN.md` is missing.
-- The assistant should synthesize docs from scratch into `docs/` and treat them as living context.
-
-Canonical instruction output (multi-tool bridge):
-
-- Init now generates `.agent-instructions.md` as canonical instruction source.
-- Init also syncs adapter files for tool compatibility: `.cursorrules`, `.windsurfrules`, `.clauderc`, `.gemini/instructions.md`, and `.github/copilot-instructions.md`.
-
-V3 purge readiness dry-run (no deletion):
-
-```bash
-npm run audit:v3-purge
-```
+> **Lihat [docs/deep-dive.md](docs/deep-dive.md) dan [docs/roadmap.md](docs/roadmap.md) untuk opsi konfigurasi lanjutan, mode architect, snapshot, dan realtime.**
 
 - This command writes `.agent-context/state/v3-purge-audit.json` and reports whether static directory deletion is safe.
 
@@ -119,7 +72,7 @@ If you see `Property $schema is not allowed`, keep `.vscode/mcp.json` without `$
 
 | Command | Purpose |
 |---------|---------|
-| `agentic-senior-core init` | Initialize rules operations context (Federated Governance baseline) |
+| `agentic-senior-core init` | Initialize strict AI coding guidelines (Federated Governance baseline) |
 | `agentic-senior-core upgrade --dry-run` | Preview safe upgrades |
 | `agentic-senior-core optimize --show` | Show token optimization state |
 | `npm run audit:v3-purge` | Run deep purge readiness audit (no deletion) |
@@ -136,13 +89,16 @@ npx @ryuenn3123/agentic-senior-core upgrade --yes
 
 Use `--dry-run` first to preview changes safely, then apply with `--yes`.
 
+Upgrade now performs managed-surface synchronization by default: obsolete governance files under managed paths are pruned so the pack stays aligned with the latest release.
+Use `--no-prune` if you want to keep legacy managed files.
+
 ---
 
 ## Terminology Mapping (Final)
 
 | Canonical Enterprise Term | Developer-Facing Alias | Usage Rule |
 |---------------------------|------------------------|------------|
-| Federated Governance | Federated Rules Operations | Use canonical term in compliance/audit artifacts. |
+| Federated Governance | Strict AI Coding Guidelines | Use canonical term in compliance/audit artifacts. |
 | Governance Engine | Rules Engine | Use alias in onboarding and day-to-day developer docs. |
 | Guardrails | Quality Checks | Use alias in implementation guidance and quickstart docs. |
 

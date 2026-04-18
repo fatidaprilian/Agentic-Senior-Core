@@ -1,7 +1,7 @@
 # Prompts: Initialize Project
 
 > Copy-paste one of these prompts to your AI agent (Cursor, Windsurf, Copilot, Antigravity) right after cloning this repository.
-> V1.4 recommendation: run `bunx @fatidaprilian/agentic-senior-core init` first to compile dynamic rules operations context (Federated Governance baseline).
+> V1.4 rekomendasi: jalankan `npx @ryuenn3123/agentic-senior-core init` untuk compile strict AI coding guidelines (Federated Governance baseline).
 
 ---
 
@@ -49,38 +49,20 @@ Now scaffold the initial project structure following the blueprint exactly:
 - Create a health check endpoint
 - Initialize the ORM/Database connection
 
-Every file MUST follow the naming conventions from rules/naming-conv.md.
-Every module MUST follow the architecture from rules/architecture.md.
-Every dependency MUST be justified per rules/efficiency-vs-hype.md.
+
+Setiap file harus mengikuti [naming conventions](../.agent-context/rules/naming-conv.md).
+Setiap modul harus mengikuti [architecture.md](../.agent-context/rules/architecture.md).
+Setiap dependency harus justified sesuai [efficiency-vs-hype.md](../.agent-context/rules/efficiency-vs-hype.md).
 ```
 
 ---
 
-## Available Stacks & Blueprints Reference
+## Referensi Stacks & Blueprints
 
-### Stacks (`[STACK].md`)
-- `typescript`
-- `python`
-- `java`
-- `php`
-- `go`
-- `csharp`
-- `rust`
-- `ruby`
+Lihat [docs/roadmap.md](../docs/roadmap.md) dan [docs/deep-dive.md](../docs/deep-dive.md) untuk daftar stack/blueprint terbaru.
 
-### Blueprints (`[BLUEPRINT].md`)
-| Blueprint | Use When |
-|-----------|----------|
-| `api-nextjs` | Next.js App Router API project |
-| `nestjs-logic` | NestJS backend service |
-| `fastapi-service` | Python FastAPI backend service |
-| `laravel-api` | PHP Laravel 13 API |
-| `spring-boot-api`| Java Spring Boot 4 API |
-| `go-service` | Go chi HTTP service |
-| `aspnet-api` | C# ASP.NET Minimal API |
-| `ci-github-actions`| GitHub Actions CI/CD pipeline |
-| `ci-gitlab`      | GitLab CI/CD pipeline |
-| `observability`  | OpenTelemetry stack |
-| `graphql-grpc-api` | GraphQL / gRPC API definitions |
-| `infrastructure-as-code` | Infrastructure as Code (Terraform | Pulumi) |
-| `kubernetes-manifests` | Kubernetes manifests structure |
+---
+
+## Bootstrap UI/UX (DESIGN.md)
+
+Untuk memulai desain UI/UX dari nol, gunakan prompt [bootstrap-design.md](./bootstrap-design.md) agar AI langsung membangunkan Art Director digital Anda.
