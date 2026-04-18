@@ -10,6 +10,13 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
+Latest release: 3.0.0 (2026-04-18).
+
+Highlights in 3.0.0:
+- Universal IDE adapter surface is completed and synchronized through thin adapters.
+- Scoped auto-docs sync rollout is active with explicit phase-1 boundaries and precision/recall evidence.
+- Init and scaffolding flow is slimmer, template-free on active path, and validated by deterministic release gates.
+
 </div>
 
 ---
@@ -61,6 +68,19 @@ AI-first project context bootstrap (no static docs template rendering):
 - For UI-first projects, execute `bootstrap-design.md` when `docs/DESIGN.md` is missing.
 - The assistant should synthesize docs from scratch into `docs/` and treat them as living context.
 
+Canonical instruction output (multi-tool bridge):
+
+- Init now generates `.agent-instructions.md` as canonical instruction source.
+- Init also syncs adapter files for tool compatibility: `.cursorrules`, `.windsurfrules`, `.clauderc`, `.gemini/instructions.md`, and `.github/copilot-instructions.md`.
+
+V3 purge readiness dry-run (no deletion):
+
+```bash
+npm run audit:v3-purge
+```
+
+- This command writes `.agent-context/state/v3-purge-audit.json` and reports whether static directory deletion is safe.
+
 ---
 
 ## Before / After
@@ -102,7 +122,7 @@ If you see `Property $schema is not allowed`, keep `.vscode/mcp.json` without `$
 | `agentic-senior-core init` | Initialize rules operations context (Federated Governance baseline) |
 | `agentic-senior-core upgrade --dry-run` | Preview safe upgrades |
 | `agentic-senior-core optimize --show` | Show token optimization state |
-| `agentic-senior-core skill frontend --tier advance` | Select skill packs |
+| `npm run audit:v3-purge` | Run deep purge readiness audit (no deletion) |
 | `agentic-senior-core mcp` | Start local MCP stdio runtime |
 
 ---
@@ -134,9 +154,6 @@ Full mapping reference: docs/terminology-mapping.md
 
 ## Reference Docs
 
-- GitHub Template: https://github.com/fatidaprilian/Agentic-Senior-Core/generate
-- Windows bootstrap script: scripts/init-project.ps1
-- Linux/macOS bootstrap script: scripts/init-project.sh
 - FAQ: docs/faq.md
 - Deep dive internals: docs/deep-dive.md
 - V2 upgrade playbook: docs/v2-upgrade-playbook.md

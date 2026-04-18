@@ -43,9 +43,9 @@ test('CLI Smoke Tests', async (t) => {
   });
 
   await t.test('launch command shows numbered startup choices', () => {
-    const launchOutput = execSync(`node ${cliPath} launch`, { input: '8\n' }).toString();
+    const launchOutput = execSync(`node ${cliPath} launch`, { input: '5\n' }).toString();
     assert.match(launchOutput, /How do you want to start\?/);
-    assert.match(launchOutput, /1\. GitHub template/);
+    assert.match(launchOutput, /1\. npm \/ npx path/);
     assert.match(launchOutput, /Exit selected\./);
   });
 
@@ -89,15 +89,15 @@ test('CLI Smoke Tests', async (t) => {
       'typescript.md',
     ];
 
-    const mobileScopeStacks = filterStackFileNamesByCandidates(
+    const frontendScopeStacks = filterStackFileNamesByCandidates(
       knownStacks,
-      PROJECT_SCOPE_STACK_FILTERS['mobile-app']
+      PROJECT_SCOPE_STACK_FILTERS['frontend-only']
     );
 
-    assert.equal(resolveProjectScopeKeyFromLabel('Web application'), 'web-application');
-    assert.equal(resolveProjectScopeKeyFromLabel('Unknown scope label'), 'other');
-    assert.deepEqual(mobileScopeStacks, ['react-native.md', 'flutter.md']);
-    assert.equal(mobileScopeStacks.includes('python.md'), false);
+    assert.equal(resolveProjectScopeKeyFromLabel('Frontend only'), 'frontend-only');
+    assert.equal(resolveProjectScopeKeyFromLabel('Unknown scope label'), 'both');
+    assert.deepEqual(frontendScopeStacks, ['typescript.md']);
+    assert.equal(frontendScopeStacks.includes('python.md'), false);
   });
 
   await t.test('init auto-detects existing project stack and additional stack signals', () => {
@@ -138,7 +138,9 @@ test('CLI Smoke Tests', async (t) => {
 
       const compiledRulesContent = readFileSync(join(existingProjectTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(compiledRulesContent, /## LAYER 3A: ADDITIONAL BLUEPRINT PROFILES/);
-      assert.match(compiledRulesContent, /\.agent-context\/blueprints\/api-nextjs\.md/);
+      const hasCompatibleAdditionalBlueprintReference = /architecture-profile:api-nextjs\.md/.test(compiledRulesContent)
+        || /api-nextjs\.md \(dynamic architecture signal\)/.test(compiledRulesContent);
+      assert.equal(hasCompatibleAdditionalBlueprintReference, true);
     } finally {
       rmSync(existingProjectTargetDirectory, { recursive: true, force: true });
     }
@@ -224,11 +226,11 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(onboardingReport.ruleLoadingPolicy?.stackLoadingMode, 'lazy');
       assert.equal(onboardingReport.ruleLoadingPolicy?.loadedOnDemand, true);
       assert.equal(onboardingReport.ciGuardrailsEnabled, true);
-      assert.deepEqual(onboardingReport.selectedSkillDomains, ['frontend', 'fullstack', 'cli']);
 
       const compiledRulesContent = readFileSync(join(temporaryTargetDirectory, '.cursorrules'), 'utf8');
-      assert.match(compiledRulesContent, /SKILL PACK: Frontend/);
-      assert.match(compiledRulesContent, /SKILL PACK: Fullstack/);
+      assert.match(compiledRulesContent, /## LAYER 2 POLICY: LAZY RULE LOADING/);
+      assert.equal(existsSync(join(temporaryTargetDirectory, '.agent-instructions.md')), true);
+      assert.equal(existsSync(join(temporaryTargetDirectory, '.clauderc')), true);
     } finally {
       rmSync(temporaryTargetDirectory, { recursive: true, force: true });
     }
@@ -590,6 +592,7 @@ test('CLI Smoke Tests', async (t) => {
       assert.match(bootstrapProjectContextPrompt, /Create or update these files in EN language/);
       assert.match(bootstrapProjectContextPrompt, /Project name: Nusantara API/);
       assert.match(bootstrapProjectContextPrompt, /No copy-paste from external prose/);
+      assert.match(bootstrapProjectContextPrompt, /For any research-backed claim, include citation metadata \(source \+ fetchedAt timestamp\) from the Architect Engine Snapshot\./);
 
       const compiledRulesContent = readFileSync(join(scaffoldingTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
@@ -830,8 +833,12 @@ test('CLI Smoke Tests', async (t) => {
       join(process.cwd(), '.agent-context', 'rules', 'frontend-architecture.md'),
       'utf8'
     );
-    const frontendRubricContent = readFileSync(
-      join(process.cwd(), '.agent-context', 'review-checklists', 'frontend-excellence-rubric.md'),
+    const prChecklistContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'review-checklists', 'pr-checklist.md'),
+      'utf8'
+    );
+    const architectureChecklistContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'review-checklists', 'architecture-review.md'),
       'utf8'
     );
 
@@ -845,10 +852,10 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(frontendRuleContent, /UI Consistency Guardrails \(Mandatory\)/);
     assert.match(frontendRuleContent, /Content language must stay consistent per screen and flow unless user requests multilingual output\./);
     assert.match(frontendRuleContent, /Text color must remain contrast-safe against its background; no color collisions\./);
-    assert.match(frontendRubricContent, /Language and Content Consistency/);
-    assert.match(frontendRubricContent, /Text Contrast and Collision Safety/);
-    assert.match(frontendRubricContent, /Template Diversity and Originality/);
-    assert.match(frontendRubricContent, /Low-Diversity Template Output Policy/);
+    assert.match(prChecklistContent, /### 15\. Universal SOP Consolidation/);
+    assert.match(prChecklistContent, /### 2\. Architecture/);
+    assert.match(architectureChecklistContent, /## Backend Universal Principles/);
+    assert.match(architectureChecklistContent, /No clever hacks in backend and shared core modules/);
   });
 
   await t.test('backend universal principles governance snippets are present', () => {
@@ -890,9 +897,25 @@ test('CLI Smoke Tests', async (t) => {
     );
 
     assert.equal(documentationAuditReport.auditName, 'documentation-boundary-audit');
+    assert.equal(typeof documentationAuditReport.reportVersion, 'string');
     assert.equal(documentationAuditReport.passed, true);
     assert.equal(typeof documentationAuditReport.source, 'string');
     assert.ok(Array.isArray(documentationAuditReport.boundaryResults));
+    assert.ok(Array.isArray(documentationAuditReport.violations));
+    assert.equal(documentationAuditReport.autoDocsSyncScope?.phase, 'phase-1');
+    assert.equal(documentationAuditReport.autoDocsSyncScope?.bounded, true);
+    assert.deepEqual(
+      documentationAuditReport.autoDocsSyncScope?.explicitBoundaries,
+      ['public-surface', 'api-contract', 'database-structure']
+    );
+    assert.equal(typeof documentationAuditReport.rolloutMetrics?.precision, 'number');
+    assert.equal(typeof documentationAuditReport.rolloutMetrics?.recall, 'number');
+    assert.equal(typeof documentationAuditReport.rolloutMetrics?.measuredAt, 'string');
+    const boundaryResultWithGuidance = documentationAuditReport.boundaryResults.find(
+      (boundaryResult) => Array.isArray(boundaryResult.expectedDocumentationPaths)
+        && Array.isArray(boundaryResult.suggestedActions)
+    );
+    assert.ok(boundaryResultWithGuidance);
     assert.match(apiDocsRuleContent, /Documentation as Hard Rule \(Boundary-Aware\)/);
     assert.match(prChecklistContent, /Public surface changes fail review if documentation updates are missing or stale in the same scope/);
     assert.match(prChecklistContent, /Documentation checks stay boundary-aware and only enforce touched scopes/);
@@ -1047,14 +1070,16 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(compilerContent, /LAYER 2 POLICY: LAZY RULE LOADING/);
   });
 
-  await t.test('skill selector outputs recommended pack', () => {
-    const skillOutput = execSync(`node ${cliPath} skill frontend --tier advance --json`).toString();
-    const skillReport = JSON.parse(skillOutput);
-
-    assert.equal(skillReport.defaultTier, 'advance');
-    assert.equal(skillReport.selectedTier, 'advance');
-    assert.equal(skillReport.selectedDomain?.name, 'frontend');
-    assert.equal(skillReport.recommendedPackFileName, 'frontend.md');
+  await t.test('skill command is retired in purge mode', () => {
+    try {
+      execSync(`node ${cliPath} skill frontend --tier advance --json`);
+      assert.fail('Expected skill command to be unavailable after purge');
+    } catch (error) {
+      const errorOutput = error && typeof error === 'object' && 'stderr' in error
+        ? String(error.stderr || error.stdout || '')
+        : '';
+      assert.match(errorOutput, /Unknown command: skill/);
+    }
   });
 
   await t.test('preflight checks abort installation on conflict', () => {
@@ -1091,7 +1116,7 @@ test('CLI Smoke Tests', async (t) => {
       // Actually, if we just make .agent-context directory strictly read-only, preflight passes for . cursorrules 
       // but fails when writing selected policy? Preflight checks directory writable.
       // To reliably test rollback, we can mock `fs.writeFile` in a test-specific way, but we are running a child process.
-      // Let's create an invalid state that compiler can't handle. For example, empty .agent-context/stacks/mock.md ?
+      // Let's create an invalid state that compiler can't handle. For example, unresolved stack metadata.
       // If we just test the manual rollback command, it proves the manifest restore logic works.
       
       const backupRoot = join(rollbackTargetDirectory, '.agentic-backup');

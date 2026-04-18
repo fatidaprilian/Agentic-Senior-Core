@@ -19,6 +19,7 @@ test('Enterprise Operations Tests', async (t) => {
     );
     assert.ok(compatibilityCoverageResult);
     assert.equal(compatibilityCoverageResult.passed, true);
+    assert.match(compatibilityCoverageResult.details, /retired in V3 purge mode/);
 
     const backendRuleCoverageResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'backend-universal-principles-rule-coverage'
@@ -49,6 +50,24 @@ test('Enterprise Operations Tests', async (t) => {
     );
     assert.ok(documentationBoundaryHardRuleResult);
     assert.equal(documentationBoundaryHardRuleResult.passed, true);
+
+    const documentationBoundaryDiagnosticsResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'documentation-boundary-diagnostics-machine-readable'
+    );
+    assert.ok(documentationBoundaryDiagnosticsResult);
+    assert.equal(documentationBoundaryDiagnosticsResult.passed, true);
+
+    const autoDocsScopePhaseOneResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'auto-docs-sync-scope-phase1'
+    );
+    assert.ok(autoDocsScopePhaseOneResult);
+    assert.equal(autoDocsScopePhaseOneResult.passed, true);
+
+    const autoDocsRolloutMetricsResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'auto-docs-sync-rollout-metrics'
+    );
+    assert.ok(autoDocsRolloutMetricsResult);
+    assert.equal(autoDocsRolloutMetricsResult.passed, true);
 
     const contextTriggeredAuditResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'context-triggered-audit'
@@ -146,23 +165,17 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(noConflictingDuplicateRulesResult);
     assert.equal(noConflictingDuplicateRulesResult.passed, true);
 
-    const frontendParityChecklistResult = releaseGateReport.results.find(
-      (resultEntry) => resultEntry.checkName === 'frontend-parity-checklist-coverage'
+    const architectureChecklistResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'architecture-review-checklist-coverage'
     );
-    assert.ok(frontendParityChecklistResult);
-    assert.equal(frontendParityChecklistResult.passed, true);
+    assert.ok(architectureChecklistResult);
+    assert.equal(architectureChecklistResult.passed, true);
 
     const frontendAuditResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'frontend-usability-audit'
     );
     assert.ok(frontendAuditResult);
     assert.equal(frontendAuditResult.passed, true);
-
-    const frontendExcellenceRubricResult = releaseGateReport.results.find(
-      (resultEntry) => resultEntry.checkName === 'frontend-excellence-rubric-coverage'
-    );
-    assert.ok(frontendExcellenceRubricResult);
-    assert.equal(frontendExcellenceRubricResult.passed, true);
 
     const benchmarkThresholdGateResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'benchmark-threshold-gate'
@@ -179,6 +192,9 @@ test('Enterprise Operations Tests', async (t) => {
     assert.equal(typeof releaseGateReport.diagnostics, 'object');
     assert.equal(releaseGateReport.diagnostics?.benchmarkGate?.gateName, 'benchmark-gate');
     assert.equal(releaseGateReport.diagnostics?.benchmarkGate?.passed, true);
+    assert.equal(releaseGateReport.diagnostics?.documentationBoundaryAudit?.autoDocsSyncScope?.phase, 'phase-1');
+    assert.equal(typeof releaseGateReport.diagnostics?.documentationBoundaryAudit?.rolloutMetrics?.precision, 'number');
+    assert.equal(typeof releaseGateReport.diagnostics?.documentationBoundaryAudit?.rolloutMetrics?.recall, 'number');
     assert.equal(releaseGateReport.diagnostics?.contextTriggeredAudit?.auditName, 'context-triggered-audit');
     assert.equal(releaseGateReport.diagnostics?.contextTriggeredAudit?.strictAuditMode, true);
     assert.equal(releaseGateReport.diagnostics?.rulesGuardianAudit?.auditName, 'rules-guardian-audit');

@@ -21,8 +21,8 @@ const REQUIRED_FILES = [
   'docs/v1.7-issue-breakdown.md',
   'docs/v1.7-execution-playbook.md',
   '.agent-context/rules/frontend-architecture.md',
-  '.agent-context/review-checklists/frontend-usability.md',
-  '.agent-context/review-checklists/frontend-excellence-rubric.md',
+  '.agent-context/review-checklists/pr-checklist.md',
+  '.agent-context/review-checklists/architecture-review.md',
 ];
 
 const REQUIRED_ROADMAP_SNIPPETS = [
@@ -32,24 +32,17 @@ const REQUIRED_ROADMAP_SNIPPETS = [
   'Delivered Scope',
 ];
 
-const REQUIRED_CHECKLIST_SNIPPETS = [
-  'Responsiveness',
-  'Accessibility',
-  'Performance',
-  'Documentation and Release Evidence',
+const REQUIRED_PR_CHECKLIST_SNIPPETS = [
+  '### 2. Architecture (→ rules/architecture.md)',
+  '### 10. Documentation',
+  '### 15. Universal SOP Consolidation',
 ];
 
-const REQUIRED_EXCELLENCE_RUBRIC_SNIPPETS = [
-  'Visual Direction and Identity',
-  'Typography Quality',
-  'Color System Diversity and Contrast',
-  'Interaction Choreography',
-  'Language and Content Consistency',
-  'Text Contrast and Collision Safety',
-  'UX Narrative and Conversion Clarity',
-  'Template Diversity and Originality',
-  'Low-Diversity Template Output Policy',
-  'Awwwards-level reference quality',
+const REQUIRED_ARCHITECTURE_CHECKLIST_SNIPPETS = [
+  '## Backend Universal Principles',
+  'No clever hacks in backend and shared core modules',
+  'No premature abstraction',
+  'Readability over brevity',
 ];
 
 const REQUIRED_FRONTEND_RULE_SNIPPETS = [
@@ -86,17 +79,17 @@ function runAudit() {
 
   const roadmapPath = 'docs/roadmap.md';
   const frontendRulePath = '.agent-context/rules/frontend-architecture.md';
-  const checklistPath = '.agent-context/review-checklists/frontend-usability.md';
-  const excellenceRubricPath = '.agent-context/review-checklists/frontend-excellence-rubric.md';
+  const prChecklistPath = '.agent-context/review-checklists/pr-checklist.md';
+  const architectureChecklistPath = '.agent-context/review-checklists/architecture-review.md';
 
   if (existsSync(resolve(REPOSITORY_ROOT, roadmapPath))) {
     const roadmapContent = readFileSync(resolve(REPOSITORY_ROOT, roadmapPath), 'utf8');
     assertContains('Roadmap', roadmapPath, roadmapContent, REQUIRED_ROADMAP_SNIPPETS, failures);
   }
 
-  if (existsSync(resolve(REPOSITORY_ROOT, checklistPath))) {
-    const checklistContent = readFileSync(resolve(REPOSITORY_ROOT, checklistPath), 'utf8');
-    assertContains('Checklist', checklistPath, checklistContent, REQUIRED_CHECKLIST_SNIPPETS, failures);
+  if (existsSync(resolve(REPOSITORY_ROOT, prChecklistPath))) {
+    const checklistContent = readFileSync(resolve(REPOSITORY_ROOT, prChecklistPath), 'utf8');
+    assertContains('PR checklist', prChecklistPath, checklistContent, REQUIRED_PR_CHECKLIST_SNIPPETS, failures);
   }
 
   if (existsSync(resolve(REPOSITORY_ROOT, frontendRulePath))) {
@@ -104,13 +97,13 @@ function runAudit() {
     assertContains('Frontend rule', frontendRulePath, frontendRuleContent, REQUIRED_FRONTEND_RULE_SNIPPETS, failures);
   }
 
-  if (existsSync(resolve(REPOSITORY_ROOT, excellenceRubricPath))) {
-    const excellenceRubricContent = readFileSync(resolve(REPOSITORY_ROOT, excellenceRubricPath), 'utf8');
+  if (existsSync(resolve(REPOSITORY_ROOT, architectureChecklistPath))) {
+    const excellenceRubricContent = readFileSync(resolve(REPOSITORY_ROOT, architectureChecklistPath), 'utf8');
     assertContains(
-      'Frontend excellence rubric',
-      excellenceRubricPath,
+      'Architecture checklist',
+      architectureChecklistPath,
       excellenceRubricContent,
-      REQUIRED_EXCELLENCE_RUBRIC_SNIPPETS,
+      REQUIRED_ARCHITECTURE_CHECKLIST_SNIPPETS,
       failures
     );
   }

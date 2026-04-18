@@ -33,50 +33,19 @@ const LAYERS = [
     injectionKeywords: ['.agent-context/rules/', 'naming-conv', 'architecture', 'security'],
   },
   {
-    name: 'Layer 2: Stacks',
-    requiredPaths: [
-      '.agent-context/stacks/typescript.md',
-      '.agent-context/stacks/python.md',
-      '.agent-context/stacks/java.md',
-      '.agent-context/stacks/php.md',
-      '.agent-context/stacks/go.md',
-      '.agent-context/stacks/csharp.md',
-      '.agent-context/stacks/rust.md',
-      '.agent-context/stacks/ruby.md',
-    ],
-    injectionKeywords: ['.agent-context/stacks/', 'typescript', 'python'],
+    name: 'Layer 2: Stack Strategy Signals',
+    requiredPaths: [],
+    injectionKeywords: ['Stack Strategy Signals', 'dynamic stack intelligence'],
   },
   {
-    name: 'Layer 3: Blueprints',
-    requiredPaths: [
-      '.agent-context/blueprints/api-nextjs.md',
-      '.agent-context/blueprints/nestjs-logic.md',
-      '.agent-context/blueprints/fastapi-service.md',
-      '.agent-context/blueprints/laravel-api.md',
-      '.agent-context/blueprints/spring-boot-api.md',
-      '.agent-context/blueprints/go-service.md',
-      '.agent-context/blueprints/aspnet-api.md',
-      '.agent-context/blueprints/ci-github-actions.md',
-      '.agent-context/blueprints/ci-gitlab.md',
-      '.agent-context/blueprints/observability.md',
-      '.agent-context/blueprints/graphql-grpc-api.md',
-      '.agent-context/blueprints/infrastructure-as-code.md',
-      '.agent-context/blueprints/kubernetes-manifests.md',
-      '.agent-context/blueprints/mobile-app.md',
-    ],
-    injectionKeywords: ['.agent-context/blueprints/'],
+    name: 'Layer 3: Architecture Playbooks',
+    requiredPaths: [],
+    injectionKeywords: ['Architecture Playbooks', 'dynamic architecture intelligence'],
   },
   {
-    name: 'Layer 4: Skills',
-    requiredPaths: [
-      '.agent-context/skills/backend.md',
-      '.agent-context/skills/frontend.md',
-      '.agent-context/skills/cli.md',
-      '.agent-context/skills/distribution.md',
-      '.agent-context/skills/fullstack.md',
-      '.agent-context/skills/review-quality.md',
-    ],
-    injectionKeywords: ['.agent-context/skills/'],
+    name: 'Layer 4: Execution Contracts',
+    requiredPaths: [],
+    injectionKeywords: ['Execution Contracts', 'dynamic execution contracts'],
   },
   {
     name: 'Layer 5: Prompts',
@@ -88,13 +57,9 @@ const LAYERS = [
     injectionKeywords: ['.agent-context/prompts/'],
   },
   {
-    name: 'Layer 6: Profiles',
-    requiredPaths: [
-      '.agent-context/profiles/platform.md',
-      '.agent-context/profiles/regulated.md',
-      '.agent-context/profiles/startup.md',
-    ],
-    injectionKeywords: ['.agent-context/profiles/'],
+    name: 'Layer 6: Governance Modes',
+    requiredPaths: [],
+    injectionKeywords: ['Governance Modes', 'dynamic governance context'],
   },
   {
     name: 'Layer 7: State',
@@ -218,17 +183,19 @@ describe('Delegating Entry Point Chain', () => {
       );
     });
 
-    it(`${entryPoint.name} references .agent-context/stacks/`, () => {
+    it(`${entryPoint.name} references stack strategy guidance`, () => {
+      const normalized = fileContent.toLowerCase();
       assert.ok(
-        fileContent.includes('stacks/'),
-        `${entryPoint.name} does not reference stacks/`
+        normalized.includes('stack') && (normalized.includes('dynamic') || normalized.includes('evidence')),
+        `${entryPoint.name} does not reference stack strategy guidance`
       );
     });
 
-    it(`${entryPoint.name} references .agent-context/blueprints/`, () => {
+    it(`${entryPoint.name} references architecture playbooks`, () => {
+      const normalized = fileContent.toLowerCase();
       assert.ok(
-        fileContent.includes('blueprint') || fileContent.includes('.agent-context/blueprints/'),
-        `${entryPoint.name} does not reference blueprints`
+        normalized.includes('architecture') || normalized.includes('playbook'),
+        `${entryPoint.name} does not reference architecture playbooks`
       );
     });
 
@@ -304,7 +271,7 @@ describe('MCP Knowledge Layer Declaration', () => {
 
   it('mcp.json declares all 8 layer paths', () => {
     const mcpConfig = JSON.parse(readFileSync(mcpPath, 'utf-8'));
-    const expectedLayerNames = ['rules', 'stacks', 'blueprints', 'skills', 'prompts', 'profiles', 'state', 'policies'];
+    const expectedLayerNames = ['rules', 'stack-strategies', 'architecture-playbooks', 'execution-contracts', 'prompts', 'governance-modes', 'state', 'policies'];
     const actualLayerNames = Object.keys(mcpConfig.knowledgeLayers.layers);
 
     const missingLayers = expectedLayerNames.filter(
@@ -342,7 +309,7 @@ describe('MCP Knowledge Layer Declaration', () => {
   it('mcp.json injection workflow covers all 8 layers', () => {
     const mcpConfig = JSON.parse(readFileSync(mcpPath, 'utf-8'));
     const injectionSteps = mcpConfig.workflows['full-knowledge-injection'].steps;
-    const expectedStepKeywords = ['rules', 'stacks', 'blueprints', 'skills', 'prompts', 'profiles', 'state', 'policies'];
+    const expectedStepKeywords = ['rules', 'stack', 'architecture', 'execution', 'prompts', 'governance', 'state', 'policies'];
 
     for (const keyword of expectedStepKeywords) {
       const hasStep = injectionSteps.some((step) => step.includes(keyword));

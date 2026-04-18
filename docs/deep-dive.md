@@ -3,13 +3,13 @@
 Agentic-Senior-Core operates as a **Dynamic Rules Engine (Governance Engine)** that merges generalized best practices with project-specific structural definitions into files agents naturally read (like `.cursorrules`, `.windsurfrules`, or `AGENTS.md`).
 
 ## The Compiler Workflow
-When you run the init command (for example through `npm exec --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior-core init`, `scripts/init-project.ps1`, `scripts/init-project.sh`, or `npx @ryuenn3123/agentic-senior-core init` after npm publish), the delivery CLI:
+When you run the init command (for example through `npm exec --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior-core init` or `npx @ryuenn3123/agentic-senior-core init` after npm publish), the delivery CLI:
 1. **Scans** your working directory heuristically out-of-the-box (looking for `package.json`, `pom.xml`, etc.).
 2. **Prompts** you to refine the Stack, Blueprint, and enforcement Profile if auto-detection confidence is low.
 3. **Compiles** modular knowledge components into dense rule files injected directly into your project.
 
 ### Distribution Modes
-- **Pre-publish mode**: use GitHub source execution (`npm exec --package=github:...`) or bootstrap scripts in this repository.
+- **Pre-publish mode**: use GitHub source execution (`npm exec --package=github:...`).
 - **Post-publish mode**: use `npx @ryuenn3123/agentic-senior-core init` as the shortest path.
 - **Engine parity**: all modes run the same CLI entrypoint (`bin/agentic-senior-core.js`) and produce the same output files.
 
@@ -21,8 +21,8 @@ When you run the init command (for example through `npm exec --package=github:fa
 
 ### Component Breakdown
 - **Universals (`.agent-context/rules/`)**: Non-negotiable laws. No floating `any` types, strict variable naming, event-driven designs.
-- **Stacks (`.agent-context/stacks/`)**: Paradigm instructions specific to a language ecosystem. (e.g. In Python, strictly enforce Pydantic over untyped dicts).
-- **Blueprints (`.agent-context/blueprints/`)**: Directory generation patterns. Instructs the agent on where a `/repository` layer goes versus a `/controller` layer.
+- **Stack strategies (dynamic)**: Language and runtime guidance resolved from project evidence, repository context, and stack research signals.
+- **Architecture playbooks (dynamic)**: Directory and layering guidance resolved at init time for the selected architecture path.
 
 ## Profile Enforcement Strategies
 Agentic-Senior-Core enables configurable rigidness:
@@ -31,7 +31,7 @@ Agentic-Senior-Core enables configurable rigidness:
 - **strict**: Fails on any deviation. Enforces test isolation, architectural violations, security problems, and fails standard CI runs when the AI Judge API becomes unresponsive.
 
 ### Team Profile Packs (V1.6)
-- Team profiles are defined in `.agent-context/profiles/` and can be applied with `--profile-pack`.
+- Team profile packs are built into CLI metadata and can be applied with `--profile-pack`.
 - Packs control default profile, stack, blueprint, and CI behavior while preserving local override options.
 - Current packs: `startup`, `regulated`, `platform`.
 

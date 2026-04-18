@@ -15,7 +15,6 @@ import { runMcpServerCommand } from '../lib/cli/commands/mcp.mjs';
 import { runOptimizeCommand, parseOptimizeArguments } from '../lib/cli/commands/optimize.mjs';
 import { runInitCommand, parseInitArguments } from '../lib/cli/commands/init.mjs';
 import { runUpgradeCommand, parseUpgradeArguments } from '../lib/cli/commands/upgrade.mjs';
-import { runSkillCommand } from '../lib/cli/skill-selector.mjs';
 
 async function main() {
   const commandArgument = process.argv[2];
@@ -33,11 +32,6 @@ async function main() {
 
   if (commandArgument === '--version' || commandArgument === '-v') {
     console.log(CLI_VERSION);
-    return;
-  }
-
-  if (commandArgument === 'skill') {
-    await runSkillCommand(commandArguments);
     return;
   }
 

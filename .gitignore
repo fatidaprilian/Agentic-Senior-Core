@@ -21,3 +21,9 @@ bun.lockb
 .env.local
 .agentic-backup/
 .benchmarks/
+
+# Local generated artifacts
+test_output.txt
+validate_output.txt
+release-gate-report.json
+.agent-context/state/v3-purge-audit.json

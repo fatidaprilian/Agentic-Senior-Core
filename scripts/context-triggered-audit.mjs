@@ -16,8 +16,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const REPOSITORY_ROOT = resolve(__dirname, '..');
 
-const SECURITY_CHECKLIST_PATH = '.agent-context/review-checklists/security-audit.md';
-const PERFORMANCE_CHECKLIST_PATH = '.agent-context/review-checklists/performance-audit.md';
+const PR_CHECKLIST_PATH = '.agent-context/review-checklists/pr-checklist.md';
+const ARCHITECTURE_CHECKLIST_PATH = '.agent-context/review-checklists/architecture-review.md';
 const DEFAULT_WORKFLOW = 'auto';
 const SMALL_EDIT_MAX_FILES = 3;
 const MAJOR_FEATURE_MIN_SIGNIFICANT_FILES = 4;
@@ -36,18 +36,18 @@ const SUPPORTED_WORKFLOWS = new Set([
   'standard',
 ]);
 
-const REQUIRED_SECURITY_CHECKLIST_SNIPPETS = [
-  '## Context Trigger Policy',
-  'Strict security audit auto-runs for review requests, PR-intent workflows, and major feature completion.',
-  'Small edits default to lightweight mode unless strict mode is explicitly forced.',
-  'User can force strict mode manually at any time.',
+const REQUIRED_PR_CHECKLIST_SNIPPETS = [
+  '### 11. Context-Triggered Audit Mode',
+  'Strict audit mode activates automatically on review and PR-intent workflows',
+  'Small edits avoid heavy checks by default unless strict mode is explicitly requested',
+  'User can always force strict audit mode manually',
 ];
 
-const REQUIRED_PERFORMANCE_CHECKLIST_SNIPPETS = [
-  '## Context Trigger Policy',
-  'Strict performance audit auto-runs for review requests, PR-intent workflows, and major feature completion.',
-  'Small edits default to lightweight mode unless strict mode is explicitly forced.',
-  'User can force strict mode manually at any time.',
+const REQUIRED_ARCHITECTURE_CHECKLIST_SNIPPETS = [
+  '## Backend Universal Principles',
+  'No clever hacks in backend and shared core modules',
+  'No premature abstraction',
+  'Readability over brevity',
 ];
 
 function pushResult(results, isPassed, checkName, details) {
@@ -348,16 +348,16 @@ function runAudit() {
     pushResult(results, true, 'strict-audit-activation', `Strict audit mode activated (${auditMode.triggerReason})`);
 
     assertChecklist(
-      'security',
-      SECURITY_CHECKLIST_PATH,
-      REQUIRED_SECURITY_CHECKLIST_SNIPPETS,
+      'pr',
+      PR_CHECKLIST_PATH,
+      REQUIRED_PR_CHECKLIST_SNIPPETS,
       failures,
       results
     );
     assertChecklist(
-      'performance',
-      PERFORMANCE_CHECKLIST_PATH,
-      REQUIRED_PERFORMANCE_CHECKLIST_SNIPPETS,
+      'architecture',
+      ARCHITECTURE_CHECKLIST_PATH,
+      REQUIRED_ARCHITECTURE_CHECKLIST_SNIPPETS,
       failures,
       results
     );

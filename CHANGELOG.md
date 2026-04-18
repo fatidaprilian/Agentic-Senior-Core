@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+### Added
+- Added V3 dry-run purge audit script (`npm run audit:v3-purge`) that emits machine-readable deletion readiness report to `.agent-context/state/v3-purge-audit.json`.
+- Added canonical init output file `.agent-instructions.md` plus `.clauderc` adapter generation for AI CLI compatibility.
+
+### Changed
+- Changed compiled rules generation to support dynamic fallback when static stack/blueprint profile files are absent.
+- Changed init stack/blueprint discovery to use compatibility fallback labels when static directories are not present.
+
+## 3.0.0 - 2026-04-18
+### Added
+- Added scoped auto-doc sync rollout metadata in documentation boundary audit output (`autoDocsSyncScope`) with explicit phase-1 boundaries for public surface, API contract, and database structure.
+- Added timestamped rollout metrics (`rolloutMetrics`) with precision and recall signals for expansion decisions.
+- Added deterministic release-gate checks for phase-1 scope lock and rollout metrics presence (`auto-docs-sync-scope-phase1`, `auto-docs-sync-rollout-metrics`).
+
+### Changed
+- Changed boundary audit report schema to version `2.1.0` with machine-readable rollout evidence fields.
+- Changed validator and smoke/enterprise tests to enforce 018E scope and metrics coverage in CI.
+- Changed scaffolder synthesis context to remove dead fields and unused import paths while preserving runtime behavior.
+- Changed repository footprint by removing obsolete `.tmpl` project-doc template files from `lib/cli/templates/` after template-free runtime migration.
+
 ## 2.5.22 - 2026-04-18
 ### Added
 - Added AI-first bootstrap prompt generation under `.agent-context/prompts/` for dynamic project context synthesis (`bootstrap-project-context.md`) and UI design synthesis (`bootstrap-design.md`) when applicable.
@@ -549,7 +570,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 1.6.0 - 2026-03-19
 ### Added
-- Team profile packs for `startup`, `regulated`, and `platform` in `.agent-context/profiles/`.
+- Team profile packs for `startup`, `regulated`, and `platform` with built-in CLI definitions and migration-safe fallback behavior.
 - New CLI option `--profile-pack <name>` to apply organization defaults during `init`.
 - New CLI command `upgrade` with `--dry-run` and `--yes` options for migration previews and controlled writes.
 - Onboarding report metadata now records selected profile pack (`name` and `sourceFile`).

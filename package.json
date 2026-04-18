@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "2.5.22",
+  "version": "3.0.0",
   "type": "module",
   "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
   "bin": {
@@ -48,6 +48,9 @@
     "audit:rules-guardian": "node ./scripts/rules-guardian-audit.mjs",
     "audit:explain-on-demand": "node ./scripts/explain-on-demand-audit.mjs",
     "audit:single-source-lazy-loading": "node ./scripts/single-source-lazy-loading-audit.mjs",
+    "audit:v3-purge": "node ./scripts/v3-purge-audit.mjs",
+    "sync:adapters": "node ./scripts/sync-thin-adapters.mjs",
+    "check:adapters": "node ./scripts/sync-thin-adapters.mjs --check",
     "gate:release": "node ./scripts/release-gate.mjs && node ./scripts/forbidden-content-check.mjs",
     "prepublishOnly": "npm run gate:release",
     "sbom:generate": "node ./scripts/generate-sbom.mjs",
@@ -62,6 +65,6 @@
     "report:docs-quality-drift": "node ./scripts/docs-quality-drift-report.mjs",
     "report:governance-weekly": "node ./scripts/governance-weekly-report.mjs",
     "validate": "node ./scripts/validate.mjs",
-    "test": "node --test ./tests/cli-smoke.test.mjs ./tests/mcp-server.test.mjs ./tests/llm-judge.test.mjs ./tests/enterprise-ops.test.mjs ./tests/skill-tier-gate.test.mjs"
+    "test": "node --test ./tests/cli-smoke.test.mjs ./tests/mcp-server.test.mjs ./tests/llm-judge.test.mjs ./tests/enterprise-ops.test.mjs"
   }
 }

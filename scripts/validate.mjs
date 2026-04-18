@@ -17,8 +17,6 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
-import { validateSkillTopicContent } from './skill-tier-policy.mjs';
-import { calculateTrustScore } from './trust-scorer.mjs';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
 const ROOT_DIR = resolve(dirname(SCRIPT_FILE_PATH), '..');
@@ -29,11 +27,9 @@ const CHANGELOG_PATH = join(ROOT_DIR, 'CHANGELOG.md');
 const README_PATH = join(ROOT_DIR, 'README.md');
 const POLICY_FILE_PATH = join(ROOT_DIR, '.agent-context', 'policies', 'llm-judge-threshold.json');
 const OVERRIDE_FILE_PATH = join(ROOT_DIR, '.agent-override.md');
-const SKILLS_DIR = join(AGENT_CONTEXT_DIR, 'skills');
 const GENERATED_RULE_FILES = ['.cursorrules', '.windsurfrules'];
 const ALLOWED_SEVERITIES = new Set(['critical', 'high', 'medium', 'low']);
 const OVERRIDE_WARNING_WINDOW_DAYS = 30;
-const SUPPORTED_COMPATIBILITY_PLATFORMS = new Set(['windows', 'linux', 'macos']);
 const THIN_ADAPTER_PATHS = [
   'AGENTS.md',
   '.github/copilot-instructions.md',
@@ -47,7 +43,6 @@ const FORMAL_ARTIFACT_PATHS = [
   '.agent-context/rules/api-docs.md',
   '.agent-context/review-checklists/pr-checklist.md',
   '.agent-context/prompts/review-code.md',
-  '.agent-context/skills/review-quality.md',
   'AGENTS.md',
   '.github/copilot-instructions.md',
   '.gemini/instructions.md',
@@ -139,9 +134,8 @@ const REQUIRED_DEVELOPER_FIRST_MENTION_PATTERNS = [
   },
 ];
 const COMPLIANCE_TERMINOLOGY_BOUNDARY_PATHS = [
-  '.agent-context/review-checklists/security-audit.md',
-  '.agent-context/review-checklists/performance-audit.md',
-  '.agent-context/review-checklists/release-operations.md',
+  '.agent-context/review-checklists/pr-checklist.md',
+  '.agent-context/review-checklists/architecture-review.md',
   'scripts/release-gate.mjs',
   'scripts/forbidden-content-check.mjs',
 ];
@@ -150,9 +144,9 @@ const COMPLIANCE_ALIAS_TERMS = [
 ];
 const REQUIRED_COMPLIANCE_CANONICAL_SNIPPETS = [
   {
-    path: '.agent-context/review-checklists/release-operations.md',
-    snippet: 'Federated Governance',
-    label: 'release operations checklist keeps canonical term Federated Governance',
+    path: '.agent-context/review-checklists/pr-checklist.md',
+    snippet: '### 15. Universal SOP Consolidation',
+    label: 'PR checklist keeps consolidated Universal SOP section',
   },
 ];
 const REQUIRED_DETECTION_TRANSPARENCY_SNIPPETS = [
@@ -200,6 +194,96 @@ const REQUIRED_STACK_RESEARCH_ENGINE_SNIPPETS = [
       '--architect-realtime-signal-file',
       'researchMode: initOptions.architectResearchMode',
       'enableRealtimeResearch: initOptions.enableRealtimeResearch',
+    ],
+  },
+];
+const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
+  {
+    path: '.agent-context/rules/architecture.md',
+    snippets: [
+      '## Universal SOP Baseline (Mandatory)',
+      'Security and testing are non-negotiable baseline requirements.',
+      'If required project context docs are missing, stop implementation and bootstrap docs before writing application code.',
+    ],
+  },
+  {
+    path: '.agent-context/review-checklists/pr-checklist.md',
+    snippets: [
+      '### 15. Universal SOP Consolidation',
+      'Coding flow is blocked if `docs/architecture-decision-record.md` (or `docs/Architecture-Decision-Record.md`) is missing',
+      'UI implementation flow is blocked if `docs/DESIGN.md` is missing',
+    ],
+  },
+  {
+    path: '.agent-context/prompts/review-code.md',
+    snippets: [
+      'Enforce Universal SOP hard gate: block coding flow when required project docs are missing (`docs/architecture-decision-record.md`, and for UI scope `docs/DESIGN.md`).',
+    ],
+  },
+  {
+    path: '.agent-context/prompts/refactor.md',
+    snippets: [
+      '6. Enforce Universal SOP hard gate: stop implementation if `docs/architecture-decision-record.md` is missing, and for UI scope stop if `docs/DESIGN.md` is missing.',
+    ],
+  },
+  {
+    path: 'lib/cli/compiler.mjs',
+    snippets: [
+      'Universal SOP hard block policy:',
+      'Hard block: do not write application code until docs/project-brief.md and docs/architecture-decision-record.md exist.',
+      'For UI scope: if docs/DESIGN.md is missing, execute bootstrap-design prompt before implementing UI surfaces.',
+    ],
+  },
+];
+const REQUIRED_TEMPLATE_FREE_BOOTSTRAP_SNIPPETS = [
+  {
+    path: 'lib/cli/project-scaffolder.mjs',
+    snippets: [
+      'resolveProjectDocTargets',
+      'Write project context docs from scratch (no template rendering, no placeholder boilerplate).',
+      'For any research-backed claim, include citation metadata (source + fetchedAt timestamp) from the Architect Engine Snapshot.',
+      "bootstrapMode: 'ai-synthesis'",
+    ],
+  },
+  {
+    path: 'lib/cli/commands/init.mjs',
+    snippets: [
+      'Project docs will be authored dynamically by your IDE assistant from these prompts.',
+      'bootstrap-project-context.md',
+      'I prepared dynamic synthesis bootstrap prompts',
+    ],
+  },
+];
+const FORBIDDEN_TEMPLATE_BOOTSTRAP_SNIPPETS = [
+  {
+    path: 'lib/cli/project-scaffolder.mjs',
+    snippets: [
+      '.tmpl',
+    ],
+  },
+];
+const REQUIRED_DETERMINISTIC_BOUNDARY_ENFORCEMENT_SNIPPETS = [
+  {
+    path: 'scripts/documentation-boundary-audit.mjs',
+    snippets: [
+      'reportVersion',
+      'violations',
+      'suggestedActions',
+      'diagnosticCode',
+      'autoDocsSyncScope',
+      'rolloutMetrics',
+      'precision',
+      'recall',
+    ],
+  },
+  {
+    path: 'scripts/release-gate.mjs',
+    snippets: [
+      'documentation-boundary-hard-rule',
+      'documentation-boundary-diagnostics-machine-readable',
+      'diagnostics.documentationBoundaryAudit',
+      'auto-docs-sync-scope-phase1',
+      'auto-docs-sync-rollout-metrics',
     ],
   },
 ];
@@ -299,10 +383,10 @@ async function validateRequiredFiles() {
     'scripts/rules-guardian-audit.mjs',
     'scripts/explain-on-demand-audit.mjs',
     'scripts/single-source-lazy-loading-audit.mjs',
+    'scripts/sync-thin-adapters.mjs',
+    'scripts/v3-purge-audit.mjs',
     'scripts/release-gate.mjs',
     'scripts/generate-sbom.mjs',
-    'scripts/init-project.sh',
-    'scripts/init-project.ps1',
     '.cursorrules',
     '.windsurfrules',
     '.agent-override.md',
@@ -326,8 +410,6 @@ async function validateRequiredFiles() {
     '.agent-context/state/stack-research-snapshot.json',
     '.agent-context/state/memory-schema-v1.json',
     '.agent-context/state/memory-adapter-contract.json',
-    '.agent-context/state/skill-platform.json',
-    '.agent-context/skills/index.json',
     '.vscode/mcp.json',
     '.github/workflows/release-gate.yml',
     '.github/workflows/sbom-compliance.yml',
@@ -340,7 +422,6 @@ async function validateRequiredFiles() {
     'tests/enterprise-ops.test.mjs',
     'LICENSE',
     '.gitignore',
-    '.agent-context/marketplace/trust-tiers.json',
   ];
 
   for (const requiredFilePath of requiredFiles) {
@@ -374,7 +455,7 @@ async function validateMarkdownFiles() {
 }
 
 async function validateRuleFiles() {
-  console.log('\nChecking rule, stack, blueprint, checklist, and state files...');
+  console.log('\nChecking rule, checklist, prompt, and state files...');
 
   const expectedPaths = [
     'rules/naming-conv.md',
@@ -392,52 +473,11 @@ async function validateRuleFiles() {
     'rules/realtime.md',
     'rules/frontend-architecture.md',
     'rules/docker-runtime.md',
-    'stacks/typescript.md',
-    'stacks/python.md',
-    'stacks/java.md',
-    'stacks/php.md',
-    'stacks/go.md',
-    'stacks/csharp.md',
-    'stacks/rust.md',
-    'stacks/ruby.md',
-    'blueprints/api-nextjs.md',
-    'blueprints/nestjs-logic.md',
-    'blueprints/fastapi-service.md',
-    'blueprints/laravel-api.md',
-    'blueprints/spring-boot-api.md',
-    'blueprints/go-service.md',
-    'blueprints/aspnet-api.md',
-    'blueprints/ci-github-actions.md',
-    'blueprints/ci-gitlab.md',
-    'blueprints/observability.md',
-    'blueprints/graphql-grpc-api.md',
-    'blueprints/infrastructure-as-code.md',
-    'blueprints/kubernetes-manifests.md',
-    'profiles/startup.md',
-    'profiles/regulated.md',
-    'profiles/platform.md',
     'review-checklists/pr-checklist.md',
-    'review-checklists/frontend-usability.md',
-    'review-checklists/frontend-skill-parity.md',
-    'review-checklists/frontend-excellence-rubric.md',
-    'review-checklists/release-operations.md',
-    'review-checklists/security-audit.md',
-    'review-checklists/performance-audit.md',
     'review-checklists/architecture-review.md',
-    'review-checklists/marketplace-acceptance.md',
-    'skills/README.md',
-    'skills/frontend/README.md',
-    'skills/backend/README.md',
-    'skills/fullstack/README.md',
-    'skills/cli/README.md',
-    'skills/distribution/README.md',
-    'skills/review-quality/README.md',
-    'skills/frontend.md',
-    'skills/backend.md',
-    'skills/fullstack.md',
-    'skills/cli.md',
-    'skills/distribution.md',
-    'skills/review-quality.md',
+    'prompts/init-project.md',
+    'prompts/refactor.md',
+    'prompts/review-code.md',
     'state/architecture-map.md',
     'state/dependency-map.md',
   ];
@@ -460,129 +500,30 @@ async function validateRuleFiles() {
   }
 }
 
-async function validateSkillTierQuality() {
-  console.log('\nChecking skill tier quality...');
+async function validateChecklistConsolidation() {
+  console.log('\nChecking review checklist consolidation...');
 
-  const skillMarkdownFiles = await collectFiles(SKILLS_DIR, (fileName) => fileName.endsWith('.md'));
-  const scopedSkillTopicFiles = skillMarkdownFiles.filter((skillFilePath) => {
-    if (skillFilePath.endsWith('README.md') || skillFilePath.endsWith('CHANGELOG.md')) {
-      return false;
-    }
-
-    const relativeSkillPath = relative(SKILLS_DIR, skillFilePath);
-    return /[\\/]/.test(relativeSkillPath);
-  });
-
-  for (const skillTopicPath of scopedSkillTopicFiles) {
-    const skillTopicContent = await readTextFile(skillTopicPath);
-    const relativeSkillTopicPath = relative(ROOT_DIR, skillTopicPath);
-    const validationResult = validateSkillTopicContent(skillTopicContent);
-
-    if (!validationResult.isValid) {
-      if (validationResult.reason === 'missing-tier') {
-        fail(`${relativeSkillTopicPath} is missing explicit Tier metadata`);
-        continue;
-      }
-
-      if (validationResult.reason === 'unsupported-tier') {
-        fail(`${relativeSkillTopicPath} has unsupported tier: ${validationResult.detectedTier}`);
-        continue;
-      }
-
-      if (validationResult.reason === 'word-count') {
-        fail(`${relativeSkillTopicPath} tier ${validationResult.detectedTier} must include at least ${validationResult.minimumRules.minWords} words (found ${validationResult.wordCount})`);
-        continue;
-      }
-
-      if (validationResult.reason === 'heading-count') {
-        fail(`${relativeSkillTopicPath} tier ${validationResult.detectedTier} must include at least ${validationResult.minimumRules.minHeadings} section headings (found ${validationResult.headingCount})`);
-        continue;
-      }
-
-      if (validationResult.reason === 'checklist-count') {
-        fail(`${relativeSkillTopicPath} tier ${validationResult.detectedTier} must include at least ${validationResult.minimumRules.minChecklistItems} checklist item(s) (found ${validationResult.checklistCount})`);
-        continue;
-      }
-
-      if (validationResult.reason === 'code-block-count') {
-        fail(`${relativeSkillTopicPath} tier ${validationResult.detectedTier} must include at least ${validationResult.minimumRules.minCodeBlocks} code block(s) (found ${validationResult.codeBlockCount})`);
-        continue;
-      }
-
-      fail(`${relativeSkillTopicPath} failed tier validation`);
-      continue;
-    }
-
-    pass(`${relativeSkillTopicPath} tier ${validationResult.detectedTier} quality gate passed`);
-  }
-}
-
-async function validateSkillCompatibilityManifests() {
-  console.log('\nChecking skill compatibility manifests...');
-
-  const skillDomainEntries = await readdir(SKILLS_DIR, { withFileTypes: true });
-  const skillDomainDirectoryNames = skillDomainEntries
-    .filter((entry) => entry.isDirectory())
+  const reviewChecklistDirectoryPath = join(AGENT_CONTEXT_DIR, 'review-checklists');
+  const checklistEntries = await readdir(reviewChecklistDirectoryPath, { withFileTypes: true });
+  const checklistFileNames = checklistEntries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
     .map((entry) => entry.name)
     .sort((leftName, rightName) => leftName.localeCompare(rightName));
 
-  let validManifestCount = 0;
+  const expectedChecklistFileNames = ['architecture-review.md', 'pr-checklist.md'];
 
-  for (const skillDomainDirectoryName of skillDomainDirectoryNames) {
-    const compatibilityManifestPath = join(
-      SKILLS_DIR,
-      skillDomainDirectoryName,
-      'compatibility-manifest.json'
-    );
-
-    if (!(await fileExists(compatibilityManifestPath))) {
-      fail(`Missing compatibility manifest: .agent-context/skills/${skillDomainDirectoryName}/compatibility-manifest.json`);
-      continue;
-    }
-
-    let parsedCompatibilityManifest;
-    try {
-      parsedCompatibilityManifest = JSON.parse(await readTextFile(compatibilityManifestPath));
-    } catch (error) {
-      fail(`Invalid JSON compatibility manifest for ${skillDomainDirectoryName}: ${error.message}`);
-      continue;
-    }
-
-    if (!Array.isArray(parsedCompatibilityManifest.ides) || parsedCompatibilityManifest.ides.length === 0) {
-      fail(`Compatibility manifest for ${skillDomainDirectoryName} must include non-empty "ides" array`);
-      continue;
-    }
-
-    if (!Array.isArray(parsedCompatibilityManifest.platforms) || parsedCompatibilityManifest.platforms.length === 0) {
-      fail(`Compatibility manifest for ${skillDomainDirectoryName} must include non-empty "platforms" array`);
-      continue;
-    }
-
-    const unsupportedPlatform = parsedCompatibilityManifest.platforms.find(
-      (platformName) => !SUPPORTED_COMPATIBILITY_PLATFORMS.has(platformName)
-    );
-
-    if (unsupportedPlatform) {
-      fail(`Compatibility manifest for ${skillDomainDirectoryName} has unsupported platform: ${unsupportedPlatform}`);
-      continue;
-    }
-
-    if (
-      typeof parsedCompatibilityManifest.nodeMin !== 'string'
-      || !/^\d+(\.\d+)?$/.test(parsedCompatibilityManifest.nodeMin)
-    ) {
-      fail(`Compatibility manifest for ${skillDomainDirectoryName} must include string nodeMin (for example "18" or "18.0")`);
-      continue;
-    }
-
-    validManifestCount += 1;
-    pass(`Compatibility manifest validated: .agent-context/skills/${skillDomainDirectoryName}/compatibility-manifest.json`);
+  if (checklistFileNames.length <= 2) {
+    pass(`Checklist count is consolidated (${checklistFileNames.length}/2)`);
+  } else {
+    fail(`Checklist count exceeds limit (${checklistFileNames.length}/2): ${checklistFileNames.join(', ')}`);
   }
 
-  if (validManifestCount >= 6) {
-    pass(`Compatibility manifest coverage is valid (${validManifestCount} skill domains)`);
-  } else {
-    fail(`Compatibility manifest coverage is insufficient (${validManifestCount}/6 skill domains)`);
+  for (const expectedChecklistFileName of expectedChecklistFileNames) {
+    if (checklistFileNames.includes(expectedChecklistFileName)) {
+      pass(`Checklist exists: .agent-context/review-checklists/${expectedChecklistFileName}`);
+    } else {
+      fail(`Missing consolidated checklist: .agent-context/review-checklists/${expectedChecklistFileName}`);
+    }
   }
 }
 
@@ -833,9 +774,6 @@ async function validateDocumentationFlow() {
 
   const readmeContent = await readTextFile(README_PATH);
   const requiredReadmeSnippets = [
-    'GitHub Template',
-    'scripts/init-project.ps1',
-    'scripts/init-project.sh',
     'npx @ryuenn3123/agentic-senior-core init',
     'npm run validate',
     'docs/faq.md',
@@ -1016,6 +954,90 @@ async function validateStackResearchEngineCoverage() {
         pass(`${coverageRule.path} includes stack research snippet: ${requiredSnippet}`);
       } else {
         fail(`${coverageRule.path} is missing stack research snippet: ${requiredSnippet}`);
+      }
+    }
+  }
+}
+
+async function validateUniversalSopConsolidationCoverage() {
+  console.log('\nChecking Universal SOP consolidation coverage...');
+
+  for (const coverageRule of REQUIRED_UNIVERSAL_SOP_SNIPPETS) {
+    const absoluteCoveragePath = join(ROOT_DIR, coverageRule.path);
+
+    if (!(await fileExists(absoluteCoveragePath))) {
+      fail(`Missing Universal SOP source: ${coverageRule.path}`);
+      continue;
+    }
+
+    const coverageContent = await readTextFile(absoluteCoveragePath);
+    for (const requiredSnippet of coverageRule.snippets) {
+      if (coverageContent.includes(requiredSnippet)) {
+        pass(`${coverageRule.path} includes Universal SOP snippet: ${requiredSnippet}`);
+      } else {
+        fail(`${coverageRule.path} is missing Universal SOP snippet: ${requiredSnippet}`);
+      }
+    }
+  }
+}
+
+async function validateTemplateFreeBootstrapCoverage() {
+  console.log('\nChecking template-free dynamic bootstrap coverage...');
+
+  for (const coverageRule of REQUIRED_TEMPLATE_FREE_BOOTSTRAP_SNIPPETS) {
+    const absoluteCoveragePath = join(ROOT_DIR, coverageRule.path);
+
+    if (!(await fileExists(absoluteCoveragePath))) {
+      fail(`Missing template-free bootstrap source: ${coverageRule.path}`);
+      continue;
+    }
+
+    const coverageContent = await readTextFile(absoluteCoveragePath);
+    for (const requiredSnippet of coverageRule.snippets) {
+      if (coverageContent.includes(requiredSnippet)) {
+        pass(`${coverageRule.path} includes template-free bootstrap snippet: ${requiredSnippet}`);
+      } else {
+        fail(`${coverageRule.path} is missing template-free bootstrap snippet: ${requiredSnippet}`);
+      }
+    }
+  }
+
+  for (const forbiddenRule of FORBIDDEN_TEMPLATE_BOOTSTRAP_SNIPPETS) {
+    const absoluteForbiddenPath = join(ROOT_DIR, forbiddenRule.path);
+
+    if (!(await fileExists(absoluteForbiddenPath))) {
+      fail(`Missing template-free bootstrap source: ${forbiddenRule.path}`);
+      continue;
+    }
+
+    const forbiddenContent = await readTextFile(absoluteForbiddenPath);
+    for (const forbiddenSnippet of forbiddenRule.snippets) {
+      if (forbiddenContent.includes(forbiddenSnippet)) {
+        fail(`${forbiddenRule.path} must not include active template snippet: ${forbiddenSnippet}`);
+      } else {
+        pass(`${forbiddenRule.path} excludes active template snippet: ${forbiddenSnippet}`);
+      }
+    }
+  }
+}
+
+async function validateDeterministicBoundaryEnforcementCoverage() {
+  console.log('\nChecking deterministic boundary enforcement coverage...');
+
+  for (const coverageRule of REQUIRED_DETERMINISTIC_BOUNDARY_ENFORCEMENT_SNIPPETS) {
+    const absoluteCoveragePath = join(ROOT_DIR, coverageRule.path);
+
+    if (!(await fileExists(absoluteCoveragePath))) {
+      fail(`Missing deterministic boundary source: ${coverageRule.path}`);
+      continue;
+    }
+
+    const coverageContent = await readTextFile(absoluteCoveragePath);
+    for (const requiredSnippet of coverageRule.snippets) {
+      if (coverageContent.includes(requiredSnippet)) {
+        pass(`${coverageRule.path} includes deterministic boundary snippet: ${requiredSnippet}`);
+      } else {
+        fail(`${coverageRule.path} is missing deterministic boundary snippet: ${requiredSnippet}`);
       }
     }
   }
@@ -1220,100 +1242,29 @@ async function validateInstructionAdapters() {
   }
 }
 
-async function validateTrustTierSchema() {
-  console.log('\nChecking marketplace trust tier schema...');
+async function validateSkillPurgeSurface() {
+  console.log('\nChecking skill and tier purge surface...');
 
-  const trustTierPath = join(AGENT_CONTEXT_DIR, 'marketplace', 'trust-tiers.json');
-  const trustTierContent = await readTextFile(trustTierPath);
-  const trustTierSchema = JSON.parse(trustTierContent);
-
-  const expectedTierNames = ['verified', 'community', 'experimental'];
-  for (const expectedTierName of expectedTierNames) {
-    if (trustTierSchema.tiers?.[expectedTierName]) {
-      pass(`Trust tier "${expectedTierName}" is defined`);
-    } else {
-      fail(`Trust tier "${expectedTierName}" is missing from trust-tiers.json`);
-    }
-  }
-
-  const scorecardDimensions = trustTierSchema.scorecard?.dimensions;
-  if (!scorecardDimensions || typeof scorecardDimensions !== 'object') {
-    fail('Trust tier scorecard must define dimensions');
-    return;
-  }
-
-  const dimensionNames = Object.keys(scorecardDimensions);
-  let totalWeight = 0;
-
-  for (const dimensionName of dimensionNames) {
-    const dimensionWeight = scorecardDimensions[dimensionName].weight;
-    if (typeof dimensionWeight !== 'number' || dimensionWeight <= 0) {
-      fail(`Scorecard dimension "${dimensionName}" must have a positive weight`);
-      continue;
-    }
-    totalWeight += dimensionWeight;
-    pass(`Scorecard dimension "${dimensionName}" weight: ${dimensionWeight}`);
-  }
-
-  if (totalWeight === 100) {
-    pass(`Scorecard weights sum to 100`);
+  const skillDirectoryPath = join(AGENT_CONTEXT_DIR, 'skills');
+  if (await fileExists(skillDirectoryPath)) {
+    fail('Skills directory must be removed: .agent-context/skills');
   } else {
-    fail(`Scorecard weights must sum to 100 (got ${totalWeight})`);
+    pass('Skills directory removed: .agent-context/skills');
   }
 
-  for (const dimensionName of dimensionNames) {
-    const gates = scorecardDimensions[dimensionName].gates;
-    if (!Array.isArray(gates) || gates.length === 0) {
-      fail(`Scorecard dimension "${dimensionName}" must define at least one gate`);
-      continue;
+  const retiredFiles = [
+    join(ROOT_DIR, 'lib', 'cli', 'skill-selector.mjs'),
+    join(ROOT_DIR, 'scripts', 'skill-tier-policy.mjs'),
+    join(ROOT_DIR, 'scripts', 'trust-scorer.mjs'),
+  ];
+
+  for (const retiredFilePath of retiredFiles) {
+    const relativeRetiredPath = relative(ROOT_DIR, retiredFilePath).replace(/\\/g, '/');
+    if (await fileExists(retiredFilePath)) {
+      fail(`Retired file still present: ${relativeRetiredPath}`);
+    } else {
+      pass(`Retired file removed: ${relativeRetiredPath}`);
     }
-    pass(`Scorecard dimension "${dimensionName}" has ${gates.length} gates`);
-  }
-
-  for (const [tierName, tierDefinition] of Object.entries(trustTierSchema.tiers)) {
-    if (typeof tierDefinition.minimumScore !== 'number') {
-      fail(`Tier "${tierName}" must define a numeric minimumScore`);
-      continue;
-    }
-    pass(`Tier "${tierName}" minimumScore: ${tierDefinition.minimumScore}`);
-  }
-}
-
-async function validateEvidenceBundles() {
-  console.log('\nChecking skill evidence bundles and trust scores...');
-  
-  const skillsDir = join(AGENT_CONTEXT_DIR, 'skills');
-  const skillDirs = (await readdir(skillsDir, { withFileTypes: true }))
-      .filter(dirent => dirent.isDirectory())
-      .map(dirent => dirent.name);
-
-  const requiredVerifiedSkillNames = new Set([
-    'cli',
-    'frontend',
-    'fullstack',
-    'distribution',
-    'review-quality',
-  ]);
-
-  for (const skillName of skillDirs) {
-      try {
-         const result = await calculateTrustScore(join(skillsDir, skillName));
-
-         if (requiredVerifiedSkillNames.has(skillName)) {
-           if (result.tier === 'verified') {
-             pass(`Skill "${skillName}" achieved Verified trust tier (Score: ${result.score})`);
-           } else {
-             fail(`Skill "${skillName}" failed to reach Verified tier. Got ${result.tier} (Score: ${result.score})`);
-             continue;
-           }
-
-           continue;
-         }
-
-         pass(`Skill "${skillName}" parses successfully as ${result.tier} tier`);
-      } catch (err) {
-         fail(`Skill "${skillName}" scorer crashed: ${err.message}`);
-      }
   }
 }
 
@@ -1325,8 +1276,7 @@ async function main() {
   await validateRequiredFiles();
   await validateMarkdownFiles();
   await validateRuleFiles();
-  await validateSkillTierQuality();
-  await validateSkillCompatibilityManifests();
+  await validateChecklistConsolidation();
   await validateOverrideGovernance();
   await validateAgentsManifest();
   await validateCrossReferences();
@@ -1337,12 +1287,14 @@ async function main() {
   await validateTerminologyMapping();
   await validateDetectionTransparencyCoverage();
   await validateStackResearchEngineCoverage();
+  await validateUniversalSopConsolidationCoverage();
+  await validateTemplateFreeBootstrapCoverage();
+  await validateDeterministicBoundaryEnforcementCoverage();
   await validateStackResearchSnapshotState();
   await validateMcpConfiguration();
   await validateHumanWritingGovernance();
   await validateInstructionAdapters();
-  await validateTrustTierSchema();
-  await validateEvidenceBundles();
+  await validateSkillPurgeSurface();
 
   console.log('\n===============================================');
   console.log('  RESULTS');

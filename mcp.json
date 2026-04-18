@@ -1,31 +1,31 @@
 {
   "version": "1.0",
   "name": "agentic-senior-core",
-  "description": "MCP configuration for governance-aware diagnostics and self-healing workflows with full knowledge injection.",
+  "description": "MCP configuration for governance-aware diagnostics and self-healing workflows with dynamic knowledge injection.",
   "knowledgeLayers": {
     "enabled": true,
-    "description": "8-layer unified knowledge injection for AI agents",
+    "description": "8-layer dynamic knowledge injection for AI agents",
     "layers": {
       "rules": {
         "path": ".agent-context/rules",
         "count": 14,
         "autoLoad": true
       },
-      "stacks": {
-        "path": ".agent-context/stacks",
-        "count": 10,
+      "stack-strategies": {
+        "path": "dynamic",
+        "count": 0,
         "autoLoad": true
       },
-      "blueprints": {
-        "path": ".agent-context/blueprints",
-        "count": 14,
+      "architecture-playbooks": {
+        "path": "dynamic",
+        "count": 0,
         "autoLoad": true
       },
-      "skills": {
-        "path": ".agent-context/skills",
-        "count": 6,
+      "execution-contracts": {
+        "path": "dynamic",
+        "count": 0,
         "autoLoad": true,
-        "packs": ["backend", "frontend", "cli", "distribution", "fullstack", "review-quality"]
+        "sources": ["prompts", "review-checklists", "policies"]
       },
       "prompts": {
         "path": ".agent-context/prompts",
@@ -33,9 +33,9 @@
         "autoLoad": true,
         "templates": ["init-project", "refactor", "review-code"]
       },
-      "profiles": {
-        "path": ".agent-context/profiles",
-        "count": 3,
+      "governance-modes": {
+        "path": "dynamic",
+        "count": 0,
         "autoLoad": true,
         "governance": ["platform", "regulated", "startup"]
       },
@@ -78,11 +78,11 @@
       "steps": [
         "load_all_knowledge_layers",
         "inject_rules",
-        "inject_stacks",
-        "inject_blueprints",
-        "inject_skills",
+        "inject_stack_strategies",
+        "inject_architecture_playbooks",
+        "inject_execution_contracts",
         "inject_prompts",
-        "inject_profiles",
+        "inject_governance_modes",
         "inject_state",
         "inject_policies"
       ]

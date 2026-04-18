@@ -23,8 +23,8 @@ Required governance sources:
 
 - `.instructions.md`
 - `.agent-context/rules/`
-- `.agent-context/stacks/`
-- `.agent-context/blueprints/`
+- `.agent-context/prompts/`
+- `.agent-context/state/`
 - `.agent-context/review-checklists/pr-checklist.md`
 
 ## GitHub Actions Playbook

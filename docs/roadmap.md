@@ -208,7 +208,9 @@ Final delivery snapshot (2026-04-17):
 
 ## V3.0 (2026) - Enterprise Governance Cloud and Federated Policy Ops
 
-Target window: Q4 2026.
+Release status: V3.0.0 completed and released on 2026-04-18.
+
+Follow-up governance expansion continues in 3.x after the 3.0 baseline cut.
 
 This release aims to move beyond repository-level governance toward federated rules operations (Federated Governance).
 
@@ -245,7 +247,7 @@ Reference: docs/terminology-mapping.md
 ### V3.0 Top Goals Intake Policy (Roadmap-First)
 - All candidate work for V3.0 (optimization, refactor, reliability, security, and DX improvements) must be recorded in roadmap top goals before implementation starts.
 - Every candidate goal must define measurable success metrics and a clear exit condition before being moved to execution.
-- Version bump to `3.0.0` is allowed only after V3.0 exit criteria are fully satisfied.
+- Version bump to `3.0.0` has been completed after release gate verification; subsequent scope continues under 3.x planning.
 
 ### V3.0 Success Metrics
 - Policy drift detection coverage reaches 100% for onboarded repositories.

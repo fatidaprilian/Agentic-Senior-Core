@@ -17,18 +17,6 @@ const __dirname = dirname(__filename);
 const REPOSITORY_ROOT = resolve(__dirname, '..');
 
 const VERSION_PATTERN = /^\d+\.\d+\.\d+$/;
-const NODE_MIN_PATTERN = /^\d+(\.\d+)?$/;
-const SUPPORTED_COMPATIBILITY_PLATFORMS = new Set(['windows', 'linux', 'macos']);
-const REQUIRED_SKILL_DOMAINS = [
-  'backend',
-  'frontend',
-  'fullstack',
-  'cli',
-  'distribution',
-  'review-quality',
-];
-const FRONTEND_PARITY_CHECKLIST_PATH = '.agent-context/review-checklists/frontend-skill-parity.md';
-const FRONTEND_EXCELLENCE_RUBRIC_PATH = '.agent-context/review-checklists/frontend-excellence-rubric.md';
 const FRONTEND_AUDIT_SCRIPT_PATH = 'scripts/frontend-usability-audit.mjs';
 const DOCUMENTATION_BOUNDARY_AUDIT_SCRIPT_PATH = 'scripts/documentation-boundary-audit.mjs';
 const CONTEXT_TRIGGERED_AUDIT_SCRIPT_PATH = 'scripts/context-triggered-audit.mjs';
@@ -37,14 +25,8 @@ const EXPLAIN_ON_DEMAND_AUDIT_SCRIPT_PATH = 'scripts/explain-on-demand-audit.mjs
 const SINGLE_SOURCE_LAZY_LOADING_AUDIT_SCRIPT_PATH = 'scripts/single-source-lazy-loading-audit.mjs';
 const BACKEND_ARCHITECTURE_RULE_PATH = '.agent-context/rules/architecture.md';
 const BACKEND_REVIEW_CHECKLIST_PATH = '.agent-context/review-checklists/pr-checklist.md';
+const ARCHITECTURE_REVIEW_CHECKLIST_PATH = '.agent-context/review-checklists/architecture-review.md';
 const REFACTOR_PROMPT_PATH = '.agent-context/prompts/refactor.md';
-const REQUIRED_FRONTEND_PARITY_SNIPPETS = [
-  'Architecture and Composition',
-  'Interaction and Motion',
-  'Accessibility and Responsiveness',
-  'UX Narrative and Conversion Clarity',
-  'Release Evidence',
-];
 const REQUIRED_BACKEND_ARCHITECTURE_RULE_SNIPPETS = [
   'No clever hacks.',
   'No premature abstraction.',
@@ -60,19 +42,19 @@ const REQUIRED_REFACTOR_PROMPT_SNIPPETS = [
   'Enforce backend universal principles: no clever hacks, no premature abstraction, readability over brevity.',
   'Prioritize maintainability over compressed one-liners.',
 ];
-const REQUIRED_FRONTEND_EXCELLENCE_RUBRIC_SNIPPETS = [
-  'Visual Direction and Identity',
-  'Typography Quality',
-  'Color System Diversity and Contrast',
-  'Interaction Choreography',
-  'Language and Content Consistency',
-  'Text Contrast and Collision Safety',
-  'UX Narrative and Conversion Clarity',
-  'Template Diversity and Originality',
-  'Low-Diversity Template Output Policy',
-  'Awwwards-level reference quality',
+const REQUIRED_ARCHITECTURE_REVIEW_CHECKLIST_SNIPPETS = [
+  '## Backend Universal Principles',
+  'No clever hacks in backend and shared core modules',
+  'No premature abstraction',
+  'Readability over brevity',
 ];
 const BENCHMARK_GATE_SCRIPT_PATH = 'scripts/benchmark-gate.mjs';
+const AUTO_DOCS_SYNC_SCOPE_PHASE = 'phase-1';
+const AUTO_DOCS_SYNC_SCOPE_BOUNDARIES = [
+  'public-surface',
+  'api-contract',
+  'database-structure',
+];
 
 function readText(relativeFilePath) {
   const absolutePath = resolve(REPOSITORY_ROOT, relativeFilePath);
@@ -131,32 +113,6 @@ function runMachineReadableScript(scriptRelativePath, scriptArguments = []) {
   }
 }
 
-function validateCompatibilityManifestShape(parsedManifest, skillDomainName) {
-  const validationErrors = [];
-
-  if (!Array.isArray(parsedManifest.ides) || parsedManifest.ides.length === 0) {
-    validationErrors.push(`Domain ${skillDomainName} must define non-empty ides[]`);
-  }
-
-  if (!Array.isArray(parsedManifest.platforms) || parsedManifest.platforms.length === 0) {
-    validationErrors.push(`Domain ${skillDomainName} must define non-empty platforms[]`);
-  } else {
-    const unsupportedPlatformName = parsedManifest.platforms.find(
-      (platformName) => !SUPPORTED_COMPATIBILITY_PLATFORMS.has(platformName)
-    );
-
-    if (unsupportedPlatformName) {
-      validationErrors.push(`Domain ${skillDomainName} has unsupported platform: ${unsupportedPlatformName}`);
-    }
-  }
-
-  if (typeof parsedManifest.nodeMin !== 'string' || !NODE_MIN_PATTERN.test(parsedManifest.nodeMin)) {
-    validationErrors.push(`Domain ${skillDomainName} must define nodeMin as "18" or "18.0" style string`);
-  }
-
-  return validationErrors;
-}
-
 function runReleaseGate() {
   const results = [];
   const diagnostics = {};
@@ -208,7 +164,7 @@ function runReleaseGate() {
   }
 
   const requiredEnterpriseFiles = [
-    '.agent-context/review-checklists/release-operations.md',
+    '.agent-context/review-checklists/architecture-review.md',
     'docs/v1.8-operations-playbook.md',
     '.github/workflows/release-gate.yml',
     '.github/workflows/sbom-compliance.yml',
@@ -226,57 +182,12 @@ function runReleaseGate() {
     pushResult(results, true, 'required-enterprise-file', `${requiredEnterpriseFile} is present`);
   }
 
-  let validatedCompatibilityManifestCount = 0;
-
-  for (const skillDomainName of REQUIRED_SKILL_DOMAINS) {
-    const compatibilityManifestPath = `.agent-context/skills/${skillDomainName}/compatibility-manifest.json`;
-    const compatibilityManifestContent = readText(compatibilityManifestPath);
-
-    if (!compatibilityManifestContent) {
-      pushResult(results, false, 'compatibility-manifest', `Missing ${compatibilityManifestPath}`);
-      continue;
-    }
-
-    let parsedCompatibilityManifest;
-    try {
-      parsedCompatibilityManifest = JSON.parse(compatibilityManifestContent);
-    } catch (compatibilityManifestParseError) {
-      const parseErrorMessage = compatibilityManifestParseError instanceof Error
-        ? compatibilityManifestParseError.message
-        : 'Unknown parse error';
-      pushResult(results, false, 'compatibility-manifest', `Invalid JSON in ${compatibilityManifestPath}: ${parseErrorMessage}`);
-      continue;
-    }
-
-    const compatibilityValidationErrors = validateCompatibilityManifestShape(
-      parsedCompatibilityManifest,
-      skillDomainName
-    );
-
-    if (compatibilityValidationErrors.length > 0) {
-      pushResult(results, false, 'compatibility-manifest', compatibilityValidationErrors.join('; '));
-      continue;
-    }
-
-    validatedCompatibilityManifestCount += 1;
-    pushResult(results, true, 'compatibility-manifest', `${compatibilityManifestPath} is valid`);
-  }
-
-  if (validatedCompatibilityManifestCount === REQUIRED_SKILL_DOMAINS.length) {
-    pushResult(
-      results,
-      true,
-      'compatibility-manifest-coverage',
-      `Validated ${validatedCompatibilityManifestCount}/${REQUIRED_SKILL_DOMAINS.length} required skill compatibility manifests`
-    );
-  } else {
-    pushResult(
-      results,
-      false,
-      'compatibility-manifest-coverage',
-      `Validated ${validatedCompatibilityManifestCount}/${REQUIRED_SKILL_DOMAINS.length} required skill compatibility manifests`
-    );
-  }
+  pushResult(
+    results,
+    true,
+    'compatibility-manifest-coverage',
+    'Skill compatibility manifest gate has been retired in V3 purge mode'
+  );
 
   const backendArchitectureRuleContent = readText(BACKEND_ARCHITECTURE_RULE_PATH);
   if (!backendArchitectureRuleContent) {
@@ -359,6 +270,82 @@ function runReleaseGate() {
       `documentation-boundary-audit executed (passed=${documentationBoundaryAuditExecution.report.passed}, failures=${documentationBoundaryAuditExecution.report.failureCount})`
     );
 
+    const hasMachineReadableBoundaryDiagnostics = typeof documentationBoundaryAuditExecution.report?.reportVersion === 'string'
+      && Array.isArray(documentationBoundaryAuditExecution.report?.boundaryResults)
+      && Array.isArray(documentationBoundaryAuditExecution.report?.violations)
+      && documentationBoundaryAuditExecution.report.boundaryResults.every((boundaryResult) => (
+        typeof boundaryResult?.boundaryName === 'string'
+        && typeof boundaryResult?.requirement === 'string'
+        && Array.isArray(boundaryResult?.expectedDocumentationPaths)
+        && Array.isArray(boundaryResult?.suggestedActions)
+      ));
+
+    if (hasMachineReadableBoundaryDiagnostics) {
+      pushResult(
+        results,
+        true,
+        'documentation-boundary-diagnostics-machine-readable',
+        `Boundary diagnostics are machine-readable and actionable (reportVersion=${documentationBoundaryAuditExecution.report.reportVersion})`
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'documentation-boundary-diagnostics-machine-readable',
+        'Documentation boundary diagnostics are missing required machine-readable actionable fields'
+      );
+    }
+
+    const reportScope = documentationBoundaryAuditExecution.report?.autoDocsSyncScope;
+    const explicitBoundaries = Array.isArray(reportScope?.explicitBoundaries)
+      ? reportScope.explicitBoundaries
+      : [];
+    const isPhaseOneScopeBounded = reportScope?.phase === AUTO_DOCS_SYNC_SCOPE_PHASE
+      && reportScope?.bounded === true
+      && AUTO_DOCS_SYNC_SCOPE_BOUNDARIES.every((boundaryName) => explicitBoundaries.includes(boundaryName));
+
+    if (isPhaseOneScopeBounded) {
+      pushResult(
+        results,
+        true,
+        'auto-docs-sync-scope-phase1',
+        `Auto-doc sync scope is explicitly bounded to phase-1 boundaries (${explicitBoundaries.join(', ')})`
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'auto-docs-sync-scope-phase1',
+        'Auto-doc sync scope is missing explicit phase-1 boundary metadata'
+      );
+    }
+
+    const rolloutMetrics = documentationBoundaryAuditExecution.report?.rolloutMetrics;
+    const hasValidPrecision = typeof rolloutMetrics?.precision === 'number'
+      && rolloutMetrics.precision >= 0
+      && rolloutMetrics.precision <= 1;
+    const hasValidRecall = typeof rolloutMetrics?.recall === 'number'
+      && rolloutMetrics.recall >= 0
+      && rolloutMetrics.recall <= 1;
+    const hasTimestampedEvidence = typeof rolloutMetrics?.measuredAt === 'string'
+      && rolloutMetrics.measuredAt.length > 0;
+
+    if (hasValidPrecision && hasValidRecall && hasTimestampedEvidence) {
+      pushResult(
+        results,
+        true,
+        'auto-docs-sync-rollout-metrics',
+        `Auto-doc sync rollout metrics are present (precision=${rolloutMetrics.precision.toFixed(4)}, recall=${rolloutMetrics.recall.toFixed(4)})`
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'auto-docs-sync-rollout-metrics',
+        'Auto-doc sync rollout metrics are missing precision/recall or timestamped evidence'
+      );
+    }
+
     if (documentationBoundaryAuditExecution.report.passed === true) {
       pushResult(
         results,
@@ -367,17 +354,28 @@ function runReleaseGate() {
         'Documentation hard-rule passed for all triggered boundaries'
       );
     } else {
-      const failedDocumentationBoundaries = Array.isArray(documentationBoundaryAuditExecution.report.failures)
-        ? documentationBoundaryAuditExecution.report.failures
-        : [];
+      const failedDocumentationBoundaries = Array.isArray(documentationBoundaryAuditExecution.report.violations)
+        ? documentationBoundaryAuditExecution.report.violations.map((violation) => {
+          const failureCode = violation?.diagnosticCode || 'BOUNDARY_DOCS_SYNC_REQUIRED';
+          const changedFiles = Array.isArray(violation?.changedFiles) && violation.changedFiles.length > 0
+            ? violation.changedFiles.join(', ')
+            : 'unknown-changed-files';
+          const suggestion = Array.isArray(violation?.suggestedActions) && violation.suggestedActions.length > 0
+            ? violation.suggestedActions[0]
+            : 'Update matching boundary documentation in the same scope.';
+          return `${failureCode} (${violation?.boundaryName || 'unknown-boundary'}): ${changedFiles}. Action: ${suggestion}`;
+        })
+        : Array.isArray(documentationBoundaryAuditExecution.report.failures)
+          ? documentationBoundaryAuditExecution.report.failures
+          : [];
       const failureSummary = failedDocumentationBoundaries.length > 0
         ? failedDocumentationBoundaries.join('; ')
-        : 'Documentation boundary audit failed without boundary failure details';
+        : '';
       pushResult(
         results,
         false,
         'documentation-boundary-hard-rule',
-        `Documentation hard-rule failed: ${failureSummary}`
+        `Documentation hard-rule failed: ${failureSummary || 'Documentation boundary audit failed without boundary failure details'}`
       );
     }
   }
@@ -673,46 +671,24 @@ function runReleaseGate() {
     }
   }
 
-  const frontendParityChecklistContent = readText(FRONTEND_PARITY_CHECKLIST_PATH);
-  if (!frontendParityChecklistContent) {
-    pushResult(results, false, 'frontend-parity-checklist-exists', `Missing ${FRONTEND_PARITY_CHECKLIST_PATH}`);
+  const architectureReviewChecklistContent = readText(ARCHITECTURE_REVIEW_CHECKLIST_PATH);
+  if (!architectureReviewChecklistContent) {
+    pushResult(results, false, 'architecture-review-checklist-exists', `Missing ${ARCHITECTURE_REVIEW_CHECKLIST_PATH}`);
   } else {
-    pushResult(results, true, 'frontend-parity-checklist-exists', `${FRONTEND_PARITY_CHECKLIST_PATH} is present`);
+    pushResult(results, true, 'architecture-review-checklist-exists', `${ARCHITECTURE_REVIEW_CHECKLIST_PATH} is present`);
 
-    const missingFrontendParitySnippets = REQUIRED_FRONTEND_PARITY_SNIPPETS.filter(
-      (requiredSnippet) => !frontendParityChecklistContent.includes(requiredSnippet)
+    const missingArchitectureChecklistSnippets = REQUIRED_ARCHITECTURE_REVIEW_CHECKLIST_SNIPPETS.filter(
+      (requiredSnippet) => !architectureReviewChecklistContent.includes(requiredSnippet)
     );
 
-    if (missingFrontendParitySnippets.length === 0) {
-      pushResult(results, true, 'frontend-parity-checklist-coverage', 'Frontend parity checklist sections are complete');
+    if (missingArchitectureChecklistSnippets.length === 0) {
+      pushResult(results, true, 'architecture-review-checklist-coverage', 'Architecture review checklist sections are complete');
     } else {
       pushResult(
         results,
         false,
-        'frontend-parity-checklist-coverage',
-        `Missing frontend parity checklist sections: ${missingFrontendParitySnippets.join(', ')}`
-      );
-    }
-  }
-
-  const frontendExcellenceRubricContent = readText(FRONTEND_EXCELLENCE_RUBRIC_PATH);
-  if (!frontendExcellenceRubricContent) {
-    pushResult(results, false, 'frontend-excellence-rubric-exists', `Missing ${FRONTEND_EXCELLENCE_RUBRIC_PATH}`);
-  } else {
-    pushResult(results, true, 'frontend-excellence-rubric-exists', `${FRONTEND_EXCELLENCE_RUBRIC_PATH} is present`);
-
-    const missingFrontendExcellenceSnippets = REQUIRED_FRONTEND_EXCELLENCE_RUBRIC_SNIPPETS.filter(
-      (requiredSnippet) => !frontendExcellenceRubricContent.includes(requiredSnippet)
-    );
-
-    if (missingFrontendExcellenceSnippets.length === 0) {
-      pushResult(results, true, 'frontend-excellence-rubric-coverage', 'Frontend excellence rubric sections are complete');
-    } else {
-      pushResult(
-        results,
-        false,
-        'frontend-excellence-rubric-coverage',
-        `Missing frontend excellence rubric sections: ${missingFrontendExcellenceSnippets.join(', ')}`
+        'architecture-review-checklist-coverage',
+        `Missing architecture review checklist sections: ${missingArchitectureChecklistSnippets.join(', ')}`
       );
     }
   }

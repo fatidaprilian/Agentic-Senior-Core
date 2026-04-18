@@ -15,6 +15,13 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const REPOSITORY_ROOT = resolve(__dirname, '..');
+const DOCUMENTATION_BOUNDARY_AUDIT_REPORT_VERSION = '2.1.0';
+const AUTO_DOCS_SYNC_SCOPE_PHASE = 'phase-1';
+const AUTO_DOCS_SYNC_SCOPE_BOUNDARIES = [
+  'public-surface',
+  'api-contract',
+  'database-structure',
+];
 
 const CORE_DOCUMENTATION_FILES = new Set(['README.md', 'CHANGELOG.md']);
 
@@ -22,6 +29,12 @@ const BOUNDARY_RULES = [
   {
     boundaryName: 'public-surface',
     requirement: 'Public surface changes must update README.md, CHANGELOG.md, or docs/* in the same scope.',
+    suggestedDocumentationUpdates: [
+      'README.md',
+      'CHANGELOG.md',
+      'docs/architecture-decision-record.md',
+      'docs/flow-overview.md',
+    ],
     trigger(filePath) {
       return /^(bin\/|lib\/|scripts\/)/.test(filePath) && !isDocumentationFilePath(filePath);
     },
@@ -32,6 +45,12 @@ const BOUNDARY_RULES = [
   {
     boundaryName: 'api-contract',
     requirement: 'API endpoint or contract changes must update API/OpenAPI documentation in the same scope.',
+    suggestedDocumentationUpdates: [
+      'docs/api-contract.md',
+      'docs/flow-overview.md',
+      '.agent-context/rules/api-docs.md',
+      'README.md',
+    ],
     trigger(filePath) {
       return !isDocumentationFilePath(filePath)
         && /(api|openapi|contract|controller|route|endpoint)/i.test(filePath);
@@ -45,6 +64,12 @@ const BOUNDARY_RULES = [
   {
     boundaryName: 'database-structure',
     requirement: 'Database structure changes must update schema or migration documentation in the same scope.',
+    suggestedDocumentationUpdates: [
+      'docs/database-schema.md',
+      'docs/flow-overview.md',
+      '.agent-context/rules/database-design.md',
+      'README.md',
+    ],
     trigger(filePath) {
       return !isDocumentationFilePath(filePath)
         && /(database|schema|migration|repository|sql|prisma|typeorm|knex)/i.test(filePath);
@@ -135,6 +160,9 @@ function isDocumentationFilePath(filePath) {
 
 function evaluateBoundary(boundaryRule, changedFiles, changedDocumentationFiles) {
   const boundaryChangedFiles = changedFiles.filter((filePath) => boundaryRule.trigger(filePath));
+  const expectedDocumentationPaths = Array.isArray(boundaryRule.suggestedDocumentationUpdates)
+    ? boundaryRule.suggestedDocumentationUpdates
+    : [];
 
   if (boundaryChangedFiles.length === 0) {
     return {
@@ -144,12 +172,21 @@ function evaluateBoundary(boundaryRule, changedFiles, changedDocumentationFiles)
       passed: true,
       changedFiles: [],
       documentationFiles: [],
+      expectedDocumentationPaths,
+      missingDocumentationUpdates: false,
+      suggestedActions: [],
       details: 'Boundary not triggered by changed scope.',
     };
   }
 
   const matchingDocumentationFiles = changedDocumentationFiles.filter((filePath) => boundaryRule.docsMatcher(filePath));
   const boundaryPassed = matchingDocumentationFiles.length > 0;
+  const suggestedActions = boundaryPassed
+    ? []
+    : [
+      `Update one or more boundary docs: ${expectedDocumentationPaths.join(', ')}`,
+      'Re-run scripts/documentation-boundary-audit.mjs before merge.',
+    ];
 
   const details = boundaryPassed
     ? `Boundary triggered and synchronized with documentation updates: ${matchingDocumentationFiles.join(', ')}`
@@ -162,6 +199,9 @@ function evaluateBoundary(boundaryRule, changedFiles, changedDocumentationFiles)
     passed: boundaryPassed,
     changedFiles: boundaryChangedFiles,
     documentationFiles: matchingDocumentationFiles,
+      expectedDocumentationPaths,
+      missingDocumentationUpdates: !boundaryPassed,
+      suggestedActions,
     details,
   };
 }
@@ -175,23 +215,70 @@ function runDocumentationBoundaryAudit() {
     evaluateBoundary(boundaryRule, changedFiles, changedDocumentationFiles)
   ));
 
-  const failures = boundaryResults
+  const violations = boundaryResults
     .filter((boundaryResult) => boundaryResult.triggered && !boundaryResult.passed)
-    .map((boundaryResult) => {
-      const affectedFiles = boundaryResult.changedFiles.join(', ');
-      return `${boundaryResult.boundaryName}: ${boundaryResult.requirement} Changed files: ${affectedFiles}`;
-    });
+    .map((boundaryResult) => ({
+      boundaryName: boundaryResult.boundaryName,
+      requirement: boundaryResult.requirement,
+      changedFiles: boundaryResult.changedFiles,
+      expectedDocumentationPaths: boundaryResult.expectedDocumentationPaths,
+      suggestedActions: boundaryResult.suggestedActions,
+      diagnosticCode: `BOUNDARY_${boundaryResult.boundaryName.toUpperCase().replace(/-/g, '_')}_DOCS_SYNC_REQUIRED`,
+    }));
+
+  const failures = violations.map((violation) => {
+    const affectedFiles = violation.changedFiles.join(', ');
+    return `${violation.boundaryName}: ${violation.requirement} Changed files: ${affectedFiles}`;
+  });
 
   const reportPayload = {
     generatedAt: new Date().toISOString(),
+    reportVersion: DOCUMENTATION_BOUNDARY_AUDIT_REPORT_VERSION,
     auditName: 'documentation-boundary-audit',
     source: changedScope.source,
     changedFileCount: changedFiles.length,
     changedFiles,
     boundaryResults,
+    violations,
     passed: failures.length === 0,
     failureCount: failures.length,
     failures,
+  };
+
+  const triggeredBoundaryResults = boundaryResults.filter((boundaryResult) => boundaryResult.triggered);
+  const passedTriggeredBoundaryResults = triggeredBoundaryResults.filter((boundaryResult) => boundaryResult.passed);
+  const scopeMatchedDocumentationFiles = uniqueSorted(
+    triggeredBoundaryResults.flatMap((boundaryResult) => boundaryResult.documentationFiles),
+  );
+  const scopeMatchedDocumentationFileSet = new Set(scopeMatchedDocumentationFiles);
+  const outOfScopeDocumentationFiles = changedDocumentationFiles.filter(
+    (filePath) => !scopeMatchedDocumentationFileSet.has(filePath),
+  );
+
+  const precisionNumerator = scopeMatchedDocumentationFiles.length;
+  const precisionDenominator = changedDocumentationFiles.length;
+  const recallNumerator = passedTriggeredBoundaryResults.length;
+  const recallDenominator = triggeredBoundaryResults.length;
+
+  const precision = precisionDenominator > 0 ? precisionNumerator / precisionDenominator : 1;
+  const recall = recallDenominator > 0 ? recallNumerator / recallDenominator : 1;
+
+  reportPayload.autoDocsSyncScope = {
+    phase: AUTO_DOCS_SYNC_SCOPE_PHASE,
+    bounded: true,
+    explicitBoundaries: AUTO_DOCS_SYNC_SCOPE_BOUNDARIES,
+  };
+
+  reportPayload.rolloutMetrics = {
+    measuredAt: reportPayload.generatedAt,
+    precision,
+    recall,
+    precisionNumerator,
+    precisionDenominator,
+    recallNumerator,
+    recallDenominator,
+    scopeMatchedDocumentationFiles,
+    outOfScopeDocumentationFiles,
   };
 
   console.log(JSON.stringify(reportPayload, null, 2));

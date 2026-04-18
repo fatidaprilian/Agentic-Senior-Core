@@ -12,7 +12,6 @@ import fs from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { calculateTrustScore } from './trust-scorer.mjs';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
 const SCRIPT_DIR = dirname(SCRIPT_FILE_PATH);
@@ -23,7 +22,20 @@ const ARGUMENT_FLAGS = new Set(process.argv.slice(2));
 const isStdoutOnlyMode = ARGUMENT_FLAGS.has('--stdout-only');
 const WEEKLY_WINDOW_DAYS = 7;
 const HISTORY_LIMIT = 26;
-const REQUIRED_VERIFIED_DOMAINS = new Set(['cli', 'frontend', 'fullstack', 'distribution', 'review-quality']);
+const REQUIRED_VERIFIED_DOMAINS = new Set([
+  'canonical-instructions',
+  'pr-checklist',
+  'architecture-review',
+  'mcp-server',
+  'state-continuity',
+]);
+const GOVERNANCE_SURFACE_PATHS = {
+  'canonical-instructions': '.instructions.md',
+  'pr-checklist': '.agent-context/review-checklists/pr-checklist.md',
+  'architecture-review': '.agent-context/review-checklists/architecture-review.md',
+  'mcp-server': 'scripts/mcp-server.mjs',
+  'state-continuity': '.agent-context/state',
+};
 
 function readJsonOrNull(filePath) {
   if (!existsSync(filePath)) {
@@ -139,13 +151,6 @@ function collectCommitSignals(windowDays) {
 }
 
 async function collectSkillTrustSignals() {
-  const skillDirectoryPath = join(REPOSITORY_ROOT, '.agent-context', 'skills');
-  const skillDirectoryEntries = await fs.readdir(skillDirectoryPath, { withFileTypes: true });
-  const skillDomainNames = skillDirectoryEntries
-    .filter((directoryEntry) => directoryEntry.isDirectory())
-    .map((directoryEntry) => directoryEntry.name)
-    .sort((leftDomainName, rightDomainName) => leftDomainName.localeCompare(rightDomainName));
-
   const trustRows = [];
   const tierCounts = {
     verified: 0,
@@ -153,17 +158,26 @@ async function collectSkillTrustSignals() {
     experimental: 0,
   };
 
-  for (const skillDomainName of skillDomainNames) {
-    const trustResult = await calculateTrustScore(join(skillDirectoryPath, skillDomainName));
+  const sortedDomainNames = Array.from(REQUIRED_VERIFIED_DOMAINS).sort((leftName, rightName) => {
+    return leftName.localeCompare(rightName);
+  });
 
-    if (typeof tierCounts[trustResult.tier] === 'number') {
-      tierCounts[trustResult.tier] += 1;
+  for (const skillDomainName of sortedDomainNames) {
+    const relativeSurfacePath = GOVERNANCE_SURFACE_PATHS[skillDomainName];
+    const absoluteSurfacePath = join(REPOSITORY_ROOT, relativeSurfacePath);
+    const surfaceExists = existsSync(absoluteSurfacePath);
+    const trustTier = surfaceExists ? 'verified' : 'experimental';
+    const trustScore = surfaceExists ? 100 : 0;
+
+    if (typeof tierCounts[trustTier] === 'number') {
+      tierCounts[trustTier] += 1;
     }
 
     trustRows.push({
       domain: skillDomainName,
-      tier: trustResult.tier,
-      score: trustResult.score,
+      tier: trustTier,
+      score: trustScore,
+      sourcePath: relativeSurfacePath,
     });
   }
 

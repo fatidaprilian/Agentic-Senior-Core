@@ -9,8 +9,8 @@ Thanks for wanting to make AI agents write better code. Here's how to contribute
 | Type | Where | Description |
 |------|-------|-------------|
 | New rule | `.agent-context/rules/` | Universal engineering standard |
-| New stack | `.agent-context/stacks/` | Language-specific profile (Python, Go, Java, etc.) |
-| New blueprint | `.agent-context/blueprints/` | Project scaffolding template |
+| Stack strategy update | `.agent-context/rules/`, `.agent-context/state/stack-research-snapshot.json` | Dynamic language/runtime guidance and evidence |
+| Architecture playbook update | `.agent-context/prompts/`, `lib/cli/compiler.mjs` | Dynamic scaffolding and project-context guidance |
 | New checklist | `.agent-context/review-checklists/` | Self-audit guide |
 | State intelligence update | `.agent-context/state/` | Architecture boundaries and dependency map |
 | Override policy update | `.agent-override.md` | Scoped enterprise rule exceptions |
@@ -44,36 +44,23 @@ If all three are "yes", it belongs here.
 
 ---
 
-## How to Add a New Stack Profile (e.g., Python)
+## How to Add or Adjust Stack Strategy Signals (e.g., Python)
 
-1. Create `.agent-context/stacks/python.md`
-2. Follow the structure of `stacks/typescript.md`:
-   - Compiler/linter configuration (non-negotiable settings)
-   - Type system rules (the equivalent of "ban any")
-   - Validation at boundaries (Pydantic, marshmallow, etc.)
-   - Import conventions
-   - Async patterns
-   - Preferred libraries with justification
-   - Banned patterns with alternatives
-3. Update `AGENTS.md` to add the new stack to the manifest table
-4. Run `bun scripts/validate.ts` to verify everything links correctly
-5. Open a PR
+1. Update relevant universal guidance in `.agent-context/rules/` (typing, validation, architecture constraints).
+2. Add or adjust measurable stack evidence in `.agent-context/state/stack-research-snapshot.json`.
+3. Update stack-facing wording in prompts or CLI output when behavior changes.
+4. Run `npm run validate` to verify references and policy checks.
+5. Open a PR.
 
 ---
 
-## How to Add a New Blueprint
+## How to Add or Adjust Architecture Playbooks
 
-1. Create `.agent-context/blueprints/<framework-name>.md`
-2. Include:
-   - Tech stack summary
-   - Complete directory structure
-   - Code patterns for each layer (with full examples)
-   - Environment validation setup
-   - Error handling setup
-   - Scaffolding checklist
-3. Update `AGENTS.md` manifest
-4. Update `prompts/init-project.md` available blueprints table
-5. Validate and PR
+1. Update the architecture options in `.agent-context/prompts/init-project.md` and related discovery guidance.
+2. Update compiler/init behavior if generated project-context guidance or bootstrap flow changes.
+3. Keep transport/service/repository separation and validation boundaries explicit in examples.
+4. Run `npm run validate` and `npm test`.
+5. Open a PR.
 
 ---
 
@@ -96,7 +83,7 @@ If all three are "yes", it belongs here.
 1. **Fork** the repository
 2. **Branch** from `main`: `feat/add-python-stack` or `docs/fix-security-typo`
 3. **Write** your content following the quality standard above
-4. **Validate**: `bun scripts/validate.ts` must pass
+4. **Validate**: `npm run validate` must pass
 5. **Commit** with Conventional Commits: `feat(stacks): add Python profile`
 6. **Open PR** with:
    - What you added/changed
@@ -123,7 +110,7 @@ git clone https://github.com/fatidaprilian/Agentic-Senior-Core.git
 cd Agentic-Senior-Core
 
 # Validate
-bun run validate
+npm run validate
 
 # Test interactive CLI
 node ./bin/agentic-senior-core.js init /tmp/test-project

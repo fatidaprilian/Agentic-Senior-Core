@@ -1,4 +1,4 @@
-import { readFileSync, statSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const ROOT_DIR = process.cwd();

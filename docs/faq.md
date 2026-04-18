@@ -72,10 +72,6 @@ npm exec --yes --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior
 
 This still shows interactive choices for profile, stack, blueprint, and CI.
 
-You can also use repository bootstrap scripts:
-- Windows: `scripts/init-project.ps1`
-- Linux/macOS: `scripts/init-project.sh`
-
 After the package is published, the shorter equivalent is:
 
 ```bash

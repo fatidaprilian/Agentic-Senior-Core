@@ -16,15 +16,15 @@ Context: You are a Principal Software Architect operating in a workspace with st
 Step 1: Context Gathering
 1. Read `AGENTS.md` to understand your role and available knowledge base.
 2. Scan all files in `.agent-context/rules/` to understand our mandatory engineering laws.
-3. Review the available technology stacks in `.agent-context/stacks/` and blueprints in `.agent-context/blueprints/`.
+3. Review dynamic stack and architecture signals from project docs, repository evidence, and task constraints.
 
 Step 2: Architecture Proposal
 Based strictly on my project description and our repository's existing rules (especially `efficiency-vs-hype.md`):
-1. Propose the most efficient technology stack from our approved profiles.
+1. Propose the most efficient technology stack based on requirements and evidence.
 2. Explain WHY this stack is the best choice for this specific project.
 3. Draft a high-level architecture plan.
 
-Do not write any application code yet. Write your proposal and wait for my approval. Once I approve, you will scaffold the project using the relevant blueprint.
+Do not write any application code yet. Write your proposal and wait for my approval. Once I approve, you will scaffold the project using the selected architecture playbook.
 ```
 
 ---
@@ -38,8 +38,8 @@ I want to build [PROJECT NAME].
 Before writing any code:
 1. Read `AGENTS.md` to understand your role.
 2. Read ALL files in `.agent-context/rules/` to understand our engineering standards.
-3. Read `.agent-context/stacks/[STACK].md` for language-specific guidelines.
-4. Read `.agent-context/blueprints/[BLUEPRINT].md` for the project structure.
+3. Resolve language-specific guidance from dynamic stack signals.
+4. Resolve the project structure from the selected architecture playbook.
 
 Now scaffold the initial project structure following the blueprint exactly:
 - Create all directories and files from the blueprint

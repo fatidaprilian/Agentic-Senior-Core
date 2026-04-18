@@ -13,6 +13,17 @@ These principles are mandatory for backend and shared core modules.
 
 If a short and a clear implementation are functionally equivalent, choose the clear implementation.
 
+## Universal SOP Baseline (Mandatory)
+
+The `.agent-context/rules/` directory is the default guidance source for implementation and review.
+
+- Backend and frontend mindset checks are both required when a task spans API and UI boundaries.
+- Security and testing are non-negotiable baseline requirements.
+- Hard block before coding:
+  - `docs/architecture-decision-record.md` (alias: `docs/Architecture-Decision-Record.md`) must exist.
+  - For UI scope, `docs/DESIGN.md` must exist.
+- If required project context docs are missing, stop implementation and bootstrap docs before writing application code.
+
 ## Rules as Guardian (Cross-Session Consistency)
 
 These guardrails are mandatory to preserve architecture direction across sessions.

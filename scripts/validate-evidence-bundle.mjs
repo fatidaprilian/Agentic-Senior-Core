@@ -13,7 +13,7 @@ export async function validateEvidenceBundle(artifactPath) {
     if (!stats.isDirectory()) {
        return { passed: false, error: '.evidence is not a directory' };
     }
-  } catch (err) {
+   } catch {
     return { passed: false, error: 'Missing .evidence directory' };
   }
 

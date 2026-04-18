@@ -53,9 +53,6 @@ const IS_DRY_RUN = process.argv.includes('--dry-run');
 const SHOULD_EMIT_MACHINE_REPORT = process.env.LLM_JUDGE_EMIT_JSON !== 'false';
 const MACHINE_REPORT_PATH = process.env.LLM_JUDGE_OUTPUT_PATH || DEFAULT_MACHINE_REPORT_PATH;
 
-/** @type {string[]} Source code file extensions to include in the diff */
-const SOURCE_CODE_EXTENSIONS = ['*.ts', '*.tsx', '*.js', '*.mjs', '*.cjs', '*.py', '*.go', '*.java', '*.cs', '*.rb', '*.php'];
-
 /** @type {Record<string, string>} */
 const SEVERITY_NORMALIZATION_TABLE = {
   critical: 'critical',
@@ -184,12 +181,12 @@ function collectPullRequestDiff() {
   console.log('  Source: local HEAD~1..HEAD fallback');
   try {
     return execSync('git diff HEAD~1 HEAD', execOptions);
-  } catch (err) {
+  } catch {
     try {
       // Initial commit has no parent — diff against empty tree
       const emptyTreeSha = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
       return execSync(`git diff "${emptyTreeSha}" HEAD`, execOptions);
-    } catch (e2) {
+    } catch {
       console.warn('  ⚠️   Unable to execute git diff. Defaulting to empty diff.');
       return '';
     }
