@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-18
-Current Version: 2.5.16
+Current Version: 2.5.17
 Status: Stable and release-ready
 
 ---
@@ -551,7 +551,7 @@ Acceptance:
 #### V3.0-011: Terminology Rebrand (Developer-Friendly)
 
 Priority: P2
-Status: planned
+Status: in-progress
 
 Scope:
 - Rebrand bureaucratic terms into developer-friendly language.
@@ -560,11 +560,15 @@ Scope:
 - Introduce developer-facing alias `Federated Rules Operations` in onboarding and day-to-day guidance.
 - Publish dual-term mapping reference (legacy term, developer term, canonical enterprise term, usage context).
 
+Execution note (2026-04-18):
+- Terminology mapping table is already present in README and roadmap.
+- Remaining work focuses on consistency enforcement and migration checks in validator/onboarding surfaces.
+
 Acceptance:
 - [ ] Primary docs use new terminology consistently.
 - [ ] Transition aliases keep older references understandable.
 - [ ] Validation and onboarding text remain stable during migration.
-- [ ] Dual-term mapping reference is published and linked from README and roadmap.
+- [x] Dual-term mapping reference is published and linked from README and roadmap.
 - [ ] Compliance and audit artifacts keep canonical enterprise terms unchanged.
 - [ ] Developer-facing docs can use friendly aliases but include canonical term on first mention.
 
@@ -595,11 +599,15 @@ Scope:
 - Prevent hallucination-only recommendations for architecture justification.
 - Prefer context-driven research over static template copying; treat template packs as optional references only.
 - Allow optional real-time design/stack evidence from trusted sources (for example Awwwards) with source and timestamp citations.
+- Do not depend on manually curated external DESIGN.md packs as baseline inputs.
+- Use dynamic synthesis from project context + research signals to generate original design guidance.
+- Store only normalized design signals (palette roles, typography scale, spacing patterns, motion characteristics), not copied prose from external sites.
 
 Acceptance:
 - [ ] Architecture recommendations cite measurable sources and timestamps.
 - [ ] Snapshot-based mode runs deterministically for release validation.
 - [ ] Optional real-time mode is gated and does not block baseline operation.
+- [ ] Design guidance generation does not copy external DESIGN.md content or source prose.
 
 #### V3.0-014: V3 Release Lock and Exit Gate
 

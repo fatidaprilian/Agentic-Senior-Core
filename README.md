@@ -74,7 +74,7 @@ If you see `Property $schema is not allowed`, keep `.vscode/mcp.json` without `$
 
 | Command | Purpose |
 |---------|---------|
-| `agentic-senior-core init` | Initialize governance context |
+| `agentic-senior-core init` | Initialize rules operations context (Federated Governance baseline) |
 | `agentic-senior-core upgrade --dry-run` | Preview safe upgrades |
 | `agentic-senior-core optimize --show` | Show token optimization state |
 | `agentic-senior-core skill frontend --tier advance` | Select skill packs |

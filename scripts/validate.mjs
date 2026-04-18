@@ -80,6 +80,26 @@ const REQUIRED_HUMAN_WRITING_SNIPPETS = [
     ],
   },
 ];
+const TERMINOLOGY_REFERENCE_PATHS = [
+  'README.md',
+  'docs/roadmap.md',
+];
+const REQUIRED_TERMINOLOGY_ROW_PATTERNS = [
+  {
+    label: 'Federated Governance -> Federated Rules Operations',
+    pattern: /\|\s*Federated Governance\s*\|\s*Federated Rules Operations\s*\|/u,
+  },
+  {
+    label: 'Governance Engine -> Rules Engine',
+    pattern: /\|\s*Governance Engine\s*\|\s*Rules Engine\s*\|/u,
+  },
+  {
+    label: 'Guardrails -> Quality Checks',
+    pattern: /\|\s*Guardrails\s*\|\s*Quality Checks\s*\|/u,
+  },
+];
+const REQUIRED_TERMINOLOGY_RULE_SNIPPET =
+  'Rule: on first mention in developer-facing docs, include canonical term in parentheses.';
 
 const validationResult = {
   passed: 0,
@@ -727,6 +747,41 @@ async function validateDocumentationFlow() {
   }
 }
 
+async function validateTerminologyMapping() {
+  console.log('\nChecking terminology mapping consistency...');
+
+  for (const terminologyReferencePath of TERMINOLOGY_REFERENCE_PATHS) {
+    const absoluteReferencePath = join(ROOT_DIR, terminologyReferencePath);
+
+    if (!(await fileExists(absoluteReferencePath))) {
+      fail(`Missing terminology reference source: ${terminologyReferencePath}`);
+      continue;
+    }
+
+    const referenceContent = await readTextFile(absoluteReferencePath);
+
+    if (referenceContent.includes('Terminology Mapping (Final)')) {
+      pass(`${terminologyReferencePath} includes Terminology Mapping (Final)`);
+    } else {
+      fail(`${terminologyReferencePath} must include Terminology Mapping (Final)`);
+    }
+
+    for (const terminologyRowRule of REQUIRED_TERMINOLOGY_ROW_PATTERNS) {
+      if (terminologyRowRule.pattern.test(referenceContent)) {
+        pass(`${terminologyReferencePath} includes mapping row: ${terminologyRowRule.label}`);
+      } else {
+        fail(`${terminologyReferencePath} is missing mapping row: ${terminologyRowRule.label}`);
+      }
+    }
+
+    if (referenceContent.includes(REQUIRED_TERMINOLOGY_RULE_SNIPPET)) {
+      pass(`${terminologyReferencePath} includes first-mention canonical term rule`);
+    } else {
+      fail(`${terminologyReferencePath} must include first-mention canonical term rule`);
+    }
+  }
+}
+
 async function validateMcpConfiguration() {
   console.log('\nChecking MCP configuration...');
 
@@ -975,6 +1030,7 @@ async function main() {
   await validatePolicyFile();
   await validateVersionConsistency();
   await validateDocumentationFlow();
+  await validateTerminologyMapping();
   await validateMcpConfiguration();
   await validateHumanWritingGovernance();
   await validateInstructionAdapters();

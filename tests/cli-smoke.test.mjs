@@ -198,6 +198,8 @@ test('CLI Smoke Tests', async (t) => {
       ).toString();
 
       assert.match(initOutput, /Initialization complete/);
+      assert.match(initOutput, /rules operations assets \(Federated Governance baseline\)/);
+      assert.match(initOutput, /CI\/CD quality checks \(guardrails\): enabled/);
       assert.match(initOutput, /Team profile pack: Startup Team/);
 
       const onboardingReportPath = join(temporaryTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
@@ -438,6 +440,8 @@ test('CLI Smoke Tests', async (t) => {
 
       const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --dry-run`).toString();
       assert.match(upgradeOutput, /Upgrade preview/);
+      assert.match(upgradeOutput, /rules operations upgrade assistant \(Federated Governance baseline\)/);
+      assert.match(upgradeOutput, /CI\/CD quality checks \(guardrails\): enabled/);
       assert.match(upgradeOutput, /Dry run enabled/);
     } finally {
       rmSync(upgradeTargetDirectory, { recursive: true, force: true });

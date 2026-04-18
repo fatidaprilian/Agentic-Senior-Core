@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.17 - 2026-04-18
+### Added
+- Added terminology mapping consistency checks in `scripts/validate.mjs` for README and roadmap mapping tables.
+- Added CLI smoke assertions for V3.0-011 runtime wording in init and upgrade output.
+
+### Changed
+- Changed init and upgrade runtime wording to developer-facing aliases while keeping canonical enterprise term on first mention.
+- Changed CLI help and onboarding prompt wording to use `quality checks (guardrails)` and `rules operations (Federated Governance baseline)` phrasing.
+- Changed V3.0-011 roadmap status to in-progress and documented no-template dynamic synthesis direction for V3.0-013.
+
 ## 2.5.16 - 2026-04-18
 ### Added
 - Added `single-source-lazy-loading-audit` script with machine-readable output to enforce canonical rule source integrity, lazy stack guidance loading, and duplicate-instruction conflict checks.
