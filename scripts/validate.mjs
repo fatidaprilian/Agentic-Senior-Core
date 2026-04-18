@@ -180,6 +180,29 @@ const REQUIRED_DETECTION_TRANSPARENCY_SNIPPETS = [
     ],
   },
 ];
+const REQUIRED_STACK_RESEARCH_ENGINE_SNIPPETS = [
+  {
+    path: 'lib/cli/architect.mjs',
+    snippets: [
+      'ARCHITECT_RESEARCH_SNAPSHOT_FILE_PATH',
+      'evidenceCitations',
+      'designGuidance',
+      'copiedExternalProse: false',
+      'realtimeGateEnabled',
+      'requestedMode: requestedResearchMode',
+    ],
+  },
+  {
+    path: 'lib/cli/commands/init.mjs',
+    snippets: [
+      '--architect-research-mode',
+      '--enable-realtime-research',
+      '--architect-realtime-signal-file',
+      'researchMode: initOptions.architectResearchMode',
+      'enableRealtimeResearch: initOptions.enableRealtimeResearch',
+    ],
+  },
+];
 
 const validationResult = {
   passed: 0,
@@ -300,6 +323,7 @@ async function validateRequiredFiles() {
     '.agent-context/state/benchmark-reproducibility.json',
     '.agent-context/state/benchmark-writer-judge-config.json',
     '.agent-context/state/benchmark-watchlist.json',
+    '.agent-context/state/stack-research-snapshot.json',
     '.agent-context/state/memory-schema-v1.json',
     '.agent-context/state/memory-adapter-contract.json',
     '.agent-context/state/skill-platform.json',
@@ -975,6 +999,93 @@ async function validateDetectionTransparencyCoverage() {
   }
 }
 
+async function validateStackResearchEngineCoverage() {
+  console.log('\nChecking stack research engine coverage...');
+
+  for (const coverageRule of REQUIRED_STACK_RESEARCH_ENGINE_SNIPPETS) {
+    const absoluteCoveragePath = join(ROOT_DIR, coverageRule.path);
+
+    if (!(await fileExists(absoluteCoveragePath))) {
+      fail(`Missing stack research source: ${coverageRule.path}`);
+      continue;
+    }
+
+    const coverageContent = await readTextFile(absoluteCoveragePath);
+    for (const requiredSnippet of coverageRule.snippets) {
+      if (coverageContent.includes(requiredSnippet)) {
+        pass(`${coverageRule.path} includes stack research snippet: ${requiredSnippet}`);
+      } else {
+        fail(`${coverageRule.path} is missing stack research snippet: ${requiredSnippet}`);
+      }
+    }
+  }
+}
+
+function isNormalizedMetricValue(value) {
+  return Number.isFinite(Number(value)) && Number(value) >= 0 && Number(value) <= 1;
+}
+
+async function validateStackResearchSnapshotState() {
+  console.log('\nChecking deterministic stack research snapshot state...');
+
+  const snapshotPath = join(ROOT_DIR, '.agent-context', 'state', 'stack-research-snapshot.json');
+  if (!(await fileExists(snapshotPath))) {
+    fail('Missing deterministic stack research snapshot: .agent-context/state/stack-research-snapshot.json');
+    return;
+  }
+
+  let snapshotPayload;
+  try {
+    snapshotPayload = JSON.parse(await readTextFile(snapshotPath));
+  } catch {
+    fail('Invalid JSON in .agent-context/state/stack-research-snapshot.json');
+    return;
+  }
+
+  if (snapshotPayload?.deterministic === true) {
+    pass('stack-research-snapshot.json declares deterministic: true');
+  } else {
+    fail('stack-research-snapshot.json must declare deterministic: true');
+  }
+
+  const generatedAtValue = String(snapshotPayload?.generatedAt || '');
+  if (!Number.isNaN(Date.parse(generatedAtValue))) {
+    pass('stack-research-snapshot.json includes valid generatedAt timestamp');
+  } else {
+    fail('stack-research-snapshot.json must include a valid generatedAt timestamp');
+  }
+
+  if (Array.isArray(snapshotPayload?.trustedRealtimeSources) && snapshotPayload.trustedRealtimeSources.length > 0) {
+    pass('stack-research-snapshot.json includes trustedRealtimeSources');
+  } else {
+    fail('stack-research-snapshot.json must include at least one trustedRealtimeSources entry');
+  }
+
+  if (!Array.isArray(snapshotPayload?.stackSignals) || snapshotPayload.stackSignals.length === 0) {
+    fail('stack-research-snapshot.json must include non-empty stackSignals array');
+    return;
+  }
+
+  pass(`stack-research-snapshot.json includes ${snapshotPayload.stackSignals.length} stack signal entries`);
+
+  const invalidSignalEntries = snapshotPayload.stackSignals.filter((signalEntry) => {
+    const hasStackName = typeof signalEntry?.stackFileName === 'string' && signalEntry.stackFileName.trim().length > 0;
+    const hasMeasuredAt = !Number.isNaN(Date.parse(String(signalEntry?.measuredAt || '')));
+    const metrics = signalEntry?.metrics || {};
+    const hasValidMetrics = isNormalizedMetricValue(metrics.ecosystemMaturity)
+      && isNormalizedMetricValue(metrics.talentAvailability)
+      && isNormalizedMetricValue(metrics.deliveryVelocity);
+
+    return !(hasStackName && hasMeasuredAt && hasValidMetrics);
+  });
+
+  if (invalidSignalEntries.length === 0) {
+    pass('stack-research-snapshot.json stackSignals keep measurable metrics and timestamps');
+  } else {
+    fail(`stack-research-snapshot.json has invalid stackSignals entries: ${invalidSignalEntries.length}`);
+  }
+}
+
 async function validateMcpConfiguration() {
   console.log('\nChecking MCP configuration...');
 
@@ -1225,6 +1336,8 @@ async function main() {
   await validateDocumentationFlow();
   await validateTerminologyMapping();
   await validateDetectionTransparencyCoverage();
+  await validateStackResearchEngineCoverage();
+  await validateStackResearchSnapshotState();
   await validateMcpConfiguration();
   await validateHumanWritingGovernance();
   await validateInstructionAdapters();

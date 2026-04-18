@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.20 - 2026-04-18
+### Added
+- Added deterministic stack research snapshot artifact at `.agent-context/state/stack-research-snapshot.json` for reproducible architecture recommendation baselines.
+- Added architect recommendation evidence output with measurable citations and timestamps (`evidenceCitations`) plus normalized anti-copy design synthesis metadata (`designGuidance`).
+- Added CLI controls for stack research engine mode and realtime gating (`--architect-research-mode`, `--enable-realtime-research`, `--architect-realtime-signal-file`).
+- Added validator and CLI smoke coverage for snapshot determinism, gated realtime fallback, citation emission, and anti-DESIGN.md-copy policy enforcement.
+
+### Changed
+- Changed architecture recommendation scoring to blend keyword/detection signals with deterministic snapshot metrics and optional trusted realtime boost.
+- Changed recommendation formatting and onboarding report payload to persist research mode metadata (`requestedMode`, `effectiveMode`, gating status, trusted source context).
+- Changed roadmap backlog status for `V3.0-013` from planned to done with all acceptance criteria checked.
+
 ## 2.5.19 - 2026-04-18
 ### Added
 - Added existing-project detection transparency summaries in init and upgrade flows, including detected stack, active rules baseline, and major constraints.

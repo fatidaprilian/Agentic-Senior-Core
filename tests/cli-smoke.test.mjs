@@ -35,6 +35,8 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(output, /init/);
     assert.match(output, /--profile-pack/);
     assert.match(output, /--no-memory-continuity/);
+    assert.match(output, /--architect-research-mode/);
+    assert.match(output, /--enable-realtime-research/);
     assert.match(output, /quality checks \(guardrails\)/i);
     assert.match(output, /java-enterprise-api/);
   });
@@ -379,8 +381,11 @@ test('CLI Smoke Tests', async (t) => {
 
       assert.match(architectOutput, /Architecture recommendation \(project-description-first\):/);
       assert.match(architectOutput, /Confidence:/);
+      assert.match(architectOutput, /Research mode:/);
       assert.match(architectOutput, /Rationale:/);
       assert.match(architectOutput, /Alternatives:/);
+      assert.match(architectOutput, /Evidence citations \(measurable source \+ timestamp\):/);
+      assert.match(architectOutput, /Design signal synthesis \(normalized, no copied external prose\):/);
       assert.match(architectOutput, /Research guardrails:/);
 
       const onboardingReportPath = join(architectTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
@@ -394,6 +399,12 @@ test('CLI Smoke Tests', async (t) => {
       assert.ok(Array.isArray(onboardingReport.architectRecommendation?.rationaleSentences));
       assert.ok(onboardingReport.architectRecommendation?.rationaleSentences.length >= 3);
       assert.ok(onboardingReport.architectRecommendation?.rationaleSentences.length <= 5);
+      assert.equal(onboardingReport.architectRecommendation?.research?.requestedMode, 'snapshot');
+      assert.equal(onboardingReport.architectRecommendation?.research?.effectiveMode, 'snapshot');
+      assert.equal(onboardingReport.architectRecommendation?.research?.deterministic, true);
+      assert.equal(Array.isArray(onboardingReport.architectRecommendation?.evidenceCitations), true);
+      assert.ok(onboardingReport.architectRecommendation?.evidenceCitations?.length >= 1);
+      assert.equal(onboardingReport.architectRecommendation?.designGuidance?.sourcePolicy?.copiedExternalProse, false);
       assert.equal(onboardingReport.architectRecommendation?.userVeto?.applied, false);
       assert.ok(
         onboardingReport.architectRecommendation?.researchBudget?.usedTokens
@@ -418,9 +429,14 @@ test('CLI Smoke Tests', async (t) => {
 
     assert.equal(lowSignalRecommendation.failureModes.lowConfidence, true);
     assert.equal(typeof lowSignalRecommendation.failureModes.dataConflict, 'boolean');
+    assert.equal(lowSignalRecommendation.research.requestedMode, 'snapshot');
+    assert.equal(lowSignalRecommendation.research.effectiveMode, 'snapshot');
+    assert.equal(lowSignalRecommendation.designGuidance.sourcePolicy.copiedExternalProse, false);
+    assert.ok(lowSignalRecommendation.evidenceCitations.length >= 1);
 
     const renderedRecommendation = formatArchitectureRecommendation(lowSignalRecommendation);
     assert.match(renderedRecommendation, /Caution labels: low-confidence/);
+    assert.match(renderedRecommendation, /Evidence citations \(measurable source \+ timestamp\):/);
 
     let architectPreference = null;
     architectPreference = createUpdatedArchitectPreference(architectPreference, {
@@ -435,6 +451,86 @@ test('CLI Smoke Tests', async (t) => {
     assert.equal(architectPreference.overrideCount, 2);
     assert.equal(shouldApplyRepeatedOverridePreference(architectPreference, 'typescript.md'), true);
     assert.equal(shouldApplyRepeatedOverridePreference(architectPreference, 'python.md'), false);
+  });
+
+  await t.test('architect recommendation keeps deterministic snapshot fallback when realtime gate is not enabled', () => {
+    const realtimeRequestedRecommendation = recommendArchitecture({
+      projectDescription: 'Realtime trend-aware marketing landing page for campaign conversion experiments',
+      projectDetection: {
+        rankedCandidates: [],
+      },
+      stackFileNames: ['typescript.md', 'python.md', 'go.md'],
+      blueprintFileNames: ['api-nextjs.md', 'fastapi-service.md', 'go-service.md'],
+      tokenBudget: 900,
+      timeoutMs: 1500,
+      researchMode: 'realtime',
+      enableRealtimeResearch: false,
+    });
+
+    assert.equal(realtimeRequestedRecommendation.research.requestedMode, 'realtime');
+    assert.equal(realtimeRequestedRecommendation.research.effectiveMode, 'snapshot');
+    assert.equal(realtimeRequestedRecommendation.failureModes.realtimeGated, true);
+    assert.equal(realtimeRequestedRecommendation.failureModes.realtimeUnavailable, false);
+    assert.equal(realtimeRequestedRecommendation.designGuidance.sourcePolicy.copiedExternalProse, false);
+  });
+
+  await t.test('architect recommendation accepts trusted realtime payload when gate is explicitly enabled', () => {
+    const realtimeFixtureDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-realtime-signal-'));
+
+    try {
+      const realtimeSignalFilePath = join(realtimeFixtureDirectory, 'realtime-signal.json');
+      writeFileSync(
+        realtimeSignalFilePath,
+        JSON.stringify({
+          generatedAt: '2026-04-18T01:00:00.000Z',
+          sourceName: 'Trusted realtime fixture',
+          sourceUrl: 'https://example.test/realtime-signals',
+          stackSignals: [
+            {
+              stackFileName: 'typescript.md',
+              measuredAt: '2026-04-18T01:00:00.000Z',
+              signalStrength: 0.95,
+              metrics: {
+                signalStrength: 0.95,
+                freshnessHours: 2,
+              },
+              sourceName: 'Realtime fixture signal',
+              sourceUrl: 'https://example.test/realtime-signals/typescript',
+            },
+          ],
+          designSignals: {
+            paletteRoles: ['base', 'surface', 'accent', 'success'],
+            typographyScale: 'expressive',
+            spacingPattern: 'airy-grid',
+            motionCharacteristics: ['staggered-reveal', 'state-feedback'],
+          },
+        }, null, 2)
+      );
+
+      const realtimeRecommendation = recommendArchitecture({
+        projectDescription: 'Modern campaign website with conversion analytics and strong storytelling',
+        projectDetection: {
+          rankedCandidates: [],
+        },
+        stackFileNames: ['typescript.md', 'python.md', 'go.md'],
+        blueprintFileNames: ['api-nextjs.md', 'fastapi-service.md', 'go-service.md'],
+        tokenBudget: 900,
+        timeoutMs: 1500,
+        researchMode: 'realtime',
+        enableRealtimeResearch: true,
+        realtimeSignalFilePath,
+      });
+
+      assert.equal(realtimeRecommendation.research.requestedMode, 'realtime');
+      assert.equal(realtimeRecommendation.research.effectiveMode, 'realtime');
+      assert.equal(realtimeRecommendation.failureModes.realtimeGated, false);
+      assert.equal(realtimeRecommendation.failureModes.realtimeUnavailable, false);
+      assert.equal(realtimeRecommendation.designGuidance.sourcePolicy.copiedExternalProse, false);
+      assert.ok(realtimeRecommendation.evidenceCitations.some((citation) => citation.sourceType === 'realtime'));
+      assert.equal(realtimeRecommendation.designGuidance.normalizedSignals.spacingPattern, 'airy-grid');
+    } finally {
+      rmSync(realtimeFixtureDirectory, { recursive: true, force: true });
+    }
   });
 
   await t.test('upgrade command supports dry-run preview', () => {

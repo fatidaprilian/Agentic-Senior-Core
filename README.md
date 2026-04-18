@@ -36,6 +36,18 @@ Project-description-first path (AI as Architect with veto control):
 npx @ryuenn3123/agentic-senior-core init --project-description "Machine learning API for fraud detection"
 ```
 
+Deterministic stack research mode (default):
+
+```bash
+npx @ryuenn3123/agentic-senior-core init --project-description "Event-driven payments platform" --architect-research-mode snapshot
+```
+
+Optional trusted realtime enrichment (explicitly gated):
+
+```bash
+npx @ryuenn3123/agentic-senior-core init --project-description "Modern conversion-focused product website" --architect-research-mode realtime --enable-realtime-research --architect-realtime-signal-file ./realtime-signals.json
+```
+
 ---
 
 ## Before / After
