@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.22 - 2026-04-18
+### Added
+- Added AI-first bootstrap prompt generation under `.agent-context/prompts/` for dynamic project context synthesis (`bootstrap-project-context.md`) and UI design synthesis (`bootstrap-design.md`) when applicable.
+
+### Changed
+- Changed init scaffolding flow from direct docs template rendering to prompt-driven AI synthesis mode while preserving deterministic guardrails and onboarding report linkage.
+- Changed Layer 9 compiled context behavior to instruct IDE assistants to execute bootstrap prompts when docs are not materialized yet.
+- Changed CLI init summaries and prompt starter guidance to reflect bootstrap-first docs workflow.
+- Changed CLI smoke coverage to lock AI-bootstrap behaviors and preserve upgrade stale-template compatibility checks.
+
 ## 2.5.21 - 2026-04-18
 ### Changed
 - Changed init architecture recommendation defaults to request realtime research mode first, with realtime ingestion enabled by default and automatic fallback to deterministic snapshot when trusted realtime payload is unavailable.

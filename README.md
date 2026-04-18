@@ -54,6 +54,13 @@ Optional trusted realtime enrichment (explicitly gated):
 npx @ryuenn3123/agentic-senior-core init --project-description "Modern conversion-focused product website" --architect-research-mode realtime --enable-realtime-research --architect-realtime-signal-file ./realtime-signals.json
 ```
 
+AI-first project context bootstrap (no static docs template rendering):
+
+- Init now generates bootstrap prompts under `.agent-context/prompts/`.
+- On first IDE chat, execute `bootstrap-project-context.md` when `docs/project-brief.md` is missing.
+- For UI-first projects, execute `bootstrap-design.md` when `docs/DESIGN.md` is missing.
+- The assistant should synthesize docs from scratch into `docs/` and treat them as living context.
+
 ---
 
 ## Before / After

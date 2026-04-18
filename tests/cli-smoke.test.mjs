@@ -554,7 +554,7 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
-  await t.test('init auto-generates docs in English by default and compiles Layer 9 in same run', () => {
+  await t.test('init generates AI bootstrap prompts in English by default and compiles Layer 9 bootstrap flow in same run', () => {
     const scaffoldingTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-scaffold-config-'));
 
     try {
@@ -577,25 +577,29 @@ test('CLI Smoke Tests', async (t) => {
         `node ${cliPath} init ${scaffoldingTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --project-config ${projectConfigPath} --no-token-optimize`
       ).toString();
 
-      assert.match(initOutput, /Project docs: 5 files generated in docs\//);
-      assert.match(initOutput, /Project docs language: en/);
+      assert.match(initOutput, /Bootstrap prompts: 1 files generated in \.agent-context\/prompts\//);
+      assert.match(initOutput, /Bootstrap docs language: en/);
       assert.match(initOutput, /Prompt starter examples \(copy and adapt in your IDE\):/);
-      assert.match(initOutput, /Build an MVP for Nusantara API\./);
+      assert.match(initOutput, /If docs\/project-brief\.md is missing, execute \.agent-context\/prompts\/bootstrap-project-context\.md now/);
 
-      const generatedProjectBrief = readFileSync(join(scaffoldingTargetDirectory, 'docs', 'project-brief.md'), 'utf8');
-      assert.match(generatedProjectBrief, /# Project Brief: Nusantara API/);
-      assert.match(generatedProjectBrief, /Template version: 1\.2\.0/);
-      assert.match(generatedProjectBrief, /\*\*Containerization strategy\*\*: Docker for both development and production/);
-      assert.match(generatedProjectBrief, /Docker setup must be generated dynamically by AI/);
+      const bootstrapProjectContextPrompt = readFileSync(
+        join(scaffoldingTargetDirectory, '.agent-context', 'prompts', 'bootstrap-project-context.md'),
+        'utf8'
+      );
+      assert.match(bootstrapProjectContextPrompt, /Dynamic Project Context Synthesis/);
+      assert.match(bootstrapProjectContextPrompt, /Create or update these files in EN language/);
+      assert.match(bootstrapProjectContextPrompt, /Project name: Nusantara API/);
+      assert.match(bootstrapProjectContextPrompt, /No copy-paste from external prose/);
 
       const compiledRulesContent = readFileSync(join(scaffoldingTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
-      assert.match(compiledRulesContent, /docs\/project-brief\.md/);
+      assert.match(compiledRulesContent, /\.agent-context\/prompts\/bootstrap-project-context\.md/);
+      assert.match(compiledRulesContent, /If docs\/project-brief\.md is missing, execute bootstrap-project-context prompt immediately\./);
       assert.match(compiledRulesContent, /Latest user prompt defines current feature scope and product direction\./);
-      assert.match(compiledRulesContent, /When scope changes, implement the new request and update docs\/\* in the same change/);
+      assert.match(compiledRulesContent, /Save generated docs under docs\/ and keep them updated when feature scope changes\./);
 
       const upgradePreviewOutput = execSync(`node ${cliPath} upgrade ${scaffoldingTargetDirectory} --dry-run`).toString();
-      assert.match(upgradePreviewOutput, /Project docs stale files: 0/);
+      assert.doesNotMatch(upgradePreviewOutput, /Some project docs were generated from older template versions/);
     } finally {
       rmSync(scaffoldingTargetDirectory, { recursive: true, force: true });
     }
@@ -622,11 +626,17 @@ test('CLI Smoke Tests', async (t) => {
         `node ${cliPath} init ${staleDocsTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --project-config ${projectConfigPath} --no-token-optimize`
       ).toString();
 
+      mkdirSync(join(staleDocsTargetDirectory, 'docs'), { recursive: true });
       const projectBriefPath = join(staleDocsTargetDirectory, 'docs', 'project-brief.md');
-      const projectBriefContent = readFileSync(projectBriefPath, 'utf8');
       writeFileSync(
         projectBriefPath,
-        projectBriefContent.replace('Template version: 1.2.0', 'Template version: 1.0.0')
+        [
+          '# Project Brief: Upgrade Docs Check',
+          '',
+          'Template version: 1.0.0',
+          '',
+          'Legacy template-based document kept for upgrade compatibility test.',
+        ].join('\n')
       );
 
       const upgradeOutput = execSync(`node ${cliPath} upgrade ${staleDocsTargetDirectory} --dry-run`).toString();
