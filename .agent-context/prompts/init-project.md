@@ -1,10 +1,12 @@
 
 # Project Initialization Prompts
 
+This prompt boots a repository with strict rules operations context (Federated Governance baseline).
+
 When a new project is created or initialized, the agent should automatically:
-1. Read [AGENTS.md](../AGENTS.md) to understand available roles and knowledge base.
-2. Scan all files in [.agent-context/rules/](../.agent-context/rules/) for mandatory engineering standards.
-3. Review dynamic stack and architecture signals from [docs/deep-dive.md](../docs/deep-dive.md), [docs/faq.md](../docs/faq.md), and task constraints.
+1. Read [AGENTS.md](../../AGENTS.md) to understand available roles and knowledge base.
+2. Scan all files in [.agent-context/rules/](../rules/) for mandatory engineering standards.
+3. Review dynamic stack and architecture signals from [docs/deep-dive.md](../../docs/deep-dive.md), [docs/faq.md](../../docs/faq.md), and task constraints.
 
 ## Architect Mode (Recommended)
 If the user describes a project or feature, the agent should:
@@ -15,9 +17,9 @@ If the user describes a project or feature, the agent should:
 
 ## Direct Blueprint Mode
 If the user specifies a framework/blueprint, the agent should:
-1. Read [AGENTS.md](../AGENTS.md) for role context.
-2. Scan all files in [.agent-context/rules/](../.agent-context/rules/) for engineering standards.
-3. Reference [docs/deep-dive.md](../docs/deep-dive.md) and [docs/faq.md](../docs/faq.md) for stack/blueprint guidance.
+1. Read [AGENTS.md](../../AGENTS.md) for role context.
+2. Scan all files in [.agent-context/rules/](../rules/) for engineering standards.
+3. Reference [docs/deep-dive.md](../../docs/deep-dive.md) and [docs/faq.md](../../docs/faq.md) for stack/blueprint guidance.
 4. Scaffold the initial project structure following the blueprint exactly:
 	- Create all directories and files from the blueprint
 	- Set up environment config and validation (e.g., Zod, Pydantic, FluentValidation)
@@ -25,12 +27,12 @@ If the user specifies a framework/blueprint, the agent should:
 	- Set up the logger
 	- Create a health check endpoint
 	- Initialize the ORM/Database connection
-	- Every file must follow [naming conventions](../.agent-context/rules/naming-conv.md)
-	- Every module must follow [architecture.md](../.agent-context/rules/architecture.md)
-	- Every dependency must be justified per [efficiency-vs-hype.md](../.agent-context/rules/efficiency-vs-hype.md)
+	- Every file must follow [naming conventions](../rules/naming-conv.md)
+	- Every module must follow [architecture.md](../rules/architecture.md)
+	- Every dependency must be justified per [efficiency-vs-hype.md](../rules/efficiency-vs-hype.md)
 
 ## Stacks & Blueprints Reference
-See [docs/roadmap.md](../docs/roadmap.md) and [docs/deep-dive.md](../docs/deep-dive.md) for the latest stack and blueprint list.
+See [docs/roadmap.md](../../docs/roadmap.md) and [docs/deep-dive.md](../../docs/deep-dive.md) for the latest stack and blueprint list.
 
 ## UI/UX Bootstrap
 When a user requests frontend or UI/UX design, the agent should automatically execute the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize DESIGN.md.
@@ -82,16 +84,16 @@ Now scaffold the initial project structure following the blueprint exactly:
 - Initialize the ORM/Database connection
 
 
-Setiap file harus mengikuti [naming conventions](../.agent-context/rules/naming-conv.md).
-Setiap modul harus mengikuti [architecture.md](../.agent-context/rules/architecture.md).
-Setiap dependency harus justified sesuai [efficiency-vs-hype.md](../.agent-context/rules/efficiency-vs-hype.md).
+Setiap file harus mengikuti [naming conventions](../rules/naming-conv.md).
+Setiap modul harus mengikuti [architecture.md](../rules/architecture.md).
+Setiap dependency harus justified sesuai [efficiency-vs-hype.md](../rules/efficiency-vs-hype.md).
 ```
 
 ---
 
 ## Referensi Stacks & Blueprints
 
-Lihat [docs/roadmap.md](../docs/roadmap.md) dan [docs/deep-dive.md](../docs/deep-dive.md) untuk daftar stack/blueprint terbaru.
+Lihat [docs/roadmap.md](../../docs/roadmap.md) dan [docs/deep-dive.md](../../docs/deep-dive.md) untuk daftar stack/blueprint terbaru.
 
 ---
 

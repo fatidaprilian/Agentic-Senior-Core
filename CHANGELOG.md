@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.2 - 2026-04-18
+### Added
+- Added Cursor MCP workspace configuration at `.cursor/mcp.json` so Cursor can detect the MCP server without manual wiring.
+
+### Changed
+- Fixed prompt cross-links in `.agent-context/prompts/*` to resolve correctly from their actual directory.
+- Added `docs/DESIGN.md` placeholder so UI bootstrap prompts have a stable local link target.
+
+### Fixed
+- Fixed `npm run validate` failures caused by broken internal markdown links.
+
 ## 3.0.1 - 2026-04-18
 ### Changed
 - Simplified README: only basic npx command shown, advanced config moved to docs.

@@ -10,7 +10,7 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.0 (2026-04-18).
+Latest release: 3.0.2 (2026-04-18).
 
 Highlights in 3.0.0:
 - Universal IDE adapter surface is completed and synchronized through thin adapters.
@@ -99,7 +99,7 @@ Use `--no-prune` if you want to keep legacy managed files.
 
 | Canonical Enterprise Term | Developer-Facing Alias | Usage Rule |
 |---------------------------|------------------------|------------|
-| Federated Governance | Strict AI Coding Guidelines | Use canonical term in compliance/audit artifacts. |
+| Federated Governance | Federated Rules Operations | Use canonical term in compliance/audit artifacts. |
 | Governance Engine | Rules Engine | Use alias in onboarding and day-to-day developer docs. |
 | Guardrails | Quality Checks | Use alias in implementation guidance and quickstart docs. |
 

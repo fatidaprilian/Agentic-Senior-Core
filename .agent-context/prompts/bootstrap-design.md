@@ -10,10 +10,10 @@ When a user requests frontend design or redesign, the agent should automatically
 - Design tokens and handoff notes for developers
 
 The agent must:
-1. Read [AGENTS.md](../AGENTS.md) for project context and team roles.
-2. Scan all files in [.agent-context/rules/](../.agent-context/rules/) for UI/UX and accessibility standards.
-3. Reference [docs/deep-dive.md](../docs/deep-dive.md) and [docs/faq.md](../docs/faq.md) for architecture and product background.
-4. If [docs/DESIGN.md](../docs/DESIGN.md) exists, check for drift and propose improvements instead of rewriting from scratch.
+1. Read [AGENTS.md](../../AGENTS.md) for project context and team roles.
+2. Scan all files in [.agent-context/rules/](../rules/) for UI/UX and accessibility standards.
+3. Reference [docs/deep-dive.md](../../docs/deep-dive.md) and [docs/faq.md](../../docs/faq.md) for architecture and product background.
+4. If [docs/DESIGN.md](../../docs/DESIGN.md) exists, check for drift and propose improvements instead of rewriting from scratch.
 5. All references to docs or rules must be clickable markdown links.
 
 Output:
