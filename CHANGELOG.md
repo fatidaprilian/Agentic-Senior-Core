@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.19 - 2026-04-18
+### Added
+- Added existing-project detection transparency summaries in init and upgrade flows, including detected stack, active rules baseline, and major constraints.
+- Added onboarding report persistence for detection transparency metadata and detection decision outcome under `autoDetection.detectionTransparency`.
+- Added validator coverage for detection transparency snippets in init, upgrade, and compiler surfaces.
+
+### Changed
+- Changed existing-project init path to include quick confirmation and quick override flow for detected setup in interactive sessions.
+- Changed CLI smoke assertions to lock detection transparency output and onboarding decision metadata.
+- Changed roadmap backlog status for `V3.0-012` from planned to done with all acceptance criteria checked.
+
 ## 2.5.18 - 2026-04-18
 ### Added
 - Added dedicated terminology reference in `docs/terminology-mapping.md` and linked it from README and roadmap.

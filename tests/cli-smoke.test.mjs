@@ -115,6 +115,8 @@ test('CLI Smoke Tests', async (t) => {
         `node ${cliPath} init ${existingProjectTargetDirectory} --profile balanced --ci true --no-scaffold-docs --no-token-optimize`
       ).toString();
 
+      assert.match(initOutput, /Existing project detection transparency:/);
+      assert.match(initOutput, /Active rules baseline: canonical \.instructions\.md -> compiled \.cursorrules\/\.windsurfrules/);
       assert.match(initOutput, /Using detected stack automatically for this existing project: Python\./);
 
       const onboardingReportPath = join(existingProjectTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
@@ -126,6 +128,10 @@ test('CLI Smoke Tests', async (t) => {
       assert.ok(onboardingReport.autoDetection.recommendedAdditionalStacks.includes('typescript.md'));
       assert.ok(Array.isArray(onboardingReport.selectedAdditionalBlueprints));
       assert.ok(onboardingReport.selectedAdditionalBlueprints.includes('api-nextjs.md'));
+      assert.equal(onboardingReport.autoDetection?.detectionTransparency?.declarationType, 'existing-project');
+      assert.equal(onboardingReport.autoDetection?.detectionTransparency?.quickConfirmation?.response, 'non-interactive-auto');
+      assert.equal(onboardingReport.autoDetection?.detectionTransparency?.decision?.mode, 'non-interactive-auto');
+      assert.equal(onboardingReport.autoDetection?.detectionTransparency?.decision?.selectedStackFileName, 'python.md');
 
       const compiledRulesContent = readFileSync(join(existingProjectTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(compiledRulesContent, /## LAYER 3A: ADDITIONAL BLUEPRINT PROFILES/);
@@ -693,6 +699,7 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(validationOutput, /RESULTS/);
     assert.match(validationOutput, /Checking override governance/);
     assert.match(validationOutput, /Checking terminology mapping consistency/);
+    assert.match(validationOutput, /Checking existing-project detection transparency coverage/);
     assert.match(validationOutput, /docs\/terminology-mapping\.md includes Dual-Term Mapping section/);
   });
 

@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-18
-Current Version: 2.5.18
+Current Version: 2.5.19
 Status: Stable and release-ready
 
 ---
@@ -576,16 +576,21 @@ Acceptance:
 #### V3.0-012: Existing Project Detection Transparency
 
 Priority: P1
-Status: planned
+Status: done
 
 Scope:
 - Make existing-project detection more vocal at session start.
 - Declare detected stack, active rules, and major constraints clearly.
 
+Execution note (2026-04-18):
+- Init and upgrade now print explicit existing-project detection transparency blocks at session start.
+- Existing-project init path now supports quick confirmation and quick override for detected setup in interactive mode.
+- Onboarding report now stores detection transparency declaration and user decision metadata under `autoDetection.detectionTransparency`.
+
 Acceptance:
-- [ ] Existing project sessions show detected stack and active rule summary up front.
-- [ ] User can confirm or override detected setup quickly.
-- [ ] Onboarding report captures declared detection and user confirmation result.
+- [x] Existing project sessions show detected stack and active rule summary up front.
+- [x] User can confirm or override detected setup quickly.
+- [x] Onboarding report captures declared detection and user confirmation result.
 
 #### Phase 4: Long-Horizon Intelligence
 

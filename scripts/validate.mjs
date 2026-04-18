@@ -155,6 +155,31 @@ const REQUIRED_COMPLIANCE_CANONICAL_SNIPPETS = [
     label: 'release operations checklist keeps canonical term Federated Governance',
   },
 ];
+const REQUIRED_DETECTION_TRANSPARENCY_SNIPPETS = [
+  {
+    path: 'lib/cli/commands/init.mjs',
+    snippets: [
+      'Existing project detection transparency:',
+      'Use detected setup for this existing project?',
+      'detectionTransparency',
+    ],
+  },
+  {
+    path: 'lib/cli/commands/upgrade.mjs',
+    snippets: [
+      'Existing project detection transparency:',
+      'formatDetectionCandidates(projectDetection.rankedCandidates)',
+      'detectionTransparency',
+    ],
+  },
+  {
+    path: 'lib/cli/compiler.mjs',
+    snippets: [
+      'detectionTransparency = null',
+      'detectionTransparency: detectionTransparency || null',
+    ],
+  },
+];
 
 const validationResult = {
   passed: 0,
@@ -928,6 +953,28 @@ async function validateTerminologyMapping() {
   }
 }
 
+async function validateDetectionTransparencyCoverage() {
+  console.log('\nChecking existing-project detection transparency coverage...');
+
+  for (const transparencyRule of REQUIRED_DETECTION_TRANSPARENCY_SNIPPETS) {
+    const absoluteTransparencyPath = join(ROOT_DIR, transparencyRule.path);
+
+    if (!(await fileExists(absoluteTransparencyPath))) {
+      fail(`Missing detection transparency source: ${transparencyRule.path}`);
+      continue;
+    }
+
+    const transparencyContent = await readTextFile(absoluteTransparencyPath);
+    for (const requiredSnippet of transparencyRule.snippets) {
+      if (transparencyContent.includes(requiredSnippet)) {
+        pass(`${transparencyRule.path} includes detection transparency snippet: ${requiredSnippet}`);
+      } else {
+        fail(`${transparencyRule.path} is missing detection transparency snippet: ${requiredSnippet}`);
+      }
+    }
+  }
+}
+
 async function validateMcpConfiguration() {
   console.log('\nChecking MCP configuration...');
 
@@ -1177,6 +1224,7 @@ async function main() {
   await validateVersionConsistency();
   await validateDocumentationFlow();
   await validateTerminologyMapping();
+  await validateDetectionTransparencyCoverage();
   await validateMcpConfiguration();
   await validateHumanWritingGovernance();
   await validateInstructionAdapters();
