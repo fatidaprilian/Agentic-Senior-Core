@@ -84,19 +84,19 @@ Now scaffold the initial project structure following the blueprint exactly:
 - Initialize the ORM/Database connection
 
 
-Setiap file harus mengikuti [naming conventions](../rules/naming-conv.md).
-Setiap modul harus mengikuti [architecture.md](../rules/architecture.md).
-Setiap dependency harus justified sesuai [efficiency-vs-hype.md](../rules/efficiency-vs-hype.md).
+Every file must follow [naming conventions](../rules/naming-conv.md).
+Every module must follow [architecture.md](../rules/architecture.md).
+Every dependency must be justified per [efficiency-vs-hype.md](../rules/efficiency-vs-hype.md).
 ```
 
 ---
 
-## Referensi Stacks & Blueprints
+## Stacks & Blueprints Reference
 
-Lihat [docs/roadmap.md](../../docs/roadmap.md) dan [docs/deep-dive.md](../../docs/deep-dive.md) untuk daftar stack/blueprint terbaru.
+See [docs/roadmap.md](../../docs/roadmap.md) and [docs/deep-dive.md](../../docs/deep-dive.md) for the latest stack and blueprint list.
 
 ---
 
 ## Bootstrap UI/UX (DESIGN.md)
 
-Untuk memulai desain UI/UX dari nol, gunakan prompt [bootstrap-design.md](./bootstrap-design.md) agar AI langsung membangunkan Art Director digital Anda.
+To start UI/UX design from scratch, use the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize `docs/DESIGN.md`.
