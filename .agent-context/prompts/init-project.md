@@ -1,7 +1,39 @@
-# Prompts: Initialize Project
 
-> Copy-paste one of these prompts to your AI agent (Cursor, Windsurf, Copilot, Antigravity) right after cloning this repository.
-> V1.4 rekomendasi: jalankan `npx @ryuenn3123/agentic-senior-core init` untuk compile strict AI coding guidelines (Federated Governance baseline).
+# Project Initialization Prompts
+
+When a new project is created or initialized, the agent should automatically:
+1. Read [AGENTS.md](../AGENTS.md) to understand available roles and knowledge base.
+2. Scan all files in [.agent-context/rules/](../.agent-context/rules/) for mandatory engineering standards.
+3. Review dynamic stack and architecture signals from [docs/deep-dive.md](../docs/deep-dive.md), [docs/faq.md](../docs/faq.md), and task constraints.
+
+## Architect Mode (Recommended)
+If the user describes a project or feature, the agent should:
+1. Propose the most efficient technology stack based on requirements and evidence.
+2. Explain why this stack is the best choice for the project.
+3. Draft a high-level architecture plan.
+4. Wait for user approval before scaffolding the project using the selected architecture playbook.
+
+## Direct Blueprint Mode
+If the user specifies a framework/blueprint, the agent should:
+1. Read [AGENTS.md](../AGENTS.md) for role context.
+2. Scan all files in [.agent-context/rules/](../.agent-context/rules/) for engineering standards.
+3. Reference [docs/deep-dive.md](../docs/deep-dive.md) and [docs/faq.md](../docs/faq.md) for stack/blueprint guidance.
+4. Scaffold the initial project structure following the blueprint exactly:
+	- Create all directories and files from the blueprint
+	- Set up environment config and validation (e.g., Zod, Pydantic, FluentValidation)
+	- Set up error handling foundation (base error class + global handler)
+	- Set up the logger
+	- Create a health check endpoint
+	- Initialize the ORM/Database connection
+	- Every file must follow [naming conventions](../.agent-context/rules/naming-conv.md)
+	- Every module must follow [architecture.md](../.agent-context/rules/architecture.md)
+	- Every dependency must be justified per [efficiency-vs-hype.md](../.agent-context/rules/efficiency-vs-hype.md)
+
+## Stacks & Blueprints Reference
+See [docs/roadmap.md](../docs/roadmap.md) and [docs/deep-dive.md](../docs/deep-dive.md) for the latest stack and blueprint list.
+
+## UI/UX Bootstrap
+When a user requests frontend or UI/UX design, the agent should automatically execute the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize DESIGN.md.
 
 ---
 

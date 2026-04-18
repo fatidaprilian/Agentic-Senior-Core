@@ -329,7 +329,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.0.21 - 2026-04-15
 ### Added
-- Added Indonesian project documentation templates (`*.md.id.tmpl`) for `project-brief`, `architecture-decision-record`, `database-schema`, `api-contract`, and `flow-overview`.
+
 - Added CLI smoke coverage for project-config scaffolding, same-run Layer 9 compilation, and project-doc template staleness reporting.
 
 ### Changed

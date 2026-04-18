@@ -24,13 +24,14 @@ Highlights in 3.0.0:
 
 ## 60-Second Start
 
+
 ```bash
 npx @ryuenn3123/agentic-senior-core init
 ```
 
-Satu perintah untuk inisialisasi rules, checklist, dan context AI coding guidelines.
+One command to initialize rules, checklists, and strict AI coding guidelines context for your project.
 
-> **Lihat [docs/deep-dive.md](docs/deep-dive.md) dan [docs/roadmap.md](docs/roadmap.md) untuk opsi konfigurasi lanjutan, mode architect, snapshot, dan realtime.**
+> **See [docs/deep-dive.md](docs/deep-dive.md) and [docs/roadmap.md](docs/roadmap.md) for advanced configuration, architect mode, snapshot, and realtime options.**
 
 - This command writes `.agent-context/state/v3-purge-audit.json` and reports whether static directory deletion is safe.
 
