@@ -122,6 +122,30 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(explainOnDemandHardRuleResult);
     assert.equal(explainOnDemandHardRuleResult.passed, true);
 
+    const singleSourceLazyLoadingAuditResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'single-source-lazy-loading-audit'
+    );
+    assert.ok(singleSourceLazyLoadingAuditResult);
+    assert.equal(singleSourceLazyLoadingAuditResult.passed, true);
+
+    const canonicalRuleSourceHardRuleResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'canonical-rule-source-hard-rule'
+    );
+    assert.ok(canonicalRuleSourceHardRuleResult);
+    assert.equal(canonicalRuleSourceHardRuleResult.passed, true);
+
+    const lazyRuleLoadingHardRuleResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'lazy-rule-loading-hard-rule'
+    );
+    assert.ok(lazyRuleLoadingHardRuleResult);
+    assert.equal(lazyRuleLoadingHardRuleResult.passed, true);
+
+    const noConflictingDuplicateRulesResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'no-conflicting-duplicate-rule-instructions'
+    );
+    assert.ok(noConflictingDuplicateRulesResult);
+    assert.equal(noConflictingDuplicateRulesResult.passed, true);
+
     const frontendParityChecklistResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'frontend-parity-checklist-coverage'
     );
@@ -162,6 +186,9 @@ test('Enterprise Operations Tests', async (t) => {
     assert.equal(releaseGateReport.diagnostics?.explainOnDemandAudit?.auditName, 'explain-on-demand-audit');
     assert.equal(releaseGateReport.diagnostics?.explainOnDemandAudit?.responsePolicy?.defaultModeExposesStateInternals, false);
     assert.equal(releaseGateReport.diagnostics?.explainOnDemandAudit?.responsePolicy?.diagnosticRequiresExplicitRequest, true);
+    assert.equal(releaseGateReport.diagnostics?.singleSourceLazyLoadingAudit?.auditName, 'single-source-lazy-loading-audit');
+    assert.equal(releaseGateReport.diagnostics?.singleSourceLazyLoadingAudit?.canonicalSource?.enforced, true);
+    assert.equal(releaseGateReport.diagnostics?.singleSourceLazyLoadingAudit?.lazyRuleLoading?.enforced, true);
   });
 
   await t.test('SBOM generator emits CycloneDX payload', () => {

@@ -1,11 +1,20 @@
 {
-  "cliVersion": "2.0.1",
-  "generatedAt": "2026-04-08T14:58:53.636Z",
+  "cliVersion": "2.5.16",
+  "generatedAt": "2026-04-18T00:00:00.000Z",
   "operationMode": "upgrade",
   "selectedProfile": "beginner",
   "selectedProfilePack": null,
   "selectedStack": "typescript.md",
+  "selectedAdditionalStacks": [],
   "selectedBlueprint": "api-nextjs.md",
+  "selectedAdditionalBlueprints": [],
+  "ruleLoadingPolicy": {
+    "canonicalSource": ".instructions.md",
+    "stackLoadingMode": "lazy",
+    "loadedOnDemand": true,
+    "primaryStack": "typescript.md",
+    "additionalStacks": []
+  },
   "ciGuardrailsEnabled": true,
   "setupDurationMs": 106,
   "selectedSkillDomains": [],

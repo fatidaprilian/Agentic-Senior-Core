@@ -175,6 +175,7 @@ async function validateRequiredFiles() {
     'scripts/context-triggered-audit.mjs',
     'scripts/rules-guardian-audit.mjs',
     'scripts/explain-on-demand-audit.mjs',
+    'scripts/single-source-lazy-loading-audit.mjs',
     'scripts/release-gate.mjs',
     'scripts/generate-sbom.mjs',
     'scripts/init-project.sh',

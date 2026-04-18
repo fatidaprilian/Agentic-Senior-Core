@@ -32,6 +32,14 @@ State internals must stay invisible by default.
 - Diagnostic mode explains relevant state decisions when needed.
 - Keep default explanations concise and outcome-first; show raw state details only in diagnostic mode.
 
+## Single Source of Truth and Lazy Rule Loading
+
+- Canonical rule source is .instructions.md.
+- Adapter entry files stay thin and must point to the canonical source.
+- Load language-specific stack guidance lazily based on detected scope.
+- Do not preload unrelated stack profiles during normal flow.
+- Keep rule-loading output deterministic for init and release validation.
+
 ## The Core Principle
 
 **Every layer has ONE job. Layer leaks are bugs — not "pragmatic shortcuts."**

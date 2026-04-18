@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.16 - 2026-04-18
+### Added
+- Added `single-source-lazy-loading-audit` script with machine-readable output to enforce canonical rule source integrity, lazy stack guidance loading, and duplicate-instruction conflict checks.
+- Added Single Source of Truth and Lazy Rule Loading governance sections in architecture rules, PR checklist, and review prompt guidance.
+
+### Changed
+- Changed context compiler output to include explicit lazy rule-loading policy guidance and persisted onboarding metadata (`ruleLoadingPolicy`) for deterministic init/release behavior.
+- Changed release gate diagnostics to execute single-source lazy-loading audit and block release when canonical-source, lazy-loading, or duplicate-instruction checks fail.
+- Expanded CLI and enterprise test coverage for V3.0-010 checks and diagnostics.
+
 ## 2.5.15 - 2026-04-17
 ### Added
 - Added `explain-on-demand-audit` script with machine-readable output to enforce invisible state management defaults and explicit diagnostic visibility requests.

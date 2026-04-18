@@ -34,6 +34,7 @@ const DOCUMENTATION_BOUNDARY_AUDIT_SCRIPT_PATH = 'scripts/documentation-boundary
 const CONTEXT_TRIGGERED_AUDIT_SCRIPT_PATH = 'scripts/context-triggered-audit.mjs';
 const RULES_GUARDIAN_AUDIT_SCRIPT_PATH = 'scripts/rules-guardian-audit.mjs';
 const EXPLAIN_ON_DEMAND_AUDIT_SCRIPT_PATH = 'scripts/explain-on-demand-audit.mjs';
+const SINGLE_SOURCE_LAZY_LOADING_AUDIT_SCRIPT_PATH = 'scripts/single-source-lazy-loading-audit.mjs';
 const BACKEND_ARCHITECTURE_RULE_PATH = '.agent-context/rules/architecture.md';
 const BACKEND_REVIEW_CHECKLIST_PATH = '.agent-context/review-checklists/pr-checklist.md';
 const REFACTOR_PROMPT_PATH = '.agent-context/prompts/refactor.md';
@@ -601,6 +602,73 @@ function runReleaseGate() {
         false,
         'explain-on-demand-hard-rule',
         `Explain-on-demand audit failed: ${failedAuditDetails}`
+      );
+    }
+  }
+
+  const singleSourceLazyLoadingAuditExecution = runMachineReadableScript(
+    SINGLE_SOURCE_LAZY_LOADING_AUDIT_SCRIPT_PATH,
+    ['--workflow', 'pr-preparation']
+  );
+  if (!singleSourceLazyLoadingAuditExecution.report) {
+    const failureDetails = singleSourceLazyLoadingAuditExecution.executionErrorMessage
+      ? `Single-source lazy-loading audit execution failed before producing a machine-readable report: ${singleSourceLazyLoadingAuditExecution.executionErrorMessage}`
+      : 'Single-source lazy-loading audit did not produce machine-readable JSON output';
+    pushResult(results, false, 'single-source-lazy-loading-audit', failureDetails);
+  } else {
+    diagnostics.singleSourceLazyLoadingAudit = singleSourceLazyLoadingAuditExecution.report;
+    pushResult(
+      results,
+      true,
+      'single-source-lazy-loading-audit',
+      `single-source-lazy-loading-audit executed (passed=${singleSourceLazyLoadingAuditExecution.report.passed}, failures=${singleSourceLazyLoadingAuditExecution.report.failureCount})`
+    );
+
+    if (singleSourceLazyLoadingAuditExecution.report?.canonicalSource?.enforced === true) {
+      pushResult(
+        results,
+        true,
+        'canonical-rule-source-hard-rule',
+        'Canonical rule source is explicitly defined and enforced'
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'canonical-rule-source-hard-rule',
+        'Canonical rule source enforcement failed in single-source lazy-loading audit'
+      );
+    }
+
+    if (singleSourceLazyLoadingAuditExecution.report?.lazyRuleLoading?.enforced === true) {
+      pushResult(
+        results,
+        true,
+        'lazy-rule-loading-hard-rule',
+        'Language-specific guidance is loaded lazily by detected scope'
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'lazy-rule-loading-hard-rule',
+        'Lazy rule loading enforcement failed in single-source lazy-loading audit'
+      );
+    }
+
+    if (singleSourceLazyLoadingAuditExecution.report?.duplicationPolicy?.noConflictingDuplicates === true) {
+      pushResult(
+        results,
+        true,
+        'no-conflicting-duplicate-rule-instructions',
+        'No conflicting duplicate rule instructions detected in normal flow'
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'no-conflicting-duplicate-rule-instructions',
+        'Conflicting duplicate rule instructions detected by single-source lazy-loading audit'
       );
     }
   }

@@ -208,6 +208,9 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(onboardingReport.selectedProfilePack?.sourceFile, 'startup.md');
       assert.equal(onboardingReport.selectedStack, 'typescript.md');
       assert.equal(onboardingReport.selectedBlueprint, 'api-nextjs.md');
+      assert.equal(onboardingReport.ruleLoadingPolicy?.canonicalSource, '.instructions.md');
+      assert.equal(onboardingReport.ruleLoadingPolicy?.stackLoadingMode, 'lazy');
+      assert.equal(onboardingReport.ruleLoadingPolicy?.loadedOnDemand, true);
       assert.equal(onboardingReport.ciGuardrailsEnabled, true);
       assert.deepEqual(onboardingReport.selectedSkillDomains, ['frontend', 'fullstack', 'cli']);
 
@@ -884,6 +887,41 @@ test('CLI Smoke Tests', async (t) => {
     assert.equal(diagnosticExplainAuditReport.diagnosticMode?.canExplainStateDecisions, true);
     assert.ok(Array.isArray(diagnosticExplainAuditReport.diagnosticMode?.stateDecisionExplanations));
     assert.ok(diagnosticExplainAuditReport.diagnosticMode?.stateDecisionExplanations.length >= 1);
+  });
+
+  await t.test('single-source lazy-loading audit enforces canonical source and scoped stack guidance', () => {
+    const singleSourceLazyAuditOutput = execSync(
+      `node ${join(process.cwd(), 'scripts', 'single-source-lazy-loading-audit.mjs')} --workflow pr-preparation`
+    ).toString();
+    const singleSourceLazyAuditReport = JSON.parse(singleSourceLazyAuditOutput);
+
+    const architectureRuleContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'rules', 'architecture.md'),
+      'utf8'
+    );
+    const prChecklistContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'review-checklists', 'pr-checklist.md'),
+      'utf8'
+    );
+    const reviewPromptContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'prompts', 'review-code.md'),
+      'utf8'
+    );
+    const compilerContent = readFileSync(
+      join(process.cwd(), 'lib', 'cli', 'compiler.mjs'),
+      'utf8'
+    );
+
+    assert.equal(singleSourceLazyAuditReport.auditName, 'single-source-lazy-loading-audit');
+    assert.equal(singleSourceLazyAuditReport.passed, true);
+    assert.equal(singleSourceLazyAuditReport.canonicalSource?.enforced, true);
+    assert.equal(singleSourceLazyAuditReport.lazyRuleLoading?.enforced, true);
+    assert.equal(singleSourceLazyAuditReport.duplicationPolicy?.noConflictingDuplicates, true);
+
+    assert.match(architectureRuleContent, /Single Source of Truth and Lazy Rule Loading/);
+    assert.match(prChecklistContent, /Canonical rule source is explicitly defined and enforced/);
+    assert.match(reviewPromptContent, /single-source and lazy-loading policy/);
+    assert.match(compilerContent, /LAYER 2 POLICY: LAZY RULE LOADING/);
   });
 
   await t.test('skill selector outputs recommended pack', () => {

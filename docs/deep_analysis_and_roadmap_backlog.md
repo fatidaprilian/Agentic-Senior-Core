@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
-Date: 2026-04-17
-Current Version: 2.5.15
+Date: 2026-04-18
+Current Version: 2.5.16
 Status: Stable and release-ready
 
 ---
@@ -537,16 +537,16 @@ Acceptance:
 #### V3.0-010: Single Source of Truth and Lazy Rule Loading
 
 Priority: P1
-Status: planned
+Status: done
 
 Scope:
 - Keep one canonical rule source and reduce active entrypoint ambiguity.
 - Load language-specific rules on demand during initialization and task execution.
 
 Acceptance:
-- [ ] Canonical rule source is explicitly defined and enforced.
-- [ ] Language-specific guidance is loaded lazily based on detected scope.
-- [ ] No conflicting duplicate rule instructions during normal flow.
+- [x] Canonical rule source is explicitly defined and enforced.
+- [x] Language-specific guidance is loaded lazily based on detected scope.
+- [x] No conflicting duplicate rule instructions during normal flow.
 
 #### V3.0-011: Terminology Rebrand (Developer-Friendly)
 
@@ -593,6 +593,8 @@ Scope:
 - Build data-backed architecture recommendation support using ecosystem signals.
 - Start with reproducible snapshot-based inputs before optional real-time enrichment.
 - Prevent hallucination-only recommendations for architecture justification.
+- Prefer context-driven research over static template copying; treat template packs as optional references only.
+- Allow optional real-time design/stack evidence from trusted sources (for example Awwwards) with source and timestamp citations.
 
 Acceptance:
 - [ ] Architecture recommendations cite measurable sources and timestamps.

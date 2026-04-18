@@ -124,3 +124,8 @@ VERDICT: PASS / FAIL (X/Y items passed)
 - [ ] Default responses avoid unnecessary state-file internals
 - [ ] State internals are exposed only on explicit request
 - [ ] Diagnostic mode can explain relevant state decisions when needed
+
+### 14. Single Source and Lazy Rule Loading
+- [ ] Canonical rule source is explicitly defined and enforced
+- [ ] Language-specific guidance is loaded lazily based on detected scope
+- [ ] No conflicting duplicate rule instructions during normal flow
