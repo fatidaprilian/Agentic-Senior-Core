@@ -10,7 +10,7 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.4 (2026-04-18).
+Latest release: 3.0.5 (2026-04-18).
 
 Highlights in 3.0.0:
 - Universal IDE adapter surface is completed and synchronized through thin adapters.

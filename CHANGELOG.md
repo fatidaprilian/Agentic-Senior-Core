@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.5 - 2026-04-18
+### Added
+- When `--mcp-template` is enabled, `upgrade` now ensures the target project contains `scripts/mcp-server.mjs` so Cursor can start the MCP server without missing-module failures.
+
+### Changed
+- MCP workspace templates are now self-contained: `mcp.json` points to a script that is guaranteed to exist after init/upgrade.
+
+### Fixed
+- Fixed Cursor connection failures caused by `MODULE_NOT_FOUND` for `./scripts/mcp-server.mjs` in upgraded projects.
+
 ## 3.0.4 - 2026-04-18
 ### Added
 - Updated upgrade MCP template generator so Cursor workspaces receive a valid `.cursor/mcp.json` using the `mcpServers` schema.
