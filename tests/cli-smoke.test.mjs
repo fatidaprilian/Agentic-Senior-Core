@@ -591,7 +591,8 @@ test('CLI Smoke Tests', async (t) => {
       writeFileSync(staleManagedFilePath, '# Obsolete managed file\n');
 
       const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
-      assert.match(upgradeOutput, /Managed stale files removed: 1/);
+      assert.match(upgradeOutput, /Governance surface sync: 1:1/);
+      assert.match(upgradeOutput, /1 deleted/);
       assert.equal(existsSync(staleManagedFilePath), false);
       assert.equal(existsSync(staleManagedDirectory), false);
     } finally {

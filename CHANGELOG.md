@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.6 - 2026-04-19
+### Added
+- Content-aware 1:1 synchronization for governance assets during upgrade.
+- Restoration of missing managed files (marked as [NEW] during sync).
+- Detailed reporting of change statistics (Created, Updated, Deleted, Unchanged).
+
+### Changed
+- Refactored `upgrade` command to provide file-by-file transparency.
+- Intelligent non-destructive merging of MCP configurations (VS Code, Cursor, Zed) to preserve custom servers.
+- Standardized Cursor workspace configurations to use the `mcpServers` key.
+
+### Fixed
+- Fixed redundant file overwrites during upgrade by implementing hash-based/binary comparison.
+
 ## 3.0.5 - 2026-04-18
 ### Added
 - When `--mcp-template` is enabled, `upgrade` now ensures the target project contains `scripts/mcp-server.mjs` so Cursor can start the MCP server without missing-module failures.
