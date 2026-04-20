@@ -6,7 +6,7 @@ This prompt boots a repository with strict rules operations context (Federated G
 When a new project is created or initialized, the agent should automatically:
 1. Read [AGENTS.md](../../AGENTS.md) to understand available roles and knowledge base.
 2. Scan all files in [.agent-context/rules/](../rules/) for mandatory engineering standards.
-3. Review dynamic stack and architecture signals from [docs/deep-dive.md](../../docs/deep-dive.md), [docs/faq.md](../../docs/faq.md), and task constraints.
+3. Review dynamic stack and architecture signals from [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), [.agent-context/state/stack-research-snapshot.json](../state/stack-research-snapshot.json), available stack and blueprint sources, and task constraints.
 
 ## Architect Mode (Recommended)
 If the user describes a project or feature, the agent should:
@@ -19,7 +19,7 @@ If the user describes a project or feature, the agent should:
 If the user specifies a framework/blueprint, the agent should:
 1. Read [AGENTS.md](../../AGENTS.md) for role context.
 2. Scan all files in [.agent-context/rules/](../rules/) for engineering standards.
-3. Reference [docs/deep-dive.md](../../docs/deep-dive.md) and [docs/faq.md](../../docs/faq.md) for stack/blueprint guidance.
+3. Reference [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), [.cursorrules](../../.cursorrules), and [.windsurfrules](../../.windsurfrules) for the active stack and blueprint guidance already applied to this project.
 4. Scaffold the initial project structure following the blueprint exactly:
 	- Create all directories and files from the blueprint
 	- Set up environment config and validation (e.g., Zod, Pydantic, FluentValidation)
@@ -32,7 +32,7 @@ If the user specifies a framework/blueprint, the agent should:
 	- Every dependency must be justified per [efficiency-vs-hype.md](../rules/efficiency-vs-hype.md)
 
 ## Stacks & Blueprints Reference
-See [docs/roadmap.md](../../docs/roadmap.md) and [docs/deep-dive.md](../../docs/deep-dive.md) for the latest stack and blueprint list.
+See [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), [.cursorrules](../../.cursorrules), and [.windsurfrules](../../.windsurfrules) for the latest shipped stack and blueprint context.
 
 ## UI/UX Bootstrap
 When a user requests frontend or UI/UX design, the agent should automatically execute the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize a dynamic design contract (`docs/DESIGN.md` + `docs/design-intent.json`).
@@ -93,7 +93,7 @@ Every dependency must be justified per [efficiency-vs-hype.md](../rules/efficien
 
 ## Stacks & Blueprints Reference
 
-See [docs/roadmap.md](../../docs/roadmap.md) and [docs/deep-dive.md](../../docs/deep-dive.md) for the latest stack and blueprint list.
+See [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), [.cursorrules](../../.cursorrules), and [.windsurfrules](../../.windsurfrules) for the latest shipped stack and blueprint context.
 
 ---
 

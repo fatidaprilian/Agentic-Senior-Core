@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.9 - 2026-04-20
+### Changed
+- Reworked `bootstrap-design.md` so the dynamic design contract relies on shipped project evidence and active governance context instead of non-shipped repository docs.
+- Strengthened the design bootstrap prompt to favor explicit assumptions, reversible design bets, and project-specific rationale over generic SaaS defaults or copied brand systems.
+- Updated `init-project.md` to reference the active onboarding and compiled-rule context that actually ships into initialized repositories.
+
 ## 3.0.8 - 2026-04-20
 ### Added
 - Added shared UI-scope detection so `init` and `upgrade` agree on when a dynamic design contract is required.

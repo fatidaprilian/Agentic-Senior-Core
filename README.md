@@ -10,12 +10,12 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.8 (2026-04-20).
+Latest release: 3.0.9 (2026-04-20).
 
-Highlights in 3.0.8:
-- Existing UI repositories now get `docs/design-intent.json` seeded during both `init` and `upgrade`.
-- Upgrade preview explicitly shows when a machine-readable design seed will be created on apply.
-- UI scope detection is now shared between `init` and `upgrade` so design-contract enforcement stays consistent.
+Highlights in 3.0.9:
+- Design bootstrap prompts now rely on shipped project evidence instead of assuming extra docs exist in every initialized repository.
+- Dynamic UI design guidance now emphasizes structure, rationale, and anti-generic constraints without anchoring to example brand systems.
+- Init prompts now point agents at the active onboarding and compiled-rule context that actually exists in target projects.
 
 </div>
 

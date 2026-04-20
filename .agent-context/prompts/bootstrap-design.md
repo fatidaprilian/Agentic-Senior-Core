@@ -10,10 +10,12 @@ This contract is a structure and reasoning system, not a fixed visual template. 
 The agent must:
 1. Read [AGENTS.md](../../AGENTS.md) for project context and team roles.
 2. Scan all files in [.agent-context/rules/](../rules/) for UI/UX and accessibility standards.
-3. Reference [docs/deep-dive.md](../../docs/deep-dive.md) and [docs/faq.md](../../docs/faq.md) for architecture and product background.
+3. Use repository evidence from [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), existing UI code, product copy, route names, component names, and any existing `docs/*` project docs to infer architecture and product background.
 4. If [docs/DESIGN.md](../../docs/DESIGN.md) or `docs/design-intent.json` already exists, check for drift and improve them instead of rewriting blindly.
-5. Treat any example structure or stylistic inspiration as non-normative. Use it only to judge depth and clarity, never to copy a visual language directly.
-6. All references to docs or rules must be clickable markdown links.
+5. If context is incomplete, write explicit assumptions and reversible design bets instead of defaulting to generic SaaS output.
+6. Explore multiple plausible design directions internally, then commit to one cohesive direction with clear rationale tied to the product context.
+7. Treat any example structure or stylistic inspiration as non-normative. Use it only to judge depth and clarity, never to copy a visual language directly.
+8. All references to docs or rules must be clickable markdown links.
 
 Required `docs/DESIGN.md` sections:
 1. Design Intent and Product Personality
@@ -44,5 +46,5 @@ Required `docs/design-intent.json` fields:
 Output:
 - Create or update both `docs/DESIGN.md` and `docs/design-intent.json`.
 - Keep both files synchronized: the markdown explains the why, the JSON captures the contract in machine-readable form.
-- Use practical, modern, accessible language grounded in the project, not generic SaaS defaults.
+- Use practical, modern, accessible language grounded in the project, not generic SaaS defaults or copycat brand systems.
 - Wait for user approval before generating Figma or code assets.
