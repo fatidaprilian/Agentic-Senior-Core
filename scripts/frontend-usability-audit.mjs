@@ -20,6 +20,9 @@ const REQUIRED_FILES = [
   'docs/roadmap.md',
   'docs/v1.7-issue-breakdown.md',
   'docs/v1.7-execution-playbook.md',
+  '.instructions.md',
+  '.agent-context/prompts/bootstrap-design.md',
+  'scripts/ui-design-judge.mjs',
   '.agent-context/rules/frontend-architecture.md',
   '.agent-context/review-checklists/pr-checklist.md',
   '.agent-context/review-checklists/architecture-review.md',
@@ -53,6 +56,28 @@ const REQUIRED_FRONTEND_RULE_SNIPPETS = [
   'UI Consistency Guardrails (Mandatory)',
   'Content language must stay consistent per screen and flow unless user requests multilingual output.',
   'Text color must remain contrast-safe against its background; no color collisions.',
+  'Responsive quality requires layout mutation and task reprioritization across breakpoints. Shrinking the desktop layout is not enough.',
+];
+
+const REQUIRED_BOOTSTRAP_DESIGN_SNIPPETS = [
+  'UI Design Mode is context-isolated by default:',
+  'Responsive Strategy and Cross-Viewport Adaptation Matrix',
+  'colorTruth.format',
+  'crossViewportAdaptation.mutationRules.mobile/tablet/desktop',
+];
+
+const REQUIRED_UI_DESIGN_JUDGE_SNIPPETS = [
+  'Advisory-first UI design contract judge.',
+  'Default mode is advisory: findings never block release. Strict mode is opt-in.',
+  'Do not reward generic SaaS defaults or popular template patterns.',
+  'UI design judge only evaluates changed UI surfaces.',
+];
+
+const REQUIRED_INSTRUCTIONS_SNIPPETS = [
+  'UI Design Mode',
+  'bootstrap-design.md',
+  'frontend-architecture.md',
+  'do not eagerly load unrelated backend-only rules',
 ];
 
 function assertFileExists(relativeFilePath, failures) {
@@ -79,6 +104,8 @@ function runAudit() {
 
   const roadmapPath = 'docs/roadmap.md';
   const frontendRulePath = '.agent-context/rules/frontend-architecture.md';
+  const bootstrapDesignPromptPath = '.agent-context/prompts/bootstrap-design.md';
+  const instructionsPath = '.instructions.md';
   const prChecklistPath = '.agent-context/review-checklists/pr-checklist.md';
   const architectureChecklistPath = '.agent-context/review-checklists/architecture-review.md';
 
@@ -95,6 +122,33 @@ function runAudit() {
   if (existsSync(resolve(REPOSITORY_ROOT, frontendRulePath))) {
     const frontendRuleContent = readFileSync(resolve(REPOSITORY_ROOT, frontendRulePath), 'utf8');
     assertContains('Frontend rule', frontendRulePath, frontendRuleContent, REQUIRED_FRONTEND_RULE_SNIPPETS, failures);
+  }
+
+  if (existsSync(resolve(REPOSITORY_ROOT, bootstrapDesignPromptPath))) {
+    const bootstrapDesignPromptContent = readFileSync(resolve(REPOSITORY_ROOT, bootstrapDesignPromptPath), 'utf8');
+    assertContains(
+      'Bootstrap design prompt',
+      bootstrapDesignPromptPath,
+      bootstrapDesignPromptContent,
+      REQUIRED_BOOTSTRAP_DESIGN_SNIPPETS,
+      failures
+    );
+  }
+
+  if (existsSync(resolve(REPOSITORY_ROOT, 'scripts/ui-design-judge.mjs'))) {
+    const uiDesignJudgeContent = readFileSync(resolve(REPOSITORY_ROOT, 'scripts/ui-design-judge.mjs'), 'utf8');
+    assertContains(
+      'UI design judge',
+      'scripts/ui-design-judge.mjs',
+      uiDesignJudgeContent,
+      REQUIRED_UI_DESIGN_JUDGE_SNIPPETS,
+      failures
+    );
+  }
+
+  if (existsSync(resolve(REPOSITORY_ROOT, instructionsPath))) {
+    const instructionsContent = readFileSync(resolve(REPOSITORY_ROOT, instructionsPath), 'utf8');
+    assertContains('Instructions', instructionsPath, instructionsContent, REQUIRED_INSTRUCTIONS_SNIPPETS, failures);
   }
 
   if (existsSync(resolve(REPOSITORY_ROOT, architectureChecklistPath))) {

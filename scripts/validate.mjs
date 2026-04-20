@@ -268,6 +268,61 @@ const REQUIRED_UPGRADE_UI_CONTRACT_WARNING_SNIPPETS = [
     ],
   },
 ];
+const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
+  {
+    path: '.instructions.md',
+    snippets: [
+      'UI Design Mode',
+      'bootstrap-design.md',
+      'frontend-architecture.md',
+      'do not eagerly load unrelated backend-only rules',
+    ],
+  },
+  {
+    path: '.agent-context/prompts/bootstrap-design.md',
+    snippets: [
+      'UI Design Mode is context-isolated by default:',
+      'Responsive Strategy and Cross-Viewport Adaptation Matrix',
+      '`colorTruth.format`',
+      '`crossViewportAdaptation.mutationRules.mobile/tablet/desktop`',
+    ],
+  },
+  {
+    path: 'scripts/ui-design-judge.mjs',
+    snippets: [
+      'Advisory-first UI design contract judge.',
+      'Default mode is advisory: findings never block release. Strict mode is opt-in.',
+      'Do not reward generic SaaS defaults or popular template patterns.',
+      'UI design judge only evaluates changed UI surfaces.',
+    ],
+  },
+  {
+    path: 'lib/cli/project-scaffolder.mjs',
+    snippets: [
+      'colorTruth',
+      'crossViewportAdaptation',
+      'requireViewportMutationRules',
+      'allowHexDerivatives',
+    ],
+  },
+  {
+    path: 'lib/cli/detector.mjs',
+    snippets: [
+      'hardcodedColorCount',
+      'propDrillingCandidateCount',
+      'arbitraryBreakpointCount',
+      'frontendEvidenceMetrics',
+    ],
+  },
+  {
+    path: 'lib/cli/compiler.mjs',
+    snippets: [
+      'LAYER 5: EXECUTION PROMPTS AND UI TRIGGERS',
+      'bootstrap-design.md -> ui, ux, layout, screen, tailwind, frontend, redesign',
+      'Keep UI-only requests context-isolated',
+    ],
+  },
+];
 const FORBIDDEN_TEMPLATE_BOOTSTRAP_SNIPPETS = [
   {
     path: 'lib/cli/project-scaffolder.mjs',
@@ -392,6 +447,7 @@ async function validateRequiredFiles() {
     'scripts/governance-weekly-report.mjs',
     'scripts/mcp-server.mjs',
     'scripts/frontend-usability-audit.mjs',
+    'scripts/ui-design-judge.mjs',
     'scripts/documentation-boundary-audit.mjs',
     'scripts/context-triggered-audit.mjs',
     'scripts/rules-guardian-audit.mjs',
@@ -490,6 +546,7 @@ async function validateRuleFiles() {
     'review-checklists/pr-checklist.md',
     'review-checklists/architecture-review.md',
     'prompts/init-project.md',
+    'prompts/bootstrap-design.md',
     'prompts/refactor.md',
     'prompts/review-code.md',
     'state/architecture-map.md',
@@ -1057,6 +1114,28 @@ async function validateUpgradeUiContractWarningCoverage() {
   }
 }
 
+async function validateUiDesignAutomationCoverage() {
+  console.log('\nChecking UI design automation coverage...');
+
+  for (const coverageRule of REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS) {
+    const absoluteCoveragePath = join(ROOT_DIR, coverageRule.path);
+
+    if (!(await fileExists(absoluteCoveragePath))) {
+      fail(`Missing UI design automation source: ${coverageRule.path}`);
+      continue;
+    }
+
+    const coverageContent = await readTextFile(absoluteCoveragePath);
+    for (const requiredSnippet of coverageRule.snippets) {
+      if (coverageContent.includes(requiredSnippet)) {
+        pass(`${coverageRule.path} includes UI design automation snippet: ${requiredSnippet}`);
+      } else {
+        fail(`${coverageRule.path} is missing UI design automation snippet: ${requiredSnippet}`);
+      }
+    }
+  }
+}
+
 async function validateDeterministicBoundaryEnforcementCoverage() {
   console.log('\nChecking deterministic boundary enforcement coverage...');
 
@@ -1326,6 +1405,7 @@ async function main() {
   await validateUniversalSopConsolidationCoverage();
   await validateTemplateFreeBootstrapCoverage();
   await validateUpgradeUiContractWarningCoverage();
+  await validateUiDesignAutomationCoverage();
   await validateDeterministicBoundaryEnforcementCoverage();
   await validateStackResearchSnapshotState();
   await validateMcpConfiguration();

@@ -12,6 +12,7 @@ The contract should be generated using:
 
 `docs/DESIGN.md` should stay structural and project-specific:
 - define design intent, visual direction, component language, accessibility, responsiveness, and anti-patterns
+- define perceptual color logic, typographic math, and cross-viewport adaptation rules instead of vague style adjectives
 - explain why the system fits the product and users
 - avoid turning reference styles into fixed templates
 

@@ -51,6 +51,7 @@ const LAYERS = [
     name: 'Layer 5: Prompts',
     requiredPaths: [
       '.agent-context/prompts/init-project.md',
+      '.agent-context/prompts/bootstrap-design.md',
       '.agent-context/prompts/refactor.md',
       '.agent-context/prompts/review-code.md',
     ],

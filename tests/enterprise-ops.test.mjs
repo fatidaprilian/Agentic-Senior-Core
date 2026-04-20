@@ -177,6 +177,18 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(frontendAuditResult);
     assert.equal(frontendAuditResult.passed, true);
 
+    const uiDesignJudgeAdvisoryResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'ui-design-judge-advisory'
+    );
+    assert.ok(uiDesignJudgeAdvisoryResult);
+    assert.equal(uiDesignJudgeAdvisoryResult.passed, true);
+
+    const uiDesignJudgePolicyResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'ui-design-judge-non-blocking-policy'
+    );
+    assert.ok(uiDesignJudgePolicyResult);
+    assert.equal(uiDesignJudgePolicyResult.passed, true);
+
     const benchmarkThresholdGateResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'benchmark-threshold-gate'
     );
@@ -205,6 +217,8 @@ test('Enterprise Operations Tests', async (t) => {
     assert.equal(releaseGateReport.diagnostics?.singleSourceLazyLoadingAudit?.auditName, 'single-source-lazy-loading-audit');
     assert.equal(releaseGateReport.diagnostics?.singleSourceLazyLoadingAudit?.canonicalSource?.enforced, true);
     assert.equal(releaseGateReport.diagnostics?.singleSourceLazyLoadingAudit?.lazyRuleLoading?.enforced, true);
+    assert.equal(releaseGateReport.diagnostics?.uiDesignJudge?.auditName, 'ui-design-judge');
+    assert.equal(releaseGateReport.diagnostics?.uiDesignJudge?.advisoryOnly, true);
   });
 
   await t.test('SBOM generator emits CycloneDX payload', () => {

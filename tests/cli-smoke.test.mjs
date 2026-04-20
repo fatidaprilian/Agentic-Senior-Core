@@ -5,7 +5,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync, existsSync
 import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { runProjectDiscovery } from '../lib/cli/project-scaffolder.mjs';
+import { runProjectDiscovery, validateDesignIntentContract } from '../lib/cli/project-scaffolder.mjs';
 import {
   filterStackFileNamesByCandidates,
   filterBlueprintFileNamesByCandidates,
@@ -25,6 +25,7 @@ import {
   createUpdatedArchitectPreference,
   shouldApplyRepeatedOverridePreference,
 } from '../lib/cli/architect.mjs';
+import { detectUiScopeSignals } from '../lib/cli/detector.mjs';
 
 test('CLI Smoke Tests', async (t) => {
   const cliPath = join(process.cwd(), 'bin', 'agentic-senior-core.js');
@@ -689,17 +690,29 @@ test('CLI Smoke Tests', async (t) => {
       assert.match(bootstrapDesignPrompt, /docs\/DESIGN\.md/);
       assert.match(bootstrapDesignPrompt, /docs\/design-intent\.json/);
       assert.match(bootstrapDesignPrompt, /Do not anchor the final design language to a famous brand reference/);
+      assert.match(bootstrapDesignPrompt, /Responsive Strategy and Cross-Viewport Adaptation Matrix/);
+      assert.match(bootstrapDesignPrompt, /colorTruth/);
+      assert.match(bootstrapDesignPrompt, /crossViewportAdaptation/);
 
       const designIntentSeed = JSON.parse(
         readFileSync(join(uiScaffoldingTargetDirectory, 'docs', 'design-intent.json'), 'utf8')
       );
       assert.equal(designIntentSeed.mode, 'dynamic');
+      assert.equal(designIntentSeed.designPhilosophy.length > 0, true);
+      assert.equal(designIntentSeed.colorTruth.format, 'OKLCH');
+      assert.equal(designIntentSeed.colorTruth.allowHexDerivatives, true);
+      assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
+      assert.equal(typeof designIntentSeed.crossViewportAdaptation.mutationRules.mobile, 'string');
+      assert.equal(designIntentSeed.implementation.requireViewportMutationRules, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
       assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);
+      assert.deepEqual(validateDesignIntentContract(designIntentSeed), []);
 
       const compiledRulesContent = readFileSync(join(uiScaffoldingTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(compiledRulesContent, /docs\/design-intent\.json/);
       assert.match(compiledRulesContent, /- For UI scope: if docs\/DESIGN\.md or docs\/design-intent\.json is missing, execute bootstrap-design prompt before implementing UI surfaces\./);
+      assert.match(compiledRulesContent, /LAYER 5: EXECUTION PROMPTS AND UI TRIGGERS/);
+      assert.match(compiledRulesContent, /bootstrap-design\.md -> ui, ux, layout, screen, tailwind, frontend, redesign/);
     } finally {
       rmSync(uiScaffoldingTargetDirectory, { recursive: true, force: true });
     }
@@ -725,6 +738,15 @@ test('CLI Smoke Tests', async (t) => {
       writeFileSync(join(existingUiInitTargetDirectory, 'vite.config.js'), 'export default {};');
       writeFileSync(join(existingUiInitTargetDirectory, 'tailwind.config.js'), 'export default {};');
       mkdirSync(join(existingUiInitTargetDirectory, 'public'), { recursive: true });
+      mkdirSync(join(existingUiInitTargetDirectory, 'src'), { recursive: true });
+      writeFileSync(
+        join(existingUiInitTargetDirectory, 'src', 'App.tsx'),
+        [
+          'export function App() {',
+          '  return <main className="md:grid lg:grid-cols-3 max-[900px]:block" style={{ color: "#112233", backgroundColor: "rgba(12, 34, 56, 0.9)" }}><Widget one={1} two={2} three={3} four={4} five={5} six={6} /></main>;',
+          '}',
+        ].join('\n')
+      );
       writeFileSync(join(existingUiInitTargetDirectory, 'index.html'), '<!doctype html><html></html>');
 
       const initOutput = execSync(
@@ -741,9 +763,56 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(designIntentSeed.mode, 'dynamic');
       assert.equal(designIntentSeed.status, 'seed-generated-during-init');
       assert.equal(designIntentSeed.project.name, 'existing-ui-init-seed');
+      assert.equal(designIntentSeed.colorTruth.format, 'OKLCH');
+      assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
+      assert.equal(designIntentSeed.repoEvidence.frontendMetrics.hardcodedColorCount >= 2, true);
+      assert.equal(designIntentSeed.repoEvidence.frontendMetrics.propDrillingCandidateCount >= 1, true);
     } finally {
       rmSync(existingUiInitTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('ui scope detector collects cheap frontend evidence metrics', async () => {
+    const uiEvidenceTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-ui-evidence-'));
+
+    try {
+      writeFileSync(
+        join(uiEvidenceTargetDirectory, 'package.json'),
+        JSON.stringify({
+          name: 'ui-evidence-target',
+          private: true,
+          dependencies: {
+            react: '19.0.0',
+            tailwindcss: '4.0.0',
+          },
+        }, null, 2)
+      );
+      mkdirSync(join(uiEvidenceTargetDirectory, 'src'), { recursive: true });
+      writeFileSync(
+        join(uiEvidenceTargetDirectory, 'src', 'Screen.tsx'),
+        [
+          'export function Screen() {',
+          '  return <section className="sm:grid md:grid lg:grid-cols-4 max-[900px]:block" style={{ color: "#abcdef", backgroundColor: "rgba(0, 0, 0, 0.5)" }}><Card a={a} b={b} c={c} d={d} e={e} f={f} /></section>;',
+          '}',
+          '@media (min-width: 920px) { .panel { display: grid; } }',
+        ].join('\n')
+      );
+
+      const uiScopeSignals = await detectUiScopeSignals({
+        targetDirectoryPath: uiEvidenceTargetDirectory,
+        selectedStackFileName: 'typescript.md',
+        selectedBlueprintFileName: 'api-nextjs.md',
+      });
+
+      assert.equal(uiScopeSignals.isUiScopeLikely, true);
+      assert.ok(uiScopeSignals.frontendEvidenceMetrics);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics.hardcodedColorCount >= 2, true);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics.propDrillingCandidateCount >= 1, true);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics.arbitraryBreakpointCount >= 1, true);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics.mediaQueryCount >= 1, true);
+    } finally {
+      rmSync(uiEvidenceTargetDirectory, { recursive: true, force: true });
     }
   });
 
@@ -851,8 +920,12 @@ test('CLI Smoke Tests', async (t) => {
       );
       assert.equal(designIntentSeed.mode, 'dynamic');
       assert.equal(designIntentSeed.status, 'seed-generated-during-upgrade');
+      assert.equal(designIntentSeed.colorTruth.format, 'OKLCH');
+      assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
+      assert.equal(designIntentSeed.implementation.requireViewportMutationRules, true);
       assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);
+      assert.deepEqual(validateDesignIntentContract(designIntentSeed), []);
     } finally {
       rmSync(uiUpgradeTargetDirectory, { recursive: true, force: true });
     }
@@ -1040,6 +1113,14 @@ test('CLI Smoke Tests', async (t) => {
       join(process.cwd(), '.agent-context', 'rules', 'frontend-architecture.md'),
       'utf8'
     );
+    const bootstrapDesignPromptContent = readFileSync(
+      join(process.cwd(), '.agent-context', 'prompts', 'bootstrap-design.md'),
+      'utf8'
+    );
+    const instructionsContent = readFileSync(
+      join(process.cwd(), '.instructions.md'),
+      'utf8'
+    );
     const prChecklistContent = readFileSync(
       join(process.cwd(), '.agent-context', 'review-checklists', 'pr-checklist.md'),
       'utf8'
@@ -1059,6 +1140,11 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(frontendRuleContent, /UI Consistency Guardrails \(Mandatory\)/);
     assert.match(frontendRuleContent, /Content language must stay consistent per screen and flow unless user requests multilingual output\./);
     assert.match(frontendRuleContent, /Text color must remain contrast-safe against its background; no color collisions\./);
+    assert.match(frontendRuleContent, /Responsive quality requires layout mutation and task reprioritization across breakpoints\. Shrinking the desktop layout is not enough\./);
+    assert.match(bootstrapDesignPromptContent, /UI Design Mode is context-isolated by default:/);
+    assert.match(bootstrapDesignPromptContent, /Cross-Viewport Adaptation Matrix/);
+    assert.match(instructionsContent, /UI Design Mode/);
+    assert.match(instructionsContent, /do not eagerly load unrelated backend-only rules/);
     assert.match(prChecklistContent, /### 15\. Universal SOP Consolidation/);
     assert.match(prChecklistContent, /### 2\. Architecture/);
     assert.match(architectureChecklistContent, /## Backend Universal Principles/);

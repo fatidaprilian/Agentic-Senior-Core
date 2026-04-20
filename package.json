@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "type": "module",
   "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
   "bin": {
@@ -43,6 +43,7 @@
   "scripts": {
     "init": "node ./bin/agentic-senior-core.js init",
     "audit:frontend-usability": "node ./scripts/frontend-usability-audit.mjs",
+    "audit:ui-design-judge": "node ./scripts/ui-design-judge.mjs",
     "audit:documentation-boundary": "node ./scripts/documentation-boundary-audit.mjs",
     "audit:context-triggered": "node ./scripts/context-triggered-audit.mjs",
     "audit:rules-guardian": "node ./scripts/rules-guardian-audit.mjs",

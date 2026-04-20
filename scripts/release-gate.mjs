@@ -18,6 +18,7 @@ const REPOSITORY_ROOT = resolve(__dirname, '..');
 
 const VERSION_PATTERN = /^\d+\.\d+\.\d+$/;
 const FRONTEND_AUDIT_SCRIPT_PATH = 'scripts/frontend-usability-audit.mjs';
+const UI_DESIGN_JUDGE_SCRIPT_PATH = 'scripts/ui-design-judge.mjs';
 const DOCUMENTATION_BOUNDARY_AUDIT_SCRIPT_PATH = 'scripts/documentation-boundary-audit.mjs';
 const CONTEXT_TRIGGERED_AUDIT_SCRIPT_PATH = 'scripts/context-triggered-audit.mjs';
 const RULES_GUARDIAN_AUDIT_SCRIPT_PATH = 'scripts/rules-guardian-audit.mjs';
@@ -714,6 +715,38 @@ function runReleaseGate() {
       ? frontendAuditError.message
       : 'Unknown frontend audit execution error';
     pushResult(results, false, 'frontend-usability-audit', `Failed to execute frontend usability audit: ${frontendAuditErrorMessage}`);
+  }
+
+  const uiDesignJudgeExecution = runMachineReadableScript(UI_DESIGN_JUDGE_SCRIPT_PATH);
+  if (!uiDesignJudgeExecution.report) {
+    const failureDetails = uiDesignJudgeExecution.executionErrorMessage
+      ? `UI design judge execution failed before producing a machine-readable report: ${uiDesignJudgeExecution.executionErrorMessage}`
+      : 'UI design judge did not produce machine-readable JSON output';
+    pushResult(results, false, 'ui-design-judge-advisory', failureDetails);
+  } else {
+    diagnostics.uiDesignJudge = uiDesignJudgeExecution.report;
+    pushResult(
+      results,
+      true,
+      'ui-design-judge-advisory',
+      `ui-design-judge executed (passed=${uiDesignJudgeExecution.report.passed}, skipped=${uiDesignJudgeExecution.report.skipped}, mode=${uiDesignJudgeExecution.report.mode})`
+    );
+
+    if (uiDesignJudgeExecution.report.advisoryOnly === true) {
+      pushResult(
+        results,
+        true,
+        'ui-design-judge-non-blocking-policy',
+        'UI design judge remains advisory by default and does not hard-block release gate'
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'ui-design-judge-non-blocking-policy',
+        'UI design judge unexpectedly ran in blocking mode during release gate'
+      );
+    }
   }
 
   const benchmarkGateExecution = runMachineReadableScript(BENCHMARK_GATE_SCRIPT_PATH);

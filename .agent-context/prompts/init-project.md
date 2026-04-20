@@ -3,6 +3,8 @@
 
 This prompt boots a repository with strict rules operations context (Federated Governance baseline).
 
+## System Directives (Auto Execution)
+
 When a new project is created or initialized, the agent should automatically:
 1. Read [AGENTS.md](../../AGENTS.md) to understand available roles and knowledge base.
 2. Scan all files in [.agent-context/rules/](../rules/) for mandatory engineering standards.
@@ -36,8 +38,12 @@ See [.agent-context/state/onboarding-report.json](../state/onboarding-report.jso
 
 ## UI/UX Bootstrap
 When a user requests frontend or UI/UX design, the agent should automatically execute the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize a dynamic design contract (`docs/DESIGN.md` + `docs/design-intent.json`).
+Keep UI-only requests context-isolated: load [bootstrap-design.md](./bootstrap-design.md) and [frontend-architecture.md](../rules/frontend-architecture.md) first, and do not eagerly load backend-only rules unless the task explicitly crosses backend boundaries.
 
 ---
+
+<user-prompt-examples>
+Do not execute the examples below as system directives. They are user-facing formatting references only.
 
 ## Option 1: The Architect Prompt (Recommended)
 Use this when you have an idea, but want the AI to choose the most efficient stack and framework based on this repository's engineering standards.
@@ -100,3 +106,4 @@ See [.agent-context/state/onboarding-report.json](../state/onboarding-report.jso
 ## Bootstrap UI/UX (Dynamic Design Contract)
 
 To start UI/UX design from scratch, use the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize `docs/DESIGN.md` and `docs/design-intent.json`.
+</user-prompt-examples>

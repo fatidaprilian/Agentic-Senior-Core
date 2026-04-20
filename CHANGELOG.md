@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.10 - 2026-04-20
+### Added
+- Added an advisory-first `ui-design-judge` audit that compares changed UI surfaces against `docs/design-intent.json` and `docs/DESIGN.md` without hard-blocking release by default.
+- Added release-gate diagnostics and direct test coverage for the UI design judge so advisory behavior, strict opt-in behavior, and non-blocking policy stay enforced.
+
+### Changed
+- Added a first-class `UI Design Mode` trigger with context isolation so UI-only requests load the design contract and frontend rules without eagerly pulling unrelated backend guidance.
+- Strengthened the dynamic design contract seed with deterministic `colorTruth`, `crossViewportAdaptation`, and viewport mutation rules plus cheap frontend evidence metrics for existing UI repositories.
+- Clarified `init-project.md` by separating auto-execution directives from user-facing prompt examples, and expanded frontend audits to verify responsive re-layout and UI automation coverage.
+- Ignored local machine report artifacts for `llm-judge` and `ui-design-judge` so verification runs do not dirty the worktree with ephemeral audit output.
+
 ## 3.0.9 - 2026-04-20
 ### Changed
 - Reworked `bootstrap-design.md` so the dynamic design contract relies on shipped project evidence and active governance context instead of non-shipped repository docs.

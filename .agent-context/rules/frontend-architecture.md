@@ -21,6 +21,7 @@ Mandatory behavior when triggered:
 - Content language must stay consistent per screen and flow unless user requests multilingual output.
 - Text color must remain contrast-safe against its background; no color collisions.
 - Layout must avoid overlap, clipped text, and misaligned key actions across breakpoints.
+- Responsive quality requires layout mutation and task reprioritization across breakpoints. Shrinking the desktop layout is not enough.
 - Keep spacing and positioning token-driven so repeated outputs stay stable.
 
 ## 1. File Structure (Feature-Driven Design)
