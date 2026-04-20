@@ -20,7 +20,7 @@ Use these checklists:
 7. Enforce cross-session consistency guardian: session handoff must include active architecture contract summary, drift detection must warn before direction changes, and direction changes require explicit user confirmation.
 8. Enforce explain-on-demand state visibility: default responses must avoid unnecessary state-file internals, state internals are exposed only on explicit request, and diagnostic mode must explain relevant state decisions when needed.
 9. Enforce single-source and lazy-loading policy: canonical rule source must be explicitly enforced, language-specific guidance must load lazily based on detected scope, and conflicting duplicate rule instructions must not appear during normal flow.
-10. Enforce Universal SOP hard gate: block coding flow when required project docs are missing (`docs/architecture-decision-record.md`, and for UI scope `docs/DESIGN.md`).
+10. Enforce Universal SOP hard gate: block coding flow when required project docs are missing (`docs/architecture-decision-record.md`, and for UI scope `docs/DESIGN.md` plus `docs/design-intent.json`).
 
 For EVERY violation found:
 - State the exact file and line

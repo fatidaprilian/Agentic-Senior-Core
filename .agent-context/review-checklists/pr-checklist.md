@@ -135,4 +135,4 @@ VERDICT: PASS / FAIL (X/Y items passed)
 - [ ] Backend and frontend mindset checks are both applied when scope spans API and UI boundaries
 - [ ] Security and testing requirements remain mandatory after static template purge
 - [ ] Coding flow is blocked if `docs/architecture-decision-record.md` (or `docs/Architecture-Decision-Record.md`) is missing
-- [ ] UI implementation flow is blocked if `docs/DESIGN.md` is missing
+- [ ] UI implementation flow is blocked if `docs/DESIGN.md` or `docs/design-intent.json` is missing

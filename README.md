@@ -10,12 +10,12 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.6 (2026-04-19).
+Latest release: 3.0.7 (2026-04-20).
 
-Highlights in 3.0.0:
-- Universal IDE adapter surface is completed and synchronized through thin adapters.
-- Scoped auto-docs sync rollout is active with explicit phase-1 boundaries and precision/recall evidence.
-- Init and scaffolding flow is slimmer, template-free on active path, and validated by deterministic release gates.
+Highlights in 3.0.7:
+- Dynamic UI design contract bootstrap now ships paired markdown and machine-readable intent.
+- Upgrade warns when existing UI repositories are missing required design contract files.
+- Init discovery stays slimmer by reusing architecture context and removing redundant wizard branches.
 
 </div>
 

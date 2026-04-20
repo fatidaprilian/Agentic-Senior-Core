@@ -49,11 +49,11 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(launchOutput, /Exit selected\./);
   });
 
-  await t.test('project discovery falls back to folder name when project name is empty', async () => {
+  await t.test('project discovery falls back to defaults when concise answers are empty', async () => {
     const queuedAnswers = [
-      '2',
       '',
       '',
+      '1',
       '1',
       '1',
       '1',
@@ -69,10 +69,11 @@ test('CLI Smoke Tests', async (t) => {
 
     const discoveryAnswers = await runProjectDiscovery(mockUserInterface, {
       defaultProjectName: 'AutomatedLicensePlateReaders',
+      defaultProjectDescription: 'Incident review dashboard for plate-reader workflows',
     });
 
     assert.equal(discoveryAnswers.projectName, 'AutomatedLicensePlateReaders');
-    assert.equal(discoveryAnswers.projectDescription, 'A AutomatedLicensePlateReaders project.');
+    assert.equal(discoveryAnswers.projectDescription, 'Incident review dashboard for plate-reader workflows');
   });
 
   await t.test('init scope mapping and stack filtering remain deterministic', () => {
@@ -652,6 +653,58 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
+  await t.test('init scaffolds a dynamic UI design contract for web projects', () => {
+    const uiScaffoldingTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-scaffold-ui-'));
+
+    try {
+      const projectConfigPath = join(uiScaffoldingTargetDirectory, 'project-config.yml');
+      writeFileSync(projectConfigPath, [
+        'projectName: Atlas Studio',
+        'projectDescription: Editorial web application for curated product stories',
+        'primaryDomain: Web application',
+        'databaseChoice: SQL (PostgreSQL, MySQL, SQLite)',
+        'authStrategy: Session-based (server-side sessions)',
+        'dockerStrategy: Docker for development only',
+        'docsLang: en',
+        'features:',
+        '- Story landing pages',
+        '- Product discovery',
+        '- Editorial collections',
+        'additionalContext: The interface should feel authored and premium without becoming a brand copy.',
+      ].join('\n'));
+
+      const initOutput = execSync(
+        `node ${cliPath} init ${uiScaffoldingTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --project-config ${projectConfigPath} --no-token-optimize`
+      ).toString();
+
+      assert.match(initOutput, /Bootstrap prompts: 2 files generated in \.agent-context\/prompts\//);
+      assert.match(initOutput, /Seed docs: 1 files generated in docs\//);
+      assert.match(initOutput, /If docs\/DESIGN\.md or docs\/design-intent\.json is missing, execute \.agent-context\/prompts\/bootstrap-design\.md now before building UI components\./);
+
+      const bootstrapDesignPrompt = readFileSync(
+        join(uiScaffoldingTargetDirectory, '.agent-context', 'prompts', 'bootstrap-design.md'),
+        'utf8'
+      );
+      assert.match(bootstrapDesignPrompt, /Dynamic Design Contract Synthesis/);
+      assert.match(bootstrapDesignPrompt, /docs\/DESIGN\.md/);
+      assert.match(bootstrapDesignPrompt, /docs\/design-intent\.json/);
+      assert.match(bootstrapDesignPrompt, /Do not anchor the final design language to a famous brand reference/);
+
+      const designIntentSeed = JSON.parse(
+        readFileSync(join(uiScaffoldingTargetDirectory, 'docs', 'design-intent.json'), 'utf8')
+      );
+      assert.equal(designIntentSeed.mode, 'dynamic');
+      assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
+      assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);
+
+      const compiledRulesContent = readFileSync(join(uiScaffoldingTargetDirectory, '.cursorrules'), 'utf8');
+      assert.match(compiledRulesContent, /docs\/design-intent\.json/);
+      assert.match(compiledRulesContent, /- For UI scope: if docs\/DESIGN\.md or docs\/design-intent\.json is missing, execute bootstrap-design prompt before implementing UI surfaces\./);
+    } finally {
+      rmSync(uiScaffoldingTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
   await t.test('upgrade dry-run warns about stale project doc templates', () => {
     const staleDocsTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-stale-docs-'));
 
@@ -692,6 +745,36 @@ test('CLI Smoke Tests', async (t) => {
       assert.match(upgradeOutput, /docs\/project-brief\.md \(detected: 1\.0\.0, expected: 1\.2\.0\)/);
     } finally {
       rmSync(staleDocsTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('upgrade dry-run warns when UI scope is detected but the design contract is missing', () => {
+    const uiUpgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-ui-warning-'));
+
+    try {
+      writeFileSync(
+        join(uiUpgradeTargetDirectory, 'package.json'),
+        JSON.stringify({
+          name: 'ui-warning-project',
+          private: true,
+          dependencies: {
+            next: '15.0.0',
+            react: '19.0.0',
+            'react-dom': '19.0.0',
+          },
+        }, null, 2)
+      );
+      writeFileSync(join(uiUpgradeTargetDirectory, 'next.config.js'), 'module.exports = {};');
+      mkdirSync(join(uiUpgradeTargetDirectory, 'components'), { recursive: true });
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${uiUpgradeTargetDirectory} --dry-run`).toString();
+      assert.match(upgradeOutput, /UI\/frontend scope was detected, but the dynamic design contract is incomplete/);
+      assert.match(upgradeOutput, /Missing docs\/DESIGN\.md/);
+      assert.match(upgradeOutput, /Missing docs\/design-intent\.json/);
+      assert.match(upgradeOutput, /Detection signals:/);
+      assert.match(upgradeOutput, /Upgrade synchronizes governance assets, but it does not author project-specific design docs automatically\./);
+    } finally {
+      rmSync(uiUpgradeTargetDirectory, { recursive: true, force: true });
     }
   });
 

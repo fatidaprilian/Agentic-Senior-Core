@@ -211,19 +211,19 @@ const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
     snippets: [
       '### 15. Universal SOP Consolidation',
       'Coding flow is blocked if `docs/architecture-decision-record.md` (or `docs/Architecture-Decision-Record.md`) is missing',
-      'UI implementation flow is blocked if `docs/DESIGN.md` is missing',
+      'UI implementation flow is blocked if `docs/DESIGN.md` or `docs/design-intent.json` is missing',
     ],
   },
   {
     path: '.agent-context/prompts/review-code.md',
     snippets: [
-      'Enforce Universal SOP hard gate: block coding flow when required project docs are missing (`docs/architecture-decision-record.md`, and for UI scope `docs/DESIGN.md`).',
+      'Enforce Universal SOP hard gate: block coding flow when required project docs are missing (`docs/architecture-decision-record.md`, and for UI scope `docs/DESIGN.md` plus `docs/design-intent.json`).',
     ],
   },
   {
     path: '.agent-context/prompts/refactor.md',
     snippets: [
-      '6. Enforce Universal SOP hard gate: stop implementation if `docs/architecture-decision-record.md` is missing, and for UI scope stop if `docs/DESIGN.md` is missing.',
+      '6. Enforce Universal SOP hard gate: stop implementation if `docs/architecture-decision-record.md` is missing, and for UI scope stop if `docs/DESIGN.md` or `docs/design-intent.json` is missing.',
     ],
   },
   {
@@ -231,7 +231,7 @@ const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
     snippets: [
       'Universal SOP hard block policy:',
       'Hard block: do not write application code until docs/project-brief.md and docs/architecture-decision-record.md exist.',
-      'For UI scope: if docs/DESIGN.md is missing, execute bootstrap-design prompt before implementing UI surfaces.',
+      'For UI scope: if docs/DESIGN.md or docs/design-intent.json is missing, execute bootstrap-design prompt before implementing UI surfaces.',
     ],
   },
 ];
@@ -250,7 +250,19 @@ const REQUIRED_TEMPLATE_FREE_BOOTSTRAP_SNIPPETS = [
     snippets: [
       'Project docs will be authored dynamically by your IDE assistant from these prompts.',
       'bootstrap-project-context.md',
+      'Seed docs:',
       'I prepared dynamic synthesis bootstrap prompts',
+    ],
+  },
+];
+const REQUIRED_UPGRADE_UI_CONTRACT_WARNING_SNIPPETS = [
+  {
+    path: 'lib/cli/commands/upgrade.mjs',
+    snippets: [
+      'UI/frontend scope was detected, but the dynamic design contract is incomplete:',
+      'docs/design-intent.json',
+      'Upgrade synchronizes governance assets, but it does not author project-specific design docs automatically.',
+      'collectProjectMarkers',
     ],
   },
 ];
@@ -1021,6 +1033,28 @@ async function validateTemplateFreeBootstrapCoverage() {
   }
 }
 
+async function validateUpgradeUiContractWarningCoverage() {
+  console.log('\nChecking upgrade UI contract warning coverage...');
+
+  for (const coverageRule of REQUIRED_UPGRADE_UI_CONTRACT_WARNING_SNIPPETS) {
+    const absoluteCoveragePath = join(ROOT_DIR, coverageRule.path);
+
+    if (!(await fileExists(absoluteCoveragePath))) {
+      fail(`Missing upgrade UI contract warning source: ${coverageRule.path}`);
+      continue;
+    }
+
+    const coverageContent = await readTextFile(absoluteCoveragePath);
+    for (const requiredSnippet of coverageRule.snippets) {
+      if (coverageContent.includes(requiredSnippet)) {
+        pass(`${coverageRule.path} includes upgrade UI contract warning snippet: ${requiredSnippet}`);
+      } else {
+        fail(`${coverageRule.path} is missing upgrade UI contract warning snippet: ${requiredSnippet}`);
+      }
+    }
+  }
+}
+
 async function validateDeterministicBoundaryEnforcementCoverage() {
   console.log('\nChecking deterministic boundary enforcement coverage...');
 
@@ -1289,6 +1323,7 @@ async function main() {
   await validateStackResearchEngineCoverage();
   await validateUniversalSopConsolidationCoverage();
   await validateTemplateFreeBootstrapCoverage();
+  await validateUpgradeUiContractWarningCoverage();
   await validateDeterministicBoundaryEnforcementCoverage();
   await validateStackResearchSnapshotState();
   await validateMcpConfiguration();

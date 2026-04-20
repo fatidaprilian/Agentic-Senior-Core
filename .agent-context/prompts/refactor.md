@@ -15,7 +15,7 @@ Before making changes:
 3. Read .agent-context/rules/error-handling.md — fix error handling patterns.
 4. Resolve active language guidance from dynamic stack signals (TypeScript in this repository).
 5. Enforce backend universal principles: no clever hacks, no premature abstraction, readability over brevity.
-6. Enforce Universal SOP hard gate: stop implementation if `docs/architecture-decision-record.md` is missing, and for UI scope stop if `docs/DESIGN.md` is missing.
+6. Enforce Universal SOP hard gate: stop implementation if `docs/architecture-decision-record.md` is missing, and for UI scope stop if `docs/DESIGN.md` or `docs/design-intent.json` is missing.
 
 For every change you make, provide a Reasoning Chain:
 - What was wrong (rule reference)

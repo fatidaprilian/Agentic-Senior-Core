@@ -21,7 +21,7 @@ The `.agent-context/rules/` directory is the default guidance source for impleme
 - Security and testing are non-negotiable baseline requirements.
 - Hard block before coding:
   - `docs/architecture-decision-record.md` (alias: `docs/Architecture-Decision-Record.md`) must exist.
-  - For UI scope, `docs/DESIGN.md` must exist.
+  - For UI scope, `docs/DESIGN.md` and `docs/design-intent.json` must exist.
 - If required project context docs are missing, stop implementation and bootstrap docs before writing application code.
 
 ## Rules as Guardian (Cross-Session Consistency)

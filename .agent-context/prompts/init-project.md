@@ -35,7 +35,7 @@ If the user specifies a framework/blueprint, the agent should:
 See [docs/roadmap.md](../../docs/roadmap.md) and [docs/deep-dive.md](../../docs/deep-dive.md) for the latest stack and blueprint list.
 
 ## UI/UX Bootstrap
-When a user requests frontend or UI/UX design, the agent should automatically execute the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize DESIGN.md.
+When a user requests frontend or UI/UX design, the agent should automatically execute the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize a dynamic design contract (`docs/DESIGN.md` + `docs/design-intent.json`).
 
 ---
 
@@ -97,6 +97,6 @@ See [docs/roadmap.md](../../docs/roadmap.md) and [docs/deep-dive.md](../../docs/
 
 ---
 
-## Bootstrap UI/UX (DESIGN.md)
+## Bootstrap UI/UX (Dynamic Design Contract)
 
-To start UI/UX design from scratch, use the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize `docs/DESIGN.md`.
+To start UI/UX design from scratch, use the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize `docs/DESIGN.md` and `docs/design-intent.json`.
