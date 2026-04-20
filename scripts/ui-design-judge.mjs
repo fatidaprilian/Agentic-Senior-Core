@@ -6,30 +6,14 @@
  *
  * Advisory-first UI design contract judge.
  *
+ * Repo-internal workflow audit; no user-facing runtime modes.
  * Compares changed UI diffs against docs/design-intent.json and docs/DESIGN.md.
- * Default mode is advisory: findings never block release. Strict mode is opt-in.
- *
- * Usage:
- *   node scripts/ui-design-judge.mjs
- *   node scripts/ui-design-judge.mjs --dry-run
- *   node scripts/ui-design-judge.mjs --strict
- *
- * Environment variables:
- *   OPENAI_API_KEY / ANTHROPIC_API_KEY / GEMINI_API_KEY
- *   UI_DESIGN_JUDGE_MODEL      Override model for this script
- *   LLM_JUDGE_MODEL            Shared fallback model override
- *   UI_DESIGN_JUDGE_MAX_DIFF_CHARS   Max diff chars to send (default: 12000)
- *   UI_DESIGN_JUDGE_OUTPUT_PATH      Machine-readable report output path
- *   UI_DESIGN_JUDGE_EMIT_JSON        false disables report file emission
- *   UI_DESIGN_JUDGE_MOCK_RESPONSE    Test-only raw LLM response body
- *   UI_DESIGN_JUDGE_CHANGED_FILES    Optional comma/newline-separated changed file override
- *   PR_DIFF                          Inject diff directly
- *   GITHUB_BASE_SHA / GITHUB_HEAD_SHA
- *   CI_MERGE_REQUEST_DIFF_BASE_SHA / CI_COMMIT_SHA
+ * Runs only in advisory mode for this repository workflow.
+ * Emits JSON to stdout for release-gate and CI consumption.
  */
 
 import { execSync } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve, dirname, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -39,13 +23,7 @@ const REPOSITORY_ROOT = resolve(__dirname, '..');
 
 const DESIGN_INTENT_PATH = resolve(REPOSITORY_ROOT, 'docs', 'design-intent.json');
 const DESIGN_GUIDE_PATH = resolve(REPOSITORY_ROOT, 'docs', 'DESIGN.md');
-const DEFAULT_MACHINE_REPORT_PATH = resolve(REPOSITORY_ROOT, '.agent-context', 'state', 'ui-design-judge-report.json');
-const MACHINE_REPORT_PATH = process.env.UI_DESIGN_JUDGE_OUTPUT_PATH || DEFAULT_MACHINE_REPORT_PATH;
-const SHOULD_EMIT_MACHINE_REPORT = process.env.UI_DESIGN_JUDGE_EMIT_JSON !== 'false';
-const MAX_DIFF_CHARS = parseInt(process.env.UI_DESIGN_JUDGE_MAX_DIFF_CHARS ?? '12000', 10);
-const IS_DRY_RUN = process.argv.includes('--dry-run');
-const IS_STRICT_MODE = process.argv.includes('--strict');
-const IS_ADVISORY_MODE = !IS_STRICT_MODE;
+const MAX_DIFF_CHARS = 12000;
 const UI_FILE_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.vue', '.css', '.scss', '.sass']);
 
 /**
@@ -64,7 +42,7 @@ const UI_FILE_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.vue', '.css'
  *   generatedAt: string,
  *   auditName: string,
  *   schemaVersion: string,
- *   mode: 'advisory' | 'strict',
+ *   mode: 'advisory',
  *   advisoryOnly: boolean,
  *   passed: boolean,
  *   skipped: boolean,
@@ -177,13 +155,6 @@ function collectPullRequestDiff() {
 }
 
 function collectChangedFiles() {
-  if (process.env.UI_DESIGN_JUDGE_CHANGED_FILES) {
-    return process.env.UI_DESIGN_JUDGE_CHANGED_FILES
-      .split(/[\r\n,]+/u)
-      .map((filePath) => filePath.trim())
-      .filter(Boolean);
-  }
-
   if (process.env.PR_DIFF) {
     const filePathSet = new Set();
     for (const diffHeaderMatch of process.env.PR_DIFF.matchAll(/^diff --git a\/(.+?) b\/(.+)$/gm)) {
@@ -256,7 +227,7 @@ function loadDesignGuide() {
   return readFileSync(DESIGN_GUIDE_PATH, 'utf8');
 }
 
-function buildSystemPrompt(modeLabel) {
+function buildSystemPrompt() {
   return [
     'You are a Principal UI/UX Design Reviewer.',
     'Compare the changed UI code against the provided design contract.',
@@ -265,7 +236,7 @@ function buildSystemPrompt(modeLabel) {
     'Do not reward generic SaaS defaults or popular template patterns.',
     'Do not penalize originality when the implementation still aligns with the contract.',
     'Only flag drift when there is a clear mismatch with the contract, accessibility non-negotiables, or cross-viewport adaptation rules.',
-    `Current mode: ${modeLabel}. In advisory mode, findings are recommendations and should not be framed as release blockers unless blockingRecommended is clearly true.`,
+    'This audit always runs in advisory mode for this repository workflow.',
     'Focus on color intent, typographic hierarchy, responsive re-layout, interaction behavior, and genericity drift.',
     'Return ONLY one JSON object on a single line prefixed with JSON_VERDICT:.',
     'Schema:',
@@ -302,7 +273,7 @@ function buildUserMessage(designIntentContent, designGuideContent, diffContent, 
 }
 
 async function callOpenAiProvider(systemPrompt, userMessage) {
-  const selectedModel = process.env.UI_DESIGN_JUDGE_MODEL ?? process.env.LLM_JUDGE_MODEL ?? 'gpt-4o-mini';
+  const selectedModel = process.env.LLM_JUDGE_MODEL ?? 'gpt-4o-mini';
   const apiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -330,7 +301,7 @@ async function callOpenAiProvider(systemPrompt, userMessage) {
 }
 
 async function callAnthropicProvider(systemPrompt, userMessage) {
-  const selectedModel = process.env.UI_DESIGN_JUDGE_MODEL ?? process.env.LLM_JUDGE_MODEL ?? 'claude-3-5-haiku-latest';
+  const selectedModel = process.env.LLM_JUDGE_MODEL ?? 'claude-3-5-haiku-latest';
   const apiResponse = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -356,7 +327,7 @@ async function callAnthropicProvider(systemPrompt, userMessage) {
 }
 
 async function callGeminiProvider(systemPrompt, userMessage) {
-  const selectedModel = process.env.UI_DESIGN_JUDGE_MODEL ?? process.env.LLM_JUDGE_MODEL ?? 'gemini-2.0-flash';
+  const selectedModel = process.env.LLM_JUDGE_MODEL ?? 'gemini-2.0-flash';
   const apiKey = process.env.GEMINI_API_KEY ?? '';
   const endpointUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`;
 
@@ -445,8 +416,8 @@ function buildReport(partialReport) {
     generatedAt: new Date().toISOString(),
     auditName: 'ui-design-judge',
     schemaVersion: '1.0',
-    mode: IS_STRICT_MODE ? 'strict' : 'advisory',
-    advisoryOnly: IS_ADVISORY_MODE,
+    mode: 'advisory',
+    advisoryOnly: true,
     passed: true,
     skipped: false,
     skipReason: null,
@@ -468,10 +439,6 @@ function buildReport(partialReport) {
 }
 
 function emitMachineReadableReport(machineReportPayload) {
-  if (SHOULD_EMIT_MACHINE_REPORT) {
-    writeFileSync(MACHINE_REPORT_PATH, `${JSON.stringify(machineReportPayload, null, 2)}\n`, 'utf8');
-  }
-
   console.log(JSON.stringify(machineReportPayload, null, 2));
 }
 
@@ -508,27 +475,8 @@ async function main() {
     return;
   }
 
-  const systemPrompt = buildSystemPrompt(IS_STRICT_MODE ? 'strict' : 'advisory');
+  const systemPrompt = buildSystemPrompt();
   const userMessage = buildUserMessage(designIntentContent, designGuideContent, rawDiff, changedUiFiles);
-
-  if (IS_DRY_RUN) {
-    emitMachineReadableReport(buildReport({
-      provider: 'dry-run',
-      contractPresent: true,
-      summary: {
-        changedUiFileCount: changedUiFiles.length,
-        alignmentScore: null,
-        driftCount: 0,
-        blockingCandidateCount: 0,
-      },
-      notes: [
-        'Dry run enabled. No LLM provider call was made.',
-        `System prompt chars: ${systemPrompt.length}`,
-        `User message chars: ${userMessage.length}`,
-      ],
-    }));
-    return;
-  }
 
   const selectedProvider = selectAvailableProvider();
   if (!selectedProvider) {
@@ -541,7 +489,7 @@ async function main() {
         driftCount: 0,
         blockingCandidateCount: 0,
       },
-      notes: ['No LLM provider configured. UI design judge skipped provider review and remained advisory.'],
+      notes: ['No LLM provider configured. UI design judge skipped provider review and stayed advisory.'],
     }));
     return;
   }
@@ -565,13 +513,8 @@ async function main() {
         blockingCandidateCount: 0,
       },
       notes: [`Provider call failed: ${providerErrorMessage}`],
-      passed: IS_ADVISORY_MODE,
+      passed: true,
     }));
-
-    if (IS_STRICT_MODE) {
-      process.exit(1);
-    }
-
     return;
   }
 
@@ -582,12 +525,11 @@ async function main() {
   const notes = Array.isArray(verdict?.notes)
     ? verdict.notes.map((note) => String(note))
     : [];
-  const shouldFailInStrictMode = IS_STRICT_MODE && blockingCandidateCount > 0;
 
   const reportPayload = buildReport({
     provider: selectedProvider.providerName,
     contractPresent: true,
-    passed: malformed ? IS_ADVISORY_MODE : !shouldFailInStrictMode,
+    passed: true,
     malformedVerdict: malformed,
     summary: {
       changedUiFileCount: changedUiFiles.length,
@@ -602,10 +544,6 @@ async function main() {
   });
 
   emitMachineReadableReport(reportPayload);
-
-  if (IS_STRICT_MODE && (malformed || shouldFailInStrictMode)) {
-    process.exit(1);
-  }
 }
 
 main().catch((unexpectedError) => {
@@ -616,11 +554,7 @@ main().catch((unexpectedError) => {
   emitMachineReadableReport(buildReport({
     provider: 'none',
     providerError: true,
-    passed: IS_ADVISORY_MODE,
+    passed: true,
     notes: [`Unexpected ui-design-judge failure: ${errorMessage}`],
   }));
-
-  if (IS_STRICT_MODE) {
-    process.exit(1);
-  }
 });

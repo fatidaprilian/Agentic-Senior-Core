@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.11 - 2026-04-20
+### Changed
+- Simplified `ui-design-judge` into a repo-internal advisory audit with no user-facing runtime flags or output-file generation.
+- Removed the extra package-level `audit:ui-design-judge` entry so the audit stays internal to this repository workflow instead of looking like a public init-facing feature.
+- Updated UI judge validation and tests to enforce the simplified repo-internal contract and avoid unused local report artifacts.
+
 ## 3.0.10 - 2026-04-20
 ### Added
 - Added an advisory-first `ui-design-judge` audit that compares changed UI surfaces against `docs/design-intent.json` and `docs/DESIGN.md` without hard-blocking release by default.

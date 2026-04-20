@@ -84,80 +84,50 @@ test('LLM Judge Tests', async (t) => {
     }
   });
 
-  await t.test('ui-design-judge dry-run stays advisory and emits machine-readable JSON', () => {
-    const temporaryOutputDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-ui-judge-'));
-
-    try {
-      withTemporaryDesignIntent(() => {
-        const output = execSync(`node ${uiDesignJudgePath} --dry-run`, {
-          env: {
-            ...process.env,
-            PR_DIFF: sampleUiDiff,
-            UI_DESIGN_JUDGE_CHANGED_FILES: 'src/App.tsx',
-            UI_DESIGN_JUDGE_OUTPUT_PATH: join(temporaryOutputDirectory, 'ui-design-judge-report.json'),
-          },
-        }).toString();
-
-        const report = JSON.parse(output);
-        assert.equal(report.auditName, 'ui-design-judge');
-        assert.equal(report.mode, 'advisory');
-        assert.equal(report.advisoryOnly, true);
-        assert.equal(report.provider, 'dry-run');
-        assert.equal(report.contractPresent, true);
-        assert.equal(report.summary.changedUiFileCount, 1);
-        assert.match(report.notes.join(' '), /Dry run enabled/);
-      });
-    } finally {
-      rmSync(temporaryOutputDirectory, { recursive: true, force: true });
-    }
-  });
-
-  await t.test('ui-design-judge mock provider keeps advisory mode non-blocking', () => {
-    const temporaryOutputDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-ui-judge-'));
-
-    try {
-      withTemporaryDesignIntent(() => {
-        const output = execSync(`node ${uiDesignJudgePath}`, {
-          env: {
-            ...process.env,
-            PR_DIFF: sampleUiDiff,
-            UI_DESIGN_JUDGE_CHANGED_FILES: 'src/App.tsx',
-            UI_DESIGN_JUDGE_OUTPUT_PATH: join(temporaryOutputDirectory, 'ui-design-judge-report.json'),
-            UI_DESIGN_JUDGE_MOCK_RESPONSE: 'JSON_VERDICT: {"alignmentScore":82,"notes":["Contract stays opinionated without becoming generic."],"findings":[{"area":"responsive","severity":"major","problem":"Mobile layout still mirrors desktop grouping.","evidence":"Cards remain three-up in the supplied diff.","recommendation":"Stack content and reprioritize CTAs for small screens.","blockingRecommended":true}]}',
-          },
-        }).toString();
-
-        const report = JSON.parse(output);
-        assert.equal(report.auditName, 'ui-design-judge');
-        assert.equal(report.provider, 'mock');
-        assert.equal(report.mode, 'advisory');
-        assert.equal(report.advisoryOnly, true);
-        assert.equal(report.passed, true);
-        assert.equal(report.summary.alignmentScore, 82);
-        assert.equal(report.summary.driftCount, 1);
-        assert.equal(report.summary.blockingCandidateCount, 1);
-        assert.equal(report.findings[0].severity, 'high');
-        assert.equal(report.findings[0].blockingRecommended, true);
-      });
-    } finally {
-      rmSync(temporaryOutputDirectory, { recursive: true, force: true });
-    }
-  });
-
-  await t.test('ui-design-judge strict mode can fail explicitly when blocking drift is present', () => {
+  await t.test('ui-design-judge stays advisory for the repo workflow', () => {
     withTemporaryDesignIntent(() => {
-      assert.throws(() => {
-        execSync(`node ${uiDesignJudgePath} --strict`, {
-          env: {
-            ...process.env,
-            PR_DIFF: sampleUiDiff,
-            UI_DESIGN_JUDGE_CHANGED_FILES: 'src/App.tsx',
-            UI_DESIGN_JUDGE_EMIT_JSON: 'false',
-            UI_DESIGN_JUDGE_MOCK_RESPONSE: 'JSON_VERDICT: {"alignmentScore":61,"notes":["Strict review requested."],"findings":[{"area":"genericity","severity":"high","problem":"Interactive styling regressed to generic template defaults.","evidence":"Buttons and cards use undifferentiated utility classes without the contract hierarchy.","recommendation":"Reapply the design contract tokens and viewport-specific structure.","blockingRecommended":true}]}',
-          },
-          stdio: 'pipe',
-        });
-      }, /Command failed/u);
+      const output = execSync(`node ${uiDesignJudgePath}`, {
+        env: {
+          ...process.env,
+          PR_DIFF: sampleUiDiff,
+          UI_DESIGN_JUDGE_MOCK_RESPONSE: 'JSON_VERDICT: {"alignmentScore":82,"notes":["Contract stays opinionated without becoming generic."],"findings":[{"area":"responsive","severity":"major","problem":"Mobile layout still mirrors desktop grouping.","evidence":"Cards remain three-up in the supplied diff.","recommendation":"Stack content and reprioritize CTAs for small screens.","blockingRecommended":true}]}',
+        },
+      }).toString();
+
+      const report = JSON.parse(output);
+      assert.equal(report.auditName, 'ui-design-judge');
+      assert.equal(report.mode, 'advisory');
+      assert.equal(report.advisoryOnly, true);
+      assert.equal(report.provider, 'mock');
+      assert.equal(report.contractPresent, true);
+      assert.equal(report.passed, true);
+      assert.equal(report.summary.changedUiFileCount, 1);
+      assert.equal(report.summary.alignmentScore, 82);
+      assert.equal(report.summary.blockingCandidateCount, 1);
+      assert.equal(report.findings[0].severity, 'high');
+    });
+  });
+
+  await t.test('ui-design-judge stays non-blocking when no provider is configured', () => {
+    withTemporaryDesignIntent(() => {
+      const output = execSync(`node ${uiDesignJudgePath}`, {
+        env: {
+          ...process.env,
+          PR_DIFF: sampleUiDiff,
+          OPENAI_API_KEY: '',
+          ANTHROPIC_API_KEY: '',
+          GEMINI_API_KEY: '',
+          UI_DESIGN_JUDGE_MOCK_RESPONSE: '',
+        },
+      }).toString();
+
+      const report = JSON.parse(output);
+      assert.equal(report.auditName, 'ui-design-judge');
+      assert.equal(report.provider, 'none');
+      assert.equal(report.mode, 'advisory');
+      assert.equal(report.advisoryOnly, true);
+      assert.equal(report.passed, true);
+      assert.match(report.notes.join(' '), /No LLM provider configured/);
     });
   });
 });

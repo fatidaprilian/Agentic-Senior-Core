@@ -68,7 +68,8 @@ const REQUIRED_BOOTSTRAP_DESIGN_SNIPPETS = [
 
 const REQUIRED_UI_DESIGN_JUDGE_SNIPPETS = [
   'Advisory-first UI design contract judge.',
-  'Default mode is advisory: findings never block release. Strict mode is opt-in.',
+  'Repo-internal workflow audit; no user-facing runtime modes.',
+  'Runs only in advisory mode for this repository workflow.',
   'Do not reward generic SaaS defaults or popular template patterns.',
   'UI design judge only evaluates changed UI surfaces.',
 ];
