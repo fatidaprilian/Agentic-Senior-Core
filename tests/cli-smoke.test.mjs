@@ -705,6 +705,48 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
+  await t.test('init seeds design-intent for detected existing UI repositories without full doc scaffolding', () => {
+    const existingUiInitTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-existing-ui-seed-'));
+
+    try {
+      writeFileSync(
+        join(existingUiInitTargetDirectory, 'package.json'),
+        JSON.stringify({
+          name: 'existing-ui-init-seed',
+          description: 'Existing portfolio site that still needs a machine-readable design contract',
+          private: true,
+          dependencies: {
+            react: '19.0.0',
+            'react-dom': '19.0.0',
+            tailwindcss: '4.0.0',
+          },
+        }, null, 2)
+      );
+      writeFileSync(join(existingUiInitTargetDirectory, 'vite.config.js'), 'export default {};');
+      writeFileSync(join(existingUiInitTargetDirectory, 'tailwind.config.js'), 'export default {};');
+      mkdirSync(join(existingUiInitTargetDirectory, 'public'), { recursive: true });
+      writeFileSync(join(existingUiInitTargetDirectory, 'index.html'), '<!doctype html><html></html>');
+
+      const initOutput = execSync(
+        `node ${cliPath} init ${existingUiInitTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize`
+      ).toString();
+
+      assert.match(initOutput, /Existing UI\/frontend scope detected\. Seeded docs\/design-intent\.json/);
+      assert.match(initOutput, /Design seed docs: 1 files generated in docs\//);
+      assert.match(initOutput, /If docs\/DESIGN\.md is missing, execute \.agent-context\/prompts\/bootstrap-design\.md now and refine docs\/design-intent\.json into a complete design contract before building UI components\./);
+
+      const designIntentSeed = JSON.parse(
+        readFileSync(join(existingUiInitTargetDirectory, 'docs', 'design-intent.json'), 'utf8')
+      );
+      assert.equal(designIntentSeed.mode, 'dynamic');
+      assert.equal(designIntentSeed.status, 'seed-generated-during-init');
+      assert.equal(designIntentSeed.project.name, 'existing-ui-init-seed');
+      assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
+    } finally {
+      rmSync(existingUiInitTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
   await t.test('upgrade dry-run warns about stale project doc templates', () => {
     const staleDocsTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-stale-docs-'));
 
@@ -771,8 +813,46 @@ test('CLI Smoke Tests', async (t) => {
       assert.match(upgradeOutput, /UI\/frontend scope was detected, but the dynamic design contract is incomplete/);
       assert.match(upgradeOutput, /Missing docs\/DESIGN\.md/);
       assert.match(upgradeOutput, /Missing docs\/design-intent\.json/);
+      assert.match(upgradeOutput, /Planned seed on apply: docs\/design-intent\.json/);
       assert.match(upgradeOutput, /Detection signals:/);
-      assert.match(upgradeOutput, /Upgrade synchronizes governance assets, but it does not author project-specific design docs automatically\./);
+      assert.match(upgradeOutput, /Upgrade synchronizes governance assets and can seed docs\/design-intent\.json, but it does not author project-specific docs\/DESIGN\.md automatically\./);
+    } finally {
+      rmSync(uiUpgradeTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('upgrade materializes a design-intent seed for detected UI repos', () => {
+    const uiUpgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-ui-seed-'));
+
+    try {
+      writeFileSync(
+        join(uiUpgradeTargetDirectory, 'package.json'),
+        JSON.stringify({
+          name: 'ui-seed-project',
+          description: 'Existing portfolio website that needs a fresh design contract',
+          private: true,
+          dependencies: {
+            vite: '6.0.0',
+            react: '19.0.0',
+            tailwindcss: '4.0.0',
+          },
+        }, null, 2)
+      );
+      writeFileSync(join(uiUpgradeTargetDirectory, 'vite.config.js'), 'export default {};');
+      writeFileSync(join(uiUpgradeTargetDirectory, 'tailwind.config.js'), 'export default {};');
+      mkdirSync(join(uiUpgradeTargetDirectory, 'public'), { recursive: true });
+      writeFileSync(join(uiUpgradeTargetDirectory, 'index.html'), '<!doctype html><html></html>');
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${uiUpgradeTargetDirectory} --yes`).toString();
+      assert.match(upgradeOutput, /\[NEW\]\s+docs\/design-intent\.json \(seed\)/);
+
+      const designIntentSeed = JSON.parse(
+        readFileSync(join(uiUpgradeTargetDirectory, 'docs', 'design-intent.json'), 'utf8')
+      );
+      assert.equal(designIntentSeed.mode, 'dynamic');
+      assert.equal(designIntentSeed.status, 'seed-generated-during-upgrade');
+      assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
+      assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);
     } finally {
       rmSync(uiUpgradeTargetDirectory, { recursive: true, force: true });
     }

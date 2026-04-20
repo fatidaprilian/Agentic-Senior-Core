@@ -261,8 +261,10 @@ const REQUIRED_UPGRADE_UI_CONTRACT_WARNING_SNIPPETS = [
     snippets: [
       'UI/frontend scope was detected, but the dynamic design contract is incomplete:',
       'docs/design-intent.json',
-      'Upgrade synchronizes governance assets, but it does not author project-specific design docs automatically.',
-      'collectProjectMarkers',
+      'Planned seed on apply: docs/design-intent.json',
+      'Upgrade synchronizes governance assets and can seed docs/design-intent.json, but it does not author project-specific docs/DESIGN.md automatically.',
+      'detectUiScopeSignals',
+      'seed-generated-during-upgrade',
     ],
   },
 ];

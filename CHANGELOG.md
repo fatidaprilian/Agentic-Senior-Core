@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+## 3.0.8 - 2026-04-20
+### Added
+- Added shared UI-scope detection so `init` and `upgrade` agree on when a dynamic design contract is required.
+- `init` now seeds `docs/design-intent.json` for detected existing UI repositories when UI scope is present but full project-doc scaffolding is not running.
+- `upgrade` now seeds `docs/design-intent.json` for detected UI repositories when the machine-readable design contract is missing.
+
+### Changed
+- Upgrade preview now makes the planned UI seed explicit while keeping `docs/DESIGN.md` authoring as a manual, project-specific step.
+- Existing-project `init` now surfaces prompt guidance for completing `docs/DESIGN.md` from the seeded machine-readable contract.
+
 ## 3.0.7 - 2026-04-20
 ### Added
 - Added dynamic UI design contract seeding so UI scaffolding materializes `docs/design-intent.json` alongside bootstrap prompts.
