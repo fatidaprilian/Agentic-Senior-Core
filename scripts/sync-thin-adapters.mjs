@@ -38,13 +38,14 @@ The canonical policy source is [.instructions.md](.instructions.md).
 
 ## Mandatory Bootstrap Chain
 
-1. Load [.instructions.md](.instructions.md) first as the single source of truth.
-2. Read baseline governance from [.agent-context/rules/](.agent-context/rules).
-3. Apply request templates from [.agent-context/prompts/](.agent-context/prompts).
-4. Enforce review contracts from [.agent-context/review-checklists/](.agent-context/review-checklists).
-5. Read change-risk maps and continuity state from [.agent-context/state/](.agent-context/state).
-6. Enforce policy thresholds from [.agent-context/policies/](.agent-context/policies).
-7. Use dynamic stack and architecture reasoning from project context docs and live research signals.
+1. Load [.instructions.md](.instructions.md) first as the canonical baseline.
+2. If \`.agent-instructions.md\` exists, read it next as the compiled project-specific snapshot.
+3. Read baseline governance from [.agent-context/rules/](.agent-context/rules).
+4. Apply request templates from [.agent-context/prompts/](.agent-context/prompts).
+5. Enforce review contracts from [.agent-context/review-checklists/](.agent-context/review-checklists).
+6. Read change-risk maps and continuity state from [.agent-context/state/](.agent-context/state).
+7. Enforce policy thresholds from [.agent-context/policies/](.agent-context/policies).
+8. Use dynamic stack and architecture reasoning from project context docs and live research signals.
 
 ## Trigger Rules
 
@@ -67,12 +68,13 @@ The canonical policy source for this repository is [.instructions.md](../.instru
 
 ## Required Load Order
 
-1. Read [.instructions.md](../.instructions.md) first.
-2. Read baseline rules in [.agent-context/rules/](../.agent-context/rules).
-3. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
-4. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
-5. Apply state awareness from [.agent-context/state/](../.agent-context/state) and thresholds from [.agent-context/policies/](../.agent-context/policies).
-6. Resolve stack and architecture choices dynamically from project context docs plus live evidence.
+1. Read [.instructions.md](../.instructions.md) first as the canonical baseline.
+2. If \`.agent-instructions.md\` exists, read it next as the compiled project-specific snapshot.
+3. Read baseline rules in [.agent-context/rules/](../.agent-context/rules).
+4. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
+5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
+6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and thresholds from [.agent-context/policies/](../.agent-context/policies).
+7. Resolve stack and architecture choices dynamically from project context docs plus live evidence.
 
 ## Completion Gate
 
@@ -91,12 +93,13 @@ Canonical policy source: [.instructions.md](../.instructions.md).
 
 ## Bootstrap Sequence
 
-1. Load [.instructions.md](../.instructions.md) first.
-2. Apply baseline rules from [.agent-context/rules/](../.agent-context/rules).
-3. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
-4. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
-5. Apply state awareness from [.agent-context/state/](../.agent-context/state) and policy thresholds from [.agent-context/policies/](../.agent-context/policies).
-6. Resolve stack and architecture choices dynamically from project context docs plus live evidence.
+1. Load [.instructions.md](../.instructions.md) first as the canonical baseline.
+2. If \`.agent-instructions.md\` exists, read it next as the compiled project-specific snapshot.
+3. Apply baseline rules from [.agent-context/rules/](../.agent-context/rules).
+4. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
+5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
+6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and policy thresholds from [.agent-context/policies/](../.agent-context/policies).
+7. Resolve stack and architecture choices dynamically from project context docs plus live evidence.
 
 ## Completion Gate
 

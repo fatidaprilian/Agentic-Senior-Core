@@ -778,6 +778,12 @@ async function validatePackageMetadata() {
   } else {
     pass('package.json has no unnecessary devDependencies');
   }
+
+  if (Array.isArray(packageJson.files) && packageJson.files.includes('.instructions.md')) {
+    pass('package.json publishes canonical .instructions.md');
+  } else {
+    fail('package.json must publish .instructions.md so init and upgrade can copy the canonical root instructions file');
+  }
 }
 
 async function validatePolicyFile() {

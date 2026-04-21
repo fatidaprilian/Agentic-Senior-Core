@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.14 - 2026-04-21
 ### Changed
+- Clarified the canonical instruction chain so `.instructions.md` remains the baseline, thin adapters explicitly delegate to it, and `.agent-instructions.md` is treated as the compiled project-specific snapshot rather than a competing source of truth.
+- Hardened `upgrade` so it fully regenerates the compiled instruction surface, including `.agent-instructions.md`, IDE adapters, and onboarding metadata, instead of leaving stale compiled files behind.
+- Made Layer 2 stack strategy signals and Layer 3 architecture playbooks explicitly adaptive in `.instructions.md`, so agents can prefer better-fit stacks or synthesize better-fit playbooks when repo evidence and current constraints justify it.
 
 ## 3.0.13 - 2026-04-21
 ### Changed

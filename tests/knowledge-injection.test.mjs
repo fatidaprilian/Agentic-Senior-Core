@@ -163,6 +163,17 @@ describe('Full 8-Layer Injection Coverage', () => {
   }
 });
 
+describe('Adaptive Strategy Guidance', () => {
+  it('.instructions.md keeps Layer 2 and Layer 3 explicitly adaptive', () => {
+    const instructionsContent = readFileSync(join(ROOT, '.instructions.md'), 'utf-8');
+
+    assert.match(instructionsContent, /illustrative, not exhaustive/i);
+    assert.match(instructionsContent, /Do not force the project into the nearest listed stack/i);
+    assert.match(instructionsContent, /not a hard whitelist/i);
+    assert.match(instructionsContent, /choose or synthesize the best-fit playbook/i);
+  });
+});
+
 // ── Test: Delegating entry points reference rules + delegate to full file ───
 
 describe('Delegating Entry Point Chain', () => {

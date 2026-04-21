@@ -30,6 +30,12 @@ import { detectProjectContext, detectUiScopeSignals } from '../lib/cli/detector.
 test('CLI Smoke Tests', async (t) => {
   const cliPath = join(process.cwd(), 'bin', 'agentic-senior-core.js');
 
+  await t.test('published package surface includes canonical .instructions.md', () => {
+    const packageJson = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8'));
+    assert.equal(Array.isArray(packageJson.files), true);
+    assert.equal(packageJson.files.includes('.instructions.md'), true);
+  });
+
   await t.test('shows help', () => {
     const output = execSync(`node ${cliPath} --help`).toString();
     assert.match(output, /Usage:/);
@@ -607,6 +613,31 @@ test('CLI Smoke Tests', async (t) => {
       assert.match(upgradeOutput, /1 deleted/);
       assert.equal(existsSync(staleManagedFilePath), false);
       assert.equal(existsSync(staleManagedDirectory), false);
+    } finally {
+      rmSync(upgradeTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('upgrade regenerates the full compiled instruction surface', () => {
+    const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-compiled-surface-'));
+
+    try {
+      execSync(
+        `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+
+      writeFileSync(join(upgradeTargetDirectory, '.agent-instructions.md'), 'STALE compiled snapshot');
+      writeFileSync(join(upgradeTargetDirectory, '.clauderc'), 'STALE clauderc');
+      writeFileSync(join(upgradeTargetDirectory, '.gemini', 'instructions.md'), 'STALE gemini');
+      writeFileSync(join(upgradeTargetDirectory, '.github', 'copilot-instructions.md'), 'STALE copilot');
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
+      assert.match(upgradeOutput, /Refreshed files: \.instructions\.md, \.agent-instructions\.md, compiled adapters, and \.agent-context\/state\/onboarding-report\.json/);
+
+      assert.doesNotMatch(readFileSync(join(upgradeTargetDirectory, '.agent-instructions.md'), 'utf8'), /STALE compiled snapshot/);
+      assert.doesNotMatch(readFileSync(join(upgradeTargetDirectory, '.clauderc'), 'utf8'), /STALE clauderc/);
+      assert.doesNotMatch(readFileSync(join(upgradeTargetDirectory, '.gemini', 'instructions.md'), 'utf8'), /STALE gemini/);
+      assert.doesNotMatch(readFileSync(join(upgradeTargetDirectory, '.github', 'copilot-instructions.md'), 'utf8'), /STALE copilot/);
     } finally {
       rmSync(upgradeTargetDirectory, { recursive: true, force: true });
     }
