@@ -64,6 +64,8 @@ const REQUIRED_BOOTSTRAP_DESIGN_SNIPPETS = [
   'Responsive Strategy and Cross-Viewport Adaptation Matrix',
   'colorTruth.format',
   'crossViewportAdaptation.mutationRules.mobile/tablet/desktop',
+  'motionSystem',
+  'componentMorphology',
 ];
 
 const REQUIRED_UI_DESIGN_JUDGE_SNIPPETS = [

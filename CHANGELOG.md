@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.12 - 2026-04-21
+### Changed
+- Hardened initialized workspaces so `.instructions.md` is copied alongside the thin adapters, keeping the canonical instruction chain intact after `init` or `upgrade`.
+- Improved microservice and workspace detection so nested UI packages such as `apps/web` or `services/frontend` still trigger UI design seeding, frontend evidence analysis, and onboarding transparency.
+- Made the copied MCP server tolerate repos without a root `package.json` and hide repo-internal validate/test tools when their supporting scripts are absent in the target workspace.
+- Expanded the dynamic UI contract with `motionSystem` and `componentMorphology` so agents can use purposeful animation and coherent state behavior without collapsing into generic static output.
+- Surfaced nested UI workspace evidence into existing-project design seeds, upgrade messaging, and onboarding reports so microservice repositories retain frontend context across init and upgrade flows.
+
 ## 3.0.11 - 2026-04-20
 ### Changed
 - Simplified `ui-design-judge` into a repo-internal advisory audit with no user-facing runtime flags or output-file generation.
@@ -115,15 +123,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved all init/architect config options to docs/roadmap.md and docs/deep-dive.md.
 - Managed-surface prune: upgrade now prunes obsolete managed files by default.
 - Bumped version to 3.0.1.
-
-## Unreleased
-### Added
-- Added V3 dry-run purge audit script (`npm run audit:v3-purge`) that emits machine-readable deletion readiness report to `.agent-context/state/v3-purge-audit.json`.
-- Added canonical init output file `.agent-instructions.md` plus `.clauderc` adapter generation for AI CLI compatibility.
-
-### Changed
-- Changed compiled rules generation to support dynamic fallback when static stack/blueprint profile files are absent.
-- Changed init stack/blueprint discovery to use compatibility fallback labels when static directories are not present.
 
 ## 3.0.0 - 2026-04-18
 ### Added

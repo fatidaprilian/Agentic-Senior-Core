@@ -235,9 +235,10 @@ function buildSystemPrompt() {
     'Treat docs/DESIGN.md as explanatory context, not a generic style guide.',
     'Do not reward generic SaaS defaults or popular template patterns.',
     'Do not penalize originality when the implementation still aligns with the contract.',
+    'Purposeful motion is allowed and can improve quality. Only flag motion when it drifts from the contract, ignores reduced-motion expectations, or adds avoidable performance/accessibility risk.',
     'Only flag drift when there is a clear mismatch with the contract, accessibility non-negotiables, or cross-viewport adaptation rules.',
     'This audit always runs in advisory mode for this repository workflow.',
-    'Focus on color intent, typographic hierarchy, responsive re-layout, interaction behavior, and genericity drift.',
+    'Focus on color intent, typographic hierarchy, responsive re-layout, purposeful motion, component morphology across states, interaction behavior, and genericity drift.',
     'Return ONLY one JSON object on a single line prefixed with JSON_VERDICT:.',
     'Schema:',
     '{"alignmentScore": number|null, "notes": string[], "findings": [{"area": string, "severity": "high|medium|low", "problem": string, "evidence": string, "recommendation": string, "blockingRecommended": boolean}]}',
@@ -268,7 +269,7 @@ function buildUserMessage(designIntentContent, designGuideContent, diffContent, 
     truncatedDiff.trim() || '(no UI diff)',
     '```',
     '',
-    'Judge alignment to the contract. Avoid aesthetic bias toward generic web trends.',
+    'Judge alignment to the contract. Avoid aesthetic bias toward generic web trends or toward motionless/static outputs.',
   ].join('\n');
 }
 

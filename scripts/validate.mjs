@@ -285,6 +285,8 @@ const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'Responsive Strategy and Cross-Viewport Adaptation Matrix',
       '`colorTruth.format`',
       '`crossViewportAdaptation.mutationRules.mobile/tablet/desktop`',
+      '`motionSystem`',
+      '`componentMorphology`',
     ],
   },
   {
@@ -302,6 +304,8 @@ const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
     snippets: [
       'colorTruth',
       'crossViewportAdaptation',
+      'motionSystem',
+      'componentMorphology',
       'requireViewportMutationRules',
       'allowHexDerivatives',
     ],

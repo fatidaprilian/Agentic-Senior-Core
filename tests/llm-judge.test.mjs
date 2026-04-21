@@ -38,8 +38,30 @@ test('LLM Judge Tests', async (t) => {
         desktop: 'Expand layout and preserve comparison workflows.',
       },
     },
+    motionSystem: {
+      allowMeaningfulMotion: true,
+      purpose: 'Use motion for continuity and feedback, not decoration.',
+      choreography: 'Prefer short transforms and opacity transitions over ornamental movement.',
+      desktopDurationMs: 180,
+      mobileDurationMs: 240,
+      respectReducedMotion: true,
+      preferTransformAndOpacity: true,
+      avoidDecorativeMotionForItsOwnSake: true,
+    },
+    componentMorphology: {
+      requireStateBehaviorMatrix: true,
+      preserveIdentityAcrossViewports: true,
+      stateKeys: ['default', 'hover', 'focus', 'active', 'disabled', 'loading', 'error'],
+      viewportBehavior: {
+        mobile: 'Compress structure and prioritize thumb-zone actions.',
+        tablet: 'Preserve hierarchy while reducing tertiary chrome.',
+        desktop: 'Expose richer states and denser supporting detail.',
+      },
+    },
     validationHints: {
       requireViewportMutationRules: true,
+      requireMotionRationale: true,
+      requireStateMorphology: true,
     },
   };
 

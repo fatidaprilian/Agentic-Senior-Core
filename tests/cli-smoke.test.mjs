@@ -25,7 +25,7 @@ import {
   createUpdatedArchitectPreference,
   shouldApplyRepeatedOverridePreference,
 } from '../lib/cli/architect.mjs';
-import { detectUiScopeSignals } from '../lib/cli/detector.mjs';
+import { detectProjectContext, detectUiScopeSignals } from '../lib/cli/detector.mjs';
 
 test('CLI Smoke Tests', async (t) => {
   const cliPath = join(process.cwd(), 'bin', 'agentic-senior-core.js');
@@ -292,6 +292,7 @@ test('CLI Smoke Tests', async (t) => {
       ).toString();
 
       assert.equal(existsSync(join(optOutMcpTargetDirectory, '.github', 'workflows', 'release-gate.yml')), false);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.instructions.md')), true);
       assert.equal(existsSync(join(optOutMcpTargetDirectory, '.github', 'copilot-instructions.md')), true);
       assert.equal(existsSync(join(optOutMcpTargetDirectory, '.vscode', 'mcp.json')), false);
 
@@ -299,6 +300,7 @@ test('CLI Smoke Tests', async (t) => {
         `node ${cliPath} init ${mcpTemplateTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize`
       ).toString();
 
+      assert.equal(existsSync(join(mcpTemplateTargetDirectory, '.instructions.md')), true);
       assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'mcp.json')), false);
       assert.equal(existsSync(join(mcpTemplateTargetDirectory, '.vscode', 'mcp.json')), true);
 
@@ -693,6 +695,8 @@ test('CLI Smoke Tests', async (t) => {
       assert.match(bootstrapDesignPrompt, /Responsive Strategy and Cross-Viewport Adaptation Matrix/);
       assert.match(bootstrapDesignPrompt, /colorTruth/);
       assert.match(bootstrapDesignPrompt, /crossViewportAdaptation/);
+      assert.match(bootstrapDesignPrompt, /motionSystem/);
+      assert.match(bootstrapDesignPrompt, /componentMorphology/);
 
       const designIntentSeed = JSON.parse(
         readFileSync(join(uiScaffoldingTargetDirectory, 'docs', 'design-intent.json'), 'utf8')
@@ -703,6 +707,10 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(designIntentSeed.colorTruth.allowHexDerivatives, true);
       assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
       assert.equal(typeof designIntentSeed.crossViewportAdaptation.mutationRules.mobile, 'string');
+      assert.equal(designIntentSeed.motionSystem.allowMeaningfulMotion, true);
+      assert.equal(designIntentSeed.motionSystem.respectReducedMotion, true);
+      assert.equal(designIntentSeed.componentMorphology.requireStateBehaviorMatrix, true);
+      assert.ok(designIntentSeed.componentMorphology.stateKeys.includes('loading'));
       assert.equal(designIntentSeed.implementation.requireViewportMutationRules, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
       assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);
@@ -765,11 +773,75 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(designIntentSeed.project.name, 'existing-ui-init-seed');
       assert.equal(designIntentSeed.colorTruth.format, 'OKLCH');
       assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
+      assert.equal(designIntentSeed.motionSystem.allowMeaningfulMotion, true);
+      assert.equal(designIntentSeed.componentMorphology.requireStateBehaviorMatrix, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
       assert.equal(designIntentSeed.repoEvidence.frontendMetrics.hardcodedColorCount >= 2, true);
       assert.equal(designIntentSeed.repoEvidence.frontendMetrics.propDrillingCandidateCount >= 1, true);
+      assert.deepEqual(designIntentSeed.repoEvidence.workspaceUiEntries, []);
     } finally {
       rmSync(existingUiInitTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('init seeds design-intent and onboarding UI evidence for microservice workspaces with nested frontend apps', () => {
+    const existingUiMicroserviceTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-existing-ui-microservice-'));
+
+    try {
+      mkdirSync(join(existingUiMicroserviceTargetDirectory, 'services', 'orders'), { recursive: true });
+      writeFileSync(
+        join(existingUiMicroserviceTargetDirectory, 'services', 'orders', 'pyproject.toml'),
+        '[project]\nname = "orders-service"\nversion = "1.0.0"\n'
+      );
+
+      mkdirSync(join(existingUiMicroserviceTargetDirectory, 'apps', 'web', 'src'), { recursive: true });
+      writeFileSync(
+        join(existingUiMicroserviceTargetDirectory, 'apps', 'web', 'package.json'),
+        JSON.stringify({
+          name: '@workspace/web',
+          description: 'Customer-facing storefront inside a microservice workspace',
+          private: true,
+          dependencies: {
+            react: '19.0.0',
+            'react-dom': '19.0.0',
+            tailwindcss: '4.0.0',
+          },
+        }, null, 2)
+      );
+      writeFileSync(join(existingUiMicroserviceTargetDirectory, 'apps', 'web', 'vite.config.js'), 'export default {};');
+      writeFileSync(
+        join(existingUiMicroserviceTargetDirectory, 'apps', 'web', 'src', 'App.tsx'),
+        [
+          'export function App() {',
+          '  return <main className="md:grid lg:grid-cols-3 max-[900px]:block" style={{ color: "#112233", backgroundColor: "rgba(12, 34, 56, 0.9)" }}><Widget one={1} two={2} three={3} four={4} five={5} six={6} /></main>;',
+          '}',
+        ].join('\n')
+      );
+
+      const initOutput = execSync(
+        `node ${cliPath} init ${existingUiMicroserviceTargetDirectory} --profile balanced --ci true --no-token-optimize --no-scaffold-docs`
+      ).toString();
+
+      assert.match(initOutput, /Using detected stack automatically for this existing project: Python\./);
+      assert.match(initOutput, /Existing UI\/frontend scope detected\. Seeded docs\/design-intent\.json/);
+
+      const designIntentSeed = JSON.parse(
+        readFileSync(join(existingUiMicroserviceTargetDirectory, 'docs', 'design-intent.json'), 'utf8')
+      );
+      assert.equal(designIntentSeed.mode, 'dynamic');
+      assert.equal(designIntentSeed.motionSystem.allowMeaningfulMotion, true);
+      assert.equal(designIntentSeed.componentMorphology.requireStateBehaviorMatrix, true);
+      assert.ok(Array.isArray(designIntentSeed.repoEvidence.workspaceUiEntries));
+      assert.ok(designIntentSeed.repoEvidence.workspaceUiEntries.some((workspaceUiEntry) => workspaceUiEntry.relativePath === 'apps/web'));
+
+      const onboardingReport = JSON.parse(
+        readFileSync(join(existingUiMicroserviceTargetDirectory, '.agent-context', 'state', 'onboarding-report.json'), 'utf8')
+      );
+      assert.equal(onboardingReport.selectedStack, 'python.md');
+      assert.equal(onboardingReport.autoDetection.uiScope.isUiScopeLikely, true);
+      assert.ok(onboardingReport.autoDetection.uiScope.workspaceUiEntries.some((workspaceUiEntry) => workspaceUiEntry.relativePath === 'apps/web'));
+    } finally {
+      rmSync(existingUiMicroserviceTargetDirectory, { recursive: true, force: true });
     }
   });
 
@@ -813,6 +885,89 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(uiScopeSignals.frontendEvidenceMetrics.mediaQueryCount >= 1, true);
     } finally {
       rmSync(uiEvidenceTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('ui scope detector finds nested frontend packages inside microservice workspaces', async () => {
+    const workspaceTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-ui-microservice-'));
+
+    try {
+      mkdirSync(join(workspaceTargetDirectory, 'services', 'orders'), { recursive: true });
+      writeFileSync(
+        join(workspaceTargetDirectory, 'services', 'orders', 'pyproject.toml'),
+        '[project]\nname = "orders-service"\nversion = "1.0.0"\n'
+      );
+
+      mkdirSync(join(workspaceTargetDirectory, 'apps', 'web', 'src'), { recursive: true });
+      writeFileSync(
+        join(workspaceTargetDirectory, 'apps', 'web', 'package.json'),
+        JSON.stringify({
+          name: '@workspace/web',
+          private: true,
+          dependencies: {
+            react: '19.0.0',
+            'react-dom': '19.0.0',
+            tailwindcss: '4.0.0',
+          },
+        }, null, 2)
+      );
+      writeFileSync(join(workspaceTargetDirectory, 'apps', 'web', 'vite.config.js'), 'export default {};');
+      writeFileSync(
+        join(workspaceTargetDirectory, 'apps', 'web', 'src', 'App.tsx'),
+        [
+          'export function App() {',
+          '  return <main className="md:grid lg:grid-cols-3 max-[900px]:block" style={{ color: "#112233", backgroundColor: "rgba(12, 34, 56, 0.9)" }}><Widget one={1} two={2} three={3} four={4} five={5} six={6} /></main>;',
+          '}',
+        ].join('\n')
+      );
+
+      const projectDetection = await detectProjectContext(workspaceTargetDirectory);
+      assert.equal(projectDetection.recommendedStackFileName, 'python.md');
+      assert.ok(projectDetection.secondaryStackFileNames.includes('typescript.md'));
+
+      const uiScopeSignals = await detectUiScopeSignals({
+        targetDirectoryPath: workspaceTargetDirectory,
+        selectedStackFileName: projectDetection.recommendedStackFileName,
+        selectedBlueprintFileName: projectDetection.recommendedBlueprintFileName,
+      });
+
+      assert.equal(uiScopeSignals.isUiScopeLikely, true);
+      assert.ok(Array.isArray(uiScopeSignals.workspaceUiEntries));
+      assert.ok(uiScopeSignals.workspaceUiEntries.some((workspaceUiEntry) => workspaceUiEntry.relativePath === 'apps/web'));
+      assert.equal(uiScopeSignals.packageManifest?.name, '@workspace/web');
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics?.hardcodedColorCount >= 2, true);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics?.propDrillingCandidateCount >= 1, true);
+    } finally {
+      rmSync(workspaceTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('ui scope detector does not false-positive on backend-only microservice workspaces', async () => {
+    const workspaceTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-backend-microservice-'));
+
+    try {
+      mkdirSync(join(workspaceTargetDirectory, 'services', 'orders'), { recursive: true });
+      mkdirSync(join(workspaceTargetDirectory, 'services', 'billing'), { recursive: true });
+      writeFileSync(
+        join(workspaceTargetDirectory, 'services', 'orders', 'pyproject.toml'),
+        '[project]\nname = "orders-service"\nversion = "1.0.0"\n'
+      );
+      writeFileSync(
+        join(workspaceTargetDirectory, 'services', 'billing', 'go.mod'),
+        'module example.com/billing\n\ngo 1.22.0\n'
+      );
+
+      const uiScopeSignals = await detectUiScopeSignals({
+        targetDirectoryPath: workspaceTargetDirectory,
+        selectedStackFileName: 'python.md',
+        selectedBlueprintFileName: 'fastapi-service.md',
+      });
+
+      assert.equal(uiScopeSignals.isUiScopeLikely, false);
+      assert.deepEqual(uiScopeSignals.workspaceUiEntries, []);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics, null);
+    } finally {
+      rmSync(workspaceTargetDirectory, { recursive: true, force: true });
     }
   });
 
@@ -922,6 +1077,8 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(designIntentSeed.status, 'seed-generated-during-upgrade');
       assert.equal(designIntentSeed.colorTruth.format, 'OKLCH');
       assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
+      assert.equal(designIntentSeed.motionSystem.allowMeaningfulMotion, true);
+      assert.equal(designIntentSeed.componentMorphology.requireStateBehaviorMatrix, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
       assert.equal(designIntentSeed.implementation.requireViewportMutationRules, true);
       assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);

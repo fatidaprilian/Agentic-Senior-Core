@@ -23,6 +23,8 @@ The agent must:
 8. Treat any example structure or stylistic inspiration as non-normative. Use it only to judge depth and clarity, never to copy a visual language directly.
 9. All references to docs or rules must be clickable markdown links.
 10. Responsive work must adapt layout, navigation, density, and task order across viewports. Shrinking desktop layouts is not enough.
+11. Motion is allowed when it improves feedback, continuity, or spatial understanding. Do not flatten everything into static screens, but do reject decorative motion with no product value.
+12. Define how core components morph across interaction states and viewports. Component quality is not only visual styling; it includes behavior under hover, focus, active, loading, error, and constrained layouts.
 
 Required `docs/DESIGN.md` sections:
 1. Design Intent and Product Personality
@@ -33,7 +35,7 @@ Required `docs/DESIGN.md` sections:
 6. Spacing, Layout Rhythm, and Density Strategy
 7. Responsive Strategy and Cross-Viewport Adaptation Matrix
 8. Interaction, Motion, and Feedback Rules
-9. Component Language and Shared Patterns
+9. Component Language, Morphology, and Shared Patterns
 10. Accessibility Non-Negotiables
 11. Anti-Patterns to Avoid
 12. Implementation Notes for Future UI Tasks
@@ -49,6 +51,8 @@ Required `docs/design-intent.json` fields:
 - `mathSystems`
 - `colorTruth`
 - `crossViewportAdaptation`
+- `motionSystem`
+- `componentMorphology`
 - `experiencePrinciples`
 - `forbiddenPatterns`
 - `validationHints`
@@ -59,7 +63,9 @@ Output:
 - Create or update both `docs/DESIGN.md` and `docs/design-intent.json`.
 - Keep both files synchronized: the markdown explains the why, the JSON captures the contract in machine-readable form.
 - `docs/design-intent.json` must include deterministic fields for `colorTruth.format`, `colorTruth.allowHexDerivatives`, and `crossViewportAdaptation.mutationRules.mobile/tablet/desktop`.
+- `docs/design-intent.json` must also include `motionSystem` and `componentMorphology` so future UI work preserves state behavior and purposeful motion without collapsing into generic static output.
 - Color intent must be defined in a perceptual or relational color model first. Hex values may appear only as implementation derivatives.
 - The contract must encode viewport mutation rules, not just breakpoint names.
+- Motion guidance must preserve creativity: allow meaningful animation, define reduced-motion behavior, and keep choreography fast, intentional, and performant.
 - Use practical, modern, accessible language grounded in the project, not generic SaaS defaults or copycat brand systems.
 - Wait for user approval before generating Figma or code assets.
