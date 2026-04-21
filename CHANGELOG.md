@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.15 - 2026-04-21
+### Changed
+- Strengthened Docker governance so container work now prefers the latest official Docker documentation, current `docker compose` and `compose.yaml` patterns, and latest stable compatible images and dependencies before documented fallback.
+- Strengthened dependency governance so framework and package setup now defaults to the latest stable compatible versions and official setup flows before any documented downgrade path.
+- Strengthened fresh-project discovery so `init` now asks for project topology up front (`Monolith` or `Microservice / distributed system`) and threads that choice into project-context synthesis and onboarding metadata.
+- Strengthened UI design governance so agents synthesize visual direction from the current project context instead of carrying over palettes or layout memory from prior websites, chats, or unrelated projects.
+- Relaxed the design contract so motion and visual originality can stay bold and expressive when they remain purposeful, reduced-motion-safe, and performant instead of being flattened into overly safe UI.
+
 ## 3.0.14 - 2026-04-21
 ### Changed
 - Clarified the canonical instruction chain so `.instructions.md` remains the baseline, thin adapters explicitly delegate to it, and `.agent-instructions.md` is treated as the compiled project-specific snapshot rather than a competing source of truth.

@@ -287,6 +287,8 @@ const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       '`crossViewportAdaptation.mutationRules.mobile/tablet/desktop`',
       '`motionSystem`',
       '`componentMorphology`',
+      'Do not reuse a color palette, component skin, or motion signature from prior chats, memories, or unrelated projects',
+      'If no approved reference system exists, synthesize the design from zero using current product context, constraints, and content only.',
     ],
   },
   {
@@ -325,6 +327,58 @@ const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'LAYER 5: EXECUTION PROMPTS AND UI TRIGGERS',
       'bootstrap-design.md -> ui, ux, layout, screen, tailwind, frontend, redesign',
       'Keep UI-only requests context-isolated',
+    ],
+  },
+];
+const REQUIRED_DOCKER_RUNTIME_AUTOMATION_SNIPPETS = [
+  {
+    path: '.instructions.md',
+    snippets: [
+      'docker-runtime.md',
+      'For Docker or Compose work, load `docker-runtime.md` and verify the latest official Docker docs before authoring container assets.',
+    ],
+  },
+  {
+    path: '.agent-context/rules/docker-runtime.md',
+    snippets: [
+      'latest official Docker documentation first',
+      'Docker Compose Quickstart',
+      'Compose file reference',
+      'Dockerfile best practices',
+      'Prefer current `docker compose` workflows and `compose.yaml`.',
+      'Do not add the top-level Compose `version` field by default.',
+      'Prefer the latest stable compatible Docker base image',
+    ],
+  },
+  {
+    path: '.agent-context/prompts/init-project.md',
+    snippets: [
+      'If Docker or Compose is in scope, load [docker-runtime.md](../rules/docker-runtime.md) and verify the latest official Docker guidance before authoring container assets.',
+      'If containerization is selected, Docker assets must follow [docker-runtime.md](../rules/docker-runtime.md) and the latest official Docker docs instead of stale blog-era patterns.',
+    ],
+  },
+];
+const REQUIRED_DEPENDENCY_FRESHNESS_AUTOMATION_SNIPPETS = [
+  {
+    path: '.instructions.md',
+    snippets: [
+      'prefer the latest stable compatible dependency set and official setup flow',
+    ],
+  },
+  {
+    path: '.agent-context/rules/efficiency-vs-hype.md',
+    snippets: [
+      'Latest-Compatible-First Rule',
+      'latest stable compatible dependency version',
+      'official scaffolder or setup command',
+      'Only step down to an older dependency version after documenting',
+    ],
+  },
+  {
+    path: '.agent-context/prompts/init-project.md',
+    snippets: [
+      'latest stable compatible dependency set and official framework setup flow first',
+      'Prefer official framework setup commands or canonical starter flows',
     ],
   },
 ];
@@ -1147,6 +1201,50 @@ async function validateUiDesignAutomationCoverage() {
   }
 }
 
+async function validateDockerRuntimeAutomationCoverage() {
+  console.log('\nChecking Docker runtime automation coverage...');
+
+  for (const coverageRule of REQUIRED_DOCKER_RUNTIME_AUTOMATION_SNIPPETS) {
+    const absoluteCoveragePath = join(ROOT_DIR, coverageRule.path);
+
+    if (!(await fileExists(absoluteCoveragePath))) {
+      fail(`Missing Docker runtime automation source: ${coverageRule.path}`);
+      continue;
+    }
+
+    const coverageContent = await readTextFile(absoluteCoveragePath);
+    for (const requiredSnippet of coverageRule.snippets) {
+      if (coverageContent.includes(requiredSnippet)) {
+        pass(`${coverageRule.path} includes Docker runtime automation snippet: ${requiredSnippet}`);
+      } else {
+        fail(`${coverageRule.path} is missing Docker runtime automation snippet: ${requiredSnippet}`);
+      }
+    }
+  }
+}
+
+async function validateDependencyFreshnessAutomationCoverage() {
+  console.log('\nChecking dependency freshness automation coverage...');
+
+  for (const coverageRule of REQUIRED_DEPENDENCY_FRESHNESS_AUTOMATION_SNIPPETS) {
+    const absoluteCoveragePath = join(ROOT_DIR, coverageRule.path);
+
+    if (!(await fileExists(absoluteCoveragePath))) {
+      fail(`Missing dependency freshness automation source: ${coverageRule.path}`);
+      continue;
+    }
+
+    const coverageContent = await readTextFile(absoluteCoveragePath);
+    for (const requiredSnippet of coverageRule.snippets) {
+      if (coverageContent.includes(requiredSnippet)) {
+        pass(`${coverageRule.path} includes dependency freshness automation snippet: ${requiredSnippet}`);
+      } else {
+        fail(`${coverageRule.path} is missing dependency freshness automation snippet: ${requiredSnippet}`);
+      }
+    }
+  }
+}
+
 async function validateDeterministicBoundaryEnforcementCoverage() {
   console.log('\nChecking deterministic boundary enforcement coverage...');
 
@@ -1417,6 +1515,8 @@ async function main() {
   await validateTemplateFreeBootstrapCoverage();
   await validateUpgradeUiContractWarningCoverage();
   await validateUiDesignAutomationCoverage();
+  await validateDockerRuntimeAutomationCoverage();
+  await validateDependencyFreshnessAutomationCoverage();
   await validateDeterministicBoundaryEnforcementCoverage();
   await validateStackResearchSnapshotState();
   await validateMcpConfiguration();

@@ -9,6 +9,8 @@ When a new project is created or initialized, the agent should automatically:
 1. Read [AGENTS.md](../../AGENTS.md) to understand available roles and knowledge base.
 2. Scan all files in [.agent-context/rules/](../rules/) for mandatory engineering standards.
 3. Review dynamic stack and architecture signals from [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), [.agent-context/state/stack-research-snapshot.json](../state/stack-research-snapshot.json), available stack and blueprint sources, and task constraints.
+4. If Docker or Compose is in scope, load [docker-runtime.md](../rules/docker-runtime.md) and verify the latest official Docker guidance before authoring container assets. Prefer latest stable compatible images, dependencies, and Compose syntax first; only step down after documenting why.
+5. For framework or package setup, prefer the latest stable compatible dependency set and official framework setup flow first. Only pin older versions after documenting the exact compatibility reason.
 
 ## Architect Mode (Recommended)
 If the user describes a project or feature, the agent should:
@@ -32,6 +34,8 @@ If the user specifies a framework/blueprint, the agent should:
 	- Every file must follow [naming conventions](../rules/naming-conv.md)
 	- Every module must follow [architecture.md](../rules/architecture.md)
 	- Every dependency must be justified per [efficiency-vs-hype.md](../rules/efficiency-vs-hype.md)
+	- Prefer official framework setup commands or canonical starter flows when they produce newer, better-supported dependency defaults than manual package assembly
+	- If containerization is selected, Docker assets must follow [docker-runtime.md](../rules/docker-runtime.md) and the latest official Docker docs instead of stale blog-era patterns.
 
 ## Stacks & Blueprints Reference
 See [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), [.cursorrules](../../.cursorrules), and [.windsurfrules](../../.windsurfrules) for the latest shipped stack and blueprint context.

@@ -29,8 +29,9 @@ const LAYERS = [
       '.agent-context/rules/database-design.md',
       '.agent-context/rules/realtime.md',
       '.agent-context/rules/frontend-architecture.md',
+      '.agent-context/rules/docker-runtime.md',
     ],
-    injectionKeywords: ['.agent-context/rules/', 'naming-conv', 'architecture', 'security'],
+    injectionKeywords: ['.agent-context/rules/', 'naming-conv', 'architecture', 'security', 'docker-runtime'],
   },
   {
     name: 'Layer 2: Stack Strategy Signals',
@@ -171,6 +172,38 @@ describe('Adaptive Strategy Guidance', () => {
     assert.match(instructionsContent, /Do not force the project into the nearest listed stack/i);
     assert.match(instructionsContent, /not a hard whitelist/i);
     assert.match(instructionsContent, /choose or synthesize the best-fit playbook/i);
+  });
+});
+
+describe('Docker and Design Freshness Guidance', () => {
+  it('docker runtime rule prefers latest official Docker guidance before fallback', () => {
+    const dockerRuntimeRule = readFileSync(join(ROOT, '.agent-context', 'rules', 'docker-runtime.md'), 'utf-8');
+
+    assert.match(dockerRuntimeRule, /latest official Docker documentation first/i);
+    assert.match(dockerRuntimeRule, /docker compose/i);
+    assert.match(dockerRuntimeRule, /compose\.yaml/i);
+    assert.match(dockerRuntimeRule, /top-level Compose `version` field by default/i);
+    assert.match(dockerRuntimeRule, /Prefer the latest stable compatible Docker base image/i);
+  });
+
+  it('design bootstrap rejects palette carryover from unrelated prior projects', () => {
+    const bootstrapDesignPrompt = readFileSync(join(ROOT, '.agent-context', 'prompts', 'bootstrap-design.md'), 'utf-8');
+
+    assert.match(bootstrapDesignPrompt, /Do not reuse a color palette, component skin, or motion signature from prior chats, memories, or unrelated projects/i);
+    assert.match(bootstrapDesignPrompt, /Similarity to prior unrelated projects is drift/i);
+    assert.match(bootstrapDesignPrompt, /synthesize the design from zero using current product context, constraints, and content only/i);
+    assert.match(bootstrapDesignPrompt, /Motion can be bold, cinematic, or highly expressive/i);
+    assert.match(bootstrapDesignPrompt, /recognizable in screenshots/i);
+  });
+
+  it('dependency governance prefers latest compatible versions and official setup flows', () => {
+    const dependencyRule = readFileSync(join(ROOT, '.agent-context', 'rules', 'efficiency-vs-hype.md'), 'utf-8');
+    const initPrompt = readFileSync(join(ROOT, '.agent-context', 'prompts', 'init-project.md'), 'utf-8');
+
+    assert.match(dependencyRule, /latest stable compatible dependency version/i);
+    assert.match(dependencyRule, /official scaffolder or setup command/i);
+    assert.match(dependencyRule, /Only step down to an older dependency version after documenting/i);
+    assert.match(initPrompt, /latest stable compatible dependency set and official framework setup flow first/i);
   });
 });
 

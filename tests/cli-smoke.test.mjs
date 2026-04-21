@@ -65,6 +65,7 @@ test('CLI Smoke Tests', async (t) => {
       '1',
       '1',
       '1',
+      '1',
       '',
     ];
 
@@ -81,6 +82,7 @@ test('CLI Smoke Tests', async (t) => {
 
     assert.equal(discoveryAnswers.projectName, 'AutomatedLicensePlateReaders');
     assert.equal(discoveryAnswers.projectDescription, 'Incident review dashboard for plate-reader workflows');
+    assert.equal(discoveryAnswers.architectureStyle, 'Monolith');
     assert.equal(discoveryAnswers.includeCiGuardrails, true);
     assert.deepEqual(discoveryAnswers.features, []);
   });
@@ -651,6 +653,7 @@ test('CLI Smoke Tests', async (t) => {
       writeFileSync(projectConfigPath, [
         'projectName: Nusantara API',
         'projectDescription: Internal service for transaction processing',
+        'architectureStyle: Microservice / distributed system',
         'primaryDomain: API service',
         'databaseChoice: SQL (PostgreSQL, MySQL, SQLite)',
         'authStrategy: JWT (stateless token auth)',
@@ -678,7 +681,9 @@ test('CLI Smoke Tests', async (t) => {
       assert.match(bootstrapProjectContextPrompt, /Dynamic Project Context Synthesis/);
       assert.match(bootstrapProjectContextPrompt, /Create or update these files in EN language/);
       assert.match(bootstrapProjectContextPrompt, /Project name: Nusantara API/);
+      assert.match(bootstrapProjectContextPrompt, /Project topology: Microservice \/ distributed system/);
       assert.match(bootstrapProjectContextPrompt, /No copy-paste from external prose/);
+      assert.match(bootstrapProjectContextPrompt, /Prefer the latest stable compatible framework and package versions/);
       assert.match(bootstrapProjectContextPrompt, /For any research-backed claim, include citation metadata \(source \+ fetchedAt timestamp\) from the Architect Engine Snapshot\./);
       assert.match(bootstrapProjectContextPrompt, /Write for native English speakers at an 8th-grade reading level\./);
       assert.match(bootstrapProjectContextPrompt, /Assumptions to Validate/);
@@ -696,6 +701,11 @@ test('CLI Smoke Tests', async (t) => {
 
       const upgradePreviewOutput = execSync(`node ${cliPath} upgrade ${scaffoldingTargetDirectory} --dry-run`).toString();
       assert.doesNotMatch(upgradePreviewOutput, /Some project docs were generated from older template versions/);
+
+      const onboardingReport = JSON.parse(
+        readFileSync(join(scaffoldingTargetDirectory, '.agent-context', 'state', 'onboarding-report.json'), 'utf8')
+      );
+      assert.equal(onboardingReport.projectTopology, 'Microservice / distributed system');
     } finally {
       rmSync(scaffoldingTargetDirectory, { recursive: true, force: true });
     }
