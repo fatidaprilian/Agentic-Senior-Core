@@ -54,11 +54,11 @@ test('CLI Smoke Tests', async (t) => {
     const queuedAnswers = [
       '',
       '',
-      '1',
-      '1',
-      '1',
-      '1',
       '',
+      '1',
+      '1',
+      '1',
+      '1',
       '',
     ];
 
@@ -75,6 +75,8 @@ test('CLI Smoke Tests', async (t) => {
 
     assert.equal(discoveryAnswers.projectName, 'AutomatedLicensePlateReaders');
     assert.equal(discoveryAnswers.projectDescription, 'Incident review dashboard for plate-reader workflows');
+    assert.equal(discoveryAnswers.includeCiGuardrails, true);
+    assert.deepEqual(discoveryAnswers.features, []);
   });
 
   await t.test('init scope mapping and stack filtering remain deterministic', () => {
@@ -371,29 +373,36 @@ test('CLI Smoke Tests', async (t) => {
     }
   });
 
-  await t.test('init supports project-description-first architecture recommendation', () => {
-    const architectTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-architect-'));
-    const architectPreferenceFilePath = join(architectTargetDirectory, 'architect-pref.json');
+  await t.test('fresh init skips the old architecture interview surface', () => {
+    const streamlinedTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-streamlined-init-'));
 
     try {
-      const architectOutput = execSync(
-        `node ${cliPath} init ${architectTargetDirectory} --project-description "Machine learning API for image classification and model serving" --ci true --no-scaffold-docs --no-token-optimize --no-memory-continuity`,
+      const streamlinedOutput = execSync(
+        `node ${cliPath} init ${streamlinedTargetDirectory} --no-token-optimize --no-memory-continuity`,
         {
-          env: {
-            ...process.env,
-            AGENTIC_ARCHITECT_PREF_FILE: architectPreferenceFilePath,
-          },
+          input: '\n\n\n1\n1\n1\n1\n\n',
         }
       ).toString();
 
-      assert.match(architectOutput, /Architecture recommendation \(project-description-first\):/);
-      assert.match(architectOutput, /Confidence:/);
-      assert.match(architectOutput, /Research mode:/);
-      assert.match(architectOutput, /Rationale:/);
-      assert.match(architectOutput, /Alternatives:/);
-      assert.match(architectOutput, /Evidence citations \(measurable source \+ timestamp\):/);
-      assert.match(architectOutput, /Design signal synthesis \(normalized, no copied external prose\):/);
-      assert.match(architectOutput, /Research guardrails:/);
+      assert.doesNotMatch(streamlinedOutput, /Architecture recommendation \(project-description-first\):/);
+      assert.doesNotMatch(streamlinedOutput, /This is a fresh project\. Want me to scaffold project documentation/);
+      assert.doesNotMatch(streamlinedOutput, /Apply this architecture recommendation\?/);
+    } finally {
+      rmSync(streamlinedTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('init uses project description for silent adaptive stack selection without a second architecture interview', () => {
+    const architectTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-architect-'));
+
+    try {
+      const architectOutput = execSync(
+        `node ${cliPath} init ${architectTargetDirectory} --project-description "Machine learning API for image classification and model serving" --ci true --no-scaffold-docs --no-token-optimize --no-memory-continuity`
+      ).toString();
+
+      assert.doesNotMatch(architectOutput, /Architecture recommendation \(project-description-first\):/);
+      assert.doesNotMatch(architectOutput, /Design signal synthesis \(normalized, no copied external prose\):/);
+      assert.doesNotMatch(architectOutput, /Research guardrails:/);
 
       const onboardingReportPath = join(architectTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
       const onboardingReport = JSON.parse(readFileSync(onboardingReportPath, 'utf8'));
@@ -413,7 +422,6 @@ test('CLI Smoke Tests', async (t) => {
       assert.equal(onboardingReport.architectRecommendation?.failureModes?.realtimeUnavailable, true);
       assert.equal(Array.isArray(onboardingReport.architectRecommendation?.evidenceCitations), true);
       assert.ok(onboardingReport.architectRecommendation?.evidenceCitations?.length >= 1);
-      assert.equal(onboardingReport.architectRecommendation?.designGuidance?.sourcePolicy?.copiedExternalProse, false);
       assert.equal(onboardingReport.architectRecommendation?.userVeto?.applied, false);
       assert.ok(
         onboardingReport.architectRecommendation?.researchBudget?.usedTokens
@@ -641,11 +649,17 @@ test('CLI Smoke Tests', async (t) => {
       assert.match(bootstrapProjectContextPrompt, /Project name: Nusantara API/);
       assert.match(bootstrapProjectContextPrompt, /No copy-paste from external prose/);
       assert.match(bootstrapProjectContextPrompt, /For any research-backed claim, include citation metadata \(source \+ fetchedAt timestamp\) from the Architect Engine Snapshot\./);
+      assert.match(bootstrapProjectContextPrompt, /Write for native English speakers at an 8th-grade reading level\./);
+      assert.match(bootstrapProjectContextPrompt, /Assumptions to Validate/);
+      assert.match(bootstrapProjectContextPrompt, /Next Validation Action/);
+      assert.match(bootstrapProjectContextPrompt, /Do not invent modules or architecture layers only to make the docs look complete\./);
 
       const compiledRulesContent = readFileSync(join(scaffoldingTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
       assert.match(compiledRulesContent, /\.agent-context\/prompts\/bootstrap-project-context\.md/);
       assert.match(compiledRulesContent, /If docs\/project-brief\.md is missing, execute bootstrap-project-context prompt immediately\./);
+      assert.match(compiledRulesContent, /docs\/flow-overview\.md must also exist before coding continues\./);
+      assert.match(compiledRulesContent, /Do not use generic placeholder templates\./);
       assert.match(compiledRulesContent, /Latest user prompt defines current feature scope and product direction\./);
       assert.match(compiledRulesContent, /Save generated docs under docs\/ and keep them updated when feature scope changes\./);
 
@@ -723,6 +737,23 @@ test('CLI Smoke Tests', async (t) => {
       assert.match(compiledRulesContent, /bootstrap-design\.md -> ui, ux, layout, screen, tailwind, frontend, redesign/);
     } finally {
       rmSync(uiScaffoldingTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('detector ignores init-owned governance artifacts when deciding whether a project already exists', async () => {
+    const governanceOnlyTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-governance-only-'));
+
+    try {
+      mkdirSync(join(governanceOnlyTargetDirectory, '.agentic-backup', 'objects'), { recursive: true });
+      mkdirSync(join(governanceOnlyTargetDirectory, '.agent-context'), { recursive: true });
+      writeFileSync(join(governanceOnlyTargetDirectory, '.cursorrules'), 'Generated by Agentic-Senior-Core CLI');
+      writeFileSync(join(governanceOnlyTargetDirectory, '.instructions.md'), '# local adapter');
+
+      const projectDetection = await detectProjectContext(governanceOnlyTargetDirectory);
+      assert.equal(projectDetection.hasExistingProjectFiles, false);
+      assert.equal(projectDetection.recommendedStackFileName, null);
+    } finally {
+      rmSync(governanceOnlyTargetDirectory, { recursive: true, force: true });
     }
   });
 
@@ -1325,6 +1356,10 @@ test('CLI Smoke Tests', async (t) => {
     assert.match(architectureRuleContent, /No clever hacks\./);
     assert.match(architectureRuleContent, /No premature abstraction\./);
     assert.match(architectureRuleContent, /Readability over brevity\./);
+    assert.match(architectureRuleContent, /docs\/project-brief\.md/);
+    assert.match(architectureRuleContent, /docs\/flow-overview\.md/);
+    assert.match(architectureRuleContent, /Do not create generic placeholder templates\./);
+    assert.match(architectureRuleContent, /Assumptions to Validate/);
     assert.match(prChecklistContent, /No clever hacks in backend and shared core modules/);
     assert.match(prChecklistContent, /No premature abstraction/);
     assert.match(prChecklistContent, /Readability over brevity for maintainability/);

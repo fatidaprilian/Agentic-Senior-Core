@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+
+## 3.0.13 - 2026-04-21
+### Changed
+- Streamlined fresh-project `init` so setup no longer opens a second architecture interview loop; the CLI now uses one focused project questionnaire, folds the CI decision into that flow, and auto-scaffolds fresh-project docs from the same answers.
+- Hardened fresh-vs-existing detection to ignore init-owned governance artifacts such as `.agentic-backup`, `.agent-context`, and compiled rule adapters, preventing empty repos from being misclassified as existing projects on first run or rerun.
+- Reduced generic UI bias in the dynamic design seed by removing the raw architect design-signal control vector from the design bootstrap prompt and relying on the stronger machine contract plus project-specific intent instead.
+- Strengthened the adaptive-docs governance path so missing project docs block implementation, bootstrap prompts must synthesize project-specific docs from repo evidence instead of templates, and generated docs must separate confirmed facts from assumptions with explicit next validation actions.
+
 ## 3.0.12 - 2026-04-21
 ### Changed
 - Hardened initialized workspaces so `.instructions.md` is copied alongside the thin adapters, keeping the canonical instruction chain intact after `init` or `upgrade`.
