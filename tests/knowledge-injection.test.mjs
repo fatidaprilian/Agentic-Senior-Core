@@ -192,8 +192,40 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(bootstrapDesignPrompt, /Do not reuse a color palette, component skin, or motion signature from prior chats, memories, or unrelated projects/i);
     assert.match(bootstrapDesignPrompt, /Similarity to prior unrelated projects is drift/i);
     assert.match(bootstrapDesignPrompt, /synthesize the design from zero using current product context, constraints, and content only/i);
+    assert.match(bootstrapDesignPrompt, /Design continuity is opt-in/i);
+    assert.match(bootstrapDesignPrompt, /explicitly approved reference systems/i);
+    assert.match(bootstrapDesignPrompt, /tainted context/i);
+    assert.match(bootstrapDesignPrompt, /WCAG 2\.2 AA/i);
+    assert.match(bootstrapDesignPrompt, /APCA/i);
+    assert.match(bootstrapDesignPrompt, /Hybrid visual QA must stay deterministic-first/i);
+    assert.match(bootstrapDesignPrompt, /visualQaPolicy/i);
+    assert.match(bootstrapDesignPrompt, /long-page capture strategy/i);
+    assert.match(bootstrapDesignPrompt, /anchor-based section or tiled-scroll captures/i);
     assert.match(bootstrapDesignPrompt, /Motion can be bold, cinematic, or highly expressive/i);
     assert.match(bootstrapDesignPrompt, /recognizable in screenshots/i);
+  });
+
+  it('design contract seed keeps machine-readable context hygiene boundaries', () => {
+    const designContractSource = readFileSync(
+      join(ROOT, 'lib', 'cli', 'project-scaffolder', 'design-contract.mjs'),
+      'utf-8'
+    );
+
+    assert.match(designContractSource, /contextHygiene/);
+    assert.match(designContractSource, /repoEvidenceOverridesMemory/);
+    assert.match(designContractSource, /requireExplicitContinuityApproval/);
+    assert.match(designContractSource, /forbidCarryoverWhenUnapproved/);
+    assert.match(designContractSource, /approvedReferenceUsage/);
+    assert.match(designContractSource, /accessibilityPolicy/);
+    assert.match(designContractSource, /hardComplianceFloor/);
+    assert.match(designContractSource, /advisoryContrastModel/);
+    assert.match(designContractSource, /visualQaPolicy/);
+    assert.match(designContractSource, /capturePlan/);
+    assert.match(designContractSource, /longPageStrategy/);
+    assert.match(designContractSource, /tileOverlapRatio/);
+    assert.match(designContractSource, /deterministicFirst/);
+    assert.match(designContractSource, /requiredViewports/);
+    assert.match(designContractSource, /meaningfulDiffRatioThreshold/);
   });
 
   it('dependency governance prefers latest compatible versions and official setup flows', () => {
@@ -297,6 +329,22 @@ describe('Thin Adapter Drift Metadata', () => {
       );
     });
   }
+});
+
+describe('Bootstrap Reliability Floor', () => {
+  it('AGENTS.md carries a critical bootstrap floor for hosts that stop at the adapter', () => {
+    const agentsContent = readFileSync(join(ROOT, 'AGENTS.md'), 'utf-8');
+
+    assert.match(agentsContent, /Critical Bootstrap Floor/);
+    assert.match(agentsContent, /If your host stops at this file/i);
+    assert.match(agentsContent, /bootstrap-design\.md/);
+    assert.match(agentsContent, /frontend-architecture\.md/);
+    assert.match(agentsContent, /docs\/DESIGN\.md/);
+    assert.match(agentsContent, /docs\/design-intent\.json/);
+    assert.match(agentsContent, /Memory continuity/i);
+    assert.match(agentsContent, /does not replace bootstrap loading/i);
+    assert.match(agentsContent, /perform live web research/i);
+  });
 });
 
 // ── Test: mcp.json declares all 8 layers ────────────────────────────────────

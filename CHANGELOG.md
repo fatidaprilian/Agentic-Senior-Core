@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.17 - 2026-04-23
+### Changed
+- Hardened bootstrap reliability for existing repositories by strengthening the thin adapters with a Critical Bootstrap Floor, clarifying that memory continuity is host-supported project memory rather than a replacement for instruction loading, and keeping UI/bootstrap triggers usable even when a host stops at `AGENTS.md`.
+- Expanded the dynamic design contract with explicit context-hygiene boundaries, hybrid visual QA policy, and long-page screenshot capture planning so UI work stays fresh, repo-grounded, and deterministic before any semantic judging occurs.
+- Extended the repo-internal UI design judge so deterministic visual review now understands long-page section coverage instead of treating viewport coverage alone as complete, and synced validation, smoke coverage, and LLM-judge fixtures to enforce that behavior.
+
 ## 3.0.16 - 2026-04-22
 ### Changed
 - Reframed the architect module as an honest offline, repo-grounded architecture brief instead of a pseudo-realtime research engine, and removed stale snapshot-style recommendation baggage.

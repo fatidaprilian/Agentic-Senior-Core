@@ -54,6 +54,14 @@ const REQUIRED_FRONTEND_RULE_SNIPPETS = [
   'UI scope trigger signals',
   'visual intent, interaction quality, and conversion clarity',
   'template-only repetitive outputs',
+  'Context Hygiene and Reference Boundaries (Mandatory)',
+  'Accessibility Split (Mandatory)',
+  'Design continuity is opt-in.',
+  'repo evidence wins',
+  'WCAG 2.2 AA as the hard compliance floor',
+  'APCA as an advisory readability model',
+  'Hybrid Visual QA Boundaries (Mandatory)',
+  'Visual QA must be deterministic-first.',
   'UI Consistency Guardrails (Mandatory)',
   'Content language must stay consistent per screen and flow unless user requests multilingual output.',
   'Text color must remain contrast-safe against its background; no color collisions.',
@@ -69,6 +77,13 @@ const REQUIRED_BOOTSTRAP_DESIGN_SNIPPETS = [
   'crossViewportAdaptation.mutationRules.mobile/tablet/desktop',
   'motionSystem',
   'componentMorphology',
+  'accessibilityPolicy',
+  'visualQaPolicy',
+  'contextHygiene',
+  'Design continuity is opt-in.',
+  'WCAG 2.2 AA as the blocking baseline',
+  'APCA only as advisory perceptual tuning',
+  'Hybrid visual QA must stay deterministic-first',
 ];
 
 const REQUIRED_UI_DESIGN_JUDGE_SNIPPETS = [
@@ -77,6 +92,9 @@ const REQUIRED_UI_DESIGN_JUDGE_SNIPPETS = [
   'Runs only in advisory mode for this repository workflow.',
   'Do not reward generic SaaS defaults or popular template patterns.',
   'UI design judge only evaluates changed UI surfaces.',
+  'Deterministic visual diff reported no meaningful drift, so semantic review was skipped.',
+  'UI_VISUAL_DIFF_REPORT_JSON',
+  'meaningfulDiffViewportCount',
 ];
 
 const REQUIRED_INSTRUCTIONS_SNIPPETS = [
@@ -84,6 +102,11 @@ const REQUIRED_INSTRUCTIONS_SNIPPETS = [
   'bootstrap-design.md',
   'frontend-architecture.md',
   'do not eagerly load unrelated backend-only rules',
+  'valid style context',
+  'explicitly approved reference systems',
+  'WCAG 2.2 AA as the hard compliance floor',
+  'APCA as advisory perceptual tuning only',
+  'deterministic screenshot or diff evidence as the first layer',
 ];
 
 const REQUIRED_DESIGN_EVIDENCE_SNIPPETS = [

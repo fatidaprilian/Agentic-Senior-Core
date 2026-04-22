@@ -53,7 +53,10 @@ const BOUNDARY_RULES = [
     ],
     trigger(filePath) {
       return !isDocumentationFilePath(filePath)
-        && /(api|openapi|contract|controller|route|endpoint)/i.test(filePath);
+        && (
+          /(api|openapi|controller|route|endpoint)/i.test(filePath)
+          || /api[-_/]?contract/i.test(filePath)
+        );
     },
     docsMatcher(filePath) {
       return filePath === '.agent-context/rules/api-docs.md'

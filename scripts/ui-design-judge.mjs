@@ -25,6 +25,8 @@ const DESIGN_INTENT_PATH = resolve(REPOSITORY_ROOT, 'docs', 'design-intent.json'
 const DESIGN_GUIDE_PATH = resolve(REPOSITORY_ROOT, 'docs', 'DESIGN.md');
 const MAX_DIFF_CHARS = 12000;
 const UI_FILE_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.vue', '.css', '.scss', '.sass']);
+const DEFAULT_VISUAL_DIFF_REPORT_VERSION = 'hybrid-visual-diff-v1';
+const DEFAULT_REQUIRED_VIEWPORTS = ['mobile', 'tablet', 'desktop'];
 
 /**
  * @typedef {{
@@ -55,6 +57,32 @@ const UI_FILE_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.vue', '.css'
  *     alignmentScore: number | null,
  *     driftCount: number,
  *     blockingCandidateCount: number,
+ *     meaningfulDiffViewportCount: number,
+ *   },
+ *   deterministicVisual: {
+ *     reportPresent: boolean,
+ *     reportVersion: string | null,
+ *     baselineStrategy: string | null,
+ *     coverageComplete: boolean,
+ *     sectionCoverageRequired: boolean,
+ *     requiredViewports: string[],
+ *     coveredViewports: string[],
+ *     missingViewports: string[],
+ *     requiredSectionTypes: string[],
+ *     coveredSectionTypes: string[],
+ *     missingSectionTypes: string[],
+ *     meaningfulDiffViewports: string[],
+ *     meaningfulDiffSectionTypes: string[],
+ *     maskedViewportCount: number,
+ *     sectionCaptureCount: number,
+ *     tileCaptureCount: number,
+ *     semanticEscalationRecommended: boolean,
+ *     notes: string[],
+ *   },
+ *   semanticJudge: {
+ *     attempted: boolean,
+ *     skipped: boolean,
+ *     skipReason: string | null,
  *   },
  *   malformedVerdict: boolean,
  *   providerError: boolean,
@@ -227,16 +255,259 @@ function loadDesignGuide() {
   return readFileSync(DESIGN_GUIDE_PATH, 'utf8');
 }
 
+function toFiniteRatio(rawValue) {
+  return typeof rawValue === 'number' && Number.isFinite(rawValue)
+    ? rawValue
+    : null;
+}
+
+function normalizeStringArray(rawValue) {
+  if (!Array.isArray(rawValue)) {
+    return [];
+  }
+
+  return rawValue
+    .map((entryValue) => String(entryValue || '').trim())
+    .filter(Boolean);
+}
+
+function loadDeterministicVisualReport() {
+  if (process.env.UI_VISUAL_DIFF_REPORT_JSON) {
+    try {
+      return JSON.parse(process.env.UI_VISUAL_DIFF_REPORT_JSON);
+    } catch {
+      return {
+        malformed: true,
+        notes: ['UI_VISUAL_DIFF_REPORT_JSON could not be parsed as JSON.'],
+      };
+    }
+  }
+
+  if (process.env.UI_VISUAL_DIFF_REPORT_PATH) {
+    const reportPath = resolve(REPOSITORY_ROOT, process.env.UI_VISUAL_DIFF_REPORT_PATH);
+    if (!existsSync(reportPath)) {
+      return {
+        malformed: true,
+        notes: [`UI_VISUAL_DIFF_REPORT_PATH does not exist: ${process.env.UI_VISUAL_DIFF_REPORT_PATH}`],
+      };
+    }
+
+    try {
+      return JSON.parse(readFileSync(reportPath, 'utf8'));
+    } catch {
+      return {
+        malformed: true,
+        notes: [`UI_VISUAL_DIFF_REPORT_PATH could not be parsed as JSON: ${process.env.UI_VISUAL_DIFF_REPORT_PATH}`],
+      };
+    }
+  }
+
+  return null;
+}
+
+function summarizeDeterministicVisualReport(rawVisualReport, designIntentContent) {
+  const visualQaPolicy = designIntentContent?.visualQaPolicy && typeof designIntentContent.visualQaPolicy === 'object'
+    ? designIntentContent.visualQaPolicy
+    : {};
+  const capturePlan = visualQaPolicy?.capturePlan && typeof visualQaPolicy.capturePlan === 'object'
+    ? visualQaPolicy.capturePlan
+    : {};
+  const requiredViewports = normalizeStringArray(visualQaPolicy.requiredViewports);
+  const normalizedRequiredViewports = requiredViewports.length > 0 ? requiredViewports : DEFAULT_REQUIRED_VIEWPORTS;
+  const requiredSectionTypes = normalizeStringArray(capturePlan.requiredSectionTypes);
+  const meaningfulDiffRatioThreshold = toFiniteRatio(visualQaPolicy?.semanticEscalation?.meaningfulDiffRatioThreshold) ?? 0.01;
+  const maxUnmaskedDiffRatio = toFiniteRatio(visualQaPolicy?.stability?.maxUnmaskedDiffRatio) ?? 0.005;
+  const maxMaskedDiffRatio = toFiniteRatio(visualQaPolicy?.stability?.maxMaskedDiffRatio) ?? 0.02;
+
+  if (!rawVisualReport) {
+    return {
+      reportPresent: false,
+      reportVersion: null,
+      baselineStrategy: visualQaPolicy.baselineStrategy || null,
+      coverageComplete: false,
+      sectionCoverageRequired: capturePlan.requireSectionCapturesForLongPages === true,
+      requiredViewports: normalizedRequiredViewports,
+      coveredViewports: [],
+      missingViewports: normalizedRequiredViewports,
+      requiredSectionTypes,
+      coveredSectionTypes: [],
+      missingSectionTypes: requiredSectionTypes,
+      meaningfulDiffViewports: [],
+      meaningfulDiffSectionTypes: [],
+      maskedViewportCount: 0,
+      sectionCaptureCount: 0,
+      tileCaptureCount: 0,
+      semanticEscalationRecommended: false,
+      notes: ['No deterministic visual diff report was supplied.'],
+    };
+  }
+
+  if (rawVisualReport.malformed === true) {
+    return {
+      reportPresent: false,
+      reportVersion: null,
+      baselineStrategy: visualQaPolicy.baselineStrategy || null,
+      coverageComplete: false,
+      sectionCoverageRequired: capturePlan.requireSectionCapturesForLongPages === true,
+      requiredViewports: normalizedRequiredViewports,
+      coveredViewports: [],
+      missingViewports: normalizedRequiredViewports,
+      requiredSectionTypes,
+      coveredSectionTypes: [],
+      missingSectionTypes: requiredSectionTypes,
+      meaningfulDiffViewports: [],
+      meaningfulDiffSectionTypes: [],
+      maskedViewportCount: 0,
+      sectionCaptureCount: 0,
+      tileCaptureCount: 0,
+      semanticEscalationRecommended: true,
+      notes: normalizeStringArray(rawVisualReport.notes).length > 0
+        ? normalizeStringArray(rawVisualReport.notes)
+        : ['Deterministic visual diff report was malformed.'],
+    };
+  }
+
+  const viewportResults = Array.isArray(rawVisualReport.viewportResults)
+    ? rawVisualReport.viewportResults
+      .map((rawViewportResult) => {
+        const viewportName = String(rawViewportResult?.viewport || '').trim().toLowerCase();
+        const pixelDiffRatio = toFiniteRatio(rawViewportResult?.pixelDiffRatio);
+        const maskedPixelDiffRatio = toFiniteRatio(rawViewportResult?.maskedPixelDiffRatio);
+        const withinNoiseBudget = typeof rawViewportResult?.withinNoiseBudget === 'boolean'
+          ? rawViewportResult.withinNoiseBudget
+          : (pixelDiffRatio === null || pixelDiffRatio <= maxUnmaskedDiffRatio)
+            && (maskedPixelDiffRatio === null || maskedPixelDiffRatio <= maxMaskedDiffRatio);
+        const meaningfulDiff = typeof rawViewportResult?.meaningfulDiff === 'boolean'
+          ? rawViewportResult.meaningfulDiff
+          : (pixelDiffRatio !== null && pixelDiffRatio > meaningfulDiffRatioThreshold)
+            || (maskedPixelDiffRatio !== null && maskedPixelDiffRatio > meaningfulDiffRatioThreshold);
+
+        return {
+          viewport: viewportName,
+          pixelDiffRatio,
+          maskedPixelDiffRatio,
+          withinNoiseBudget,
+          meaningfulDiff,
+          dynamicMaskCategories: normalizeStringArray(rawViewportResult?.dynamicMaskCategories),
+          notes: normalizeStringArray(rawViewportResult?.notes),
+        };
+      })
+      .filter((viewportResult) => Boolean(viewportResult.viewport))
+    : [];
+  const sectionResults = Array.isArray(rawVisualReport.sectionResults)
+    ? rawVisualReport.sectionResults
+      .map((rawSectionResult) => {
+        const sectionType = String(rawSectionResult?.sectionType || '').trim().toLowerCase();
+        const captureKind = String(rawSectionResult?.captureKind || '').trim().toLowerCase();
+        const tileIndex = Number.isInteger(rawSectionResult?.tileIndex) ? rawSectionResult.tileIndex : null;
+        const pixelDiffRatio = toFiniteRatio(rawSectionResult?.pixelDiffRatio);
+        const maskedPixelDiffRatio = toFiniteRatio(rawSectionResult?.maskedPixelDiffRatio);
+        const withinNoiseBudget = typeof rawSectionResult?.withinNoiseBudget === 'boolean'
+          ? rawSectionResult.withinNoiseBudget
+          : (pixelDiffRatio === null || pixelDiffRatio <= maxUnmaskedDiffRatio)
+            && (maskedPixelDiffRatio === null || maskedPixelDiffRatio <= maxMaskedDiffRatio);
+        const meaningfulDiff = typeof rawSectionResult?.meaningfulDiff === 'boolean'
+          ? rawSectionResult.meaningfulDiff
+          : (pixelDiffRatio !== null && pixelDiffRatio > meaningfulDiffRatioThreshold)
+            || (maskedPixelDiffRatio !== null && maskedPixelDiffRatio > meaningfulDiffRatioThreshold);
+
+        return {
+          sectionType,
+          captureKind,
+          tileIndex,
+          pixelDiffRatio,
+          maskedPixelDiffRatio,
+          withinNoiseBudget,
+          meaningfulDiff,
+          notes: normalizeStringArray(rawSectionResult?.notes),
+        };
+      })
+      .filter((sectionResult) => Boolean(sectionResult.sectionType))
+    : [];
+
+  const coveredViewports = Array.from(new Set(viewportResults.map((viewportResult) => viewportResult.viewport)));
+  const missingViewports = normalizedRequiredViewports.filter((requiredViewport) => !coveredViewports.includes(requiredViewport));
+  const sectionCoverageRequired = capturePlan.requireSectionCapturesForLongPages === true && (
+    rawVisualReport.requiresSectionCoverage === true
+    || String(rawVisualReport.pageLengthCategory || '').trim().toLowerCase() === 'long'
+    || sectionResults.length > 0
+  );
+  const coveredSectionTypes = Array.from(new Set(sectionResults.map((sectionResult) => sectionResult.sectionType)));
+  const missingSectionTypes = sectionCoverageRequired
+    ? requiredSectionTypes.filter((requiredSectionType) => !coveredSectionTypes.includes(requiredSectionType))
+    : [];
+  const meaningfulDiffViewports = viewportResults
+    .filter((viewportResult) => viewportResult.meaningfulDiff)
+    .map((viewportResult) => viewportResult.viewport);
+  const meaningfulDiffSectionTypes = Array.from(new Set(
+    sectionResults
+      .filter((sectionResult) => sectionResult.meaningfulDiff)
+      .map((sectionResult) => sectionResult.sectionType)
+  ));
+  const maskedViewportCount = viewportResults.filter((viewportResult) => viewportResult.dynamicMaskCategories.length > 0).length;
+  const tileCaptureCount = sectionResults.filter((sectionResult) => sectionResult.captureKind === 'tile').length;
+  const reportNotes = normalizeStringArray(rawVisualReport.notes);
+
+  const semanticEscalationRecommended = rawVisualReport?.summary?.semanticEscalationRecommended === true
+    || meaningfulDiffViewports.length > 0
+    || meaningfulDiffSectionTypes.length > 0
+    || (
+      visualQaPolicy?.semanticEscalation?.escalateWhenViewportCoverageIncomplete === true
+      && missingViewports.length > 0
+    )
+    || (
+      sectionCoverageRequired
+      && missingSectionTypes.length > 0
+    );
+  const fallbackNotes = [];
+  if (viewportResults.length === 0) {
+    fallbackNotes.push('Deterministic visual diff report did not include viewportResults.');
+  }
+  if (sectionCoverageRequired && sectionResults.length === 0) {
+    fallbackNotes.push('Long-page screenshot coverage was required, but sectionResults were not provided.');
+  }
+  if (sectionCoverageRequired && missingSectionTypes.length > 0) {
+    fallbackNotes.push(`Long-page screenshot coverage is incomplete. Missing section captures: ${missingSectionTypes.join(', ')}.`);
+  }
+
+  return {
+    reportPresent: true,
+    reportVersion: String(rawVisualReport.reportVersion || DEFAULT_VISUAL_DIFF_REPORT_VERSION),
+    baselineStrategy: String(rawVisualReport.baselineStrategy || visualQaPolicy.baselineStrategy || 'deterministic-screenshots'),
+    coverageComplete: missingViewports.length === 0 && (!sectionCoverageRequired || missingSectionTypes.length === 0),
+    sectionCoverageRequired,
+    requiredViewports: normalizedRequiredViewports,
+    coveredViewports,
+    missingViewports,
+    requiredSectionTypes,
+    coveredSectionTypes,
+    missingSectionTypes,
+    meaningfulDiffViewports,
+    meaningfulDiffSectionTypes,
+    maskedViewportCount,
+    sectionCaptureCount: sectionResults.length,
+    tileCaptureCount,
+    semanticEscalationRecommended,
+    notes: reportNotes.length > 0
+      ? reportNotes
+      : fallbackNotes,
+  };
+}
+
 function buildSystemPrompt() {
   return [
     'You are a Principal UI/UX Design Reviewer.',
     'Compare the changed UI code against the provided design contract.',
     'Treat docs/design-intent.json as the machine-readable source of truth.',
     'Treat docs/DESIGN.md as explanatory context, not a generic style guide.',
+    'When deterministic visual diff evidence is provided, treat it as the first layer of truth for noise filtering, viewport coverage, long-page section coverage, and meaningful-drift detection.',
     'Do not reward generic SaaS defaults or popular template patterns.',
     'Do not penalize originality when the implementation still aligns with the contract.',
     'Purposeful motion is allowed and can improve quality. Only flag motion when it drifts from the contract, ignores reduced-motion expectations, or adds avoidable performance/accessibility risk.',
     'Only flag drift when there is a clear mismatch with the contract, accessibility non-negotiables, or cross-viewport adaptation rules.',
+    'Treat WCAG 2.2 AA failures as hard accessibility drift.',
+    'Treat APCA as advisory perceptual tuning only. Do not recommend blocking solely because APCA would prefer a stronger readability adjustment when WCAG hard requirements still pass.',
+    'Check focus visibility, focus appearance, target size, keyboard access, accessible authentication, and status or dynamic state access when the diff touches those surfaces.',
     'This audit always runs in advisory mode for this repository workflow.',
     'Focus on color intent, typographic hierarchy, responsive re-layout, purposeful motion, component morphology across states, interaction behavior, and genericity drift.',
     'Return ONLY one JSON object on a single line prefixed with JSON_VERDICT:.',
@@ -245,7 +516,7 @@ function buildSystemPrompt() {
   ].join('\n');
 }
 
-function buildUserMessage(designIntentContent, designGuideContent, diffContent, changedUiFiles) {
+function buildUserMessage(designIntentContent, designGuideContent, diffContent, changedUiFiles, deterministicVisualSummary) {
   const truncatedDiff = diffContent.length > MAX_DIFF_CHARS
     ? `${diffContent.slice(0, MAX_DIFF_CHARS)}\n\n[DIFF TRUNCATED - ${diffContent.length - MAX_DIFF_CHARS} additional characters omitted]`
     : diffContent;
@@ -262,6 +533,11 @@ function buildUserMessage(designIntentContent, designGuideContent, diffContent, 
     '## DESIGN.md',
     '```md',
     designGuideContent.trim() || '(missing DESIGN.md)',
+    '```',
+    '',
+    '## Deterministic Visual Diff Summary',
+    '```json',
+    JSON.stringify(deterministicVisualSummary, null, 2),
     '```',
     '',
     '## UI Diff',
@@ -416,7 +692,7 @@ function buildReport(partialReport) {
   return {
     generatedAt: new Date().toISOString(),
     auditName: 'ui-design-judge',
-    schemaVersion: '1.0',
+    schemaVersion: '1.1',
     mode: 'advisory',
     advisoryOnly: true,
     passed: true,
@@ -430,6 +706,25 @@ function buildReport(partialReport) {
       alignmentScore: null,
       driftCount: 0,
       blockingCandidateCount: 0,
+      meaningfulDiffViewportCount: 0,
+    },
+    deterministicVisual: {
+      reportPresent: false,
+      reportVersion: null,
+      baselineStrategy: null,
+      coverageComplete: false,
+      requiredViewports: [],
+      coveredViewports: [],
+      missingViewports: [],
+      meaningfulDiffViewports: [],
+      maskedViewportCount: 0,
+      semanticEscalationRecommended: false,
+      notes: [],
+    },
+    semanticJudge: {
+      attempted: false,
+      skipped: false,
+      skipReason: null,
     },
     malformedVerdict: false,
     providerError: false,
@@ -470,14 +765,53 @@ async function main() {
         alignmentScore: null,
         driftCount: 0,
         blockingCandidateCount: 0,
+        meaningfulDiffViewportCount: 0,
       },
       notes: ['UI design judge only evaluates changed UI surfaces.'],
     }));
     return;
   }
 
+  const deterministicVisualSummary = summarizeDeterministicVisualReport(
+    loadDeterministicVisualReport(),
+    designIntentContent
+  );
+  const shouldRunSemanticJudge = !deterministicVisualSummary.reportPresent
+    || deterministicVisualSummary.semanticEscalationRecommended;
+
+  if (!shouldRunSemanticJudge) {
+    emitMachineReadableReport(buildReport({
+      provider: 'none',
+      contractPresent: true,
+      summary: {
+        changedUiFileCount: changedUiFiles.length,
+        alignmentScore: null,
+        driftCount: 0,
+        blockingCandidateCount: 0,
+        meaningfulDiffViewportCount: deterministicVisualSummary.meaningfulDiffViewports.length,
+      },
+      deterministicVisual: deterministicVisualSummary,
+      semanticJudge: {
+        attempted: false,
+        skipped: true,
+        skipReason: 'deterministic-clean',
+      },
+      notes: [
+        'Deterministic visual diff reported no meaningful drift, so semantic review was skipped.',
+        ...deterministicVisualSummary.notes,
+      ],
+    }));
+    return;
+  }
+
   const systemPrompt = buildSystemPrompt();
-  const userMessage = buildUserMessage(designIntentContent, designGuideContent, rawDiff, changedUiFiles);
+  const userMessage = buildUserMessage(
+    designIntentContent,
+    designGuideContent,
+    rawDiff,
+    changedUiFiles,
+    deterministicVisualSummary
+  );
 
   const selectedProvider = selectAvailableProvider();
   if (!selectedProvider) {
@@ -489,8 +823,18 @@ async function main() {
         alignmentScore: null,
         driftCount: 0,
         blockingCandidateCount: 0,
+        meaningfulDiffViewportCount: deterministicVisualSummary.meaningfulDiffViewports.length,
       },
-      notes: ['No LLM provider configured. UI design judge skipped provider review and stayed advisory.'],
+      deterministicVisual: deterministicVisualSummary,
+      semanticJudge: {
+        attempted: false,
+        skipped: true,
+        skipReason: 'no-provider-configured',
+      },
+      notes: [
+        'No LLM provider configured. UI design judge skipped provider review and stayed advisory.',
+        ...deterministicVisualSummary.notes,
+      ],
     }));
     return;
   }
@@ -512,8 +856,15 @@ async function main() {
         alignmentScore: null,
         driftCount: 0,
         blockingCandidateCount: 0,
+        meaningfulDiffViewportCount: deterministicVisualSummary.meaningfulDiffViewports.length,
       },
-      notes: [`Provider call failed: ${providerErrorMessage}`],
+      deterministicVisual: deterministicVisualSummary,
+      semanticJudge: {
+        attempted: true,
+        skipped: false,
+        skipReason: null,
+      },
+      notes: [`Provider call failed: ${providerErrorMessage}`, ...deterministicVisualSummary.notes],
       passed: true,
     }));
     return;
@@ -537,11 +888,18 @@ async function main() {
       alignmentScore,
       driftCount: findings.length,
       blockingCandidateCount,
+      meaningfulDiffViewportCount: deterministicVisualSummary.meaningfulDiffViewports.length,
+    },
+    deterministicVisual: deterministicVisualSummary,
+    semanticJudge: {
+      attempted: true,
+      skipped: false,
+      skipReason: null,
     },
     findings,
     notes: malformed
-      ? ['LLM response was malformed. Advisory mode kept the audit non-blocking.']
-      : notes,
+      ? ['LLM response was malformed. Advisory mode kept the audit non-blocking.', ...deterministicVisualSummary.notes]
+      : [...notes, ...deterministicVisualSummary.notes],
   });
 
   emitMachineReadableReport(reportPayload);

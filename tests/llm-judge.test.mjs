@@ -78,6 +78,94 @@ test('LLM Judge Tests', async (t) => {
         desktop: 'Expose richer states and denser supporting detail.',
       },
     },
+    accessibilityPolicy: {
+      hardComplianceFloor: 'WCAG-2.2-AA',
+      advisoryContrastModel: 'APCA',
+      failOnHardViolations: true,
+      advisoryFindingsDoNotBlockByDefault: true,
+      hardRequirements: {
+        textContrastMinimum: true,
+        nonTextContrast: true,
+        useOfColorOnlyProhibited: true,
+        focusVisible: true,
+        focusAppearance: true,
+        targetSizeMinimum: true,
+        keyboardAccess: true,
+        reflowRequired: true,
+        accessibleAuthenticationMinimum: true,
+        statusMessagesAndDynamicStateAccess: true,
+      },
+      advisoryChecks: {
+        perceptualContrastReview: true,
+        darkModeContrastTuning: true,
+        typographyReadabilityTuning: true,
+      },
+    },
+    visualQaPolicy: {
+      deterministicFirst: true,
+      baselineStrategy: 'deterministic-screenshots',
+      reportVersion: 'hybrid-visual-diff-v1',
+      requiredViewports: ['mobile', 'tablet', 'desktop'],
+      capturePlan: {
+        requireAboveFoldCapture: true,
+        requireFullPageCapture: true,
+        requireSectionCapturesForLongPages: true,
+        longPageStrategy: 'anchor-plus-tiles',
+        minimumSectionCaptureCount: 3,
+        maxViewportHeightsPerTile: 3,
+        tileOverlapRatio: 0.15,
+        requiredSectionTypes: [
+          'hero-or-primary-action',
+          'midpage-proof-or-content',
+          'footer-or-terminal-state',
+        ],
+      },
+      masking: {
+        requireDynamicContentMasks: true,
+        requireMaskReasonAnnotations: true,
+        allowedDynamicMaskCategories: [
+          'time-based-content',
+          'randomized-content',
+          'live-counters',
+          'streaming-media',
+          'user-specific-personalization',
+        ],
+      },
+      stability: {
+        maxUnmaskedDiffRatio: 0.005,
+        maxMaskedDiffRatio: 0.02,
+        requireConsistentRenderingEnvironment: true,
+      },
+      semanticEscalation: {
+        requireMeaningfulDiffForEscalation: true,
+        escalateWhenViewportCoverageIncomplete: true,
+        skipSemanticJudgeWhenDeterministicClean: true,
+        meaningfulDiffRatioThreshold: 0.01,
+      },
+      artifactContract: {
+        requireMachineReadableDiffBundle: true,
+        requireViewportResults: true,
+        mergeDeterministicAndSemanticVerdicts: true,
+      },
+    },
+    contextHygiene: {
+      continuityMode: 'opt-in-only',
+      allowedSources: [
+        'current-repo-evidence',
+        'current-user-brief',
+        'current-project-docs',
+        'explicitly-approved-reference-systems',
+      ],
+      taintedSources: [
+        'prior-chat-visual-memory',
+        'unrelated-project-aesthetics',
+        'remembered-screenshots-without-current-approval',
+      ],
+      repoEvidenceOverridesMemory: true,
+      requireExplicitContinuityApproval: true,
+      forbidCarryoverWhenUnapproved: true,
+      approvedReferenceUsage: 'Adapt reasoning and constraints without copying the source surface 1:1.',
+    },
     validationHints: {
       requireViewportMutationRules: true,
       requireMotionRationale: true,
@@ -145,7 +233,10 @@ test('LLM Judge Tests', async (t) => {
       assert.equal(report.passed, true);
       assert.equal(report.summary.changedUiFileCount, 1);
       assert.equal(report.summary.alignmentScore, 82);
+      assert.equal(report.summary.meaningfulDiffViewportCount, 0);
       assert.equal(report.summary.blockingCandidateCount, 1);
+      assert.equal(report.semanticJudge.attempted, true);
+      assert.equal(report.deterministicVisual.reportPresent, false);
       assert.equal(report.findings[0].severity, 'high');
     });
   });
@@ -169,7 +260,111 @@ test('LLM Judge Tests', async (t) => {
       assert.equal(report.mode, 'advisory');
       assert.equal(report.advisoryOnly, true);
       assert.equal(report.passed, true);
+      assert.equal(report.semanticJudge.skipped, true);
       assert.match(report.notes.join(' '), /No LLM provider configured/);
+    });
+  });
+
+  await t.test('ui-design-judge skips semantic review when deterministic diff stays clean', () => {
+    withTemporaryDesignIntent(() => {
+      const output = execSync(`node ${uiDesignJudgePath}`, {
+        env: {
+          ...process.env,
+          PR_DIFF: sampleUiDiff,
+          UI_VISUAL_DIFF_REPORT_JSON: JSON.stringify({
+            reportVersion: 'hybrid-visual-diff-v1',
+            baselineStrategy: 'deterministic-screenshots',
+            viewportResults: [
+              { viewport: 'mobile', pixelDiffRatio: 0.001, maskedPixelDiffRatio: 0.001, withinNoiseBudget: true },
+              { viewport: 'tablet', pixelDiffRatio: 0.002, maskedPixelDiffRatio: 0.002, withinNoiseBudget: true },
+              { viewport: 'desktop', pixelDiffRatio: 0.003, maskedPixelDiffRatio: 0.003, withinNoiseBudget: true },
+            ],
+          }),
+          OPENAI_API_KEY: '',
+          ANTHROPIC_API_KEY: '',
+          GEMINI_API_KEY: '',
+          UI_DESIGN_JUDGE_MOCK_RESPONSE: '',
+        },
+      }).toString();
+
+      const report = JSON.parse(output);
+      assert.equal(report.provider, 'none');
+      assert.equal(report.semanticJudge.attempted, false);
+      assert.equal(report.semanticJudge.skipped, true);
+      assert.equal(report.semanticJudge.skipReason, 'deterministic-clean');
+      assert.equal(report.deterministicVisual.reportPresent, true);
+      assert.equal(report.deterministicVisual.coverageComplete, true);
+      assert.equal(report.summary.meaningfulDiffViewportCount, 0);
+      assert.match(report.notes.join(' '), /Deterministic visual diff reported no meaningful drift/i);
+    });
+  });
+
+  await t.test('ui-design-judge escalates meaningful deterministic visual drift to semantic review', () => {
+    withTemporaryDesignIntent(() => {
+      const output = execSync(`node ${uiDesignJudgePath}`, {
+        env: {
+          ...process.env,
+          PR_DIFF: sampleUiDiff,
+          UI_VISUAL_DIFF_REPORT_JSON: JSON.stringify({
+            reportVersion: 'hybrid-visual-diff-v1',
+            baselineStrategy: 'deterministic-screenshots',
+            viewportResults: [
+              { viewport: 'mobile', pixelDiffRatio: 0.015, maskedPixelDiffRatio: 0.004, dynamicMaskCategories: ['live-counters'] },
+              { viewport: 'tablet', pixelDiffRatio: 0.002, maskedPixelDiffRatio: 0.001, withinNoiseBudget: true },
+              { viewport: 'desktop', pixelDiffRatio: 0.003, maskedPixelDiffRatio: 0.002, withinNoiseBudget: true },
+            ],
+          }),
+          UI_DESIGN_JUDGE_MOCK_RESPONSE: 'JSON_VERDICT: {"alignmentScore":74,"notes":["Meaningful mobile drift requires contract review."],"findings":[{"area":"layout","severity":"high","problem":"Mobile hero layout drifted from the contract.","evidence":"Deterministic diff crossed the meaningful threshold on mobile.","recommendation":"Restore the intended mobile hierarchy and verify CTA order.","blockingRecommended":true}]}',
+        },
+      }).toString();
+
+      const report = JSON.parse(output);
+      assert.equal(report.provider, 'mock');
+      assert.equal(report.semanticJudge.attempted, true);
+      assert.equal(report.deterministicVisual.reportPresent, true);
+      assert.equal(report.deterministicVisual.semanticEscalationRecommended, true);
+      assert.deepEqual(report.deterministicVisual.meaningfulDiffViewports, ['mobile']);
+      assert.equal(report.summary.meaningfulDiffViewportCount, 1);
+      assert.equal(report.summary.alignmentScore, 74);
+    });
+  });
+
+  await t.test('ui-design-judge treats long-page section coverage as part of deterministic completeness', () => {
+    withTemporaryDesignIntent(() => {
+      const output = execSync(`node ${uiDesignJudgePath}`, {
+        env: {
+          ...process.env,
+          PR_DIFF: sampleUiDiff,
+          UI_VISUAL_DIFF_REPORT_JSON: JSON.stringify({
+            reportVersion: 'hybrid-visual-diff-v1',
+            baselineStrategy: 'deterministic-screenshots',
+            pageLengthCategory: 'long',
+            viewportResults: [
+              { viewport: 'mobile', pixelDiffRatio: 0.001, maskedPixelDiffRatio: 0.001, withinNoiseBudget: true },
+              { viewport: 'tablet', pixelDiffRatio: 0.002, maskedPixelDiffRatio: 0.002, withinNoiseBudget: true },
+              { viewport: 'desktop', pixelDiffRatio: 0.003, maskedPixelDiffRatio: 0.003, withinNoiseBudget: true },
+            ],
+            sectionResults: [
+              { sectionType: 'hero-or-primary-action', captureKind: 'anchor', pixelDiffRatio: 0.001, maskedPixelDiffRatio: 0.001, withinNoiseBudget: true },
+              { sectionType: 'midpage-proof-or-content', captureKind: 'tile', tileIndex: 1, pixelDiffRatio: 0.002, maskedPixelDiffRatio: 0.002, withinNoiseBudget: true },
+            ],
+          }),
+          OPENAI_API_KEY: '',
+          ANTHROPIC_API_KEY: '',
+          GEMINI_API_KEY: '',
+          UI_DESIGN_JUDGE_MOCK_RESPONSE: '',
+        },
+      }).toString();
+
+      const report = JSON.parse(output);
+      assert.equal(report.provider, 'none');
+      assert.equal(report.deterministicVisual.sectionCoverageRequired, true);
+      assert.equal(report.deterministicVisual.coverageComplete, false);
+      assert.deepEqual(report.deterministicVisual.missingSectionTypes, ['footer-or-terminal-state']);
+      assert.equal(report.deterministicVisual.sectionCaptureCount, 2);
+      assert.equal(report.deterministicVisual.tileCaptureCount, 1);
+      assert.equal(report.deterministicVisual.semanticEscalationRecommended, true);
+      assert.match(report.notes.join(' '), /Long-page screenshot coverage is incomplete/i);
     });
   });
 });

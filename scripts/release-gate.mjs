@@ -747,6 +747,28 @@ function runReleaseGate() {
         'UI design judge unexpectedly ran in blocking mode during release gate'
       );
     }
+
+    const hasHybridVisualQaDiagnostics = typeof uiDesignJudgeExecution.report?.summary?.meaningfulDiffViewportCount === 'number'
+      && typeof uiDesignJudgeExecution.report?.deterministicVisual?.reportPresent === 'boolean'
+      && Array.isArray(uiDesignJudgeExecution.report?.deterministicVisual?.requiredViewports)
+      && typeof uiDesignJudgeExecution.report?.semanticJudge?.attempted === 'boolean'
+      && typeof uiDesignJudgeExecution.report?.semanticJudge?.skipped === 'boolean';
+
+    if (hasHybridVisualQaDiagnostics) {
+      pushResult(
+        results,
+        true,
+        'ui-design-judge-hybrid-diagnostics',
+        'UI design judge reports deterministic visual QA summary and semantic-review state together'
+      );
+    } else {
+      pushResult(
+        results,
+        false,
+        'ui-design-judge-hybrid-diagnostics',
+        'UI design judge is missing deterministic visual QA or semantic-review machine-readable fields'
+      );
+    }
   }
 
   const benchmarkGateExecution = runMachineReadableScript(BENCHMARK_GATE_SCRIPT_PATH);

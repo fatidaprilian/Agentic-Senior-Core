@@ -59,6 +59,13 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.match(bootstrapDesignPrompt, /crossViewportAdaptation/);
       assert.match(bootstrapDesignPrompt, /motionSystem/);
       assert.match(bootstrapDesignPrompt, /componentMorphology/);
+      assert.match(bootstrapDesignPrompt, /accessibilityPolicy/);
+      assert.match(bootstrapDesignPrompt, /visualQaPolicy/);
+      assert.match(bootstrapDesignPrompt, /contextHygiene/);
+      assert.match(bootstrapDesignPrompt, /Design continuity is opt-in\./);
+      assert.match(bootstrapDesignPrompt, /WCAG 2\.2 AA/);
+      assert.match(bootstrapDesignPrompt, /APCA/);
+      assert.match(bootstrapDesignPrompt, /deterministic-first/i);
 
       const designIntentSeed = readJson(join(uiScaffoldingTargetDirectory, 'docs', 'design-intent.json'));
       assert.equal(designIntentSeed.mode, 'dynamic');
@@ -74,6 +81,20 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.motionSystem.respectReducedMotion, true);
       assert.equal(designIntentSeed.componentMorphology.requireStateBehaviorMatrix, true);
       assert.ok(designIntentSeed.componentMorphology.stateKeys.includes('loading'));
+      assert.equal(designIntentSeed.accessibilityPolicy.hardComplianceFloor, 'WCAG-2.2-AA');
+      assert.equal(designIntentSeed.accessibilityPolicy.advisoryContrastModel, 'APCA');
+      assert.equal(designIntentSeed.accessibilityPolicy.failOnHardViolations, true);
+      assert.equal(designIntentSeed.visualQaPolicy.deterministicFirst, true);
+      assert.equal(designIntentSeed.visualQaPolicy.reportVersion, 'hybrid-visual-diff-v1');
+      assert.deepEqual(designIntentSeed.visualQaPolicy.requiredViewports, ['mobile', 'tablet', 'desktop']);
+      assert.equal(designIntentSeed.visualQaPolicy.capturePlan.requireAboveFoldCapture, true);
+      assert.equal(designIntentSeed.visualQaPolicy.capturePlan.requireSectionCapturesForLongPages, true);
+      assert.equal(designIntentSeed.visualQaPolicy.capturePlan.longPageStrategy, 'anchor-plus-tiles');
+      assert.equal(designIntentSeed.visualQaPolicy.capturePlan.minimumSectionCaptureCount >= 3, true);
+      assert.equal(designIntentSeed.visualQaPolicy.semanticEscalation.skipSemanticJudgeWhenDeterministicClean, true);
+      assert.equal(designIntentSeed.contextHygiene.continuityMode, 'opt-in-only');
+      assert.equal(designIntentSeed.contextHygiene.repoEvidenceOverridesMemory, true);
+      assert.equal(designIntentSeed.contextHygiene.forbidCarryoverWhenUnapproved, true);
       assert.equal(designIntentSeed.implementation.requireViewportMutationRules, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
       assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);
@@ -84,6 +105,13 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.match(compiledRulesContent, /- For UI scope: if docs\/DESIGN\.md or docs\/design-intent\.json is missing, execute bootstrap-design prompt before implementing UI surfaces\./);
       assert.match(compiledRulesContent, /LAYER 5: EXECUTION PROMPTS AND UI TRIGGERS/);
       assert.match(compiledRulesContent, /bootstrap-design\.md -> ui, ux, layout, screen, tailwind, frontend, redesign/);
+
+      const agentsContent = readFileSync(join(uiScaffoldingTargetDirectory, 'AGENTS.md'), 'utf8');
+      assert.match(agentsContent, /Critical Bootstrap Floor/);
+      assert.match(agentsContent, /bootstrap-design\.md/);
+      assert.match(agentsContent, /frontend-architecture\.md/);
+      assert.match(agentsContent, /docs\/DESIGN\.md/);
+      assert.match(agentsContent, /docs\/design-intent\.json/);
     } finally {
       rmSync(uiScaffoldingTargetDirectory, { recursive: true, force: true });
     }
@@ -155,6 +183,10 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
       assert.equal(designIntentSeed.motionSystem.allowMeaningfulMotion, true);
       assert.equal(designIntentSeed.componentMorphology.requireStateBehaviorMatrix, true);
+      assert.equal(designIntentSeed.accessibilityPolicy.hardComplianceFloor, 'WCAG-2.2-AA');
+      assert.equal(designIntentSeed.visualQaPolicy.deterministicFirst, true);
+      assert.equal(designIntentSeed.visualQaPolicy.capturePlan.longPageStrategy, 'anchor-plus-tiles');
+      assert.equal(designIntentSeed.contextHygiene.requireExplicitContinuityApproval, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
       assert.equal(designIntentSeed.repoEvidence.frontendMetrics.hardcodedColorCount >= 2, true);
       assert.equal(designIntentSeed.repoEvidence.frontendMetrics.propDrillingCandidateCount >= 1, true);
@@ -213,6 +245,10 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.deepEqual(designIntentSeed.tokenSystem.taxonomyOrder, ['primitive', 'semantic', 'component']);
       assert.equal(designIntentSeed.motionSystem.allowMeaningfulMotion, true);
       assert.equal(designIntentSeed.componentMorphology.requireStateBehaviorMatrix, true);
+      assert.equal(designIntentSeed.accessibilityPolicy.advisoryContrastModel, 'APCA');
+      assert.equal(designIntentSeed.visualQaPolicy.reportVersion, 'hybrid-visual-diff-v1');
+      assert.equal(designIntentSeed.visualQaPolicy.capturePlan.requireSectionCapturesForLongPages, true);
+      assert.equal(designIntentSeed.contextHygiene.repoEvidenceOverridesMemory, true);
       assert.ok(Array.isArray(designIntentSeed.repoEvidence.workspaceUiEntries));
       assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.summaryVersion, 'v1');
       assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.tailwind.breakpointUsageCount >= 1, true);
@@ -468,6 +504,9 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
       assert.equal(designIntentSeed.motionSystem.allowMeaningfulMotion, true);
       assert.equal(designIntentSeed.componentMorphology.requireStateBehaviorMatrix, true);
+      assert.equal(designIntentSeed.accessibilityPolicy.failOnHardViolations, true);
+      assert.equal(designIntentSeed.visualQaPolicy.semanticEscalation.requireMeaningfulDiffForEscalation, true);
+      assert.equal(designIntentSeed.contextHygiene.continuityMode, 'opt-in-only');
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
       assert.equal(designIntentSeed.implementation.requireViewportMutationRules, true);
       assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.summaryVersion, 'v1');
@@ -556,7 +595,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
         `node ${cliPath} init ${defaultOptimizationTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
       ).toString();
 
-      assert.match(defaultInitOutput, /Memory continuity policy enabled/);
+      assert.match(defaultInitOutput, /Project memory continuity metadata enabled/);
       assert.match(defaultInitOutput, /Token optimization policy enabled for agent/);
 
       const defaultMemoryState = readJson(

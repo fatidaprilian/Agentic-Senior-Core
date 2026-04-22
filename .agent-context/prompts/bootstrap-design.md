@@ -30,6 +30,13 @@ The agent must:
 14. Do not reuse a color palette, component skin, or motion signature from prior chats, memories, or unrelated projects unless current repo evidence or the active brand brief explicitly asks for that continuity.
 15. Treat prior website memory, old portfolio styles, and remembered screenshots as tainted context unless the user explicitly asks to continue or evolve that specific visual system.
 16. Do not default to balanced card grids, soft startup gradients, safe centered heroes, or neutral dashboard chrome unless the product context explicitly justifies them.
+17. For design work, only these count as valid style context by default: current repo evidence, the current user brief, current project docs, and explicitly approved reference systems.
+18. Design continuity is opt-in. If the user does not explicitly ask for continuity with an older system, prefer fresh synthesis from the current repo and brief.
+19. Accessibility must be split into a hard compliance floor and an advisory readability layer. Use WCAG 2.2 AA as the blocking baseline, and use APCA only as advisory perceptual tuning. APCA must never waive a WCAG failure.
+20. Accessibility planning must cover more than color contrast. It must explicitly address focus visibility, focus appearance, target size, keyboard access, accessible authentication, and dynamic state/status access.
+21. Hybrid visual QA must stay deterministic-first. Define screenshot baseline expectations, dynamic-content masking rules, stability thresholds, viewport coverage, and long-page capture strategy before escalating any visual drift to a semantic judge.
+22. Do not assume one screenshot is enough for a long page. Require above-fold capture, full-page capture when stable, and anchor-based section or tiled-scroll captures when deep content would otherwise be missed.
+23. Deterministic visual QA must distinguish rendering noise from meaningful layout or styling drift. If a semantic judge is used later, it should only review diffs that already exceeded the deterministic threshold or lost required coverage.
 
 Required `docs/DESIGN.md` sections:
 1. Design Intent and Product Personality
@@ -42,9 +49,10 @@ Required `docs/DESIGN.md` sections:
 8. Responsive Strategy and Cross-Viewport Adaptation Matrix
 9. Interaction, Motion, and Feedback Rules
 10. Component Language, Morphology, and Shared Patterns
-11. Accessibility Non-Negotiables
-12. Anti-Patterns to Avoid
-13. Implementation Notes for Future UI Tasks
+11. Context Hygiene and Approved Reference Boundaries
+12. Accessibility Non-Negotiables
+13. Anti-Patterns to Avoid
+14. Implementation Notes for Future UI Tasks
 
 Required `docs/design-intent.json` fields:
 - `mode`
@@ -60,6 +68,9 @@ Required `docs/design-intent.json` fields:
 - `crossViewportAdaptation`
 - `motionSystem`
 - `componentMorphology`
+- `accessibilityPolicy`
+- `visualQaPolicy`
+- `contextHygiene`
 - `experiencePrinciples`
 - `forbiddenPatterns`
 - `validationHints`
@@ -73,13 +84,20 @@ Output:
 - `docs/design-intent.json` must define a real token system, not just loose style notes. Include primitive, semantic, and component layers plus aliasing rules and naming constraints.
 - `docs/design-intent.json` must include deterministic fields for `colorTruth.format`, `colorTruth.allowHexDerivatives`, and `crossViewportAdaptation.mutationRules.mobile/tablet/desktop`.
 - `docs/design-intent.json` must also include `motionSystem` and `componentMorphology` so future UI work preserves state behavior and purposeful motion without collapsing into generic static output.
+- `docs/design-intent.json` must also include `accessibilityPolicy` so the hard compliance floor, advisory contrast model, and blocking-vs-advisory checks stay machine-readable.
+- `docs/design-intent.json` must also include `visualQaPolicy` so deterministic screenshot expectations, masking rules, viewport coverage, long-page capture strategy, stability thresholds, and semantic-escalation boundaries stay machine-readable.
+- `docs/design-intent.json` must include `contextHygiene` so valid design sources, tainted carryover sources, and continuity rules are machine-readable.
 - If onboarding or detector evidence exists, preserve it under `repoEvidence.designEvidenceSummary` instead of throwing away the machine-readable snapshot of the current UI system.
 - Token intent must stay structure-first: primitive tokens hold raw values, semantic tokens carry purpose, and component tokens consume semantic tokens instead of bypassing them with raw values.
 - Color intent must be defined in a perceptual or relational color model first. Hex values may appear only as implementation derivatives.
 - The contract must encode viewport mutation rules, not just breakpoint names.
 - Motion guidance must preserve creativity: allow meaningful animation, define reduced-motion behavior, and optimize choreography instead of suppressing it by default.
+- Accessibility guidance must split hard compliance from advisory tuning: treat WCAG 2.2 AA as the minimum blocking floor and APCA as advisory perceptual guidance for readability nuance, especially in typography and dark mode.
+- Accessibility scope must include focus visibility, focus appearance, target size, accessible authentication, keyboard access, use-of-color-only failures, and dynamic status/state access.
+- Visual QA guidance must define deterministic-first screenshot review, noise thresholds, dynamic masking categories, mobile/tablet/desktop coverage, long-page capture strategy, and when semantic review is allowed to intervene.
 - Color direction must come from the current project context. Similarity to prior unrelated projects is drift unless the brief or repo evidence explicitly supports it.
 - If no approved reference system exists, synthesize the design from zero using current product context, constraints, and content only.
+- Explicitly record which sources are allowed to shape the visual language and which sources are tainted unless the user opts into continuity.
 - The resulting system should feel authored and recognizable in screenshots, not politely interchangeable with common template kits.
 - Use practical, modern, accessible language grounded in the project, not generic SaaS defaults or copycat brand systems.
 - Wait for user approval before generating Figma or code assets.

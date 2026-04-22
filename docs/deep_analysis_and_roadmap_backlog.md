@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
-Date: 2026-04-22
-Current Version: 3.0.16
+Date: 2026-04-23
+Current Version: 3.0.17
 Status: Stable baseline, design-governance expansion active
 
 ---
@@ -27,13 +27,14 @@ This backlog now keeps only:
 
 ### Facts confirmed in the current repo
 
-- The published package version is `3.0.15`.
+- The published package version is `3.0.17`.
 - The current baseline already ships canonical instruction flow centered on `.instructions.md`.
 - `init` and `upgrade` now copy the canonical instruction surface, regenerate compiled instructions, and preserve adaptive prompts.
 - Fresh project setup now asks project topology first: `Monolith` or `Microservice / distributed system`.
 - UI design governance already pushes agents to synthesize from the current project context, not from prior website memory or unrelated visual carryover.
 - Docker and dependency governance already prefer the latest stable compatible guidance and official setup flows first.
 - The current design contract already protects against generic shrink-only responsive behavior and already allows purposeful motion when it stays performant and reduced-motion-safe.
+- The design contract now formalizes accessibility as a split policy: WCAG 2.2 AA hard floor plus APCA advisory readability tuning.
 
 ### Working assumptions
 
@@ -158,7 +159,7 @@ Done when:
 
 ### Phase 3 - Accessibility Split: Hard Gate vs Advisory
 
-Overall status: `[~]`
+Overall status: `[x]`
 Priority: high
 
 Goal:
@@ -166,21 +167,23 @@ Goal:
 
 What already exists:
 - [x] Accessibility is already treated as a non-negotiable design concern in the contract direction.
+- [x] The design contract now stores a machine-readable `accessibilityPolicy` with explicit hard-vs-advisory boundaries.
+- [x] Prompt, rule, validator, and judge coverage now use the same split.
 
 Breakdown:
-- [ ] Formalize WCAG 2.2 AA as the hard compliance floor.
-- [ ] Formalize APCA as an advisory layer for perceptual quality.
-- [ ] Extend checks beyond color contrast:
-  - [ ] focus visibility
-  - [ ] target size
-  - [ ] authentication friction
-  - [ ] dynamic state access
-- [ ] Define which checks are blocking and which are advisory.
+- [x] Formalize WCAG 2.2 AA as the hard compliance floor.
+- [x] Formalize APCA as an advisory layer for perceptual quality.
+- [x] Extend checks beyond color contrast:
+  - [x] focus visibility
+  - [x] target size
+  - [x] authentication friction
+  - [x] dynamic state access
+- [x] Define which checks are blocking and which are advisory.
 
 Done when:
-- [ ] The repo has an explicit hard-fail accessibility floor.
-- [ ] Advisory contrast guidance does not override legal or standards-based gates.
-- [ ] Accessibility checks stay useful for modern UI instead of collapsing into a single contrast ratio rule.
+- [x] The repo has an explicit hard-fail accessibility floor.
+- [x] Advisory contrast guidance does not override legal or standards-based gates.
+- [x] Accessibility checks stay useful for modern UI instead of collapsing into a single contrast ratio rule.
 
 ### Phase 4 - Hybrid Visual QA
 
@@ -192,14 +195,16 @@ Goal:
 
 What already exists:
 - [x] The repo already has an advisory internal UI design judge.
+- [x] The design contract now defines a machine-readable hybrid visual QA policy for deterministic-first review, masking, stability thresholds, and semantic escalation boundaries.
+- [x] The internal UI design judge can now merge deterministic visual diff summaries with semantic verdicts in one advisory report.
 
 Breakdown:
-- [ ] Add deterministic screenshot baseline support.
-- [ ] Add masking rules for dynamic content.
-- [ ] Add threshold and stability rules for rendering noise.
-- [ ] Add viewport coverage expectations across mobile, tablet, and desktop.
-- [ ] Escalate only meaningful diffs to the semantic judge.
-- [ ] Define machine-readable output for deterministic diff and semantic verdict together.
+- [~] Add deterministic screenshot baseline support.
+- [x] Add masking rules for dynamic content.
+- [x] Add threshold and stability rules for rendering noise.
+- [x] Add viewport coverage expectations across mobile, tablet, and desktop.
+- [x] Escalate only meaningful diffs to the semantic judge.
+- [x] Define machine-readable output for deterministic diff and semantic verdict together.
 
 Done when:
 - [ ] The repo can tell the difference between tiny rendering noise and real design drift.
@@ -236,7 +241,7 @@ Done when:
 
 ### Phase 6 - Context Hygiene and Memory Boundaries
 
-Overall status: `[~]`
+Overall status: `[x]`
 Priority: medium
 
 Goal:
@@ -245,21 +250,23 @@ Goal:
 What already exists:
 - [x] The design contract already tells agents to synthesize from the current project context.
 - [x] The repo already discourages accidental carryover from earlier website styles.
+- [x] The design contract now stores machine-readable context hygiene boundaries in `docs/design-intent.json`.
+- [x] Validator, audit, and test coverage now check continuity and carryover boundaries explicitly.
 
 Breakdown:
-- [ ] Formalize allowed context sources for design work:
-  - [ ] current repo evidence
-  - [ ] current brief
-  - [ ] current docs contract
-  - [ ] explicitly approved reference systems
-- [ ] Define continuity as opt-in for design language.
-- [ ] Define how stale or unrelated memory should be ignored.
-- [ ] Add validation or audit coverage for memory contamination boundaries.
+- [x] Formalize allowed context sources for design work:
+  - [x] current repo evidence
+  - [x] current brief
+  - [x] current docs contract
+  - [x] explicitly approved reference systems
+- [x] Define continuity as opt-in for design language.
+- [x] Define how stale or unrelated memory should be ignored.
+- [x] Add validation or audit coverage for memory contamination boundaries.
 
 Done when:
-- [ ] Agents stop carrying over old palette, layout, or component habits by accident.
-- [ ] Continuity is opt-in for design language, not silent default behavior.
-- [ ] Repo evidence wins over memory residue.
+- [x] Agents stop carrying over old palette, layout, or component habits by accident.
+- [x] Continuity is opt-in for design language, not silent default behavior.
+- [x] Repo evidence wins over memory residue.
 
 ### Phase 7 - Dependency and Runtime Freshness
 

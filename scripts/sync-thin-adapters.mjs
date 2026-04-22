@@ -36,6 +36,18 @@ Canonical Snapshot SHA256: ${canonicalHash}
 This file is an adapter entrypoint for agent discovery.
 The canonical policy source is [.instructions.md](.instructions.md).
 
+If your host stops at this file instead of following the full chain, obey the Critical Bootstrap Floor below before coding.
+
+## Critical Bootstrap Floor
+
+- If \`.agent-instructions.md\` exists, prefer it immediately after this file because it is the compiled project-specific snapshot.
+- Memory continuity does not replace bootstrap loading. It is host-dependent project memory, not a guarantee that instructions were reloaded for this session.
+- For UI, UX, layout, screen, tailwind, frontend, or redesign requests: load [.agent-context/prompts/bootstrap-design.md](.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](.agent-context/rules/frontend-architecture.md) before editing code.
+- For UI scope: if \`docs/DESIGN.md\` or \`docs/design-intent.json\` is missing, materialize or refine them before implementing UI changes.
+- For refactor, improve, clean up, or fix requests: inspect the active rules and propose a plan before editing.
+- For new project or module requests: propose architecture before generating code.
+- For ecosystem, framework, dependency, or Docker claims: perform live web research instead of relying on stale local heuristics.
+
 ## Mandatory Bootstrap Chain
 
 1. Load [.instructions.md](.instructions.md) first as the canonical baseline.
@@ -66,6 +78,12 @@ Canonical Snapshot SHA256: ${canonicalHash}
 
 The canonical policy source for this repository is [.instructions.md](../.instructions.md).
 
+If your host stops at this file, follow this minimum floor:
+- Read \`.agent-instructions.md\` next when it exists.
+- For UI or redesign requests, load [.agent-context/prompts/bootstrap-design.md](../.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](../.agent-context/rules/frontend-architecture.md) before coding.
+- If UI scope and \`docs/DESIGN.md\` or \`docs/design-intent.json\` is missing, materialize them before UI implementation.
+- Memory continuity is host-dependent project memory and does not replace bootstrap loading.
+
 ## Required Load Order
 
 1. Read [.instructions.md](../.instructions.md) first as the canonical baseline.
@@ -90,6 +108,12 @@ Adapter Source: .instructions.md
 Canonical Snapshot SHA256: ${canonicalHash}
 
 Canonical policy source: [.instructions.md](../.instructions.md).
+
+If your host stops at this file, follow this minimum floor:
+- Read \`.agent-instructions.md\` next when it exists.
+- For UI or redesign requests, load [.agent-context/prompts/bootstrap-design.md](../.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](../.agent-context/rules/frontend-architecture.md) before coding.
+- If UI scope and \`docs/DESIGN.md\` or \`docs/design-intent.json\` is missing, materialize them before UI implementation.
+- Memory continuity is host-dependent project memory and does not replace bootstrap loading.
 
 ## Bootstrap Sequence
 
