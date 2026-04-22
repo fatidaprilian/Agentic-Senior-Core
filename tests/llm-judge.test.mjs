@@ -25,6 +25,26 @@ test('LLM Judge Tests', async (t) => {
       typographyScaleRatio: '1.250',
       baseGridUnit: 8,
     },
+    tokenSystem: {
+      sourceOfTruth: 'docs/design-intent.json',
+      taxonomyOrder: ['primitive', 'semantic', 'component'],
+      primitiveColorSpace: 'OKLCH',
+      requireSemanticAliases: true,
+      componentTokensConsumeSemantic: true,
+      forbidDirectComponentPrimitiveBypass: true,
+      aliasingStrategy: 'Primitive tokens hold raw values, semantic tokens carry intent, and component tokens consume semantic aliases instead of raw values.',
+      namingConstraints: {
+        forbidCurlyBracesInNames: true,
+        forbidDotsInNames: true,
+        forbidSquareBracketsInNames: true,
+      },
+      tokenLayerRoles: {
+        primitive: 'Raw values.',
+        semantic: 'Intent tokens.',
+        component: 'Component-scoped tokens.',
+      },
+      platformOutputs: ['json-contract', 'css-variables'],
+    },
     colorTruth: {
       format: 'OKLCH',
       allowHexDerivatives: true,

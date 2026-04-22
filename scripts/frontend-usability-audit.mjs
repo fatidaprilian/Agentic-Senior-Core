@@ -26,6 +26,7 @@ const REQUIRED_FILES = [
   '.agent-context/rules/frontend-architecture.md',
   '.agent-context/review-checklists/pr-checklist.md',
   '.agent-context/review-checklists/architecture-review.md',
+  'lib/cli/detector/design-evidence.mjs',
 ];
 
 const REQUIRED_ROADMAP_SNIPPETS = [
@@ -62,6 +63,8 @@ const REQUIRED_FRONTEND_RULE_SNIPPETS = [
 const REQUIRED_BOOTSTRAP_DESIGN_SNIPPETS = [
   'UI Design Mode is context-isolated by default:',
   'Responsive Strategy and Cross-Viewport Adaptation Matrix',
+  'Token Architecture and Alias Strategy',
+  'tokenSystem',
   'colorTruth.format',
   'crossViewportAdaptation.mutationRules.mobile/tablet/desktop',
   'motionSystem',
@@ -81,6 +84,19 @@ const REQUIRED_INSTRUCTIONS_SNIPPETS = [
   'bootstrap-design.md',
   'frontend-architecture.md',
   'do not eagerly load unrelated backend-only rules',
+];
+
+const REQUIRED_DESIGN_EVIDENCE_SNIPPETS = [
+  'summaryVersion',
+  "source: 'lightweight-static-scan'",
+  'cssVariables',
+  'componentInventory',
+  'tokenBypassSignals',
+];
+
+const REQUIRED_COMPILER_UI_EVIDENCE_SNIPPETS = [
+  'frontendEvidenceMetrics',
+  'designEvidenceSummary',
 ];
 
 function assertFileExists(relativeFilePath, failures) {
@@ -111,6 +127,8 @@ function runAudit() {
   const instructionsPath = '.instructions.md';
   const prChecklistPath = '.agent-context/review-checklists/pr-checklist.md';
   const architectureChecklistPath = '.agent-context/review-checklists/architecture-review.md';
+  const designEvidenceExtractorPath = 'lib/cli/detector/design-evidence.mjs';
+  const compilerPath = 'lib/cli/compiler.mjs';
 
   if (existsSync(resolve(REPOSITORY_ROOT, roadmapPath))) {
     const roadmapContent = readFileSync(resolve(REPOSITORY_ROOT, roadmapPath), 'utf8');
@@ -165,12 +183,47 @@ function runAudit() {
     );
   }
 
+  let designEvidenceExtractorContent = '';
+  let compilerContent = '';
+
+  if (existsSync(resolve(REPOSITORY_ROOT, designEvidenceExtractorPath))) {
+    designEvidenceExtractorContent = readFileSync(resolve(REPOSITORY_ROOT, designEvidenceExtractorPath), 'utf8');
+    assertContains(
+      'Design evidence extractor',
+      designEvidenceExtractorPath,
+      designEvidenceExtractorContent,
+      REQUIRED_DESIGN_EVIDENCE_SNIPPETS,
+      failures
+    );
+  }
+
+  if (existsSync(resolve(REPOSITORY_ROOT, compilerPath))) {
+    compilerContent = readFileSync(resolve(REPOSITORY_ROOT, compilerPath), 'utf8');
+    assertContains(
+      'Compiler UI evidence projection',
+      compilerPath,
+      compilerContent,
+      REQUIRED_COMPILER_UI_EVIDENCE_SNIPPETS,
+      failures
+    );
+  }
+
   const reportPayload = {
     generatedAt: new Date().toISOString(),
     auditName: 'frontend-usability-audit',
     passed: failures.length === 0,
     failureCount: failures.length,
     failures,
+    phase2DesignEvidenceCoverage: {
+      extractorFilePath: designEvidenceExtractorPath,
+      compilerFilePath: compilerPath,
+      extractorIncludesSummaryVersion: designEvidenceExtractorContent.includes('summaryVersion'),
+      extractorIncludesCssVariables: designEvidenceExtractorContent.includes('cssVariables'),
+      extractorIncludesComponentInventory: designEvidenceExtractorContent.includes('componentInventory'),
+      extractorIncludesTokenBypassSignals: designEvidenceExtractorContent.includes('tokenBypassSignals'),
+      compilerProjectsFrontendEvidenceMetrics: compilerContent.includes('frontendEvidenceMetrics'),
+      compilerProjectsDesignEvidenceSummary: compilerContent.includes('designEvidenceSummary'),
+    },
   };
 
   console.log(JSON.stringify(reportPayload, null, 2));

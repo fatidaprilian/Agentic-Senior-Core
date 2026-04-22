@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.16 - 2026-04-22
+### Changed
+- Reframed the architect module as an honest offline, repo-grounded architecture brief instead of a pseudo-realtime research engine, and removed stale snapshot-style recommendation baggage.
+- Simplified `init`, `upgrade`, and related compiler flows so review thresholds stay as internal policy while noisy user-facing profile-pack and Golden Standard surface wording disappears.
+- Removed dead architect and profile-pack plumbing, synced docs and smoke tests to the new offline-brief model, and kept package-facing guidance aligned with agent-led live research for drift-prone ecosystem claims.
+
 ## 3.0.15 - 2026-04-21
 ### Changed
 - Strengthened Docker governance so container work now prefers the latest official Docker documentation, current `docker compose` and `compose.yaml` patterns, and latest stable compatible images and dependencies before documented fallback.

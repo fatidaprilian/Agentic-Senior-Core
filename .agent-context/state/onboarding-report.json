@@ -3,7 +3,6 @@
   "generatedAt": "2026-04-18T00:00:00.000Z",
   "operationMode": "upgrade",
   "selectedProfile": "beginner",
-  "selectedProfilePack": null,
   "selectedStack": "typescript.md",
   "selectedAdditionalStacks": [],
   "selectedBlueprint": "api-nextjs.md",

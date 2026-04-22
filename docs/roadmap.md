@@ -10,8 +10,8 @@ Original plan targeted Q2-Q4 2026, but implementation landed earlier (Q2 2026).
 
 ### Delivered Scope
 1. Foundation and governance
-   - Team profile packs shipped: startup, regulated, platform.
-   - CLI support shipped: `agentic-senior-core init --profile-pack <name>`.
+   - Preset-driven onboarding shipped for common stack and blueprint combinations.
+   - CLI support favors one default review-threshold path over multiple profile surfaces.
    - Override governance hardening shipped: required `Owner` and `Expiry` metadata, `YYYY-MM-DD` validation, expiry warning window, and expired-entry validation failure.
 2. CI and detection quality
    - LLM Judge machine-readable reporting shipped: `JSON_REPORT` line output + artifact file `.agent-context/state/llm-judge-report.json`.
@@ -28,7 +28,7 @@ Original plan targeted Q2-Q4 2026, but implementation landed earlier (Q2 2026).
 - Smoke test pass rate: 100% on current suite.
 
 ### Release Exit Criteria for V1.6
-- Team profile packs and override governance validations are shipped and documented.
+- Preset-driven onboarding and override governance validations are shipped and documented.
 - CI annotations are available for GitHub Actions and GitLab CI.
 - Detection accuracy benchmark command is published.
 - Smoke tests cover beginner, balanced, and strict profile scenarios.

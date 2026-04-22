@@ -167,6 +167,19 @@ If these triggers don't exist, microservices are **premature complexity**.
 
 ## Project Structure: Feature-Based Grouping
 
+## Code Organization and File Size Discipline
+
+Keep modules small enough to understand in one focused read.
+
+- Prefer grouping by responsibility, not by convenience.
+- One folder should represent one clear area of responsibility.
+- Split discovery, validation, prompt building, persistence, and contract logic into separate modules when they grow.
+- Avoid mixed-purpose mega-files that combine constants, parsing, orchestration, validation, and I/O in one place.
+- Treat files above roughly 1000 lines as a refactor trigger, not a badge of completeness.
+- If a file grows past that threshold, extract stable submodules with clear names before adding more behavior.
+- Preserve one public entrypoint when it helps callers, but move the real implementation behind focused modules.
+- Tests may aggregate scenarios, but shared helpers and repeated setup should move into dedicated support files when the suite becomes hard to scan.
+
 ### ❌ BANNED: Technical Grouping
 ```
 src/

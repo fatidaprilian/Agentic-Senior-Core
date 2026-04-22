@@ -5,7 +5,7 @@ Agentic-Senior-Core operates as a **Dynamic Rules Engine (Governance Engine)** t
 ## The Compiler Workflow
 When you run the init command (for example through `npm exec --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior-core init` or `npx @ryuenn3123/agentic-senior-core init` after npm publish), the delivery CLI:
 1. **Scans** your working directory heuristically out-of-the-box (looking for `package.json`, `pom.xml`, etc.).
-2. **Prompts** you to refine the Stack, Blueprint, and enforcement Profile if auto-detection confidence is low.
+2. **Prompts** you to refine the Stack and Blueprint only when repository evidence is weak.
 3. **Compiles** modular knowledge components into dense rule files injected directly into your project.
 
 ### Distribution Modes
@@ -16,24 +16,19 @@ When you run the init command (for example through `npm exec --package=github:fa
 ### Upgrade Assistant (V1.6)
 - The CLI now includes `upgrade` mode for existing repositories.
 - `agentic-senior-core upgrade --dry-run` previews migration impact without writing files.
-- Apply mode rewrites `.cursorrules` and `.windsurfrules`, refreshes policy profile alignment, and records onboarding telemetry with `operationMode: upgrade`.
-- Upgrade previews include line-count delta and selected profile/stack/blueprint/CI state before write.
+- Apply mode rewrites the compiled instruction surface, refreshes policy thresholds, and records onboarding telemetry with `operationMode: upgrade`.
+- Upgrade previews include line-count delta and selected stack/blueprint/CI state before write.
 
 ### Component Breakdown
 - **Universals (`.agent-context/rules/`)**: Non-negotiable laws. No floating `any` types, strict variable naming, event-driven designs.
-- **Stack strategies (dynamic)**: Language and runtime guidance resolved from project evidence, repository context, and stack research signals.
-- **Architecture playbooks (dynamic)**: Directory and layering guidance resolved at init time for the selected architecture path.
+- **Stack strategies (dynamic)**: Language and runtime guidance resolved from project evidence, repository context, and lightweight keyword hints.
+- **Architecture playbooks (dynamic)**: Directory and layering guidance resolved at init time from repo evidence and agent-led research.
 
-## Profile Enforcement Strategies
-Agentic-Senior-Core enables configurable rigidness:
-- **beginner**: The CLI opts out of difficult architectural prompts, setting safe defaults (`node`, `balanced` quality checks (guardrails), lenient AI reviews).
-- **balanced**: Standard operation. The CI enforces `critical` and `high` violations via LLM judge, skipping nitpicks around style.
-- **strict**: Fails on any deviation. Enforces test isolation, architectural violations, security problems, and fails standard CI runs when the AI Judge API becomes unresponsive.
-
-### Team Profile Packs (V1.6)
-- Team profile packs are built into CLI metadata and can be applied with `--profile-pack`.
-- Packs control default profile, stack, blueprint, and CI behavior while preserving local override options.
-- Current packs: `startup`, `regulated`, `platform`.
+## Review Threshold Strategies
+Agentic-Senior-Core keeps review thresholds as internal policy, not as a noisy user-facing mode system:
+- **beginner**: Safe fallback for power users who want the least blocking review surface.
+- **balanced**: Default behavior. CI enforces `critical` and `high` findings.
+- **strict**: Power-user override for tighter enforcement when a repo explicitly wants it.
 
 ### Detection Transparency (V1.6)
 - Auto-detection now records confidence score, confidence gap, ranked candidates, and a plain-language reasoning summary.
