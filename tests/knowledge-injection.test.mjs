@@ -197,12 +197,17 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(bootstrapDesignPrompt, /tainted context/i);
     assert.match(bootstrapDesignPrompt, /WCAG 2\.2 AA/i);
     assert.match(bootstrapDesignPrompt, /APCA/i);
-    assert.match(bootstrapDesignPrompt, /Hybrid visual QA must stay deterministic-first/i);
-    assert.match(bootstrapDesignPrompt, /visualQaPolicy/i);
-    assert.match(bootstrapDesignPrompt, /long-page capture strategy/i);
-    assert.match(bootstrapDesignPrompt, /anchor-based section or tiled-scroll captures/i);
+    assert.match(bootstrapDesignPrompt, /Structured design execution must stay representation-first/i);
+    assert.match(bootstrapDesignPrompt, /designExecutionPolicy/i);
+    assert.match(bootstrapDesignPrompt, /designExecutionHandoff/i);
+    assert.match(bootstrapDesignPrompt, /reviewRubric/i);
+    assert.match(bootstrapDesignPrompt, /surface plan/i);
+    assert.match(bootstrapDesignPrompt, /component graph/i);
+    assert.match(bootstrapDesignPrompt, /structured handoff/i);
+    assert.match(bootstrapDesignPrompt, /stable review rubric/i);
+    assert.match(bootstrapDesignPrompt, /Genericity findings must name the actual drift signal/i);
     assert.match(bootstrapDesignPrompt, /Motion can be bold, cinematic, or highly expressive/i);
-    assert.match(bootstrapDesignPrompt, /recognizable in screenshots/i);
+    assert.match(bootstrapDesignPrompt, /recognizable in implementation/i);
   });
 
   it('design contract seed keeps machine-readable context hygiene boundaries', () => {
@@ -219,13 +224,17 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(designContractSource, /accessibilityPolicy/);
     assert.match(designContractSource, /hardComplianceFloor/);
     assert.match(designContractSource, /advisoryContrastModel/);
-    assert.match(designContractSource, /visualQaPolicy/);
-    assert.match(designContractSource, /capturePlan/);
-    assert.match(designContractSource, /longPageStrategy/);
-    assert.match(designContractSource, /tileOverlapRatio/);
-    assert.match(designContractSource, /deterministicFirst/);
-    assert.match(designContractSource, /requiredViewports/);
-    assert.match(designContractSource, /meaningfulDiffRatioThreshold/);
+    assert.match(designContractSource, /designExecutionPolicy/);
+    assert.match(designContractSource, /reviewRubric/);
+    assert.match(designContractSource, /representationStrategy/);
+    assert.match(designContractSource, /requireSurfacePlan/);
+    assert.match(designContractSource, /forbidScreenshotDependency/);
+    assert.match(designContractSource, /requireViewportMutationPlan/);
+    assert.match(designContractSource, /requireInteractionStateMatrix/);
+    assert.match(designContractSource, /semanticReviewFocus/);
+    assert.match(designContractSource, /genericitySignals/);
+    assert.match(designContractSource, /validBoldSignals/);
+    assert.match(designContractSource, /mustExplainGenericity/);
   });
 
   it('dependency governance prefers latest compatible versions and official setup flows', () => {

@@ -60,8 +60,8 @@ const REQUIRED_FRONTEND_RULE_SNIPPETS = [
   'repo evidence wins',
   'WCAG 2.2 AA as the hard compliance floor',
   'APCA as an advisory readability model',
-  'Hybrid Visual QA Boundaries (Mandatory)',
-  'Visual QA must be deterministic-first.',
+  'Structured Design Execution Boundaries (Mandatory)',
+  'UI review must stay representation-first.',
   'UI Consistency Guardrails (Mandatory)',
   'Content language must stay consistent per screen and flow unless user requests multilingual output.',
   'Text color must remain contrast-safe against its background; no color collisions.',
@@ -78,12 +78,15 @@ const REQUIRED_BOOTSTRAP_DESIGN_SNIPPETS = [
   'motionSystem',
   'componentMorphology',
   'accessibilityPolicy',
-  'visualQaPolicy',
+  'designExecutionPolicy',
+  'designExecutionHandoff',
+  'reviewRubric',
   'contextHygiene',
   'Design continuity is opt-in.',
   'WCAG 2.2 AA as the blocking baseline',
   'APCA only as advisory perceptual tuning',
-  'Hybrid visual QA must stay deterministic-first',
+  'Structured design execution must stay representation-first',
+  'structured handoff',
 ];
 
 const REQUIRED_UI_DESIGN_JUDGE_SNIPPETS = [
@@ -92,9 +95,13 @@ const REQUIRED_UI_DESIGN_JUDGE_SNIPPETS = [
   'Runs only in advisory mode for this repository workflow.',
   'Do not reward generic SaaS defaults or popular template patterns.',
   'UI design judge only evaluates changed UI surfaces.',
-  'Deterministic visual diff reported no meaningful drift, so semantic review was skipped.',
-  'UI_VISUAL_DIFF_REPORT_JSON',
-  'meaningfulDiffViewportCount',
+  'Structured design execution summary was supplied to semantic review.',
+  'designExecutionSignalCount',
+  'designExecutionPolicy',
+  'designExecutionHandoff',
+  'reviewRubric',
+  'genericityStatus',
+  'handoffReady',
 ];
 
 const REQUIRED_INSTRUCTIONS_SNIPPETS = [
@@ -106,7 +113,7 @@ const REQUIRED_INSTRUCTIONS_SNIPPETS = [
   'explicitly approved reference systems',
   'WCAG 2.2 AA as the hard compliance floor',
   'APCA as advisory perceptual tuning only',
-  'deterministic screenshot or diff evidence as the first layer',
+  'Do not require screenshot capture as a baseline dependency',
 ];
 
 const REQUIRED_DESIGN_EVIDENCE_SNIPPETS = [

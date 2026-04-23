@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -101,6 +101,7 @@ test('mcp-server initializes even when the workspace has no root package.json', 
   mkdirSync(join(temporaryWorkspaceRoot, 'scripts'), { recursive: true });
   mkdirSync(join(temporaryWorkspaceRoot, '.agent-context', 'state'), { recursive: true });
   writeFileSync(temporaryScriptPath, readFileSync(serverScriptPath, 'utf8'));
+  cpSync(join(process.cwd(), 'scripts', 'mcp-server'), join(temporaryWorkspaceRoot, 'scripts', 'mcp-server'), { recursive: true });
 
   try {
     const responseText = await requestInitializeWithDelimiter('\n\n', temporaryScriptPath);

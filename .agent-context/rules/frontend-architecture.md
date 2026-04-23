@@ -35,12 +35,12 @@ Mandatory behavior when triggered:
 - Hard accessibility checks must cover more than contrast alone. They must include focus visibility, focus appearance, target size, keyboard access, use-of-color-only failures, accessible authentication, and status or dynamic state access.
 - Keep accessibility compatible with expressive design. Fix the violation without flattening the interface into generic low-risk layouts unless that is the only safe option.
 
-## Hybrid Visual QA Boundaries (Mandatory)
+## Structured Design Execution Boundaries (Mandatory)
 
-- Visual QA must be deterministic-first. Run screenshot or pixel-diff style checks before escalating to any semantic judge.
-- Treat dynamic masking as explicit policy, not ad hoc cleanup. Time, randomized content, live counters, streaming media, and other unstable regions must be masked deliberately and documented.
-- Define stability thresholds so the system can separate tiny rendering noise from meaningful layout or styling drift.
-- Required visual coverage must include mobile, tablet, and desktop unless the product scope explicitly excludes one of those surfaces.
+- UI review must stay representation-first. The contract should define a surface plan, component graph, content-priority map, viewport mutation plan, interaction-state matrix, and task-flow narrative before implementation drifts into styling guesswork.
+- Semantic review should judge contract fidelity, distinctiveness, hierarchy, component-state behavior, and cross-viewport mutation directly from the contract plus changed UI code.
+- Do not make screenshot capture, browser automation, or pixel diff artifacts a baseline dependency for design quality in this repo.
+- Required coverage must still include mobile, tablet, and desktop behavior unless the product scope explicitly excludes one of those surfaces.
 - Escalate to semantic review only when deterministic evidence shows meaningful drift, missing required viewport coverage, or another contract-critical visual failure.
 - Do not use semantic review to invent aesthetic problems when deterministic evidence says the surface is stable.
 

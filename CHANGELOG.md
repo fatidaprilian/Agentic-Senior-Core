@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.18 - 2026-04-23
+### Changed
+- Regrouped the repo-internal script surfaces for the MCP server, release gate, and UI design judge so large single-file tools now live behind function-focused folders while keeping the public package surface unchanged.
+- Reworked the dynamic design-intent seed so `init` and `upgrade` now emit a structure-first scaffold instead of a domain-bucket taste engine, making project-specific art direction come from repo evidence and the active brief rather than pre-shaped visual heuristics.
+- Hardened the structured UI handoff and validation path so scaffold-only fields are marked explicitly, minimum semantic palette roles are enforced, and smoke coverage keeps `docs/design-intent.json` aligned with the new scaffold-first contract.
+
 ## 3.0.17 - 2026-04-23
 ### Changed
 - Hardened bootstrap reliability for existing repositories by strengthening the thin adapters with a Critical Bootstrap Floor, clarifying that memory continuity is host-supported project memory rather than a replacement for instruction loading, and keeping UI/bootstrap triggers usable even when a host stops at `AGENTS.md`.

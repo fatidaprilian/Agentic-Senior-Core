@@ -2,7 +2,7 @@
 
 Adapter Mode: thin
 Adapter Source: .instructions.md
-Canonical Snapshot SHA256: ee64f53171dcf88e10c6f6aae98d75cc541e13880255f0e519fc82736a4af5f4
+Canonical Snapshot SHA256: 3ddc44d1c3cad20aa06e31c45b5d7289b1b4cde46decb668b0347817222fb022
 
 Canonical policy source: [.instructions.md](../.instructions.md).
 

@@ -21,10 +21,6 @@ test('LLM Judge Tests', async (t) => {
   const sampleDesignIntent = {
     projectDomain: 'test-ui-governance',
     designPhilosophy: 'Contract-first UI that avoids generic defaults.',
-    mathSystems: {
-      typographyScaleRatio: '1.250',
-      baseGridUnit: 8,
-    },
     tokenSystem: {
       sourceOfTruth: 'docs/design-intent.json',
       taxonomyOrder: ['primitive', 'semantic', 'component'],
@@ -32,24 +28,6 @@ test('LLM Judge Tests', async (t) => {
       requireSemanticAliases: true,
       componentTokensConsumeSemantic: true,
       forbidDirectComponentPrimitiveBypass: true,
-      aliasingStrategy: 'Primitive tokens hold raw values, semantic tokens carry intent, and component tokens consume semantic aliases instead of raw values.',
-      namingConstraints: {
-        forbidCurlyBracesInNames: true,
-        forbidDotsInNames: true,
-        forbidSquareBracketsInNames: true,
-      },
-      tokenLayerRoles: {
-        primitive: 'Raw values.',
-        semantic: 'Intent tokens.',
-        component: 'Component-scoped tokens.',
-      },
-      platformOutputs: ['json-contract', 'css-variables'],
-    },
-    colorTruth: {
-      format: 'OKLCH',
-      allowHexDerivatives: true,
-      primaryHue: '250',
-      backgroundStrategy: 'contextual contrast pacing',
     },
     crossViewportAdaptation: {
       mutationRules: {
@@ -60,125 +38,137 @@ test('LLM Judge Tests', async (t) => {
     },
     motionSystem: {
       allowMeaningfulMotion: true,
-      purpose: 'Use motion for continuity and feedback, not decoration.',
-      choreography: 'Prefer short transforms and opacity transitions over ornamental movement.',
-      desktopDurationMs: 180,
-      mobileDurationMs: 240,
       respectReducedMotion: true,
       preferTransformAndOpacity: true,
-      avoidDecorativeMotionForItsOwnSake: true,
     },
     componentMorphology: {
       requireStateBehaviorMatrix: true,
       preserveIdentityAcrossViewports: true,
-      stateKeys: ['default', 'hover', 'focus', 'active', 'disabled', 'loading', 'error'],
-      viewportBehavior: {
-        mobile: 'Compress structure and prioritize thumb-zone actions.',
-        tablet: 'Preserve hierarchy while reducing tertiary chrome.',
-        desktop: 'Expose richer states and denser supporting detail.',
-      },
     },
     accessibilityPolicy: {
       hardComplianceFloor: 'WCAG-2.2-AA',
       advisoryContrastModel: 'APCA',
       failOnHardViolations: true,
-      advisoryFindingsDoNotBlockByDefault: true,
-      hardRequirements: {
-        textContrastMinimum: true,
-        nonTextContrast: true,
-        useOfColorOnlyProhibited: true,
-        focusVisible: true,
-        focusAppearance: true,
-        targetSizeMinimum: true,
-        keyboardAccess: true,
-        reflowRequired: true,
-        accessibleAuthenticationMinimum: true,
-        statusMessagesAndDynamicStateAccess: true,
+    },
+    designExecutionPolicy: {
+      representationStrategy: 'surface-plan-v1',
+      requireSurfacePlan: true,
+      requireComponentGraph: true,
+      requireViewportMutationPlan: true,
+      requireInteractionStateMatrix: true,
+      requireContentPriorityMap: true,
+      requireTaskFlowNarrative: true,
+      requireSignatureMoveRationale: true,
+      requireStructuredHandoff: true,
+      requireRepoEvidenceAlignment: true,
+      forbidScreenshotDependency: true,
+      handoffFormatVersion: 'ui-handoff-v1',
+      semanticReviewFocus: [
+        'distinctiveness-vs-genericity',
+        'contract-fidelity',
+        'hierarchy-and-task-priority',
+        'component-state-behavior',
+        'cross-viewport-mutation',
+      ],
+    },
+    designExecutionHandoff: {
+      version: 'ui-handoff-v1',
+      location: 'inline-design-intent',
+      status: 'ready',
+      primaryExperienceGoal: 'Drive one decisive UI action with explicit supporting proof and authored hierarchy.',
+      surfacePlan: [
+        {
+          surfaceId: 'primary-entry-surface',
+          role: 'primary-task-entry',
+          goal: 'Establish the first task immediately.',
+          primaryAction: 'Start the main user flow.',
+          supportingModules: ['context', 'proof'],
+          signatureMoveHint: 'Use one authored surface tension instead of a generic hero.',
+        },
+      ],
+      componentGraph: {
+        nodes: [
+          { id: 'primary-action-surface', role: 'task-driver', priority: 'high' },
+          { id: 'supporting-context-rail', role: 'context-support', priority: 'medium' },
+        ],
+        edges: [
+          { from: 'primary-action-surface', to: 'supporting-context-rail', relationship: 'context-support' },
+        ],
       },
-      advisoryChecks: {
-        perceptualContrastReview: true,
-        darkModeContrastTuning: true,
-        typographyReadabilityTuning: true,
+      contentPriorityMap: {
+        primary: ['primary-task'],
+        secondary: ['supporting-proof'],
+        deferred: ['tertiary-detail'],
+      },
+      viewportMutationPlan: {
+        mobile: 'Prioritize the primary task first.',
+        tablet: 'Preserve hierarchy with condensed chrome.',
+        desktop: 'Expose richer supporting context without weakening the main task.',
+      },
+      interactionStateMatrix: [
+        {
+          componentId: 'primary-action-control',
+          states: ['default', 'hover', 'focus', 'loading', 'success', 'error'],
+          notes: 'Primary action states stay decisive and legible.',
+        },
+      ],
+      taskFlowNarrative: [
+        'Entry: orient the user quickly.',
+        'Decision: confirm the next action with proof and hierarchy.',
+        'Resolution: return clear feedback and the next useful move.',
+      ],
+      signatureMoveRationale: 'The layout should feel authored through one clear visual tension.',
+      implementationGuardrails: {
+        requireBuildFromHandoff: true,
+        requireGapNotesBeforeFallback: true,
+        forbidGenericLayoutFallbackWithoutReason: true,
       },
     },
-    visualQaPolicy: {
-      deterministicFirst: true,
-      baselineStrategy: 'deterministic-screenshots',
-      reportVersion: 'hybrid-visual-diff-v1',
-      requiredViewports: ['mobile', 'tablet', 'desktop'],
-      capturePlan: {
-        requireAboveFoldCapture: true,
-        requireFullPageCapture: true,
-        requireSectionCapturesForLongPages: true,
-        longPageStrategy: 'anchor-plus-tiles',
-        minimumSectionCaptureCount: 3,
-        maxViewportHeightsPerTile: 3,
-        tileOverlapRatio: 0.15,
-        requiredSectionTypes: [
-          'hero-or-primary-action',
-          'midpage-proof-or-content',
-          'footer-or-terminal-state',
-        ],
+    reviewRubric: {
+      version: 'ui-rubric-v1',
+      dimensions: [
+        { key: 'distinctiveness', blockingByDefault: false, question: 'Does the UI feel authored?' },
+        { key: 'contractFidelity', blockingByDefault: true, question: 'Does the UI follow the contract?' },
+        { key: 'visualConsistency', blockingByDefault: false, question: 'Does the system stay coherent?' },
+        { key: 'heuristicUxQuality', blockingByDefault: false, question: 'Does the flow stay clear and trustworthy?' },
+        { key: 'motionDiscipline', blockingByDefault: false, question: 'Does motion stay purposeful and safe?' },
+      ],
+      genericitySignals: [
+        'safe-centered-hero-without-product-rationale',
+        'balanced-card-grid-without-priority-shift',
+        'default-framework-button-and-input-treatment',
+      ],
+      validBoldSignals: [
+        'one-clear-signature-move',
+        'project-specific-layout-tension',
+        'purposeful-motion-as-identity',
+      ],
+      reportingRules: {
+        mustExplainGenericity: true,
+        mustSeparateTasteFromFailure: true,
+        contractFidelityOverridesPersonalTaste: true,
       },
-      masking: {
-        requireDynamicContentMasks: true,
-        requireMaskReasonAnnotations: true,
-        allowedDynamicMaskCategories: [
-          'time-based-content',
-          'randomized-content',
-          'live-counters',
-          'streaming-media',
-          'user-specific-personalization',
-        ],
-      },
-      stability: {
-        maxUnmaskedDiffRatio: 0.005,
-        maxMaskedDiffRatio: 0.02,
-        requireConsistentRenderingEnvironment: true,
-      },
-      semanticEscalation: {
-        requireMeaningfulDiffForEscalation: true,
-        escalateWhenViewportCoverageIncomplete: true,
-        skipSemanticJudgeWhenDeterministicClean: true,
-        meaningfulDiffRatioThreshold: 0.01,
-      },
-      artifactContract: {
-        requireMachineReadableDiffBundle: true,
-        requireViewportResults: true,
-        mergeDeterministicAndSemanticVerdicts: true,
+    },
+    repoEvidence: {
+      designEvidenceSummary: {
+        summaryVersion: 'v1',
+        source: 'lightweight-static-scan',
       },
     },
     contextHygiene: {
       continuityMode: 'opt-in-only',
-      allowedSources: [
-        'current-repo-evidence',
-        'current-user-brief',
-        'current-project-docs',
-        'explicitly-approved-reference-systems',
-      ],
-      taintedSources: [
-        'prior-chat-visual-memory',
-        'unrelated-project-aesthetics',
-        'remembered-screenshots-without-current-approval',
-      ],
       repoEvidenceOverridesMemory: true,
       requireExplicitContinuityApproval: true,
       forbidCarryoverWhenUnapproved: true,
-      approvedReferenceUsage: 'Adapt reasoning and constraints without copying the source surface 1:1.',
-    },
-    validationHints: {
-      requireViewportMutationRules: true,
-      requireMotionRationale: true,
-      requireStateMorphology: true,
     },
   };
 
-  function withTemporaryDesignIntent(runTest) {
+  function withTemporaryDesignIntent(designIntentValue, runTest) {
     const previousDesignIntent = existsSync(designIntentPath)
       ? readFileSync(designIntentPath, 'utf8')
       : null;
 
-    writeFileSync(designIntentPath, `${JSON.stringify(sampleDesignIntent, null, 2)}\n`, 'utf8');
+    writeFileSync(designIntentPath, `${JSON.stringify(designIntentValue, null, 2)}\n`, 'utf8');
 
     try {
       runTest();
@@ -195,32 +185,29 @@ test('LLM Judge Tests', async (t) => {
     const temporaryOutputDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-judge-'));
 
     try {
-      // In CI environment or normal environments, dry-run shouldn't ask for API keys.
       const output = execSync(`node ${judgePath} --dry-run`, {
         env: {
           ...process.env,
           LLM_JUDGE_OUTPUT_PATH: join(temporaryOutputDirectory, 'llm-judge-report.json'),
         },
       }).toString();
-    
-      // It should output VERDICT: JSON_VERDICT: []  (dry run — no LLM call made)
+
       assert.match(output, /JSON_VERDICT:\s*\[\]/);
       assert.match(output, /JSON_REPORT:/);
       assert.match(output, /"schemaVersion":"1.0"/);
       assert.match(output, /"provider":"dry-run"/);
-      assert.match(output, /dry run — no LLM call made/);
     } finally {
       rmSync(temporaryOutputDirectory, { recursive: true, force: true });
     }
   });
 
   await t.test('ui-design-judge stays advisory for the repo workflow', () => {
-    withTemporaryDesignIntent(() => {
+    withTemporaryDesignIntent(sampleDesignIntent, () => {
       const output = execSync(`node ${uiDesignJudgePath}`, {
         env: {
           ...process.env,
           PR_DIFF: sampleUiDiff,
-          UI_DESIGN_JUDGE_MOCK_RESPONSE: 'JSON_VERDICT: {"alignmentScore":82,"notes":["Contract stays opinionated without becoming generic."],"findings":[{"area":"responsive","severity":"major","problem":"Mobile layout still mirrors desktop grouping.","evidence":"Cards remain three-up in the supplied diff.","recommendation":"Stack content and reprioritize CTAs for small screens.","blockingRecommended":true}]}',
+          UI_DESIGN_JUDGE_MOCK_RESPONSE: 'JSON_VERDICT: {"alignmentScore":82,"genericityAssessment":{"status":"mixed","reason":"The UI still carries one template-like grouping pattern, but the contract remains visible."},"tasteVsFailureSeparated":true,"rubricBreakdown":[{"dimension":"distinctiveness","score":68,"verdict":"acceptable","reason":"The direction is somewhat authored but still leans on one familiar grouping move.","blocking":false},{"dimension":"contractFidelity","score":61,"verdict":"weak","reason":"The mobile hierarchy drifted from the contract.","blocking":true}],"notes":["Contract stays opinionated without becoming generic."],"findings":[{"area":"responsive","severity":"major","problem":"Mobile layout still mirrors desktop grouping.","evidence":"Cards remain three-up in the supplied diff.","recommendation":"Stack content and reprioritize CTAs for small screens.","blockingRecommended":true}]}',
         },
       }).toString();
 
@@ -233,16 +220,27 @@ test('LLM Judge Tests', async (t) => {
       assert.equal(report.passed, true);
       assert.equal(report.summary.changedUiFileCount, 1);
       assert.equal(report.summary.alignmentScore, 82);
-      assert.equal(report.summary.meaningfulDiffViewportCount, 0);
+      assert.equal(report.summary.designExecutionSignalCount, 9);
+      assert.equal(report.summary.genericityStatus, 'mixed');
       assert.equal(report.summary.blockingCandidateCount, 1);
       assert.equal(report.semanticJudge.attempted, true);
-      assert.equal(report.deterministicVisual.reportPresent, false);
+      assert.equal(report.designExecution.policyPresent, true);
+      assert.equal(report.designExecution.contractReady, true);
+      assert.equal(report.designExecution.handoffPresent, true);
+      assert.equal(report.designExecution.handoffReady, true);
+      assert.equal(report.designExecution.handoffArtifactCount >= 8, true);
+      assert.equal(report.designExecution.screenshotDependencyForbidden, true);
+      assert.ok(Array.isArray(report.designExecution.semanticReviewFocus));
+      assert.equal(report.rubric.expectedDimensions.length, 5);
+      assert.equal(report.rubric.genericityAssessment.status, 'mixed');
+      assert.equal(report.rubric.tasteVsFailureSeparated, true);
+      assert.equal(report.rubric.breakdown[0].dimension, 'distinctiveness');
       assert.equal(report.findings[0].severity, 'high');
     });
   });
 
   await t.test('ui-design-judge stays non-blocking when no provider is configured', () => {
-    withTemporaryDesignIntent(() => {
+    withTemporaryDesignIntent(sampleDesignIntent, () => {
       const output = execSync(`node ${uiDesignJudgePath}`, {
         env: {
           ...process.env,
@@ -261,25 +259,30 @@ test('LLM Judge Tests', async (t) => {
       assert.equal(report.advisoryOnly, true);
       assert.equal(report.passed, true);
       assert.equal(report.semanticJudge.skipped, true);
+      assert.equal(report.semanticJudge.skipReason, 'no-provider-configured');
+      assert.equal(report.designExecution.handoffReady, true);
+      assert.equal(report.summary.genericityStatus, 'unclear');
+      assert.equal(report.rubric.genericityAssessment.status, 'unclear');
       assert.match(report.notes.join(' '), /No LLM provider configured/);
     });
   });
 
-  await t.test('ui-design-judge skips semantic review when deterministic diff stays clean', () => {
-    withTemporaryDesignIntent(() => {
+  await t.test('ui-design-judge surfaces missing structured execution capabilities without blocking', () => {
+    const incompleteDesignIntent = {
+      ...sampleDesignIntent,
+      designExecutionPolicy: {
+        ...sampleDesignIntent.designExecutionPolicy,
+        requireComponentGraph: false,
+        requireViewportMutationPlan: false,
+        semanticReviewFocus: ['contract-fidelity'],
+      },
+    };
+
+    withTemporaryDesignIntent(incompleteDesignIntent, () => {
       const output = execSync(`node ${uiDesignJudgePath}`, {
         env: {
           ...process.env,
           PR_DIFF: sampleUiDiff,
-          UI_VISUAL_DIFF_REPORT_JSON: JSON.stringify({
-            reportVersion: 'hybrid-visual-diff-v1',
-            baselineStrategy: 'deterministic-screenshots',
-            viewportResults: [
-              { viewport: 'mobile', pixelDiffRatio: 0.001, maskedPixelDiffRatio: 0.001, withinNoiseBudget: true },
-              { viewport: 'tablet', pixelDiffRatio: 0.002, maskedPixelDiffRatio: 0.002, withinNoiseBudget: true },
-              { viewport: 'desktop', pixelDiffRatio: 0.003, maskedPixelDiffRatio: 0.003, withinNoiseBudget: true },
-            ],
-          }),
           OPENAI_API_KEY: '',
           ANTHROPIC_API_KEY: '',
           GEMINI_API_KEY: '',
@@ -289,82 +292,13 @@ test('LLM Judge Tests', async (t) => {
 
       const report = JSON.parse(output);
       assert.equal(report.provider, 'none');
-      assert.equal(report.semanticJudge.attempted, false);
-      assert.equal(report.semanticJudge.skipped, true);
-      assert.equal(report.semanticJudge.skipReason, 'deterministic-clean');
-      assert.equal(report.deterministicVisual.reportPresent, true);
-      assert.equal(report.deterministicVisual.coverageComplete, true);
-      assert.equal(report.summary.meaningfulDiffViewportCount, 0);
-      assert.match(report.notes.join(' '), /Deterministic visual diff reported no meaningful drift/i);
-    });
-  });
-
-  await t.test('ui-design-judge escalates meaningful deterministic visual drift to semantic review', () => {
-    withTemporaryDesignIntent(() => {
-      const output = execSync(`node ${uiDesignJudgePath}`, {
-        env: {
-          ...process.env,
-          PR_DIFF: sampleUiDiff,
-          UI_VISUAL_DIFF_REPORT_JSON: JSON.stringify({
-            reportVersion: 'hybrid-visual-diff-v1',
-            baselineStrategy: 'deterministic-screenshots',
-            viewportResults: [
-              { viewport: 'mobile', pixelDiffRatio: 0.015, maskedPixelDiffRatio: 0.004, dynamicMaskCategories: ['live-counters'] },
-              { viewport: 'tablet', pixelDiffRatio: 0.002, maskedPixelDiffRatio: 0.001, withinNoiseBudget: true },
-              { viewport: 'desktop', pixelDiffRatio: 0.003, maskedPixelDiffRatio: 0.002, withinNoiseBudget: true },
-            ],
-          }),
-          UI_DESIGN_JUDGE_MOCK_RESPONSE: 'JSON_VERDICT: {"alignmentScore":74,"notes":["Meaningful mobile drift requires contract review."],"findings":[{"area":"layout","severity":"high","problem":"Mobile hero layout drifted from the contract.","evidence":"Deterministic diff crossed the meaningful threshold on mobile.","recommendation":"Restore the intended mobile hierarchy and verify CTA order.","blockingRecommended":true}]}',
-        },
-      }).toString();
-
-      const report = JSON.parse(output);
-      assert.equal(report.provider, 'mock');
-      assert.equal(report.semanticJudge.attempted, true);
-      assert.equal(report.deterministicVisual.reportPresent, true);
-      assert.equal(report.deterministicVisual.semanticEscalationRecommended, true);
-      assert.deepEqual(report.deterministicVisual.meaningfulDiffViewports, ['mobile']);
-      assert.equal(report.summary.meaningfulDiffViewportCount, 1);
-      assert.equal(report.summary.alignmentScore, 74);
-    });
-  });
-
-  await t.test('ui-design-judge treats long-page section coverage as part of deterministic completeness', () => {
-    withTemporaryDesignIntent(() => {
-      const output = execSync(`node ${uiDesignJudgePath}`, {
-        env: {
-          ...process.env,
-          PR_DIFF: sampleUiDiff,
-          UI_VISUAL_DIFF_REPORT_JSON: JSON.stringify({
-            reportVersion: 'hybrid-visual-diff-v1',
-            baselineStrategy: 'deterministic-screenshots',
-            pageLengthCategory: 'long',
-            viewportResults: [
-              { viewport: 'mobile', pixelDiffRatio: 0.001, maskedPixelDiffRatio: 0.001, withinNoiseBudget: true },
-              { viewport: 'tablet', pixelDiffRatio: 0.002, maskedPixelDiffRatio: 0.002, withinNoiseBudget: true },
-              { viewport: 'desktop', pixelDiffRatio: 0.003, maskedPixelDiffRatio: 0.003, withinNoiseBudget: true },
-            ],
-            sectionResults: [
-              { sectionType: 'hero-or-primary-action', captureKind: 'anchor', pixelDiffRatio: 0.001, maskedPixelDiffRatio: 0.001, withinNoiseBudget: true },
-              { sectionType: 'midpage-proof-or-content', captureKind: 'tile', tileIndex: 1, pixelDiffRatio: 0.002, maskedPixelDiffRatio: 0.002, withinNoiseBudget: true },
-            ],
-          }),
-          OPENAI_API_KEY: '',
-          ANTHROPIC_API_KEY: '',
-          GEMINI_API_KEY: '',
-          UI_DESIGN_JUDGE_MOCK_RESPONSE: '',
-        },
-      }).toString();
-
-      const report = JSON.parse(output);
-      assert.equal(report.provider, 'none');
-      assert.equal(report.deterministicVisual.sectionCoverageRequired, true);
-      assert.equal(report.deterministicVisual.coverageComplete, false);
-      assert.deepEqual(report.deterministicVisual.missingSectionTypes, ['footer-or-terminal-state']);
-      assert.equal(report.deterministicVisual.sectionCaptureCount, 2);
-      assert.equal(report.deterministicVisual.tileCaptureCount, 1);
-      assert.equal(report.deterministicVisual.semanticEscalationRecommended, true);
-      assert.match(report.notes.join(' '), /Long-page screenshot coverage is incomplete/i);
+      assert.equal(report.designExecution.policyPresent, true);
+      assert.equal(report.designExecution.contractReady, false);
+      assert.equal(report.designExecution.handoffPresent, true);
+      assert.equal(report.rubric.expectedDimensions.length, 5);
+      assert.ok(report.designExecution.missingCapabilities.includes('requireComponentGraph'));
+      assert.ok(report.designExecution.missingCapabilities.includes('requireViewportMutationPlan'));
+      assert.match(report.notes.join(' '), /missing required capabilities/i);
     });
   });
 });

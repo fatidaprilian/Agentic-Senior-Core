@@ -34,9 +34,12 @@ The agent must:
 18. Design continuity is opt-in. If the user does not explicitly ask for continuity with an older system, prefer fresh synthesis from the current repo and brief.
 19. Accessibility must be split into a hard compliance floor and an advisory readability layer. Use WCAG 2.2 AA as the blocking baseline, and use APCA only as advisory perceptual tuning. APCA must never waive a WCAG failure.
 20. Accessibility planning must cover more than color contrast. It must explicitly address focus visibility, focus appearance, target size, keyboard access, accessible authentication, and dynamic state/status access.
-21. Hybrid visual QA must stay deterministic-first. Define screenshot baseline expectations, dynamic-content masking rules, stability thresholds, viewport coverage, and long-page capture strategy before escalating any visual drift to a semantic judge.
-22. Do not assume one screenshot is enough for a long page. Require above-fold capture, full-page capture when stable, and anchor-based section or tiled-scroll captures when deep content would otherwise be missed.
-23. Deterministic visual QA must distinguish rendering noise from meaningful layout or styling drift. If a semantic judge is used later, it should only review diffs that already exceeded the deterministic threshold or lost required coverage.
+21. Structured design execution must stay representation-first. Define a surface plan, component graph, content-priority map, viewport mutation plan, and interaction-state matrix before relying on semantic review.
+22. Do not depend on screenshot capture, browser automation, or image diff artifacts as the default path. The contract must be strong enough to guide precise UI from repo evidence, component logic, and user intent alone.
+23. Semantic review should judge contract fidelity, distinctiveness, hierarchy, state behavior, and viewport mutation directly from the contract and changed UI code.
+24. Distinctive design review must use a stable review rubric. The contract should define how to judge distinctiveness, contract fidelity, visual consistency, heuristic UX quality, and motion discipline without collapsing those into one vague taste score.
+25. Genericity findings must name the actual drift signal. Do not say "generic" without tying it to a rubric dimension or explicit anti-pattern.
+26. Separate taste from failure. A bold design is valid when it still follows the contract, serves the product, and respects accessibility and runtime constraints.
 
 Required `docs/DESIGN.md` sections:
 1. Design Intent and Product Personality
@@ -69,7 +72,9 @@ Required `docs/design-intent.json` fields:
 - `motionSystem`
 - `componentMorphology`
 - `accessibilityPolicy`
-- `visualQaPolicy`
+- `designExecutionPolicy`
+- `designExecutionHandoff`
+- `reviewRubric`
 - `contextHygiene`
 - `experiencePrinciples`
 - `forbiddenPatterns`
@@ -85,7 +90,9 @@ Output:
 - `docs/design-intent.json` must include deterministic fields for `colorTruth.format`, `colorTruth.allowHexDerivatives`, and `crossViewportAdaptation.mutationRules.mobile/tablet/desktop`.
 - `docs/design-intent.json` must also include `motionSystem` and `componentMorphology` so future UI work preserves state behavior and purposeful motion without collapsing into generic static output.
 - `docs/design-intent.json` must also include `accessibilityPolicy` so the hard compliance floor, advisory contrast model, and blocking-vs-advisory checks stay machine-readable.
-- `docs/design-intent.json` must also include `visualQaPolicy` so deterministic screenshot expectations, masking rules, viewport coverage, long-page capture strategy, stability thresholds, and semantic-escalation boundaries stay machine-readable.
+- `docs/design-intent.json` must also include `designExecutionPolicy` so structured handoff rules, representation strategy, semantic review focus, and non-screenshot execution boundaries stay machine-readable.
+- `docs/design-intent.json` must also include `designExecutionHandoff` so surface plans, component graph relationships, content priority, viewport mutation, interaction states, and signature move rationale are explicit before implementation begins.
+- `docs/design-intent.json` must also include `reviewRubric` so distinctiveness, genericity drift, taste-vs-failure boundaries, and motion discipline are judged with stable dimensions instead of ad hoc opinion.
 - `docs/design-intent.json` must include `contextHygiene` so valid design sources, tainted carryover sources, and continuity rules are machine-readable.
 - If onboarding or detector evidence exists, preserve it under `repoEvidence.designEvidenceSummary` instead of throwing away the machine-readable snapshot of the current UI system.
 - Token intent must stay structure-first: primitive tokens hold raw values, semantic tokens carry purpose, and component tokens consume semantic tokens instead of bypassing them with raw values.
@@ -94,10 +101,12 @@ Output:
 - Motion guidance must preserve creativity: allow meaningful animation, define reduced-motion behavior, and optimize choreography instead of suppressing it by default.
 - Accessibility guidance must split hard compliance from advisory tuning: treat WCAG 2.2 AA as the minimum blocking floor and APCA as advisory perceptual guidance for readability nuance, especially in typography and dark mode.
 - Accessibility scope must include focus visibility, focus appearance, target size, accessible authentication, keyboard access, use-of-color-only failures, and dynamic status/state access.
-- Visual QA guidance must define deterministic-first screenshot review, noise thresholds, dynamic masking categories, mobile/tablet/desktop coverage, long-page capture strategy, and when semantic review is allowed to intervene.
+- Structured design execution guidance must define the surface plan, component graph, content-priority map, viewport mutation plan, interaction-state matrix, and semantic review focus without relying on screenshot capture.
+- Structured design execution must include an explicit structured handoff in `docs/design-intent.json`, not just policy booleans. The handoff should be detailed enough that a future agent can implement the UI without falling back to generic layout defaults.
+- The review rubric must define stable dimensions, genericity signals, valid bold signals, and reporting rules that force the agent to explain why something is generic or valid.
 - Color direction must come from the current project context. Similarity to prior unrelated projects is drift unless the brief or repo evidence explicitly supports it.
 - If no approved reference system exists, synthesize the design from zero using current product context, constraints, and content only.
 - Explicitly record which sources are allowed to shape the visual language and which sources are tainted unless the user opts into continuity.
-- The resulting system should feel authored and recognizable in screenshots, not politely interchangeable with common template kits.
+- The resulting system should feel authored and recognizable in implementation, not politely interchangeable with common template kits.
 - Use practical, modern, accessible language grounded in the project, not generic SaaS defaults or copycat brand systems.
 - Wait for user approval before generating Figma or code assets.

@@ -189,11 +189,11 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(uiDesignJudgePolicyResult);
     assert.equal(uiDesignJudgePolicyResult.passed, true);
 
-    const uiDesignJudgeHybridResult = releaseGateReport.results.find(
-      (resultEntry) => resultEntry.checkName === 'ui-design-judge-hybrid-diagnostics'
+    const uiDesignJudgeStructuredResult = releaseGateReport.results.find(
+      (resultEntry) => resultEntry.checkName === 'ui-design-judge-structured-diagnostics'
     );
-    assert.ok(uiDesignJudgeHybridResult);
-    assert.equal(uiDesignJudgeHybridResult.passed, true);
+    assert.ok(uiDesignJudgeStructuredResult);
+    assert.equal(uiDesignJudgeStructuredResult.passed, true);
 
     const benchmarkThresholdGateResult = releaseGateReport.results.find(
       (resultEntry) => resultEntry.checkName === 'benchmark-threshold-gate'
@@ -225,8 +225,17 @@ test('Enterprise Operations Tests', async (t) => {
     assert.equal(releaseGateReport.diagnostics?.singleSourceLazyLoadingAudit?.lazyRuleLoading?.enforced, true);
     assert.equal(releaseGateReport.diagnostics?.uiDesignJudge?.auditName, 'ui-design-judge');
     assert.equal(releaseGateReport.diagnostics?.uiDesignJudge?.advisoryOnly, true);
-    assert.equal(typeof releaseGateReport.diagnostics?.uiDesignJudge?.summary?.meaningfulDiffViewportCount, 'number');
-    assert.equal(typeof releaseGateReport.diagnostics?.uiDesignJudge?.deterministicVisual?.reportPresent, 'boolean');
+    assert.equal(typeof releaseGateReport.diagnostics?.uiDesignJudge?.summary?.designExecutionSignalCount, 'number');
+    assert.equal(typeof releaseGateReport.diagnostics?.uiDesignJudge?.summary?.genericityStatus, 'string');
+    assert.equal(typeof releaseGateReport.diagnostics?.uiDesignJudge?.designExecution?.policyPresent, 'boolean');
+    assert.equal(typeof releaseGateReport.diagnostics?.uiDesignJudge?.designExecution?.contractReady, 'boolean');
+    assert.equal(typeof releaseGateReport.diagnostics?.uiDesignJudge?.designExecution?.handoffPresent, 'boolean');
+    assert.equal(typeof releaseGateReport.diagnostics?.uiDesignJudge?.designExecution?.handoffReady, 'boolean');
+    assert.ok(Array.isArray(releaseGateReport.diagnostics?.uiDesignJudge?.designExecution?.semanticReviewFocus));
+    assert.ok(Array.isArray(releaseGateReport.diagnostics?.uiDesignJudge?.designExecution?.missingHandoffArtifacts));
+    assert.ok(Array.isArray(releaseGateReport.diagnostics?.uiDesignJudge?.rubric?.expectedDimensions));
+    assert.ok(Array.isArray(releaseGateReport.diagnostics?.uiDesignJudge?.rubric?.breakdown));
+    assert.equal(typeof releaseGateReport.diagnostics?.uiDesignJudge?.rubric?.genericityAssessment?.status, 'string');
     assert.equal(typeof releaseGateReport.diagnostics?.uiDesignJudge?.semanticJudge?.skipped, 'boolean');
   });
 

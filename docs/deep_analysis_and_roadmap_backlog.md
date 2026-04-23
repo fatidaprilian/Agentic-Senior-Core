@@ -85,7 +85,7 @@ Right now, the system can:
 But it still needs stronger machinery to:
 - read real design evidence from code
 - distinguish distinctive UI from generic UI more reliably
-- evaluate visual drift with better signal than prose-only review
+- translate design intent into structured execution guidance before code drifts into defaults
 - enforce token integrity without making designs stiff
 
 ---
@@ -185,31 +185,39 @@ Done when:
 - [x] Advisory contrast guidance does not override legal or standards-based gates.
 - [x] Accessibility checks stay useful for modern UI instead of collapsing into a single contrast ratio rule.
 
-### Phase 4 - Hybrid Visual QA
+### Phase 4 - Structured Design Execution and Handoff
 
-Overall status: `[~]`
+Overall status: `[x]`
 Priority: high
 
 Goal:
-- Evaluate UI changes with a hybrid flow that uses deterministic screenshot checks first, then escalates meaningful diffs to a semantic judge.
+- Make design execution precise without depending on screenshot capture, browser automation, or pixel-diff infrastructure.
 
 What already exists:
 - [x] The repo already has an advisory internal UI design judge.
-- [x] The design contract now defines a machine-readable hybrid visual QA policy for deterministic-first review, masking, stability thresholds, and semantic escalation boundaries.
-- [x] The internal UI design judge can now merge deterministic visual diff summaries with semantic verdicts in one advisory report.
+- [x] The design contract now defines a machine-readable structured execution policy.
+- [x] The internal UI design judge now carries structured execution diagnostics alongside semantic verdicts.
+- [x] The repo now forbids screenshot dependency as a baseline requirement for design quality.
 
 Breakdown:
-- [~] Add deterministic screenshot baseline support.
-- [x] Add masking rules for dynamic content.
-- [x] Add threshold and stability rules for rendering noise.
-- [x] Add viewport coverage expectations across mobile, tablet, and desktop.
-- [x] Escalate only meaningful diffs to the semantic judge.
-- [x] Define machine-readable output for deterministic diff and semantic verdict together.
+- [x] Define one machine-readable execution policy:
+  - [x] surface plan
+  - [x] component graph
+  - [x] content-priority map
+  - [x] viewport mutation plan
+  - [x] interaction-state matrix
+  - [x] task-flow narrative
+  - [x] signature-move rationale
+- [x] Make repo evidence part of execution readiness, not just prompt context.
+- [x] Ensure semantic review judges distinctiveness, contract fidelity, hierarchy, state behavior, and viewport mutation directly from the contract plus changed code.
+- [x] Remove screenshot dependency from the baseline design-quality path.
+- [x] Add a more explicit structured UI handoff format that can sit between `DESIGN.md` and implementation.
+- [x] Keep that handoff inside `docs/design-intent.json` instead of introducing a separate companion artifact.
 
 Done when:
-- [ ] The repo can tell the difference between tiny rendering noise and real design drift.
-- [ ] Mobile, tablet, and desktop changes can be judged against the same contract.
-- [ ] The system reduces false positives without hiding real regressions.
+- [x] The repo can review UI execution quality without requiring browser capture.
+- [x] The judge can explain structured design readiness in machine-readable form.
+- [x] The handoff from design intent to implementation is explicit enough that agents stop defaulting to generic layout habits.
 
 ### Phase 5 - Rubric Calibration for Generic vs Distinctive
 
@@ -221,18 +229,20 @@ Goal:
 
 What already exists:
 - [x] The repo already tries to prevent generic template output through prompt and judge direction.
+- [x] The design contract now stores a machine-readable review rubric with stable dimensions and genericity signals.
+- [x] The internal UI design judge now exposes rubric diagnostics and genericity status in machine-readable output.
 
 Breakdown:
-- [ ] Define rubric dimensions in one stable source:
-  - [ ] distinctiveness
-  - [ ] contract fidelity
-  - [ ] visual consistency
-  - [ ] heuristic UX quality
-  - [ ] motion discipline
-- [ ] Separate taste preference from real failure conditions.
+- [x] Define rubric dimensions in one stable source:
+  - [x] distinctiveness
+  - [x] contract fidelity
+  - [x] visual consistency
+  - [x] heuristic UX quality
+  - [x] motion discipline
+- [x] Separate taste preference from real failure conditions.
 - [ ] Build a small gold set with human-reviewed examples.
 - [ ] Calibrate the judge against that gold set before raising trust.
-- [ ] Add reporting that explains why something is generic, not just that it is generic.
+- [x] Add reporting that explains why something is generic, not just that it is generic.
 
 Done when:
 - [ ] The rubric can explain why a design is too generic.
@@ -300,7 +310,7 @@ These ideas are valid, but they should not jump ahead of the roadmap above.
 
 - Full multi-agent maker-checker orchestration for design work
 - Complex long-term memory architectures for design preference persistence
-- Heavy VLM architecture optimization before deterministic visual QA exists
+- Heavy screenshot or browser-capture infrastructure as a baseline design-quality requirement
 - Style-trend chasing such as glassmorphism, claymorphism, or named aesthetics as default policy
 - Mathematical layout systems that add complexity before token and evidence foundations are stable
 
@@ -374,7 +384,7 @@ Execution order:
 1. token taxonomy and resolver plan
 2. design evidence extraction
 3. accessibility split formalization
-4. hybrid visual QA
+4. structured design execution and handoff
 5. rubric calibration
 6. context hygiene refinements
 
