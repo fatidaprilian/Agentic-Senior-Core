@@ -312,6 +312,18 @@ test('Enterprise Operations Tests', async (t) => {
     assert.ok(Array.isArray(continuityReport.checks));
   });
 
+  await t.test('ui rubric calibration outputs machine-readable report', () => {
+    const calibrationOutput = execSync(`node ${join(process.cwd(), 'scripts', 'ui-rubric-calibration.mjs')}`).toString();
+    const calibrationReport = JSON.parse(calibrationOutput);
+
+    assert.equal(calibrationReport.reportName, 'ui-rubric-calibration');
+    assert.equal(calibrationReport.passed, true);
+    assert.equal(calibrationReport.failureCount, 0);
+    assert.equal(typeof calibrationReport.accuracyPercent, 'number');
+    assert.ok(Array.isArray(calibrationReport.results));
+    assert.ok(calibrationReport.results.length >= 5);
+  });
+
   await t.test('benchmark writer-judge matrix outputs machine-readable report', () => {
     const writerJudgeOutput = execSync(`node ${join(process.cwd(), 'scripts', 'benchmark-writer-judge-matrix.mjs')} --stdout-only`).toString();
     const writerJudgeReport = JSON.parse(writerJudgeOutput);

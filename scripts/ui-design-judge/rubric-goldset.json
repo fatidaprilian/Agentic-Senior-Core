@@ -1,0 +1,188 @@
+{
+  "version": "ui-rubric-goldset-v1",
+  "reviewRubric": {
+    "version": "ui-rubric-v1",
+    "genericitySignals": [
+      "safe-centered-hero-without-product-rationale",
+      "balanced-card-grid-without-priority-shift",
+      "default-framework-button-and-input-treatment",
+      "trend-gradient-without-structural-role",
+      "interchangeable-dashboard-chrome"
+    ],
+    "validBoldSignals": [
+      "one-clear-signature-move",
+      "project-specific-layout-tension",
+      "purposeful-motion-as-identity",
+      "distinct-typographic-hierarchy",
+      "non-template-task-priority"
+    ],
+    "reportingRules": {
+      "mustExplainGenericity": true,
+      "mustSeparateTasteFromFailure": true,
+      "contractFidelityOverridesPersonalTaste": true
+    }
+  },
+  "cases": [
+    {
+      "id": "distinctive-authored-valid",
+      "label": "Authored UI with clear valid bold signals and no contract drift",
+      "designExecutionSummary": {
+        "contractReady": true
+      },
+      "genericityAssessment": {
+        "status": "distinctive",
+        "reason": "The UI lands one clear signature move with project specific layout tension and non template task priority."
+      },
+      "rubricBreakdown": [
+        {
+          "dimension": "contractFidelity",
+          "score": 88,
+          "verdict": "strong",
+          "reason": "Contract fidelity stays intact while the layout uses non template task priority.",
+          "blocking": true
+        }
+      ],
+      "findings": [],
+      "notes": [
+        "The composition keeps one clear signature move instead of collapsing into default chrome."
+      ],
+      "tasteVsFailureSeparated": true,
+      "expected": {
+        "calibratedStatus": "distinctive",
+        "contractDriftDetected": false
+      }
+    },
+    {
+      "id": "bold-but-contract-drift",
+      "label": "Bold ideas exist but contract drift keeps the result mixed",
+      "designExecutionSummary": {
+        "contractReady": true
+      },
+      "genericityAssessment": {
+        "status": "distinctive",
+        "reason": "There is project specific layout tension and one clear signature move, but the mobile hierarchy drifted."
+      },
+      "rubricBreakdown": [
+        {
+          "dimension": "contractFidelity",
+          "score": 54,
+          "verdict": "weak",
+          "reason": "Contract fidelity weakened when the primary CTA moved below secondary content.",
+          "blocking": true
+        }
+      ],
+      "findings": [
+        {
+          "area": "responsive",
+          "severity": "high",
+          "problem": "Mobile layout no longer follows the contract.",
+          "evidence": "The primary action now drops below supporting proof.",
+          "recommendation": "Restore the intended task order.",
+          "blockingRecommended": true
+        }
+      ],
+      "notes": [
+        "The distinctive direction is real, but contract fidelity still drifted."
+      ],
+      "tasteVsFailureSeparated": true,
+      "expected": {
+        "calibratedStatus": "mixed",
+        "contractDriftDetected": true
+      }
+    },
+    {
+      "id": "generic-template-drift",
+      "label": "Generic template drift is named clearly and stays generic",
+      "designExecutionSummary": {
+        "contractReady": false
+      },
+      "genericityAssessment": {
+        "status": "mixed",
+        "reason": "The redesign fell back to balanced card grid without priority shift plus default framework button and input treatment."
+      },
+      "rubricBreakdown": [
+        {
+          "dimension": "contractFidelity",
+          "score": 49,
+          "verdict": "weak",
+          "reason": "The hierarchy collapsed into interchangeable dashboard chrome.",
+          "blocking": true
+        }
+      ],
+      "findings": [
+        {
+          "area": "layout",
+          "severity": "high",
+          "problem": "The page uses balanced card grid without priority shift.",
+          "evidence": "Every block carries equal weight and the CTA no longer leads.",
+          "recommendation": "Rebuild the page around one dominant task surface.",
+          "blockingRecommended": true
+        }
+      ],
+      "notes": [
+        "Interchangeable dashboard chrome now dominates the flow."
+      ],
+      "tasteVsFailureSeparated": true,
+      "expected": {
+        "calibratedStatus": "generic",
+        "contractDriftDetected": true
+      }
+    },
+    {
+      "id": "provider-overcalls-generic",
+      "label": "Provider called the work generic, but the evidence points to valid authored moves",
+      "designExecutionSummary": {
+        "contractReady": true
+      },
+      "genericityAssessment": {
+        "status": "generic",
+        "reason": "The work feels generic, although it carries one clear signature move and distinct typographic hierarchy."
+      },
+      "rubricBreakdown": [
+        {
+          "dimension": "contractFidelity",
+          "score": 82,
+          "verdict": "strong",
+          "reason": "Contract fidelity is strong and the task order remains deliberate.",
+          "blocking": true
+        }
+      ],
+      "findings": [],
+      "notes": [
+        "The surface uses one clear signature move with distinct typographic hierarchy and non template task priority."
+      ],
+      "tasteVsFailureSeparated": true,
+      "expected": {
+        "calibratedStatus": "distinctive",
+        "contractDriftDetected": false
+      }
+    },
+    {
+      "id": "unnamed-genericity-claim",
+      "label": "Genericity claim without named drift signal drops to unclear",
+      "designExecutionSummary": {
+        "contractReady": true
+      },
+      "genericityAssessment": {
+        "status": "generic",
+        "reason": "The layout still feels a little too safe and familiar."
+      },
+      "rubricBreakdown": [
+        {
+          "dimension": "contractFidelity",
+          "score": 78,
+          "verdict": "acceptable",
+          "reason": "The contract is mostly intact.",
+          "blocking": true
+        }
+      ],
+      "findings": [],
+      "notes": [],
+      "tasteVsFailureSeparated": true,
+      "expected": {
+        "calibratedStatus": "unclear",
+        "contractDriftDetected": false
+      }
+    }
+  ]
+}

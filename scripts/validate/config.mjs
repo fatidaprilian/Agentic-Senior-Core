@@ -309,6 +309,25 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'reviewRubric',
       'genericityStatus',
       'handoffReady',
+      'calibratedStatus',
+    ],
+  },
+  {
+    path: 'scripts/ui-design-judge/rubric-calibration.mjs',
+    snippets: [
+      'ui-rubric-calibration-v1',
+      'matchedGenericitySignals',
+      'matchedValidBoldSignals',
+      'contractDriftDetected',
+      'Genericity claim was not backed by any named drift signal.',
+    ],
+  },
+  {
+    path: 'scripts/ui-rubric-calibration.mjs',
+    snippets: [
+      'ui-rubric-calibration',
+      'rubric-goldset.json',
+      'accuracyPercent',
     ],
   },
   {

@@ -23,6 +23,9 @@ const REQUIRED_FILES = [
   '.instructions.md',
   '.agent-context/prompts/bootstrap-design.md',
   'scripts/ui-design-judge.mjs',
+  'scripts/ui-rubric-calibration.mjs',
+  'scripts/ui-design-judge/rubric-calibration.mjs',
+  'scripts/ui-design-judge/rubric-goldset.json',
   '.agent-context/rules/frontend-architecture.md',
   '.agent-context/review-checklists/pr-checklist.md',
   '.agent-context/review-checklists/architecture-review.md',
@@ -102,6 +105,7 @@ const REQUIRED_UI_DESIGN_JUDGE_SNIPPETS = [
   'reviewRubric',
   'genericityStatus',
   'handoffReady',
+  'calibratedStatus',
 ];
 
 const REQUIRED_INSTRUCTIONS_SNIPPETS = [

@@ -221,7 +221,7 @@ Done when:
 
 ### Phase 5 - Rubric Calibration for Generic vs Distinctive
 
-Overall status: `[~]`
+Overall status: `[x]`
 Priority: high
 
 Goal:
@@ -231,6 +231,7 @@ What already exists:
 - [x] The repo already tries to prevent generic template output through prompt and judge direction.
 - [x] The design contract now stores a machine-readable review rubric with stable dimensions and genericity signals.
 - [x] The internal UI design judge now exposes rubric diagnostics and genericity status in machine-readable output.
+- [x] The repo now ships a small internal gold set plus a calibration harness for generic vs distinctive review.
 
 Breakdown:
 - [x] Define rubric dimensions in one stable source:
@@ -240,14 +241,14 @@ Breakdown:
   - [x] heuristic UX quality
   - [x] motion discipline
 - [x] Separate taste preference from real failure conditions.
-- [ ] Build a small gold set with human-reviewed examples.
-- [ ] Calibrate the judge against that gold set before raising trust.
+- [x] Build a small gold set with human-reviewed examples.
+- [x] Calibrate the judge against that gold set before raising trust.
 - [x] Add reporting that explains why something is generic, not just that it is generic.
 
 Done when:
-- [ ] The rubric can explain why a design is too generic.
-- [ ] The judge can distinguish bold-but-valid from inconsistent-or-lazy.
-- [ ] Contract drift and default-framework drift become measurable.
+- [x] The rubric can explain why a design is too generic.
+- [x] The judge can distinguish bold-but-valid from inconsistent-or-lazy.
+- [x] Contract drift and default-framework drift become measurable.
 
 ### Phase 6 - Context Hygiene and Memory Boundaries
 

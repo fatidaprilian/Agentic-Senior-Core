@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.19 - 2026-04-23
+### Changed
+- Added a deterministic rubric-calibration layer for the internal UI design judge so generic-vs-distinctive status now gets checked against named drift signals, contract drift, and valid authored signals instead of trusting provider labels at face value.
+- Introduced a small internal rubric gold set plus a machine-readable calibration runner to keep `generic`, `mixed`, and `distinctive` judgments stable as the judge evolves.
+- Extended repo validation, frontend audit, enterprise ops coverage, and test execution so the new calibration path stays part of the release guardrails rather than a local-only experiment.
+
 ## 3.0.18 - 2026-04-23
 ### Changed
 - Regrouped the repo-internal script surfaces for the MCP server, release gate, and UI design judge so large single-file tools now live behind function-focused folders while keeping the public package surface unchanged.

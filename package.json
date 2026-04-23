@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "3.0.18",
+  "version": "3.0.19",
   "type": "module",
   "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
   "bin": {
@@ -66,6 +66,6 @@
     "report:docs-quality-drift": "node ./scripts/docs-quality-drift-report.mjs",
     "report:governance-weekly": "node ./scripts/governance-weekly-report.mjs",
     "validate": "node ./scripts/validate.mjs",
-    "test": "node --test ./tests/cli-smoke.test.mjs ./tests/mcp-server.test.mjs ./tests/llm-judge.test.mjs ./tests/enterprise-ops.test.mjs"
+    "test": "node --test ./tests/cli-smoke.test.mjs ./tests/mcp-server.test.mjs ./tests/llm-judge.test.mjs ./tests/ui-rubric-calibration.test.mjs ./tests/enterprise-ops.test.mjs"
   }
 }

@@ -207,7 +207,7 @@ test('LLM Judge Tests', async (t) => {
         env: {
           ...process.env,
           PR_DIFF: sampleUiDiff,
-          UI_DESIGN_JUDGE_MOCK_RESPONSE: 'JSON_VERDICT: {"alignmentScore":82,"genericityAssessment":{"status":"mixed","reason":"The UI still carries one template-like grouping pattern, but the contract remains visible."},"tasteVsFailureSeparated":true,"rubricBreakdown":[{"dimension":"distinctiveness","score":68,"verdict":"acceptable","reason":"The direction is somewhat authored but still leans on one familiar grouping move.","blocking":false},{"dimension":"contractFidelity","score":61,"verdict":"weak","reason":"The mobile hierarchy drifted from the contract.","blocking":true}],"notes":["Contract stays opinionated without becoming generic."],"findings":[{"area":"responsive","severity":"major","problem":"Mobile layout still mirrors desktop grouping.","evidence":"Cards remain three-up in the supplied diff.","recommendation":"Stack content and reprioritize CTAs for small screens.","blockingRecommended":true}]}',
+          UI_DESIGN_JUDGE_MOCK_RESPONSE: 'JSON_VERDICT: {"alignmentScore":82,"genericityAssessment":{"status":"mixed","reason":"The UI still carries balanced card grid without priority shift, even though one clear signature move remains visible."},"tasteVsFailureSeparated":true,"rubricBreakdown":[{"dimension":"distinctiveness","score":68,"verdict":"acceptable","reason":"The direction still keeps one clear signature move but leans on one familiar grouping move.","blocking":false},{"dimension":"contractFidelity","score":61,"verdict":"weak","reason":"The mobile hierarchy drifted from the contract and lost non template task priority.","blocking":true}],"notes":["Contract stays opinionated without becoming generic."],"findings":[{"area":"responsive","severity":"major","problem":"Mobile layout still mirrors desktop grouping and keeps balanced card grid without priority shift.","evidence":"Cards remain three-up in the supplied diff.","recommendation":"Stack content and reprioritize CTAs for small screens.","blockingRecommended":true}]}',
         },
       }).toString();
 
@@ -234,6 +234,12 @@ test('LLM Judge Tests', async (t) => {
       assert.equal(report.rubric.expectedDimensions.length, 5);
       assert.equal(report.rubric.genericityAssessment.status, 'mixed');
       assert.equal(report.rubric.tasteVsFailureSeparated, true);
+      assert.equal(report.rubric.calibration.version, 'ui-rubric-calibration-v1');
+      assert.equal(report.rubric.calibration.providerStatus, 'mixed');
+      assert.equal(report.rubric.calibration.calibratedStatus, 'mixed');
+      assert.equal(report.rubric.calibration.contractDriftDetected, true);
+      assert.ok(report.rubric.calibration.matchedGenericitySignals.includes('balanced-card-grid-without-priority-shift'));
+      assert.ok(report.rubric.calibration.matchedValidBoldSignals.includes('one-clear-signature-move'));
       assert.equal(report.rubric.breakdown[0].dimension, 'distinctiveness');
       assert.equal(report.findings[0].severity, 'high');
     });
@@ -263,6 +269,7 @@ test('LLM Judge Tests', async (t) => {
       assert.equal(report.designExecution.handoffReady, true);
       assert.equal(report.summary.genericityStatus, 'unclear');
       assert.equal(report.rubric.genericityAssessment.status, 'unclear');
+      assert.equal(report.rubric.calibration.calibratedStatus, 'unclear');
       assert.match(report.notes.join(' '), /No LLM provider configured/);
     });
   });

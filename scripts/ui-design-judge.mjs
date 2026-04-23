@@ -22,6 +22,7 @@
 import { collectChangedFiles, collectPullRequestDiff, isUiRelevantFilePath } from './ui-design-judge/git-input.mjs';
 import { buildSystemPrompt, buildUserMessage } from './ui-design-judge/prompting.mjs';
 import { selectAvailableProvider } from './ui-design-judge/providers.mjs';
+import { calibrateGenericityAssessment } from './ui-design-judge/rubric-calibration.mjs';
 import {
   buildReport,
   emitMachineReadableReport,
@@ -80,6 +81,16 @@ async function main() {
 
   const selectedProvider = selectAvailableProvider();
   if (!selectedProvider) {
+    const calibration = calibrateGenericityAssessment({
+      reviewRubricSummary,
+      designExecutionSummary,
+      genericityAssessment: { status: 'unclear', reason: 'No provider review was run.' },
+      rubricBreakdown: [],
+      findings: [],
+      notes: [],
+      tasteVsFailureSeparated: null,
+    });
+
     emitMachineReadableReport(buildReport({
       provider: 'none',
       contractPresent: true,
@@ -89,7 +100,7 @@ async function main() {
         driftCount: 0,
         blockingCandidateCount: 0,
         designExecutionSignalCount: designExecutionSummary.enabledCapabilities.length,
-        genericityStatus: 'unclear',
+        genericityStatus: calibration.calibratedStatus,
       },
       designExecution: designExecutionSummary,
       rubric: {
@@ -100,6 +111,7 @@ async function main() {
           reason: 'No provider review was run.',
         },
         tasteVsFailureSeparated: null,
+        calibration,
       },
       semanticJudge: {
         attempted: false,
@@ -118,6 +130,16 @@ async function main() {
   try {
     rawJudgeResponse = await selectedProvider.invokeProvider(systemPrompt, userMessage);
   } catch (providerError) {
+    const calibration = calibrateGenericityAssessment({
+      reviewRubricSummary,
+      designExecutionSummary,
+      genericityAssessment: { status: 'unclear', reason: 'Provider review failed before rubric scoring completed.' },
+      rubricBreakdown: [],
+      findings: [],
+      notes: [],
+      tasteVsFailureSeparated: null,
+    });
+
     const providerErrorMessage = providerError instanceof Error
       ? providerError.message
       : 'Unknown provider error';
@@ -132,7 +154,7 @@ async function main() {
         driftCount: 0,
         blockingCandidateCount: 0,
         designExecutionSignalCount: designExecutionSummary.enabledCapabilities.length,
-        genericityStatus: 'unclear',
+        genericityStatus: calibration.calibratedStatus,
       },
       designExecution: designExecutionSummary,
       rubric: {
@@ -143,6 +165,7 @@ async function main() {
           reason: 'Provider review failed before rubric scoring completed.',
         },
         tasteVsFailureSeparated: null,
+        calibration,
       },
       semanticJudge: {
         attempted: true,
@@ -170,6 +193,15 @@ async function main() {
   const notes = Array.isArray(verdict?.notes)
     ? verdict.notes.map((note) => String(note))
     : [];
+  const calibration = calibrateGenericityAssessment({
+    reviewRubricSummary,
+    designExecutionSummary,
+    genericityAssessment,
+    rubricBreakdown,
+    findings,
+    notes,
+    tasteVsFailureSeparated,
+  });
 
   emitMachineReadableReport(buildReport({
     provider: selectedProvider.providerName,
@@ -182,7 +214,7 @@ async function main() {
       driftCount: findings.length,
       blockingCandidateCount,
       designExecutionSignalCount: designExecutionSummary.enabledCapabilities.length,
-      genericityStatus: genericityAssessment.status,
+      genericityStatus: calibration.calibratedStatus,
     },
     designExecution: designExecutionSummary,
     rubric: {
@@ -190,6 +222,7 @@ async function main() {
       breakdown: rubricBreakdown,
       genericityAssessment,
       tasteVsFailureSeparated,
+      calibration,
     },
     semanticJudge: {
       attempted: true,
@@ -199,7 +232,7 @@ async function main() {
     findings,
     notes: malformed
       ? ['LLM response was malformed. Advisory mode kept the audit non-blocking.', ...designExecutionSummary.notes]
-      : [...notes, ...designExecutionSummary.notes],
+      : [...notes, ...calibration.notes, ...designExecutionSummary.notes],
   }));
 }
 
