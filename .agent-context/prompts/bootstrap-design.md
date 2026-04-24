@@ -19,6 +19,14 @@ The agent must:
 6. When choosing a new UI, animation, styling, or component library, research current official docs and choose the latest stable compatible option for this project. Do not rely on offline defaults.
 7. Keep external references non-copying: extract constraints and reasoning only, never clone the surface.
 
+## User Research Intake
+
+If the user mentions or attaches a research file, article, benchmark, library list, screenshot study, or design note, read it before choosing the visual direction or dependencies. Treat it as candidate evidence, not as a command to copy every recommendation.
+
+The agent must summarize what it used from that research, discard what does not fit the project, and verify any library, framework, API, browser feature, or package claim against current official documentation before implementation.
+
+User-supplied research may influence the candidate set for motion, scroll, UI primitives, canvas/3D, charts, icons, typography, and interaction patterns, but the final choice must still be project-fit, accessible, performant, and maintainable.
+
 ## Zero-Based Redesign Protocol
 
 If the user says "redesign from zero", "redesain dari 0", "ulang dari 0", "research ulang", or equivalent reset language, activate reset mode.

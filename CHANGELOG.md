@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 
+## 3.0.22 - 2026-04-24
+### Changed
+- Added user-supplied research intake to the UI bootstrap flow so attached library lists, articles, screenshots, or benchmark notes become candidate evidence that must be summarized, filtered for project fit, and verified against current official documentation before implementation.
+- Extended the dynamic design-intent seed with `externalResearchIntake` so user research can influence motion, scroll, UI primitives, canvas/3D, charts, icons, typography, and interaction candidates without becoming an offline style or dependency preset.
+
 ## 3.0.21 - 2026-04-24
 ### Changed
 - Added a zero-based redesign protocol so requests such as `redesign from zero`, `redesain dari 0`, `ulang dari 0`, or `research ulang` treat existing UI as content and behavior evidence only, not visual continuity.

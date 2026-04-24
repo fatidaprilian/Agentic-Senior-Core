@@ -67,6 +67,8 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.match(bootstrapDesignPrompt, /Design continuity is opt-in\./);
       assert.match(bootstrapDesignPrompt, /zero-based redesign/i);
       assert.match(bootstrapDesignPrompt, /visualResetStrategy/);
+      assert.match(bootstrapDesignPrompt, /user supplies research files/i);
+      assert.match(bootstrapDesignPrompt, /candidate evidence/i);
       assert.match(bootstrapDesignPrompt, /WCAG 2\.2 AA/);
       assert.match(bootstrapDesignPrompt, /APCA/);
       assert.match(bootstrapDesignPrompt, /representation-first/i);
@@ -80,6 +82,9 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.seedPolicy.requiresProjectSpecificRefinement, true);
       assert.equal(designIntentSeed.visualDirection.seedMode, 'scaffold-only');
       assert.equal(designIntentSeed.visualDirection.requiresProjectSpecificSynthesis, true);
+      assert.equal(designIntentSeed.externalResearchIntake.userSuppliedResearchPolicy, 'read-as-candidate-evidence-not-final-prescription');
+      assert.equal(designIntentSeed.externalResearchIntake.requireOfficialDocsVerificationForTechnologyClaims, true);
+      assert.ok(designIntentSeed.externalResearchIntake.candidateDomains.includes('motion-and-scroll'));
       assert.deepEqual(designIntentSeed.tokenSystem.taxonomyOrder, ['primitive', 'semantic', 'component']);
       assert.equal(designIntentSeed.tokenSystem.primitiveColorSpace, 'OKLCH');
       assert.equal(designIntentSeed.tokenSystem.requireSemanticAliases, true);
