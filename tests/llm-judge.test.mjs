@@ -170,6 +170,8 @@ test('LLM Judge Tests', async (t) => {
         'unresearched-library-or-framework-choice',
         'default-component-kit-treatment-without-product-rationale',
         'template-shell-without-product-rationale',
+        'zero-based-redesign-kept-prior-visual-dna',
+        'restyle-instead-of-recomposition',
       ],
       validBoldSignals: [
         'context-derived-visual-direction',
@@ -188,6 +190,8 @@ test('LLM Judge Tests', async (t) => {
       'unresearched-library-or-framework-choice',
       'default-component-kit-treatment-without-product-rationale',
       'template-shell-without-product-rationale',
+      'zero-based-redesign-kept-prior-visual-dna',
+      'restyle-instead-of-recomposition',
       'scale-only-responsive-layout',
       'single-safe-typographic-family-without-role-contrast-or-rationale',
     ],
@@ -243,7 +247,7 @@ test('LLM Judge Tests', async (t) => {
     }
   });
 
-  await t.test('ui-design-judge keeps advisory mode but escalates generic auto-fail findings', () => {
+  await t.test('ui-design-judge makes generic auto-fail findings blocking when named drift is detected', () => {
     withTemporaryDesignIntent(sampleDesignIntent, () => {
       const output = execSync(`node ${uiDesignJudgePath}`, {
         env: {
@@ -255,11 +259,12 @@ test('LLM Judge Tests', async (t) => {
 
       const report = JSON.parse(output);
       assert.equal(report.auditName, 'ui-design-judge');
-      assert.equal(report.mode, 'advisory');
-      assert.equal(report.advisoryOnly, true);
+      assert.equal(report.mode, 'blocking-recommended');
+      assert.equal(report.advisoryOnly, false);
+      assert.equal(report.autoFailTriggered, true);
       assert.equal(report.provider, 'mock');
       assert.equal(report.contractPresent, true);
-      assert.equal(report.passed, true);
+      assert.equal(report.passed, false);
       assert.equal(report.summary.changedUiFileCount, 1);
       assert.equal(report.summary.alignmentScore, 82);
       assert.equal(report.summary.designExecutionSignalCount, 9);

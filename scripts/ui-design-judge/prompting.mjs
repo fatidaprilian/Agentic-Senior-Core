@@ -19,7 +19,7 @@ export function buildSystemPrompt() {
     'Treat WCAG 2.2 AA failures as hard accessibility drift.',
     'Treat APCA as advisory perceptual tuning only. Do not set blocking solely because APCA indicates a stronger readability adjustment when WCAG hard requirements still pass.',
     'Check focus visibility, focus appearance, target size, keyboard access, accessible authentication, and status or dynamic state access when the diff touches those surfaces.',
-    'This audit always runs in advisory mode for this repository workflow.',
+    'Check design-intent.json for reviewRubric.genericityAutoFail. If true and forbiddenPatterns or genericitySignals are detected in the changed UI, this audit is no longer merely advisory for that finding: set blockingRecommended to true, mark the relevant rubric dimension as blocking, and require rebuilding the drifted surface instead of polishing it.',
     'Focus on color intent, typographic hierarchy, responsive re-layout, purposeful motion, component morphology across states, interaction behavior, and genericity drift.',
     'If you call something generic, explain the specific genericity signal or anti-pattern that caused that judgment.',
     'Separate taste from failure. A bold design that follows the contract must not be penalized only because it is unusual.',

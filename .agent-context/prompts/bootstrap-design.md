@@ -19,6 +19,18 @@ The agent must:
 6. When choosing a new UI, animation, styling, or component library, research current official docs and choose the latest stable compatible option for this project. Do not rely on offline defaults.
 7. Keep external references non-copying: extract constraints and reasoning only, never clone the surface.
 
+## Zero-Based Redesign Protocol
+
+If the user says "redesign from zero", "redesain dari 0", "ulang dari 0", "research ulang", or equivalent reset language, activate reset mode.
+
+In reset mode:
+- Existing UI and existing design docs are content, behavior, accessibility, and repo-evidence inputs only. They are not visual continuity sources.
+- Replace or materially rewrite `docs/DESIGN.md` and `docs/design-intent.json` before implementation so the new contract cannot inherit old palette, typography, layout, navigation shape, component morphology, motion signature, or image placement by accident.
+- Define a `visualResetStrategy` that names the old visual DNA being discarded and the new direction being selected from current brief, repo evidence, and live official documentation.
+- The implementation must change composition, hierarchy, palette/typography, motion/interaction, and responsive information architecture. A palette swap, dark-mode flip, or same hero with new colors is failure.
+- Keep product data, copy requirements, routes, accessibility needs, and required local assets intact unless the user explicitly says they may be removed.
+- If a modern UI, animation, scroll, 3D, canvas, chart, or icon library is useful, research current official docs and record the selected library, source URL, fetched date, reason, performance risk, and reduced-motion/accessibility fallback.
+
 ## Design Quality Bar
 
 The UI must feel authored by a strong UI/UX designer, not assembled from default cards and safe framework chrome.

@@ -7,9 +7,10 @@
  * Advisory-default UI design contract judge.
  *
  * Repo-internal workflow audit; no user-facing runtime modes.
- * Stays advisory by default for this repository workflow, but genericityAutoFail
- * must escalate findings into blocking required actions when named drift signals
- * or forbidden patterns are detected.
+ * Stays advisory when no provider is configured or no auto-fail signal is found.
+ * reviewRubric.genericityAutoFail escalates named drift signals and forbidden
+ * patterns into blocking findings and blocking required actions when provider
+ * evidence is available.
  *
  * Validation anchors for repo governance:
  * - Do not reward generic SaaS defaults or popular template patterns.
@@ -269,7 +270,10 @@ async function main() {
   emitMachineReadableReport(buildReport({
     provider: selectedProvider.providerName,
     contractPresent: true,
-    passed: true,
+    mode: autoFailResolution.autoFailTriggered ? 'blocking-recommended' : 'advisory',
+    advisoryOnly: !autoFailResolution.autoFailTriggered,
+    passed: !autoFailResolution.autoFailTriggered,
+    autoFailTriggered: autoFailResolution.autoFailTriggered,
     malformedVerdict: malformed,
     summary: {
       changedUiFileCount: changedUiFiles.length,

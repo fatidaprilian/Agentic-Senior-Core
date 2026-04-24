@@ -107,6 +107,7 @@ export function buildReport(partialReport) {
     mode: 'advisory',
     advisoryOnly: true,
     passed: true,
+    autoFailTriggered: false,
     skipped: false,
     skipReason: null,
     provider: 'none',

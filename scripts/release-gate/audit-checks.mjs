@@ -361,13 +361,28 @@ export function runAuditReleaseChecks(results, diagnostics) {
       'ui-design-judge-advisory',
       `ui-design-judge executed (passed=${uiDesignJudgeExecution.report.passed}, skipped=${uiDesignJudgeExecution.report.skipped}, mode=${uiDesignJudgeExecution.report.mode})`
     );
+
     pushResult(
       results,
-      uiDesignJudgeExecution.report.advisoryOnly === true,
+      uiDesignJudgeExecution.report.passed === true,
+      'ui-design-judge-contract-hard-rule',
+      uiDesignJudgeExecution.report.passed === true
+        ? 'UI design judge contract hard-rule passed or no blocking auto-fail was triggered'
+        : `UI design judge reported blocking design drift: ${Array.isArray(uiDesignJudgeExecution.report.findings)
+          ? uiDesignJudgeExecution.report.findings
+            .filter((finding) => finding?.blockingRecommended === true)
+            .map((finding) => `${finding.area}: ${finding.problem}`)
+            .join('; ') || 'blocking drift reported without detailed findings'
+          : 'blocking drift reported without detailed findings'}`
+    );
+
+    pushResult(
+      results,
+      uiDesignJudgeExecution.report.advisoryOnly === true || uiDesignJudgeExecution.report.autoFailTriggered === true,
       'ui-design-judge-non-blocking-policy',
       uiDesignJudgeExecution.report.advisoryOnly === true
-        ? 'UI design judge remains advisory by default and does not hard-block release gate'
-        : 'UI design judge unexpectedly ran in blocking mode during release gate'
+        ? 'UI design judge remains advisory by default when no auto-fail drift is detected'
+        : 'UI design judge entered blocking-recommended mode because genericityAutoFail detected named drift'
     );
 
     const hasStructuredDesignDiagnostics = typeof uiDesignJudgeExecution.report?.summary?.designExecutionSignalCount === 'number'

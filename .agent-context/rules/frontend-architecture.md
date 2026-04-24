@@ -29,6 +29,14 @@ Do not use this file to teach generic frontend basics the model already knows.
 - External references are tainted by default. If the user supplies one, convert only explicit constraints into the current contract and do not compare against or imitate the source surface.
 - If a new UI, animation, styling, or component library is needed, research current official docs and choose the latest stable compatible option for the project.
 
+## Zero-Based Redesign Boundary
+
+- If the user asks for a redesign "from zero" or equivalent reset language, treat existing UI as behavioral/content evidence only, not as visual direction.
+- Do not preserve prior palette, typography, hero composition, navigation placement, component morphology, motion signature, or image framing unless the user explicitly requests continuity.
+- The new UI must materially recompose at least the primary surface, content hierarchy, interaction model, and responsive information architecture.
+- A dark-mode flip, same layout with different colors, or restyled version of the previous hero is not a zero-based redesign.
+- Record the visual reset in `docs/DESIGN.md` and `docs/design-intent.json` before coding.
+
 ## Accessibility Split
 
 - Treat WCAG 2.2 AA as the hard compliance floor.

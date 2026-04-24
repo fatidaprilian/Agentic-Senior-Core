@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 
+## 3.0.21 - 2026-04-24
+### Changed
+- Added a zero-based redesign protocol so requests such as `redesign from zero`, `redesain dari 0`, `ulang dari 0`, or `research ulang` treat existing UI as content and behavior evidence only, not visual continuity.
+- Extended the dynamic design contract with `visualResetStrategy`, prior-visual-DNA drift signals, and restyle-vs-recomposition anti-patterns so reset-language UI work cannot quietly become a recolor of the previous layout.
+- Tightened the UI design judge prompt and release gate integration so `reviewRubric.genericityAutoFail` escalates named genericity or forbidden-pattern drift into blocking-recommended findings instead of being framed as merely advisory.
+
 ## 3.0.20 - 2026-04-24
 ### Changed
 - Fixed MCP template synchronization for `init` and `upgrade` so target repositories now receive the full `scripts/mcp-server/` helper bundle alongside `scripts/mcp-server.mjs`, preventing Antigravity and similar IDE integrations from crashing on missing local module imports.
