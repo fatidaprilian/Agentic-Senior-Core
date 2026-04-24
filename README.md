@@ -10,12 +10,13 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.9 (2026-04-20).
+Latest release: 3.0.25 (2026-04-25).
 
-Highlights in 3.0.9:
-- Design bootstrap prompts now rely on shipped project evidence instead of assuming extra docs exist in every initialized repository.
-- Dynamic UI design guidance now emphasizes structure, rationale, and anti-generic constraints without anchoring to brand systems.
-- Init prompts now point agents at the active onboarding and compiled-rule context that actually exists in target projects.
+Highlights in 3.0.25:
+- UI design bootstrap now forces a dynamic conceptual anchor when no current-task visual research is provided.
+- Agents must use live/current-year research for ecosystem, framework, dependency, Docker, and modern UI/library claims instead of offline repository guesses.
+- Frontend guidance now rejects safe dashboard/admin-panel defaults, requires responsive recomposition, and allows rich modern motion when it supports the chosen concept.
+- Generated design-intent seeds are more compact, leaving the LLM room to synthesize project-specific visual direction instead of inheriting verbose scaffold bias.
 
 </div>
 
@@ -34,6 +35,20 @@ One command to initialize rules, checklists, and strict AI coding guidelines con
 > **See [docs/deep-dive.md](docs/deep-dive.md) and [docs/roadmap.md](docs/roadmap.md) for advanced configuration, planning mode, snapshot, and realtime options.**
 
 - This command writes `.agent-context/state/v3-purge-audit.json` and reports whether static directory deletion is safe.
+
+---
+
+## Design Direction
+
+For UI, UX, layout, screen, Tailwind, frontend, or redesign work, the pack routes agents through the design bootstrap and frontend architecture rules before code changes.
+
+The intended behavior is agent-led, not offline-template-led:
+
+- Existing projects: read the real repository, docs, UI surface, and current user brief before changing design.
+- Fresh projects: ask the LLM agent to recommend the stack and design approach from current evidence instead of silently choosing a hardcoded framework.
+- No visual reference provided: synthesize one modern conceptual anchor first, then derive typography, spacing, morphology, motion, and responsive behavior from that anchor.
+- Modern UI claims: research current-year libraries and patterns when relevant; 2026 work should use 2026 evidence, and future years should update automatically through agent research.
+- Anti-generic rule: avoid safe dashboard shells, admin panels, card grids, scale-only mobile layouts, and static no-motion interfaces unless the product context explicitly justifies them.
 
 ---
 
