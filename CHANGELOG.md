@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 
+## 3.0.24 - 2026-04-24
+### Changed
+- Strengthened the prompt-only UI conceptual anchor flow into a Dynamic Avant-Garde Anchor Engine so missing user research triggers agent-led synthesis instead of fallback to scaffold, prior UI, or dashboard/admin metaphors.
+- Added visual risk budget, motion risk budget, high-variance candidate selection, and smoke/validation coverage so expressive motion and spatial interaction are allowed when they fit the selected anchor and remain accessible.
+
 ## 3.0.23 - 2026-04-24
 ### Changed
 - Added an advanced conceptual anchor requirement for prompt-only UI work so agents must choose one cohesive non-template concept before coding when no external design research is supplied.

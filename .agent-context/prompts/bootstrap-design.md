@@ -27,17 +27,21 @@ The agent must summarize what it used from that research, discard what does not 
 
 User-supplied research may influence the candidate set for motion, scroll, UI primitives, canvas/3D, charts, icons, typography, and interaction patterns, but the final choice must still be project-fit, accessible, performant, and maintainable.
 
-## Advanced Conceptual Anchor
+## Dynamic Avant-Garde Anchor Engine
 
-If the user requests UI work but provides no external research, design reference, screenshot study, or library note, do not start coding immediately. First synthesize one advanced conceptual anchor that will unify the interface.
+If the user requests UI work but provides no user-supplied research, design reference, screenshot study, or library note, do not start coding immediately. This is not permission to fall back to the scaffold, prior UI, or generic software metaphors. First synthesize one advanced conceptual anchor that will unify the interface.
 
-Do not use basic software UI labels as the final anchor, including "dashboard", "portal", "cards", "admin panel", "SaaS shell", or "minimalist interface".
+User-supplied research means current-task evidence from the user. The scaffold seed, this repo's offline examples, old design docs, and prior UI do not count as research. If live research is available, perform agent-led research into current official docs for any technology choices and current premium interaction/design patterns before selecting the anchor. If live research is unavailable, state that limitation in the design docs and synthesize from product context plus broad design knowledge without pretending the seed was research.
 
-The agent must consider at least three substantially different candidate anchors internally, discard predictable or generic candidates, and record only the surviving anchor and concise rationale. Do not expose hidden deliberation or the rejected candidate list.
+Do not use basic software UI labels as the final anchor, including "dashboard", "portal", "cards", "admin panel", "SaaS shell", "web app shell", or "minimalist interface".
 
-The final anchor must come from broad non-template domains such as complex physical engineering, high-end industrial design, experimental editorial structure, advanced architecture, scientific instrumentation, or spatial information systems. These are search domains, not style presets.
+The agent must internally consider at least three substantially different, high-variance candidate anchors, discard the two most obvious, safest, or easiest-to-predict options, and record only the surviving anchor and concise rationale. Do not expose hidden deliberation or the rejected candidate list.
 
-Write the chosen anchor into `docs/design-intent.json` as `conceptualAnchor`, then derive typography, spacing, density, color behavior, morphology, motion, and responsive composition from that single anchor. If a later design choice does not logically follow from the anchor, revise the contract before coding.
+The final anchor must come from broad non-template domains such as complex physical engineering, high-end industrial design, cinematic spatial interfaces, experimental editorial structure, advanced architecture, scientific instrumentation, advanced data visualization, exhibition/wayfinding systems, or premium interactive web experiences. These are search domains, not style presets.
+
+Write the chosen anchor into `docs/design-intent.json` as `conceptualAnchor`, including agentResearchMode, sourceDomain, rationale, derivedTokenLogic, visualRiskBudget, motionRiskBudget, and cohesionChecks. Typography, spacing, density, color behavior, morphology, motion, and responsive composition must logically derive from that single anchor. If a later design choice does not follow from the anchor, revise the contract before coding.
+
+Motion is not a garnish. The agent may use rich animation, fluid transitions, spatial reveals, scroll choreography, micro-interactions, and modern motion libraries when they support the anchor, remain performant, and include reduced-motion fallbacks. Do not suppress motion merely to look safe.
 
 ## Zero-Based Redesign Protocol
 
