@@ -112,7 +112,7 @@ export function buildToolDefinitions() {
         properties: {
           path: {
             type: 'string',
-            description: 'Path relative to .agent-context/state (for example memory-continuity-benchmark.json).',
+            description: 'Path relative to .agent-context/state, such as memory-continuity-benchmark.json.',
           },
         },
         required: ['path'],

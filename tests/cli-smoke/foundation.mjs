@@ -14,24 +14,11 @@ import {
 } from './shared.mjs';
 import { runProjectDiscovery } from '../../lib/cli/project-scaffolder.mjs';
 import {
-  filterStackFileNamesByCandidates,
-  filterBlueprintFileNamesByCandidates,
   resolveProjectScopeKeyFromLabel,
   normalizeAdditionalStackSelection,
   normalizeAdditionalBlueprintSelection,
   normalizeRuntimeEnvironmentKey,
 } from '../../lib/cli/commands/init.mjs';
-import {
-  PROJECT_SCOPE_STACK_FILTERS,
-  WEB_FRONTEND_BLUEPRINT_CANDIDATES,
-  WEB_BACKEND_BLUEPRINT_CANDIDATES,
-} from '../../lib/cli/constants.mjs';
-import {
-  recommendArchitecture,
-  formatArchitectureRecommendation,
-  createUpdatedArchitectPreference,
-  shouldApplyRepeatedOverridePreference,
-} from '../../lib/cli/architect.mjs';
 
 export async function registerCliSmokeFoundationTests(t) {
   await t.test('published package surface includes canonical .instructions.md', () => {
@@ -48,7 +35,7 @@ export async function registerCliSmokeFoundationTests(t) {
     assert.match(output, /--no-memory-continuity/);
 
     assert.match(output, /quality checks \(guardrails\)/i);
-    assert.match(output, /java-enterprise-api/);
+    assert.match(output, /frontend-ui/);
   });
 
   await t.test('launch command shows numbered startup choices', () => {
@@ -73,37 +60,17 @@ export async function registerCliSmokeFoundationTests(t) {
 
     assert.equal(discoveryAnswers.projectName, 'AutomatedLicensePlateReaders');
     assert.equal(discoveryAnswers.projectDescription, 'Incident review dashboard for plate-reader workflows');
-    assert.equal(discoveryAnswers.architectureStyle, 'Monolith');
+    assert.equal(discoveryAnswers.architectureStyle, 'Agent recommendation required from current brief, repo evidence, and live official docs');
     assert.equal(discoveryAnswers.includeCiGuardrails, true);
     assert.deepEqual(discoveryAnswers.features, []);
   });
 
-  await t.test('init scope mapping and stack filtering remain deterministic', () => {
-    const knownStacks = [
-      'csharp.md',
-      'flutter.md',
-      'go.md',
-      'java.md',
-      'php.md',
-      'python.md',
-      'react-native.md',
-      'ruby.md',
-      'rust.md',
-      'typescript.md',
-    ];
-
-    const frontendScopeStacks = filterStackFileNamesByCandidates(
-      knownStacks,
-      PROJECT_SCOPE_STACK_FILTERS['frontend-only']
-    );
-
+  await t.test('init scope mapping remains deterministic without choosing stack', () => {
     assert.equal(resolveProjectScopeKeyFromLabel('Frontend only'), 'frontend-only');
     assert.equal(resolveProjectScopeKeyFromLabel('Unknown scope label'), 'both');
-    assert.deepEqual(frontendScopeStacks, ['typescript.md']);
-    assert.equal(frontendScopeStacks.includes('python.md'), false);
   });
 
-  await t.test('init auto-detects existing project stack and additional stack signals', () => {
+  await t.test('init records existing project runtime evidence without applying detected stack', () => {
     const existingProjectTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-existing-stack-detect-'));
 
     try {
@@ -123,27 +90,29 @@ export async function registerCliSmokeFoundationTests(t) {
 
       assert.match(initOutput, /Existing project detection transparency:/);
       assert.match(initOutput, /Active rules baseline: canonical \.instructions\.md -> compiled \.cursorrules\/\.windsurfrules/);
-      assert.match(initOutput, /Using detected stack automatically for this existing project: Python\./);
+      assert.match(initOutput, /Runtime decision: agent recommendation required from current repo\/brief evidence/);
+      assert.match(initOutput, /Architecture decision: agent recommendation required from current repo\/brief evidence/);
 
       const onboardingReportPath = join(existingProjectTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
       const onboardingReport = readJson(onboardingReportPath);
 
-      assert.equal(onboardingReport.selectedStack, 'python.md');
+      assert.equal(onboardingReport.selectedStack, null);
+      assert.equal(onboardingReport.runtimeDecision.mode, 'agent-decision-required');
+      assert.equal(onboardingReport.runtimeDecision.detectedStackEvidence, 'python.md');
       assert.ok(Array.isArray(onboardingReport.selectedAdditionalStacks));
-      assert.ok(onboardingReport.selectedAdditionalStacks.includes('typescript.md'));
-      assert.ok(onboardingReport.autoDetection.recommendedAdditionalStacks.includes('typescript.md'));
+      assert.deepEqual(onboardingReport.selectedAdditionalStacks, []);
+      assert.ok(onboardingReport.autoDetection.detectedAdditionalStacks.includes('typescript.md'));
       assert.ok(Array.isArray(onboardingReport.selectedAdditionalBlueprints));
-      assert.ok(onboardingReport.selectedAdditionalBlueprints.includes('api-nextjs.md'));
+      assert.deepEqual(onboardingReport.selectedAdditionalBlueprints, []);
       assert.equal(onboardingReport.autoDetection?.detectionTransparency?.declarationType, 'existing-project');
-      assert.equal(onboardingReport.autoDetection?.detectionTransparency?.quickConfirmation?.response, 'non-interactive-auto');
-      assert.equal(onboardingReport.autoDetection?.detectionTransparency?.decision?.mode, 'non-interactive-auto');
-      assert.equal(onboardingReport.autoDetection?.detectionTransparency?.decision?.selectedStackFileName, 'python.md');
+      assert.equal(onboardingReport.autoDetection?.detectionTransparency?.quickConfirmation?.response, 'evidence-only');
+      assert.equal(onboardingReport.autoDetection?.detectionTransparency?.decision?.mode, 'existing-project-evidence-only');
+      assert.equal(onboardingReport.autoDetection?.detectionTransparency?.decision?.selectedStackFileName, 'agent-decision-runtime.md');
 
       const compiledRulesContent = readFileSync(join(existingProjectTargetDirectory, '.cursorrules'), 'utf8');
-      assert.match(compiledRulesContent, /## LAYER 3A: ADDITIONAL BLUEPRINT PROFILES/);
-      const hasCompatibleAdditionalBlueprintReference = /architecture-profile:api-nextjs\.md/.test(compiledRulesContent)
-        || /api-nextjs\.md \(dynamic architecture signal\)/.test(compiledRulesContent);
-      assert.equal(hasCompatibleAdditionalBlueprintReference, true);
+      assert.match(compiledRulesContent, /## LAYER 2: RUNTIME DECISION REQUIRED/);
+      assert.match(compiledRulesContent, /## LAYER 3: ARCHITECTURE DECISION REQUIRED/);
+      assert.doesNotMatch(compiledRulesContent, /## LAYER 3A: ADDITIONAL BLUEPRINT PROFILES/);
     } finally {
       rmSync(existingProjectTargetDirectory, { recursive: true, force: true });
     }
@@ -171,32 +140,6 @@ export async function registerCliSmokeFoundationTests(t) {
     assert.deepEqual(normalizedAdditionalBlueprints, ['api-nextjs.md', 'nestjs-logic.md']);
   });
 
-  await t.test('init blueprint filtering supports web dual-blueprint candidates', () => {
-    const knownBlueprints = [
-      'api-nextjs.md',
-      'aspnet-api.md',
-      'fastapi-service.md',
-      'go-service.md',
-      'graphql-grpc-api.md',
-      'laravel-api.md',
-      'nestjs-logic.md',
-      'spring-boot-api.md',
-    ];
-
-    const frontendBlueprintChoices = filterBlueprintFileNamesByCandidates(
-      knownBlueprints,
-      WEB_FRONTEND_BLUEPRINT_CANDIDATES
-    );
-    const backendBlueprintChoices = filterBlueprintFileNamesByCandidates(
-      knownBlueprints,
-      WEB_BACKEND_BLUEPRINT_CANDIDATES
-    );
-
-    assert.deepEqual(frontendBlueprintChoices, ['api-nextjs.md']);
-    assert.equal(backendBlueprintChoices.includes('fastapi-service.md'), true);
-    assert.equal(backendBlueprintChoices.includes('nestjs-logic.md'), true);
-  });
-
   await t.test('init runtime environment normalization accepts supported keys', () => {
     assert.equal(normalizeRuntimeEnvironmentKey('linux-wsl'), 'linux-wsl');
     assert.equal(normalizeRuntimeEnvironmentKey('Windows'), 'windows');
@@ -204,45 +147,25 @@ export async function registerCliSmokeFoundationTests(t) {
     assert.equal(normalizeRuntimeEnvironmentKey('unsupported-env'), null);
   });
 
-  await t.test('initializes with a plug-and-play preset', () => {
+  await t.test('initializes with a scope hint preset without selecting stack', () => {
     const presetTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-preset-'));
 
     try {
-      const presetOutput = execSync(`node ${cliPath} init ${presetTargetDirectory} --preset frontend-web`).toString();
+      const presetOutput = execSync(`node ${cliPath} init ${presetTargetDirectory} --preset frontend-ui`).toString();
 
-      assert.match(presetOutput, /Using preset: frontend-web/);
+      assert.match(presetOutput, /Using preset: frontend-ui/);
 
       const presetReportPath = join(presetTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
       const presetReport = readJson(presetReportPath);
 
-      assert.equal(presetReport.selectedPreset, 'frontend-web');
+      assert.equal(presetReport.selectedPreset, 'frontend-ui');
       assert.equal(presetReport.selectedProfile, 'balanced');
-      assert.equal(presetReport.selectedStack, 'typescript.md');
-      assert.equal(presetReport.selectedBlueprint, 'api-nextjs.md');
+      assert.equal(presetReport.selectedStack, null);
+      assert.equal(presetReport.selectedBlueprint, null);
+      assert.equal(presetReport.runtimeDecision.mode, 'agent-decision-required');
+      assert.equal(presetReport.architectureDecision.mode, 'agent-decision-required');
     } finally {
       rmSync(presetTargetDirectory, { recursive: true, force: true });
-    }
-  });
-
-  await t.test('initializes with expanded Java enterprise preset', () => {
-    const javaPresetTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-java-preset-'));
-
-    try {
-      const javaPresetOutput = execSync(
-        `node ${cliPath} init ${javaPresetTargetDirectory} --preset java-enterprise-api`
-      ).toString();
-
-      assert.match(javaPresetOutput, /Using preset: java-enterprise-api/);
-
-      const javaPresetReportPath = join(javaPresetTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
-      const javaPresetReport = readJson(javaPresetReportPath);
-
-      assert.equal(javaPresetReport.selectedPreset, 'java-enterprise-api');
-      assert.equal(javaPresetReport.selectedProfile, 'balanced');
-      assert.equal(javaPresetReport.selectedStack, 'java.md');
-      assert.equal(javaPresetReport.selectedBlueprint, 'spring-boot-api.md');
-    } finally {
-      rmSync(javaPresetTargetDirectory, { recursive: true, force: true });
     }
   });
 
@@ -267,6 +190,10 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.equal(existsSync(join(mcpTemplateTargetDirectory, '.instructions.md')), true);
       assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'mcp.json')), false);
       assert.equal(existsSync(join(mcpTemplateTargetDirectory, '.vscode', 'mcp.json')), true);
+      assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'scripts', 'mcp-server.mjs')), true);
+      assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'scripts', 'mcp-server', 'constants.mjs')), true);
+      assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'scripts', 'mcp-server', 'tool-registry.mjs')), true);
+      assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'scripts', 'mcp-server', 'tools.mjs')), true);
 
       const workspaceMcpConfig = readJson(join(mcpTemplateTargetDirectory, '.vscode', 'mcp.json'));
 
@@ -334,85 +261,36 @@ export async function registerCliSmokeFoundationTests(t) {
     }
   });
 
-  await t.test('fresh init skips the old architecture interview surface', () => {
+  await t.test('fresh non-interactive init uses agent decision placeholders instead of stack interview', () => {
     const streamlinedTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-streamlined-init-'));
 
     try {
-      const streamlinedOutput = execSync(
-        `node ${cliPath} init ${streamlinedTargetDirectory} --no-token-optimize --no-memory-continuity`,
-        {
-          input: '\n\n\n1\n1\n1\n1\n\n',
-        }
+      const initOutput = execSync(
+        `node ${cliPath} init ${streamlinedTargetDirectory} --no-token-optimize --no-memory-continuity`
       ).toString();
-
-      assert.doesNotMatch(streamlinedOutput, /Architecture recommendation \(project-description-first\):/);
-      assert.doesNotMatch(streamlinedOutput, /This is a fresh project\. Want me to scaffold project documentation/);
-      assert.doesNotMatch(streamlinedOutput, /Apply this architecture recommendation\?/);
+      assert.match(initOutput, /Runtime decision: agent recommendation required from current repo\/brief evidence/);
+      assert.match(initOutput, /Architecture decision: agent recommendation required from current repo\/brief evidence/);
+      assert.doesNotMatch(initOutput, /project-description-first/);
+      assert.doesNotMatch(initOutput, /This is a fresh project\. Want me to scaffold project documentation/);
+      assert.doesNotMatch(initOutput, /Apply this architecture/);
     } finally {
       rmSync(streamlinedTargetDirectory, { recursive: true, force: true });
     }
   });
 
-  await t.test('init uses project description for silent adaptive stack selection without a second architecture interview', () => {
+  await t.test('non-interactive fresh init records agent runtime recommendation requirement', () => {
     const architectTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-architect-'));
 
     try {
-      const architectOutput = execSync(
+      const initOutput = execSync(
         `node ${cliPath} init ${architectTargetDirectory} --project-description "Machine learning API for image classification and model serving" --ci true --no-scaffold-docs --no-token-optimize --no-memory-continuity`
       ).toString();
-
-      assert.doesNotMatch(architectOutput, /Architecture recommendation \(project-description-first\):/);
-      assert.doesNotMatch(architectOutput, /Design signal synthesis \(normalized, no copied external prose\):/);
-      assert.doesNotMatch(architectOutput, /Research guardrails:/);
-
-      const onboardingReportPath = join(architectTargetDirectory, '.agent-context', 'state', 'onboarding-report.json');
-      const onboardingReport = readJson(onboardingReportPath);
-
-      assert.equal(onboardingReport.selectedStack, 'python.md');
-      assert.equal(onboardingReport.selectedBlueprint, 'fastapi-service.md');
-      assert.equal(onboardingReport.architectRecommendation?.recommendedStackFileName, 'python.md');
-      assert.equal(onboardingReport.architectRecommendation?.recommendedBlueprintFileName, 'fastapi-service.md');
-      assert.ok(['high', 'medium', 'low'].includes(onboardingReport.architectRecommendation?.confidenceLabel));
-      assert.ok(Array.isArray(onboardingReport.architectRecommendation?.rationaleSentences));
-      assert.ok(onboardingReport.architectRecommendation?.rationaleSentences.length >= 3);
-      assert.ok(onboardingReport.architectRecommendation?.rationaleSentences.length <= 5);
-      assert.equal(onboardingReport.architectRecommendation?.briefType, 'offline');
-      assert.equal(onboardingReport.architectRecommendation?.userVeto?.applied, false);
+      assert.match(initOutput, /Runtime decision: agent recommendation required from current repo\/brief evidence/);
+      const onboardingReport = readJson(join(architectTargetDirectory, '.agent-context', 'state', 'onboarding-report.json'));
+      assert.equal(onboardingReport.runtimeDecision.mode, 'agent-decision-required');
     } finally {
       rmSync(architectTargetDirectory, { recursive: true, force: true });
     }
-  });
-
-  await t.test('architect brief surfaces low-confidence caution and repeated-override policy', () => {
-    const lowSignalRecommendation = recommendArchitecture({
-      projectDescription: 'Build software',
-      projectDetection: { rankedCandidates: [] },
-      stackFileNames: ['typescript.md', 'python.md', 'go.md'],
-      blueprintFileNames: ['api-nextjs.md', 'fastapi-service.md', 'go-service.md'],
-    });
-
-    assert.equal(lowSignalRecommendation.briefType, 'offline');
-    assert.equal(lowSignalRecommendation.failureModes.lowConfidence, true);
-    assert.equal(typeof lowSignalRecommendation.failureModes.dataConflict, 'boolean');
-    assert.ok(lowSignalRecommendation.uncertaintyNotes.length >= 1);
-
-    const renderedRecommendation = formatArchitectureRecommendation(lowSignalRecommendation);
-    assert.match(renderedRecommendation, /Caution labels: low-confidence/);
-    assert.match(renderedRecommendation, /Architecture brief \(offline, repo-grounded\):/);
-
-    let architectPreference = null;
-    architectPreference = createUpdatedArchitectPreference(architectPreference, {
-      selectedStackFileName: 'python.md',
-      selectedBlueprintFileName: 'fastapi-service.md',
-    });
-    architectPreference = createUpdatedArchitectPreference(architectPreference, {
-      selectedStackFileName: 'python.md',
-      selectedBlueprintFileName: 'fastapi-service.md',
-    });
-
-    assert.equal(architectPreference.overrideCount, 2);
-    assert.equal(shouldApplyRepeatedOverridePreference(architectPreference, 'typescript.md'), true);
-    assert.equal(shouldApplyRepeatedOverridePreference(architectPreference, 'python.md'), false);
   });
 
 
@@ -427,7 +305,7 @@ export async function registerCliSmokeFoundationTests(t) {
 
       const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --dry-run`).toString();
       assert.match(upgradeOutput, /Upgrade preview/);
-      assert.match(upgradeOutput, /rules operations upgrade assistant \(Federated Governance baseline\)/);
+      assert.match(upgradeOutput, /Running managed guidance upgrade for an existing repository\./);
       assert.match(upgradeOutput, /CI\/CD quality checks \(guardrails\): enabled/);
       assert.match(upgradeOutput, /Dry run enabled/);
     } finally {
@@ -504,6 +382,29 @@ export async function registerCliSmokeFoundationTests(t) {
     }
   });
 
+  await t.test('upgrade restores MCP helper modules when MCP template is enabled', () => {
+    const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-mcp-helpers-'));
+
+    try {
+      execSync(
+        `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+
+      rmSync(join(upgradeTargetDirectory, 'scripts', 'mcp-server'), { recursive: true, force: true });
+      assert.equal(existsSync(join(upgradeTargetDirectory, 'scripts', 'mcp-server', 'tool-registry.mjs')), false);
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
+
+      assert.match(upgradeOutput, /scripts\/mcp-server\/tool-registry\.mjs/);
+      assert.equal(existsSync(join(upgradeTargetDirectory, 'scripts', 'mcp-server.mjs')), true);
+      assert.equal(existsSync(join(upgradeTargetDirectory, 'scripts', 'mcp-server', 'constants.mjs')), true);
+      assert.equal(existsSync(join(upgradeTargetDirectory, 'scripts', 'mcp-server', 'tool-registry.mjs')), true);
+      assert.equal(existsSync(join(upgradeTargetDirectory, 'scripts', 'mcp-server', 'tools.mjs')), true);
+    } finally {
+      rmSync(upgradeTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
   await t.test('init generates AI bootstrap prompts in English by default and compiles Layer 9 bootstrap flow in same run', () => {
     const scaffoldingTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-scaffold-config-'));
 
@@ -540,9 +441,9 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.match(bootstrapProjectContextPrompt, /Dynamic Project Context Synthesis/);
       assert.match(bootstrapProjectContextPrompt, /Create or update these files in EN language/);
       assert.match(bootstrapProjectContextPrompt, /Project name: Nusantara API/);
-      assert.match(bootstrapProjectContextPrompt, /Project topology: Microservice \/ distributed system/);
+      assert.match(bootstrapProjectContextPrompt, /Project topology decision: Microservice \/ distributed system/);
       assert.match(bootstrapProjectContextPrompt, /No copy-paste from external prose/);
-      assert.match(bootstrapProjectContextPrompt, /Prefer the latest stable compatible framework and package versions/);
+      assert.match(bootstrapProjectContextPrompt, /If runtime or framework setup is unresolved, recommend the latest stable compatible option from the brief, constraints, and live official documentation before coding/);
       assert.match(bootstrapProjectContextPrompt, /For any ecosystem or technology claim, perform live web research and include citation metadata \(source \+ fetchedAt timestamp\) rather than relying on offline heuristics\./);
       assert.match(bootstrapProjectContextPrompt, /Write for native English speakers at an 8th-grade reading level\./);
       assert.match(bootstrapProjectContextPrompt, /Assumptions to Validate/);

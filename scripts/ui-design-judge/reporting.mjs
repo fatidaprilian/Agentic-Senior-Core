@@ -49,7 +49,7 @@ export function normalizeFindings(rawFindings) {
     severity: normalizeSeverity(rawFinding?.severity),
     problem: String(rawFinding?.problem || 'No problem description provided.'),
     evidence: String(rawFinding?.evidence || 'No evidence provided.'),
-    recommendation: String(rawFinding?.recommendation || 'No recommendation provided.'),
+    requiredAction: String(rawFinding?.requiredAction || 'No required action provided.'),
     blockingRecommended: rawFinding?.blockingRecommended === true,
   }));
 }
@@ -154,6 +154,7 @@ export function buildReport(partialReport) {
         statusChanged: false,
         namedGenericityRequired: false,
         matchedGenericitySignals: [],
+        matchedForbiddenPatterns: [],
         matchedValidBoldSignals: [],
         blockingFindingCount: 0,
         contractFidelityWeak: false,

@@ -29,7 +29,7 @@ const BOUNDARY_RULES = [
   {
     boundaryName: 'public-surface',
     requirement: 'Public surface changes must update README.md, CHANGELOG.md, or docs/* in the same scope.',
-    suggestedDocumentationUpdates: [
+    requiredDocumentationUpdates: [
       'README.md',
       'CHANGELOG.md',
       'docs/architecture-decision-record.md',
@@ -45,7 +45,7 @@ const BOUNDARY_RULES = [
   {
     boundaryName: 'api-contract',
     requirement: 'API endpoint or contract changes must update API/OpenAPI documentation in the same scope.',
-    suggestedDocumentationUpdates: [
+    requiredDocumentationUpdates: [
       'docs/api-contract.md',
       'docs/flow-overview.md',
       '.agent-context/rules/api-docs.md',
@@ -67,7 +67,7 @@ const BOUNDARY_RULES = [
   {
     boundaryName: 'database-structure',
     requirement: 'Database structure changes must update schema or migration documentation in the same scope.',
-    suggestedDocumentationUpdates: [
+    requiredDocumentationUpdates: [
       'docs/database-schema.md',
       'docs/flow-overview.md',
       '.agent-context/rules/database-design.md',
@@ -163,8 +163,8 @@ function isDocumentationFilePath(filePath) {
 
 function evaluateBoundary(boundaryRule, changedFiles, changedDocumentationFiles) {
   const boundaryChangedFiles = changedFiles.filter((filePath) => boundaryRule.trigger(filePath));
-  const expectedDocumentationPaths = Array.isArray(boundaryRule.suggestedDocumentationUpdates)
-    ? boundaryRule.suggestedDocumentationUpdates
+  const expectedDocumentationPaths = Array.isArray(boundaryRule.requiredDocumentationUpdates)
+    ? boundaryRule.requiredDocumentationUpdates
     : [];
 
   if (boundaryChangedFiles.length === 0) {
@@ -177,14 +177,14 @@ function evaluateBoundary(boundaryRule, changedFiles, changedDocumentationFiles)
       documentationFiles: [],
       expectedDocumentationPaths,
       missingDocumentationUpdates: false,
-      suggestedActions: [],
+      requiredActions: [],
       details: 'Boundary not triggered by changed scope.',
     };
   }
 
   const matchingDocumentationFiles = changedDocumentationFiles.filter((filePath) => boundaryRule.docsMatcher(filePath));
   const boundaryPassed = matchingDocumentationFiles.length > 0;
-  const suggestedActions = boundaryPassed
+  const requiredActions = boundaryPassed
     ? []
     : [
       `Update one or more boundary docs: ${expectedDocumentationPaths.join(', ')}`,
@@ -204,7 +204,7 @@ function evaluateBoundary(boundaryRule, changedFiles, changedDocumentationFiles)
     documentationFiles: matchingDocumentationFiles,
       expectedDocumentationPaths,
       missingDocumentationUpdates: !boundaryPassed,
-      suggestedActions,
+      requiredActions,
     details,
   };
 }
@@ -225,7 +225,7 @@ function runDocumentationBoundaryAudit() {
       requirement: boundaryResult.requirement,
       changedFiles: boundaryResult.changedFiles,
       expectedDocumentationPaths: boundaryResult.expectedDocumentationPaths,
-      suggestedActions: boundaryResult.suggestedActions,
+      requiredActions: boundaryResult.requiredActions,
       diagnosticCode: `BOUNDARY_${boundaryResult.boundaryName.toUpperCase().replace(/-/g, '_')}_DOCS_SYNC_REQUIRED`,
     }));
 

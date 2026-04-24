@@ -15,22 +15,22 @@ const FORBIDDEN_PATTERNS = [
   {
     name: 'Hardcoded API Key',
     regex: /api_?key\s*[:=]\s*['"][a-zA-Z0-9_\-]{16,}['"]/i,
-    suggestion: 'API Keys must be provided via environment variables (process.env) or config files, never hardcoded.'
+    requiredAction: 'API Keys must be provided via environment variables (process.env) or config files, never hardcoded.'
   },
   {
     name: 'Hardcoded Password',
     regex: /password\s*[:=]\s*['"][^'"]+['"]/i,
-    suggestion: 'Passwords must be injected via secret managers or environment variables.'
+    requiredAction: 'Passwords must be injected via secret managers or environment variables.'
   },
   {
     name: 'Absolute Local Desktop Path',
     regex: /file:\/\/\/?([c-zC-Z]:|\/Users\/|\/home\/)/,
-    suggestion: 'Do not commit local absolute file paths (e.g. file:///C:/Users). Use relative paths or process.cwd().'
+    requiredAction: 'Do not commit local absolute file paths. Use relative paths or process.cwd().'
   },
   {
     name: 'Stray Breakpoint (debugger)',
     regex: /\bdebugger\s*;?/,
-    suggestion: 'Remove debug breakpoints before publishing to production.'
+    requiredAction: 'Remove debug breakpoints before publishing to production.'
   }
 ];
 
@@ -48,7 +48,7 @@ function scanFile(filePath) {
           line: i + 1,
           content: line.trim().substring(0, 80), // truncate long lines
           rule: pattern.name,
-          suggestion: pattern.suggestion
+          requiredAction: pattern.requiredAction
         });
       }
     }
@@ -97,12 +97,12 @@ async function runCheck() {
 
       if (violations.length > 0) {
         const relPath = relative(ROOT_DIR, file);
-        console.error(`\n❌ FORBIDDEN CONTENT DETECTED IN: ${relPath}`);
+        console.error(`\nFORBIDDEN CONTENT DETECTED IN: ${relPath}`);
 
         for (const v of violations) {
           console.error(`   Line ${v.line}: [${v.rule}]`);
           console.error(`   > ${v.content}`);
-          console.error(`   Action required: ${v.suggestion}`);
+          console.error(`   Action required: ${v.requiredAction}`);
           totalViolations++;
         }
       }
@@ -112,10 +112,10 @@ async function runCheck() {
   console.log(`\nScanned ${filesScanned.length} files across ${SCAN_DIRECTORIES.length} source directories.`);
 
   if (totalViolations > 0) {
-    console.error(`\n✖ PUBLISH ABORTED: Found ${totalViolations} forbidden content violation(s).`);
+    console.error(`\nPUBLISH ABORTED: Found ${totalViolations} forbidden content violation(s).`);
     process.exit(1);
   } else {
-    console.log('✔ Clean. No forbidden content detected.');
+    console.log('Clean. No forbidden content detected.');
     process.exit(0);
   }
 }

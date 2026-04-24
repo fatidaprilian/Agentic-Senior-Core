@@ -4,10 +4,12 @@
 /**
  * ui-design-judge.mjs
  *
- * Advisory-first UI design contract judge.
+ * Advisory-default UI design contract judge.
  *
  * Repo-internal workflow audit; no user-facing runtime modes.
- * Runs only in advisory mode for this repository workflow.
+ * Stays advisory by default for this repository workflow, but genericityAutoFail
+ * must escalate findings into blocking required actions when named drift signals
+ * or forbidden patterns are detected.
  *
  * Validation anchors for repo governance:
  * - Do not reward generic SaaS defaults or popular template patterns.
@@ -17,6 +19,7 @@
  * - designExecutionPolicy
  * - designExecutionHandoff
  * - handoffReady
+ * - structuredInspectionAvailable
  */
 
 import { collectChangedFiles, collectPullRequestDiff, isUiRelevantFilePath } from './ui-design-judge/git-input.mjs';
@@ -32,6 +35,56 @@ import {
   normalizeRubricBreakdown,
 } from './ui-design-judge/reporting.mjs';
 import { loadDesignGuide, loadDesignIntent, summarizeDesignExecutionPolicy, summarizeReviewRubric } from './ui-design-judge/design-execution-summary.mjs';
+
+function applyGenericityAutoFail({
+  reviewRubricSummary,
+  calibration,
+  findings,
+  notes,
+}) {
+  const autoFailEnabled = reviewRubricSummary?.genericityAutoFail === true;
+  const namedGenericityDetected = Array.isArray(calibration?.matchedGenericitySignals)
+    && calibration.matchedGenericitySignals.length > 0;
+  const forbiddenPatternDetected = Array.isArray(calibration?.matchedForbiddenPatterns)
+    && calibration.matchedForbiddenPatterns.length > 0;
+  const shouldAutoFail = autoFailEnabled
+    && calibration?.calibratedStatus === 'generic'
+    && (namedGenericityDetected || forbiddenPatternDetected);
+
+  if (!shouldAutoFail) {
+    return {
+      findings,
+      notes,
+      autoFailTriggered: false,
+    };
+  }
+
+  const normalizedFindings = Array.isArray(findings) ? findings.map((finding) => ({ ...finding })) : [];
+  const updatedFindings = normalizedFindings.length > 0
+    ? normalizedFindings.map((finding) => ({
+      ...finding,
+      blockingRecommended: true,
+    }))
+    : [
+      {
+        area: 'design-contract',
+        severity: 'high',
+        problem: 'The UI matches named genericity drift signals that the contract marks as auto-fail.',
+        evidence: `Matched signals: ${[...(calibration.matchedGenericitySignals || []), ...(calibration.matchedForbiddenPatterns || [])].join(', ')}`,
+        requiredAction: 'Rebuild the affected UI surfaces from the contract and remove the named generic patterns instead of polishing them.',
+        blockingRecommended: true,
+      },
+    ];
+
+  return {
+    findings: updatedFindings,
+    notes: [
+      ...(Array.isArray(notes) ? notes : []),
+      'reviewRubric.genericityAutoFail triggered because named genericity drift signals or forbidden patterns were detected.',
+    ],
+    autoFailTriggered: true,
+  };
+}
 
 async function main() {
   const changedFiles = collectChangedFiles();
@@ -100,6 +153,7 @@ async function main() {
         driftCount: 0,
         blockingCandidateCount: 0,
         designExecutionSignalCount: designExecutionSummary.enabledCapabilities.length,
+        structuredInspectionAvailable: designExecutionSummary.structuredInspectionAvailable,
         genericityStatus: calibration.calibratedStatus,
       },
       designExecution: designExecutionSummary,
@@ -154,6 +208,7 @@ async function main() {
         driftCount: 0,
         blockingCandidateCount: 0,
         designExecutionSignalCount: designExecutionSummary.enabledCapabilities.length,
+        structuredInspectionAvailable: designExecutionSummary.structuredInspectionAvailable,
         genericityStatus: calibration.calibratedStatus,
       },
       designExecution: designExecutionSummary,
@@ -188,7 +243,6 @@ async function main() {
   const tasteVsFailureSeparated = typeof verdict?.tasteVsFailureSeparated === 'boolean'
     ? verdict.tasteVsFailureSeparated
     : null;
-  const blockingCandidateCount = findings.filter((finding) => finding.blockingRecommended || finding.severity === 'high').length;
   const alignmentScore = typeof verdict?.alignmentScore === 'number' ? verdict.alignmentScore : null;
   const notes = Array.isArray(verdict?.notes)
     ? verdict.notes.map((note) => String(note))
@@ -202,6 +256,15 @@ async function main() {
     notes,
     tasteVsFailureSeparated,
   });
+  const autoFailResolution = applyGenericityAutoFail({
+    reviewRubricSummary,
+    calibration,
+    findings,
+    notes,
+  });
+  const resolvedFindings = autoFailResolution.findings;
+  const resolvedNotes = autoFailResolution.notes;
+  const blockingCandidateCount = resolvedFindings.filter((finding) => finding.blockingRecommended || finding.severity === 'high').length;
 
   emitMachineReadableReport(buildReport({
     provider: selectedProvider.providerName,
@@ -211,9 +274,10 @@ async function main() {
     summary: {
       changedUiFileCount: changedUiFiles.length,
       alignmentScore,
-      driftCount: findings.length,
+      driftCount: resolvedFindings.length,
       blockingCandidateCount,
       designExecutionSignalCount: designExecutionSummary.enabledCapabilities.length,
+      structuredInspectionAvailable: designExecutionSummary.structuredInspectionAvailable,
       genericityStatus: calibration.calibratedStatus,
     },
     designExecution: designExecutionSummary,
@@ -229,10 +293,10 @@ async function main() {
       skipped: false,
       skipReason: null,
     },
-    findings,
+    findings: resolvedFindings,
     notes: malformed
       ? ['LLM response was malformed. Advisory mode kept the audit non-blocking.', ...designExecutionSummary.notes]
-      : [...notes, ...calibration.notes, ...designExecutionSummary.notes],
+      : [...resolvedNotes, ...calibration.notes, ...designExecutionSummary.notes],
   }));
 }
 

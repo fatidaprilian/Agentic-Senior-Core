@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { execSync } from 'node:child_process';
 import { join } from 'node:path';
 
-test('Enterprise Operations Tests', async (t) => {
+test('Operations Tests', async (t) => {
   await t.test('release gate outputs machine-readable report', () => {
     const releaseGateOutput = execSync(`node ${join(process.cwd(), 'scripts', 'release-gate.mjs')}`).toString();
     const releaseGateReport = JSON.parse(releaseGateOutput);

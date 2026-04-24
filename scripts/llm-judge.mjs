@@ -242,7 +242,7 @@ You must categorize each violation with a severity level: critical, high, medium
 - critical: Security vulnerabilities (hardcoded secrets, SQL/command injection, missing auth checks, CORS), unvalidated external inputs.
 - high: N+1 database queries, swallowed errors (empty catch blocks without re-throw/recovery), layer boundary violations.
 - medium: TypeScript \`any\` type used without justification, missing test coverage, bad architectural patterns.
-- low: Style preferences, minor naming nitpicks, documentation suggestions, performance micro-optimizations.
+- low: Style preferences, minor naming nitpicks, documentation nitpicks, performance micro-optimizations.
 
 ## Mandatory output format:
 You MUST output your findings in EXACTLY this structure:

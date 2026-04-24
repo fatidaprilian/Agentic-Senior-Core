@@ -7,15 +7,6 @@
  * Publishes top-1 accuracy and manual-correction-rate proxy.
  */
 
-const BLUEPRINT_RECOMMENDATIONS = {
-  'typescript.md': 'api-nextjs.md',
-  'python.md': 'fastapi-service.md',
-  'java.md': 'spring-boot-api.md',
-  'php.md': 'laravel-api.md',
-  'go.md': 'go-service.md',
-  'csharp.md': 'aspnet-api.md',
-};
-
 const AMBIGUITY_THRESHOLD = 0.08;
 
 const BENCHMARK_FIXTURES = [
@@ -71,8 +62,7 @@ function detectProjectFromMarkers(markers) {
 
   if (candidates.length === 0) {
     return {
-      recommendedStack: null,
-      recommendedBlueprint: null,
+      detectedStack: null,
       confidenceScore: 0,
       confidenceGap: 0,
       needsManualCorrection: true,
@@ -87,8 +77,7 @@ function detectProjectFromMarkers(markers) {
     : Number(strongestCandidate.confidenceScore.toFixed(2));
 
   return {
-    recommendedStack: strongestCandidate.stackFileName,
-    recommendedBlueprint: BLUEPRINT_RECOMMENDATIONS[strongestCandidate.stackFileName] || null,
+    detectedStack: strongestCandidate.stackFileName,
     confidenceScore: strongestCandidate.confidenceScore,
     confidenceGap,
     needsManualCorrection: confidenceGap < AMBIGUITY_THRESHOLD,
@@ -101,7 +90,7 @@ function runBenchmark() {
 
   const fixtureResults = BENCHMARK_FIXTURES.map((benchmarkFixture) => {
     const detectionResult = detectProjectFromMarkers(benchmarkFixture.markers);
-    const isCorrect = detectionResult.recommendedStack === benchmarkFixture.expectedStack;
+    const isCorrect = detectionResult.detectedStack === benchmarkFixture.expectedStack;
 
     if (isCorrect) {
       passingFixtureCount += 1;
@@ -114,7 +103,7 @@ function runBenchmark() {
     return {
       fixtureName: benchmarkFixture.fixtureName,
       expectedStack: benchmarkFixture.expectedStack,
-      detectedStack: detectionResult.recommendedStack,
+      detectedStack: detectionResult.detectedStack,
       confidenceGap: detectionResult.confidenceGap,
       needsManualCorrection: detectionResult.needsManualCorrection,
       isCorrect,

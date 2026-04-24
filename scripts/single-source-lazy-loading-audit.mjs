@@ -76,8 +76,8 @@ const REQUIRED_REVIEW_PROMPT_SNIPPETS = [
 
 const REQUIRED_COMPILER_SNIPPETS = [
   '## LAYER 2 POLICY: LAZY RULE LOADING',
-  'Load stack guidance only when task scope touches that stack.',
-  'Avoid eager loading unrelated stack profiles to prevent instruction conflicts.',
+  'Load runtime-specific guidance only when task scope touches that runtime.',
+  'Avoid eager loading unrelated runtime guidance to prevent instruction conflicts.',
   "stackLoadingMode: 'lazy'",
 ];
 

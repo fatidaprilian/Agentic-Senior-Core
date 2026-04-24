@@ -10,13 +10,13 @@ Thanks for wanting to make AI agents write better code. Here's how to contribute
 |------|-------|-------------|
 | New rule | `.agent-context/rules/` | Universal engineering standard |
 | Stack strategy update | `.agent-context/rules/`, `.agent-context/state/stack-research-snapshot.json` | Dynamic language/runtime guidance and evidence |
-| Architecture playbook update | `.agent-context/prompts/`, `lib/cli/compiler.mjs` | Dynamic scaffolding and project-context guidance |
+| Structural planning guidance update | `.agent-context/prompts/`, `lib/cli/compiler.mjs` | Scope planning, docs bootstrap, and project-context guidance |
 | New checklist | `.agent-context/review-checklists/` | Self-audit guide |
 | State intelligence update | `.agent-context/state/` | Architecture boundaries and dependency map |
-| Override policy update | `.agent-override.md` | Scoped enterprise rule exceptions |
+| Override policy update | `.agent-override.md` | Scoped rule exceptions |
 | MCP workflow update | `mcp.json` | Self-healing automation flow |
-| Bug fix | Any file | Typos, broken links, incorrect examples |
-| Improvement | Any file | Sharper wording, better examples |
+| Bug fix | Any file | Typos, broken links, incorrect rules |
+| Improvement | Any file | Sharper wording, stricter boundaries |
 
 ---
 
@@ -24,19 +24,10 @@ Thanks for wanting to make AI agents write better code. Here's how to contribute
 
 This is the single most important rule: **every file must be "galak" (strict/fierce).**
 
-Your contribution MUST be opinionated, specific, and enforceable. We reject generic advice.
-
-```
-BAD  (generic, useless):
-  "Use descriptive variable names."
-
-GOOD (specific, enforceable):
-  "NEVER use single-letter variables except `i` in `for(let i=0; i<n; i++)`.
-   Function names MUST start with a verb. Booleans MUST use is/has/can prefix."
-```
+Your contribution MUST be opinionated, specific, and enforceable. We reject generic advice, externally anchored rules, and borrowed-pattern guidance that can become accidental style anchors.
 
 ### The Litmus Test
-- Does your rule include concrete BANNED / REQUIRED examples?
+- Does your rule include concrete BANNED / REQUIRED boundaries?
 - Would an AI agent be able to enforce it without ambiguity?
 - Does it teach the reader WHY, not just WHAT?
 
@@ -54,11 +45,11 @@ If all three are "yes", it belongs here.
 
 ---
 
-## How to Add or Adjust Architecture Playbooks
+## How to Add or Adjust Structural Planning Guidance
 
-1. Update the architecture options in `.agent-context/prompts/init-project.md` and related discovery guidance.
+1. Update the planning guidance in `.agent-context/prompts/init-project.md` and related discovery guidance.
 2. Update compiler/init behavior if generated project-context guidance or bootstrap flow changes.
-3. Keep transport/service/repository separation and validation boundaries explicit in examples.
+3. Keep system boundaries, required docs, and validation boundaries explicit without silently recommending a framework from offline heuristics.
 4. Run `npm run validate` and `npm test`.
 5. Open a PR.
 
@@ -70,10 +61,10 @@ If all three are "yes", it belongs here.
 2. Structure:
    - Opening quote (sets the tone)
    - Core principle (1-2 sentences)
-   - BANNED / REQUIRED sections with code examples
-   - Decision tree or quick reference (if applicable)
+   - BANNED / REQUIRED sections with enforceable boundaries
+   - Decision tree or quick ruleset when it reduces ambiguity
 3. Update `AGENTS.md` rules manifest table
-4. Update `review-checklists/pr-checklist.md` if the rule should be checked in reviews
+4. Update `review-checklists/pr-checklist.md` when the rule is part of review scope
 5. Validate and PR
 
 ---
@@ -95,7 +86,7 @@ If all three are "yes", it belongs here.
 ## What We Don't Accept
 
 - Generic content that reads like it was auto-generated without thought
-- Rules without concrete code examples
+- Rules without concrete enforcement boundaries
 - Stack profiles for languages the author doesn't actually use in production
 - Blueprints that are just folder structures without code patterns
 - PRs that don't update the relevant manifest files (AGENTS.md, checklists)

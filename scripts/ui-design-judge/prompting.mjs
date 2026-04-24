@@ -8,7 +8,7 @@ export function buildSystemPrompt() {
     'Compare the changed UI code against the provided design contract.',
     'Treat docs/design-intent.json as the machine-readable source of truth.',
     'Treat docs/DESIGN.md as explanatory context, not a generic style guide.',
-    'Treat designExecutionPolicy as the execution contract for how the UI should be planned, structured, and reviewed.',
+    'Treat designExecutionPolicy as the execution contract for how the UI must be planned, structured, and reviewed.',
     'Treat designExecutionHandoff as the explicit bridge between design intent and implementation decisions.',
     'Treat reviewRubric as the stable scoring frame for distinctiveness, contract fidelity, visual consistency, heuristic UX quality, and motion discipline.',
     'Use repoEvidence.designEvidenceSummary as implementation evidence when deciding whether the diff follows the intended system.',
@@ -17,15 +17,15 @@ export function buildSystemPrompt() {
     'Purposeful motion is allowed and can improve quality. Only flag motion when it drifts from the contract, ignores reduced-motion expectations, or adds avoidable performance/accessibility risk.',
     'Only flag drift when there is a clear mismatch with the contract, accessibility non-negotiables, or cross-viewport adaptation rules.',
     'Treat WCAG 2.2 AA failures as hard accessibility drift.',
-    'Treat APCA as advisory perceptual tuning only. Do not recommend blocking solely because APCA would prefer a stronger readability adjustment when WCAG hard requirements still pass.',
+    'Treat APCA as advisory perceptual tuning only. Do not set blocking solely because APCA indicates a stronger readability adjustment when WCAG hard requirements still pass.',
     'Check focus visibility, focus appearance, target size, keyboard access, accessible authentication, and status or dynamic state access when the diff touches those surfaces.',
     'This audit always runs in advisory mode for this repository workflow.',
     'Focus on color intent, typographic hierarchy, responsive re-layout, purposeful motion, component morphology across states, interaction behavior, and genericity drift.',
     'If you call something generic, explain the specific genericity signal or anti-pattern that caused that judgment.',
-    'Separate taste from failure. A bold design that follows the contract should not be penalized only because it is unusual.',
+    'Separate taste from failure. A bold design that follows the contract must not be penalized only because it is unusual.',
     'Return ONLY one JSON object on a single line prefixed with JSON_VERDICT:.',
     'Schema:',
-    '{"alignmentScore": number|null, "genericityAssessment": {"status": "distinctive|mixed|generic|unclear", "reason": string}, "tasteVsFailureSeparated": boolean, "rubricBreakdown": [{"dimension": string, "score": number|null, "verdict": "strong|acceptable|weak|unclear", "reason": string, "blocking": boolean}], "notes": string[], "findings": [{"area": string, "severity": "high|medium|low", "problem": string, "evidence": string, "recommendation": string, "blockingRecommended": boolean}]}',
+    '{"alignmentScore": number|null, "genericityAssessment": {"status": "distinctive|mixed|generic|unclear", "reason": string}, "tasteVsFailureSeparated": boolean, "rubricBreakdown": [{"dimension": string, "score": number|null, "verdict": "strong|acceptable|weak|unclear", "reason": string, "blocking": boolean}], "notes": string[], "findings": [{"area": string, "severity": "high|medium|low", "problem": string, "evidence": string, "requiredAction": string, "blockingRecommended": boolean}]}',
   ].join('\n');
 }
 

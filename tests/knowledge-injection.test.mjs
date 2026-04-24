@@ -39,9 +39,9 @@ const LAYERS = [
     injectionKeywords: ['Stack Strategy Signals', 'dynamic stack intelligence'],
   },
   {
-    name: 'Layer 3: Architecture Playbooks',
+    name: 'Layer 3: Structural Planning Signals',
     requiredPaths: [],
-    injectionKeywords: ['Architecture Playbooks', 'dynamic architecture intelligence'],
+    injectionKeywords: ['Structural Planning Signals', 'dynamic structural planning'],
   },
   {
     name: 'Layer 4: Execution Contracts',
@@ -165,49 +165,45 @@ describe('Full 8-Layer Injection Coverage', () => {
 });
 
 describe('Adaptive Strategy Guidance', () => {
-  it('.instructions.md keeps Layer 2 and Layer 3 explicitly adaptive', () => {
+  it('.instructions.md keeps Layer 2 and Layer 3 evidence-gated without pattern anchors', () => {
     const instructionsContent = readFileSync(join(ROOT, '.instructions.md'), 'utf-8');
 
-    assert.match(instructionsContent, /illustrative, not exhaustive/i);
-    assert.match(instructionsContent, /Do not force the project into the nearest listed stack/i);
-    assert.match(instructionsContent, /not a hard whitelist/i);
-    assert.match(instructionsContent, /choose or synthesize the best-fit playbook/i);
+    assert.match(instructionsContent, /Stack strategy signals are evidence gates/i);
+    assert.match(instructionsContent, /Ignore pattern frequency/i);
+    assert.match(instructionsContent, /Structural planning signals are not a hard whitelist/i);
+    assert.match(instructionsContent, /Do not silently choose frameworks or architecture from offline heuristics/i);
+    assert.match(instructionsContent, /ask for confirmation instead of silently choosing/i);
   });
 });
 
 describe('Docker and Design Freshness Guidance', () => {
-  it('docker runtime rule prefers latest official Docker guidance before fallback', () => {
+  it('docker runtime rule uses latest official Docker guidance before fallback', () => {
     const dockerRuntimeRule = readFileSync(join(ROOT, '.agent-context', 'rules', 'docker-runtime.md'), 'utf-8');
 
     assert.match(dockerRuntimeRule, /latest official Docker documentation first/i);
     assert.match(dockerRuntimeRule, /docker compose/i);
     assert.match(dockerRuntimeRule, /compose\.yaml/i);
     assert.match(dockerRuntimeRule, /top-level Compose `version` field by default/i);
-    assert.match(dockerRuntimeRule, /Prefer the latest stable compatible Docker base image/i);
+    assert.match(dockerRuntimeRule, /Use the latest stable compatible Docker base image/i);
   });
 
   it('design bootstrap rejects palette carryover from unrelated prior projects', () => {
     const bootstrapDesignPrompt = readFileSync(join(ROOT, '.agent-context', 'prompts', 'bootstrap-design.md'), 'utf-8');
 
-    assert.match(bootstrapDesignPrompt, /Do not reuse a color palette, component skin, or motion signature from prior chats, memories, or unrelated projects/i);
-    assert.match(bootstrapDesignPrompt, /Similarity to prior unrelated projects is drift/i);
-    assert.match(bootstrapDesignPrompt, /synthesize the design from zero using current product context, constraints, and content only/i);
-    assert.match(bootstrapDesignPrompt, /Design continuity is opt-in/i);
-    assert.match(bootstrapDesignPrompt, /explicitly approved reference systems/i);
+    assert.match(bootstrapDesignPrompt, /This contract is a decision scaffold, not a style preset/i);
+    assert.match(bootstrapDesignPrompt, /We guide the agent; we do not pick the final style/i);
+    assert.match(bootstrapDesignPrompt, /Use current repo evidence, product copy, route names, component names, user goals, and existing constraints as the source of truth/i);
+    assert.match(bootstrapDesignPrompt, /research current official docs/i);
+    assert.match(bootstrapDesignPrompt, /Keep external references non-copying/i);
     assert.match(bootstrapDesignPrompt, /tainted context/i);
     assert.match(bootstrapDesignPrompt, /WCAG 2\.2 AA/i);
     assert.match(bootstrapDesignPrompt, /APCA/i);
-    assert.match(bootstrapDesignPrompt, /Structured design execution must stay representation-first/i);
-    assert.match(bootstrapDesignPrompt, /designExecutionPolicy/i);
-    assert.match(bootstrapDesignPrompt, /designExecutionHandoff/i);
-    assert.match(bootstrapDesignPrompt, /reviewRubric/i);
-    assert.match(bootstrapDesignPrompt, /surface plan/i);
-    assert.match(bootstrapDesignPrompt, /component graph/i);
-    assert.match(bootstrapDesignPrompt, /structured handoff/i);
-    assert.match(bootstrapDesignPrompt, /stable review rubric/i);
-    assert.match(bootstrapDesignPrompt, /Genericity findings must name the actual drift signal/i);
-    assert.match(bootstrapDesignPrompt, /Motion can be bold, cinematic, or highly expressive/i);
-    assert.match(bootstrapDesignPrompt, /recognizable in implementation/i);
+    assert.match(bootstrapDesignPrompt, /Responsive design means recomposition, not resizing/i);
+    assert.match(bootstrapDesignPrompt, /agent-chosen visual direction/i);
+    assert.match(bootstrapDesignPrompt, /viewport mutation rules/i);
+    assert.match(bootstrapDesignPrompt, /review rubric/i);
+    assert.match(bootstrapDesignPrompt, /genericity findings that cannot name the exact drift signal/i);
+    assert.match(bootstrapDesignPrompt, /Use modern, expressive interaction/i);
   });
 
   it('design contract seed keeps machine-readable context hygiene boundaries', () => {
@@ -220,7 +216,7 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(designContractSource, /repoEvidenceOverridesMemory/);
     assert.match(designContractSource, /requireExplicitContinuityApproval/);
     assert.match(designContractSource, /forbidCarryoverWhenUnapproved/);
-    assert.match(designContractSource, /approvedReferenceUsage/);
+    assert.match(designContractSource, /approvedExternalConstraintUsage/);
     assert.match(designContractSource, /accessibilityPolicy/);
     assert.match(designContractSource, /hardComplianceFloor/);
     assert.match(designContractSource, /advisoryContrastModel/);
@@ -237,14 +233,14 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(designContractSource, /mustExplainGenericity/);
   });
 
-  it('dependency governance prefers latest compatible versions and official setup flows', () => {
+  it('dependency governance uses latest compatible versions and official setup flows', () => {
     const dependencyRule = readFileSync(join(ROOT, '.agent-context', 'rules', 'efficiency-vs-hype.md'), 'utf-8');
     const initPrompt = readFileSync(join(ROOT, '.agent-context', 'prompts', 'init-project.md'), 'utf-8');
 
     assert.match(dependencyRule, /latest stable compatible dependency version/i);
     assert.match(dependencyRule, /official scaffolder or setup command/i);
     assert.match(dependencyRule, /Only step down to an older dependency version after documenting/i);
-    assert.match(initPrompt, /latest stable compatible dependency set and official framework setup flow first/i);
+    assert.match(initPrompt, /latest stable compatible dependency set and official framework setup flow unless a documented compatibility constraint blocks it/i);
   });
 });
 
@@ -277,11 +273,14 @@ describe('Delegating Entry Point Chain', () => {
       );
     });
 
-    it(`${entryPoint.name} references architecture playbooks`, () => {
+    it(`${entryPoint.name} references structural planning guidance`, () => {
       const normalized = fileContent.toLowerCase();
       assert.ok(
-        normalized.includes('architecture') || normalized.includes('playbook'),
-        `${entryPoint.name} does not reference architecture playbooks`
+        normalized.includes('structural planning')
+          || normalized.includes('constraints')
+          || normalized.includes('structure')
+          || normalized.includes('architecture boundaries'),
+        `${entryPoint.name} does not reference structural planning guidance`
       );
     });
 

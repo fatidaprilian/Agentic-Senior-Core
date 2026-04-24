@@ -84,18 +84,18 @@ export const REQUIRED_DEVELOPER_FIRST_MENTION_PATTERNS = [
   },
   {
     path: '.agent-context/prompts/init-project.md',
-    label: 'Init prompt first mention includes Federated Governance baseline',
-    pattern: /rules operations context\s*\(Federated Governance baseline\)/iu,
+    label: 'Init prompt first mention includes strict AI coding guidance context',
+    pattern: /strict AI coding guidance context/iu,
   },
   {
     path: 'lib/cli/commands/init.mjs',
-    label: 'Init command wording includes Federated Governance baseline',
-    pattern: /rules operations\s+(assets|pack)[^\n]*\(Federated Governance baseline\)/iu,
+    label: 'Init command wording includes project guidance pack',
+    pattern: /copy the project guidance pack[^\n]*compile a single rulebook/iu,
   },
   {
     path: 'lib/cli/commands/upgrade.mjs',
-    label: 'Upgrade command wording includes Federated Governance baseline',
-    pattern: /rules operations upgrade assistant\s*\(Federated Governance baseline\)/iu,
+    label: 'Upgrade command wording includes managed guidance upgrade',
+    pattern: /running managed guidance upgrade for an existing repository\./iu,
   },
   {
     path: 'lib/cli/utils.mjs',
@@ -121,10 +121,9 @@ export const REQUIRED_COMPLIANCE_CANONICAL_SNIPPETS = [
 ];
 export const REQUIRED_DETECTION_TRANSPARENCY_SNIPPETS = [
   {
-    path: 'lib/cli/commands/init.mjs',
+    path: 'lib/cli/init-detection-flow.mjs',
     snippets: [
-      'Existing project detection transparency:',
-      'Use detected setup for this existing project?',
+      'existing-project-evidence-only',
       'detectionTransparency',
     ],
   },
@@ -144,20 +143,38 @@ export const REQUIRED_DETECTION_TRANSPARENCY_SNIPPETS = [
     ],
   },
 ];
-export const REQUIRED_STACK_RESEARCH_ENGINE_SNIPPETS = [
+export const REQUIRED_STACK_DECISION_BOUNDARY_SNIPPETS = [
   {
-    path: 'lib/cli/architect.mjs',
+    path: '.instructions.md',
     snippets: [
-      'STACK_SIGNAL_WEIGHTS',
-      'briefType',
-      'recommendArchitecture',
-      'formatArchitectureRecommendation',
+      'Do not silently choose frameworks or architecture from offline heuristics.',
+      'produce a short recommendation from evidence and live official documentation before coding',
+    ],
+  },
+  {
+    path: '.agent-context/prompts/init-project.md',
+    snippets: [
+      'If the user already named a stack or framework, treat it as an explicit constraint.',
+      'produce a short evidence-backed recommendation from the brief, repo evidence, and live official documentation before coding',
+    ],
+  },
+  {
+    path: '.agent-context/rules/architecture.md',
+    snippets: [
+      'Do not force a default architecture label before the repo, delivery model, and boundary evidence are clear.',
+    ],
+  },
+  {
+    path: '.agent-context/rules/microservices.md',
+    snippets: [
+      'Do not start with microservices by fashion, fear, or habit.',
     ],
   },
   {
     path: 'lib/cli/commands/init.mjs',
     snippets: [
-      'recommendArchitecture',
+      'AGENT_DECISION_STACK_FILE_NAME',
+      'agent recommendation required from current repo/brief evidence',
     ],
   },
 ];
@@ -254,12 +271,13 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
   {
     path: '.instructions.md',
     snippets: [
+      'Resolve the smallest relevant layer set for the current request.',
       'UI Design Mode',
       'bootstrap-design.md',
       'frontend-architecture.md',
       'do not eagerly load unrelated backend-only rules',
       'valid style context',
-      'explicitly approved reference systems',
+      'External references, prior-chat memory, unrelated-project visuals, and remembered screenshots are tainted',
       'WCAG 2.2 AA as the hard compliance floor',
       'APCA as advisory perceptual tuning only',
     ],
@@ -267,39 +285,30 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
   {
     path: '.agent-context/prompts/bootstrap-design.md',
     snippets: [
-      'UI Design Mode is context-isolated by default:',
+      'This contract is a decision scaffold, not a style preset.',
+      'We guide the agent; we do not pick the final style',
       'Token Architecture and Alias Strategy',
-      '`tokenSystem`',
       '`repoEvidence.designEvidenceSummary`',
-      'Responsive Strategy and Cross-Viewport Adaptation Matrix',
-      '`colorTruth.format`',
-      '`crossViewportAdaptation.mutationRules.mobile/tablet/desktop`',
-      '`motionSystem`',
-      '`componentMorphology`',
-      '`accessibilityPolicy`',
-      '`designExecutionPolicy`',
-      '`designExecutionHandoff`',
-      '`reviewRubric`',
-      '`contextHygiene`',
-      'Do not reuse a color palette, component skin, or motion signature from prior chats, memories, or unrelated projects',
-      'If no approved reference system exists, synthesize the design from zero using current product context, constraints, and content only.',
-      'Design continuity is opt-in.',
-      'WCAG 2.2 AA as the blocking baseline',
-      'APCA only as advisory perceptual tuning',
-      'Structured design execution must stay representation-first',
-      'structured handoff',
-      'surface plan',
-      'component graph',
-      'stable review rubric',
-      'Genericity findings must name the actual drift signal',
+      'Responsive Recomposition Plan',
+      'source of truth',
+      'research current official docs',
+      'Responsive design means recomposition, not resizing.',
+      'agent-chosen visual direction',
+      'viewport mutation rules',
+      'WCAG 2.2 AA is the hard floor',
+      'APCA may be used only as advisory perceptual tuning',
+      'unresearched dependency choices',
+      'default component-kit styling without product rationale',
+      'genericity findings that cannot name the exact drift signal',
     ],
   },
   {
     path: 'scripts/ui-design-judge.mjs',
     snippets: [
-      'Advisory-first UI design contract judge.',
+      'Advisory-default UI design contract judge.',
       'Repo-internal workflow audit; no user-facing runtime modes.',
-      'Runs only in advisory mode for this repository workflow.',
+      'genericityAutoFail',
+      'blocking required actions',
       'Do not reward generic SaaS defaults or popular template patterns.',
       'UI design judge only evaluates changed UI surfaces.',
       'Structured design execution summary was supplied to semantic review.',
@@ -309,7 +318,9 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'reviewRubric',
       'genericityStatus',
       'handoffReady',
+      'structuredInspectionAvailable',
       'calibratedStatus',
+      'applyGenericityAutoFail',
     ],
   },
   {
@@ -317,6 +328,7 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
     snippets: [
       'ui-rubric-calibration-v1',
       'matchedGenericitySignals',
+      'matchedForbiddenPatterns',
       'matchedValidBoldSignals',
       'contractDriftDetected',
       'Genericity claim was not backed by any named drift signal.',
@@ -346,6 +358,8 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'accessibilityPolicy',
       'designExecutionPolicy',
       'seedRefinementRequiredBeforeUiImplementation',
+      'requirePerSurfaceMutationOps',
+      'forbidUniformSiblingSurfaceTreatment',
       'requireStructuredHandoff',
       'handoffFormatVersion',
       'designExecutionHandoff',
@@ -368,16 +382,21 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'signatureMoveRationale',
       'implementationGuardrails',
       'reviewRubric',
+      'genericityAutoFail',
       'genericitySignals',
       'validBoldSignals',
       'mustExplainGenericity',
       'mustSeparateTasteFromFailure',
+      'offline-prescribed-style-used-as-final-direction',
+      'unresearched-library-or-framework-choice',
+      'single-safe-typographic-family-without-role-contrast-or-rationale',
       'hardComplianceFloor',
       'advisoryContrastModel',
       'contextHygiene',
       'repoEvidenceOverridesMemory',
       'requireExplicitContinuityApproval',
       'forbidCarryoverWhenUnapproved',
+      'approvedExternalConstraintUsage',
       'requireViewportMutationRules',
       'allowHexDerivatives',
     ],
@@ -398,15 +417,21 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'arbitraryBreakpointCount',
       'cssVariables',
       'componentInventory',
+      'structuredInspection',
+      'classAttributeCount',
+      'inlineStyleObjectCount',
       'tokenBypassSignals',
     ],
   },
   {
     path: 'lib/cli/compiler.mjs',
     snippets: [
+      'Resolve the smallest relevant layer set before responding.',
+      'LAYER 1: RULES (SCOPE-RESOLVED)',
       'LAYER 5: EXECUTION PROMPTS AND UI TRIGGERS',
       'bootstrap-design.md -> ui, ux, layout, screen, tailwind, frontend, redesign',
       'Keep UI-only requests context-isolated',
+      'git-workflow.md',
       'designEvidenceSummary',
     ],
   },
@@ -426,9 +451,9 @@ export const REQUIRED_DOCKER_RUNTIME_AUTOMATION_SNIPPETS = [
       'Docker Compose Quickstart',
       'Compose file reference',
       'Dockerfile best practices',
-      'Prefer current `docker compose` workflows and `compose.yaml`.',
+      'Use current `docker compose` workflows and `compose.yaml`.',
       'Do not add the top-level Compose `version` field by default.',
-      'Prefer the latest stable compatible Docker base image',
+      'Use the latest stable compatible Docker base image',
     ],
   },
   {
@@ -443,7 +468,7 @@ export const REQUIRED_DEPENDENCY_FRESHNESS_AUTOMATION_SNIPPETS = [
   {
     path: '.instructions.md',
     snippets: [
-      'prefer the latest stable compatible dependency set and official setup flow',
+      'use the latest stable compatible dependency set and official setup flow',
     ],
   },
   {
@@ -458,8 +483,8 @@ export const REQUIRED_DEPENDENCY_FRESHNESS_AUTOMATION_SNIPPETS = [
   {
     path: '.agent-context/prompts/init-project.md',
     snippets: [
-      'latest stable compatible dependency set and official framework setup flow first',
-      'Prefer official framework setup commands or canonical starter flows',
+      'recommend the latest stable compatible dependency set and official framework setup flow from live official documentation before coding',
+      'Use official framework setup commands or canonical starter flows',
     ],
   },
 ];
@@ -471,13 +496,78 @@ export const FORBIDDEN_TEMPLATE_BOOTSTRAP_SNIPPETS = [
     ],
   },
 ];
+export const FORBIDDEN_ACTIVE_BIAS_ANCHOR_SNIPPETS = [
+  {
+    path: '.instructions.md',
+    snippets: [
+      'illustrative, not exhaustive',
+      'explicitly approved reference systems',
+      'Do not auto-recommend frameworks',
+      'prefer the latest stable compatible dependency set',
+    ],
+  },
+  {
+    path: '.agent-context/prompts/bootstrap-design.md',
+    snippets: [
+      'stylistic inspiration',
+      'famous brand reference',
+      'If no approved reference system exists',
+      'explicitly approved reference systems',
+    ],
+  },
+  {
+    path: '.agent-context/prompts/init-project.md',
+    snippets: [
+      'Compact User Prompt Patterns',
+      'latest stable compatible dependency set and official framework setup flow first',
+      'Prefer official framework setup commands',
+      'ask for confirmation instead of silently choosing a stack',
+    ],
+  },
+  {
+    path: 'lib/cli/project-scaffolder/design-contract.mjs',
+    snippets: [
+      'explicitly-approved-reference-systems',
+      'approvedReferenceUsage',
+    ],
+  },
+  {
+    path: 'lib/cli/constants.mjs',
+    snippets: [
+      'BLUEPRINT_RECOMMENDATIONS',
+      `java-${'enter'}${'prise'}-api`,
+      `dotnet-${'enter'}${'prise'}-api`,
+    ],
+  },
+  {
+    path: 'lib/cli/init-detection-flow.mjs',
+    snippets: [
+      `Using detected ${'stack'} automatically`,
+      `Use detected ${'setup'} for this existing project?`,
+      'Override detected stack',
+    ],
+  },
+  {
+    path: 'scripts/ui-design-judge/prompting.mjs',
+    snippets: [
+      '"recommendation": string',
+    ],
+  },
+  {
+    path: 'scripts/documentation-boundary-audit.mjs',
+    snippets: [
+      'suggestedActions',
+      'suggestedDocumentationUpdates',
+    ],
+  },
+];
 export const REQUIRED_DETERMINISTIC_BOUNDARY_ENFORCEMENT_SNIPPETS = [
   {
     path: 'scripts/documentation-boundary-audit.mjs',
     snippets: [
       'reportVersion',
       'violations',
-      'suggestedActions',
+      'requiredActions',
       'diagnosticCode',
       'autoDocsSyncScope',
       'rolloutMetrics',

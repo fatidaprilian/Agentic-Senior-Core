@@ -45,7 +45,7 @@ If your host stops at this file instead of following the full chain, obey the Cr
 - For UI, UX, layout, screen, tailwind, frontend, or redesign requests: load [.agent-context/prompts/bootstrap-design.md](.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](.agent-context/rules/frontend-architecture.md) before editing code.
 - For UI scope: if \`docs/DESIGN.md\` or \`docs/design-intent.json\` is missing, materialize or refine them before implementing UI changes.
 - For refactor, improve, clean up, or fix requests: inspect the active rules and propose a plan before editing.
-- For new project or module requests: propose architecture before generating code.
+- For new project or module requests: clarify constraints, stack decisions, and required docs before generating code.
 - For ecosystem, framework, dependency, or Docker claims: perform live web research instead of relying on stale local heuristics.
 
 ## Mandatory Bootstrap Chain
@@ -57,11 +57,11 @@ If your host stops at this file instead of following the full chain, obey the Cr
 5. Enforce review contracts from [.agent-context/review-checklists/](.agent-context/review-checklists).
 6. Read change-risk maps and continuity state from [.agent-context/state/](.agent-context/state).
 7. Enforce policy thresholds from [.agent-context/policies/](.agent-context/policies).
-8. Use dynamic stack and architecture reasoning from project context docs and live research signals.
+8. Use dynamic stack, structure, and live research signals from project context docs.
 
 ## Trigger Rules
 
-- New project or module requests: propose architecture first and wait for approval.
+- New project or module requests: propose scope, constraints, and required docs first, then wait for approval.
 - Refactor or fix requests: propose plan first, then execute safely.
 - Completion: run [.agent-context/review-checklists/pr-checklist.md](.agent-context/review-checklists/pr-checklist.md) before declaring done.
 
@@ -92,7 +92,7 @@ If your host stops at this file, follow this minimum floor:
 4. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
 5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
 6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and thresholds from [.agent-context/policies/](../.agent-context/policies).
-7. Resolve stack and architecture choices dynamically from project context docs plus live evidence.
+7. Resolve stack, structure, and dependency choices from project context docs plus live evidence.
 
 ## Completion Gate
 
@@ -123,7 +123,7 @@ If your host stops at this file, follow this minimum floor:
 4. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
 5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
 6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and policy thresholds from [.agent-context/policies/](../.agent-context/policies).
-7. Resolve stack and architecture choices dynamically from project context docs plus live evidence.
+7. Resolve stack, structure, and dependency choices from project context docs plus live evidence.
 
 ## Completion Gate
 

@@ -85,7 +85,7 @@ Transport → Service → Repository layering, when to apply, why it matters
 - Detect circular dependencies between layers
 - Enforce Transport ↔ Service ↔ Repository direction
 - CI gate: Fail if Transport imports Repository directly
-- Provide remediation suggestions
+- Provide required remediation actions
 ```
 
 **Implementation Steps:**
@@ -216,7 +216,7 @@ Content: Zod/Pydantic at API boundary → typed services → no any types
 **Repos Contributing:**
 - `awesome-copilot`: Feature-based architecture, avoid layer spaghetti
 - `antigravity`: Feature-driven monolith structure
-- `minimax`: Fullstack project structure recommendations
+- `minimax`: Fullstack project structure patterns
 
 **Tier: ADVANCE**
 
@@ -359,7 +359,7 @@ Content: Zod/Pydantic at API boundary → typed services → no any types
 **Tier: ADVANCE**
 
 **ABOVE LINE:**
-- Automated security scanner (SAST) with remediation suggestions
+- Automated security scanner (SAST) with required remediation actions
 - Dependency vulnerability scanning + license compliance
 - Hardcoded secret detection
 
@@ -487,4 +487,4 @@ This is equivalent to a 100+ page technical book focused on production engineeri
 - Benchmark Analysis: `.agent-context/state/benchmark-analysis.json`
 - Skill Platform: `.agent-context/skills/` (all domains)
 - Validator: `scripts/validate.mjs` (ensures tier structure + README presence)
-- Tests: `tests/cli-smoke.test.mjs` + `tests/enterprise-ops.test.mjs`
+- Tests: `tests/cli-smoke.test.mjs` + `tests/operations.test.mjs`

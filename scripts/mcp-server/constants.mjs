@@ -33,9 +33,9 @@ function resolvePackageVersion() {
 export const PACKAGE_VERSION = resolvePackageVersion();
 
 export const TEST_SUITE_ARGS = {
-  full: ['--test', './tests/cli-smoke.test.mjs', './tests/mcp-server.test.mjs', './tests/llm-judge.test.mjs', './tests/enterprise-ops.test.mjs'],
+  full: ['--test', './tests/cli-smoke.test.mjs', './tests/mcp-server.test.mjs', './tests/llm-judge.test.mjs', './tests/operations.test.mjs'],
   cli: ['--test', './tests/cli-smoke.test.mjs'],
-  enterprise: ['--test', './tests/enterprise-ops.test.mjs'],
+  operations: ['--test', './tests/operations.test.mjs'],
   'llm-judge': ['--test', './tests/llm-judge.test.mjs'],
 };
 

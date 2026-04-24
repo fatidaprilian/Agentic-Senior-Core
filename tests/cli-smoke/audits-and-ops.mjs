@@ -67,18 +67,21 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     assert.equal(auditReport.phase2DesignEvidenceCoverage?.extractorIncludesSummaryVersion, true);
     assert.equal(auditReport.phase2DesignEvidenceCoverage?.extractorIncludesCssVariables, true);
     assert.equal(auditReport.phase2DesignEvidenceCoverage?.extractorIncludesComponentInventory, true);
+    assert.equal(auditReport.phase2DesignEvidenceCoverage?.extractorIncludesStructuredInspection, true);
     assert.equal(auditReport.phase2DesignEvidenceCoverage?.extractorIncludesTokenBypassSignals, true);
     assert.equal(auditReport.phase2DesignEvidenceCoverage?.compilerProjectsFrontendEvidenceMetrics, true);
     assert.equal(auditReport.phase2DesignEvidenceCoverage?.compilerProjectsDesignEvidenceSummary, true);
-    assert.match(frontendRuleContent, /Frontend Designer Mode \(Auto Activation\)/);
-    assert.match(frontendRuleContent, /UI scope trigger signals/);
-    assert.match(frontendRuleContent, /template-only repetitive outputs/);
-    assert.match(frontendRuleContent, /UI Consistency Guardrails \(Mandatory\)/);
-    assert.match(frontendRuleContent, /Content language must stay consistent per screen and flow unless user requests multilingual output\./);
-    assert.match(frontendRuleContent, /Text color must remain contrast-safe against its background; no color collisions\./);
-    assert.match(frontendRuleContent, /Responsive quality requires layout mutation and task reprioritization across breakpoints\. Shrinking the desktop layout is not enough\./);
-    assert.match(bootstrapDesignPromptContent, /UI Design Mode is context-isolated by default:/);
-    assert.match(bootstrapDesignPromptContent, /Cross-Viewport Adaptation Matrix/);
+    assert.match(frontendRuleContent, /Frontend Design and Interaction Boundaries/);
+    assert.match(frontendRuleContent, /UI scope triggers:/);
+    assert.match(frontendRuleContent, /Do not use this file to teach generic frontend basics the model already knows\./);
+    assert.match(frontendRuleContent, /This rule guides the LLM; it must not choose the final style/);
+    assert.match(frontendRuleContent, /Do not default to interchangeable dashboard chrome, balanced card grids, centered marketing shells/);
+    assert.match(frontendRuleContent, /Do not let repeated surfaces share the same visual treatment by habit/);
+    assert.match(frontendRuleContent, /Responsive quality is not allowed to be scale-only\./);
+    assert.match(frontendRuleContent, /Do not hardcode Zustand, React Query, smart\/dumb component doctrine/);
+    assert.match(bootstrapDesignPromptContent, /This contract is a decision scaffold, not a style preset/);
+    assert.match(bootstrapDesignPromptContent, /Responsive Recomposition Plan/);
+    assert.match(bootstrapDesignPromptContent, /research current official docs/);
     assert.match(instructionsContent, /UI Design Mode/);
     assert.match(instructionsContent, /do not eagerly load unrelated backend-only rules/);
     assert.match(prChecklistContent, /### 15\. Universal SOP Consolidation/);
@@ -88,6 +91,9 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     assert.match(designEvidenceExtractorContent, /summaryVersion/);
     assert.match(designEvidenceExtractorContent, /cssVariables/);
     assert.match(designEvidenceExtractorContent, /componentInventory/);
+    assert.match(designEvidenceExtractorContent, /structuredInspection/);
+    assert.match(designEvidenceExtractorContent, /classAttributeCount/);
+    assert.match(designEvidenceExtractorContent, /inlineStyleObjectCount/);
     assert.match(designEvidenceExtractorContent, /tokenBypassSignals/);
     assert.match(compilerContent, /frontendEvidenceMetrics/);
     assert.match(compilerContent, /designEvidenceSummary/);
@@ -152,7 +158,7 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     assert.equal(typeof documentationAuditReport.rolloutMetrics?.measuredAt, 'string');
     const boundaryResultWithGuidance = documentationAuditReport.boundaryResults.find(
       (boundaryResult) => Array.isArray(boundaryResult.expectedDocumentationPaths)
-        && Array.isArray(boundaryResult.suggestedActions)
+        && Array.isArray(boundaryResult.requiredActions)
     );
     assert.ok(boundaryResultWithGuidance);
     assert.match(apiDocsRuleContent, /Documentation as Hard Rule \(Boundary-Aware\)/);
@@ -201,14 +207,15 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     assert.equal(rulesGuardianAuditReport.passed, true);
     assert.equal(rulesGuardianAuditReport.sessionHandoff?.included, true);
     assert.equal(typeof rulesGuardianAuditReport.sessionHandoff?.contractSummary, 'string');
-    assert.match(rulesGuardianAuditReport.sessionHandoff?.contractSummary, /stack=/);
+    assert.match(rulesGuardianAuditReport.sessionHandoff?.contractSummary, /runtimeDecision=/);
+    assert.match(rulesGuardianAuditReport.sessionHandoff?.contractSummary, /architectureDecision=/);
 
-    const activeStack = rulesGuardianAuditReport.sessionHandoff?.activeArchitectureContract?.stack;
-    const proposedDifferentStack = activeStack === 'python.md' ? 'go.md' : 'python.md';
+    const activeRuntimeDecision = rulesGuardianAuditReport.sessionHandoff?.activeArchitectureContract?.runtimeDecision;
+    const proposedDifferentRuntimeDecision = activeRuntimeDecision === 'python.md' ? 'go.md' : 'python.md';
 
     try {
       execSync(
-        `node ${join(process.cwd(), 'scripts', 'rules-guardian-audit.mjs')} --workflow direction-change --proposed-stack ${proposedDifferentStack}`
+        `node ${join(process.cwd(), 'scripts', 'rules-guardian-audit.mjs')} --workflow direction-change --proposed-stack ${proposedDifferentRuntimeDecision}`
       );
       assert.fail('Expected rules guardian audit to fail when direction change is not explicitly confirmed');
     } catch (error) {
@@ -223,7 +230,7 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     }
 
     const confirmedRulesGuardianAuditOutput = execSync(
-      `node ${join(process.cwd(), 'scripts', 'rules-guardian-audit.mjs')} --workflow direction-change --proposed-stack ${proposedDifferentStack} --confirm-direction-change`
+      `node ${join(process.cwd(), 'scripts', 'rules-guardian-audit.mjs')} --workflow direction-change --proposed-stack ${proposedDifferentRuntimeDecision} --confirm-direction-change`
     ).toString();
     const confirmedRulesGuardianAuditReport = JSON.parse(confirmedRulesGuardianAuditOutput);
 
@@ -321,7 +328,7 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     writeFileSync(join(preflightTargetDirectory, '.cursorrules'), 'Conflict');
 
     try {
-      execSync(`node ${cliPath} init ${preflightTargetDirectory} --preset frontend-web`);
+      execSync(`node ${cliPath} init ${preflightTargetDirectory} --preset frontend-ui`);
       assert.fail('Should have thrown an error due to preflight failure');
     } catch (error) {
       const errorOutput = error.stderr ? error.stderr.toString() : error.stdout.toString();

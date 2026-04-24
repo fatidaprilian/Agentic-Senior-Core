@@ -19,7 +19,6 @@ import { fileURLToPath } from 'node:url';
 import {
   ALLOWED_SEVERITIES,
   OVERRIDE_WARNING_WINDOW_DAYS,
-  REQUIRED_STACK_RESEARCH_ENGINE_SNIPPETS,
 } from './validate/config.mjs';
 import {
   validateDependencyFreshnessAutomationCoverage,
@@ -28,8 +27,9 @@ import {
   validateDockerRuntimeAutomationCoverage,
   validateHumanWritingGovernance,
   validateInstructionAdapters,
+  validateRulesOnlyActiveSurfaceCoverage,
   validateSkillPurgeSurface,
-  validateStackResearchEngineCoverage,
+  validateStackDecisionBoundaryCoverage,
   validateTemplateFreeBootstrapCoverage,
   validateTerminologyMapping,
   validateUiDesignAutomationCoverage,
@@ -137,6 +137,9 @@ async function validateRequiredFiles() {
     'scripts/docs-quality-drift-report.mjs',
     'scripts/governance-weekly-report.mjs',
     'scripts/mcp-server.mjs',
+    'scripts/mcp-server/constants.mjs',
+    'scripts/mcp-server/tool-registry.mjs',
+    'scripts/mcp-server/tools.mjs',
     'scripts/frontend-usability-audit.mjs',
     'scripts/ui-design-judge.mjs',
     'scripts/documentation-boundary-audit.mjs',
@@ -180,7 +183,7 @@ async function validateRequiredFiles() {
     'tests/cli-smoke.test.mjs',
     'tests/mcp-server.test.mjs',
     'tests/llm-judge.test.mjs',
-    'tests/enterprise-ops.test.mjs',
+    'tests/operations.test.mjs',
     'LICENSE',
     '.gitignore',
   ];
@@ -700,7 +703,7 @@ async function main() {
   await validateDocumentationFlow();
   await validateTerminologyMapping(coverageValidationContext);
   await validateDetectionTransparencyCoverage(coverageValidationContext);
-  await validateStackResearchEngineCoverage(coverageValidationContext);
+  await validateStackDecisionBoundaryCoverage(coverageValidationContext);
   await validateUniversalSopConsolidationCoverage(coverageValidationContext);
   await validateTemplateFreeBootstrapCoverage(coverageValidationContext);
   await validateUpgradeUiContractWarningCoverage(coverageValidationContext);
@@ -708,6 +711,7 @@ async function main() {
   await validateDockerRuntimeAutomationCoverage(coverageValidationContext);
   await validateDependencyFreshnessAutomationCoverage(coverageValidationContext);
   await validateDeterministicBoundaryEnforcementCoverage(coverageValidationContext);
+  await validateRulesOnlyActiveSurfaceCoverage(coverageValidationContext);
   await validateStackResearchSnapshotState();
   await validateMcpConfiguration();
   await validateHumanWritingGovernance(coverageValidationContext);

@@ -66,7 +66,7 @@ export function runStaticReleaseChecks(results, diagnostics) {
     pushResult(results, true, 'roadmap-v18', 'Roadmap includes V1.8 release track');
   }
 
-  const requiredEnterpriseFiles = [
+  const requiredOperationsFiles = [
     '.agent-context/review-checklists/architecture-review.md',
     'docs/v1.8-operations-playbook.md',
     '.github/workflows/release-gate.yml',
@@ -75,14 +75,14 @@ export function runStaticReleaseChecks(results, diagnostics) {
     'scripts/governance-weekly-report.mjs',
   ];
 
-  for (const requiredEnterpriseFile of requiredEnterpriseFiles) {
-    const absoluteRequiredPath = resolve(REPOSITORY_ROOT, requiredEnterpriseFile);
+  for (const requiredOperationsFile of requiredOperationsFiles) {
+    const absoluteRequiredPath = resolve(REPOSITORY_ROOT, requiredOperationsFile);
     if (!existsSync(absoluteRequiredPath)) {
-      pushResult(results, false, 'required-enterprise-file', `Missing ${requiredEnterpriseFile}`);
+      pushResult(results, false, 'required-operations-file', `Missing ${requiredOperationsFile}`);
       continue;
     }
 
-    pushResult(results, true, 'required-enterprise-file', `${requiredEnterpriseFile} is present`);
+    pushResult(results, true, 'required-operations-file', `${requiredOperationsFile} is present`);
   }
 
   pushResult(

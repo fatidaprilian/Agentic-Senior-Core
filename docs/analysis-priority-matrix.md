@@ -96,11 +96,11 @@ Recommendation
 - Keep local benchmark work under ignored directories.
 - Remove generated artifacts from tracked sources unless explicitly required.
 
-### 6. V3.0 Enterprise Federation Preparation
+### 6. V3.0 Federated Rules Preparation
 
 Risk
 - Cross-repo policy drift controls and signed bundle distribution are not yet operational.
-- Enterprise migration can stall without early schema and governance registry decisions.
+- Federated migration can stall without early schema and governance registry decisions.
 
 Impact
 - Portfolio governance at scale remains manual.
@@ -125,4 +125,4 @@ The platform is no longer in `1.x` transition mode.
 That keeps execution coherent:
 - `2.0.x` for closure and quality hardening
 - `V2.5` for model-agnostic benchmark control
-- `V3.0` for enterprise federated governance operations
+- `V3.0` for federated rules operations

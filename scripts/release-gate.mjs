@@ -3,7 +3,7 @@
 /**
  * release-gate.mjs
  *
- * Enterprise release gate for V1.8.
+ * Operations release gate for V1.8.
  * Produces machine-readable output for CI and fails fast on missing release evidence.
  *
  * Validation anchors kept here intentionally:

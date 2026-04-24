@@ -29,7 +29,7 @@ Partially. MCP server trust/registration is manual in your IDE for the first sta
 After that, you can enable VS Code setting `chat.mcp.autoStart` (Experimental) to auto-restart MCP servers when config changes are detected.
 
 ## Why is there no "pick file" option when I add MCP server?
-That is expected. VS Code MCP setup uses server registration (command/http/npm), not arbitrary file import. The recommended flow is:
+That is expected. VS Code MCP setup uses server registration (command/http/npm), not arbitrary file import. The supported flow is:
 
 1. Generate `.vscode/mcp.json` using `--mcp-template`.
 2. Open MCP workspace configuration from Command Palette.

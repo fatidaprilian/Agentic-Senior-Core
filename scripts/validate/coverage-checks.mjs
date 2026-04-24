@@ -3,6 +3,7 @@ import { join, relative } from 'node:path';
 import {
   COMPLIANCE_ALIAS_TERMS,
   COMPLIANCE_TERMINOLOGY_BOUNDARY_PATHS,
+  FORBIDDEN_ACTIVE_BIAS_ANCHOR_SNIPPETS,
   FORMAL_ARTIFACT_PATHS,
   FORBIDDEN_TEMPLATE_BOOTSTRAP_SNIPPETS,
   REQUIRED_COMPLIANCE_CANONICAL_SNIPPETS,
@@ -12,7 +13,7 @@ import {
   REQUIRED_DEVELOPER_FIRST_MENTION_PATTERNS,
   REQUIRED_DOCKER_RUNTIME_AUTOMATION_SNIPPETS,
   REQUIRED_HUMAN_WRITING_SNIPPETS,
-  REQUIRED_STACK_RESEARCH_ENGINE_SNIPPETS,
+  REQUIRED_STACK_DECISION_BOUNDARY_SNIPPETS,
   REQUIRED_TEMPLATE_FREE_BOOTSTRAP_SNIPPETS,
   REQUIRED_TERMINOLOGY_ROW_PATTERNS,
   REQUIRED_TERMINOLOGY_RULE_SNIPPET,
@@ -86,7 +87,7 @@ export async function validateTerminologyMapping(context) {
       fail(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} must define first-mention canonical term rule`);
     }
 
-    if (terminologyReferenceContent.includes('Compliance and audit artifacts must keep canonical enterprise terminology')) {
+    if (terminologyReferenceContent.includes('Formal policy and audit artifacts must keep canonical terminology')) {
       pass(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} defines compliance terminology boundary`);
     } else {
       fail(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} must define compliance terminology boundary`);
@@ -191,12 +192,12 @@ export async function validateDetectionTransparencyCoverage(context) {
   });
 }
 
-export async function validateStackResearchEngineCoverage(context) {
+export async function validateStackDecisionBoundaryCoverage(context) {
   await validateSnippetCoverage({
-    heading: 'Checking stack research engine coverage...',
-    coverageRules: REQUIRED_STACK_RESEARCH_ENGINE_SNIPPETS,
-    missingLabel: 'stack research source',
-    snippetLabel: 'stack research snippet',
+    heading: 'Checking stack decision boundary coverage...',
+    coverageRules: REQUIRED_STACK_DECISION_BOUNDARY_SNIPPETS,
+    missingLabel: 'stack decision boundary source',
+    snippetLabel: 'stack decision boundary snippet',
     context,
   });
 }
@@ -301,6 +302,30 @@ export async function validateDeterministicBoundaryEnforcementCoverage(context) 
     snippetLabel: 'deterministic boundary snippet',
     context,
   });
+}
+
+export async function validateRulesOnlyActiveSurfaceCoverage(context) {
+  const { ROOT_DIR, fileExists, readTextFile, pass, fail } = context;
+
+  console.log('\nChecking rules-only active surface cleanup...');
+
+  for (const forbiddenRule of FORBIDDEN_ACTIVE_BIAS_ANCHOR_SNIPPETS) {
+    const absoluteForbiddenPath = join(ROOT_DIR, forbiddenRule.path);
+
+    if (!(await fileExists(absoluteForbiddenPath))) {
+      fail(`Missing rules-only active surface source: ${forbiddenRule.path}`);
+      continue;
+    }
+
+    const forbiddenContent = await readTextFile(absoluteForbiddenPath);
+    for (const forbiddenSnippet of forbiddenRule.snippets) {
+      if (forbiddenContent.includes(forbiddenSnippet)) {
+        fail(`${forbiddenRule.path} must not include active bias-anchor snippet: ${forbiddenSnippet}`);
+      } else {
+        pass(`${forbiddenRule.path} excludes active bias-anchor snippet: ${forbiddenSnippet}`);
+      }
+    }
+  }
 }
 
 export async function validateHumanWritingGovernance(context) {

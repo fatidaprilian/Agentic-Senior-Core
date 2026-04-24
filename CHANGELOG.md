@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Changed
+
+## 3.0.20 - 2026-04-24
+### Changed
+- Fixed MCP template synchronization for `init` and `upgrade` so target repositories now receive the full `scripts/mcp-server/` helper bundle alongside `scripts/mcp-server.mjs`, preventing Antigravity and similar IDE integrations from crashing on missing local module imports.
+- Extended repository validation and CLI smoke coverage so missing MCP helper modules are now caught before release and restored automatically during `upgrade` when MCP templates are enabled.
+- Removed the offline architecture selection path from `init`, so fresh repositories now rely on explicit stack selection, detected existing-project evidence, or named presets instead of silent heuristic stack picking.
+- Reframed the bootstrap and planning surfaces around constraints, structural guidance, and live research, and removed the remaining `Federated Governance baseline` onboarding wording from user-facing init and upgrade flows.
+- Removed offline stack, framework, blueprint, and topology bias from init guidance so fresh projects require an agent recommendation from the current brief, repo evidence, and live official documentation.
+- Reworked existing-project init to treat detected runtime markers as evidence only, infer product context from repository files instead of folder names, and preserve unresolved decisions as agent-led handoff fields.
+- Compressed global rules, prompts, workflows, and review checklists into boundary-first guidance so agents avoid bad habits without being steered into one language, framework, architecture style, or visual template.
+- Reframed the UI design contract around context-led synthesis, responsive recomposition, modern researched motion/styling choices, and genericity auto-fail signals without locking the project to a fixed aesthetic.
 
 ## 3.0.19 - 2026-04-23
 ### Changed
@@ -27,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 3.0.16 - 2026-04-22
 ### Changed
-- Reframed the architect module as an honest offline, repo-grounded architecture brief instead of a pseudo-realtime research engine, and removed stale snapshot-style recommendation baggage.
+- Reframed the architect module as an honest offline, repo-grounded architecture brief instead of a pseudo-realtime research engine, and removed stale snapshot-style selection baggage.
 - Simplified `init`, `upgrade`, and related compiler flows so review thresholds stay as internal policy while noisy user-facing profile-pack and Golden Standard surface wording disappears.
 - Removed dead architect and profile-pack plumbing, synced docs and smoke tests to the new offline-brief model, and kept package-facing guidance aligned with agent-led live research for drift-prone ecosystem claims.
 
@@ -193,21 +205,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.5.21 - 2026-04-18
 ### Changed
-- Changed init architecture recommendation defaults to request realtime research mode first, with realtime ingestion enabled by default and automatic fallback to deterministic snapshot when trusted realtime payload is unavailable.
+- Changed init architecture selection defaults to request realtime research mode first, with realtime ingestion enabled by default and automatic fallback to deterministic snapshot when trusted realtime payload is unavailable.
 - Changed CLI help text to document realtime-first init behavior and explicit snapshot override via `--disable-realtime-research` or `--architect-research-mode snapshot`.
 - Changed CLI smoke expectations so project-description-first init now records `requestedMode: realtime` while preserving deterministic fallback behavior when realtime evidence is missing.
 - Changed roadmap execution note for V3.0-013 to reflect realtime-first init with guarded fallback semantics.
 
 ## 2.5.20 - 2026-04-18
 ### Added
-- Added deterministic stack research snapshot artifact at `.agent-context/state/stack-research-snapshot.json` for reproducible architecture recommendation baselines.
-- Added architect recommendation evidence output with measurable citations and timestamps (`evidenceCitations`) plus normalized anti-copy design synthesis metadata (`designGuidance`).
+- Added deterministic stack research snapshot artifact at `.agent-context/state/stack-research-snapshot.json` for reproducible architecture selection baselines.
+- Added architect decision evidence output with measurable citations and timestamps (`evidenceCitations`) plus normalized anti-copy design synthesis metadata (`designGuidance`).
 - Added CLI controls for stack research engine mode and realtime gating (`--architect-research-mode`, `--enable-realtime-research`, `--architect-realtime-signal-file`).
 - Added validator and CLI smoke coverage for snapshot determinism, gated realtime fallback, citation emission, and anti-DESIGN.md-copy policy enforcement.
 
 ### Changed
-- Changed architecture recommendation scoring to blend keyword/detection signals with deterministic snapshot metrics and optional trusted realtime boost.
-- Changed recommendation formatting and onboarding report payload to persist research mode metadata (`requestedMode`, `effectiveMode`, gating status, trusted source context).
+- Changed architecture selection scoring to blend keyword/detection signals with deterministic snapshot metrics and optional trusted realtime boost.
+- Changed decision formatting and onboarding report payload to persist research mode metadata (`requestedMode`, `effectiveMode`, gating status, trusted source context).
 - Changed roadmap backlog status for `V3.0-013` from planned to done with all acceptance criteria checked.
 
 ## 2.5.19 - 2026-04-18
@@ -313,13 +325,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.5.9 - 2026-04-17
 ### Added
-- Added project-description-first architecture recommendation engine for `init`, including stack and blueprint proposal, confidence label, uncertainty notes, and one-line alternatives.
-- Added recommendation guardrails for token-budget and timeout envelopes (`--architect-token-budget`, `--architect-timeout-ms`) plus non-interactive project input via `--project-description`.
-- Added onboarding report architecture metadata (`architectRecommendation`) to persist recommendation, failure-mode labels, veto outcome, and guardrail usage.
-- Added CLI smoke coverage for project-description-first recommendation flow and repeated-override preference behavior.
+- Added project-description-first architecture selection engine for `init`, including stack and blueprint proposal, confidence label, uncertainty notes, and one-line alternatives.
+- Added selection guardrails for token-budget and timeout envelopes (`--architect-token-budget`, `--architect-timeout-ms`) plus non-interactive project input via `--project-description`.
+- Added onboarding report architecture metadata to persist decision state, failure-mode labels, veto outcome, and guardrail usage.
+- Added CLI smoke coverage for project-description-first selection flow and repeated-override preference behavior.
 
 ### Changed
-- Changed init flow to prioritize AI-as-Architect recommendation when stack/blueprint is not explicitly provided.
+- Changed init flow to prioritize AI-as-Architect selection when stack/blueprint is not explicitly provided.
 - Changed veto handling so user override is applied immediately without debate and can update reusable preference state for repeated overrides.
 - Updated README quickstart with project-description-first init example.
 
@@ -743,7 +755,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.5.0 - Unreleased
 ### Added
 - Zero-Conf onboarding for complete beginners (`--newbie` flag).
-- Smart auto-detection for existing projects (stack + blueprint suggestions).
+- Smart auto-detection for existing projects (stack + blueprint detections).
 - Profile presets (`beginner`, `balanced`, `strict`).
 - `llm-judge-threshold.json` to handle LLM review severities.
 - Split documentation paths (FAQ and Deep Dive).

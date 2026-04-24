@@ -1,6 +1,6 @@
 # V2 Upgrade Playbook (Benchmark-Driven)
 
-This playbook defines how Agentic-Senior-Core stays ahead of benchmark repositories while maintaining stable enterprise delivery.
+This playbook defines how Agentic-Senior-Core stays ahead of benchmark repositories while maintaining stable release delivery.
 
 ## Benchmark Inputs (Mandatory)
 - `sickn33/antigravity-awesome-skills`
@@ -49,9 +49,9 @@ This playbook defines how Agentic-Senior-Core stays ahead of benchmark repositor
 - Add and enforce frontend skill parity checklist.
 - Link parity checks to release gate and validator requirements.
 - Add benchmark baseline references in roadmap.
-- Add plug-and-play init presets for common stack and blueprint combinations.
+- Add scope-hint init presets that do not choose stack or blueprint offline.
 - Add a numbered launch path so first-run setup is guided instead of command-heavy.
-- Extend starter coverage for mobile and observability presets where the stack inventory supports them.
+- Extend scope-hint coverage for mobile and observability flows without locking framework choices.
 
 ### Phase B: Competitive Quality Gates
 - Add benchmark scan cadence and owner assignment.
@@ -82,10 +82,10 @@ npm run audit:frontend-usability
 
 ## Profile and Preset Guidance (Common Usage Patterns)
 
-Use presets when you want fast, low-friction onboarding. Keep review thresholds internal unless you explicitly need a power-user override.
+Use presets when you want fast, low-friction scope hints. Presets do not choose the runtime, framework, or architecture.
 
 ### Quick Decision Rule
-- Use `--preset` when you know the project shape.
+- Use `--preset` when you know the project shape but still want the AI agent to recommend runtime and architecture.
 - Use `--stack` + `--blueprint` when you need a custom combination.
 - Let the agent validate ecosystem choices with live research instead of relying on stale local stack heuristics.
 
@@ -93,13 +93,12 @@ Use presets when you want fast, low-friction onboarding. Keep review thresholds 
 
 | Scenario | Recommended Command | Why |
 |----------|---------------------|-----|
-| Web product startup | `npx @ryuenn3123/agentic-senior-core init --preset frontend-web` | Fast fullstack default with balanced guardrails |
-| Backend API service | `npx @ryuenn3123/agentic-senior-core init --preset backend-api` | API-oriented baseline with safe defaults |
-| Enterprise Java API | `npx @ryuenn3123/agentic-senior-core init --preset java-enterprise-api` | Enterprise-ready Spring baseline without extra governance prompts |
-| .NET enterprise API | `npx @ryuenn3123/agentic-senior-core init --preset dotnet-enterprise-api` | .NET API baseline tuned for current service delivery |
-| Laravel API delivery | `npx @ryuenn3123/agentic-senior-core init --preset php-laravel-api` | Laravel blueprint aligned to current migration guidance |
-| Platform team module | `npx @ryuenn3123/agentic-senior-core init --preset platform-governance` | Reuses the Go service starter without extra profile surface |
-| Kubernetes platform starter | `npx @ryuenn3123/agentic-senior-core init --preset kubernetes-platform` | Seeds platform delivery assets with current defaults |
+| Frontend/UI work | `npx @ryuenn3123/agentic-senior-core init --preset frontend-ui` | Scope hint only; AI agent recommends runtime and architecture |
+| Backend/API service | `npx @ryuenn3123/agentic-senior-core init --preset backend-service` | Scope hint only; AI agent recommends runtime and architecture |
+| Fullstack product | `npx @ryuenn3123/agentic-senior-core init --preset fullstack-product` | Scope hint only; AI agent recommends runtime and architecture |
+| Mobile app | `npx @ryuenn3123/agentic-senior-core init --preset mobile-app` | Scope hint only; AI agent recommends native strategy |
+| Platform operations | `npx @ryuenn3123/agentic-senior-core init --preset platform-ops` | Scope hint only; AI agent recommends implementation path |
+| Observability work | `npx @ryuenn3123/agentic-senior-core init --preset observability` | Scope hint only; AI agent recommends implementation path |
 
 ### Practical Overrides
 - To switch delivery shape, add `--stack` and `--blueprint`.

@@ -1,8 +1,8 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-23
-Current Version: 3.0.17
-Status: Stable baseline, design-governance expansion active
+Current Version: 3.0.19
+Status: Published baseline stable, frontend/design governance refactor in progress, no new push until the current release-hold batch closes
 
 ---
 
@@ -31,10 +31,13 @@ This backlog now keeps only:
 - The current baseline already ships canonical instruction flow centered on `.instructions.md`.
 - `init` and `upgrade` now copy the canonical instruction surface, regenerate compiled instructions, and preserve adaptive prompts.
 - Fresh project setup now asks project topology first: `Monolith` or `Microservice / distributed system`.
+- Compiled instruction surfaces now resolve the smallest relevant layer set instead of forcing broad rule loading for every request.
 - UI design governance already pushes agents to synthesize from the current project context, not from prior website memory or unrelated visual carryover.
-- Docker and dependency governance already prefer the latest stable compatible guidance and official setup flows first.
+- Docker and dependency governance already uses the latest stable compatible guidance and official setup flows first.
 - The current design contract already protects against generic shrink-only responsive behavior and already allows purposeful motion when it stays performant and reduced-motion-safe.
 - The design contract now formalizes accessibility as a split policy: WCAG 2.2 AA hard floor plus APCA advisory readability tuning.
+- The design contract now avoids offline style prescriptions and instead encodes global anti-generic drift signals such as scaffold-driven final style, unresearched library choices, default component-kit treatment, and scale-only responsive behavior.
+- The internal UI design judge now keeps advisory workflow mode by default while escalating blocking failures when `genericityAutoFail` and named forbidden patterns align.
 
 ### Working assumptions
 
@@ -141,12 +144,14 @@ What already exists:
 - [x] Microservice and nested UI package detection already exists at the repo-discovery level.
 - [x] The repo now emits a machine-readable `designEvidenceSummary` from lightweight static UI scanning and carries it into onboarding plus design-intent seeds.
 - [x] Repo-internal frontend audit coverage now verifies the design evidence extractor, compiler projection, and token bypass signal surface.
+- [x] The design evidence extractor now includes structure-aware inspection for class surfaces, inline style objects, and expression-backed UI hints so repo evidence is less dependent on blind text scanning.
 
 Breakdown:
 - [x] Produce one machine-readable design evidence summary format.
 - [x] Extract CSS variable evidence.
 - [x] Extract hardcoded color, radius, spacing, shadow, and typography patterns.
 - [x] Extract Tailwind usage in a way that can later evolve to AST inspection.
+- [x] Add structure-aware class and inline-style inspection for JSX, TSX, and similar component surfaces.
 - [ ] Add AST-based inspection where plain text scanning is too weak.
 - [x] Add component inventory reporting.
 - [ ] Add runtime style evidence only for gaps that static analysis cannot cover.
@@ -269,7 +274,7 @@ Breakdown:
   - [x] current repo evidence
   - [x] current brief
   - [x] current docs contract
-  - [x] explicitly approved reference systems
+  - [x] explicitly approved current-task constraints
 - [x] Define continuity as opt-in for design language.
 - [x] Define how stale or unrelated memory should be ignored.
 - [x] Add validation or audit coverage for memory contamination boundaries.
@@ -289,8 +294,8 @@ Goal:
 
 What already exists:
 - [x] Latest stable compatible dependency guidance is already the default direction.
-- [x] Official setup flows are already preferred over stale manual assembly when they are better.
-- [x] Docker guidance already prefers current `docker compose` and `compose.yaml` practices.
+- [x] Official setup flows already replace stale manual assembly when they are better.
+- [x] Docker guidance already uses current `docker compose` and `compose.yaml` practices.
 
 Breakdown:
 - [ ] Add deterministic validation that downgrade paths include a clear reason.
@@ -302,6 +307,42 @@ Done when:
 - [ ] Init guidance stops falling behind current framework defaults.
 - [ ] Docker examples and dependency choices age more slowly.
 - [ ] The system can explain why an older version is being used when that happens.
+
+### Phase 8 - Frontend and Design Governance Simplification
+
+Overall status: `[~]`
+Priority: highest while release hold is active
+
+Goal:
+- Finish the cross-cutting refactor that removes context fatigue, strips broad default loading, and makes anti-generic UI enforcement operational before the next push.
+
+What already exists:
+- [x] Canonical and compiled instruction surfaces now resolve the smallest relevant layer set instead of forcing broad eager loading.
+- [x] The frontend rule surface is now design-governance-first and no longer teaches generic framework basics as default bootstrap content.
+- [x] The design contract now uses dominant/support/recovery surfaces instead of dashboard-shaped seed shells.
+- [x] `viewportMutationPlan` now uses per-viewport operations, required surface actions, forbidden fallback patterns, and rationale.
+- [x] Genericity auto-fail, forbidden patterns, validator coverage, judge coverage, and smoke coverage are now synchronized.
+- [x] `init-project.md` now resolves only the relevant rules instead of telling agents to scan the full rules directory by default.
+- [x] Core generic rule files (`naming-conv`, `error-handling`, `performance`, `efficiency-vs-hype`, `architecture`) have been reduced into boundary-first guidance instead of tutorial-style prose.
+- [x] The offline architecture selection path has been removed from `init`, so fresh repositories no longer get a silent heuristic stack pick.
+
+Breakdown:
+- [x] Replace broad bootstrap wording in `.instructions.md`, compiler output, and compiled rule surfaces with scope-resolved loading.
+- [x] Replace dashboard-shaped execution handoff defaults with more neutral but anti-generic structural surfaces.
+- [x] Convert responsive mutation from prose-only expectations to operation-based handoff objects.
+- [x] Make generic drift machine-actionable with explicit forbidden patterns and named genericity signals.
+- [x] Keep UI judge workflow advisory by default while allowing named generic drift to escalate blocking failures.
+- [x] Audit remaining non-UI rule files that still reteach basics LLMs already know and remove them from default pressure paths where possible.
+- [x] Decide which generic engineering rule files should stay shipped but lazy-only versus which should be merged, reduced, or retired.
+- [x] Review remaining CLI and prompt wording for old governance/profile jargon that no longer helps current behavior.
+- [x] Remove architecture-playbook and silent stack-selection framing from active bootstrap, init, and planning surfaces.
+- [ ] Run one deliberate real-project redesign validation pass against current output quality before lifting release hold.
+
+Done when:
+- [ ] Host entrypoints no longer push broad context loading by default for narrow UI work.
+- [ ] The shipped rule surface focuses on anti-bad-habit boundaries, not on reteaching generic engineering basics.
+- [ ] Real redesign output no longer predictably collapses into hero-plus-stats-row, repeated cards, or scale-only responsive fallback.
+- [ ] The current release-hold batch can be closed without needing another structural frontend/design governance rewrite.
 
 ---
 
@@ -382,11 +423,9 @@ This file should stay short enough to steer decisions quickly.
 Use this backlog as the source for the next design-governance phase.
 
 Execution order:
-1. token taxonomy and resolver plan
-2. design evidence extraction
-3. accessibility split formalization
-4. structured design execution and handoff
-5. rubric calibration
-6. context hygiene refinements
+1. finish `Phase 8 - Frontend and Design Governance Simplification`
+2. continue `Phase 2 - Design Evidence Extraction` with AST-based inspection
+3. continue `Phase 7 - Dependency and Runtime Freshness`
+4. only lift release hold and push after the current cross-cutting frontend/design refactor is complete
 
 If this file starts becoming a release diary again, cut it back and move history to the changelog.

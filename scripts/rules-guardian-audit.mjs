@@ -36,15 +36,15 @@ const SUPPORTED_WORKFLOWS = new Set([
 const CORE_PATTERN_SIGNALS = [
   {
     pattern: 'layer-separation',
-    snippet: 'Every layer has ONE job.',
+    snippet: '## Layer Boundaries (Mandatory)',
   },
   {
-    pattern: 'modular-monolith-default',
-    snippet: 'Default Architecture: Modular Monolith',
+    pattern: 'agent-decides-topology',
+    snippet: 'Do not force a default architecture label before the repo, delivery model, and boundary evidence are clear.',
   },
   {
     pattern: 'feature-based-grouping',
-    snippet: 'Project Structure: Feature-Based Grouping',
+    snippet: 'Group code by feature or domain',
   },
   {
     pattern: 'rules-as-guardian-cross-session',
@@ -55,7 +55,7 @@ const CORE_PATTERN_SIGNALS = [
 const REQUIRED_ARCHITECTURE_RULE_SNIPPETS = [
   '## Rules as Guardian (Cross-Session Consistency)',
   'Session handoff must include active architecture contract summary.',
-  'Detect drift before changing declared stack or core patterns.',
+  'Detect drift before changing runtime choices, topology, public contracts, or core patterns.',
   'Direction changes require explicit user confirmation before applying changes.',
 ];
 
@@ -66,7 +66,8 @@ const REQUIRED_PR_CHECKLIST_SNIPPETS = [
 ];
 
 const REQUIRED_REVIEW_PROMPT_SNIPPETS = [
-  'Enforce cross-session consistency guardian: session handoff must include active architecture contract summary, drift detection must warn before direction changes, and direction changes require explicit user confirmation.',
+  'Review the code with a production-risk mindset.',
+  'Do not invent stack-specific concerns unless the repo or changed files prove they apply.',
 ];
 
 function pushResult(results, isPassed, checkName, details) {
@@ -295,8 +296,8 @@ function parseBooleanFromEnvironment(rawEnvironmentValue) {
 
 function buildArchitectureContract(onboardingReport, corePatterns) {
   return {
-    stack: String(onboardingReport?.selectedStack || 'unknown').trim() || 'unknown',
-    blueprint: String(onboardingReport?.selectedBlueprint || 'unknown').trim() || 'unknown',
+    runtimeDecision: String(onboardingReport?.runtimeDecision?.mode || onboardingReport?.selectedStack || 'unknown').trim() || 'unknown',
+    architectureDecision: String(onboardingReport?.architectureDecision?.mode || onboardingReport?.selectedBlueprint || 'unknown').trim() || 'unknown',
     profile: String(onboardingReport?.selectedProfile || 'unknown').trim() || 'unknown',
     corePatterns: normalizeCorePatterns(corePatterns),
   };
@@ -312,7 +313,7 @@ function toComparableContractValue(value) {
 
 function detectContractDrift(baseContract, targetContract, driftSource) {
   const driftItems = [];
-  const fieldNames = ['stack', 'blueprint', 'profile', 'corePatterns'];
+  const fieldNames = ['runtimeDecision', 'architectureDecision', 'profile', 'corePatterns'];
 
   for (const fieldName of fieldNames) {
     const baseValue = toComparableContractValue(baseContract?.[fieldName]);
@@ -336,7 +337,7 @@ function buildSessionHandoffSummary(architectureContract) {
     ? architectureContract.corePatterns.join(', ')
     : 'none';
 
-  return `Architecture contract summary: stack=${architectureContract.stack}, blueprint=${architectureContract.blueprint}, profile=${architectureContract.profile}, corePatterns=${corePatternsSummary}.`;
+  return `Architecture contract summary: runtimeDecision=${architectureContract.runtimeDecision}, architectureDecision=${architectureContract.architectureDecision}, profile=${architectureContract.profile}, corePatterns=${corePatternsSummary}.`;
 }
 
 function assertSnippetCoverage(sourceLabel, sourcePath, requiredSnippets, failures, results) {
@@ -468,8 +469,8 @@ function runAudit() {
   );
 
   const proposedContract = {
-    stack: parsedArguments.proposedStack || activeContract.stack,
-    blueprint: parsedArguments.proposedBlueprint || activeContract.blueprint,
+    runtimeDecision: parsedArguments.proposedStack || activeContract.runtimeDecision,
+    architectureDecision: parsedArguments.proposedBlueprint || activeContract.architectureDecision,
     profile: activeContract.profile,
     corePatterns: parsedArguments.proposedCorePatterns.length > 0
       ? parsedArguments.proposedCorePatterns

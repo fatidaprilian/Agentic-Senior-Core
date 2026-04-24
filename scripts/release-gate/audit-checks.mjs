@@ -39,7 +39,7 @@ export function runAuditReleaseChecks(results, diagnostics) {
         typeof boundaryResult?.boundaryName === 'string'
         && typeof boundaryResult?.requirement === 'string'
         && Array.isArray(boundaryResult?.expectedDocumentationPaths)
-        && Array.isArray(boundaryResult?.suggestedActions)
+        && Array.isArray(boundaryResult?.requiredActions)
       ));
 
     if (hasMachineReadableBoundaryDiagnostics) {
@@ -117,10 +117,10 @@ export function runAuditReleaseChecks(results, diagnostics) {
           const changedFiles = Array.isArray(violation?.changedFiles) && violation.changedFiles.length > 0
             ? violation.changedFiles.join(', ')
             : 'unknown-changed-files';
-          const suggestion = Array.isArray(violation?.suggestedActions) && violation.suggestedActions.length > 0
-            ? violation.suggestedActions[0]
+          const requiredAction = Array.isArray(violation?.requiredActions) && violation.requiredActions.length > 0
+            ? violation.requiredActions[0]
             : 'Update matching boundary documentation in the same scope.';
-          return `${failureCode} (${violation?.boundaryName || 'unknown-boundary'}): ${changedFiles}. Action: ${suggestion}`;
+          return `${failureCode} (${violation?.boundaryName || 'unknown-boundary'}): ${changedFiles}. Action: ${requiredAction}`;
         })
         : Array.isArray(documentationBoundaryAuditExecution.report.failures)
           ? documentationBoundaryAuditExecution.report.failures

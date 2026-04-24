@@ -2,7 +2,7 @@
 
 Adapter Mode: thin
 Adapter Source: .instructions.md
-Canonical Snapshot SHA256: 3ddc44d1c3cad20aa06e31c45b5d7289b1b4cde46decb668b0347817222fb022
+Canonical Snapshot SHA256: e6984d32169e98e32c9e6b6d6209bb2613b63b22d1e66af63a70788be00c55d5
 
 Canonical policy source: [.instructions.md](../.instructions.md).
 
@@ -20,7 +20,7 @@ If your host stops at this file, follow this minimum floor:
 4. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
 5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
 6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and policy thresholds from [.agent-context/policies/](../.agent-context/policies).
-7. Resolve stack and architecture choices dynamically from project context docs plus live evidence.
+7. Resolve stack, structure, and dependency choices from project context docs plus live evidence.
 
 ## Completion Gate
 

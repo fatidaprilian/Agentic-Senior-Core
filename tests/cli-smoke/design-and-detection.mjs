@@ -51,7 +51,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.match(bootstrapDesignPrompt, /Dynamic Design Contract Synthesis/);
       assert.match(bootstrapDesignPrompt, /docs\/DESIGN\.md/);
       assert.match(bootstrapDesignPrompt, /docs\/design-intent\.json/);
-      assert.match(bootstrapDesignPrompt, /Do not anchor the final design language to a famous brand reference/);
+      assert.match(bootstrapDesignPrompt, /Do not anchor the final design language to famous products, benchmark visuals, or external reference surfaces/);
       assert.match(bootstrapDesignPrompt, /Token Architecture and Alias Strategy/);
       assert.match(bootstrapDesignPrompt, /Responsive Strategy and Cross-Viewport Adaptation Matrix/);
       assert.match(bootstrapDesignPrompt, /tokenSystem/);
@@ -69,7 +69,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.match(bootstrapDesignPrompt, /APCA/);
       assert.match(bootstrapDesignPrompt, /representation-first/i);
       assert.match(bootstrapDesignPrompt, /Refine this scaffold seed instead of discarding it\./);
-      assert.match(bootstrapDesignPrompt, /replace placeholder expressive direction with project-specific reasoning grounded in repo evidence and the active brief/i);
+      assert.match(bootstrapDesignPrompt, /replace all placeholder expressive direction with agent-chosen decisions grounded in repo evidence/i);
 
       const designIntentSeed = readJson(join(uiScaffoldingTargetDirectory, 'docs', 'design-intent.json'));
       assert.equal(designIntentSeed.mode, 'dynamic');
@@ -84,8 +84,8 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.colorTruth.format, 'OKLCH');
       assert.equal(designIntentSeed.colorTruth.allowHexDerivatives, true);
       assert.equal(designIntentSeed.colorTruth.rolesAreMinimumScaffold, true);
-      assert.ok(designIntentSeed.colorTruth.paletteRoles.includes('text'));
-      assert.ok(designIntentSeed.colorTruth.paletteRoles.includes('focus'));
+      assert.equal(designIntentSeed.colorTruth.rolesMustBeAgentDefined, true);
+      assert.ok(designIntentSeed.colorTruth.paletteRoles.includes('agent-defined-semantic-roles'));
       assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
       assert.equal(typeof designIntentSeed.crossViewportAdaptation.mutationRules.mobile, 'string');
       assert.equal(designIntentSeed.motionSystem.allowMeaningfulMotion, true);
@@ -105,6 +105,8 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.designExecutionPolicy.requireInteractionStateMatrix, true);
       assert.equal(designIntentSeed.designExecutionPolicy.requireContentPriorityMap, true);
       assert.equal(designIntentSeed.designExecutionPolicy.requireStructuredHandoff, true);
+      assert.equal(designIntentSeed.designExecutionPolicy.requirePerSurfaceMutationOps, true);
+      assert.equal(designIntentSeed.designExecutionPolicy.forbidUniformSiblingSurfaceTreatment, true);
       assert.equal(designIntentSeed.designExecutionPolicy.forbidScreenshotDependency, true);
       assert.equal(designIntentSeed.designExecutionPolicy.semanticReviewFocus.length >= 4, true);
       assert.equal(designIntentSeed.designExecutionHandoff.version, 'ui-handoff-v1');
@@ -113,8 +115,12 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.designExecutionHandoff.surfacePlan.length >= 1, true);
       assert.equal(designIntentSeed.designExecutionHandoff.componentGraph.nodes.length >= 2, true);
       assert.equal(designIntentSeed.designExecutionHandoff.taskFlowNarrative.length >= 2, true);
+      assert.equal(designIntentSeed.designExecutionHandoff.viewportMutationPlan.mobile.primaryOperation.length > 0, true);
+      assert.equal(designIntentSeed.designExecutionHandoff.viewportMutationPlan.mobile.requiredSurfaceActions.length >= 2, true);
+      assert.equal(designIntentSeed.designExecutionHandoff.viewportMutationPlan.mobile.forbiddenPatterns.length >= 1, true);
       assert.equal(designIntentSeed.designExecutionHandoff.implementationGuardrails.requireBuildFromHandoff, true);
       assert.equal(designIntentSeed.reviewRubric.version, 'ui-rubric-v1');
+      assert.equal(designIntentSeed.reviewRubric.genericityAutoFail, true);
       assert.equal(designIntentSeed.reviewRubric.dimensions.length >= 5, true);
       assert.equal(designIntentSeed.reviewRubric.reportingRules.mustExplainGenericity, true);
       assert.equal(designIntentSeed.contextHygiene.continuityMode, 'opt-in-only');
@@ -127,6 +133,8 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
 
       const compiledRulesContent = readFileSync(join(uiScaffoldingTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(compiledRulesContent, /docs\/design-intent\.json/);
+      assert.match(compiledRulesContent, /Resolve the smallest relevant layer set before responding\./);
+      assert.match(compiledRulesContent, /LAYER 1: RULES \(SCOPE-RESOLVED\)/);
       assert.match(compiledRulesContent, /- For UI scope: if docs\/DESIGN\.md or docs\/design-intent\.json is missing, execute bootstrap-design prompt before implementing UI surfaces\./);
       assert.match(compiledRulesContent, /LAYER 5: EXECUTION PROMPTS AND UI TRIGGERS/);
       assert.match(compiledRulesContent, /bootstrap-design\.md -> ui, ux, layout, screen, tailwind, frontend, redesign/);
@@ -153,7 +161,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
 
       const projectDetection = await detectProjectContext(governanceOnlyTargetDirectory);
       assert.equal(projectDetection.hasExistingProjectFiles, false);
-      assert.equal(projectDetection.recommendedStackFileName, null);
+      assert.equal(projectDetection.detectedStackFileName, null);
       assert.deepEqual(projectDetection.rankedCandidates, []);
     } finally {
       rmSync(governanceOnlyTargetDirectory, { recursive: true, force: true });
@@ -206,7 +214,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.seedPolicy.mode, 'structure-first-scaffold');
       assert.deepEqual(designIntentSeed.tokenSystem.taxonomyOrder, ['primitive', 'semantic', 'component']);
       assert.equal(designIntentSeed.colorTruth.format, 'OKLCH');
-      assert.ok(designIntentSeed.colorTruth.paletteRoles.includes('text'));
+      assert.ok(designIntentSeed.colorTruth.paletteRoles.includes('agent-defined-semantic-roles'));
       assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
       assert.equal(designIntentSeed.motionSystem.allowMeaningfulMotion, true);
       assert.equal(designIntentSeed.motionSystem.seedToneLocked, false);
@@ -217,7 +225,10 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.designExecutionPolicy.requireViewportMutationPlan, true);
       assert.equal(designIntentSeed.designExecutionHandoff.version, 'ui-handoff-v1');
       assert.equal(designIntentSeed.designExecutionHandoff.seedMode, 'structure-first-scaffold');
-      assert.equal(designIntentSeed.designExecutionHandoff.viewportMutationPlan.mobile.length > 0, true);
+      assert.equal(designIntentSeed.designExecutionHandoff.viewportMutationPlan.mobile.primaryOperation.length > 0, true);
+      assert.equal(designIntentSeed.designExecutionHandoff.viewportMutationPlan.mobile.requiredSurfaceActions.length >= 2, true);
+      assert.equal(designIntentSeed.designExecutionHandoff.viewportMutationPlan.mobile.forbiddenPatterns.length >= 1, true);
+      assert.equal(designIntentSeed.reviewRubric.genericityAutoFail, true);
       assert.equal(designIntentSeed.reviewRubric.reportingRules.mustSeparateTasteFromFailure, true);
       assert.equal(designIntentSeed.contextHygiene.requireExplicitContinuityApproval, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
@@ -226,6 +237,9 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.summaryVersion, 'v1');
       assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.colors.hardcodedCount >= 2, true);
       assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.componentInventory.componentFileCount >= 1, true);
+      assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.structuredInspection.classAttributeCount >= 1, true);
+      assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.structuredInspection.inlineStyleObjectCount >= 1, true);
+      assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.tokenBypassSignals.inlineHardcodedColorCount >= 2, true);
       assert.deepEqual(designIntentSeed.repoEvidence.workspaceUiEntries, []);
     } finally {
       rmSync(existingUiInitTargetDirectory, { recursive: true, force: true });
@@ -270,7 +284,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
         `node ${cliPath} init ${existingUiMicroserviceTargetDirectory} --profile balanced --ci true --no-token-optimize --no-scaffold-docs`
       ).toString();
 
-      assert.match(initOutput, /Using detected stack automatically for this existing project: Python\./);
+      assert.match(initOutput, /Runtime decision: agent recommendation required from current repo\/brief evidence/);
       assert.match(initOutput, /Existing UI\/frontend scope detected\. Seeded docs\/design-intent\.json/);
 
       const designIntentSeed = readJson(join(existingUiMicroserviceTargetDirectory, 'docs', 'design-intent.json'));
@@ -290,12 +304,16 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.ok(Array.isArray(designIntentSeed.repoEvidence.workspaceUiEntries));
       assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.summaryVersion, 'v1');
       assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.tailwind.breakpointUsageCount >= 1, true);
+      assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.structuredInspection.classAttributeCount >= 1, true);
+      assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.structuredInspection.inlineStyleObjectCount >= 1, true);
       assert.ok(designIntentSeed.repoEvidence.workspaceUiEntries.some((workspaceUiEntry) => workspaceUiEntry.relativePath === 'apps/web'));
 
       const onboardingReport = readJson(
         join(existingUiMicroserviceTargetDirectory, '.agent-context', 'state', 'onboarding-report.json')
       );
-      assert.equal(onboardingReport.selectedStack, 'python.md');
+      assert.equal(onboardingReport.selectedStack, null);
+      assert.equal(onboardingReport.runtimeDecision.mode, 'agent-decision-required');
+      assert.equal(onboardingReport.runtimeDecision.detectedStackEvidence, 'python.md');
       assert.equal(onboardingReport.autoDetection.uiScope.isUiScopeLikely, true);
       assert.equal(onboardingReport.autoDetection.uiScope.designEvidenceSummary.summaryVersion, 'v1');
       assert.ok(onboardingReport.autoDetection.uiScope.workspaceUiEntries.some((workspaceUiEntry) => workspaceUiEntry.relativePath === 'apps/web'));
@@ -342,9 +360,16 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(uiScopeSignals.frontendEvidenceMetrics.propDrillingCandidateCount >= 1, true);
       assert.equal(uiScopeSignals.frontendEvidenceMetrics.arbitraryBreakpointCount >= 1, true);
       assert.equal(uiScopeSignals.frontendEvidenceMetrics.mediaQueryCount >= 1, true);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics.structuredClassAttributeCount >= 1, true);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics.inlineStyleObjectCount >= 1, true);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics.inlineStyleTokenBypassCount >= 2, true);
       assert.equal(uiScopeSignals.designEvidenceSummary.summaryVersion, 'v1');
       assert.equal(uiScopeSignals.designEvidenceSummary.cssVariables.definitionCount, 0);
       assert.equal(uiScopeSignals.designEvidenceSummary.colors.hardcodedCount >= 2, true);
+      assert.equal(uiScopeSignals.designEvidenceSummary.structuredInspection.classAttributeCount >= 1, true);
+      assert.equal(uiScopeSignals.designEvidenceSummary.structuredInspection.inlineStyleObjectCount >= 1, true);
+      assert.equal(uiScopeSignals.designEvidenceSummary.structuredInspection.utilityFamilyCounts.grid >= 1, true);
+      assert.equal(uiScopeSignals.designEvidenceSummary.tokenBypassSignals.inlineHardcodedColorCount >= 2, true);
     } finally {
       rmSync(uiEvidenceTargetDirectory, { recursive: true, force: true });
     }
@@ -384,13 +409,13 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       );
 
       const projectDetection = await detectProjectContext(workspaceTargetDirectory);
-      assert.equal(projectDetection.recommendedStackFileName, 'python.md');
+      assert.equal(projectDetection.detectedStackFileName, 'python.md');
       assert.ok(projectDetection.secondaryStackFileNames.includes('typescript.md'));
 
       const uiScopeSignals = await detectUiScopeSignals({
         targetDirectoryPath: workspaceTargetDirectory,
-        selectedStackFileName: projectDetection.recommendedStackFileName,
-        selectedBlueprintFileName: projectDetection.recommendedBlueprintFileName,
+        selectedStackFileName: projectDetection.detectedStackFileName,
+        selectedBlueprintFileName: projectDetection.detectedBlueprintFileName,
       });
 
       assert.equal(uiScopeSignals.isUiScopeLikely, true);
@@ -399,8 +424,12 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(uiScopeSignals.packageManifest?.name, '@workspace/web');
       assert.equal(uiScopeSignals.frontendEvidenceMetrics?.hardcodedColorCount >= 2, true);
       assert.equal(uiScopeSignals.frontendEvidenceMetrics?.propDrillingCandidateCount >= 1, true);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics?.structuredClassAttributeCount >= 1, true);
+      assert.equal(uiScopeSignals.frontendEvidenceMetrics?.inlineStyleObjectCount >= 1, true);
       assert.equal(uiScopeSignals.designEvidenceSummary.summaryVersion, 'v1');
       assert.ok(uiScopeSignals.designEvidenceSummary.componentInventory.surfaceFileSamples.some((filePath) => filePath.endsWith('src/App.tsx')));
+      assert.equal(uiScopeSignals.designEvidenceSummary.structuredInspection.classAttributeCount >= 1, true);
+      assert.equal(uiScopeSignals.designEvidenceSummary.structuredInspection.inlineStyleObjectCount >= 1, true);
     } finally {
       rmSync(workspaceTargetDirectory, { recursive: true, force: true });
     }
@@ -540,7 +569,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.seedPolicy.mode, 'structure-first-scaffold');
       assert.deepEqual(designIntentSeed.tokenSystem.taxonomyOrder, ['primitive', 'semantic', 'component']);
       assert.equal(designIntentSeed.colorTruth.format, 'OKLCH');
-      assert.ok(designIntentSeed.colorTruth.paletteRoles.includes('text'));
+      assert.ok(designIntentSeed.colorTruth.paletteRoles.includes('agent-defined-semantic-roles'));
       assert.equal(designIntentSeed.crossViewportAdaptation.adaptByRecomposition, true);
       assert.equal(designIntentSeed.motionSystem.allowMeaningfulMotion, true);
       assert.equal(designIntentSeed.motionSystem.seedToneLocked, false);
@@ -555,6 +584,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
       assert.equal(designIntentSeed.implementation.requireViewportMutationRules, true);
       assert.equal(designIntentSeed.repoEvidence.designEvidenceSummary.summaryVersion, 'v1');
+      assert.equal(typeof designIntentSeed.repoEvidence.designEvidenceSummary.structuredInspection.classAttributeCount, 'number');
       assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);
       assert.deepEqual(validateDesignIntentContract(designIntentSeed), []);
     } finally {

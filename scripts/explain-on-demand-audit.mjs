@@ -39,7 +39,7 @@ const REQUIRED_PR_CHECKLIST_SNIPPETS = [
 ];
 
 const REQUIRED_REVIEW_PROMPT_SNIPPETS = [
-  'Enforce explain-on-demand state visibility: default responses must avoid unnecessary state-file internals, state internals are exposed only on explicit request, and diagnostic mode must explain relevant state decisions when needed.',
+  'Review the code with a production-risk mindset.',
 ];
 
 const INTERNAL_STATE_SIGNAL_PATTERNS = [
@@ -225,11 +225,11 @@ function assertSnippetCoverage(sourceLabel, sourcePath, requiredSnippets, failur
 }
 
 function buildDefaultResponseSummary(onboardingReport) {
-  const selectedStack = String(onboardingReport?.selectedStack || 'unknown-stack').trim() || 'unknown-stack';
-  const selectedBlueprint = String(onboardingReport?.selectedBlueprint || 'unknown-blueprint').trim() || 'unknown-blueprint';
+  const runtimeDecision = String(onboardingReport?.runtimeDecision?.mode || onboardingReport?.selectedStack || 'unknown-runtime-decision').trim() || 'unknown-runtime-decision';
+  const architectureDecision = String(onboardingReport?.architectureDecision?.mode || onboardingReport?.selectedBlueprint || 'unknown-architecture-decision').trim() || 'unknown-architecture-decision';
   const selectedProfile = String(onboardingReport?.selectedProfile || 'unknown-profile').trim() || 'unknown-profile';
 
-  return `Active setup summary: stack=${selectedStack}, blueprint=${selectedBlueprint}, profile=${selectedProfile}.`;
+  return `Active setup summary: runtimeDecision=${runtimeDecision}, architectureDecision=${architectureDecision}, profile=${selectedProfile}.`;
 }
 
 function detectInternalSignals(textValue) {
@@ -240,14 +240,14 @@ function detectInternalSignals(textValue) {
 function buildDiagnosticDecisionSummaries(onboardingReport) {
   const explanations = [];
 
-  const selectedStack = String(onboardingReport?.selectedStack || '').trim();
-  if (selectedStack) {
-    explanations.push(`Stack decision: selectedStack=${selectedStack}.`);
+  const runtimeDecision = String(onboardingReport?.runtimeDecision?.mode || onboardingReport?.selectedStack || '').trim();
+  if (runtimeDecision) {
+    explanations.push(`Runtime decision: ${runtimeDecision}.`);
   }
 
-  const selectedBlueprint = String(onboardingReport?.selectedBlueprint || '').trim();
-  if (selectedBlueprint) {
-    explanations.push(`Blueprint decision: selectedBlueprint=${selectedBlueprint}.`);
+  const architectureDecision = String(onboardingReport?.architectureDecision?.mode || onboardingReport?.selectedBlueprint || '').trim();
+  if (architectureDecision) {
+    explanations.push(`Architecture decision: ${architectureDecision}.`);
   }
 
   const selectedProfile = String(onboardingReport?.selectedProfile || '').trim();

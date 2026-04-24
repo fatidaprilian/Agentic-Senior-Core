@@ -2,7 +2,7 @@
 
 This document tracks the product delivery plan and current execution reality.
 
-## V1.6 (2026) — Enterprise Reliability and Team Workflow
+## V1.6 (2026) — Reliability and Team Workflow
 
 Release status: Completed and released on 2026-03-19.
 
@@ -10,7 +10,7 @@ Original plan targeted Q2-Q4 2026, but implementation landed earlier (Q2 2026).
 
 ### Delivered Scope
 1. Foundation and governance
-   - Preset-driven onboarding shipped for common stack and blueprint combinations.
+   - Scope-hint onboarding shipped without offline stack or blueprint selection.
    - CLI support favors one default review-threshold path over multiple profile surfaces.
    - Override governance hardening shipped: required `Owner` and `Expiry` metadata, `YYYY-MM-DD` validation, expiry warning window, and expired-entry validation failure.
 2. CI and detection quality
@@ -63,7 +63,7 @@ Note: this repository is a governance and enablement engine, not a runtime front
 - V1.7 issue breakdown and execution playbook are published.
 - Issue template for V1.7 frontend work is available.
 
-## V1.8 (2026) — Enterprise Release Operations and Compliance
+## V1.8 (2026) — Release Operations and Compliance
 
 Release status: Completed and released on 2026-03-30.
 
@@ -81,7 +81,7 @@ V1.8 upgrades release governance from policy-only to CI-enforced evidence with m
 3. Operational readiness standards
    - Release operations checklist shipped: `.agent-context/review-checklists/release-operations.md`.
    - Operations execution guide shipped: `docs/v1.8-operations-playbook.md`.
-   - Enterprise operations automated tests shipped: `tests/enterprise-ops.test.mjs`.
+   - Operations automated tests shipped: `tests/operations.test.mjs`.
 
 ### V1.8 KPI Snapshot (Operations Baseline)
 - Release gate report generation: pass and artifact-ready.
@@ -110,7 +110,7 @@ This release shifts from governance pack distribution to a verified skill market
    - DEFINED public trust tiers: `verified`, `community`, `experimental`.
    - SHIPPED a weighted acceptance scorecard for skills and plugins.
    - SHIPPED machine-readable evidence bundles requirement for accepted artifacts.
-   - SHIPPED plug-and-play init presets for fast, stack-specific installations.
+   - SHIPPED scope-hint init presets that avoid offline stack selection.
    - SHIPPED a numbered interactive launcher for seamless bootstrapping.
 2. Installer and distribution hardening
    - SHIPPED transactional install flow with preflight checks, backup points, and automatic rollback.
@@ -125,7 +125,7 @@ This release shifts from governance pack distribution to a verified skill market
    - SHIPPED visual motion, accessibility, responsive behavior, and conversion narrative checks in frontend skill depth packs.
    - SHIPPED frontend skill parity checklist hard enforcement in release eligibility gates.
    - SHIPPED frontend/fullstack/distribution/review depth expansion with verified trust-tier evidence on required release domains.
-   - SHIPPED starter coverage extension for mobile and observability flows with additional stack-specific presets.
+   - SHIPPED scope-hint coverage extension for mobile and observability flows without runtime-specific presets.
 
 ### V2.0 Success Metrics
 - At least 95% of published marketplace artifacts include complete evidence bundles.
@@ -172,7 +172,7 @@ Final delivery snapshot (2026-04-17):
    - Integrate benchmark gates into release and pull request workflows.
 3. Competitive intelligence loop
    - Add scheduled scan workflow to monitor benchmark repos and detect new patterns.
-   - Produce actionable adopt or adapt recommendations with owner assignment.
+   - Produce actionable adopt-or-adapt decisions with owner assignment.
    - Treat frontend skill updates from `MiniMax-AI/skills` as mandatory inputs for each cycle.
 4. Frontend excellence track
    - Define an advanced frontend quality rubric inspired by high-end frontend references (including Builder.io quality signals) and manual design workflow standards.
@@ -206,7 +206,7 @@ Final delivery snapshot (2026-04-17):
 - Laravel 13 migration guardrails are published and referenced by onboarding and upgrade flows.
 - Cross-agent memory pilot can persist and retrieve session context through a provider-agnostic interface.
 
-## V3.0 (2026) - Enterprise Governance Cloud and Federated Policy Ops
+## V3.0 (2026) - Federated Rules Cloud and Policy Ops
 
 Release status: V3.0.0 completed and released on 2026-04-18.
 
@@ -216,9 +216,9 @@ This release aims to move beyond repository-level governance toward federated ru
 
 ### Terminology Mapping (Final)
 
-| Canonical Enterprise Term | Developer-Facing Alias | Usage Rule |
-|---------------------------|------------------------|------------|
-| Federated Governance | Federated Rules Operations | Use canonical term in compliance and audit artifacts. |
+| Canonical Term | Developer-Facing Alias | Usage Rule |
+|----------------|------------------------|------------|
+| Federated Governance | Federated Rules Operations | Use canonical term in formal policy artifacts. |
 | Governance Engine | Rules Engine | Use alias in onboarding and day-to-day developer docs. |
 | Guardrails | Quality Checks | Use alias in implementation guidance and quickstart docs. |
 
@@ -251,7 +251,7 @@ Reference: docs/terminology-mapping.md
 
 ### V3.0 Success Metrics
 - Policy drift detection coverage reaches 100% for onboarded repositories.
-- Governance bundle attestation coverage reaches 100% for enterprise releases.
+- Governance bundle attestation coverage reaches 100% for managed releases.
 - Mean time to governance rollback is below 15 minutes.
 
 ### V3.0 Exit Criteria

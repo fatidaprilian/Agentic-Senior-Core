@@ -44,6 +44,13 @@ function hasRepoEvidenceSummary(designIntentContent) {
   );
 }
 
+function hasStructuredInspectionEvidence(designIntentContent) {
+  return Boolean(
+    designIntentContent?.repoEvidence?.designEvidenceSummary?.structuredInspection
+    && typeof designIntentContent.repoEvidence.designEvidenceSummary.structuredInspection === 'object'
+  );
+}
+
 function summarizeDesignExecutionHandoff(designIntentContent) {
   const designExecutionHandoff = designIntentContent?.designExecutionHandoff
   && typeof designIntentContent.designExecutionHandoff === 'object'
@@ -72,6 +79,19 @@ function summarizeDesignExecutionHandoff(designIntentContent) {
     ? designExecutionHandoff.viewportMutationPlan
     : {};
 
+  function hasViewportMutationEntry(viewportKey) {
+    const viewportEntry = viewportMutationPlan?.[viewportKey];
+    return Boolean(
+      viewportEntry
+      && typeof viewportEntry === 'object'
+      && String(viewportEntry.primaryOperation || '').trim().length > 0
+      && Array.isArray(viewportEntry.requiredSurfaceActions)
+      && viewportEntry.requiredSurfaceActions.length > 0
+      && Array.isArray(viewportEntry.forbiddenPatterns)
+      && viewportEntry.forbiddenPatterns.length > 0
+    );
+  }
+
   const artifactChecks = [
     { name: 'surfacePlan', present: surfacePlan.length > 0 },
     { name: 'componentGraphNodes', present: componentGraphNodes.length > 1 },
@@ -82,7 +102,7 @@ function summarizeDesignExecutionHandoff(designIntentContent) {
     },
     {
       name: 'viewportMutationPlan',
-      present: ['mobile', 'tablet', 'desktop'].every((viewportKey) => String(viewportMutationPlan?.[viewportKey] || '').trim().length > 0),
+      present: ['mobile', 'tablet', 'desktop'].every((viewportKey) => hasViewportMutationEntry(viewportKey)),
     },
     { name: 'interactionStateMatrix', present: interactionStateMatrix.length > 0 },
     { name: 'taskFlowNarrative', present: taskFlowNarrative.length > 1 },
@@ -131,6 +151,7 @@ export function summarizeDesignExecutionPolicy(designIntentContent) {
     ? designExecutionPolicy.representationStrategy
     : null;
   const repoEvidenceAvailable = hasRepoEvidenceSummary(designIntentContent);
+  const structuredInspectionAvailable = hasStructuredInspectionEvidence(designIntentContent);
   const screenshotDependencyForbidden = designExecutionPolicy.forbidScreenshotDependency === true;
   const handoffFormatVersion = typeof designExecutionPolicy.handoffFormatVersion === 'string'
     ? designExecutionPolicy.handoffFormatVersion
@@ -170,6 +191,8 @@ export function summarizeDesignExecutionPolicy(designIntentContent) {
   }
   if (!repoEvidenceAvailable) {
     notes.push('repoEvidence.designEvidenceSummary is missing or unreadable.');
+  } else if (!structuredInspectionAvailable) {
+    notes.push('repoEvidence.designEvidenceSummary.structuredInspection is missing; class and inline-style evidence will stay lower-confidence.');
   }
   if (notes.length === 0) {
     notes.push('Structured design execution policy is present and ready for contract review.');
@@ -181,6 +204,7 @@ export function summarizeDesignExecutionPolicy(designIntentContent) {
     contractReady,
     screenshotDependencyForbidden,
     repoEvidenceAvailable,
+    structuredInspectionAvailable,
     handoffPresent: handoffSummary.present,
     handoffVersion: handoffSummary.version,
     handoffReady: handoffSummary.handoffReady,
@@ -216,8 +240,10 @@ export function summarizeReviewRubric(designIntentContent) {
   return {
     version: typeof reviewRubric.version === 'string' ? reviewRubric.version : null,
     dimensions,
+    genericityAutoFail: reviewRubric.genericityAutoFail === true,
     genericitySignals: normalizeStringArray(reviewRubric.genericitySignals),
     validBoldSignals: normalizeStringArray(reviewRubric.validBoldSignals),
+    forbiddenPatterns: normalizeStringArray(designIntentContent?.forbiddenPatterns),
     reportingRules: reviewRubric.reportingRules && typeof reviewRubric.reportingRules === 'object'
       ? {
         mustExplainGenericity: reviewRubric.reportingRules.mustExplainGenericity === true,

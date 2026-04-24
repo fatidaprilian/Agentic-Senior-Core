@@ -24,7 +24,7 @@ function collectEvidenceTexts({
         finding?.area,
         finding?.problem,
         finding?.evidence,
-        finding?.recommendation,
+        finding?.requiredAction,
       ])
       : []),
     ...(Array.isArray(notes) ? notes : []),
@@ -93,6 +93,7 @@ export function calibrateGenericityAssessment({
   });
   const matchedGenericitySignals = collectMatchedSignals(reviewRubricSummary?.genericitySignals, evidenceTexts);
   const matchedValidBoldSignals = collectMatchedSignals(reviewRubricSummary?.validBoldSignals, evidenceTexts);
+  const matchedForbiddenPatterns = collectMatchedSignals(reviewRubricSummary?.forbiddenPatterns, evidenceTexts);
   const { blockingFindingCount, contractFidelityWeak, contractDriftDetected } = detectContractDrift(
     rubricBreakdown,
     findings,
@@ -106,17 +107,18 @@ export function calibrateGenericityAssessment({
     namedGenericityRequired
     && ['generic', 'mixed'].includes(providerStatus)
     && matchedGenericitySignals.length === 0
+    && matchedForbiddenPatterns.length === 0
   ) {
     calibratedStatus = 'unclear';
     calibrationNotes.push('Genericity claim was not backed by any named drift signal.');
   }
 
-  if (matchedGenericitySignals.length > 0 && matchedValidBoldSignals.length === 0) {
-    calibratedStatus = contractDriftDetected || matchedGenericitySignals.length >= 2
+  if ((matchedGenericitySignals.length > 0 || matchedForbiddenPatterns.length > 0) && matchedValidBoldSignals.length === 0) {
+    calibratedStatus = contractDriftDetected || matchedGenericitySignals.length + matchedForbiddenPatterns.length >= 2
       ? 'generic'
       : 'mixed';
     calibrationNotes.push('Named genericity drift signals dominate the review evidence.');
-  } else if (matchedValidBoldSignals.length > 0 && matchedGenericitySignals.length === 0) {
+  } else if (matchedValidBoldSignals.length > 0 && matchedGenericitySignals.length === 0 && matchedForbiddenPatterns.length === 0) {
     if (contractDriftDetected) {
       calibratedStatus = 'mixed';
       calibrationNotes.push('Authored signals are present, but contract drift prevents a distinctive verdict.');
@@ -127,7 +129,7 @@ export function calibrateGenericityAssessment({
       calibratedStatus = 'mixed';
       calibrationNotes.push('One valid bold signal was named, but evidence is not strong enough for a distinctive verdict.');
     }
-  } else if (matchedGenericitySignals.length > 0 && matchedValidBoldSignals.length > 0) {
+  } else if ((matchedGenericitySignals.length > 0 || matchedForbiddenPatterns.length > 0) && matchedValidBoldSignals.length > 0) {
     calibratedStatus = contractDriftDetected ? 'mixed' : 'mixed';
     calibrationNotes.push('The evidence contains both generic drift and legitimate authored moves.');
   } else if (providerStatus === 'distinctive' && contractDriftDetected) {
@@ -151,6 +153,7 @@ export function calibrateGenericityAssessment({
     statusChanged: calibratedStatus !== providerStatus,
     namedGenericityRequired,
     matchedGenericitySignals,
+    matchedForbiddenPatterns,
     matchedValidBoldSignals,
     blockingFindingCount,
     contractFidelityWeak,

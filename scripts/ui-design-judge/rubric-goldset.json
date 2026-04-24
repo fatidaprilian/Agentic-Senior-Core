@@ -77,7 +77,7 @@
           "severity": "high",
           "problem": "Mobile layout no longer follows the contract.",
           "evidence": "The primary action now drops below supporting proof.",
-          "recommendation": "Restore the intended task order.",
+          "requiredAction": "Restore the intended task order.",
           "blockingRecommended": true
         }
       ],
@@ -115,7 +115,7 @@
           "severity": "high",
           "problem": "The page uses balanced card grid without priority shift.",
           "evidence": "Every block carries equal weight and the CTA no longer leads.",
-          "recommendation": "Rebuild the page around one dominant task surface.",
+          "requiredAction": "Rebuild the page around one dominant task surface.",
           "blockingRecommended": true
         }
       ],

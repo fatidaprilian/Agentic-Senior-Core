@@ -54,9 +54,9 @@ npm run report:docs-quality-drift
 | TypeScript | api-nextjs | Web app, fullstack product, CLI tooling |
 | Python | fastapi-service | API service, automation, data-heavy backend |
 | Go | go-service | Small, fast services and platform tooling |
-| Java | spring-boot-api | Enterprise APIs and service-oriented systems |
+| Java | spring-boot-api | Service APIs and distributed systems |
 | PHP | laravel-api | Conventional product backends |
-| C# | aspnet-api | Microsoft stack services and enterprise apps |
+| C# | aspnet-api | Microsoft stack services and operations apps |
 | Rust | go-service | Performance-sensitive backend work |
 | Ruby | laravel-api | Mature product services and backend workflows |
 | React Native | mobile-app | Cross-platform mobile applications |

@@ -3,9 +3,9 @@
 Agentic-Senior-Core operates as a **Dynamic Rules Engine (Governance Engine)** that merges generalized best practices with project-specific structural definitions into files agents naturally read (like `.cursorrules`, `.windsurfrules`, or `AGENTS.md`).
 
 ## The Compiler Workflow
-When you run the init command (for example through `npm exec --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior-core init` or `npx @ryuenn3123/agentic-senior-core init` after npm publish), the delivery CLI:
+When you run the init command through `npm exec --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior-core init` or `npx @ryuenn3123/agentic-senior-core init` after npm publish, the delivery CLI:
 1. **Scans** your working directory heuristically out-of-the-box (looking for `package.json`, `pom.xml`, etc.).
-2. **Prompts** you to refine the Stack and Blueprint only when repository evidence is weak.
+2. **Prompts** you to confirm the Stack and Blueprint only when repository evidence is weak.
 3. **Compiles** modular knowledge components into dense rule files injected directly into your project.
 
 ### Distribution Modes
@@ -22,7 +22,7 @@ When you run the init command (for example through `npm exec --package=github:fa
 ### Component Breakdown
 - **Universals (`.agent-context/rules/`)**: Non-negotiable laws. No floating `any` types, strict variable naming, event-driven designs.
 - **Stack strategies (dynamic)**: Language and runtime guidance resolved from project evidence, repository context, and lightweight keyword hints.
-- **Architecture playbooks (dynamic)**: Directory and layering guidance resolved at init time from repo evidence and agent-led research.
+- **Structural planning signals (dynamic)**: Directory, boundary, and doc-bootstrap guidance resolved from repo evidence, live research, and explicit user choices.
 
 ## Review Threshold Strategies
 Agentic-Senior-Core keeps review thresholds as internal policy, not as a noisy user-facing mode system:
@@ -49,7 +49,7 @@ We bundle Model Context Protocol capabilities with a local stdio runtime (`scrip
 - `.github/workflows/frontend-usability-gate.yml` runs the audit and publishes report artifacts per workflow run.
 
 ## Release Operations and Compliance (V1.8)
-- `scripts/release-gate.mjs` enforces version/changelog/roadmap consistency and required enterprise assets.
+- `scripts/release-gate.mjs` enforces version/changelog/roadmap consistency and required operations assets.
 - `.github/workflows/release-gate.yml` publishes machine-readable release-gate reports for every CI run.
 - `scripts/generate-sbom.mjs` emits a CycloneDX 1.5 JSON payload for supply-chain evidence.
 - `.github/workflows/sbom-compliance.yml` publishes SBOM artifacts for audit traceability.

@@ -14,7 +14,7 @@ Latest release: 3.0.9 (2026-04-20).
 
 Highlights in 3.0.9:
 - Design bootstrap prompts now rely on shipped project evidence instead of assuming extra docs exist in every initialized repository.
-- Dynamic UI design guidance now emphasizes structure, rationale, and anti-generic constraints without anchoring to example brand systems.
+- Dynamic UI design guidance now emphasizes structure, rationale, and anti-generic constraints without anchoring to brand systems.
 - Init prompts now point agents at the active onboarding and compiled-rule context that actually exists in target projects.
 
 </div>
@@ -31,23 +31,9 @@ npx @ryuenn3123/agentic-senior-core init
 
 One command to initialize rules, checklists, and strict AI coding guidelines context for your project.
 
-> **See [docs/deep-dive.md](docs/deep-dive.md) and [docs/roadmap.md](docs/roadmap.md) for advanced configuration, architect mode, snapshot, and realtime options.**
+> **See [docs/deep-dive.md](docs/deep-dive.md) and [docs/roadmap.md](docs/roadmap.md) for advanced configuration, planning mode, snapshot, and realtime options.**
 
 - This command writes `.agent-context/state/v3-purge-audit.json` and reports whether static directory deletion is safe.
-
----
-
-## Before / After
-
-```text
-Before:
-"Build me a user registration API"
-=> one file, weak validation, no typed errors, weak structure
-
-After:
-"Build me a user registration API"
-=> layered modules, validated inputs, typed errors, tests, docs updates
-```
 
 ---
 
@@ -73,7 +59,7 @@ If you see `Property $schema is not allowed`, keep `.vscode/mcp.json` without `$
 
 | Command | Purpose |
 |---------|---------|
-| `agentic-senior-core init` | Initialize strict AI coding guidelines (Federated Governance baseline) |
+| `agentic-senior-core init` | Initialize the project guidance pack and compiled AI rulebook |
 | `agentic-senior-core upgrade --dry-run` | Preview safe upgrades |
 | `agentic-senior-core optimize --show` | Show token optimization state |
 | `npm run audit:v3-purge` | Run deep purge readiness audit (no deletion) |
@@ -97,9 +83,9 @@ Use `--no-prune` if you want to keep legacy managed files.
 
 ## Terminology Mapping (Final)
 
-| Canonical Enterprise Term | Developer-Facing Alias | Usage Rule |
-|---------------------------|------------------------|------------|
-| Federated Governance | Federated Rules Operations | Use canonical term in compliance/audit artifacts. |
+| Canonical Term | Developer-Facing Alias | Usage Rule |
+|----------------|------------------------|------------|
+| Federated Governance | Federated Rules Operations | Use canonical term in formal policy artifacts. |
 | Governance Engine | Rules Engine | Use alias in onboarding and day-to-day developer docs. |
 | Guardrails | Quality Checks | Use alias in implementation guidance and quickstart docs. |
 
