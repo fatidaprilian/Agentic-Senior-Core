@@ -27,6 +27,18 @@ The agent must summarize what it used from that research, discard what does not 
 
 User-supplied research may influence the candidate set for motion, scroll, UI primitives, canvas/3D, charts, icons, typography, and interaction patterns, but the final choice must still be project-fit, accessible, performant, and maintainable.
 
+## Advanced Conceptual Anchor
+
+If the user requests UI work but provides no external research, design reference, screenshot study, or library note, do not start coding immediately. First synthesize one advanced conceptual anchor that will unify the interface.
+
+Do not use basic software UI labels as the final anchor, including "dashboard", "portal", "cards", "admin panel", "SaaS shell", or "minimalist interface".
+
+The agent must consider at least three substantially different candidate anchors internally, discard predictable or generic candidates, and record only the surviving anchor and concise rationale. Do not expose hidden deliberation or the rejected candidate list.
+
+The final anchor must come from broad non-template domains such as complex physical engineering, high-end industrial design, experimental editorial structure, advanced architecture, scientific instrumentation, or spatial information systems. These are search domains, not style presets.
+
+Write the chosen anchor into `docs/design-intent.json` as `conceptualAnchor`, then derive typography, spacing, density, color behavior, morphology, motion, and responsive composition from that single anchor. If a later design choice does not logically follow from the anchor, revise the contract before coding.
+
 ## Zero-Based Redesign Protocol
 
 If the user says "redesign from zero", "redesain dari 0", "ulang dari 0", "research ulang", or equivalent reset language, activate reset mode.
@@ -89,6 +101,7 @@ For every UI task, define how major surfaces change across mobile, tablet, and d
 The JSON must stay machine-readable and project-specific. It should record:
 - the confirmed project context and assumptions to validate
 - agent-chosen visual direction, not scaffold-chosen direction
+- `conceptualAnchor` and how typography, spacing, morphology, motion, and responsive composition derive from it when no external research was provided
 - agent-chosen semantic color roles, typography system, spacing rhythm, and motion approach
 - token layering with primitive, semantic, and component tokens
 - viewport mutation rules for mobile, tablet, and desktop
@@ -107,6 +120,7 @@ The review must block or flag:
 - scale-only responsive behavior
 - unresearched dependency choices
 - default component-kit styling without product rationale
+- missing or disconnected `conceptualAnchor` when no external design research was provided
 - visual direction copied from unrelated memory or external references
 - genericity findings that cannot name the exact drift signal
 

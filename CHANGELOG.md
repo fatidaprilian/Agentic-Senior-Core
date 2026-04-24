@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 
+## 3.0.23 - 2026-04-24
+### Changed
+- Added an advanced conceptual anchor requirement for prompt-only UI work so agents must choose one cohesive non-template concept before coding when no external design research is supplied.
+- Extended the dynamic design-intent seed, validation, and smoke coverage with `conceptualAnchor`, including internal candidate selection policy, forbidden basic UI labels, broad non-template source domains, and derived token axes for typography, spacing, morphology, motion, and responsive composition.
+
 ## 3.0.22 - 2026-04-24
 ### Changed
 - Added user-supplied research intake to the UI bootstrap flow so attached library lists, articles, screenshots, or benchmark notes become candidate evidence that must be summarized, filtered for project fit, and verified against current official documentation before implementation.

@@ -69,6 +69,8 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.match(bootstrapDesignPrompt, /visualResetStrategy/);
       assert.match(bootstrapDesignPrompt, /user supplies research files/i);
       assert.match(bootstrapDesignPrompt, /candidate evidence/i);
+      assert.match(bootstrapDesignPrompt, /advanced conceptual anchor before coding/i);
+      assert.match(bootstrapDesignPrompt, /output only the chosen anchor/i);
       assert.match(bootstrapDesignPrompt, /WCAG 2\.2 AA/);
       assert.match(bootstrapDesignPrompt, /APCA/);
       assert.match(bootstrapDesignPrompt, /representation-first/i);
@@ -85,6 +87,11 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.externalResearchIntake.userSuppliedResearchPolicy, 'read-as-candidate-evidence-not-final-prescription');
       assert.equal(designIntentSeed.externalResearchIntake.requireOfficialDocsVerificationForTechnologyClaims, true);
       assert.ok(designIntentSeed.externalResearchIntake.candidateDomains.includes('motion-and-scroll'));
+      assert.equal(designIntentSeed.conceptualAnchor.mode, 'required-when-no-external-research');
+      assert.equal(designIntentSeed.conceptualAnchor.candidateSelectionPolicy.considerAtLeast, 3);
+      assert.equal(designIntentSeed.conceptualAnchor.candidateSelectionPolicy.doNotRevealHiddenCandidateList, true);
+      assert.ok(designIntentSeed.conceptualAnchor.forbiddenFinalAnchorTerms.includes('dashboard'));
+      assert.ok(designIntentSeed.conceptualAnchor.requiredDerivedAxes.includes('responsive-composition'));
       assert.deepEqual(designIntentSeed.tokenSystem.taxonomyOrder, ['primitive', 'semantic', 'component']);
       assert.equal(designIntentSeed.tokenSystem.primitiveColorSpace, 'OKLCH');
       assert.equal(designIntentSeed.tokenSystem.requireSemanticAliases, true);
@@ -131,6 +138,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.designExecutionHandoff.implementationGuardrails.requireBuildFromHandoff, true);
       assert.equal(designIntentSeed.reviewRubric.version, 'ui-rubric-v1');
       assert.equal(designIntentSeed.reviewRubric.genericityAutoFail, true);
+      assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('missing-conceptual-anchor-without-external-research'));
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('zero-based-redesign-kept-prior-visual-dna'));
       assert.equal(designIntentSeed.reviewRubric.dimensions.length >= 5, true);
       assert.equal(designIntentSeed.reviewRubric.reportingRules.mustExplainGenericity, true);
@@ -138,6 +146,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.contextHygiene.repoEvidenceOverridesMemory, true);
       assert.equal(designIntentSeed.contextHygiene.forbidCarryoverWhenUnapproved, true);
       assert.ok(designIntentSeed.contextHygiene.driftSignals.includes('prior-ui-visual-dna-carried-into-reset-request'));
+      assert.ok(designIntentSeed.forbiddenPatterns.includes('visual-decisions-not-derived-from-conceptual-anchor'));
       assert.ok(designIntentSeed.forbiddenPatterns.includes('restyle-instead-of-recomposition'));
       assert.equal(designIntentSeed.implementation.requireViewportMutationRules, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
