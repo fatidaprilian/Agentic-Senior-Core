@@ -52,6 +52,14 @@ Do not use this file to teach generic frontend basics the model already knows.
 - Do not let heading, body, and data/meta roles collapse into one safe typographic family without explicit rationale.
 - At least one visual, interaction, content, motion, or state behavior must read as project-specific at a glance.
 
+## Dynamic Avant-Garde Anchor Boundary
+
+- If the user gives no current-task visual research or reference, the scaffold, old UI, and existing design docs do not count as research.
+- Before UI code, choose one agent-synthesized conceptual anchor from high-variance non-software domains and record only the final anchor in `docs/design-intent.json`.
+- Internally reject the safest dashboard, portal, card-grid, admin-shell, or minimalist-web-app mental model before writing CSS.
+- Typography, spacing, morphology, motion, and responsive recomposition must derive from the chosen anchor, not from framework defaults.
+- Rich motion, spatial transitions, and micro-interactions are allowed when they support the anchor and include reduced-motion and performance safeguards.
+
 ## Responsive Mutation Requirements
 
 - Responsive quality is not allowed to be scale-only. At least one surface must materially change position, grouping, priority, or disclosure strategy between mobile and desktop.

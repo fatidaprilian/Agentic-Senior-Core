@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 
+## 3.0.25 - 2026-04-25
+### Changed
+- Synced `frontend-architecture.md` with the Dynamic Avant-Garde Anchor Engine so UI agents reject dashboard/admin fallback from both the bootstrap prompt and frontend rule surface.
+- Compacted the generated `docs/design-intent.json` seed by trimming verbose handoff defaults while preserving validator-enforced conceptual anchor, responsive mutation, accessibility, and genericity gates.
+
 ## 3.0.24 - 2026-04-24
 ### Changed
 - Strengthened the prompt-only UI conceptual anchor flow into a Dynamic Avant-Garde Anchor Engine so missing user research triggers agent-led synthesis instead of fallback to scaffold, prior UI, or dashboard/admin metaphors.
