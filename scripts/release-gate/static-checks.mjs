@@ -15,6 +15,10 @@ import {
   VERSION_PATTERN,
 } from './constants.mjs';
 import { pushResult, readText } from './runtime.mjs';
+import {
+  buildDesignIntentSeedFromSignals,
+  validateDesignContractCompleteness,
+} from '../../lib/cli/project-scaffolder.mjs';
 
 export function runStaticReleaseChecks(results, diagnostics) {
   const packageJsonPath = 'package.json';
@@ -64,6 +68,34 @@ export function runStaticReleaseChecks(results, diagnostics) {
     pushResult(results, false, 'roadmap-v18', 'Roadmap does not mention V1.8 release track');
   } else {
     pushResult(results, true, 'roadmap-v18', 'Roadmap includes V1.8 release track');
+  }
+
+  try {
+    const designIntentSeed = JSON.parse(buildDesignIntentSeedFromSignals({
+      projectName: 'Release Gate UI Contract',
+      projectDescription: 'Validates deterministic UI design contract completeness before release',
+      primaryDomain: 'Web application',
+      initContext: {
+        stackFileName: 'agent-decision-runtime.md',
+        blueprintFileName: 'agent-decision-architecture.md',
+      },
+      status: 'release-gate-seed-validation',
+    }));
+    const designContractIssues = validateDesignContractCompleteness(designIntentSeed);
+
+    if (designContractIssues.length === 0) {
+      pushResult(results, true, 'ui-design-contract-completeness', 'Design intent seed includes deterministic token derivation and library verification gates');
+    } else {
+      pushResult(
+        results,
+        false,
+        'ui-design-contract-completeness',
+        `Design intent seed completeness issues: ${designContractIssues.join('; ')}`
+      );
+    }
+  } catch (designContractError) {
+    const designContractMessage = designContractError instanceof Error ? designContractError.message : 'Unknown design contract error';
+    pushResult(results, false, 'ui-design-contract-completeness', `Cannot validate design intent seed: ${designContractMessage}`);
   }
 
   const requiredOperationsFiles = [

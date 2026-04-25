@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.29 - 2026-04-25
+### Added
+- Added deterministic UI token derivation through `conceptualAnchor.anchorReference` plus top-level `derivedTokenLogic` for color, spacing, typography, and motion decisions.
+- Added `libraryResearchStatus` and `libraryDecisions[]` so unverified UI libraries stay visible with explicit fallbacks instead of becoming hallucinated imports.
+- Added a compiler-generated UI task anchor header when `docs/design-intent.json` is present, keeping the active anchor, signature motion, and typographic decision at the top of compiled context.
+- Added release-gate coverage for design-intent completeness so token derivation and library verification rules are checked deterministically.
+
+### Changed
+- Updated frontend bootstrap prompts and generated design prompts with token derivation and library research protocols.
+
+### Fixed
+- Avoided brittle prose matching by validating exact `anchorReference` IDs instead of checking whether derivation text includes the anchor name.
+
 ## 3.0.28 - 2026-04-25
 ### Changed
 - Made memory-continuity completion behavior explicit: agents must refresh `.agent-context/state/active-memory.json` directly before final responses when material project progress happened.

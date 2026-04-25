@@ -60,7 +60,14 @@ Do not use this file to teach generic frontend basics the model already knows.
 - Reject anchors that can only be described with generic quality words such as "modern", "clean", "premium", "expressive", "minimal", or "bold"; the anchor must name a specific material, instrument, artifact class, architectural system, editorial genre, cinematic behavior, exhibition system, scientific apparatus, or industrial mechanism.
 - Internally reject the safest dashboard, portal, card-grid, admin-shell, or minimalist-web-app mental model before writing CSS.
 - Typography, spacing, morphology, motion, and responsive recomposition must derive from the chosen anchor, not from framework defaults.
+- Token choices must trace to `docs/design-intent.json` `derivedTokenLogic.anchorReference`. A color, spacing, typography, or motion token that cannot be explained from the anchor is invalid.
 - Default to an expressive motion plan derived from the anchor. Use spatial transitions, micro-interactions, scroll choreography, and modern animation libraries when they improve the experience; include reduced-motion and performance safeguards without using them as an excuse for a static UI.
+
+## Library Research Boundary
+
+- New UI, animation, scroll, 3D, canvas, charting, icon, styling, or primitive libraries require current official-doc verification before imports are written.
+- If live research is unavailable, mark `libraryResearchStatus` as `pending-verification`, record the library as `LIBRARY_TO_VERIFY`, and use native CSS, browser APIs, or already-present project dependencies until verification is possible.
+- Each `libraryDecisions[]` entry must have either verification metadata or a concrete `fallbackIfUnavailable`.
 
 ## Responsive Mutation Requirements
 

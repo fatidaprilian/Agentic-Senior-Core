@@ -72,6 +72,8 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.match(bootstrapDesignPrompt, /activate the Dynamic Avant-Garde Anchor Engine before coding/i);
       assert.match(bootstrapDesignPrompt, /output only the chosen anchor/i);
       assert.match(bootstrapDesignPrompt, /Dynamic Avant-Garde Anchor Engine/i);
+      assert.match(bootstrapDesignPrompt, /Token Derivation Audit/i);
+      assert.match(bootstrapDesignPrompt, /Library Research Protocol/i);
       assert.match(bootstrapDesignPrompt, /old design docs do not count as research/i);
       assert.match(bootstrapDesignPrompt, /discard the two safest or most predictable options/i);
       assert.match(bootstrapDesignPrompt, /reduced-motion fallbacks instead of suppressing motion/i);
@@ -99,13 +101,23 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.conceptualAnchor.candidateSelectionPolicy.minimumCandidateDistance, 'high');
       assert.equal(designIntentSeed.conceptualAnchor.candidateSelectionPolicy.preferDistinctiveOverSafe, true);
       assert.equal(designIntentSeed.conceptualAnchor.candidateSelectionPolicy.doNotRevealHiddenCandidateList, true);
+      assert.equal(designIntentSeed.conceptualAnchor.anchorReference, 'agent-defined-anchor-reference');
+      assert.equal(designIntentSeed.conceptualAnchor.creativeCommitmentPolicy.requiredBeforeComplianceReview, true);
+      assert.ok(designIntentSeed.conceptualAnchor.creativeCommitmentPolicy.requiredCommitmentFields.includes('signatureMotion'));
       assert.ok(designIntentSeed.conceptualAnchor.forbiddenFinalAnchorTerms.includes('dashboard'));
       assert.ok(designIntentSeed.conceptualAnchor.forbiddenFinalAnchorTerms.includes('safe-admin-layout'));
       assert.ok(designIntentSeed.conceptualAnchor.sourceDomains.includes('cinematic-spatial-interface'));
       assert.equal(designIntentSeed.conceptualAnchor.visualRiskBudget.allowRichMotionAndMicroInteraction, true);
       assert.equal(designIntentSeed.conceptualAnchor.visualRiskBudget.rejectTimidDefaultWhenAnchorSupportsExpressiveUi, true);
       assert.ok(designIntentSeed.conceptualAnchor.requiredDerivedAxes.includes('responsive-composition'));
+      assert.ok(designIntentSeed.conceptualAnchor.finalAnchorContract.requiredFields.includes('anchorReference'));
+      assert.ok(designIntentSeed.conceptualAnchor.finalAnchorContract.requiredFields.includes('specificReferencePoint'));
       assert.ok(designIntentSeed.conceptualAnchor.finalAnchorContract.requiredFields.includes('motionRiskBudget'));
+      assert.equal(designIntentSeed.derivedTokenLogic.anchorReference, designIntentSeed.conceptualAnchor.anchorReference);
+      assert.equal(typeof designIntentSeed.derivedTokenLogic.colorDerivationSource, 'string');
+      assert.equal(designIntentSeed.derivedTokenLogic.validationRule.includes('anchorReference'), true);
+      assert.equal(designIntentSeed.libraryResearchStatus, 'pending-verification');
+      assert.equal(designIntentSeed.libraryDecisions[0].fallbackIfUnavailable.length > 0, true);
       assert.deepEqual(designIntentSeed.tokenSystem.taxonomyOrder, ['primitive', 'semantic', 'component']);
       assert.equal(designIntentSeed.tokenSystem.primitiveColorSpace, 'OKLCH');
       assert.equal(designIntentSeed.tokenSystem.requireSemanticAliases, true);
@@ -132,6 +144,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.designExecutionPolicy.requireViewportMutationPlan, true);
       assert.equal(designIntentSeed.designExecutionPolicy.requireInteractionStateMatrix, true);
       assert.equal(designIntentSeed.designExecutionPolicy.requireContentPriorityMap, true);
+      assert.equal(designIntentSeed.designExecutionPolicy.requireCreativeCommitmentGate, true);
       assert.equal(designIntentSeed.designExecutionPolicy.requireStructuredHandoff, true);
       assert.equal(designIntentSeed.designExecutionPolicy.requirePerSurfaceMutationOps, true);
       assert.equal(designIntentSeed.designExecutionPolicy.forbidUniformSiblingSurfaceTreatment, true);
@@ -144,6 +157,7 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.designExecutionHandoff.surfacePlan.length >= 1, true);
       assert.equal(designIntentSeed.designExecutionHandoff.componentGraph.nodes.length >= 2, true);
       assert.equal(designIntentSeed.designExecutionHandoff.taskFlowNarrative.length >= 2, true);
+      assert.equal(designIntentSeed.designExecutionHandoff.creativeCommitment.status, 'agent-must-complete-before-ui-implementation');
       assert.ok(designIntentSeed.designExecutionHandoff.visualResetStrategy.requiredResetAxes.includes('composition'));
       assert.ok(designIntentSeed.designExecutionHandoff.visualResetStrategy.existingUiForbiddenAs.includes('layout-source'));
       assert.equal(designIntentSeed.designExecutionHandoff.viewportMutationPlan.mobile.primaryOperation.length > 0, true);
@@ -168,6 +182,8 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.deepEqual(validateDesignIntentContract(designIntentSeed), []);
 
       const compiledRulesContent = readFileSync(join(uiScaffoldingTargetDirectory, '.cursorrules'), 'utf8');
+      assert.match(compiledRulesContent, /\[UI TASK ANCHOR - READ FIRST\]/);
+      assert.match(compiledRulesContent, /Anchor Reference: agent-defined-anchor-reference/);
       assert.match(compiledRulesContent, /docs\/design-intent\.json/);
       assert.match(compiledRulesContent, /Resolve the smallest relevant layer set before responding\./);
       assert.match(compiledRulesContent, /LAYER 1: RULES \(SCOPE-RESOLVED\)/);

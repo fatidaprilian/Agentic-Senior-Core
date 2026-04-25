@@ -10,15 +10,13 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.28 (2026-04-25).
+Latest release: 3.0.29 (2026-04-25).
 
-Highlights in 3.0.28:
-- Memory continuity now requires agents to refresh `.agent-context/state/active-memory.json` directly at completion boundaries when material project progress happened.
-- UI design governance now forces an upfront creative commitment: a specific real-world anchor reference, signature motion, and typographic decision before compliance review or implementation.
-- Token optimization now exposes an output folding strategy that preserves failures, file/line details, and actionable warnings while folding repetitive shell noise.
-- UI design guidance now treats expressive motion as a first-class default for modern interfaces instead of letting safety wording become an excuse for static screens.
-- Agents must use live/current-year research for ecosystem, framework, dependency, Docker, and modern UI/library claims instead of offline repository guesses.
-- Frontend guidance rejects safe dashboard/admin-panel defaults and requires responsive recomposition.
+Highlights in 3.0.29:
+- UI design contracts now require deterministic `anchorReference` traceability through `derivedTokenLogic` before implementation.
+- Compiled UI context can surface a top-of-file anchor commitment header from `docs/design-intent.json` so the creative direction is not buried under governance.
+- Library decisions now must be verified against current official docs or marked `pending-verification` with native/project-local fallbacks.
+- Release gate now validates the design-intent seed for token derivation and library verification completeness.
 
 </div>
 

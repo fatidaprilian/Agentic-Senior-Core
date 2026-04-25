@@ -54,6 +54,32 @@ Write the chosen anchor into `docs/design-intent.json` as `conceptualAnchor`, in
 
 Motion is not a garnish. Default to a rich motion plan: fluid transitions, spatial reveals, scroll choreography, micro-interactions, and modern motion libraries are expected when they strengthen the anchor and product experience. Keep reduced-motion fallbacks instead of suppressing motion, and solve performance deliberately instead of using safety language as a reason to stay static.
 
+## Token Derivation Audit
+
+Before implementation, `docs/design-intent.json` must include top-level `derivedTokenLogic` with `anchorReference`, `colorDerivationSource`, `spacingDerivationSource`, `typographyDerivationSource`, `motionDerivationSource`, and `validationRule`.
+
+After writing `docs/design-intent.json`, audit the token plan:
+- Why these colors instead of another palette? Answer in one sentence that references the anchorReference.
+- Why this spacing rhythm? Answer in one sentence that references the anchorReference.
+- Why this motion timing and easing? Answer in one sentence that references the anchorReference.
+
+If the answer is "looks good", "common practice", "modern default", "Tailwind default", or a generic framework habit, the token is wrong. Derive it again from the chosen anchor before writing UI code.
+
+## Library Research Protocol
+
+If web search is available:
+- Research current official docs for each library, framework API, animation package, scroll tool, 3D/canvas helper, charting tool, icon package, or UI primitive claim.
+- Record source URL, fetched date, stable compatible version, purpose, risk, and fallback in `docs/design-intent.json`.
+- Set `libraryResearchStatus` to `verified` only when each external library decision has current official evidence.
+
+If web search is unavailable or fails:
+- Do not hallucinate dependency APIs, package names, versions, or imports.
+- Write `LIBRARY_TO_VERIFY: [name] - requires live research before implementation` in the design notes.
+- Use only native CSS, browser APIs, or already-present project dependencies you can verify from local repo files.
+- Set `libraryResearchStatus` to `pending-verification` and give every `libraryDecisions[]` entry a `fallbackIfUnavailable`.
+
+Do not write imports from a new library until that library decision is verified or the user explicitly accepts a pending verification blocker.
+
 ## Zero-Based Redesign Protocol
 
 If the user says "redesign from zero", "redesain dari 0", "ulang dari 0", "research ulang", or equivalent reset language, activate reset mode.
@@ -117,6 +143,8 @@ The JSON must stay machine-readable and project-specific. It should record:
 - the confirmed project context and assumptions to validate
 - agent-chosen visual direction, not scaffold-chosen direction
 - `conceptualAnchor` and how typography, spacing, morphology, motion, and responsive composition derive from it when no external research was provided
+- `derivedTokenLogic` with exact `anchorReference` traceability for color, spacing, typography, and motion tokens
+- `libraryResearchStatus` plus `libraryDecisions[]` with verified source metadata or explicit native/project-local fallbacks
 - agent-chosen semantic color roles, typography system, spacing rhythm, and motion approach
 - token layering with primitive, semantic, and component tokens
 - viewport mutation rules for mobile, tablet, and desktop
