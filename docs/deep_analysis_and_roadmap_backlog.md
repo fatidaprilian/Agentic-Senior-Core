@@ -360,7 +360,7 @@ External signals:
 Proposed direction:
 - [x] Define a tiny machine-readable continuity snapshot such as `.agent-context/state/active-memory.json`.
 - [x] Store only durable project facts, current task focus, pending decisions, known blockers, and validation state.
-- [ ] Keep design memory scoped: repo evidence and current brief win over old visual preferences unless the user explicitly approves continuity.
+- [x] Keep design memory scoped: repo evidence and current brief win over old visual preferences unless the user explicitly approves continuity.
 - [x] Add host-facing bootstrap wording that asks agents to read the continuity snapshot at session start when it exists.
 - [x] Add completion wording that asks agents to refresh the snapshot at natural task boundaries.
 - [x] Add a compact command-output strategy inspired by `rtk`, but keep it optional and repo-internal until it proves useful.
