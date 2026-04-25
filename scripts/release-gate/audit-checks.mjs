@@ -312,7 +312,7 @@ export function runAuditReleaseChecks(results, diagnostics) {
       singleSourceLazyLoadingAuditExecution.report?.lazyRuleLoading?.enforced === true,
       'lazy-rule-loading-hard-rule',
       singleSourceLazyLoadingAuditExecution.report?.lazyRuleLoading?.enforced === true
-        ? 'Language-specific guidance is loaded lazily by detected scope'
+        ? 'Global domain governance is loaded lazily by touched scope'
         : 'Lazy rule loading enforcement failed in single-source lazy-loading audit'
     );
     pushResult(

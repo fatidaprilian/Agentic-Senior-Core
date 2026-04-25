@@ -13,6 +13,8 @@ Before editing:
 5. If the change touches a dependency, framework, Docker, runtime, or ecosystem claim, verify current official docs before choosing.
 6. Enforce Universal SOP hard gate: stop implementation if `docs/architecture-decision-record.md` is missing, and for UI scope stop if `docs/DESIGN.md` or `docs/design-intent.json` is missing.
 7. Enforce backend universal principles: no clever hacks, no premature abstraction, readability over brevity.
+8. For backend/API scope, enforce layered boundaries, zero-trust input validation, safe centralized error responses, bounded list reads, transaction safety for multi-write mutations, idempotency for sensitive mutations, and behavior-focused API tests.
+9. Backend/API governance is global and stack-agnostic. Do not create stack-specific adapters or framework-specific rule branches; apply the global rules through the framework already present in the target project.
 
 Refactor rules:
 - Improve clarity, boundaries, naming, validation, error handling, tests, and docs.

@@ -24,6 +24,10 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] No clever hacks in backend and shared core modules
 - [ ] No premature abstraction (base classes/util layers created only after repeated stable patterns)
 - [ ] Readability over brevity for maintainability
+- [ ] Controllers, route handlers, and transport adapters do not contain business policy, raw queries, or cross-resource orchestration.
+- [ ] Services or use cases own business flow, transaction boundaries, and mutation safety.
+- [ ] Repositories or adapters own persistence/external IO details without hiding business decisions.
+- [ ] Backend/API governance was applied through global domain rules, not stack-specific adapters or framework-only branches.
 - [ ] Code is grouped by feature/domain where that improves maintainability.
 - [ ] Cross-module access uses public contracts instead of internal file reach-through.
 - [ ] Files above roughly 1000 lines were split or explicitly justified.
@@ -32,14 +36,18 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 ## 4. Security And Privacy
 
 - [ ] External input is validated at trust boundaries using the project’s chosen validation approach.
+- [ ] Body, query, params, headers, cookies, uploads, webhooks, and job payloads are treated as untrusted until validated and normalized.
 - [ ] Secrets, tokens, credentials, and private data are not committed or logged.
 - [ ] Authorization is enforced at a trusted boundary.
 - [ ] Error responses and logs do not leak internals.
+- [ ] Least privilege, resource-level authorization, and secret handling are preserved where sensitive data or privileged actions are touched.
 - [ ] Dependency or platform security claims are based on current official docs or repo evidence.
 
 ## 5. Testing
 
 - [ ] Changed behavior has appropriate tests at the smallest useful level.
+- [ ] API changes cover validation, authorization, documented error shape, pagination defaults, and empty states where relevant.
+- [ ] Sensitive mutations include idempotency or duplicate-submit coverage where duplicate side effects would be harmful.
 - [ ] Tests assert behavior and contracts, not implementation trivia.
 - [ ] Critical flows include failure-path coverage.
 - [ ] Test fixtures are readable and do not hide the behavior under test.
@@ -88,7 +96,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] State internals are exposed only on explicit request.
 - [ ] Diagnostic mode can explain relevant state decisions when needed.
 - [ ] Canonical rule source is explicitly defined and enforced
-- [ ] Language-specific guidance is loaded lazily based on detected scope
+- [ ] Global domain governance is loaded lazily based on touched scope
 - [ ] No conflicting duplicate rule instructions during normal flow
 - [ ] Canonical rule source is explicit and duplicate/conflicting instructions are avoided.
 

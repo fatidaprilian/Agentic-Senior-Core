@@ -15,7 +15,7 @@ The agent must:
 2. If `docs/DESIGN.md` or `docs/design-intent.json` exists, refine them instead of replacing them blindly.
 3. If either design doc is missing, create it before UI implementation.
 4. Use current repo evidence, product copy, route names, component names, user goals, and existing constraints as the source of truth.
-5. Treat prior-chat visuals, unrelated project memory, benchmark screenshots, and famous-product aesthetics as tainted unless the user explicitly asks for continuity.
+5. Treat prior-chat visuals, unrelated project memory, benchmark screenshots, and famous-product aesthetics as tainted context unless the user explicitly asks for continuity.
 6. When choosing a new UI, animation, styling, or component library, research current official docs and choose the latest stable compatible option for this project. Do not rely on offline defaults.
 7. Keep external references non-copying: extract constraints and reasoning only, never clone the surface.
 

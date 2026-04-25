@@ -2,7 +2,7 @@
 
 Adapter Mode: thin
 Adapter Source: .instructions.md
-Canonical Snapshot SHA256: e6984d32169e98e32c9e6b6d6209bb2613b63b22d1e66af63a70788be00c55d5
+Canonical Snapshot SHA256: 11eeafb3ff6a0977785e3668a704c6bba543b515d2828c02de8276f6cf1c391c
 
 Canonical policy source: [.instructions.md](../.instructions.md).
 
@@ -10,6 +10,7 @@ If your host stops at this file, follow this minimum floor:
 - Read `.agent-instructions.md` next when it exists.
 - For UI or redesign requests, load [.agent-context/prompts/bootstrap-design.md](../.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](../.agent-context/rules/frontend-architecture.md) before coding.
 - If UI scope and `docs/DESIGN.md` or `docs/design-intent.json` is missing, materialize them before UI implementation.
+- For backend/API/data/auth/event requests, load relevant global rules from [.agent-context/rules/](../.agent-context/rules) and do not create stack-specific governance adapters.
 - Memory continuity is host-dependent project memory and does not replace bootstrap loading.
 
 ## Bootstrap Sequence
@@ -20,7 +21,7 @@ If your host stops at this file, follow this minimum floor:
 4. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
 5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
 6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and policy thresholds from [.agent-context/policies/](../.agent-context/policies).
-7. Resolve stack, structure, and dependency choices from project context docs plus live evidence.
+7. Resolve runtime, structure, and dependency choices from project context docs plus live evidence.
 
 ## Completion Gate
 

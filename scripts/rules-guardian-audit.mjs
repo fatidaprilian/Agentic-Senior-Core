@@ -67,7 +67,7 @@ const REQUIRED_PR_CHECKLIST_SNIPPETS = [
 
 const REQUIRED_REVIEW_PROMPT_SNIPPETS = [
   'Review the code with a production-risk mindset.',
-  'Do not invent stack-specific concerns unless the repo or changed files prove they apply.',
+  'Do not create stack-specific governance concerns.',
 ];
 
 function pushResult(results, isPassed, checkName, details) {

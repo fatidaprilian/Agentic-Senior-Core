@@ -32,17 +32,24 @@ export const REQUIRED_BACKEND_ARCHITECTURE_RULE_SNIPPETS = [
   'No premature abstraction.',
   'Readability over brevity.',
   'backend and shared core modules',
+  'Do not create or load stack-specific governance adapters as the baseline.',
 ];
 
 export const REQUIRED_BACKEND_REVIEW_CHECKLIST_SNIPPETS = [
   'No clever hacks in backend and shared core modules',
   'No premature abstraction (base classes/util layers created only after repeated stable patterns)',
   'Readability over brevity for maintainability',
+  'Controllers, route handlers, and transport adapters do not contain business policy',
+  'Sensitive mutations include idempotency or duplicate-submit coverage',
+  'Backend/API governance was applied through global domain rules',
 ];
 
 export const REQUIRED_REFACTOR_PROMPT_SNIPPETS = [
   'Enforce backend universal principles: no clever hacks, no premature abstraction, readability over brevity.',
   'Prioritize maintainability over compressed one-liners.',
+  'zero-trust input validation',
+  'idempotency for sensitive mutations',
+  'Backend/API governance is global and stack-agnostic.',
 ];
 
 export const REQUIRED_ARCHITECTURE_REVIEW_CHECKLIST_SNIPPETS = [
@@ -50,4 +57,8 @@ export const REQUIRED_ARCHITECTURE_REVIEW_CHECKLIST_SNIPPETS = [
   'No clever hacks in backend and shared core modules',
   'No premature abstraction',
   'Readability over brevity',
+  'Service or use-case code owns orchestration',
+  'Relational reads avoid N+1 patterns',
+  'Global backend/API governance is used directly',
+  'Dual-write database plus message flows use an outbox',
 ];

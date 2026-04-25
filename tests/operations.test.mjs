@@ -410,6 +410,11 @@ test('Operations Tests', async (t) => {
     assert.ok(Array.isArray(weeklyGovernanceReport.releaseReadiness.blockers));
     assert.equal(typeof weeklyGovernanceReport.skillTrust.allRequiredVerified, 'boolean');
     assert.ok(Array.isArray(weeklyGovernanceReport.skillTrust.domains));
+    assert.equal(weeklyGovernanceReport.backendGovernance.status, 'verified');
+    assert.ok(Array.isArray(weeklyGovernanceReport.backendGovernance.coverage));
+    assert.ok(weeklyGovernanceReport.backendGovernance.coverage.length >= 8);
+    assert.match(weeklyGovernanceReport.backendGovernance.coverage.map((coverageEntry) => coverageEntry.constraint).join(' '), /Global backend\/API rule routing/);
+    assert.equal(typeof weeklyGovernanceReport.backendGovernance.verifiedSurfaceCount, 'number');
     assert.equal(typeof weeklyGovernanceReport.commitSignals.windowDays, 'number');
     assert.ok(Array.isArray(weeklyGovernanceReport.history));
   });

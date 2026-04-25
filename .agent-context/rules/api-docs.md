@@ -9,6 +9,10 @@ If a change affects an API, CLI command, exported library behavior, schema, even
 - Document the public surface before or alongside implementation.
 - Machine-readable API contracts should use the current project standard. If unresolved, the LLM must recommend a current maintained option from official docs.
 - HTTP APIs should prefer OpenAPI 3.1 when no stronger project standard exists.
+- List endpoints must document pagination, limits, filtering, sorting, and empty-state behavior.
+- Sensitive mutation endpoints must document idempotency behavior, retry safety, duplicate-submit handling, and any required idempotency key or request fingerprint.
+- Public error contracts must document stable machine-readable codes and any RFC 9457 Problem Details-style fields the project exposes, including safe trace or correlation identifiers when present.
+- Async, webhook, and event contracts must document idempotency, retry, ordering, dead-letter or recovery behavior, and duplicate-message handling.
 - Event APIs should define producer, consumer, payload, versioning, retry, and failure behavior.
 - CLI/library public behavior must update README, help text, changelog, or docs as appropriate.
 - Do not write "see code" as the contract.

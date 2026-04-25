@@ -5,7 +5,7 @@
  *
  * Enforces V3.0-010 policy:
  * - One canonical rule source is explicitly defined and enforced.
- * - Language-specific rule guidance loads lazily by detected scope.
+ * - Global domain governance loads lazily by touched scope.
  * - Conflicting duplicate instruction paths are prevented.
  */
 
@@ -60,24 +60,24 @@ const MAX_EAGER_STACK_MENTIONS = 4;
 const REQUIRED_ARCHITECTURE_RULE_SNIPPETS = [
   '## Single Source of Truth and Lazy Rule Loading',
   'Canonical rule source is .instructions.md.',
-  'Load language-specific stack guidance lazily based on detected scope.',
-  'Do not preload unrelated stack profiles during normal flow.',
+  'Load global domain rules lazily based on touched scope.',
+  'Do not create or load stack-specific governance adapters as the baseline.',
 ];
 
 const REQUIRED_PR_CHECKLIST_SNIPPETS = [
   'Canonical rule source is explicitly defined and enforced',
-  'Language-specific guidance is loaded lazily based on detected scope',
+  'Global domain governance is loaded lazily based on touched scope',
   'No conflicting duplicate rule instructions during normal flow',
 ];
 
 const REQUIRED_REVIEW_PROMPT_SNIPPETS = [
-  'Enforce single-source and lazy-loading policy: canonical rule source must be explicitly enforced, language-specific guidance must load lazily based on detected scope, and conflicting duplicate rule instructions must not appear during normal flow.',
+  'Enforce single-source and lazy-loading policy: canonical rule source must be explicitly enforced, global domain governance must load lazily based on touched scope, and conflicting duplicate rule instructions must not appear during normal flow.',
 ];
 
 const REQUIRED_COMPILER_SNIPPETS = [
   '## LAYER 2 POLICY: LAZY RULE LOADING',
-  'Load runtime-specific guidance only when task scope touches that runtime.',
-  'Avoid eager loading unrelated runtime guidance to prevent instruction conflicts.',
+  'Load global domain rules only when task scope touches that domain.',
+  'Avoid eager loading unrelated runtime or domain guidance to prevent instruction conflicts.',
   "stackLoadingMode: 'lazy'",
 ];
 
@@ -377,6 +377,7 @@ function runAudit() {
     if (lazyPolicy
       && lazyPolicy.canonicalSource === CANONICAL_SOURCE_PATH
       && lazyPolicy.stackLoadingMode === 'lazy'
+      && (lazyPolicy.domainRuleLoadingMode === 'lazy' || typeof lazyPolicy.domainRuleLoadingMode === 'undefined')
       && lazyPolicy.loadedOnDemand === true) {
       onboardingLazyPolicyMode = 'explicit-lazy-policy';
       onboardingLazyPolicyValidated = true;
@@ -478,7 +479,7 @@ function runAudit() {
     && !eagerLoadingDetected;
 
   if (lazyRuleLoadingEnforced) {
-    pushResult(results, true, 'lazy-rule-loading-hard-rule', 'Language-specific guidance is loaded lazily by detected scope');
+    pushResult(results, true, 'lazy-rule-loading-hard-rule', 'Global domain governance is loaded lazily by touched scope');
   } else {
     failures.push('Lazy rule loading hard-rule is not fully enforced');
     pushResult(results, false, 'lazy-rule-loading-hard-rule', 'Lazy loading enforcement failed');
@@ -514,6 +515,7 @@ function runAudit() {
       onboardingPolicyValidated: onboardingLazyPolicyValidated,
       eagerLoadingDetected,
       maxAllowedStackMentions: MAX_EAGER_STACK_MENTIONS,
+      globalDomainGovernance: true,
     },
     duplicationPolicy: {
       noConflictingDuplicates,

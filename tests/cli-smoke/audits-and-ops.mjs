@@ -123,7 +123,12 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     assert.match(prChecklistContent, /No clever hacks in backend and shared core modules/);
     assert.match(prChecklistContent, /No premature abstraction/);
     assert.match(prChecklistContent, /Readability over brevity for maintainability/);
+    assert.match(prChecklistContent, /Controllers, route handlers, and transport adapters do not contain business policy/);
+    assert.match(prChecklistContent, /Sensitive mutations include idempotency or duplicate-submit coverage/);
+    assert.match(prChecklistContent, /Backend\/API governance was applied through global domain rules/);
     assert.match(refactorPromptContent, /Prioritize maintainability over compressed one-liners\./);
+    assert.match(refactorPromptContent, /zero-trust input validation/);
+    assert.match(refactorPromptContent, /global and stack-agnostic/);
   });
 
   await t.test('documentation boundary audit outputs machine-readable report', () => {
@@ -307,7 +312,9 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
 
     assert.match(architectureRuleContent, /Single Source of Truth and Lazy Rule Loading/);
     assert.match(prChecklistContent, /Canonical rule source is explicitly defined and enforced/);
+    assert.match(prChecklistContent, /Global domain governance is loaded lazily based on touched scope/);
     assert.match(reviewPromptContent, /single-source and lazy-loading policy/);
+    assert.match(reviewPromptContent, /global domain governance must load lazily based on touched scope/);
     assert.match(compilerContent, /LAYER 2 POLICY: LAZY RULE LOADING/);
   });
 

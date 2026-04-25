@@ -50,9 +50,9 @@ The `.agent-context/rules/` directory is the default guidance source for impleme
 
 - Canonical rule source is .instructions.md.
 - Adapter entry files stay thin and must point to the canonical source.
-- Load language-specific stack guidance lazily based on detected scope.
-- Load language-specific or framework-specific guidance lazily based on changed files, explicit constraints, and repo evidence.
-- Do not preload unrelated stack profiles during normal flow.
+- Load global domain rules lazily based on touched scope.
+- Do not create or load stack-specific governance adapters as the baseline.
+- Runtime or framework evidence can clarify implementation details, but it must not replace the global architecture, security, data, API, error, event, and testing boundaries.
 - Keep rule-loading output deterministic for init and release validation.
 
 ## Architecture Decision Boundary

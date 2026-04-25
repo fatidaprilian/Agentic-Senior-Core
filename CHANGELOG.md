@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
+## 3.0.27 - 2026-04-25
 ### Changed
+- Added backend governance posture to the weekly governance report so architecture, security, data access, error handling, API contracts, testing, performance, idempotency, and risk-map surfaces are verified alongside frontend governance.
+- Kept backend/API governance global and stack-agnostic by routing through domain rules instead of adding framework-specific adapters or stack-detection branches.
+- Strengthened backend rule and review surfaces for zero-trust input, bounded list reads, N+1 prevention, transaction safety, centralized API errors, mutation idempotency, and behavior-focused API tests.
+- Synced Index and Lazy Loading checks around global domain governance so runtime evidence stays separate from stack-specific governance adapters.
 
 ## 3.0.26 - 2026-04-25
 ### Changed

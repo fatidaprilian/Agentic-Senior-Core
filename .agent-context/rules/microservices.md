@@ -35,7 +35,9 @@ Hard rules:
 - Each service owns its data boundary.
 - Public service contracts must be documented before implementation or extraction.
 - Cross-service calls need timeout, retry, idempotency, observability, and recovery behavior.
+- Independent services must not use shared tables as their integration contract; communicate through documented APIs, events, or async workflows owned by the source domain.
 - Avoid synchronous call chains that turn services into a distributed monolith.
+- Critical cross-service mutations should prefer local transactions plus outbox, saga, choreography, orchestration, or compensating actions over two-phase commit by default.
 - Prefer incremental extraction over rewrites.
 
 If the evidence is unclear, document the uncertainty and keep the topology agent-recommended instead of pretending an offline default is correct.

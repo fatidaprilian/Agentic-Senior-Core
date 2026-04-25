@@ -34,9 +34,9 @@ const LAYERS = [
     injectionKeywords: ['.agent-context/rules/', 'naming-conv', 'architecture', 'security', 'docker-runtime'],
   },
   {
-    name: 'Layer 2: Stack Strategy Signals',
+    name: 'Layer 2: Runtime Decision Signals',
     requiredPaths: [],
-    injectionKeywords: ['Stack Strategy Signals', 'dynamic stack intelligence'],
+    injectionKeywords: ['Runtime Decision Signals', 'Runtime signals are evidence gates'],
   },
   {
     name: 'Layer 3: Structural Planning Signals',
@@ -168,11 +168,11 @@ describe('Adaptive Strategy Guidance', () => {
   it('.instructions.md keeps Layer 2 and Layer 3 evidence-gated without pattern anchors', () => {
     const instructionsContent = readFileSync(join(ROOT, '.instructions.md'), 'utf-8');
 
-    assert.match(instructionsContent, /Stack strategy signals are evidence gates/i);
+    assert.match(instructionsContent, /Runtime signals are evidence gates/i);
     assert.match(instructionsContent, /Ignore pattern frequency/i);
     assert.match(instructionsContent, /Structural planning signals are not a hard whitelist/i);
     assert.match(instructionsContent, /Do not silently choose frameworks or architecture from offline heuristics/i);
-    assert.match(instructionsContent, /ask for confirmation instead of silently choosing/i);
+    assert.match(instructionsContent, /WAIT for user approval/i);
   });
 });
 
@@ -240,7 +240,7 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(dependencyRule, /latest stable compatible dependency version/i);
     assert.match(dependencyRule, /official scaffolder or setup command/i);
     assert.match(dependencyRule, /Only step down to an older dependency version after documenting/i);
-    assert.match(initPrompt, /latest stable compatible dependency set and official framework setup flow unless a documented compatibility constraint blocks it/i);
+    assert.match(initPrompt, /latest stable compatible dependency set and official framework setup flow from live official documentation before coding unless a documented compatibility constraint blocks it/i);
   });
 });
 
@@ -265,11 +265,11 @@ describe('Delegating Entry Point Chain', () => {
       );
     });
 
-    it(`${entryPoint.name} references stack strategy guidance`, () => {
+    it(`${entryPoint.name} references runtime decision guidance`, () => {
       const normalized = fileContent.toLowerCase();
       assert.ok(
-        normalized.includes('stack') && (normalized.includes('dynamic') || normalized.includes('evidence')),
-        `${entryPoint.name} does not reference stack strategy guidance`
+        normalized.includes('runtime') && normalized.includes('evidence'),
+        `${entryPoint.name} does not reference runtime decision guidance`
       );
     });
 
