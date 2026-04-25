@@ -10,13 +10,14 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.25 (2026-04-25).
+Latest release: 3.0.26 (2026-04-25).
 
-Highlights in 3.0.25:
-- UI design bootstrap now forces a dynamic conceptual anchor when no current-task visual research is provided.
+Highlights in 3.0.26:
+- Memory continuity now seeds `.agent-context/state/active-memory.json` once, so new sessions have a compact project-focus snapshot without overwriting active work during upgrade.
+- Token optimization now exposes an output folding strategy that preserves failures, file/line details, and actionable warnings while folding repetitive shell noise.
+- UI design guidance now treats expressive motion as a first-class default for modern interfaces instead of letting safety wording become an excuse for static screens.
 - Agents must use live/current-year research for ecosystem, framework, dependency, Docker, and modern UI/library claims instead of offline repository guesses.
-- Frontend guidance now rejects safe dashboard/admin-panel defaults, requires responsive recomposition, and allows rich modern motion when it supports the chosen concept.
-- Generated design-intent seeds are more compact, leaving the LLM room to synthesize project-specific visual direction instead of inheriting verbose scaffold bias.
+- Frontend guidance rejects safe dashboard/admin-panel defaults and requires responsive recomposition.
 
 </div>
 

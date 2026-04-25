@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "3.0.25",
+  "version": "3.0.26",
   "type": "module",
   "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
   "bin": {

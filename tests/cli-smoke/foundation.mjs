@@ -369,6 +369,10 @@ export async function registerCliSmokeFoundationTests(t) {
       writeFileSync(join(upgradeTargetDirectory, '.clauderc'), 'STALE clauderc');
       writeFileSync(join(upgradeTargetDirectory, '.gemini', 'instructions.md'), 'STALE gemini');
       writeFileSync(join(upgradeTargetDirectory, '.github', 'copilot-instructions.md'), 'STALE copilot');
+      const activeMemoryPath = join(upgradeTargetDirectory, '.agent-context', 'state', 'active-memory.json');
+      const activeMemoryState = readJson(activeMemoryPath);
+      activeMemoryState.project.currentFocus = 'Preserve this active task across upgrade.';
+      writeFileSync(activeMemoryPath, `${JSON.stringify(activeMemoryState, null, 2)}\n`);
 
       const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
       assert.match(upgradeOutput, /Refreshed files: \.instructions\.md, \.agent-instructions\.md, compiled adapters, and \.agent-context\/state\/onboarding-report\.json/);
@@ -377,6 +381,29 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.doesNotMatch(readFileSync(join(upgradeTargetDirectory, '.clauderc'), 'utf8'), /STALE clauderc/);
       assert.doesNotMatch(readFileSync(join(upgradeTargetDirectory, '.gemini', 'instructions.md'), 'utf8'), /STALE gemini/);
       assert.doesNotMatch(readFileSync(join(upgradeTargetDirectory, '.github', 'copilot-instructions.md'), 'utf8'), /STALE copilot/);
+      assert.equal(
+        readJson(activeMemoryPath).project.currentFocus,
+        'Preserve this active task across upgrade.'
+      );
+    } finally {
+      rmSync(upgradeTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('upgrade seeds active memory when continuity snapshot is missing', () => {
+    const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-active-memory-'));
+
+    try {
+      execSync(
+        `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+
+      const activeMemoryPath = join(upgradeTargetDirectory, '.agent-context', 'state', 'active-memory.json');
+      rmSync(activeMemoryPath, { force: true });
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
+      assert.match(upgradeOutput, /\.agent-context\/state\/active-memory\.json \(seed\)/);
+      assert.equal(readJson(activeMemoryPath).schemaVersion, 'active-memory-v1');
     } finally {
       rmSync(upgradeTargetDirectory, { recursive: true, force: true });
     }

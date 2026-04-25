@@ -41,7 +41,7 @@ The final anchor must come from broad non-template domains such as complex physi
 
 Write the chosen anchor into `docs/design-intent.json` as `conceptualAnchor`, including agentResearchMode, sourceDomain, rationale, derivedTokenLogic, visualRiskBudget, motionRiskBudget, and cohesionChecks. Typography, spacing, density, color behavior, morphology, motion, and responsive composition must logically derive from that single anchor. If a later design choice does not follow from the anchor, revise the contract before coding.
 
-Motion is not a garnish. The agent may use rich animation, fluid transitions, spatial reveals, scroll choreography, micro-interactions, and modern motion libraries when they support the anchor, remain performant, and include reduced-motion fallbacks. Do not suppress motion merely to look safe.
+Motion is not a garnish. Default to a rich motion plan: fluid transitions, spatial reveals, scroll choreography, micro-interactions, and modern motion libraries are expected when they strengthen the anchor and product experience. Keep reduced-motion fallbacks instead of suppressing motion, and solve performance deliberately instead of using safety language as a reason to stay static.
 
 ## Zero-Based Redesign Protocol
 
@@ -62,7 +62,7 @@ The UI must feel authored by a strong UI/UX designer, not assembled from default
 Do:
 - Synthesize a visual direction from the project context and explain why it fits.
 - Choose color, typography, spacing, motion, density, and component morphology dynamically from the product and audience.
-- Use modern, expressive interaction when it improves hierarchy, feedback, delight, confidence, or memorability.
+- Use modern, expressive interaction and motion as part of the core design language, especially when it improves hierarchy, feedback, delight, confidence, or memorability.
 - Keep frontend code clean, componentized, accessible, and easy to maintain.
 - Use tokens and semantic aliases so future changes do not require rewriting components.
 - Make design decisions explicit before coding, then implement consistently.

@@ -65,7 +65,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] Visual direction is project-specific and not a template/default component-kit habit.
 - [ ] Responsive behavior recomposes content and priority, not only shrinking desktop layout.
 - [ ] Accessibility hard requirements are preserved: keyboard access, focus visibility, contrast, target size, status feedback, and no color-only meaning.
-- [ ] Motion is purposeful, reduced-motion-safe, and justified by product value.
+- [ ] Motion is treated as part of the design language for modern UI work, with reduced-motion and performance safeguards instead of defaulting to static screens.
 
 ## 8. Dependencies And Runtime
 

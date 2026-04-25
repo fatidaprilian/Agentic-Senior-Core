@@ -58,7 +58,7 @@ Do not use this file to teach generic frontend basics the model already knows.
 - Before UI code, choose one agent-synthesized conceptual anchor from high-variance non-software domains and record only the final anchor in `docs/design-intent.json`.
 - Internally reject the safest dashboard, portal, card-grid, admin-shell, or minimalist-web-app mental model before writing CSS.
 - Typography, spacing, morphology, motion, and responsive recomposition must derive from the chosen anchor, not from framework defaults.
-- Rich motion, spatial transitions, and micro-interactions are allowed when they support the anchor and include reduced-motion and performance safeguards.
+- Default to an expressive motion plan derived from the anchor. Use spatial transitions, micro-interactions, scroll choreography, and modern animation libraries when they improve the experience; include reduced-motion and performance safeguards without using them as an excuse for a static UI.
 
 ## Responsive Mutation Requirements
 
@@ -72,7 +72,7 @@ Do not use this file to teach generic frontend basics the model already knows.
 - Define the primary user task or reading path from current evidence before arranging surfaces.
 - Supporting surfaces must earn their placement through role, priority, or behavior. They must not feel like cloned modules.
 - Component states must preserve identity under hover, focus, loading, success, empty, and error. Do not let everything collapse into anonymous rounded panels.
-- Motion may be expressive, but it must strengthen hierarchy, feedback, or memorability while staying reduced-motion-safe and performant.
+- Motion should be expressive by default for modern UI work. Make it strengthen hierarchy, feedback, or memorability, then keep it reduced-motion-safe and performant.
 
 ## Implementation Boundaries
 

@@ -14,7 +14,7 @@ export function buildSystemPrompt() {
     'Use repoEvidence.designEvidenceSummary as implementation evidence when deciding whether the diff follows the intended system.',
     'Do not reward generic SaaS defaults or popular template patterns.',
     'Do not penalize originality when the implementation still aligns with the contract.',
-    'Purposeful motion is allowed and can improve quality. Only flag motion when it drifts from the contract, ignores reduced-motion expectations, or adds avoidable performance/accessibility risk.',
+    'Treat purposeful motion as a first-class quality signal for modern UI work. Flag missing or timid motion when the contract calls for expressive interaction, and only flag motion itself when it drifts from the contract, ignores reduced-motion expectations, or adds avoidable performance/accessibility risk.',
     'Only flag drift when there is a clear mismatch with the contract, accessibility non-negotiables, or cross-viewport adaptation rules.',
     'Treat WCAG 2.2 AA failures as hard accessibility drift.',
     'Treat APCA as advisory perceptual tuning only. Do not set blocking solely because APCA indicates a stronger readability adjustment when WCAG hard requirements still pass.',

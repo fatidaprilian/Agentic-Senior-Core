@@ -1,8 +1,8 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
-Date: 2026-04-23
-Current Version: 3.0.19
-Status: Published baseline stable, frontend/design governance refactor in progress, no new push until the current release-hold batch closes
+Date: 2026-04-25
+Current Version: 3.0.26
+Status: Frontend/design governance batch pushed; Phase 9 lightweight continuity and token-output folding baseline complete
 
 ---
 
@@ -27,7 +27,7 @@ This backlog now keeps only:
 
 ### Facts confirmed in the current repo
 
-- The published package version is `3.0.17`.
+- The current repo version is `3.0.26`.
 - The current baseline already ships canonical instruction flow centered on `.instructions.md`.
 - `init` and `upgrade` now copy the canonical instruction surface, regenerate compiled instructions, and preserve adaptive prompts.
 - Fresh project setup now asks project topology first: `Monolith` or `Microservice / distributed system`.
@@ -344,6 +344,40 @@ Done when:
 - [ ] Real redesign output no longer predictably collapses into hero-plus-stats-row, repeated cards, or scale-only responsive fallback.
 - [ ] The current release-hold batch can be closed without needing another structural frontend/design governance rewrite.
 
+### Phase 9 - Seamless Context Continuity and Token Output Folding
+
+Overall status: `[x]`
+Priority: medium
+
+Goal:
+- Explore a lightweight, cross-LLM continuity layer that helps new sessions resume real project work without forcing users to run extra commands or loading full chat history.
+
+External signals:
+- `claude-mem` validates the direction of automatic session continuity through lifecycle hooks, compressed observations, persistent storage, and progressive retrieval.
+- `rtk` validates the direction of transparent token reduction by filtering command output before it reaches the LLM context.
+- These are inspiration signals only. Agentic-Senior-Core should not copy their architecture directly or require a worker/background service as the default path.
+
+Proposed direction:
+- [x] Define a tiny machine-readable continuity snapshot such as `.agent-context/state/active-memory.json`.
+- [x] Store only durable project facts, current task focus, pending decisions, known blockers, and validation state.
+- [ ] Keep design memory scoped: repo evidence and current brief win over old visual preferences unless the user explicitly approves continuity.
+- [x] Add host-facing bootstrap wording that asks agents to read the continuity snapshot at session start when it exists.
+- [x] Add completion wording that asks agents to refresh the snapshot at natural task boundaries.
+- [x] Add a compact command-output strategy inspired by `rtk`, but keep it optional and repo-internal until it proves useful.
+- [x] Prefer synchronous updates tied to existing agent actions over a default worker, daemon, database, or extra user command.
+
+Risks to avoid:
+- Do not promise true automatic injection on hosts that do not honor startup instructions.
+- Do not store secrets, raw chat logs, private data, or stale design taste.
+- Do not let memory override current repo evidence, current user brief, or fresh live research.
+- Do not make continuity required for normal init/upgrade usage.
+
+Done when:
+- [x] A new session can resume from a compact project snapshot without reading full history.
+- [x] The snapshot is small enough to save tokens and clear enough to avoid hallucinated continuity.
+- [x] Validation ensures no secrets or large raw logs are written into continuity state.
+- [x] Design continuity remains opt-in for visual language and does not reintroduce old-style carryover.
+
 ---
 
 ## 7. Deferred Until the Foundation Is Real
@@ -351,7 +385,7 @@ Done when:
 These ideas are valid, but they should not jump ahead of the roadmap above.
 
 - Full multi-agent maker-checker orchestration for design work
-- Complex long-term memory architectures for design preference persistence
+- Heavy long-term memory architectures for design preference persistence
 - Heavy screenshot or browser-capture infrastructure as a baseline design-quality requirement
 - Style-trend chasing such as glassmorphism, claymorphism, or named aesthetics as default policy
 - Mathematical layout systems that add complexity before token and evidence foundations are stable

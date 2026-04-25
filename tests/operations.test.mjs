@@ -3,6 +3,11 @@ import assert from 'node:assert/strict';
 import { execSync } from 'node:child_process';
 import { join } from 'node:path';
 
+import {
+  createActiveMemorySnapshot,
+  validateActiveMemorySnapshot,
+} from '../lib/cli/memory-continuity.mjs';
+
 test('Operations Tests', async (t) => {
   await t.test('release gate outputs machine-readable report', () => {
     const releaseGateOutput = execSync(`node ${join(process.cwd(), 'scripts', 'release-gate.mjs')}`).toString();
@@ -310,6 +315,29 @@ test('Operations Tests', async (t) => {
     assert.ok(Array.isArray(continuityReport.scenarios));
     assert.ok(continuityReport.scenarios.length >= 3);
     assert.ok(Array.isArray(continuityReport.checks));
+  });
+
+  await t.test('active memory snapshot validation rejects secrets and raw-log persistence', () => {
+    const activeMemorySnapshot = createActiveMemorySnapshot({ projectName: 'demo-project' });
+    assert.deepEqual(validateActiveMemorySnapshot(activeMemorySnapshot), []);
+
+    const unsafeSnapshot = {
+      ...activeMemorySnapshot,
+      progress: {
+        ...activeMemorySnapshot.progress,
+        pendingIssues: [
+          'Investigate deployment failure with token=abc123',
+        ],
+      },
+      privacy: {
+        ...activeMemorySnapshot.privacy,
+        storeRawChatLogs: true,
+      },
+    };
+
+    const validationErrors = validateActiveMemorySnapshot(unsafeSnapshot);
+    assert.ok(validationErrors.some((validationError) => validationError.includes('secret-like')));
+    assert.ok(validationErrors.some((validationError) => validationError.includes('storeRawChatLogs')));
   });
 
   await t.test('ui rubric calibration outputs machine-readable report', () => {

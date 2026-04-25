@@ -717,19 +717,32 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.ok(Array.isArray(defaultMemoryState.adapters));
       assert.ok(defaultMemoryState.adapters.length >= 3);
 
+      const defaultActiveMemoryState = readJson(
+        join(defaultOptimizationTargetDirectory, '.agent-context', 'state', 'active-memory.json')
+      );
+      assert.equal(defaultActiveMemoryState.schemaVersion, 'active-memory-v1');
+      assert.equal(defaultActiveMemoryState.snapshotPurpose, 'compact-cross-session-continuity');
+      assert.equal(defaultActiveMemoryState.privacy.storeSecrets, false);
+
       const defaultTokenState = readJson(
         join(defaultOptimizationTargetDirectory, '.agent-context', 'state', 'token-optimization.json')
       );
       assert.equal(defaultTokenState.enabled, true);
+      assert.equal(defaultTokenState.outputFoldingStrategy?.mode, 'compact-high-signal-output');
+      assert.ok(defaultTokenState.outputFoldingStrategy.preserveAlways.includes('error-message'));
+      assert.ok(defaultTokenState.outputFoldingStrategy.safetyBoundary.includes('never hide failing checks'));
 
       const defaultCompiledRules = readFileSync(join(defaultOptimizationTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(defaultCompiledRules, /MEMORY CONTINUITY PROFILE/);
+      assert.match(defaultCompiledRules, /active-memory\.json/);
       assert.match(defaultCompiledRules, /TOKEN OPTIMIZATION PROFILE/);
+      assert.match(defaultCompiledRules, /Output folding policy/);
 
       const defaultOnboardingReport = readJson(
         join(defaultOptimizationTargetDirectory, '.agent-context', 'state', 'onboarding-report.json')
       );
       assert.equal(defaultOnboardingReport.memoryContinuity?.enabled, true);
+      assert.equal(defaultOnboardingReport.memoryContinuity?.activeSnapshotFile, '.agent-context/state/active-memory.json');
       assert.equal(defaultOnboardingReport.tokenOptimization?.enabled, true);
 
       const optOutInitOutput = execSync(
@@ -746,6 +759,14 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
         'memory-continuity.json'
       );
       assert.equal(existsSync(optOutMemoryStatePath), false);
+
+      const optOutActiveMemoryStatePath = join(
+        optOutOptimizationTargetDirectory,
+        '.agent-context',
+        'state',
+        'active-memory.json'
+      );
+      assert.equal(existsSync(optOutActiveMemoryStatePath), false);
 
       const optOutTokenStatePath = join(
         optOutOptimizationTargetDirectory,

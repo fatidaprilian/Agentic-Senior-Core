@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 
+## 3.0.26 - 2026-04-25
+### Changed
+- Added a non-overwriting `.agent-context/state/active-memory.json` seed for memory continuity so `init` and `upgrade` can provide a compact cross-session project snapshot without replacing active task state.
+- Updated memory continuity guidance to read the active snapshot at session start and refresh it at natural task boundaries while keeping secrets, raw chat logs, and stale design taste out of persisted state.
+- Added token output folding strategy metadata so compact command output preserves failures, file/line details, and actionable warnings while folding repetitive shell noise.
+- Shifted UI motion guidance toward expressive motion by default for modern interfaces, while keeping reduced-motion and performance safeguards as implementation requirements rather than reasons to stay static.
+
 ## 3.0.25 - 2026-04-25
 ### Changed
 - Synced `frontend-architecture.md` with the Dynamic Avant-Garde Anchor Engine so UI agents reject dashboard/admin fallback from both the bootstrap prompt and frontend rule surface.
