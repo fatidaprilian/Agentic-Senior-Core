@@ -10,10 +10,10 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.26 (2026-04-25).
+Latest release: 3.0.28 (2026-04-25).
 
-Highlights in 3.0.26:
-- Memory continuity now seeds `.agent-context/state/active-memory.json` once, so new sessions have a compact project-focus snapshot without overwriting active work during upgrade.
+Highlights in 3.0.28:
+- Memory continuity now requires agents to refresh `.agent-context/state/active-memory.json` directly at completion boundaries when material project progress happened.
 - Token optimization now exposes an output folding strategy that preserves failures, file/line details, and actionable warnings while folding repetitive shell noise.
 - UI design guidance now treats expressive motion as a first-class default for modern interfaces instead of letting safety wording become an excuse for static screens.
 - Agents must use live/current-year research for ecosystem, framework, dependency, Docker, and modern UI/library claims instead of offline repository guesses.

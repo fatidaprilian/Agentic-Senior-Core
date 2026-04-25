@@ -735,6 +735,8 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       const defaultCompiledRules = readFileSync(join(defaultOptimizationTargetDirectory, '.cursorrules'), 'utf8');
       assert.match(defaultCompiledRules, /MEMORY CONTINUITY PROFILE/);
       assert.match(defaultCompiledRules, /active-memory\.json/);
+      assert.match(defaultCompiledRules, /Refresh `?\.agent-context\/state\/active-memory\.json`? directly at natural task boundaries/);
+      assert.match(defaultCompiledRules, /Before the final response, update `project\.currentFocus`/);
       assert.match(defaultCompiledRules, /TOKEN OPTIMIZATION PROFILE/);
       assert.match(defaultCompiledRules, /Output folding policy/);
 

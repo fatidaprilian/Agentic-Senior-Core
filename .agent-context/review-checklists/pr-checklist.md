@@ -81,6 +81,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] Official setup flows are preferred when they produce better-supported current defaults.
 - [ ] Docker, framework, package, and ecosystem claims were checked live when they could be stale.
 - [ ] Token optimization and memory continuity defaults remain enabled unless the user explicitly opts out.
+- [ ] If `.agent-context/state/active-memory.json` exists and the task made material project progress, the agent refreshed it directly before completion and preserved privacy/user-owned entries.
 
 ## 9. State And Governance
 

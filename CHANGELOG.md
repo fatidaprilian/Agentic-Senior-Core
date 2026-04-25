@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.28 - 2026-04-25
+### Changed
+- Made memory-continuity completion behavior explicit: agents must refresh `.agent-context/state/active-memory.json` directly before final responses when material project progress happened.
+- Added active-memory completion checks to the PR checklist and CLI smoke coverage so seeded snapshots do not stay empty after meaningful work.
+
+### Fixed
+- Clarified that `active-memory.json` is a seed plus agent-owned continuity snapshot, not a user-run command flow or automatic repo runtime.
+
 ## 3.0.27 - 2026-04-25
 ### Changed
 - Added backend governance posture to the weekly governance report so architecture, security, data access, error handling, API contracts, testing, performance, idempotency, and risk-map surfaces are verified alongside frontend governance.
