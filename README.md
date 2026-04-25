@@ -10,13 +10,12 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.29 (2026-04-25).
+Latest release: 3.0.30 (2026-04-25).
 
-Highlights in 3.0.29:
-- UI design contracts now require deterministic `anchorReference` traceability through `derivedTokenLogic` before implementation.
-- Compiled UI context can surface a top-of-file anchor commitment header from `docs/design-intent.json` so the creative direction is not buried under governance.
-- Library decisions now must be verified against current official docs or marked `pending-verification` with native/project-local fallbacks.
-- Release gate now validates the design-intent seed for token derivation and library verification completeness.
+Highlights in 3.0.30:
+- Root `mcp.json` now reflects the current 9-layer governance model instead of the old 8-layer metadata.
+- MCP knowledge metadata now includes 15 rules, 4 prompts including `bootstrap-design`, and the project-context layer.
+- MCP workflow wording now reinforces scope-first relevant-layer injection instead of eager load-all context.
 
 </div>
 

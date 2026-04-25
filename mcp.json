@@ -1,14 +1,14 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "name": "agentic-senior-core",
-  "description": "MCP configuration for governance-aware diagnostics and self-healing workflows with dynamic knowledge injection.",
+  "description": "MCP configuration for governance-aware diagnostics, scoped rule loading, and self-healing workflows with dynamic knowledge injection.",
   "knowledgeLayers": {
     "enabled": true,
-    "description": "8-layer dynamic knowledge injection for AI agents",
+    "description": "9-layer dynamic knowledge injection for AI agents",
     "layers": {
       "rules": {
         "path": ".agent-context/rules",
-        "count": 14,
+        "count": 15,
         "autoLoad": true
       },
       "stack-strategies": {
@@ -29,9 +29,9 @@
       },
       "prompts": {
         "path": ".agent-context/prompts",
-        "count": 3,
+        "count": 4,
         "autoLoad": true,
-        "templates": ["init-project", "refactor", "review-code"]
+        "templates": ["init-project", "bootstrap-design", "refactor", "review-code"]
       },
       "governance-modes": {
         "path": "dynamic",
@@ -41,13 +41,19 @@
       },
       "state": {
         "path": ".agent-context/state",
-        "count": 6,
+        "count": 22,
         "autoLoad": true
       },
       "policies": {
         "path": ".agent-context/policies",
         "count": 1,
         "autoLoad": true
+      },
+      "project-context": {
+        "path": "docs",
+        "count": 0,
+        "autoLoad": false,
+        "sources": ["project-brief", "architecture-decision-record", "flow-overview", "api-contract", "database-schema", "DESIGN", "design-intent"]
       }
     }
   },
@@ -76,15 +82,16 @@
     "full-knowledge-injection": {
       "trigger": ["workspace.initialize", "agent.start"],
       "steps": [
-        "load_all_knowledge_layers",
-        "inject_rules",
-        "inject_stack_strategies",
-        "inject_architecture_playbooks",
+        "resolve_scope_first",
+        "inject_relevant_rules",
+        "inject_runtime_decision_signals",
+        "inject_structural_planning_signals",
         "inject_execution_contracts",
         "inject_prompts",
         "inject_governance_modes",
         "inject_state",
-        "inject_policies"
+        "inject_policies",
+        "inject_project_context_when_relevant"
       ]
     }
   }

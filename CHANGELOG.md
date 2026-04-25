@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.30 - 2026-04-25
+### Added
+- Added the `project-context` layer to root `mcp.json` so MCP metadata reflects the current 9-layer governance model.
+
+### Changed
+- Synced root MCP knowledge metadata with the current rule, prompt, state, and scoped-loading surface: 15 rules, 4 prompts, and current state inventory.
+- Updated the MCP full-knowledge workflow wording from eager load-all injection to scope-first relevant-layer injection.
+
+### Fixed
+- Fixed stale MCP metadata that still described the old 8-layer model and omitted the UI design bootstrap prompt.
+
 ## 3.0.29 - 2026-04-25
 ### Added
 - Added deterministic UI token derivation through `conceptualAnchor.anchorReference` plus top-level `derivedTokenLogic` for color, spacing, typography, and motion decisions.
