@@ -56,6 +56,8 @@ Do not use this file to teach generic frontend basics the model already knows.
 
 - If the user gives no current-task visual research or reference, the scaffold, old UI, and existing design docs do not count as research.
 - Before UI code, choose one agent-synthesized conceptual anchor from high-variance non-software domains and record only the final anchor in `docs/design-intent.json`.
+- Before broad compliance review, record a creative commitment: one concrete real-world anchor reference, one signature motion behavior, and one typographic decision with meaningful role contrast.
+- Reject anchors that can only be described with generic quality words such as "modern", "clean", "premium", "expressive", "minimal", or "bold"; the anchor must name a specific material, instrument, artifact class, architectural system, editorial genre, cinematic behavior, exhibition system, scientific apparatus, or industrial mechanism.
 - Internally reject the safest dashboard, portal, card-grid, admin-shell, or minimalist-web-app mental model before writing CSS.
 - Typography, spacing, morphology, motion, and responsive recomposition must derive from the chosen anchor, not from framework defaults.
 - Default to an expressive motion plan derived from the anchor. Use spatial transitions, micro-interactions, scroll choreography, and modern animation libraries when they improve the experience; include reduced-motion and performance safeguards without using them as an excuse for a static UI.

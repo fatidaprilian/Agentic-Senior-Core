@@ -14,6 +14,7 @@ Latest release: 3.0.28 (2026-04-25).
 
 Highlights in 3.0.28:
 - Memory continuity now requires agents to refresh `.agent-context/state/active-memory.json` directly at completion boundaries when material project progress happened.
+- UI design governance now forces an upfront creative commitment: a specific real-world anchor reference, signature motion, and typographic decision before compliance review or implementation.
 - Token optimization now exposes an output folding strategy that preserves failures, file/line details, and actionable warnings while folding repetitive shell noise.
 - UI design guidance now treats expressive motion as a first-class default for modern interfaces instead of letting safety wording become an excuse for static screens.
 - Agents must use live/current-year research for ecosystem, framework, dependency, Docker, and modern UI/library claims instead of offline repository guesses.

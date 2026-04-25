@@ -19,6 +19,17 @@ The agent must:
 6. When choosing a new UI, animation, styling, or component library, research current official docs and choose the latest stable compatible option for this project. Do not rely on offline defaults.
 7. Keep external references non-copying: extract constraints and reasoning only, never clone the surface.
 
+## Creative Commitment Gate
+
+Before broad compliance review or UI implementation, commit to one concrete creative direction and record it in `docs/DESIGN.md` plus `docs/design-intent.json`. This commitment must include:
+- one conceptual anchor from a specific physical, editorial, architectural, cinematic, industrial, scientific, or interaction domain
+- one signature motion behavior that is more specific than "smooth transitions"
+- one typographic decision that creates meaningful role contrast instead of a uniform safe type system
+
+The anchor must name at least one specific real-world reference point such as a material, instrument, artifact class, architectural system, editorial genre, cinematic interface behavior, exhibition system, scientific apparatus, or industrial mechanism. If the anchor can only be described with generic quality words such as "modern", "clean", "premium", "expressive", "minimal", or "bold", reject it and choose again.
+
+When the host supports separate agents, a lightweight creative pass may synthesize the commitment from the brief and repo evidence before a governance pass validates accessibility, tokens, maintainability, and implementation risk. When only one agent is available, perform the same separation sequentially: creative commitment first, governance validation second.
+
 ## User Research Intake
 
 If the user mentions or attaches a research file, article, benchmark, library list, screenshot study, or design note, read it before choosing the visual direction or dependencies. Treat it as candidate evidence, not as a command to copy every recommendation.
@@ -35,11 +46,11 @@ User-supplied research means current-task evidence from the user. The scaffold s
 
 Do not use basic software UI labels as the final anchor, including "dashboard", "portal", "cards", "admin panel", "SaaS shell", "web app shell", or "minimalist interface".
 
-The agent must internally consider at least three substantially different, high-variance candidate anchors, discard the two most obvious, safest, or easiest-to-predict options, and record only the surviving anchor and concise rationale. Do not expose hidden deliberation or the rejected candidate list.
+The agent must internally consider at least three substantially different, high-variance candidate anchors, discard the two most obvious, safest, or easiest-to-predict options, then record only the surviving anchor, its concrete real-world reference point, and concise rationale. Do not expose hidden deliberation or the rejected candidate list.
 
 The final anchor must come from broad non-template domains such as complex physical engineering, high-end industrial design, cinematic spatial interfaces, experimental editorial structure, advanced architecture, scientific instrumentation, advanced data visualization, exhibition/wayfinding systems, or premium interactive web experiences. These are search domains, not style presets.
 
-Write the chosen anchor into `docs/design-intent.json` as `conceptualAnchor`, including agentResearchMode, sourceDomain, rationale, derivedTokenLogic, visualRiskBudget, motionRiskBudget, and cohesionChecks. Typography, spacing, density, color behavior, morphology, motion, and responsive composition must logically derive from that single anchor. If a later design choice does not follow from the anchor, revise the contract before coding.
+Write the chosen anchor into `docs/design-intent.json` as `conceptualAnchor`, including agentResearchMode, sourceDomain, specificReferencePoint, rationale, signatureMotion, typographicDecision, derivedTokenLogic, visualRiskBudget, motionRiskBudget, and cohesionChecks. Typography, spacing, density, color behavior, morphology, motion, and responsive composition must logically derive from that single anchor. If a later design choice does not follow from the anchor, revise the contract before coding.
 
 Motion is not a garnish. Default to a rich motion plan: fluid transitions, spatial reveals, scroll choreography, micro-interactions, and modern motion libraries are expected when they strengthen the anchor and product experience. Keep reduced-motion fallbacks instead of suppressing motion, and solve performance deliberately instead of using safety language as a reason to stay static.
 
