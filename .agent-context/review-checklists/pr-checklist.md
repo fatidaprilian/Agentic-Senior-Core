@@ -5,6 +5,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 ## 1. Repo Context
 
 - [ ] The agent read `AGENTS.md` and the smallest relevant rule set.
+- [ ] For non-trivial coding, review, planning, or governance work, the agent produced a Bootstrap Receipt with loaded files, selected rules, skipped rules, unreachable files, and validation plan before implementation output.
 - [ ] Existing project context came from real files, docs, package metadata, and changed code, not folder name alone.
 - [ ] Runtime, framework, library, topology, and design choices are explicit user constraints or agent recommendations from current evidence.
 - [ ] No offline default stack, blueprint, vendor, or visual style was treated as authoritative.

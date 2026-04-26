@@ -384,6 +384,22 @@ export async function validateInstructionAdapters(context) {
 
   const canonicalInstructionContent = normalizeLineEndings(await readTextFile(CANONICAL_INSTRUCTION_PATH));
   const canonicalSnapshotHash = createHash('sha256').update(canonicalInstructionContent).digest('hex');
+  const requiredBootstrapReceiptSnippets = [
+    'Bootstrap Receipt',
+    'loaded_files',
+    'selected_rules',
+    'skipped_rules',
+    'unreachable_files',
+    'validation_plan',
+  ];
+
+  for (const requiredBootstrapReceiptSnippet of requiredBootstrapReceiptSnippets) {
+    if (canonicalInstructionContent.includes(requiredBootstrapReceiptSnippet)) {
+      pass(`.instructions.md includes bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
+    } else {
+      fail(`.instructions.md is missing bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
+    }
+  }
 
   for (const thinAdapterPath of THIN_ADAPTER_PATHS) {
     const absoluteAdapterPath = join(ROOT_DIR, thinAdapterPath);
@@ -402,6 +418,14 @@ export async function validateInstructionAdapters(context) {
       pass(`${thinAdapterPath} declares thin adapter metadata`);
     } else {
       fail(`${thinAdapterPath} must declare Adapter Mode: thin and Adapter Source: .instructions.md`);
+    }
+
+    for (const requiredBootstrapReceiptSnippet of requiredBootstrapReceiptSnippets) {
+      if (thinAdapterContent.includes(requiredBootstrapReceiptSnippet)) {
+        pass(`${thinAdapterPath} includes bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
+      } else {
+        fail(`${thinAdapterPath} is missing bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
+      }
     }
 
     const hashMatch = thinAdapterContent.match(/Canonical Snapshot SHA256:\s*([a-f0-9]{64})/);

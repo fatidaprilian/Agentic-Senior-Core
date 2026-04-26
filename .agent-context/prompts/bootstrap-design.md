@@ -100,6 +100,7 @@ Do:
 - Synthesize a visual direction from the project context and explain why it fits.
 - Choose color, typography, spacing, motion, density, and component morphology dynamically from the product and audience.
 - Use modern, expressive interaction and motion as part of the core design language, especially when it improves hierarchy, feedback, delight, confidence, or memorability.
+- Use 3D or spatial/canvas experiences as primary UI only when they improve product understanding or exploration while preserving navigation, content clarity, user actions, performance, accessibility, and non-3D fallbacks.
 - Keep frontend code clean, componentized, accessible, and easy to maintain.
 - Use tokens and semantic aliases so future changes do not require rewriting components.
 - Make design decisions explicit before coding, then implement consistently.
@@ -110,6 +111,7 @@ Do not:
 - Let heading, body, data, and metadata collapse into one safe typographic treatment without rationale.
 - Reuse colors, layout shapes, or motion signatures from unrelated memory.
 - Add decorative animation that hurts clarity, accessibility, or runtime performance.
+- Let 3D visuals hide navigation, replace readable content, block core actions, or require a powerful device before the product can be understood.
 - Choose a dependency because this repo scaffold mentioned it. The LLM must verify fit from current project context and official docs.
 
 ## Responsive Rule

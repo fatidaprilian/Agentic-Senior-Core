@@ -69,6 +69,14 @@ Do not use this file to teach generic frontend basics the model already knows.
 - If live research is unavailable, mark `libraryResearchStatus` as `pending-verification`, record the library as `LIBRARY_TO_VERIFY`, and use native CSS, browser APIs, or already-present project dependencies until verification is possible.
 - Each `libraryDecisions[]` entry must have either verification metadata or a concrete `fallbackIfUnavailable`.
 
+## Spatial and 3D Experience Boundary
+
+- 3D, WebGL, canvas, and immersive spatial interfaces are allowed as the primary experience when they clarify the product, strengthen the chosen anchor, or make exploration meaningfully better than a flat UI.
+- 3D must not take over the jobs of navigation, content comprehension, or decisive user actions. Core routes, text, forms, and calls to action must remain discoverable, accessible, and usable without solving the scene.
+- Treat 3D as interaction architecture, not decoration. If it is only a modern-looking background or visual stunt, reduce it to a supporting accent or remove it.
+- Define performance and accessibility fallbacks before implementation: reduced motion, keyboard reachable controls, readable non-canvas content, mobile budgets, loading states, and a graceful non-3D path when rendering fails.
+- When 3D is central, document its product role, interaction model, fallback path, and library/runtime decision in `docs/DESIGN.md` and `docs/design-intent.json` before coding.
+
 ## Responsive Mutation Requirements
 
 - Responsive quality is not allowed to be scale-only. At least one surface must materially change position, grouping, priority, or disclosure strategy between mobile and desktop.

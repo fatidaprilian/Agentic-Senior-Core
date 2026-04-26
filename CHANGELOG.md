@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.32 - 2026-04-26
+### Changed
+- Added scoped Bootstrap Receipt governance so non-trivial coding, review, planning, and governance work must name loaded files, selected rules, skipped rules, unreachable files, and validation plan before implementation output.
+- Synced thin adapters with Bootstrap Receipt guidance and extended validation coverage so adapter output cannot drift from the canonical receipt contract.
+- Added a frontend 3D and spatial experience boundary so immersive UI can be primary when useful without hiding navigation, content, user actions, performance, accessibility, or non-3D fallbacks.
+
 ## 3.0.31 - 2026-04-26
 ### Changed
 - Clarified dependency governance so agents may add new packages when they create a better practical tradeoff than custom implementation.

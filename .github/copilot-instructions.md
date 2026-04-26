@@ -2,7 +2,7 @@
 
 Adapter Mode: thin
 Adapter Source: .instructions.md
-Canonical Snapshot SHA256: c2aef70028abc43f5e3f110a2fa90086cd6697bac42ec97a8d4db3c4477880d4
+Canonical Snapshot SHA256: 58ca52e08f9503f55d49dfc64f800bb1124774251db4614478dbdfa618834445
 
 The canonical policy source for this repository is [.instructions.md](../.instructions.md).
 
@@ -22,6 +22,10 @@ If your host stops at this file, follow this minimum floor:
 5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
 6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and thresholds from [.agent-context/policies/](../.agent-context/policies).
 7. Resolve runtime, structure, and dependency choices from project context docs plus live evidence.
+
+## Bootstrap Receipt
+
+For non-trivial coding, review, planning, or governance work, produce a short Bootstrap Receipt before implementation output: `loaded_files`, `selected_rules`, `skipped_rules`, `unreachable_files`, and `validation_plan`.
 
 ## Completion Gate
 

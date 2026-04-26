@@ -2,7 +2,7 @@
 
 Adapter Mode: thin
 Adapter Source: .instructions.md
-Canonical Snapshot SHA256: c2aef70028abc43f5e3f110a2fa90086cd6697bac42ec97a8d4db3c4477880d4
+Canonical Snapshot SHA256: 58ca52e08f9503f55d49dfc64f800bb1124774251db4614478dbdfa618834445
 
 This file is an adapter entrypoint for agent discovery.
 The canonical policy source is [.instructions.md](.instructions.md).
@@ -30,6 +30,10 @@ If your host stops at this file instead of following the full chain, obey the Cr
 6. Read change-risk maps and continuity state from [.agent-context/state/](.agent-context/state).
 7. Enforce policy thresholds from [.agent-context/policies/](.agent-context/policies).
 8. Use runtime evidence, structure, and live research signals from project context docs.
+
+## Bootstrap Receipt
+
+For non-trivial coding, review, planning, or governance work, produce a short Bootstrap Receipt before implementation output: `loaded_files`, `selected_rules`, `skipped_rules`, `unreachable_files`, and `validation_plan`.
 
 ## Trigger Rules
 

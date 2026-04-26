@@ -60,6 +60,10 @@ If your host stops at this file instead of following the full chain, obey the Cr
 7. Enforce policy thresholds from [.agent-context/policies/](.agent-context/policies).
 8. Use runtime evidence, structure, and live research signals from project context docs.
 
+## Bootstrap Receipt
+
+For non-trivial coding, review, planning, or governance work, produce a short Bootstrap Receipt before implementation output: \`loaded_files\`, \`selected_rules\`, \`skipped_rules\`, \`unreachable_files\`, and \`validation_plan\`.
+
 ## Trigger Rules
 
 - New project or module requests: propose scope, constraints, and required docs first, then wait for approval.
@@ -96,6 +100,10 @@ If your host stops at this file, follow this minimum floor:
 6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and thresholds from [.agent-context/policies/](../.agent-context/policies).
 7. Resolve runtime, structure, and dependency choices from project context docs plus live evidence.
 
+## Bootstrap Receipt
+
+For non-trivial coding, review, planning, or governance work, produce a short Bootstrap Receipt before implementation output: \`loaded_files\`, \`selected_rules\`, \`skipped_rules\`, \`unreachable_files\`, and \`validation_plan\`.
+
 ## Completion Gate
 
 Run [.agent-context/review-checklists/pr-checklist.md](../.agent-context/review-checklists/pr-checklist.md) before declaring work complete.
@@ -127,6 +135,10 @@ If your host stops at this file, follow this minimum floor:
 5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
 6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and policy thresholds from [.agent-context/policies/](../.agent-context/policies).
 7. Resolve runtime, structure, and dependency choices from project context docs plus live evidence.
+
+## Bootstrap Receipt
+
+For non-trivial coding, review, planning, or governance work, produce a short Bootstrap Receipt before implementation output: \`loaded_files\`, \`selected_rules\`, \`skipped_rules\`, \`unreachable_files\`, and \`validation_plan\`.
 
 ## Completion Gate
 
