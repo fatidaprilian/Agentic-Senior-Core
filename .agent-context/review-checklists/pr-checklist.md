@@ -60,6 +60,8 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] Scope applied: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations
 - [ ] Style scope review is advisory and does not block merge when API docs are synced in the same commit and contract details are correct
 - [ ] Required docs exist before implementation: project brief, architecture decision, flow overview, API/public contract when relevant, data model when relevant, and UI design contract when relevant.
+- [ ] For docs-only or docs-first requests, implementation code was not changed unless the user explicitly asked for it or approved an implementation plan.
+- [ ] Formal project docs use English by default unless the user requested another language or existing docs established one.
 - [ ] Docs cover feature plan, architecture rationale, public contracts, data model, UI/design, security assumptions, testing strategy, delivery flow, and next validation actions where relevant.
 - [ ] API, event, CLI, library, data, and UI contract changes update docs in the same scope.
 - [ ] Public surface changes fail review if documentation updates are missing or stale in the same scope

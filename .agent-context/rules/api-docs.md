@@ -24,6 +24,10 @@ If a change affects an API, CLI command, exported library behavior, schema, even
 This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.
 API docs and README updates are included in this scope.
 
+### Language Default
+
+Write formal project docs in English by default, even when the user prompt is in another language. Use another documentation language only when the user explicitly asks for it or when existing project docs already establish that language.
+
 ### Style Baseline
 
 1. Write for native English speakers.

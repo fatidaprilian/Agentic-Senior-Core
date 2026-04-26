@@ -24,6 +24,7 @@ export const REQUIRED_HUMAN_WRITING_SNIPPETS = [
       '## Human Writing Standard (Mandatory)',
       'This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.',
       'Style baseline findings are advisory by default and must not block endpoint-change commits that already include accurate docs/spec updates.',
+      'Write formal project docs in English by default',
       'No emoji in formal artifacts.',
     ],
   },
@@ -32,6 +33,7 @@ export const REQUIRED_HUMAN_WRITING_SNIPPETS = [
     snippets: [
       'Scope applied: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations',
       'Style scope review is advisory and does not block merge when API docs are synced in the same commit and contract details are correct',
+      'Formal project docs use English by default',
       'No emoji in formal documentation or review summaries',
       'Documentation uses plain English and avoids AI cliches',
     ],
@@ -180,11 +182,27 @@ export const REQUIRED_STACK_DECISION_BOUNDARY_SNIPPETS = [
 ];
 export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
   {
+    path: '.instructions.md',
+    snippets: [
+      '### 1. Documentation-First Mode',
+      'Stop after documentation when the user only asked for docs.',
+      'Do not write application, firmware, or UI code',
+    ],
+  },
+  {
     path: '.agent-context/rules/architecture.md',
     snippets: [
       '## Universal SOP Baseline (Mandatory)',
       'Security and testing are non-negotiable baseline requirements.',
       'If required project context docs are missing, stop implementation and bootstrap docs before writing application code.',
+    ],
+  },
+  {
+    path: '.agent-context/prompts/init-project.md',
+    snippets: [
+      '## Documentation-First Requests',
+      'Stop after docs when the user only asked for docs.',
+      'Write formal project docs in English by default',
     ],
   },
   {
@@ -212,6 +230,8 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
     snippets: [
       'Universal SOP hard block policy:',
       'Hard block: do not write application code until docs/project-brief.md and docs/architecture-decision-record.md exist.',
+      'Documentation-first policy:',
+      'For docs-only/docs-first requests, do not write application, firmware, or UI code until the user asks or approves an implementation plan.',
       'For UI scope: if docs/DESIGN.md or docs/design-intent.json is missing, execute bootstrap-design prompt before implementing UI surfaces.',
     ],
   },
@@ -265,6 +285,9 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'docs/DESIGN.md',
       'docs/design-intent.json',
       'does not replace bootstrap loading',
+      'documentation-first requests',
+      'English by default',
+      'do not write application, firmware, or UI code',
       'Motion/Palette Decision',
       'product categories are heuristics',
       'perform live web research',

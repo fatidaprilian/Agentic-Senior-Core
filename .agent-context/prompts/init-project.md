@@ -20,6 +20,15 @@ If the user describes a project or feature, the agent must:
 4. Draft a high-level structure plan plus the docs/bootstrap artifacts that must exist before coding.
 5. Wait for user approval before scaffolding the project.
 
+## Documentation-First Requests
+
+If the user asks to create, complete, fix, or review project docs, documentation, dokumen, `docs/*`, architecture docs, flow docs, API docs, or "lengkapkan docs", treat the request as documentation-first.
+
+The agent must:
+1. Materialize or refine required project docs before implementation: `docs/project-brief.md`, `docs/architecture-decision-record.md`, `docs/flow-overview.md`, `docs/api-contract.md` when APIs, firmware endpoints, CLI commands, or web application flows exist, `docs/database-schema.md` when persistent data exists, and `docs/DESIGN.md` plus `docs/design-intent.json` for UI scope.
+2. Write formal project docs in English by default unless the user explicitly asks for another documentation language.
+3. Stop after docs when the user only asked for docs. Do not write application, firmware, or UI code until the user explicitly asks for implementation or approves the implementation plan.
+
 ## Direct Constraint Mode
 
 If the user specifies a framework, runtime, or architecture constraint, the agent must:

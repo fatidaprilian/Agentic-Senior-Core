@@ -45,6 +45,7 @@ If your host stops at this file instead of following the full chain, obey the Cr
 - For UI, UX, layout, screen, tailwind, frontend, or redesign requests: load [.agent-context/prompts/bootstrap-design.md](.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](.agent-context/rules/frontend-architecture.md) before editing code.
 - For UI scope, include a one-line Motion/Palette Decision in the Bootstrap Receipt; product categories are heuristics, not style presets.
 - For UI scope: if \`docs/DESIGN.md\` or \`docs/design-intent.json\` is missing, materialize or refine them before implementing UI changes.
+- For documentation-first requests: create or refine required project docs in English by default and do not write application, firmware, or UI code until the user asks or approves.
 - For backend, API, data, auth, error, event, queue, worker, or distributed-system requests: load the relevant global rules from [.agent-context/rules/](.agent-context/rules); do not create stack-specific governance adapters.
 - For refactor, improve, clean up, or fix requests: inspect the active rules and propose a plan before editing.
 - For new project or module requests: clarify constraints, runtime decisions, and required docs before generating code.
@@ -89,6 +90,7 @@ If your host stops at this file, follow this minimum floor:
 - For UI or redesign requests, load [.agent-context/prompts/bootstrap-design.md](../.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](../.agent-context/rules/frontend-architecture.md) before coding.
 - For UI scope, include a one-line Motion/Palette Decision in the Bootstrap Receipt; product categories are heuristics, not style presets.
 - If UI scope and \`docs/DESIGN.md\` or \`docs/design-intent.json\` is missing, materialize them before UI implementation.
+- For documentation-first requests, create or refine required project docs in English by default and do not write application, firmware, or UI code until the user asks or approves.
 - For backend/API/data/auth/event requests, load relevant global rules from [.agent-context/rules/](../.agent-context/rules) and do not create stack-specific governance adapters.
 - Memory continuity is host-dependent project memory and does not replace bootstrap loading.
 
@@ -126,6 +128,7 @@ If your host stops at this file, follow this minimum floor:
 - For UI or redesign requests, load [.agent-context/prompts/bootstrap-design.md](../.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](../.agent-context/rules/frontend-architecture.md) before coding.
 - For UI scope, include a one-line Motion/Palette Decision in the Bootstrap Receipt; product categories are heuristics, not style presets.
 - If UI scope and \`docs/DESIGN.md\` or \`docs/design-intent.json\` is missing, materialize them before UI implementation.
+- For documentation-first requests, create or refine required project docs in English by default and do not write application, firmware, or UI code until the user asks or approves.
 - For backend/API/data/auth/event requests, load relevant global rules from [.agent-context/rules/](../.agent-context/rules) and do not create stack-specific governance adapters.
 - Memory continuity is host-dependent project memory and does not replace bootstrap loading.
 
