@@ -18,6 +18,7 @@ The agent must:
 5. Treat prior-chat visuals, unrelated project memory, benchmark screenshots, and famous-product aesthetics as tainted context unless the user explicitly asks for continuity.
 6. When choosing a new UI, animation, styling, or component library, research current official docs and choose the latest stable compatible option for this project. Do not rely on offline defaults.
 7. Keep external references non-copying: extract constraints and reasoning only, never clone the surface.
+8. Record a Motion/Palette Decision before UI implementation; product categories are heuristics, not style presets, so override them with task, content density, brand intent, device/performance, and accessibility evidence.
 
 ## Creative Commitment Gate
 
@@ -144,6 +145,7 @@ For every UI task, define how major surfaces change across mobile, tablet, and d
 The JSON must stay machine-readable and project-specific. It should record:
 - the confirmed project context and assumptions to validate
 - agent-chosen visual direction, not scaffold-chosen direction
+- `motionPaletteDecision` with motion density source, required interaction states, palette autopilot risk, and whether 3D/canvas is useful or unnecessary
 - `conceptualAnchor` and how typography, spacing, morphology, motion, and responsive composition derive from it when no external research was provided
 - `derivedTokenLogic` with exact `anchorReference` traceability for color, spacing, typography, and motion tokens
 - `libraryResearchStatus` plus `libraryDecisions[]` with verified source metadata or explicit native/project-local fallbacks

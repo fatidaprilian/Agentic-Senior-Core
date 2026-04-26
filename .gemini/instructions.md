@@ -2,13 +2,14 @@
 
 Adapter Mode: thin
 Adapter Source: .instructions.md
-Canonical Snapshot SHA256: 58ca52e08f9503f55d49dfc64f800bb1124774251db4614478dbdfa618834445
+Canonical Snapshot SHA256: a49781782fac817a8a979e7937563b67826fd088af160a12cf84bdab4d038624
 
 Canonical policy source: [.instructions.md](../.instructions.md).
 
 If your host stops at this file, follow this minimum floor:
 - Read `.agent-instructions.md` next when it exists.
 - For UI or redesign requests, load [.agent-context/prompts/bootstrap-design.md](../.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](../.agent-context/rules/frontend-architecture.md) before coding.
+- For UI scope, include a one-line Motion/Palette Decision in the Bootstrap Receipt; product categories are heuristics, not style presets.
 - If UI scope and `docs/DESIGN.md` or `docs/design-intent.json` is missing, materialize them before UI implementation.
 - For backend/API/data/auth/event requests, load relevant global rules from [.agent-context/rules/](../.agent-context/rules) and do not create stack-specific governance adapters.
 - Memory continuity is host-dependent project memory and does not replace bootstrap loading.

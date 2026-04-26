@@ -1,7 +1,7 @@
 # Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
 
 Date: 2026-04-25
-Current Version: 3.0.30
+Current Version: 3.0.33
 Status: Frontend/design governance batch pushed; Phase 9 lightweight continuity and token-output folding baseline complete
 
 ---

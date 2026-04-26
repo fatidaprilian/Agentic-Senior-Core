@@ -69,6 +69,15 @@ Do not use this file to teach generic frontend basics the model already knows.
 - If live research is unavailable, mark `libraryResearchStatus` as `pending-verification`, record the library as `LIBRARY_TO_VERIFY`, and use native CSS, browser APIs, or already-present project dependencies until verification is possible.
 - Each `libraryDecisions[]` entry must have either verification metadata or a concrete `fallbackIfUnavailable`.
 
+## Contextual Motion and Palette Intelligence
+
+- Product categories are heuristics, not style presets. Use them only as a starting signal, then choose motion density from user task, content density, brand intent, device/performance budget, and accessibility needs.
+- If the category is unclear, infer from the dominant task: reading, scanning, form completion, data comparison, product inspection, storytelling, learning, play, or spatial exploration.
+- For interactive UI, map the required states before coding: default, hover, focus-visible, active/pressed, disabled, loading, empty, error, success, and transition.
+- Do not default to dark slate, cream/beige/tan, purple-blue gradients, monochrome palettes, or uniform card surfaces unless current project evidence supports them. If one of those palettes is used, document why it fits and add enough role contrast that the UI does not read as a template.
+- Use the existing motion stack first. Add animation, 3D, canvas, or scroll dependencies only when they materially improve delivery speed, interaction quality, maintainability, or product understanding.
+- Motion should be absent only for a named reason: repeated high-frequency workflow, long-form reading focus, data-density scanning, reduced-motion need, or performance constraint.
+
 ## Spatial and 3D Experience Boundary
 
 - 3D, WebGL, canvas, and immersive spatial interfaces are allowed as the primary experience when they clarify the product, strengthen the chosen anchor, or make exploration meaningfully better than a flat UI.

@@ -392,12 +392,24 @@ export async function validateInstructionAdapters(context) {
     'unreachable_files',
     'validation_plan',
   ];
+  const requiredUiReadabilitySnippets = [
+    'Motion/Palette Decision',
+    'product categories are heuristics',
+  ];
 
   for (const requiredBootstrapReceiptSnippet of requiredBootstrapReceiptSnippets) {
     if (canonicalInstructionContent.includes(requiredBootstrapReceiptSnippet)) {
       pass(`.instructions.md includes bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
     } else {
       fail(`.instructions.md is missing bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
+    }
+  }
+
+  for (const requiredUiReadabilitySnippet of requiredUiReadabilitySnippets) {
+    if (canonicalInstructionContent.includes(requiredUiReadabilitySnippet)) {
+      pass(`.instructions.md includes UI readability snippet: ${requiredUiReadabilitySnippet}`);
+    } else {
+      fail(`.instructions.md is missing UI readability snippet: ${requiredUiReadabilitySnippet}`);
     }
   }
 
@@ -425,6 +437,14 @@ export async function validateInstructionAdapters(context) {
         pass(`${thinAdapterPath} includes bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
       } else {
         fail(`${thinAdapterPath} is missing bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
+      }
+    }
+
+    for (const requiredUiReadabilitySnippet of requiredUiReadabilitySnippets) {
+      if (thinAdapterContent.includes(requiredUiReadabilitySnippet)) {
+        pass(`${thinAdapterPath} includes UI readability snippet: ${requiredUiReadabilitySnippet}`);
+      } else {
+        fail(`${thinAdapterPath} is missing UI readability snippet: ${requiredUiReadabilitySnippet}`);
       }
     }
 

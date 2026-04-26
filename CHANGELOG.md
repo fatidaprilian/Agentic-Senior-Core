@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.33 - 2026-04-27
+### Changed
+- Added a UI Motion/Palette Decision readability gate to canonical instructions, thin adapters, frontend governance, and design-intent seeds so agents must name motion density, interaction states, palette autopilot risk, and 3D/canvas fit before UI implementation.
+- Clarified that product categories are heuristics rather than style presets, keeping motion density and palette choices tied to task, content density, brand intent, performance, and accessibility evidence.
+
 ## 3.0.32 - 2026-04-26
 ### Changed
 - Added scoped Bootstrap Receipt governance so non-trivial coding, review, planning, and governance work must name loaded files, selected rules, skipped rules, unreachable files, and validation plan before implementation output.
