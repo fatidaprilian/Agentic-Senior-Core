@@ -28,3 +28,4 @@ validate_output.txt
 release-gate-report.json
 .agent-context/state/v3-purge-audit.json
 .agent-context/state/llm-judge-report.json
+.agent-context/state/active-memory.json

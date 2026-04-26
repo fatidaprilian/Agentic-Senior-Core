@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.31 - 2026-04-26
+### Changed
+- Clarified dependency governance so agents may add new packages when they create a better practical tradeoff than custom implementation.
+- Reframed dependency decisions around efficiency, delivery time, correctness, maintainability, and avoiding unnecessary in-house code instead of defaulting to dependency avoidance.
+- Synced thin instruction adapters after the canonical `.instructions.md` policy update.
+
 ## 3.0.30 - 2026-04-25
 ### Added
 - Added the `project-context` layer to root `mcp.json` so MCP metadata reflects the current 9-layer governance model.
