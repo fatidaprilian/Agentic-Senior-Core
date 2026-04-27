@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.35 - 2026-04-27
+### Changed
+- Treat fresh fullstack projects as UI-bearing during docs scaffolding so `docs/design-intent.json` is seeded, UI docs are listed in the bootstrap prompt, and `docs/api-contract.md` remains in scope.
+- Added upgrade coverage for already-installed fullstack workspaces so missing `docs/design-intent.json` is restored from the recorded onboarding project scope.
+
 ## 3.0.34 - 2026-04-27
 ### Changed
 - Clarified documentation-first governance so agents must materialize required project docs in English by default and stop before application, firmware, or UI implementation unless the user asks or approves.
