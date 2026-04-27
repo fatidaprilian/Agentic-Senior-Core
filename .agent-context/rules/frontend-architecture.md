@@ -78,15 +78,19 @@ Do not use this file to teach generic frontend basics the model already knows.
 - For interactive UI, map the required states before coding: default, hover, focus-visible, active/pressed, disabled, loading, empty, error, success, and transition.
 - Prefer visually exploratory, product-derived palettes over safe template palettes. High readability is mandatory, but readability must not be used as an excuse for cream/beige/tan, dark slate, purple-blue gradients, monochrome palettes, or uniform card surfaces.
 - Do not default to dark slate, cream/beige/tan, purple-blue gradients, monochrome palettes, or uniform card surfaces unless current project evidence supports them. If one of those palettes is used, document why it fits, add enough role contrast that the UI does not read as a template, and include at least one product-specific color behavior that would not make sense in a generic SaaS screen.
+- Treat cyber-neon terminal palettes, pale editorial cream surfaces, anonymous dark control rooms, soft glow gradients, and monochrome minimalism as autopilot risks, not reusable defaults. They are valid only when the product anchor explains their task role.
+- Palette review must answer why these colors belong to this product, which semantic roles carry task/status/data meaning, and what color behavior would not transfer cleanly to another product category.
 - Background lines, grids, scanlines, noise, glows, blobs, abstract logos, and decorative geometry are invalid when used as wallpaper. They must serve a named product function such as alignment, crop guidance, map/route orientation, timeline reading, measurement, status, or motion continuity.
 - Use the existing motion stack first. Add animation, 3D, canvas, or scroll dependencies only when they materially improve delivery speed, interaction quality, maintainability, or product understanding.
-- Motion should be absent only for a named reason: repeated high-frequency workflow, long-form reading focus, data-density scanning, reduced-motion need, or performance constraint.
+- Motion should be absent only for a named reason: repeated high-frequency workflow, long-form reading focus, data-density scanning, reduced-motion need, device budget, or performance constraint.
+- If rich motion, 3D, canvas, WebGL, scroll choreography, or animation libraries are omitted, the design contract must name the product-fit reason and the replacement interaction quality that will carry hierarchy, feedback, or memorability.
 
 ## Spatial and 3D Experience Boundary
 
 - 3D, WebGL, canvas, and immersive spatial interfaces are allowed as the primary experience when they clarify the product, strengthen the chosen anchor, or make exploration meaningfully better than a flat UI.
 - 3D must not take over the jobs of navigation, content comprehension, or decisive user actions. Core routes, text, forms, and calls to action must remain discoverable, accessible, and usable without solving the scene.
 - Treat 3D as interaction architecture, not decoration. If it is only a modern-looking background or visual stunt, reduce it to a supporting accent or remove it.
+- Do not reject 3D/canvas by habit. Reject it only after naming the product, content-density, performance, accessibility, or device constraint that makes a non-3D interaction stronger.
 - Define performance and accessibility fallbacks before implementation: reduced motion, keyboard reachable controls, readable non-canvas content, mobile budgets, loading states, and a graceful non-3D path when rendering fails.
 - When 3D is central, document its product role, interaction model, fallback path, and library/runtime decision in `docs/DESIGN.md` and `docs/design-intent.json` before coding.
 

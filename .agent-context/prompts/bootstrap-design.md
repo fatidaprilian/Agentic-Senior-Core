@@ -98,6 +98,40 @@ In reset mode:
 The UI must feel authored by a strong UI/UX designer, not assembled from default cards and safe framework chrome.
 The UI must not look like a first-pass AI template. "Readable" and "safe" are not enough when the brief calls for an authored product experience.
 
+## Creative Ambition Floor
+
+For new screens and broad redesigns, the agent must make one authored visual bet before coding. This can be a spatial structure, material logic, data treatment, motion language, typographic contrast, image system, or interaction model, but it must be visible in the first viewport and it must come from the chosen product anchor.
+
+The ambition floor is not a license to decorate. It is a check against timid AI-template output. The design may still be quiet, dense, utilitarian, or text-heavy when the product needs that, but it must have a clear authored decision that a generic scaffold would not produce.
+
+Before implementation, record:
+- one product-derived palette move that does not rely on cream, slate, purple-blue gradient, monochrome, or cyber-neon defaults
+- one signature motion, spatial, or interaction behavior that is more specific than "smooth"
+- one morphology or composition choice that breaks away from interchangeable card stacks when the product allows it
+
+If the agent chooses not to use rich motion, 3D, canvas, WebGL, scroll choreography, or an animation library, it must name the product, content-density, performance, accessibility, or device constraint that makes omission better. "Not necessary", "keep it simple", or "avoid complexity" is insufficient without that evidence.
+
+## AI Color and Template Residue Audit
+
+AI color drift happens when a screen reaches for safe defaults before it understands the product: cream editorial surfaces, dark slate dashboards, purple-blue gradients, monochrome minimalism, neon cyber terminals, soft glow atmospheres, or arbitrary bright accents with no semantic behavior.
+
+These palettes are not banned when the product truly earns them. They are banned as autopilot. If one appears, the design contract must explain why that palette belongs to the product, how each semantic role behaves, and what product-specific color behavior prevents the UI from reading like a first-pass AI template.
+
+The palette audit must answer:
+- What product evidence or anchorReference makes these colors more appropriate than safer defaults?
+- Which color roles carry task, status, data, or navigation meaning beyond surface decoration?
+- Which color choice would not transfer cleanly to a different product category?
+
+Accessibility is the floor, not the personality. Do not use contrast compliance as an excuse to flatten the palette into generic cream, slate, monochrome, or gradient safety.
+
+## Motion and 3D Courage Rule
+
+Motion, 3D, canvas, WebGL, scroll choreography, and modern animation libraries are first-class UI options when they improve product understanding, exploration, feedback, hierarchy, memorability, or confidence.
+
+The agent must not suppress motion or spatial UI because it is afraid of implementation complexity. It must choose the richest responsible interaction model the product can support, then define reduced-motion, keyboard, loading, performance, and non-3D fallbacks.
+
+When 3D/canvas is not used, document the non-use reason and the replacement interaction quality that will carry the experience. When 3D/canvas is used, document its product role, interaction model, fallback path, and library/runtime decision before coding.
+
 Do:
 - Synthesize a visual direction from the project context and explain why it fits.
 - Choose color, typography, spacing, motion, density, and component morphology dynamically from the product and audience.

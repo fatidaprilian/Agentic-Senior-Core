@@ -80,6 +80,9 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.match(bootstrapDesignPrompt, /WCAG 2\.2 AA/);
       assert.match(bootstrapDesignPrompt, /APCA/);
       assert.match(bootstrapDesignPrompt, /AI-safe UI/);
+      assert.match(bootstrapDesignPrompt, /Creative Ambition Floor/);
+      assert.match(bootstrapDesignPrompt, /AI color audit/i);
+      assert.match(bootstrapDesignPrompt, /motion, 3D, canvas, WebGL/i);
       assert.match(bootstrapDesignPrompt, /visually exploratory, product-derived palettes/);
       assert.match(bootstrapDesignPrompt, /decorative grid wallpaper/);
       assert.match(bootstrapDesignPrompt, /representation-first/i);
@@ -125,6 +128,12 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.match(designIntentSeed.aiSafeUiAudit.interchangeabilityTest, /renamed/);
       assert.match(designIntentSeed.aiSafeUiAudit.paletteExplorationRule, /visually exploratory/);
       assert.match(designIntentSeed.aiSafeUiAudit.backgroundPatternRule, /product function/);
+      assert.equal(designIntentSeed.aiSafeUiAudit.aiColorAudit.status, 'agent-must-complete-before-ui-implementation');
+      assert.ok(designIntentSeed.aiSafeUiAudit.aiColorAudit.autopilotRisks.includes('cyber-neon-terminal-default'));
+      assert.ok(designIntentSeed.aiSafeUiAudit.aiColorAudit.requiredEvidence.includes('product-specific-color-behavior-that-would-not-transfer'));
+      assert.equal(designIntentSeed.aiSafeUiAudit.motionSpatialCourageAudit.status, 'agent-must-complete-before-ui-implementation');
+      assert.match(designIntentSeed.aiSafeUiAudit.motionSpatialCourageAudit.defaultStance, /first-class options/);
+      assert.ok(designIntentSeed.aiSafeUiAudit.motionSpatialCourageAudit.requiredDecisionFields.includes('spatial-or-3d-fit'));
       assert.equal(designIntentSeed.libraryResearchStatus, 'pending-verification');
       assert.equal(designIntentSeed.libraryDecisions[0].fallbackIfUnavailable.length > 0, true);
       assert.deepEqual(designIntentSeed.tokenSystem.taxonomyOrder, ['primitive', 'semantic', 'component']);
@@ -178,8 +187,11 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('missing-conceptual-anchor-without-external-research'));
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('zero-based-redesign-kept-prior-visual-dna'));
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('ai-safe-ui-template-look'));
+      assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('ai-color-default-palette-without-product-role-behavior'));
+      assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('motion-or-3d-omitted-from-fear-without-fit-analysis'));
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('decorative-grid-or-glow-wallpaper-without-product-function'));
       assert.ok(designIntentSeed.reviewRubric.validBoldSignals.includes('three-at-a-glance-product-specific-signals'));
+      assert.ok(designIntentSeed.reviewRubric.validBoldSignals.includes('motion-or-spatial-experience-derived-from-anchor'));
       assert.equal(designIntentSeed.reviewRubric.dimensions.length >= 5, true);
       assert.equal(designIntentSeed.reviewRubric.reportingRules.mustExplainGenericity, true);
       assert.equal(designIntentSeed.contextHygiene.continuityMode, 'opt-in-only');
