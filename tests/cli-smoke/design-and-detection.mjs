@@ -79,6 +79,9 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.match(bootstrapDesignPrompt, /reduced-motion fallbacks instead of suppressing motion/i);
       assert.match(bootstrapDesignPrompt, /WCAG 2\.2 AA/);
       assert.match(bootstrapDesignPrompt, /APCA/);
+      assert.match(bootstrapDesignPrompt, /AI-safe UI/);
+      assert.match(bootstrapDesignPrompt, /visually exploratory, product-derived palettes/);
+      assert.match(bootstrapDesignPrompt, /decorative grid wallpaper/);
       assert.match(bootstrapDesignPrompt, /representation-first/i);
       assert.match(bootstrapDesignPrompt, /Refine this scaffold seed instead of discarding it\./);
       assert.match(bootstrapDesignPrompt, /replace all placeholder expressive direction with agent-chosen decisions grounded in repo evidence/i);
@@ -116,6 +119,12 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.derivedTokenLogic.anchorReference, designIntentSeed.conceptualAnchor.anchorReference);
       assert.equal(typeof designIntentSeed.derivedTokenLogic.colorDerivationSource, 'string');
       assert.equal(designIntentSeed.derivedTokenLogic.validationRule.includes('anchorReference'), true);
+      assert.equal(designIntentSeed.aiSafeUiAudit.status, 'agent-must-complete-before-ui-implementation');
+      assert.equal(designIntentSeed.aiSafeUiAudit.blockingByDefault, true);
+      assert.equal(designIntentSeed.aiSafeUiAudit.requiredProductSpecificSignals.length >= 3, true);
+      assert.match(designIntentSeed.aiSafeUiAudit.interchangeabilityTest, /renamed/);
+      assert.match(designIntentSeed.aiSafeUiAudit.paletteExplorationRule, /visually exploratory/);
+      assert.match(designIntentSeed.aiSafeUiAudit.backgroundPatternRule, /product function/);
       assert.equal(designIntentSeed.libraryResearchStatus, 'pending-verification');
       assert.equal(designIntentSeed.libraryDecisions[0].fallbackIfUnavailable.length > 0, true);
       assert.deepEqual(designIntentSeed.tokenSystem.taxonomyOrder, ['primitive', 'semantic', 'component']);
@@ -168,6 +177,9 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.equal(designIntentSeed.reviewRubric.genericityAutoFail, true);
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('missing-conceptual-anchor-without-external-research'));
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('zero-based-redesign-kept-prior-visual-dna'));
+      assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('ai-safe-ui-template-look'));
+      assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('decorative-grid-or-glow-wallpaper-without-product-function'));
+      assert.ok(designIntentSeed.reviewRubric.validBoldSignals.includes('three-at-a-glance-product-specific-signals'));
       assert.equal(designIntentSeed.reviewRubric.dimensions.length >= 5, true);
       assert.equal(designIntentSeed.reviewRubric.reportingRules.mustExplainGenericity, true);
       assert.equal(designIntentSeed.contextHygiene.continuityMode, 'opt-in-only');
@@ -176,6 +188,8 @@ export async function registerCliSmokeDesignAndDetectionTests(t) {
       assert.ok(designIntentSeed.contextHygiene.driftSignals.includes('prior-ui-visual-dna-carried-into-reset-request'));
       assert.ok(designIntentSeed.forbiddenPatterns.includes('visual-decisions-not-derived-from-conceptual-anchor'));
       assert.ok(designIntentSeed.forbiddenPatterns.includes('restyle-instead-of-recomposition'));
+      assert.ok(designIntentSeed.forbiddenPatterns.includes('ai-safe-ui-template-look'));
+      assert.ok(designIntentSeed.forbiddenPatterns.includes('interchangeable-product-renaming-test-fails'));
       assert.equal(designIntentSeed.implementation.requireViewportMutationRules, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
       assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);

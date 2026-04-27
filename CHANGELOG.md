@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.36 - 2026-04-27
+### Changed
+- Added an AI-safe UI review gate to frontend governance, generated design prompts, and `docs/design-intent.json` seeds so template-looking card/grid/logo/palette defaults are treated as genericity drift.
+
 ## 3.0.35 - 2026-04-27
 ### Changed
 - Treat fresh fullstack projects as UI-bearing during docs scaffolding so `docs/design-intent.json` is seeded, UI docs are listed in the bootstrap prompt, and `docs/api-contract.md` remains in scope.

@@ -96,10 +96,13 @@ In reset mode:
 ## Design Quality Bar
 
 The UI must feel authored by a strong UI/UX designer, not assembled from default cards and safe framework chrome.
+The UI must not look like a first-pass AI template. "Readable" and "safe" are not enough when the brief calls for an authored product experience.
 
 Do:
 - Synthesize a visual direction from the project context and explain why it fits.
 - Choose color, typography, spacing, motion, density, and component morphology dynamically from the product and audience.
+- Make at least three at-a-glance product-specific signals visible on new screens or broad redesigns: for example a data treatment, physical metaphor, motion behavior, iconography system, spatial structure, or state language that would not transfer cleanly to a different product.
+- Use visually exploratory, product-derived palettes while preserving WCAG contrast and status clarity. The design may be quiet, but it must not hide inside safe cream, slate, monochrome, or gradient defaults.
 - Use modern, expressive interaction and motion as part of the core design language, especially when it improves hierarchy, feedback, delight, confidence, or memorability.
 - Use 3D or spatial/canvas experiences as primary UI only when they improve product understanding or exploration while preserving navigation, content clarity, user actions, performance, accessibility, and non-3D fallbacks.
 - Keep frontend code clean, componentized, accessible, and easy to maintain.
@@ -107,7 +110,9 @@ Do:
 - Make design decisions explicit before coding, then implement consistently.
 
 Do not:
+- Ship AI-safe UI: predictable card stacks, rounded template panels, generic abstract marks, decorative grid wallpaper, beige or slate safety palettes, soft glow backgrounds, or first-output composition with only local copy swapped in.
 - Default to generic SaaS heroes, balanced card grids, soft startup gradients, or dashboard chrome without product rationale.
+- Use background lines, grids, scanlines, noise, glows, blobs, logos, or geometric decoration unless each motif has a named product function such as alignment, measurement, navigation, crop guidance, timeline reading, status, or motion continuity.
 - Let desktop, tablet, and mobile be the same design merely scaled down.
 - Let heading, body, data, and metadata collapse into one safe typographic treatment without rationale.
 - Reuse colors, layout shapes, or motion signatures from unrelated memory.
@@ -145,6 +150,7 @@ For every UI task, define how major surfaces change across mobile, tablet, and d
 The JSON must stay machine-readable and project-specific. It should record:
 - the confirmed project context and assumptions to validate
 - agent-chosen visual direction, not scaffold-chosen direction
+- an `aiSafeUiAudit` or equivalent review signal that states why the screen is not interchangeable with a generic AI-generated template
 - `motionPaletteDecision` with motion density source, required interaction states, palette autopilot risk, and whether 3D/canvas is useful or unnecessary
 - `conceptualAnchor` and how typography, spacing, morphology, motion, and responsive composition derive from it when no external research was provided
 - `derivedTokenLogic` with exact `anchorReference` traceability for color, spacing, typography, and motion tokens
@@ -166,6 +172,8 @@ The review must block or flag:
 - inaccessible contrast, focus, target size, keyboard, auth, or dynamic-status behavior
 - scale-only responsive behavior
 - unresearched dependency choices
+- AI-safe UI drift: interchangeable card grids, safe cream/slate/monochrome palettes, generic abstract logos, decorative grid wallpaper, or a screen that can be renamed to another product without visual changes
+- palette choices that use readability as a reason to stay in safe defaults instead of deriving a richer but accessible palette from the product
 - default component-kit styling without product rationale
 - missing or disconnected `conceptualAnchor` when no external design research was provided
 - visual direction copied from unrelated memory or external references

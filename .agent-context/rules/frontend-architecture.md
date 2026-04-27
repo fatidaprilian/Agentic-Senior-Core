@@ -47,10 +47,12 @@ Do not use this file to teach generic frontend basics the model already knows.
 ## Anti-Generic UI Boundaries
 
 - Do not default to interchangeable dashboard chrome, balanced card grids, centered marketing shells, or generic component-kit surfaces unless the product explicitly needs them.
+- Do not ship "AI-safe UI": predictable card stacks, rounded rectangles, generic abstract logos, decorative grids, beige or slate safety palettes, soft glow backgrounds, and first-output template composition are review findings when they are not directly required by the product.
 - Do not let repeated surfaces share the same visual treatment by habit. Repetition is allowed only when the contract explains the product reason.
 - Do not use default framework button and input treatment as the final UI language.
 - Do not let heading, body, and data/meta roles collapse into one safe typographic family without explicit rationale.
-- At least one visual, interaction, content, motion, or state behavior must read as project-specific at a glance.
+- At least three visual, interaction, content, motion, or state behaviors must read as project-specific at a glance for new screens or broad redesigns. For a narrow component edit, at least one touched behavior must preserve or improve project specificity.
+- If the UI could be renamed to another product category without changing its composition, palette, iconography, and motion language, treat that as genericity drift and revise before implementation is considered complete.
 
 ## Dynamic Avant-Garde Anchor Boundary
 
@@ -74,7 +76,9 @@ Do not use this file to teach generic frontend basics the model already knows.
 - Product categories are heuristics, not style presets. Use them only as a starting signal, then choose motion density from user task, content density, brand intent, device/performance budget, and accessibility needs.
 - If the category is unclear, infer from the dominant task: reading, scanning, form completion, data comparison, product inspection, storytelling, learning, play, or spatial exploration.
 - For interactive UI, map the required states before coding: default, hover, focus-visible, active/pressed, disabled, loading, empty, error, success, and transition.
-- Do not default to dark slate, cream/beige/tan, purple-blue gradients, monochrome palettes, or uniform card surfaces unless current project evidence supports them. If one of those palettes is used, document why it fits and add enough role contrast that the UI does not read as a template.
+- Prefer visually exploratory, product-derived palettes over safe template palettes. High readability is mandatory, but readability must not be used as an excuse for cream/beige/tan, dark slate, purple-blue gradients, monochrome palettes, or uniform card surfaces.
+- Do not default to dark slate, cream/beige/tan, purple-blue gradients, monochrome palettes, or uniform card surfaces unless current project evidence supports them. If one of those palettes is used, document why it fits, add enough role contrast that the UI does not read as a template, and include at least one product-specific color behavior that would not make sense in a generic SaaS screen.
+- Background lines, grids, scanlines, noise, glows, blobs, abstract logos, and decorative geometry are invalid when used as wallpaper. They must serve a named product function such as alignment, crop guidance, map/route orientation, timeline reading, measurement, status, or motion continuity.
 - Use the existing motion stack first. Add animation, 3D, canvas, or scroll dependencies only when they materially improve delivery speed, interaction quality, maintainability, or product understanding.
 - Motion should be absent only for a named reason: repeated high-frequency workflow, long-form reading focus, data-density scanning, reduced-motion need, or performance constraint.
 
