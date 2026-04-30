@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.40 - 2026-04-30
+### Changed
+- Added a mandatory complexity budget rule so agents prefer fewer moving parts only when behavior, safety, clarity, and maintainability stay intact.
+- Added the complexity budget to the architecture rule, refactor prompt, and PR checklist.
+
+### Fixed
+- Updated the bump script so legacy root adapter release metadata stays aligned with package versions.
+
 ## 3.0.39 - 2026-04-30
 ### Changed
 - Refreshed repo-local agent context in `.agent-context/state/architecture-map.md`, `.agent-context/state/dependency-map.md`, and `onboarding-report.json`.

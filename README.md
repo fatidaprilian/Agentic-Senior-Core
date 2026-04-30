@@ -10,12 +10,12 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.39 (2026-04-30).
+Latest release: 3.0.40 (2026-04-30).
 
-Highlights in 3.0.39:
-- Post-release hygiene removes stale V2 evidence-bundle and Bun lockfile drift surfaces.
-- Package and lockfile validation now blocks version drift and accidental dual package-manager state.
-- Repo-local agent context now documents frontend/backend governance boundaries and anti-grid wallpaper handling.
+Highlights in 3.0.40:
+- Adds a mandatory complexity budget so agents choose fewer moving parts only when quality stays intact.
+- Refactor guidance now requires a final simplification pass before completion.
+- Release tooling keeps legacy root adapter version metadata aligned with package bumps.
 
 </div>
 

@@ -1,7 +1,7 @@
 # Agentic-Senior-Core Roadmap Backlog
 
 Date: 2026-04-30
-Current Version: 3.0.39
+Current Version: 3.0.40
 Status: Phase 10 instruction-footprint simplification, Phase 11 cleanup/refactor audit, and Phase 12 post-release hygiene cleanup are complete.
 
 ---
@@ -376,5 +376,5 @@ Non-negotiables:
 Phase 10, Phase 11, and Phase 12 are complete locally.
 Next release action:
 1. Run the final release validation gate.
-2. Commit and push the 3.0.39 cleanup release.
+2. Commit and push the 3.0.40 complexity-budget release.
 3. Start the next follow-up slice from earlier deferred phases only after this cleanup bundle is released.
