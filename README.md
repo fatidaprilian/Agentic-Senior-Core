@@ -10,12 +10,12 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.38 (2026-04-30).
+Latest release: 3.0.39 (2026-04-30).
 
-Highlights in 3.0.38:
-- Phase 11 cleanup removes stale skill-marketplace artifacts and generated report snapshots from the shipped package.
-- Large init, utility, design-contract, and design/detection smoke surfaces are split into smaller modules.
-- UI governance keeps anti-generic drift checks while preserving product-derived, non-prescriptive palette decisions.
+Highlights in 3.0.39:
+- Post-release hygiene removes stale V2 evidence-bundle and Bun lockfile drift surfaces.
+- Package and lockfile validation now blocks version drift and accidental dual package-manager state.
+- Repo-local agent context now documents frontend/backend governance boundaries and anti-grid wallpaper handling.
 
 </div>
 
@@ -34,6 +34,7 @@ One command to initialize rules, checklists, thin discovery adapters, and a comp
 > **See [docs/deep-dive.md](docs/deep-dive.md) and [docs/roadmap.md](docs/roadmap.md) for advanced configuration, planning mode, snapshot, and realtime options.**
 
 - This command writes `.agent-context/state/v3-purge-audit.json` and reports whether static directory deletion is safe.
+- Package scope is `@ryuenn3123`; the GitHub repository owner is `fatidaprilian`.
 
 ---
 

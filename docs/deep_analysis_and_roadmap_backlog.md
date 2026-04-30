@@ -1,8 +1,8 @@
 # Agentic-Senior-Core Roadmap Backlog
 
 Date: 2026-04-30
-Current Version: 3.0.38
-Status: Phase 10 instruction-footprint simplification is complete. Phase 11 cleanup/refactor audit is complete.
+Current Version: 3.0.39
+Status: Phase 10 instruction-footprint simplification, Phase 11 cleanup/refactor audit, and Phase 12 post-release hygiene cleanup are complete.
 
 ---
 
@@ -163,7 +163,7 @@ Done:
 
 ### Phase 10 - Instruction Footprint Simplification
 
-Status: `[~]`
+Status: `[x]`
 
 Goal:
 - Keep downstream project roots small while AI tools still load the right rules through proven entrypoints.
@@ -211,7 +211,7 @@ Done when:
 
 ### Phase 11 - Repository Hygiene and Bias-Resistant Refactor
 
-Status: `[~]`
+Status: `[x]`
 
 Goal:
 - Clean stale V2/V3-transition artifacts, shrink high-risk monolith files, and reduce prompt/code surfaces that can bias agents toward obsolete skill-marketplace thinking or generic UI output.
@@ -300,6 +300,29 @@ Validation plan:
 - [x] Rerun `npm test`.
 - [x] Run `git diff --check` and resolve whitespace/line-ending noise before release.
 
+### Phase 12 - Post-Release Hygiene Cleanup
+
+Status: `[x]`
+
+Goal:
+- Close the small cleanup gaps found after the Phase 11 release without expanding the instruction surface or adding new user-facing modes.
+
+Done:
+- [x] Removed stale V2 evidence-bundle validation.
+- [x] Removed the obsolete `bun.lock` and ignored Bun lockfiles while npm remains the package manager source of truth.
+- [x] Synced `package-lock.json` with the release version.
+- [x] Updated `scripts/bump-version.mjs` so future bumps keep `package-lock.json` aligned.
+- [x] Added validation for lockfile drift and accidental `bun.lock` reintroduction.
+- [x] Removed unused `resolveScopeBlueprintCandidates`.
+- [x] Consolidated upgrade setup constraints through `init-detection-flow.mjs`.
+- [x] Removed internal scaffolder helpers from the public barrel export.
+- [x] Refreshed `.agent-context/state/onboarding-report.json` to the current CLI version.
+- [x] Replaced placeholder architecture/dependency state maps with repo-specific agent context.
+- [x] Clarified frontend governance: grid or line backgrounds are invalid filler unless tied to a product function.
+
+Decision:
+- No further frontend/backend rule reduction is needed in this slice. Current loading is scope-resolved, backend rules remain global and stack-agnostic, and frontend rules unlock motion/3D/canvas while blocking generic template drift.
+
 ---
 
 ## Deferred
@@ -350,8 +373,8 @@ Non-negotiables:
 
 ## Next Action
 
-Phase 10 and Phase 11 are complete locally.
+Phase 10, Phase 11, and Phase 12 are complete locally.
 Next release action:
-1. Review the final diff for the Phase 10 + current Phase 11 bundle before commit.
-2. If releasing now, bump version, run the final release validation gate, commit, and push.
+1. Run the final release validation gate.
+2. Commit and push the 3.0.39 cleanup release.
 3. Start the next follow-up slice from earlier deferred phases only after this cleanup bundle is released.

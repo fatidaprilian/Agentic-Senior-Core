@@ -95,6 +95,8 @@ If all three are "yes", it belongs here.
 
 ## Local Development
 
+The npm package is published under `@ryuenn3123`, while the GitHub repository is hosted under `fatidaprilian`.
+
 ```bash
 # Clone
 git clone https://github.com/fatidaprilian/Agentic-Senior-Core.git

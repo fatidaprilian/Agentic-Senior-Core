@@ -1,6 +1,6 @@
 {
-  "cliVersion": "3.0.19",
-  "generatedAt": "2026-04-24T06:02:48.306Z",
+  "cliVersion": "3.0.39",
+  "generatedAt": "2026-04-30T06:35:59.946Z",
   "operationMode": "upgrade",
   "selectedProfile": "beginner",
   "projectScope": null,
@@ -23,13 +23,14 @@
   "ruleLoadingPolicy": {
     "canonicalSource": ".instructions.md",
     "stackLoadingMode": "lazy",
+    "domainRuleLoadingMode": "lazy",
     "loadedOnDemand": true,
     "primaryStack": null,
     "additionalStacks": [],
     "agentDecisionRequired": true
   },
   "ciGuardrailsEnabled": true,
-  "setupDurationMs": 127,
+  "setupDurationMs": 117,
   "runtimeEnvironment": null,
   "tokenOptimization": null,
   "memoryContinuity": null,
@@ -57,17 +58,30 @@
       "tsconfig.json"
     ],
     "detectionTransparency": {
-      "declaredAt": "2026-04-24T06:02:48.218Z",
+      "declaredAt": "2026-04-30T06:35:59.869Z",
       "declarationType": "existing-project",
       "declarationShown": true,
       "detectionSummary": "This folder looks like Typescript with high confidence based on package.json, tsconfig.json. Confidence gap: 0.94.",
       "activeRulesSummary": {
         "canonicalSource": ".instructions.md",
-        "compiledEntrypoints": [
+        "compiledRulebook": ".agent-instructions.md",
+        "legacyThinAdapters": [
           ".cursorrules",
-          ".windsurfrules"
+          ".windsurfrules",
+          ".clauderc"
+        ],
+        "generatedBridgeAdapters": [
+          "AGENTS.md",
+          "CLAUDE.md",
+          "GEMINI.md",
+          ".cursor/rules/agentic-senior-core.mdc",
+          ".windsurf/rules/agentic-senior-core.md",
+          ".github/copilot-instructions.md",
+          ".github/instructions/agentic-senior-core.instructions.md",
+          ".gemini/instructions.md"
         ],
         "stackLoadingMode": "lazy",
+        "domainRuleLoadingMode": "lazy",
         "selectedProfile": "beginner",
         "selectedProfileDisplayName": "Beginner",
         "blockingSeverities": [

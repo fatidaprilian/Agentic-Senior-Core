@@ -42,6 +42,8 @@ const ROOT_DIR = resolve(dirname(SCRIPT_FILE_PATH), '..');
 const AGENT_CONTEXT_DIR = join(ROOT_DIR, '.agent-context');
 const CANONICAL_INSTRUCTION_PATH = join(ROOT_DIR, '.instructions.md');
 const PACKAGE_JSON_PATH = join(ROOT_DIR, 'package.json');
+const PACKAGE_LOCK_PATH = join(ROOT_DIR, 'package-lock.json');
+const BUN_LOCK_PATH = join(ROOT_DIR, 'bun.lock');
 const CHANGELOG_PATH = join(ROOT_DIR, 'CHANGELOG.md');
 const README_PATH = join(ROOT_DIR, 'README.md');
 const POLICY_FILE_PATH = join(ROOT_DIR, '.agent-context', 'policies', 'llm-judge-threshold.json');
@@ -473,6 +475,12 @@ async function validatePackageMetadata() {
   } else {
     fail('package.json must publish .instructions.md so init and upgrade can copy the canonical root instructions file');
   }
+
+  if (await fileExists(BUN_LOCK_PATH)) {
+    fail('bun.lock must not be tracked while npm is the package manager source of truth');
+  } else {
+    pass('No bun.lock drift file present');
+  }
 }
 
 async function validatePolicyFile() {
@@ -527,6 +535,18 @@ async function validateVersionConsistency() {
     pass(`CHANGELOG.md contains release entry for ${packageVersion}`);
   } else {
     fail(`CHANGELOG.md is missing a ## ${packageVersion} heading`);
+  }
+
+  if (await fileExists(PACKAGE_LOCK_PATH)) {
+    const packageLock = JSON.parse(await readTextFile(PACKAGE_LOCK_PATH));
+    const rootLockVersion = packageLock.packages?.['']?.version;
+    if (packageLock.version === packageVersion && rootLockVersion === packageVersion) {
+      pass(`package-lock.json matches package version ${packageVersion}`);
+    } else {
+      fail(`package-lock.json version drift: expected ${packageVersion}, found ${packageLock.version || 'missing'} / ${rootLockVersion || 'missing'}`);
+    }
+  } else {
+    fail('package-lock.json is required for npm release consistency');
   }
 
   for (const generatedRuleFileName of GENERATED_RULE_FILES) {

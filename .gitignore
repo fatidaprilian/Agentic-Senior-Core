@@ -11,6 +11,7 @@ Desktop.ini
 
 # Node (for scripts/)
 node_modules/
+bun.lock
 bun.lockb
 
 # Logs
@@ -23,6 +24,9 @@ bun.lockb
 .benchmarks/
 
 # Local generated artifacts
+.agent-instructions.md
+.clauderc
+.zed/
 test_output.txt
 validate_output.txt
 release-gate-report.json

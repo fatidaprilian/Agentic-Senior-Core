@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.39 - 2026-04-30
+### Changed
+- Refreshed repo-local agent context in `.agent-context/state/architecture-map.md`, `.agent-context/state/dependency-map.md`, and `onboarding-report.json`.
+- Consolidated upgrade setup constraints through the shared init-detection helper and removed an unused init-selection export.
+- Clarified that grid or line backgrounds are review findings unless they serve a named product function.
+- Documented the GitHub owner versus npm package scope to reduce contributor confusion.
+
+### Fixed
+- Synced `package-lock.json` with the package release version and taught `scripts/bump-version.mjs` to keep it aligned.
+- Added validation that blocks npm lockfile drift and accidental `bun.lock` package-manager ambiguity.
+- Removed stale V2 evidence-bundle validation and the obsolete Bun lockfile.
+
 ## 3.0.38 - 2026-04-30
 ### Changed
 - Started Phase 11 repository hygiene by narrowing the package allowlist so volatile local state is not published accidentally.

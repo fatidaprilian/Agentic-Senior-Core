@@ -57,7 +57,7 @@ Before UI code, record:
 - one morphology or composition choice that avoids interchangeable card stacks when the product allows it
 - at least three at-a-glance product-specific signals for new screens or broad redesigns
 
-Do not ship AI-safe UI. Record exact drift signals in `reviewRubric`; at minimum reject decorative grid wallpaper, soft glow backgrounds, generic abstract marks, and first-output composition with only local copy swapped in when they have no product function.
+Do not ship AI-safe UI. Record exact drift signals in `reviewRubric`; at minimum reject decorative grid wallpaper, default line backgrounds, soft glow backgrounds, generic abstract marks, and first-output composition with only local copy swapped in when they have no product function.
 
 ## AI Color and Template Residue Audit
 
@@ -171,6 +171,7 @@ Block or flag:
 - scale-only responsive behavior
 - default component-kit styling without product rationale
 - nonfunctional background effects, including decorative grid wallpaper
+- grid or line backgrounds used as filler instead of product function
 - palette choices that use readability as an excuse for safe defaults
 - visual direction copied from unrelated memory or external references
 - genericity findings that cannot name the exact drift signal

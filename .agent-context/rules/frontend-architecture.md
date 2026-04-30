@@ -43,7 +43,7 @@ For new screens or broad redesigns, make at least three at-a-glance product-spec
 
 Use the rename test: if the UI can be renamed to another product category without changing composition, palette, iconography, and motion language, revise before implementation is considered complete.
 
-Background lines, grids, scanlines, noise, glows, blobs, abstract logos, and decorative geometry are invalid as wallpaper. Use them only for a named product function such as alignment, crop guidance, map/route orientation, timeline reading, measurement, status, or motion continuity.
+Background lines, grids, scanlines, noise, glows, blobs, abstract logos, and decorative geometry are invalid as wallpaper. Do not use grid or line backgrounds as first-output filler. Use them only for a named product function such as alignment, crop guidance, map/route orientation, timeline reading, measurement, status, or motion continuity.
 
 ## Dynamic Anchor Gate
 
