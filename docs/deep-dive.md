@@ -1,12 +1,15 @@
 # Deep Dive: Dynamic Rules Engine (Governance Engine)
 
-Agentic-Senior-Core operates as a **Dynamic Rules Engine (Governance Engine)** that merges generalized best practices with project-specific structural definitions into files agents naturally read (like `.cursorrules`, `.windsurfrules`, or `AGENTS.md`).
+Agentic-Senior-Core operates as a **Dynamic Rules Engine (Governance Engine)** that merges generalized best practices with project-specific structural definitions into files agents naturally read.
+
+The canonical source is `.instructions.md`. Init and upgrade generate `.agent-instructions.md` as the compiled project rulebook. Tool-specific entrypoints such as `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, Cursor rules, Windsurf rules, Copilot instructions, and Gemini instructions stay thin.
 
 ## The Compiler Workflow
 When you run the init command through `npm exec --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior-core init` or `npx @ryuenn3123/agentic-senior-core init` after npm publish, the delivery CLI:
 1. **Scans** your working directory heuristically out-of-the-box (looking for `package.json`, `pom.xml`, etc.).
 2. **Prompts** you to confirm the Stack and Blueprint only when repository evidence is weak.
-3. **Compiles** modular knowledge components into dense rule files injected directly into your project.
+3. **Compiles** modular knowledge components into `.agent-instructions.md`.
+4. **Writes** thin discovery adapters for supported tools and legacy root compatibility.
 
 ### Distribution Modes
 - **Pre-publish mode**: use GitHub source execution (`npm exec --package=github:...`).
@@ -16,7 +19,7 @@ When you run the init command through `npm exec --package=github:fatidaprilian/A
 ### Upgrade Assistant (V1.6)
 - The CLI now includes `upgrade` mode for existing repositories.
 - `agentic-senior-core upgrade --dry-run` previews migration impact without writing files.
-- Apply mode rewrites the compiled instruction surface, refreshes policy thresholds, and records onboarding telemetry with `operationMode: upgrade`.
+- Apply mode rewrites `.agent-instructions.md`, refreshes thin adapters, refreshes policy thresholds, and records onboarding telemetry with `operationMode: upgrade`.
 - Upgrade previews include line-count delta and selected stack/blueprint/CI state before write.
 
 ### Component Breakdown

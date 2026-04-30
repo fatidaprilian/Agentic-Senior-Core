@@ -408,8 +408,8 @@ test('Operations Tests', async (t) => {
     assert.equal(weeklyGovernanceReport.reportName, 'weekly-governance-report');
     assert.equal(typeof weeklyGovernanceReport.releaseReadiness.isReady, 'boolean');
     assert.ok(Array.isArray(weeklyGovernanceReport.releaseReadiness.blockers));
-    assert.equal(typeof weeklyGovernanceReport.skillTrust.allRequiredVerified, 'boolean');
-    assert.ok(Array.isArray(weeklyGovernanceReport.skillTrust.domains));
+    assert.equal(typeof weeklyGovernanceReport.governanceSurfaceTrust.allRequiredVerified, 'boolean');
+    assert.ok(Array.isArray(weeklyGovernanceReport.governanceSurfaceTrust.domains));
     assert.equal(weeklyGovernanceReport.backendGovernance.status, 'verified');
     assert.ok(Array.isArray(weeklyGovernanceReport.backendGovernance.coverage));
     assert.ok(weeklyGovernanceReport.backendGovernance.coverage.length >= 8);

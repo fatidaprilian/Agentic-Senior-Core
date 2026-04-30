@@ -7,9 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.38 - 2026-04-30
+### Changed
+- Started Phase 11 repository hygiene by narrowing the package allowlist so volatile local state is not published accidentally.
+- Renamed weekly governance trust output from skill-oriented terms to governance-surface terms.
+- Split design-intent contract validation out of the large `design-contract.mjs` scaffold entrypoint while preserving the existing public exports.
+- Split the broad design/detection CLI smoke suite into focused sub-suites for design seeds, UI detection, upgrade design seeding, and optimization defaults.
+- Split filesystem helpers, CLI prompt helpers, and managed-surface analysis out of `utils.mjs` while preserving the existing utility entrypoint.
+- Split init runtime, project-context, design seed, and setup decision helpers out of `lib/cli/commands/init.mjs` while preserving the existing `runInitCommand` entrypoint.
+- Added `npm run clean:local` for explicit cleanup of ignored local reports, backups, benchmarks, and active-memory state.
+- Classified `.agent-context/state` artifacts and converted regenerated benchmark, trend, weekly governance, quality, token, and memory-continuity reports into ignored local outputs.
+- Reduced duplicated anti-generic UI wording by centralizing design-contract drift signals and shortening active prompt/rule prose without making palette guidance color-prescriptive.
+
+### Removed
+- Removed stale skill marketplace artifacts: `input.txt`, `.agent-context/marketplace/trust-tiers.json`, `docs/skill-incorporation-playbook.md`, and the orphaned skill compatibility helper.
+
 ## 3.0.37 - 2026-04-27
 ### Changed
 - Strengthened frontend design governance with AI color and motion/spatial courage audits so agents must reject template-looking palettes, explain product-derived color behavior, and justify any omission of rich motion, 3D, canvas, or spatial interaction.
+- Compact canonical instructions and design governance into shorter imperative gates with mechanical line-count checks.
+- Added generated thin adapters for Claude, Gemini, Cursor, Windsurf, and GitHub path-specific instructions.
+- Converted legacy root `.cursorrules`, `.windsurfrules`, and generated `.clauderc` output into thin compatibility adapters that point to `.agent-instructions.md`.
+- Kept `.agent-instructions.md` as the only compiled rulebook and preserved user-owned instruction entrypoints during upgrade.
 
 ## 3.0.36 - 2026-04-27
 ### Changed

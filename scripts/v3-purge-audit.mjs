@@ -27,9 +27,14 @@ const NON_BLOCKING_REFERENCE_FILE_PATHS = new Set([
 
 const RUNTIME_BLOCKING_PATH_PATTERNS = [
   /^AGENTS\.md$/,
+  /^CLAUDE\.md$/,
+  /^GEMINI\.md$/,
   /^\.instructions\.md$/,
   /^\.github\/copilot-instructions\.md$/,
+  /^\.github\/instructions\/agentic-senior-core\.instructions\.md$/,
   /^\.gemini\/instructions\.md$/,
+  /^\.cursor\/rules\/agentic-senior-core\.mdc$/,
+  /^\.windsurf\/rules\/agentic-senior-core\.md$/,
   /^mcp\.json$/,
   /^lib\//,
   /^scripts\//,

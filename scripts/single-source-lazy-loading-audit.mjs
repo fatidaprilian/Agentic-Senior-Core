@@ -22,8 +22,13 @@ const REPOSITORY_ROOT = resolve(__dirname, '..');
 const CANONICAL_SOURCE_PATH = '.instructions.md';
 const ADAPTER_PATHS = [
   'AGENTS.md',
+  'CLAUDE.md',
+  'GEMINI.md',
   '.github/copilot-instructions.md',
+  '.github/instructions/agentic-senior-core.instructions.md',
   '.gemini/instructions.md',
+  '.cursor/rules/agentic-senior-core.mdc',
+  '.windsurf/rules/agentic-senior-core.md',
 ];
 const COMPILER_PATH = 'lib/cli/compiler.mjs';
 const ONBOARDING_REPORT_PATH = '.agent-context/state/onboarding-report.json';
@@ -31,6 +36,11 @@ const ARCHITECTURE_RULE_PATH = '.agent-context/rules/architecture.md';
 const PR_CHECKLIST_PATH = '.agent-context/review-checklists/pr-checklist.md';
 const REVIEW_PROMPT_PATH = '.agent-context/prompts/review-code.md';
 const COMPILED_RULE_PATHS = ['.cursorrules', '.windsurfrules'];
+const REQUIRED_LEGACY_ROOT_ADAPTER_SNIPPETS = [
+  'Adapter Mode: legacy-thin',
+  'Adapter Source: .agent-instructions.md',
+  'Canonical baseline: .instructions.md',
+];
 
 const DEFAULT_WORKFLOW = 'standard';
 const SUPPORTED_WORKFLOWS = new Set([
@@ -432,6 +442,20 @@ function runAudit() {
 
     const stackMentionCount = countStackMentions(compiledRuleContent);
     const isEagerLoading = stackMentionCount > MAX_EAGER_STACK_MENTIONS;
+    const missingLegacyAdapterSnippets = REQUIRED_LEGACY_ROOT_ADAPTER_SNIPPETS
+      .filter((requiredSnippet) => !compiledRuleContent.includes(requiredSnippet));
+
+    if (missingLegacyAdapterSnippets.length > 0) {
+      failures.push(`${compiledRulePath} must stay a legacy thin adapter`);
+      pushResult(
+        results,
+        false,
+        'legacy-root-adapter-thin-mode',
+        `${compiledRulePath} is missing: ${missingLegacyAdapterSnippets.join(', ')}`
+      );
+    } else {
+      pushResult(results, true, 'legacy-root-adapter-thin-mode', `${compiledRulePath} stays legacy-thin`);
+    }
 
     if (isEagerLoading) {
       eagerLoadingDetected = true;

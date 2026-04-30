@@ -1,5 +1,7 @@
 # Product Roadmap
 
+Historical note: This file preserves older release-track context. Use `docs/deep_analysis_and_roadmap_backlog.md` for the active next-work backlog and `.instructions.md` plus `.agent-context/` for current governance policy.
+
 This document tracks the product delivery plan and current execution reality.
 
 ## V1.6 (2026) — Reliability and Team Workflow

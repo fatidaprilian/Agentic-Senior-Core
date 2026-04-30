@@ -1,5 +1,7 @@
 # Benchmark and Stack Reference
 
+Historical note: This file is benchmark background. Treat it as evidence history, not active governance policy. Current agent behavior is controlled by `.instructions.md`, `.agent-context/`, and the active roadmap backlog.
+
 This document contains detailed benchmark, stack fit, and comparison data moved out of README as part of V3.0-001 onboarding compression.
 
 ## Token Efficiency Benchmark Snapshot

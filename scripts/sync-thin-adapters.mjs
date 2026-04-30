@@ -11,9 +11,9 @@
  * - node scripts/sync-thin-adapters.mjs --check
  */
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, posix, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
@@ -26,144 +26,110 @@ function normalizeLineEndings(content) {
   return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 }
 
-function buildAgentsAdapter(canonicalHash) {
-  return `# AGENTS.md - Thin Adapter
-
-Adapter Mode: thin
-Adapter Source: .instructions.md
-Canonical Snapshot SHA256: ${canonicalHash}
-
-This file is an adapter entrypoint for agent discovery.
-The canonical policy source is [.instructions.md](.instructions.md).
-
-If your host stops at this file instead of following the full chain, obey the Critical Bootstrap Floor below before coding.
-
-## Critical Bootstrap Floor
-
-- If \`.agent-instructions.md\` exists, prefer it immediately after this file because it is the compiled project-specific snapshot.
-- Memory continuity does not replace bootstrap loading. It is host-dependent project memory, not a guarantee that instructions were reloaded for this session.
-- For UI, UX, layout, screen, tailwind, frontend, or redesign requests: load [.agent-context/prompts/bootstrap-design.md](.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](.agent-context/rules/frontend-architecture.md) before editing code.
-- For UI scope, include a one-line Motion/Palette Decision in the Bootstrap Receipt; product categories are heuristics, not style presets.
-- For UI scope: if \`docs/DESIGN.md\` or \`docs/design-intent.json\` is missing, materialize or refine them before implementing UI changes.
-- For documentation-first requests: create or refine required project docs in English by default and do not write application, firmware, or UI code until the user asks or approves.
-- For backend, API, data, auth, error, event, queue, worker, or distributed-system requests: load the relevant global rules from [.agent-context/rules/](.agent-context/rules); do not create stack-specific governance adapters.
-- For refactor, improve, clean up, or fix requests: inspect the active rules and propose a plan before editing.
-- For new project or module requests: clarify constraints, runtime decisions, and required docs before generating code.
-- For ecosystem, framework, dependency, or Docker claims: perform live web research instead of relying on stale local heuristics.
-
-## Mandatory Bootstrap Chain
-
-1. Load [.instructions.md](.instructions.md) first as the canonical baseline.
-2. If \`.agent-instructions.md\` exists, read it next as the compiled project-specific snapshot.
-3. Read baseline governance from [.agent-context/rules/](.agent-context/rules).
-4. Apply request templates from [.agent-context/prompts/](.agent-context/prompts).
-5. Enforce review contracts from [.agent-context/review-checklists/](.agent-context/review-checklists).
-6. Read change-risk maps and continuity state from [.agent-context/state/](.agent-context/state).
-7. Enforce policy thresholds from [.agent-context/policies/](.agent-context/policies).
-8. Use runtime evidence, structure, and live research signals from project context docs.
-
-## Bootstrap Receipt
-
-For non-trivial coding, review, planning, or governance work, produce a short Bootstrap Receipt before implementation output: \`loaded_files\`, \`selected_rules\`, \`skipped_rules\`, \`unreachable_files\`, and \`validation_plan\`.
-
-## Trigger Rules
-
-- New project or module requests: propose scope, constraints, and required docs first, then wait for approval.
-- Refactor or fix requests: propose plan first, then execute safely.
-- Completion: run [.agent-context/review-checklists/pr-checklist.md](.agent-context/review-checklists/pr-checklist.md) before declaring done.
-
-If this adapter drifts from canonical behavior, refresh from [.instructions.md](.instructions.md) and update the hash metadata.
-`;
+function buildAdapterLink(adapterRelativePath, targetRelativePath) {
+  const adapterDirectoryPath = posix.dirname(adapterRelativePath);
+  const relativePath = posix.relative(adapterDirectoryPath === '.' ? '' : adapterDirectoryPath, targetRelativePath);
+  return relativePath.startsWith('.') ? relativePath : `./${relativePath}`;
 }
 
-function buildCopilotAdapter(canonicalHash) {
-  return `# GitHub Copilot Instructions - Thin Adapter
+function buildThinAdapter({
+  relativePath,
+  title,
+  canonicalHash,
+  frontmatter = '',
+}) {
+  const canonicalLink = buildAdapterLink(relativePath, '.instructions.md');
+  const rulesLink = buildAdapterLink(relativePath, '.agent-context/rules');
+  const promptsLink = buildAdapterLink(relativePath, '.agent-context/prompts');
+  const designPromptLink = buildAdapterLink(relativePath, '.agent-context/prompts/bootstrap-design.md');
+  const frontendRuleLink = buildAdapterLink(relativePath, '.agent-context/rules/frontend-architecture.md');
+  const checklistLink = buildAdapterLink(relativePath, '.agent-context/review-checklists/pr-checklist.md');
+  const stateLink = buildAdapterLink(relativePath, '.agent-context/state');
+  const policiesLink = buildAdapterLink(relativePath, '.agent-context/policies');
+  const adapterHeader = frontmatter.trim() ? [frontmatter.trim(), ''] : [];
 
-Adapter Mode: thin
-Adapter Source: .instructions.md
-Canonical Snapshot SHA256: ${canonicalHash}
-
-The canonical policy source for this repository is [.instructions.md](../.instructions.md).
-
-If your host stops at this file, follow this minimum floor:
-- Read \`.agent-instructions.md\` next when it exists.
-- For UI or redesign requests, load [.agent-context/prompts/bootstrap-design.md](../.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](../.agent-context/rules/frontend-architecture.md) before coding.
-- For UI scope, include a one-line Motion/Palette Decision in the Bootstrap Receipt; product categories are heuristics, not style presets.
-- If UI scope and \`docs/DESIGN.md\` or \`docs/design-intent.json\` is missing, materialize them before UI implementation.
-- For documentation-first requests, create or refine required project docs in English by default and do not write application, firmware, or UI code until the user asks or approves.
-- For backend/API/data/auth/event requests, load relevant global rules from [.agent-context/rules/](../.agent-context/rules) and do not create stack-specific governance adapters.
-- Memory continuity is host-dependent project memory and does not replace bootstrap loading.
-
-## Required Load Order
-
-1. Read [.instructions.md](../.instructions.md) first as the canonical baseline.
-2. If \`.agent-instructions.md\` exists, read it next as the compiled project-specific snapshot.
-3. Read baseline rules in [.agent-context/rules/](../.agent-context/rules).
-4. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
-5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
-6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and thresholds from [.agent-context/policies/](../.agent-context/policies).
-7. Resolve runtime, structure, and dependency choices from project context docs plus live evidence.
-
-## Bootstrap Receipt
-
-For non-trivial coding, review, planning, or governance work, produce a short Bootstrap Receipt before implementation output: \`loaded_files\`, \`selected_rules\`, \`skipped_rules\`, \`unreachable_files\`, and \`validation_plan\`.
-
-## Completion Gate
-
-Run [.agent-context/review-checklists/pr-checklist.md](../.agent-context/review-checklists/pr-checklist.md) before declaring work complete.
-`;
-}
-
-function buildGeminiAdapter(canonicalHash) {
-  return `# Gemini Instructions - Thin Adapter
-
-Adapter Mode: thin
-Adapter Source: .instructions.md
-Canonical Snapshot SHA256: ${canonicalHash}
-
-Canonical policy source: [.instructions.md](../.instructions.md).
-
-If your host stops at this file, follow this minimum floor:
-- Read \`.agent-instructions.md\` next when it exists.
-- For UI or redesign requests, load [.agent-context/prompts/bootstrap-design.md](../.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](../.agent-context/rules/frontend-architecture.md) before coding.
-- For UI scope, include a one-line Motion/Palette Decision in the Bootstrap Receipt; product categories are heuristics, not style presets.
-- If UI scope and \`docs/DESIGN.md\` or \`docs/design-intent.json\` is missing, materialize them before UI implementation.
-- For documentation-first requests, create or refine required project docs in English by default and do not write application, firmware, or UI code until the user asks or approves.
-- For backend/API/data/auth/event requests, load relevant global rules from [.agent-context/rules/](../.agent-context/rules) and do not create stack-specific governance adapters.
-- Memory continuity is host-dependent project memory and does not replace bootstrap loading.
-
-## Bootstrap Sequence
-
-1. Load [.instructions.md](../.instructions.md) first as the canonical baseline.
-2. If \`.agent-instructions.md\` exists, read it next as the compiled project-specific snapshot.
-3. Apply baseline rules from [.agent-context/rules/](../.agent-context/rules).
-4. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
-5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
-6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and policy thresholds from [.agent-context/policies/](../.agent-context/policies).
-7. Resolve runtime, structure, and dependency choices from project context docs plus live evidence.
-
-## Bootstrap Receipt
-
-For non-trivial coding, review, planning, or governance work, produce a short Bootstrap Receipt before implementation output: \`loaded_files\`, \`selected_rules\`, \`skipped_rules\`, \`unreachable_files\`, and \`validation_plan\`.
-
-## Completion Gate
-
-Run [.agent-context/review-checklists/pr-checklist.md](../.agent-context/review-checklists/pr-checklist.md) before declaring completion.
-`;
+  return [
+    ...adapterHeader,
+    `# ${title}`,
+    '',
+    'Adapter Mode: thin',
+    'Adapter Source: .instructions.md',
+    `Canonical Snapshot SHA256: ${canonicalHash}`,
+    '',
+    'This repository is governed by a strict instruction contract.',
+    `Use [${CANONICAL_SOURCE_PATH}](${canonicalLink}) as the canonical policy source.`,
+    'Use .agent-context/ for technical rules, prompts, checklists, policies, and state.',
+    'Treat README.md as overview/install/user context only when governance files conflict.',
+    '',
+    '## Critical Bootstrap Floor',
+    '',
+    '- If your host stops at this file, continue the chain manually before coding.',
+    '- Read `.agent-instructions.md` next when it exists.',
+    '- Memory continuity does not replace bootstrap loading.',
+    `- For UI, UX, layout, screen, tailwind, frontend, or redesign requests, load [bootstrap-design.md](${designPromptLink}) and [frontend-architecture.md](${frontendRuleLink}) before code edits.`,
+    '- For UI scope, include a one-line Motion/Palette Decision in the Bootstrap Receipt; product categories are heuristics, not style presets.',
+    '- For UI scope, create or refine `docs/DESIGN.md` and `docs/design-intent.json` before UI implementation.',
+    '- For documentation-first requests, create or refine required project docs in English by default and do not write application, firmware, or UI code until the user asks or approves.',
+    `- For backend, API, data, auth, error, event, queue, worker, or distributed-system requests, load only relevant global rules from .agent-context/rules/ ([link](${rulesLink})).`,
+    '- For ecosystem, framework, dependency, or Docker claims, perform live web research.',
+    '- Resolve runtime choices from project evidence and live official documentation; resolve structural planning from constraints and architecture boundaries.',
+    '',
+    '## Mandatory Bootstrap Chain',
+    '',
+    `1. Load [${CANONICAL_SOURCE_PATH}](${canonicalLink}).`,
+    '2. Load `.agent-instructions.md` when present.',
+    `3. Load only relevant files from .agent-context/rules/ ([link](${rulesLink})).`,
+    `4. Apply matching prompts from .agent-context/prompts/ ([link](${promptsLink})).`,
+    `5. Enforce .agent-context/review-checklists/ ([link](${checklistLink})).`,
+    `6. Use .agent-context/state/ ([link](${stateLink})) and .agent-context/policies/ ([link](${policiesLink})) only when relevant.`,
+    '7. Use project docs and live evidence for runtime, dependency, and architecture claims.',
+    '',
+    '## Bootstrap Receipt',
+    '',
+    'For non-trivial coding, review, planning, or governance work, produce a short Bootstrap Receipt before implementation output: `loaded_files`, `selected_rules`, `skipped_rules`, `unreachable_files`, and `validation_plan`.',
+    '',
+    '## Completion Gate',
+    '',
+    `Run [pr-checklist.md](${checklistLink}) before declaring work complete.`,
+    '',
+    `If this adapter drifts from canonical behavior, refresh from [${CANONICAL_SOURCE_PATH}](${canonicalLink}) and update the hash metadata.`,
+  ].join('\n');
 }
 
 const ADAPTERS = [
   {
     relativePath: 'AGENTS.md',
-    buildContent: buildAgentsAdapter,
+    title: 'AGENTS.md - Thin Adapter',
+  },
+  {
+    relativePath: 'CLAUDE.md',
+    title: 'CLAUDE.md - Thin Adapter',
+  },
+  {
+    relativePath: 'GEMINI.md',
+    title: 'GEMINI.md - Thin Adapter',
   },
   {
     relativePath: '.github/copilot-instructions.md',
-    buildContent: buildCopilotAdapter,
+    title: 'GitHub Copilot Instructions - Thin Adapter',
+  },
+  {
+    relativePath: '.github/instructions/agentic-senior-core.instructions.md',
+    title: 'GitHub Copilot Path Instructions - Thin Adapter',
+    frontmatter: '---\napplyTo: "**"\n---',
   },
   {
     relativePath: '.gemini/instructions.md',
-    buildContent: buildGeminiAdapter,
+    title: 'Gemini Instructions - Thin Adapter',
+  },
+  {
+    relativePath: '.cursor/rules/agentic-senior-core.mdc',
+    title: 'Cursor Rule - Thin Adapter',
+    frontmatter: '---\ndescription: Agentic Senior Core bootstrap adapter\nalwaysApply: true\n---',
+  },
+  {
+    relativePath: '.windsurf/rules/agentic-senior-core.md',
+    title: 'Windsurf Rule - Thin Adapter',
   },
 ];
 
@@ -175,11 +141,14 @@ async function main() {
 
   for (const adapter of ADAPTERS) {
     const adapterAbsolutePath = join(ROOT_DIR, adapter.relativePath);
-    const expectedContent = adapter.buildContent(canonicalHash);
+    const expectedContent = buildThinAdapter({
+      ...adapter,
+      canonicalHash,
+    });
 
     if (IS_CHECK_MODE) {
       const existingContent = normalizeLineEndings(await readFile(adapterAbsolutePath, 'utf8'));
-      const expectedNormalized = normalizeLineEndings(expectedContent);
+      const expectedNormalized = normalizeLineEndings(`${expectedContent.trimEnd()}\n`);
       if (existingContent !== expectedNormalized) {
         hasDrift = true;
         console.error(`[DRIFT] ${adapter.relativePath} does not match canonical adapter output.`);
@@ -189,6 +158,7 @@ async function main() {
       continue;
     }
 
+    await mkdir(dirname(adapterAbsolutePath), { recursive: true });
     await writeFile(adapterAbsolutePath, `${expectedContent.trimEnd()}\n`, 'utf8');
     console.log(`[SYNC] ${adapter.relativePath}`);
   }

@@ -10,12 +10,12 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Latest release: 3.0.30 (2026-04-25).
+Latest release: 3.0.38 (2026-04-30).
 
-Highlights in 3.0.30:
-- Root `mcp.json` now reflects the current 9-layer governance model instead of the old 8-layer metadata.
-- MCP knowledge metadata now includes 15 rules, 4 prompts including `bootstrap-design`, and the project-context layer.
-- MCP workflow wording now reinforces scope-first relevant-layer injection instead of eager load-all context.
+Highlights in 3.0.38:
+- Phase 11 cleanup removes stale skill-marketplace artifacts and generated report snapshots from the shipped package.
+- Large init, utility, design-contract, and design/detection smoke surfaces are split into smaller modules.
+- UI governance keeps anti-generic drift checks while preserving product-derived, non-prescriptive palette decisions.
 
 </div>
 
@@ -29,7 +29,7 @@ Highlights in 3.0.30:
 npx @ryuenn3123/agentic-senior-core init
 ```
 
-One command to initialize rules, checklists, and strict AI coding guidelines context for your project.
+One command to initialize rules, checklists, thin discovery adapters, and a compiled AI rulebook for your project.
 
 > **See [docs/deep-dive.md](docs/deep-dive.md) and [docs/roadmap.md](docs/roadmap.md) for advanced configuration, planning mode, snapshot, and realtime options.**
 
@@ -73,10 +73,11 @@ If you see `Property $schema is not allowed`, keep `.vscode/mcp.json` without `$
 
 | Command | Purpose |
 |---------|---------|
-| `agentic-senior-core init` | Initialize the project guidance pack and compiled AI rulebook |
+| `agentic-senior-core init` | Initialize the project guidance pack, thin adapters, and compiled AI rulebook |
 | `agentic-senior-core upgrade --dry-run` | Preview safe upgrades |
 | `agentic-senior-core optimize --show` | Show token optimization state |
 | `npm run audit:v3-purge` | Run deep purge readiness audit (no deletion) |
+| `npm run clean:local` | Remove ignored local reports, backups, benchmarks, and active-memory state |
 | `agentic-senior-core mcp` | Start local MCP stdio runtime |
 
 ---
@@ -92,6 +93,22 @@ Use `--dry-run` first to preview changes safely, then apply with `--yes`.
 
 Upgrade now performs managed-surface synchronization by default: obsolete governance files under managed paths are pruned so the pack stays aligned with the latest release.
 Use `--no-prune` if you want to keep legacy managed files.
+
+## Instruction Entrypoints
+
+The canonical source is `.instructions.md`.
+
+Generated bridge files stay small:
+- `AGENTS.md`
+- `CLAUDE.md`
+- `GEMINI.md`
+- `.cursor/rules/agentic-senior-core.mdc`
+- `.windsurf/rules/agentic-senior-core.md`
+- `.github/copilot-instructions.md`
+- `.github/instructions/agentic-senior-core.instructions.md`
+- `.gemini/instructions.md`
+
+Legacy root files `.cursorrules`, `.windsurfrules`, and `.clauderc` are thin compatibility adapters. They point to `.agent-instructions.md` when the compiled rulebook exists, with `.instructions.md` as the fallback source.
 
 ---
 

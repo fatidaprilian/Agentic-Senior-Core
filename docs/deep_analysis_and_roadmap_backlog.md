@@ -1,409 +1,324 @@
-# Agentic-Senior-Core - Deep Analysis and Roadmap Backlog
+# Agentic-Senior-Core Roadmap Backlog
 
-Date: 2026-04-25
-Current Version: 3.0.36
-Status: Frontend/design governance batch pushed; Phase 9 lightweight continuity and token-output folding baseline complete
-
----
-
-## 1. Purpose
-
-This file is the live roadmap for what still matters next.
-
-It is not a full release diary. Completed work that no longer changes near-term decisions should stay in:
-- `CHANGELOG.md`
-- Git history
-- validation and test evidence
-
-This backlog now keeps only:
-- the current baseline
-- the settled direction
-- the ordered next design and governance work
-- explicit non-priorities so the scope does not sprawl again
+Date: 2026-04-30
+Current Version: 3.0.38
+Status: Phase 10 instruction-footprint simplification is complete. Phase 11 cleanup/refactor audit is complete.
 
 ---
 
-## 2. Current Baseline
+## Purpose
 
-### Facts confirmed in the current repo
+Use this file to decide the next work, not to store release history.
 
-- The current repo version is `3.0.26`.
-- The current baseline already ships canonical instruction flow centered on `.instructions.md`.
-- `init` and `upgrade` now copy the canonical instruction surface, regenerate compiled instructions, and preserve adaptive prompts.
-- Fresh project setup now asks project topology first: `Monolith` or `Microservice / distributed system`.
-- Compiled instruction surfaces now resolve the smallest relevant layer set instead of forcing broad rule loading for every request.
-- UI design governance already pushes agents to synthesize from the current project context, not from prior website memory or unrelated visual carryover.
-- Docker and dependency governance already uses the latest stable compatible guidance and official setup flows first.
-- The current design contract already protects against generic shrink-only responsive behavior and already allows purposeful motion when it stays performant and reduced-motion-safe.
-- The design contract now formalizes accessibility as a split policy: WCAG 2.2 AA hard floor plus APCA advisory readability tuning.
-- The design contract now avoids offline style prescriptions and instead encodes global anti-generic drift signals such as scaffold-driven final style, unresearched library choices, default component-kit treatment, and scale-only responsive behavior.
-- The internal UI design judge now keeps advisory workflow mode by default while escalating blocking failures when `genericityAutoFail` and named forbidden patterns align.
+Keep it short:
+- Current baseline
+- Settled direction
+- Ordered roadmap
+- Active migration checklist
+- Explicit non-goals
 
-### Working assumptions
-
-- `docs/DESIGN.md` and `docs/design-intent.json` remain the preferred paired contract for UI work.
-- Dynamic prompts remain the right path. We do not want to go back to static final-doc templates.
-- Creativity should stay wide open in visual direction, motion, and composition.
-- Deterministic governance should stay hard only where drift causes real damage: docs boundaries, accessibility minimums, token integrity, and release safety.
+Move completed detail to `CHANGELOG.md`, Git history, or validation output.
 
 ---
 
-## 3. Settled Direction
+## Current Baseline
 
-These points are no longer under debate unless new evidence appears.
-
-### 3.1 Documentation stance
-
-- Architecture, flow, and design docs are mandatory when the project needs them.
-- Agents should author those docs from the real repo surface and user brief.
-- Missing core docs should block implementation work.
-- Generated docs must separate facts from assumptions and end with the next validation action.
-
-### 3.2 Design stance
-
-- The goal is not "safe SaaS UI."
-- The goal is original, high-quality UI with strong system logic behind it.
-- Motion is allowed, and often useful, if it has purpose and does not damage performance or accessibility.
-- Responsive work must mutate layout by task priority, not just shrink the desktop layout.
-
-### 3.3 Governance stance
-
-- Prompts alone are not enough.
-- The winning direction is: design contract + repo evidence + deterministic checks + AI evaluation where it adds value.
-- We should keep public user-facing surfaces simple. Internal repo tooling can be richer if it stays internal.
+- `.instructions.md` is the canonical instruction source.
+- Thin adapters are generated from `.instructions.md` and hash-synced.
+- `.agent-context/` holds managed rules, prompts, checklists, policies, and state.
+- Init/upgrade copy the canonical instruction surface and regenerate compiled guidance.
+- Rule loading is scope-resolved. Narrow tasks must not load broad unrelated rules.
+- Documentation-first requests must create/refine docs before implementation.
+- UI work must create/refine `docs/DESIGN.md` and `docs/design-intent.json` before UI code.
+- UI governance rejects AI-safe UI, palette autopilot, decorative wallpaper, and scale-only responsive behavior.
+- Motion, 3D, canvas, WebGL, and animation libraries are allowed when they serve the product.
+- Palette choices must be visually exploratory, product-derived, contrast-safe, and status-clear.
+- Accessibility policy is split: WCAG 2.2 AA is the hard floor; APCA is advisory.
+- Dependency and Docker guidance use current official docs and latest stable compatible choices first.
+- Active instruction surfaces now use imperative gates, authority statements, README redirection, and mechanical validation.
 
 ---
 
-## 4. Main Problem Statement
+## Settled Direction
 
-The repo is strong at prompt governance, instruction flow, and adaptive bootstrapping.
-
-The next gap is deeper design execution quality.
-
-Right now, the system can:
-- ask better setup questions
-- generate better design intent
-- block more obvious drift
-
-But it still needs stronger machinery to:
-- read real design evidence from code
-- distinguish distinctive UI from generic UI more reliably
-- translate design intent into structured execution guidance before code drifts into defaults
-- enforce token integrity without making designs stiff
+- Use one official, proven instruction architecture. Do not add user-facing modes.
+- Keep public user-facing surfaces simple.
+- Keep detailed governance inside `.agent-context/`.
+- Keep prompts short, imperative, and mechanically validated.
+- Keep UI direction open-ended. Do not hard-code a house style, color family, or layout pattern.
+- Prefer generated adapters over hand-edited duplicate rules.
+- Retire legacy root adapters only after migration tests prove upgrade safety and rollback behavior.
 
 ---
 
-## 5. Status Marker Legend
+## Status Legend
 
 - `[x]` done
-- `[~]` partially done or baseline exists
+- `[~]` partially done
 - `[ ]` not started
-- `[-]` intentionally deferred
+- `[-]` deferred
 
 ---
 
-## 6. Ordered Roadmap
-
-The order below is intentional. Later phases depend on earlier ones.
+## Ordered Roadmap
 
 ### Phase 1 - Design Token Foundation
 
-Overall status: `[x]`
-Priority: highest
+Status: `[x]`
 
-Goal:
-- Move from ad-hoc design tokens and contract hints toward a real token system with clear layers and resolution rules.
-
-Breakdown:
-- [x] Define the three-layer token taxonomy in the design contract:
-  - primitive
-  - semantic or alias
-  - component
-- [x] Define naming rules, reserved syntax boundaries, and token-path conventions.
-- [x] Define color token guidance for modern color spaces such as `OKLCH`.
-- [x] Define alias resolution rules so theme changes happen by semantic remapping, not component rewrites.
-- [x] Decide how token truth relates to `docs/design-intent.json`.
-- [x] Add validation rules for token structure and illegal fallback patterns.
-
-Done when:
-- [x] Token layers are defined in one stable contract.
-- [x] Semantic tokens can be remapped without touching component code.
-- [x] The contract is strict enough for validation but loose enough for bold visual direction.
-- [x] The repo has one explicit rule for primitive, semantic, and component scope.
+Done:
+- Token taxonomy: primitive, semantic, component.
+- Token-path rules, reserved syntax, and alias resolution.
+- `docs/design-intent.json` as token truth.
+- Validation for token structure and bad fallback patterns.
 
 ### Phase 2 - Design Evidence Extraction
 
-Overall status: `[~]`
-Priority: highest
+Status: `[x]`
 
-Goal:
-- Make the system read what the UI really does, not just what the prompt claims it should do.
+Done:
+- Machine-readable `designEvidenceSummary`.
+- CSS variable, hardcoded style, Tailwind, component inventory, and token-bypass signals.
+- Nested frontend detection in monolith and microservice layouts.
+- Structure-aware class and inline-style inspection.
 
-What already exists:
-- [x] The repo already gathers some cheap frontend evidence for onboarding and design seeding.
-- [x] Microservice and nested UI package detection already exists at the repo-discovery level.
-- [x] The repo now emits a machine-readable `designEvidenceSummary` from lightweight static UI scanning and carries it into onboarding plus design-intent seeds.
-- [x] Repo-internal frontend audit coverage now verifies the design evidence extractor, compiler projection, and token bypass signal surface.
-- [x] The design evidence extractor now includes structure-aware inspection for class surfaces, inline style objects, and expression-backed UI hints so repo evidence is less dependent on blind text scanning.
+Next:
+- [ ] Add AST-based inspection where text scanning is weak.
+- [ ] Add runtime style evidence only for gaps static analysis cannot cover.
 
-Breakdown:
-- [x] Produce one machine-readable design evidence summary format.
-- [x] Extract CSS variable evidence.
-- [x] Extract hardcoded color, radius, spacing, shadow, and typography patterns.
-- [x] Extract Tailwind usage in a way that can later evolve to AST inspection.
-- [x] Add structure-aware class and inline-style inspection for JSX, TSX, and similar component surfaces.
-- [ ] Add AST-based inspection where plain text scanning is too weak.
-- [x] Add component inventory reporting.
-- [ ] Add runtime style evidence only for gaps that static analysis cannot cover.
+### Phase 3 - Accessibility Split
 
-Done when:
-- [x] The system can produce a machine-readable design evidence summary from a real repo.
-- [~] It can detect common token bypass patterns.
-- [x] It can surface actual UI package evidence inside monolith and microservice layouts.
-- [x] The evidence output is useful enough to seed design docs and later audits.
+Status: `[x]`
 
-### Phase 3 - Accessibility Split: Hard Gate vs Advisory
+Done:
+- WCAG 2.2 AA is the hard compliance floor.
+- APCA is advisory perceptual tuning.
+- Focus, target size, auth friction, and dynamic state access are part of the hard-check surface.
 
-Overall status: `[x]`
-Priority: high
+### Phase 4 - Structured Design Execution
 
-Goal:
-- Keep accessibility strict where it must be strict, and nuanced where nuance helps quality.
+Status: `[x]`
 
-What already exists:
-- [x] Accessibility is already treated as a non-negotiable design concern in the contract direction.
-- [x] The design contract now stores a machine-readable `accessibilityPolicy` with explicit hard-vs-advisory boundaries.
-- [x] Prompt, rule, validator, and judge coverage now use the same split.
+Done:
+- `designExecutionPolicy` and `designExecutionHandoff`.
+- Surface plan, component graph, content-priority map, viewport mutation plan, interaction-state matrix, task-flow narrative, and signature-move rationale.
+- Screenshot capture is not a baseline dependency.
 
-Breakdown:
-- [x] Formalize WCAG 2.2 AA as the hard compliance floor.
-- [x] Formalize APCA as an advisory layer for perceptual quality.
-- [x] Extend checks beyond color contrast:
-  - [x] focus visibility
-  - [x] target size
-  - [x] authentication friction
-  - [x] dynamic state access
-- [x] Define which checks are blocking and which are advisory.
+### Phase 5 - Generic vs Distinctive Rubric
 
-Done when:
-- [x] The repo has an explicit hard-fail accessibility floor.
-- [x] Advisory contrast guidance does not override legal or standards-based gates.
-- [x] Accessibility checks stay useful for modern UI instead of collapsing into a single contrast ratio rule.
+Status: `[x]`
 
-### Phase 4 - Structured Design Execution and Handoff
+Done:
+- Machine-readable `reviewRubric`.
+- Genericity signals, valid bold signals, and taste-vs-failure separation.
+- UI judge diagnostics and calibration gold set.
 
-Overall status: `[x]`
-Priority: high
+### Phase 6 - Context Hygiene
 
-Goal:
-- Make design execution precise without depending on screenshot capture, browser automation, or pixel-diff infrastructure.
+Status: `[x]`
 
-What already exists:
-- [x] The repo already has an advisory internal UI design judge.
-- [x] The design contract now defines a machine-readable structured execution policy.
-- [x] The internal UI design judge now carries structured execution diagnostics alongside semantic verdicts.
-- [x] The repo now forbids screenshot dependency as a baseline requirement for design quality.
-
-Breakdown:
-- [x] Define one machine-readable execution policy:
-  - [x] surface plan
-  - [x] component graph
-  - [x] content-priority map
-  - [x] viewport mutation plan
-  - [x] interaction-state matrix
-  - [x] task-flow narrative
-  - [x] signature-move rationale
-- [x] Make repo evidence part of execution readiness, not just prompt context.
-- [x] Ensure semantic review judges distinctiveness, contract fidelity, hierarchy, state behavior, and viewport mutation directly from the contract plus changed code.
-- [x] Remove screenshot dependency from the baseline design-quality path.
-- [x] Add a more explicit structured UI handoff format that can sit between `DESIGN.md` and implementation.
-- [x] Keep that handoff inside `docs/design-intent.json` instead of introducing a separate companion artifact.
-
-Done when:
-- [x] The repo can review UI execution quality without requiring browser capture.
-- [x] The judge can explain structured design readiness in machine-readable form.
-- [x] The handoff from design intent to implementation is explicit enough that agents stop defaulting to generic layout habits.
-
-### Phase 5 - Rubric Calibration for Generic vs Distinctive
-
-Overall status: `[x]`
-Priority: high
-
-Goal:
-- Define a repeatable rubric for judging whether a UI is distinctive, contract-faithful, and coherent.
-
-What already exists:
-- [x] The repo already tries to prevent generic template output through prompt and judge direction.
-- [x] The design contract now stores a machine-readable review rubric with stable dimensions and genericity signals.
-- [x] The internal UI design judge now exposes rubric diagnostics and genericity status in machine-readable output.
-- [x] The repo now ships a small internal gold set plus a calibration harness for generic vs distinctive review.
-
-Breakdown:
-- [x] Define rubric dimensions in one stable source:
-  - [x] distinctiveness
-  - [x] contract fidelity
-  - [x] visual consistency
-  - [x] heuristic UX quality
-  - [x] motion discipline
-- [x] Separate taste preference from real failure conditions.
-- [x] Build a small gold set with human-reviewed examples.
-- [x] Calibrate the judge against that gold set before raising trust.
-- [x] Add reporting that explains why something is generic, not just that it is generic.
-
-Done when:
-- [x] The rubric can explain why a design is too generic.
-- [x] The judge can distinguish bold-but-valid from inconsistent-or-lazy.
-- [x] Contract drift and default-framework drift become measurable.
-
-### Phase 6 - Context Hygiene and Memory Boundaries
-
-Overall status: `[x]`
-Priority: medium
-
-Goal:
-- Keep agents fresh and context-aware without accidentally cloning older projects or polluted style memory.
-
-What already exists:
-- [x] The design contract already tells agents to synthesize from the current project context.
-- [x] The repo already discourages accidental carryover from earlier website styles.
-- [x] The design contract now stores machine-readable context hygiene boundaries in `docs/design-intent.json`.
-- [x] Validator, audit, and test coverage now check continuity and carryover boundaries explicitly.
-
-Breakdown:
-- [x] Formalize allowed context sources for design work:
-  - [x] current repo evidence
-  - [x] current brief
-  - [x] current docs contract
-  - [x] explicitly approved current-task constraints
-- [x] Define continuity as opt-in for design language.
-- [x] Define how stale or unrelated memory should be ignored.
-- [x] Add validation or audit coverage for memory contamination boundaries.
-
-Done when:
-- [x] Agents stop carrying over old palette, layout, or component habits by accident.
-- [x] Continuity is opt-in for design language, not silent default behavior.
-- [x] Repo evidence wins over memory residue.
+Done:
+- Current repo evidence, current brief, current docs, and explicit current-task constraints are valid design inputs.
+- Unrelated memory and old visual language are tainted unless the user approves continuity.
+- Design continuity is opt-in.
 
 ### Phase 7 - Dependency and Runtime Freshness
 
-Overall status: `[~]`
-Priority: medium
+Status: `[x]`
 
-Goal:
-- Keep framework setup, Docker usage, and dependency choices aligned with current official guidance.
+Done:
+- Latest stable compatible dependency guidance.
+- Official setup flows before stale manual assembly.
+- Current Docker Compose and `compose.yaml` guidance.
 
-What already exists:
-- [x] Latest stable compatible dependency guidance is already the default direction.
-- [x] Official setup flows already replace stale manual assembly when they are better.
-- [x] Docker guidance already uses current `docker compose` and `compose.yaml` practices.
-
-Breakdown:
-- [ ] Add deterministic validation that downgrade paths include a clear reason.
-- [ ] Add stale-example detection for framework setup guidance where practical.
-- [ ] Add clearer evidence in generated docs when an older version is chosen intentionally.
-- [ ] Keep framework-specific examples reviewed as major ecosystem defaults change.
-
-Done when:
-- [ ] Init guidance stops falling behind current framework defaults.
-- [ ] Docker examples and dependency choices age more slowly.
-- [ ] The system can explain why an older version is being used when that happens.
+Next:
+- [ ] Validate downgrade paths include reasons.
+- [ ] Detect stale setup examples where practical.
+- [ ] Explain intentional old-version choices in generated docs.
 
 ### Phase 8 - Frontend and Design Governance Simplification
 
-Overall status: `[~]`
-Priority: highest while release hold is active
+Status: `[~]`
+
+Done:
+- Scope-resolved loading across canonical and compiled instruction surfaces.
+- Frontend rule is governance-first, not generic frontend basics.
+- Design contract uses product-specific surfaces instead of dashboard-shaped defaults.
+- Generic drift is machine-actionable through forbidden patterns and named signals.
+- Core generic engineering rules are reduced and lazy-loaded.
+
+Next:
+- [ ] Run one deliberate real-project redesign validation pass before lifting release hold.
+- [ ] Confirm real output no longer collapses into hero-plus-stats, repeated cards, or scale-only responsive fallback.
+
+### Phase 9 - Context Continuity and Output Folding
+
+Status: `[x]`
+
+Done:
+- Compact `active-memory.json` contract.
+- Privacy-safe validation for secrets and raw logs.
+- Design continuity remains opt-in.
+- Token output folding policy keeps failures and actionable details while folding repetitive noise.
+
+### Phase 10 - Instruction Footprint Simplification
+
+Status: `[~]`
 
 Goal:
-- Finish the cross-cutting refactor that removes context fatigue, strips broad default loading, and makes anti-generic UI enforcement operational before the next push.
+- Keep downstream project roots small while AI tools still load the right rules through proven entrypoints.
 
-What already exists:
-- [x] Canonical and compiled instruction surfaces now resolve the smallest relevant layer set instead of forcing broad eager loading.
-- [x] The frontend rule surface is now design-governance-first and no longer teaches generic framework basics as default bootstrap content.
-- [x] The design contract now uses dominant/support/recovery surfaces instead of dashboard-shaped seed shells.
-- [x] `viewportMutationPlan` now uses per-viewport operations, required surface actions, forbidden fallback patterns, and rationale.
-- [x] Genericity auto-fail, forbidden patterns, validator coverage, judge coverage, and smoke coverage are now synchronized.
-- [x] `init-project.md` now resolves only the relevant rules instead of telling agents to scan the full rules directory by default.
-- [x] Core generic rule files (`naming-conv`, `error-handling`, `performance`, `efficiency-vs-hype`, `architecture`) have been reduced into boundary-first guidance instead of tutorial-style prose.
-- [x] The offline architecture selection path has been removed from `init`, so fresh repositories no longer get a silent heuristic stack pick.
+Current completed slice:
+- [x] Verified official entrypoint direction for Codex, Cursor, Windsurf, GitHub Copilot, Claude Code, and Gemini CLI.
+- [x] Rewrote active design prompt and frontend rule into shorter imperative gates.
+- [x] Added README redirection to `.agent-context/` and current project docs.
+- [x] Updated thin adapter generation with authority, scoped loading, and bootstrap receipt wording.
+- [x] Added line-count validation for active instruction surfaces.
+- [x] Added generated bridge adapters for Claude, Gemini, Cursor, Windsurf, and GitHub path instructions.
+- [x] Converted legacy root `.cursorrules`, `.windsurfrules`, and `.clauderc` output into thin compatibility adapters.
+- [x] Updated tests and audits for the new contract shape.
 
-Breakdown:
-- [x] Replace broad bootstrap wording in `.instructions.md`, compiler output, and compiled rule surfaces with scope-resolved loading.
-- [x] Replace dashboard-shaped execution handoff defaults with more neutral but anti-generic structural surfaces.
-- [x] Convert responsive mutation from prose-only expectations to operation-based handoff objects.
-- [x] Make generic drift machine-actionable with explicit forbidden patterns and named genericity signals.
-- [x] Keep UI judge workflow advisory by default while allowing named generic drift to escalate blocking failures.
-- [x] Audit remaining non-UI rule files that still reteach basics LLMs already know and remove them from default pressure paths where possible.
-- [x] Decide which generic engineering rule files should stay shipped but lazy-only versus which should be merged, reduced, or retired.
-- [x] Review remaining CLI and prompt wording for old governance/profile jargon that no longer helps current behavior.
-- [x] Remove architecture-playbook and silent stack-selection framing from active bootstrap, init, and planning surfaces.
-- [ ] Run one deliberate real-project redesign validation pass against current output quality before lifting release hold.
+Root footprint target:
+- [x] Keep `AGENTS.md` as the primary bridge.
+- [x] Add `CLAUDE.md` as a thin Claude import bridge.
+- [x] Add `GEMINI.md` as a thin Gemini import bridge.
+- [x] Keep `.instructions.md` canonical but compact.
+- [x] Keep `.agent-context/` as managed canonical context.
+- [x] Keep `.github/copilot-instructions.md` and `.github/instructions/*.instructions.md` generated.
+- [x] Add Cursor rules under `.cursor/rules/*.mdc`.
+- [x] Add Windsurf rules under `.windsurf/rules/*.md`.
+- [x] Keep root `.cursorrules` and `.windsurfrules` as legacy thin adapters after migration tests passed.
+
+Migration checklist:
+- [x] Change `scripts/sync-thin-adapters.mjs` to generate imperative thin adapters with hash metadata.
+- [x] Change `lib/cli/compiler.mjs` for the final entrypoint set.
+- [x] Change `lib/cli/commands/init.mjs`, `upgrade.mjs`, and `optimize.mjs` output and generated file lists.
+- [x] Change `lib/cli/constants.mjs`, `preflight.mjs`, and `backup.mjs` for new managed adapter files.
+- [x] Review `detector.mjs`, rollback handling, and legacy ignore rules before root adapter retirement.
+- [x] Update validation scripts for current contract checks.
+- [x] Generate `CLAUDE.md`, `GEMINI.md`, `.cursor/rules/*.mdc`, `.windsurf/rules/*.md`, and `.github/instructions/*.instructions.md`.
+- [x] Move active long-form Cursor/Windsurf content out of root legacy files.
+- [x] Stop generating long-form root `.cursorrules`, `.windsurfrules`, and `.clauderc`.
+- [x] Decide `.gemini/instructions.md` is a thin bridge; keep compiled content only in `.agent-instructions.md`.
+- [x] Update adapter-path tests.
+- [x] Update README, CONTRIBUTING, FAQ, deep dive, integration playbook, semantic redundancy notes, and CHANGELOG.
 
 Done when:
-- [ ] Host entrypoints no longer push broad context loading by default for narrow UI work.
-- [ ] The shipped rule surface focuses on anti-bad-habit boundaries, not on reteaching generic engineering basics.
-- [ ] Real redesign output no longer predictably collapses into hero-plus-stats-row, repeated cards, or scale-only responsive fallback.
-- [ ] The current release-hold batch can be closed without needing another structural frontend/design governance rewrite.
+- [x] New projects no longer receive long root adapter files.
+- [x] Existing projects upgrade without losing user-owned instruction entrypoints.
+- [x] Validation blocks adapter drift and stale legacy root surfaces.
+- [x] Codex, Cursor, Windsurf, Copilot, Claude, and Gemini entrypoints have source-backed tests or manual verification notes.
 
-### Phase 9 - Seamless Context Continuity and Token Output Folding
+### Phase 11 - Repository Hygiene and Bias-Resistant Refactor
 
-Overall status: `[x]`
-Priority: medium
+Status: `[~]`
 
 Goal:
-- Explore a lightweight, cross-LLM continuity layer that helps new sessions resume real project work without forcing users to run extra commands or loading full chat history.
+- Clean stale V2/V3-transition artifacts, shrink high-risk monolith files, and reduce prompt/code surfaces that can bias agents toward obsolete skill-marketplace thinking or generic UI output.
 
-External signals:
-- `claude-mem` validates the direction of automatic session continuity through lifecycle hooks, compressed observations, persistent storage, and progressive retrieval.
-- `rtk` validates the direction of transparent token reduction by filtering command output before it reaches the LLM context.
-- These are inspiration signals only. Agentic-Senior-Core should not copy their architecture directly or require a worker/background service as the default path.
+Audit basis:
+- Full tracked-file inventory via `git ls-files`.
+- Root footprint review.
+- Stale-term scan for `skill`, `tier`, `marketplace`, `trust`, `template`, `generic`, `dashboard`, and palette-autopilot terms.
+- Package surface review via `npm pack --dry-run`.
+- Line-count review for large source, test, docs, and state files.
 
-Proposed direction:
-- [x] Define a tiny machine-readable continuity snapshot such as `.agent-context/state/active-memory.json`.
-- [x] Store only durable project facts, current task focus, pending decisions, known blockers, and validation state.
-- [x] Keep design memory scoped: repo evidence and current brief win over old visual preferences unless the user explicitly approves continuity.
-- [x] Add host-facing bootstrap wording that asks agents to read the continuity snapshot at session start when it exists.
-- [x] Add completion wording that asks agents to refresh the snapshot at natural task boundaries.
-- [x] Add a compact command-output strategy inspired by `rtk`, but keep it optional and repo-internal until it proves useful.
-- [x] Prefer synchronous updates tied to existing agent actions over a default worker, daemon, database, or extra user command.
+Immediate cleanup candidates:
+- [x] Delete tracked `input.txt`.
+  - Reason: it is throwaway CLI input (`1`, `4`, `1`, `1`, `Testing`) with no repo references.
+- [x] Keep ignored local artifacts out of package tarballs.
+  - Reason: `npm pack --dry-run` currently includes ignored `.agent-context/state/active-memory.json` and `.agent-context/state/v3-purge-audit.json` when they exist locally because the package ships the whole `.agent-context/` tree.
+  - Result: `package.json` now allowlists stable `.agent-context/` subtrees and required state seeds instead of shipping the whole directory.
+- [x] Decide whether `test_output.txt`, `.benchmarks/`, `.agentic-backup/`, and local `active-memory.json` need a documented cleanup command.
+  - Reason: they are ignored and not tracked, but they make the root look noisy during local work.
+  - Result: added `npm run clean:local`, backed by `scripts/clean-local-artifacts.mjs`, to remove only known ignored local artifacts on explicit user command.
 
-Risks to avoid:
-- Do not promise true automatic injection on hosts that do not honor startup instructions.
-- Do not store secrets, raw chat logs, private data, or stale design taste.
-- Do not let memory override current repo evidence, current user brief, or fresh live research.
-- Do not make continuity required for normal init/upgrade usage.
+Obsolete or confusing surfaces:
+- [x] Remove or archive `.agent-context/marketplace/trust-tiers.json`.
+  - Reason: no active code path references it, and V3 purge mode retired skill marketplace gates.
+- [x] Archive or delete `docs/skill-incorporation-playbook.md`.
+  - Reason: it describes `.agent-context/skills/`, tier routing, and a 100-page skill-platform plan that conflicts with current compact governance direction.
+- [x] Move stale historical planning docs to `docs/archive/` or add a clear historical banner.
+  - Candidate files: `docs/roadmap.md`, `docs/v2-upgrade-playbook.md`, `docs/benchmark-reference.md`, `docs/analysis-priority-matrix.md`, `docs/rtk-comparison-and-sync-audit-2026-04-11.md`, and `docs/semantic-redundancy-scan-2026-04-11.md`.
+  - Result: kept the files in place for validator and reference stability, but added historical notes that redirect current policy to `.instructions.md`, `.agent-context/`, and this backlog.
 
-Done when:
-- [x] A new session can resume from a compact project snapshot without reading full history.
-- [x] The snapshot is small enough to save tokens and clear enough to avoid hallucinated continuity.
-- [x] Validation ensures no secrets or large raw logs are written into continuity state.
-- [x] Design continuity remains opt-in for visual language and does not reintroduce old-style carryover.
+Rename stale active terminology:
+- [x] Rename `skillTrust` and `verifiedSkillDomainCount` in `scripts/governance-weekly-report.mjs`, `.agent-context/state/weekly-governance-report.json`, and `tests/operations.test.mjs`.
+  - Suggested replacement: `governanceSurfaceTrust` and `verifiedGovernanceSurfaceCount`.
+  - Reason: the script now checks governance surfaces, not skills.
+- [x] Review `lib/cli/compatibility.mjs`.
+  - Reason: it only checks `.agent-context/skills/*/compatibility-manifest.json`; active release gates already say the skill compatibility manifest gate is retired in V3 purge mode.
+  - Result: deleted after confirming no active imports.
+
+Large-file refactor targets:
+- [x] Split `lib/cli/project-scaffolder/design-contract.mjs` (about 1,450 lines before split).
+  - Suggested modules: seed defaults, schema validation, AI-safe UI audit, conceptual-anchor validation, review-rubric validation.
+  - Reason: this is the highest-risk active monolith and the easiest place for duplicated bias wording to grow.
+  - Result: moved design-intent validation into `lib/cli/project-scaffolder/design-contract/validation.mjs`; the public `design-contract.mjs` entrypoint remains stable and is now about 715 lines.
+- [x] Split `tests/cli-smoke/design-and-detection.mjs` (about 833 lines before split).
+  - Reason: one smoke file owns too many concerns; split design contract, detector, upgrade UI seed, and optimization behavior tests.
+  - Result: kept the public registration wrapper and moved the concerns into `tests/cli-smoke/design-and-detection/`.
+- [x] Split `lib/cli/commands/init.mjs` (about 774 lines).
+  - Reason: init orchestration, prompts, project evidence, scaffolding, and console output are interleaved.
+  - Result: kept `runInitCommand` as the public entrypoint and moved runtime detection, project-context/design seed, and setup decision helpers into `lib/cli/commands/init/`; `init.mjs` is now about 587 lines.
+- [x] Split `lib/cli/utils.mjs` (about 634 lines before split).
+  - Suggested modules: file sync, managed-surface manifest, MCP config sync, CLI prompt helpers.
+  - Result: kept `lib/cli/utils.mjs` as the public entrypoint and moved filesystem helpers, CLI prompt helpers, and managed-surface analysis into `lib/cli/utils/`.
+- [x] Review `scripts/validate.mjs`, `scripts/validate/config.mjs`, and `scripts/validate/coverage-checks.mjs`.
+  - Reason: validation is strong but dense; split checks by adapter, docs, purge, design, dependency, and state surfaces.
+  - Result: keep the current three-file boundary for this slice. `validate.mjs` owns orchestration/basic repository checks, `coverage-checks.mjs` owns behavior coverage checks, and `config.mjs` is static validation data; splitting the static config now would add import churn without reducing active behavior risk.
+
+Generated state policy:
+- [x] Classify `.agent-context/state/*.json` as one of `seed`, `fixture`, `generated-report`, or `local-only`.
+  - Reason: the package currently ships benchmark reports, weekly reports, onboarding reports, and local generated audit state together.
+  - Result: added `.agent-context/state/README.md`; stable seeds/config stay tracked and shipped, `onboarding-report.json` stays tracked as repo operational state, and generated report outputs are ignored/local-only.
+- [x] Move report snapshots used only by tests into `tests/fixtures/` or regenerate them in tests.
+  - Candidate files: `benchmark-evidence-bundle.json`, `benchmark-writer-judge-matrix.json`, `weekly-governance-report.json`, `quality-trend-report.json`, `onboarding-report.json`.
+  - Reason: shipped state should not look like current project truth when it is only historical output.
+  - Result: removed tracked generated report snapshots for benchmark, trend, weekly governance, quality, token, and memory-continuity outputs. Scripts already regenerate these reports on demand; tests use stdout/generated output. `onboarding-report.json` remains tracked because audit scripts read it as the repository operational state.
+
+Bias and generic-output cleanup:
+- [x] Keep anti-generic UI rules, but reduce repeated prose copies of the same forbidden examples in active prompts, tests, and seed builders.
+  - Reason: repeated words like `dashboard`, `generic`, `template`, `cream`, `slate`, and `AI-safe` are useful as detectors, but over-repetition can become an unintended style anchor.
+  - Result: centralized duplicate `genericitySignals`, `validBoldSignals`, and `forbiddenPatterns` in `design-contract.mjs`, then shortened active prompt/rule prose so concrete examples appear as drift checks rather than repeated style anchors.
+- [x] Keep palette policy product-derived and contrast-bound, not color-prescriptive.
+  - Reason: the repo should reject autopilot palettes without banning valid product-earned palettes.
+  - Result: retained product-derived/WCAG-bound palette language and kept color-family examples framed as autopilot risks, not banned palettes or preferred colors.
+- [x] Keep the `skill command is retired in purge mode` test.
+  - Reason: that test is intentionally negative and protects V3 purge behavior.
+  - Result: retained the negative smoke coverage while deleting obsolete skill-marketplace artifacts.
+
+Validation plan:
+- [x] Rerun `npm pack --dry-run` and confirm volatile local state is excluded.
+- [x] Rerun `npm run check:adapters`.
+- [x] Rerun `node --test tests/cli-smoke/design-and-detection.mjs`.
+- [x] Rerun `node --test tests/knowledge-injection.test.mjs`.
+- [x] Rerun `node --check` for split `lib/cli/utils/*` helper modules.
+- [x] Rerun `node --check` for split `lib/cli/commands/init/*` helper modules.
+- [x] Rerun `node ./scripts/validate.mjs`.
+- [x] Rerun `node --test tests/cli-smoke.test.mjs`.
+- [x] Rerun `npm test`.
+- [x] Run `git diff --check` and resolve whitespace/line-ending noise before release.
 
 ---
 
-## 7. Deferred Until the Foundation Is Real
+## Deferred
 
-These ideas are valid, but they should not jump ahead of the roadmap above.
-
-- Full multi-agent maker-checker orchestration for design work
-- Heavy long-term memory architectures for design preference persistence
-- Heavy screenshot or browser-capture infrastructure as a baseline design-quality requirement
-- Style-trend chasing such as glassmorphism, claymorphism, or named aesthetics as default policy
-- Mathematical layout systems that add complexity before token and evidence foundations are stable
-
-Reason:
-- These can add cost and complexity fast.
-- They will be more useful after token taxonomy, evidence extraction, and hybrid QA are in place.
+- Full maker-checker multi-agent design orchestration.
+- Heavy long-term memory architecture.
+- Heavy screenshot or browser-capture infrastructure as a baseline requirement.
+- Style-trend chasing as policy.
+- Mathematical layout systems before token/evidence foundations are stronger.
 
 ---
 
-## 8. Explicit Non-Goals
+## Non-Goals
 
-This roadmap does not aim to:
-- force one house style across every product
-- flatten UI into safe corporate minimalism
-- replace design judgment with rigid formulas
-- turn advisory design guidance into blocking noise everywhere
-- reintroduce static final-document templates
+- Do not force one house style.
+- Do not flatten UI into safe corporate minimalism.
+- Do not replace design judgment with rigid formulas.
+- Do not turn advisory design guidance into blocking noise everywhere.
+- Do not reintroduce static final-document templates.
 
 ---
 
@@ -429,37 +344,14 @@ Non-negotiables:
 - Avoid AI cliches and puffed-up language.
 - Separate facts from assumptions.
 - Keep terminology stable.
-- End major explanations with the next action when that helps execution.
+- End major explanations with the next action when useful.
 
 ---
 
-## 10. Why the Old 900-Line Version Was Trimmed
+## Next Action
 
-The old file mixed three different jobs:
-- release history
-- completed implementation logs
-- future roadmap
-
-That made it hard to answer one simple question:
-"What should we do next?"
-
-Completed historical detail now belongs mainly in:
-- `CHANGELOG.md`
-- Git history
-- test and validation evidence
-
-This file should stay short enough to steer decisions quickly.
-
----
-
-## 11. Next Action
-
-Use this backlog as the source for the next design-governance phase.
-
-Execution order:
-1. finish `Phase 8 - Frontend and Design Governance Simplification`
-2. continue `Phase 2 - Design Evidence Extraction` with AST-based inspection
-3. continue `Phase 7 - Dependency and Runtime Freshness`
-4. only lift release hold and push after the current cross-cutting frontend/design refactor is complete
-
-If this file starts becoming a release diary again, cut it back and move history to the changelog.
+Phase 10 and Phase 11 are complete locally.
+Next release action:
+1. Review the final diff for the Phase 10 + current Phase 11 bundle before commit.
+2. If releasing now, bump version, run the final release validation gate, commit, and push.
+3. Start the next follow-up slice from earlier deferred phases only after this cleanup bundle is released.

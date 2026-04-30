@@ -63,7 +63,7 @@ If all three are "yes", it belongs here.
    - Core principle (1-2 sentences)
    - BANNED / REQUIRED sections with enforceable boundaries
    - Decision tree or quick ruleset when it reduces ambiguity
-3. Update `AGENTS.md` rules manifest table
+3. Update `.instructions.md` or `.agent-context/` as the source, then regenerate thin adapters with `npm run sync:adapters`
 4. Update `review-checklists/pr-checklist.md` when the rule is part of review scope
 5. Validate and PR
 
@@ -89,7 +89,7 @@ If all three are "yes", it belongs here.
 - Rules without concrete enforcement boundaries
 - Stack profiles for languages the author doesn't actually use in production
 - Blueprints that are just folder structures without code patterns
-- PRs that don't update the relevant manifest files (AGENTS.md, checklists)
+- PRs that don't update the relevant source files, generated adapters, and checklists
 
 ---
 
@@ -102,6 +102,9 @@ cd Agentic-Senior-Core
 
 # Validate
 npm run validate
+
+# Clean ignored local reports/backups when the workspace gets noisy
+npm run clean:local
 
 # Test interactive CLI
 node ./bin/agentic-senior-core.js init /tmp/test-project

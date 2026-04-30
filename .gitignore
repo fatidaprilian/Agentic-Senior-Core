@@ -29,3 +29,14 @@ release-gate-report.json
 .agent-context/state/v3-purge-audit.json
 .agent-context/state/llm-judge-report.json
 .agent-context/state/active-memory.json
+.agent-context/state/benchmark-analysis.json
+.agent-context/state/benchmark-evidence-bundle.json
+.agent-context/state/benchmark-history.json
+.agent-context/state/benchmark-trend-report.csv
+.agent-context/state/benchmark-trend-report.json
+.agent-context/state/benchmark-writer-judge-matrix.json
+.agent-context/state/docs-quality-drift-report.json
+.agent-context/state/memory-continuity-benchmark.json
+.agent-context/state/quality-trend-report.json
+.agent-context/state/token-optimization-benchmark.json
+.agent-context/state/weekly-governance-report.json

@@ -1,12 +1,14 @@
 # Semantic Redundancy Scan (Phase 2) — 2026-04-11
 
+Historical note: This scan is retained as dated evidence. Use the active roadmap backlog for current cleanup work.
+
 ## Scope
 
 This scan targets semantic overlap (not exact hash duplicates) across markdown content in:
 - repository root markdown files
 - `docs/`
 - `.agent-context/`
-- instruction entry files (`AGENTS.md`, `.instructions.md`, `.github/copilot-instructions.md`, `.gemini/instructions.md`)
+- instruction entry files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.instructions.md`, `.github/copilot-instructions.md`, `.github/instructions/`, `.cursor/rules/`, `.windsurf/rules/`, `.gemini/instructions.md`)
 
 Method:
 - n-gram similarity and lexical overlap scoring
@@ -29,14 +31,14 @@ Recommendation:
 - Keep one canonical instruction source and reduce other files to thin adapters/references.
 - Move duplicated policy text into `.agent-context/rules/` and reference it.
 
-### Compiled Rule Duplication (Expected)
+### Legacy Root Adapter Duplication (Expected)
 
 Expected and intentional:
 - `.cursorrules` ↔ `.windsurfrules` (1.000)
 
 Interpretation:
-- Compiled output is intentionally mirrored for tool compatibility.
-- Not a cleanup target.
+- Legacy root adapters are intentionally mirrored for older tool discovery.
+- They must stay thin and point to `.agent-instructions.md` when present.
 
 ### Docs Overlap (Medium)
 
@@ -81,8 +83,9 @@ Recommendation:
    - README links to roadmap sections rather than repeating long milestone text.
 3. Add drift checks for instruction adapters:
    - Detect if adapter files include duplicated policy blocks beyond threshold.
-4. Keep compiled dual-rule files unchanged:
-   - required for tool compatibility.
+4. Keep legacy dual-root files thin:
+   - required for old tool compatibility.
+   - not allowed to carry the full compiled rulebook.
 
 ## Result
 

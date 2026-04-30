@@ -1,5 +1,7 @@
 # RTK Comparison and Sync Audit (2026-04-11)
 
+Historical note: This audit is retained as dated evidence. Do not treat it as the current implementation plan.
+
 ## Scope
 
 This audit compares Agentic-Senior-Core against RTK as a reference implementation for token-efficient CLI workflows, then maps cleanup and synchronization actions for this repository.

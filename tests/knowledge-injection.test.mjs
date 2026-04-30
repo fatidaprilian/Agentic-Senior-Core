@@ -95,16 +95,26 @@ const FULL_INJECTION_ENTRY_POINTS = [
  */
 const DELEGATING_ENTRY_POINTS = [
   { name: 'AGENTS.md', path: 'AGENTS.md', delegatesTo: ['.instructions.md'] },
+  { name: 'CLAUDE.md', path: 'CLAUDE.md', delegatesTo: ['.instructions.md'] },
+  { name: 'GEMINI.md', path: 'GEMINI.md', delegatesTo: ['.instructions.md'] },
   { name: 'copilot-instructions.md', path: '.github/copilot-instructions.md', delegatesTo: ['.instructions.md'] },
-  { name: '.cursorrules', path: '.cursorrules', delegatesTo: ['.cursorrules'] },
-  { name: '.windsurfrules', path: '.windsurfrules', delegatesTo: ['.cursorrules'] },
+  { name: '.github/instructions/agentic-senior-core.instructions.md', path: '.github/instructions/agentic-senior-core.instructions.md', delegatesTo: ['.instructions.md'] },
+  { name: '.cursorrules', path: '.cursorrules', delegatesTo: ['.agent-instructions.md'] },
+  { name: '.windsurfrules', path: '.windsurfrules', delegatesTo: ['.agent-instructions.md'] },
   { name: '.gemini/instructions.md', path: '.gemini/instructions.md', delegatesTo: ['.instructions.md'] },
+  { name: '.cursor/rules/agentic-senior-core.mdc', path: '.cursor/rules/agentic-senior-core.mdc', delegatesTo: ['.instructions.md'] },
+  { name: '.windsurf/rules/agentic-senior-core.md', path: '.windsurf/rules/agentic-senior-core.md', delegatesTo: ['.instructions.md'] },
 ];
 
 const THIN_ADAPTER_ENTRY_POINTS = [
   { name: 'AGENTS.md', path: 'AGENTS.md' },
+  { name: 'CLAUDE.md', path: 'CLAUDE.md' },
+  { name: 'GEMINI.md', path: 'GEMINI.md' },
   { name: 'copilot-instructions.md', path: '.github/copilot-instructions.md' },
+  { name: '.github/instructions/agentic-senior-core.instructions.md', path: '.github/instructions/agentic-senior-core.instructions.md' },
   { name: '.gemini/instructions.md', path: '.gemini/instructions.md' },
+  { name: '.cursor/rules/agentic-senior-core.mdc', path: '.cursor/rules/agentic-senior-core.mdc' },
+  { name: '.windsurf/rules/agentic-senior-core.md', path: '.windsurf/rules/agentic-senior-core.md' },
 ];
 
 function normalizeLineEndings(content) {
@@ -370,9 +380,19 @@ describe('MCP Knowledge Layer Declaration', () => {
     assert.strictEqual(mcpConfig.knowledgeLayers.enabled, true, 'knowledgeLayers not enabled');
   });
 
-  it('mcp.json declares all 8 layer paths', () => {
+  it('mcp.json declares all 9 layer paths', () => {
     const mcpConfig = JSON.parse(readFileSync(mcpPath, 'utf-8'));
-    const expectedLayerNames = ['rules', 'stack-strategies', 'architecture-playbooks', 'execution-contracts', 'prompts', 'governance-modes', 'state', 'policies'];
+    const expectedLayerNames = [
+      'rules',
+      'stack-strategies',
+      'architecture-playbooks',
+      'execution-contracts',
+      'prompts',
+      'governance-modes',
+      'state',
+      'policies',
+      'project-context',
+    ];
     const actualLayerNames = Object.keys(mcpConfig.knowledgeLayers.layers);
 
     const missingLayers = expectedLayerNames.filter(
@@ -385,10 +405,11 @@ describe('MCP Knowledge Layer Declaration', () => {
     );
   });
 
-  it('mcp.json sets autoLoad=true for all layers', () => {
+  it('mcp.json auto-loads governance layers and keeps project docs lazy', () => {
     const mcpConfig = JSON.parse(readFileSync(mcpPath, 'utf-8'));
     const layerEntries = Object.entries(mcpConfig.knowledgeLayers.layers);
     const nonAutoLoadLayers = layerEntries
+      .filter(([layerName]) => layerName !== 'project-context')
       .filter(([, layerConfig]) => layerConfig.autoLoad !== true)
       .map(([layerName]) => layerName);
 
@@ -396,6 +417,11 @@ describe('MCP Knowledge Layer Declaration', () => {
       nonAutoLoadLayers,
       [],
       `These layers do not have autoLoad=true: ${nonAutoLoadLayers.join(', ')}`
+    );
+    assert.equal(
+      mcpConfig.knowledgeLayers.layers['project-context']?.autoLoad,
+      false,
+      'project-context must stay lazy so docs are injected only when relevant'
     );
   });
 
@@ -407,10 +433,21 @@ describe('MCP Knowledge Layer Declaration', () => {
     );
   });
 
-  it('mcp.json injection workflow covers all 8 layers', () => {
+  it('mcp.json injection workflow covers all scoped layers', () => {
     const mcpConfig = JSON.parse(readFileSync(mcpPath, 'utf-8'));
     const injectionSteps = mcpConfig.workflows['full-knowledge-injection'].steps;
-    const expectedStepKeywords = ['rules', 'stack', 'architecture', 'execution', 'prompts', 'governance', 'state', 'policies'];
+    const expectedStepKeywords = [
+      'scope',
+      'rules',
+      'runtime',
+      'structural',
+      'execution',
+      'prompts',
+      'governance',
+      'state',
+      'policies',
+      'project_context',
+    ];
 
     for (const keyword of expectedStepKeywords) {
       const hasStep = injectionSteps.some((step) => step.includes(keyword));

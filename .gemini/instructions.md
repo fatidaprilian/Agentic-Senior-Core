@@ -2,28 +2,35 @@
 
 Adapter Mode: thin
 Adapter Source: .instructions.md
-Canonical Snapshot SHA256: 06e3f81d1df0e86bad6c3fe2a4623da640a1ea88b3124aecf1c10214cdc178e6
+Canonical Snapshot SHA256: 75652106d1fc453e9407eb9301e7f38de2e0159190dc47fb0b6e377859d91a46
 
-Canonical policy source: [.instructions.md](../.instructions.md).
+This repository is governed by a strict instruction contract.
+Use [.instructions.md](../.instructions.md) as the canonical policy source.
+Use .agent-context/ for technical rules, prompts, checklists, policies, and state.
+Treat README.md as overview/install/user context only when governance files conflict.
 
-If your host stops at this file, follow this minimum floor:
+## Critical Bootstrap Floor
+
+- If your host stops at this file, continue the chain manually before coding.
 - Read `.agent-instructions.md` next when it exists.
-- For UI or redesign requests, load [.agent-context/prompts/bootstrap-design.md](../.agent-context/prompts/bootstrap-design.md) and [.agent-context/rules/frontend-architecture.md](../.agent-context/rules/frontend-architecture.md) before coding.
+- Memory continuity does not replace bootstrap loading.
+- For UI, UX, layout, screen, tailwind, frontend, or redesign requests, load [bootstrap-design.md](../.agent-context/prompts/bootstrap-design.md) and [frontend-architecture.md](../.agent-context/rules/frontend-architecture.md) before code edits.
 - For UI scope, include a one-line Motion/Palette Decision in the Bootstrap Receipt; product categories are heuristics, not style presets.
-- If UI scope and `docs/DESIGN.md` or `docs/design-intent.json` is missing, materialize them before UI implementation.
+- For UI scope, create or refine `docs/DESIGN.md` and `docs/design-intent.json` before UI implementation.
 - For documentation-first requests, create or refine required project docs in English by default and do not write application, firmware, or UI code until the user asks or approves.
-- For backend/API/data/auth/event requests, load relevant global rules from [.agent-context/rules/](../.agent-context/rules) and do not create stack-specific governance adapters.
-- Memory continuity is host-dependent project memory and does not replace bootstrap loading.
+- For backend, API, data, auth, error, event, queue, worker, or distributed-system requests, load only relevant global rules from .agent-context/rules/ ([link](../.agent-context/rules)).
+- For ecosystem, framework, dependency, or Docker claims, perform live web research.
+- Resolve runtime choices from project evidence and live official documentation; resolve structural planning from constraints and architecture boundaries.
 
-## Bootstrap Sequence
+## Mandatory Bootstrap Chain
 
-1. Load [.instructions.md](../.instructions.md) first as the canonical baseline.
-2. If `.agent-instructions.md` exists, read it next as the compiled project-specific snapshot.
-3. Apply baseline rules from [.agent-context/rules/](../.agent-context/rules).
-4. Load request templates from [.agent-context/prompts/](../.agent-context/prompts).
-5. Apply review contracts from [.agent-context/review-checklists/](../.agent-context/review-checklists).
-6. Apply state awareness from [.agent-context/state/](../.agent-context/state) and policy thresholds from [.agent-context/policies/](../.agent-context/policies).
-7. Resolve runtime, structure, and dependency choices from project context docs plus live evidence.
+1. Load [.instructions.md](../.instructions.md).
+2. Load `.agent-instructions.md` when present.
+3. Load only relevant files from .agent-context/rules/ ([link](../.agent-context/rules)).
+4. Apply matching prompts from .agent-context/prompts/ ([link](../.agent-context/prompts)).
+5. Enforce .agent-context/review-checklists/ ([link](../.agent-context/review-checklists/pr-checklist.md)).
+6. Use .agent-context/state/ ([link](../.agent-context/state)) and .agent-context/policies/ ([link](../.agent-context/policies)) only when relevant.
+7. Use project docs and live evidence for runtime, dependency, and architecture claims.
 
 ## Bootstrap Receipt
 
@@ -31,4 +38,6 @@ For non-trivial coding, review, planning, or governance work, produce a short Bo
 
 ## Completion Gate
 
-Run [.agent-context/review-checklists/pr-checklist.md](../.agent-context/review-checklists/pr-checklist.md) before declaring completion.
+Run [pr-checklist.md](../.agent-context/review-checklists/pr-checklist.md) before declaring work complete.
+
+If this adapter drifts from canonical behavior, refresh from [.instructions.md](../.instructions.md) and update the hash metadata.

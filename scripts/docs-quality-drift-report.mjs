@@ -26,8 +26,13 @@ const MONITORED_STATIC_FILE_PATHS = [
   'CHANGELOG.md',
   '.instructions.md',
   'AGENTS.md',
+  'CLAUDE.md',
+  'GEMINI.md',
   '.github/copilot-instructions.md',
+  '.github/instructions/agentic-senior-core.instructions.md',
   '.gemini/instructions.md',
+  '.cursor/rules/agentic-senior-core.mdc',
+  '.windsurf/rules/agentic-senior-core.md',
   'docs/deep_analysis_and_roadmap_backlog.md',
 ];
 

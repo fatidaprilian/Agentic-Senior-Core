@@ -253,7 +253,7 @@ function collectCommitSignals(windowDays) {
   };
 }
 
-async function collectSkillTrustSignals() {
+async function collectGovernanceSurfaceTrustSignals() {
   const trustRows = [];
   const tierCounts = {
     verified: 0,
@@ -265,8 +265,8 @@ async function collectSkillTrustSignals() {
     return leftName.localeCompare(rightName);
   });
 
-  for (const skillDomainName of sortedDomainNames) {
-    const relativeSurfacePath = GOVERNANCE_SURFACE_PATHS[skillDomainName];
+  for (const surfaceDomainName of sortedDomainNames) {
+    const relativeSurfacePath = GOVERNANCE_SURFACE_PATHS[surfaceDomainName];
     const absoluteSurfacePath = join(REPOSITORY_ROOT, relativeSurfacePath);
     const surfaceExists = existsSync(absoluteSurfacePath);
     const trustTier = surfaceExists ? 'verified' : 'experimental';
@@ -277,7 +277,7 @@ async function collectSkillTrustSignals() {
     }
 
     trustRows.push({
-      domain: skillDomainName,
+      domain: surfaceDomainName,
       tier: trustTier,
       score: trustScore,
       sourcePath: relativeSurfacePath,
@@ -297,8 +297,8 @@ async function collectSkillTrustSignals() {
   };
 }
 
-function buildBackendGovernancePosture(skillTrustSignals) {
-  const backendSurfaceRows = skillTrustSignals.domains.filter((trustRow) => {
+function buildBackendGovernancePosture(governanceSurfaceTrustSignals) {
+  const backendSurfaceRows = governanceSurfaceTrustSignals.domains.filter((trustRow) => {
     return BACKEND_REQUIRED_DOMAIN_NAMES.has(trustRow.domain);
   });
   const missingBackendSurfaceNames = backendSurfaceRows
@@ -328,7 +328,7 @@ function buildBackendGovernancePosture(skillTrustSignals) {
   };
 }
 
-function buildBlockers(qualityTrendReport, skillTrustSignals, commitSignals) {
+function buildBlockers(qualityTrendReport, governanceSurfaceTrustSignals, commitSignals) {
   const blockers = [];
 
   const qualityGatePassRatePercent = qualityTrendReport?.governanceHealth?.gatePassRatePercent;
@@ -336,9 +336,9 @@ function buildBlockers(qualityTrendReport, skillTrustSignals, commitSignals) {
     blockers.push('Governance gate pass rate is below 100%.');
   }
 
-  if (!skillTrustSignals.allRequiredVerified) {
+  if (!governanceSurfaceTrustSignals.allRequiredVerified) {
     blockers.push(
-      `Required verified skill domains missing: ${skillTrustSignals.requiredVerifiedDomainFailures.join(', ')}`
+      `Required verified governance surfaces missing: ${governanceSurfaceTrustSignals.requiredVerifiedDomainFailures.join(', ')}`
     );
   }
 
@@ -355,15 +355,37 @@ function buildHistoryEntry(weeklyReport) {
     readinessStatus: weeklyReport.releaseReadiness.isReady ? 'ready' : 'blocked',
     blockerCount: weeklyReport.releaseReadiness.blockers.length,
     gatePassRatePercent: weeklyReport.qualitySignals.governanceHealth.gatePassRatePercent,
-    verifiedSkillDomainCount: weeklyReport.skillTrust.tierCounts.verified,
+    verifiedGovernanceSurfaceCount: weeklyReport.governanceSurfaceTrust.tierCounts.verified,
     backendVerifiedSurfaceCount: weeklyReport.backendGovernance?.verifiedSurfaceCount ?? null,
     releaseFrequencyPercent: weeklyReport.commitSignals.releaseFrequencyPercent,
     rollbackFrequencyPercent: weeklyReport.commitSignals.rollbackFrequencyPercent,
   };
 }
 
+function normalizeHistoryEntry(historyEntry) {
+  if (!historyEntry || typeof historyEntry !== 'object') {
+    return historyEntry;
+  }
+
+  const {
+    verifiedSkillDomainCount,
+    ...normalizedHistoryEntry
+  } = historyEntry;
+
+  if (
+    typeof normalizedHistoryEntry.verifiedGovernanceSurfaceCount !== 'number'
+    && typeof verifiedSkillDomainCount === 'number'
+  ) {
+    normalizedHistoryEntry.verifiedGovernanceSurfaceCount = verifiedSkillDomainCount;
+  }
+
+  return normalizedHistoryEntry;
+}
+
 function mergeHistory(previousReport, currentHistoryEntry) {
-  const existingHistory = Array.isArray(previousReport?.history) ? previousReport.history : [];
+  const existingHistory = Array.isArray(previousReport?.history)
+    ? previousReport.history.map((historyEntry) => normalizeHistoryEntry(historyEntry))
+    : [];
   const mergedHistory = [...existingHistory, currentHistoryEntry];
 
   if (mergedHistory.length <= HISTORY_LIMIT) {
@@ -377,10 +399,10 @@ async function runWeeklyGovernanceReport() {
   const qualityTrendState = loadQualityTrendReport();
   const qualityTrendReport = qualityTrendState.report;
 
-  const skillTrustSignals = await collectSkillTrustSignals();
-  const backendGovernance = buildBackendGovernancePosture(skillTrustSignals);
+  const governanceSurfaceTrustSignals = await collectGovernanceSurfaceTrustSignals();
+  const backendGovernance = buildBackendGovernancePosture(governanceSurfaceTrustSignals);
   const commitSignals = collectCommitSignals(WEEKLY_WINDOW_DAYS);
-  const blockers = buildBlockers(qualityTrendReport, skillTrustSignals, commitSignals);
+  const blockers = buildBlockers(qualityTrendReport, governanceSurfaceTrustSignals, commitSignals);
 
   const weeklyReportSnapshot = {
     generatedAt: new Date().toISOString(),
@@ -402,7 +424,7 @@ async function runWeeklyGovernanceReport() {
         : [],
       tokenEfficiency: qualityTrendReport?.tokenEfficiency || null,
     },
-    skillTrust: skillTrustSignals,
+    governanceSurfaceTrust: governanceSurfaceTrustSignals,
     backendGovernance,
     commitSignals,
     releaseReadiness: {

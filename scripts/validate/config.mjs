@@ -2,8 +2,13 @@ export const ALLOWED_SEVERITIES = new Set(['critical', 'high', 'medium', 'low'])
 export const OVERRIDE_WARNING_WINDOW_DAYS = 30;
 export const THIN_ADAPTER_PATHS = [
   'AGENTS.md',
+  'CLAUDE.md',
+  'GEMINI.md',
   '.github/copilot-instructions.md',
+  '.github/instructions/agentic-senior-core.instructions.md',
   '.gemini/instructions.md',
+  '.cursor/rules/agentic-senior-core.mdc',
+  '.windsurf/rules/agentic-senior-core.md',
 ];
 export const FORMAL_ARTIFACT_PATHS = [
   '.instructions.md',
@@ -14,8 +19,13 @@ export const FORMAL_ARTIFACT_PATHS = [
   '.agent-context/review-checklists/pr-checklist.md',
   '.agent-context/prompts/review-code.md',
   'AGENTS.md',
+  'CLAUDE.md',
+  'GEMINI.md',
   '.github/copilot-instructions.md',
+  '.github/instructions/agentic-senior-core.instructions.md',
   '.gemini/instructions.md',
+  '.cursor/rules/agentic-senior-core.mdc',
+  '.windsurf/rules/agentic-senior-core.md',
 ];
 export const REQUIRED_HUMAN_WRITING_SNIPPETS = [
   {

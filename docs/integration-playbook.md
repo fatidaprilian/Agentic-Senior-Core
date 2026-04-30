@@ -27,6 +27,25 @@ Required governance sources:
 - `.agent-context/state/`
 - `.agent-context/review-checklists/pr-checklist.md`
 
+## AI Host Entrypoint Verification
+
+Checked on 2026-04-29 against current vendor documentation.
+
+| Host | Supported entrypoints | Source |
+| --- | --- | --- |
+| Codex | `AGENTS.md` | OpenAI Codex `AGENTS.md` documentation: https://github.com/openai/codex/blob/main/docs/agents_md.md |
+| Cursor | `.cursor/rules/*.mdc`, `AGENTS.md`, legacy `.cursorrules` | Cursor Rules documentation: https://docs.cursor.com/context/rules |
+| Windsurf | `AGENTS.md`, `.windsurf/rules/*.md` | Windsurf `AGENTS.md` documentation: https://docs.windsurf.com/windsurf/cascade/agents-md |
+| GitHub Copilot | `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md`, `AGENTS.md`, root `CLAUDE.md`, root `GEMINI.md` | GitHub Copilot repository instructions documentation: https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions |
+| Claude Code | `CLAUDE.md` | Claude Code memory documentation: https://code.claude.com/docs/en/memory |
+| Gemini CLI | `GEMINI.md` | Gemini CLI context file documentation: https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/gemini-md.md |
+
+Policy:
+- Keep `.instructions.md` canonical.
+- Keep `.agent-instructions.md` as the only compiled rulebook.
+- Keep vendor entrypoints thin unless a vendor requires a compiled file.
+- Preserve user-owned instruction files during upgrade when they lack Agentic-Senior-Core managed markers.
+
 ## GitHub Actions Playbook
 
 1. Use repository workflows in `.github/workflows/` as the source of truth.
@@ -91,7 +110,7 @@ pipeline {
 
 ## VS Code Playbook
 
-1. Keep `.github/copilot-instructions.md` aligned with `.instructions.md`.
+1. Keep `.github/copilot-instructions.md` and `.github/instructions/agentic-senior-core.instructions.md` aligned with `.instructions.md`.
 2. Use `.vscode/mcp.json` for local MCP registration (`node ./scripts/mcp-server.mjs`).
 3. Run `init` or `upgrade` after pulling governance changes:
 
@@ -101,8 +120,13 @@ npx @ryuenn3123/agentic-senior-core upgrade --yes
 ```
 
 4. Confirm generated files are present and current:
-- `.cursorrules`
-- `.windsurfrules`
+- `.agent-instructions.md`
+- `.cursorrules` as a legacy thin adapter
+- `.windsurfrules` as a legacy thin adapter
+- `CLAUDE.md`
+- `GEMINI.md`
+- `.cursor/rules/agentic-senior-core.mdc`
+- `.windsurf/rules/agentic-senior-core.md`
 - `.agent-context/state/onboarding-report.json`
 
 ## JetBrains Playbook
@@ -128,7 +152,8 @@ npm run gate:release
 
 - CI and local commands are identical.
 - Instruction adapter files still point to `.instructions.md`.
-- Compiled rule files are regenerated after policy changes.
+- `.agent-instructions.md` is regenerated after policy changes.
+- Legacy root adapters stay thin and point to `.agent-instructions.md` when present.
 - Release gate remains green on both CI and local runs.
 
 ## Next Action
