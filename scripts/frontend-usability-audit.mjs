@@ -3,9 +3,9 @@
 /**
  * frontend-usability-audit.mjs
  *
- * Governance-level audit for V1.7 frontend execution assets.
+ * Governance-level audit for current frontend governance assets.
  * This repository does not host a frontend runtime app, so the audit validates
- * required execution artifacts and quality gates documentation.
+ * required quality gates and archived execution evidence.
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -18,8 +18,8 @@ const REPOSITORY_ROOT = resolve(__dirname, '..');
 
 const REQUIRED_FILES = [
   'docs/roadmap.md',
-  'docs/v1.7-issue-breakdown.md',
-  'docs/v1.7-execution-playbook.md',
+  'docs/archive/v1.7-issue-breakdown.md',
+  'docs/archive/v1.7-execution-playbook.md',
   '.instructions.md',
   '.agent-context/prompts/bootstrap-design.md',
   'scripts/ui-design-judge.mjs',

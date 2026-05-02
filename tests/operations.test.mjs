@@ -270,8 +270,9 @@ test('Operations Tests', async (t) => {
 
     assert.equal(benchmarkIntelligenceReport.reportName, 'benchmark-intelligence');
     assert.equal(typeof benchmarkIntelligenceReport.passed, 'boolean');
+    assert.equal(benchmarkIntelligenceReport.staticExternalWatchlistRetired, true);
     assert.ok(Array.isArray(benchmarkIntelligenceReport.watchlist));
-    assert.ok(benchmarkIntelligenceReport.watchlist.length >= 3);
+    assert.equal(benchmarkIntelligenceReport.watchlist.length, 0);
   });
 
   await t.test('benchmark evidence bundle outputs machine-readable report', () => {

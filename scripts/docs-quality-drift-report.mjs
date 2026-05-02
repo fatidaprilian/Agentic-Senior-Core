@@ -33,7 +33,7 @@ const MONITORED_STATIC_FILE_PATHS = [
   '.gemini/instructions.md',
   '.cursor/rules/agentic-senior-core.mdc',
   '.windsurf/rules/agentic-senior-core.md',
-  'docs/deep_analysis_and_roadmap_backlog.md',
+  'docs/deep-analysis-and-roadmap-backlog.md',
 ];
 
 const MONITORED_DIRECTORY_PATHS = [

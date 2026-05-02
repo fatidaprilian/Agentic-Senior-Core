@@ -152,10 +152,6 @@ function loadScenarios(reproducibilityProfile) {
 }
 
 function buildBaseSignals(detectionBenchmarkReport, tokenBenchmarkReport, benchmarkGateReport, benchmarkIntelligenceReport, thresholdConfiguration) {
-  const staleWatchlistCount = Array.isArray(benchmarkIntelligenceReport?.watchlist)
-    ? benchmarkIntelligenceReport.watchlist.filter((watchlistEntry) => watchlistEntry?.stale === true).length
-    : 0;
-
   const top1Accuracy = Number(detectionBenchmarkReport?.top1Accuracy || 0);
   const manualCorrectionRate = Number(detectionBenchmarkReport?.manualCorrectionRate || 1);
 
@@ -166,7 +162,7 @@ function buildBaseSignals(detectionBenchmarkReport, tokenBenchmarkReport, benchm
     benchmarkGatePassed: benchmarkGateReport?.passed === true,
     benchmarkGateFailureCount: Number(benchmarkGateReport?.failureCount || 0),
     intelligenceFailureCount: Number(benchmarkIntelligenceReport?.failureCount || 0),
-    staleWatchlistCount,
+    staticExternalWatchlistRetired: benchmarkIntelligenceReport?.staticExternalWatchlistRetired === true,
     top1AccuracyMet: top1Accuracy >= Number(thresholdConfiguration?.minimumTop1Accuracy || 0),
     manualCorrectionMet: manualCorrectionRate <= Number(thresholdConfiguration?.maximumManualCorrectionRate || 1),
   };
@@ -182,7 +178,7 @@ function buildWriterScenarioRun(writerModel, scenario, baseSignals, writerWeight
     ? clamp(100 + deterministicOffset(`${writerModel.id}:reliability`, 2), 0, 100)
     : clamp(100 - (baseSignals.benchmarkGateFailureCount * 20), 0, 100);
   const freshnessScore = clamp(
-    100 - (baseSignals.intelligenceFailureCount * 15) - (baseSignals.staleWatchlistCount * 10) + deterministicOffset(`${writerModel.id}:freshness`, 2),
+    100 - (baseSignals.intelligenceFailureCount * 15) + deterministicOffset(`${writerModel.id}:freshness`, 2),
     0,
     100
   );

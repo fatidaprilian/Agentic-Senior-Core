@@ -11,5 +11,10 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["bin/**/*.js", "scripts/**/*.mjs", "tests/**/*.mjs"]
+  "include": [
+    "bin/**/*.js",
+    "scripts/**/*.mjs",
+    "tests/**/*.mjs",
+    "lib/**/*.mjs"
+  ]
 }

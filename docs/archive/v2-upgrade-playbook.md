@@ -1,6 +1,6 @@
 # V2 Upgrade Playbook (Benchmark-Driven)
 
-Historical note: This playbook records the V2 benchmark-driven direction. V3 purge mode retired the skill marketplace path; use `.instructions.md`, `.agent-context/`, and `docs/deep_analysis_and_roadmap_backlog.md` for current policy and next work.
+Historical note: This playbook records the V2 benchmark-driven direction. V3 purge mode retired the skill marketplace path; use `.instructions.md`, `.agent-context/`, and `docs/deep-analysis-and-roadmap-backlog.md` for current policy and next work.
 
 This playbook defines how Agentic-Senior-Core stays ahead of benchmark repositories while maintaining stable release delivery.
 

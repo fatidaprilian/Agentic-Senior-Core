@@ -100,7 +100,6 @@ export function runStaticReleaseChecks(results, diagnostics) {
 
   const requiredOperationsFiles = [
     '.agent-context/review-checklists/architecture-review.md',
-    'docs/v1.8-operations-playbook.md',
     '.github/workflows/release-gate.yml',
     '.github/workflows/sbom-compliance.yml',
     '.github/workflows/governance-weekly-report.yml',

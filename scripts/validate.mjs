@@ -166,14 +166,12 @@ async function validateRequiredFiles() {
     'docs/faq.md',
     'docs/deep-dive.md',
     'docs/terminology-mapping.md',
-    'docs/v1.7-execution-playbook.md',
-    'docs/v1.7-issue-breakdown.md',
-    'docs/v1.8-operations-playbook.md',
-    'docs/v2-upgrade-playbook.md',
+    'docs/archive/v1.7-execution-playbook.md',
+    'docs/archive/v1.7-issue-breakdown.md',
+    'docs/archive/v1.8-operations-playbook.md',
+    'docs/archive/v2-upgrade-playbook.md',
     '.agent-context/state/benchmark-reproducibility.json',
     '.agent-context/state/benchmark-writer-judge-config.json',
-    '.agent-context/state/benchmark-watchlist.json',
-    '.agent-context/state/stack-research-snapshot.json',
     '.agent-context/state/memory-schema-v1.json',
     '.agent-context/state/memory-adapter-contract.json',
     '.vscode/mcp.json',
@@ -569,7 +567,7 @@ async function validateDocumentationFlow() {
     'npm run validate',
     'docs/faq.md',
     'docs/deep-dive.md',
-    'docs/v2-upgrade-playbook.md',
+    'docs/archive/v2-upgrade-playbook.md',
   ];
 
   for (const requiredReadmeSnippet of requiredReadmeSnippets) {
@@ -581,90 +579,17 @@ async function validateDocumentationFlow() {
   }
 }
 
-function isNormalizedMetricValue(value) {
-  return Number.isFinite(Number(value)) && Number(value) >= 0 && Number(value) <= 1;
-}
-
-async function validateStackResearchSnapshotState() {
-  console.log('\nChecking deterministic stack research snapshot state...');
-
-  const snapshotPath = join(ROOT_DIR, '.agent-context', 'state', 'stack-research-snapshot.json');
-  if (!(await fileExists(snapshotPath))) {
-    fail('Missing deterministic stack research snapshot: .agent-context/state/stack-research-snapshot.json');
-    return;
-  }
-
-  let snapshotPayload;
-  try {
-    snapshotPayload = JSON.parse(await readTextFile(snapshotPath));
-  } catch {
-    fail('Invalid JSON in .agent-context/state/stack-research-snapshot.json');
-    return;
-  }
-
-  if (snapshotPayload?.deterministic === true) {
-    pass('stack-research-snapshot.json declares deterministic: true');
-  } else {
-    fail('stack-research-snapshot.json must declare deterministic: true');
-  }
-
-  const generatedAtValue = String(snapshotPayload?.generatedAt || '');
-  if (!Number.isNaN(Date.parse(generatedAtValue))) {
-    pass('stack-research-snapshot.json includes valid generatedAt timestamp');
-  } else {
-    fail('stack-research-snapshot.json must include a valid generatedAt timestamp');
-  }
-
-  if (Array.isArray(snapshotPayload?.trustedRealtimeSources) && snapshotPayload.trustedRealtimeSources.length > 0) {
-    pass('stack-research-snapshot.json includes trustedRealtimeSources');
-  } else {
-    fail('stack-research-snapshot.json must include at least one trustedRealtimeSources entry');
-  }
-
-  if (!Array.isArray(snapshotPayload?.stackSignals) || snapshotPayload.stackSignals.length === 0) {
-    fail('stack-research-snapshot.json must include non-empty stackSignals array');
-    return;
-  }
-
-  pass(`stack-research-snapshot.json includes ${snapshotPayload.stackSignals.length} stack signal entries`);
-
-  const invalidSignalEntries = snapshotPayload.stackSignals.filter((signalEntry) => {
-    const hasStackName = typeof signalEntry?.stackFileName === 'string' && signalEntry.stackFileName.trim().length > 0;
-    const hasMeasuredAt = !Number.isNaN(Date.parse(String(signalEntry?.measuredAt || '')));
-    const metrics = signalEntry?.metrics || {};
-    const hasValidMetrics = isNormalizedMetricValue(metrics.ecosystemMaturity)
-      && isNormalizedMetricValue(metrics.talentAvailability)
-      && isNormalizedMetricValue(metrics.deliveryVelocity);
-
-    return !(hasStackName && hasMeasuredAt && hasValidMetrics);
-  });
-
-  if (invalidSignalEntries.length === 0) {
-    pass('stack-research-snapshot.json stackSignals keep measurable metrics and timestamps');
-  } else {
-    fail(`stack-research-snapshot.json has invalid stackSignals entries: ${invalidSignalEntries.length}`);
-  }
-}
-
 async function validateMcpConfiguration() {
   console.log('\nChecking MCP configuration...');
 
   const mcpConfiguration = JSON.parse(await readTextFile(join(ROOT_DIR, 'mcp.json')));
-  const lintServerCommand = mcpConfiguration.servers?.lint?.command;
-  const testServerCommand = mcpConfiguration.servers?.test?.command;
   const workspaceMcpConfiguration = JSON.parse(await readTextFile(join(ROOT_DIR, '.vscode', 'mcp.json')));
   const workspaceServerConfig = workspaceMcpConfiguration.servers?.['agentic-senior-core'];
 
-  if (lintServerCommand === 'node') {
-    pass('MCP lint server uses Node');
+  if (mcpConfiguration.knowledgeLayers?.enabled === true) {
+    pass('Root MCP config has knowledgeLayers enabled');
   } else {
-    fail('MCP lint server must use Node');
-  }
-
-  if (testServerCommand === 'node') {
-    pass('MCP test server uses Node');
-  } else {
-    fail('MCP test server must use Node');
+    fail('Root MCP config must have knowledgeLayers.enabled: true');
   }
 
   if (typeof workspaceMcpConfiguration.$schema === 'undefined') {
@@ -732,7 +657,6 @@ async function main() {
   await validateDependencyFreshnessAutomationCoverage(coverageValidationContext);
   await validateDeterministicBoundaryEnforcementCoverage(coverageValidationContext);
   await validateRulesOnlyActiveSurfaceCoverage(coverageValidationContext);
-  await validateStackResearchSnapshotState();
   await validateMcpConfiguration();
   await validateHumanWritingGovernance(coverageValidationContext);
   await validateInstructionAdapters(coverageValidationContext);

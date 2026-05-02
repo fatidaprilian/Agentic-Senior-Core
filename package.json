@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "3.0.40",
+  "version": "3.0.41",
   "type": "module",
   "description": "Force your AI Agent to code like a Staff Engineer, not a Junior.",
   "bin": {
@@ -21,11 +21,9 @@
     ".agent-context/state/benchmark-comparison-schema.json",
     ".agent-context/state/benchmark-reproducibility.json",
     ".agent-context/state/benchmark-thresholds.json",
-    ".agent-context/state/benchmark-watchlist.json",
     ".agent-context/state/benchmark-writer-judge-config.json",
     ".agent-context/state/memory-adapter-contract.json",
     ".agent-context/state/memory-schema-v1.json",
-    ".agent-context/state/stack-research-snapshot.json",
     ".agents/",
     ".cursor/",
     ".github/",
@@ -85,6 +83,6 @@
     "report:governance-weekly": "node ./scripts/governance-weekly-report.mjs",
     "clean:local": "node ./scripts/clean-local-artifacts.mjs",
     "validate": "node ./scripts/validate.mjs",
-    "test": "node --test ./tests/cli-smoke.test.mjs ./tests/mcp-server.test.mjs ./tests/llm-judge.test.mjs ./tests/ui-rubric-calibration.test.mjs ./tests/operations.test.mjs"
+    "test": "node --test ./tests/cli-smoke.test.mjs ./tests/mcp-server.test.mjs ./tests/llm-judge.test.mjs ./tests/ui-rubric-calibration.test.mjs ./tests/operations.test.mjs ./tests/knowledge-injection.test.mjs"
   }
 }

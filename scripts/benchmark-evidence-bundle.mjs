@@ -22,7 +22,6 @@ const isStdoutOnlyMode = ARGUMENT_FLAGS.has('--stdout-only');
 const PACKAGE_JSON_PATH = join(REPOSITORY_ROOT, 'package.json');
 const REPRO_PROFILE_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'benchmark-reproducibility.json');
 const BENCHMARK_THRESHOLD_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'benchmark-thresholds.json');
-const BENCHMARK_WATCHLIST_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'benchmark-watchlist.json');
 const MEMORY_SCHEMA_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'memory-schema-v1.json');
 const MEMORY_ADAPTER_CONTRACT_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'memory-adapter-contract.json');
 const OUTPUT_PATH = join(REPOSITORY_ROOT, '.agent-context', 'state', 'benchmark-evidence-bundle.json');
@@ -233,6 +232,7 @@ function buildRubricSummary(thresholdConfiguration, intelligenceReport, memoryCo
       maximumManualCorrectionIncrease: thresholdConfiguration?.maximumManualCorrectionIncrease ?? null,
     },
     intelligenceSlaDays: intelligenceReport?.reviewSlaDays ?? null,
+    staticExternalWatchlistRetired: intelligenceReport?.staticExternalWatchlistRetired === true,
     reliabilityThresholds: RELIABILITY_THRESHOLDS,
     continuityThresholds: memoryContinuityReport?.thresholds || null,
   };
@@ -384,10 +384,6 @@ function buildHistorySnapshot({
   reliabilitySignals,
   securityIndicators,
 }) {
-  const staleWatchlistCount = Array.isArray(benchmarkIntelligenceReport?.watchlist)
-    ? benchmarkIntelligenceReport.watchlist.filter((watchlistEntry) => watchlistEntry?.stale === true).length
-    : null;
-
   return {
     generatedAt,
     releaseVersion,
@@ -396,7 +392,7 @@ function buildHistorySnapshot({
     manualCorrectionRate: toFiniteNumber(detectionBenchmarkReport?.manualCorrectionRate, 0),
     benchmarkGatePassed: benchmarkGateReport?.passed === true,
     intelligencePassed: benchmarkIntelligenceReport?.passed === true,
-    staleWatchlistCount,
+    staticExternalWatchlistRetired: benchmarkIntelligenceReport?.staticExternalWatchlistRetired === true,
     reliabilityPassed: reliabilitySignals.passed,
     reliabilityRiskLevel: reliabilitySignals.riskLevel,
     incorrectDetectionRate: reliabilitySignals.metrics.incorrectDetectionRate,
@@ -419,8 +415,6 @@ function buildReleaseDelta(historyEntries, currentSnapshot) {
 
   const top1AccuracyDelta = Number((currentSnapshot.top1Accuracy - previousReleaseSnapshot.top1Accuracy).toFixed(4));
   const manualCorrectionDelta = Number((currentSnapshot.manualCorrectionRate - previousReleaseSnapshot.manualCorrectionRate).toFixed(4));
-  const staleWatchlistDelta =
-    (toFiniteNumber(currentSnapshot.staleWatchlistCount, 0) - toFiniteNumber(previousReleaseSnapshot.staleWatchlistCount, 0));
   const vulnerabilityDelta =
     (toFiniteNumber(currentSnapshot.vulnerabilityTotal, 0) - toFiniteNumber(previousReleaseSnapshot.vulnerabilityTotal, 0));
 
@@ -433,12 +427,10 @@ function buildReleaseDelta(historyEntries, currentSnapshot) {
     },
     top1AccuracyDelta,
     manualCorrectionRateDelta: manualCorrectionDelta,
-    staleWatchlistCountDelta: staleWatchlistDelta,
     vulnerabilityTotalDelta: vulnerabilityDelta,
     summary: [
       `top1Accuracy: ${top1AccuracyDelta >= 0 ? '+' : ''}${top1AccuracyDelta}`,
       `manualCorrectionRate: ${manualCorrectionDelta >= 0 ? '+' : ''}${manualCorrectionDelta}`,
-      `staleWatchlistCount: ${staleWatchlistDelta >= 0 ? '+' : ''}${staleWatchlistDelta}`,
       `vulnerabilityTotal: ${vulnerabilityDelta >= 0 ? '+' : ''}${vulnerabilityDelta}`,
     ],
   };
@@ -453,7 +445,7 @@ function buildTrendTable(historyEntries) {
     manualCorrectionRate: historyEntry.manualCorrectionRate,
     incorrectDetectionRate: historyEntry.incorrectDetectionRate,
     lowConfidenceRate: historyEntry.lowConfidenceRate,
-    staleWatchlistCount: historyEntry.staleWatchlistCount,
+    staticExternalWatchlistRetired: historyEntry.staticExternalWatchlistRetired === true,
     vulnerabilityTotal: historyEntry.vulnerabilityTotal,
     criticalVulnerabilityCount: historyEntry.criticalVulnerabilityCount,
     benchmarkGatePassed: historyEntry.benchmarkGatePassed,
@@ -470,7 +462,7 @@ function buildChartSeries(historyEntries) {
     manualCorrectionRate: historyEntries.map((historyEntry) => historyEntry.manualCorrectionRate),
     incorrectDetectionRate: historyEntries.map((historyEntry) => historyEntry.incorrectDetectionRate),
     lowConfidenceRate: historyEntries.map((historyEntry) => historyEntry.lowConfidenceRate),
-    staleWatchlistCount: historyEntries.map((historyEntry) => historyEntry.staleWatchlistCount),
+    staticExternalWatchlistRetired: historyEntries.map((historyEntry) => historyEntry.staticExternalWatchlistRetired === true),
     vulnerabilityTotal: historyEntries.map((historyEntry) => historyEntry.vulnerabilityTotal),
   };
 }
@@ -503,7 +495,6 @@ function convertTrendTableToCsv(trendTable) {
 async function runBenchmarkEvidenceBundle() {
   const reproducibilityProfile = readJsonOrNull(REPRO_PROFILE_PATH);
   const thresholdConfiguration = readJsonOrNull(BENCHMARK_THRESHOLD_PATH);
-  const watchlistConfiguration = readJsonOrNull(BENCHMARK_WATCHLIST_PATH);
   const memorySchemaConfiguration = readJsonOrNull(MEMORY_SCHEMA_PATH);
   const memoryAdapterContractConfiguration = readJsonOrNull(MEMORY_ADAPTER_CONTRACT_PATH);
   const releaseVersion = readReleaseVersion();
@@ -611,9 +602,10 @@ async function runBenchmarkEvidenceBundle() {
     rawInputs: {
       scenarios: Array.isArray(reproducibilityProfile?.scenarios) ? reproducibilityProfile.scenarios : [],
       benchmarkThresholds: thresholdConfiguration,
-      benchmarkWatchlist: Array.isArray(watchlistConfiguration?.repositories)
-        ? watchlistConfiguration.repositories
-        : [],
+      benchmarkWatchlist: {
+        retired: true,
+        reason: 'Static external benchmark watchlists were removed to avoid stale or biasing research inputs.',
+      },
       memorySchema: memorySchemaConfiguration,
       memoryAdapterContract: memoryAdapterContractConfiguration,
     },

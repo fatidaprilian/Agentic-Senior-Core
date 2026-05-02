@@ -1,6 +1,6 @@
 # Analysis Priority Matrix
 
-Historical note: This file captures an older analysis snapshot. Use `docs/deep_analysis_and_roadmap_backlog.md` for the active execution queue.
+Historical note: This file captures an older analysis snapshot. Use `docs/deep-analysis-and-roadmap-backlog.md` for the active execution queue.
 
 This document captures the execution priorities after the `2.0.2` release and the latest deep-scan audit.
 

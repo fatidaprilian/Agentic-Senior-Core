@@ -12,6 +12,7 @@ const LOCAL_ARTIFACT_PATHS = [
   'validate_output.txt',
   'release-gate-report.json',
   '.benchmarks',
+  '.zed',
   '.agentic-backup',
   '.agent-context/state/active-memory.json',
   '.agent-context/state/v3-purge-audit.json',

@@ -2,7 +2,7 @@
 
 Historical note: This file is benchmark background. Treat it as evidence history, not active governance policy. Current agent behavior is controlled by `.instructions.md`, `.agent-context/`, and the active roadmap backlog.
 
-This document contains detailed benchmark, stack fit, and comparison data moved out of README as part of V3.0-001 onboarding compression.
+This document contains local benchmark background moved out of README as part of V3.0-001 onboarding compression. It does not define stack defaults, vendor preferences, or external comparison baselines.
 
 ## Token Efficiency Benchmark Snapshot
 
@@ -49,27 +49,6 @@ npm run report:docs-quality-drift
 - Writer-judge config: .agent-context/state/benchmark-writer-judge-config.json
 - Continuity benchmark: .agent-context/state/memory-continuity-benchmark.json
 
-## Supported Stack Map
+## Runtime and Stack Boundary
 
-| Stack | Recommended Blueprint | Best Fit |
-|-------|-----------------------|----------|
-| TypeScript | api-nextjs | Web app, fullstack product, CLI tooling |
-| Python | fastapi-service | API service, automation, data-heavy backend |
-| Go | go-service | Small, fast services and platform tooling |
-| Java | spring-boot-api | Service APIs and distributed systems |
-| PHP | laravel-api | Conventional product backends |
-| C# | aspnet-api | Microsoft stack services and operations apps |
-| Rust | go-service | Performance-sensitive backend work |
-| Ruby | laravel-api | Mature product services and backend workflows |
-| React Native | mobile-app | Cross-platform mobile applications |
-| Flutter | mobile-app | Cross-platform mobile applications |
-
-## Benchmark Comparison (Current State)
-
-| Capability | antigravity-awesome-skills | awesome-copilot | MiniMax-AI/skills | Agentic-Senior-Core |
-|------------|----------------------------|-----------------|-------------------|---------------------|
-| Skill organization | Large curated library | Resource catalog and governance docs | Domain-focused packs | Unified folder-based domain packs with tier routing |
-| Architecture guidance | Strong practical patterns | Strong SoC and layered architecture | Strong applied templates | Consolidated architecture plus domain enforcement |
-| CLI governance | Limited | Moderate | Moderate | Init and upgrade governance with dry-run and structured reports |
-| Distribution operations | Basic | Moderate | Strong release checklists | Publish, rollback, compatibility gates, benchmark, and SBOM flows |
-| Review quality | Pattern-oriented | Checklist-oriented | Gate-oriented | Planning, security, and benchmark review model with CI integration |
+This repository no longer publishes static stack-fit tables or external benchmark watchlists. Runtime and dependency recommendations must come from the target repository evidence, the user's constraints, and current official documentation when ecosystem facts matter.

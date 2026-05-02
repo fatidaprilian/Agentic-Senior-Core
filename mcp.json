@@ -13,31 +13,44 @@
       },
       "stack-strategies": {
         "path": "dynamic",
-        "count": 0,
-        "autoLoad": true
+        "autoLoad": true,
+        "type": "virtual"
       },
       "architecture-playbooks": {
         "path": "dynamic",
-        "count": 0,
-        "autoLoad": true
+        "autoLoad": true,
+        "type": "virtual"
       },
       "execution-contracts": {
         "path": "dynamic",
-        "count": 0,
         "autoLoad": true,
-        "sources": ["prompts", "review-checklists", "policies"]
+        "sources": [
+          "prompts",
+          "review-checklists",
+          "policies"
+        ],
+        "type": "virtual"
       },
       "prompts": {
         "path": ".agent-context/prompts",
         "count": 4,
         "autoLoad": true,
-        "templates": ["init-project", "bootstrap-design", "refactor", "review-code"]
+        "templates": [
+          "init-project",
+          "bootstrap-design",
+          "refactor",
+          "review-code"
+        ]
       },
       "governance-modes": {
         "path": "dynamic",
-        "count": 0,
         "autoLoad": true,
-        "governance": ["platform", "regulated", "startup"]
+        "governance": [
+          "platform",
+          "regulated",
+          "startup"
+        ],
+        "type": "virtual"
       },
       "state": {
         "path": ".agent-context/state",
@@ -53,25 +66,24 @@
         "path": "docs",
         "count": 0,
         "autoLoad": false,
-        "sources": ["project-brief", "architecture-decision-record", "flow-overview", "api-contract", "database-schema", "DESIGN", "design-intent"]
+        "sources": [
+          "project-brief",
+          "architecture-decision-record",
+          "flow-overview",
+          "api-contract",
+          "database-schema",
+          "DESIGN",
+          "design-intent"
+        ]
       }
-    }
-  },
-  "servers": {
-    "lint": {
-      "command": "node",
-      "args": ["./scripts/validate.mjs"],
-      "transport": "stdio"
-    },
-    "test": {
-      "command": "node",
-      "args": ["--test", "./tests/cli-smoke.test.mjs", "./tests/llm-judge.test.mjs"],
-      "transport": "stdio"
     }
   },
   "workflows": {
     "self-heal-on-failure": {
-      "trigger": ["ci.failure", "lint.failure"],
+      "trigger": [
+        "ci.failure",
+        "lint.failure"
+      ],
       "steps": [
         "collect_logs",
         "map_violation_to_rule",
@@ -80,7 +92,10 @@
       ]
     },
     "full-knowledge-injection": {
-      "trigger": ["workspace.initialize", "agent.start"],
+      "trigger": [
+        "workspace.initialize",
+        "agent.start"
+      ],
       "steps": [
         "resolve_scope_first",
         "inject_relevant_rules",

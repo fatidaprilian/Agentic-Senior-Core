@@ -88,7 +88,6 @@ If all three are "yes", it belongs here.
 - Generic content that reads like it was auto-generated without thought
 - Rules without concrete enforcement boundaries
 - Stack profiles for languages the author doesn't actually use in production
-- Blueprints that are just folder structures without code patterns
 - PRs that don't update the relevant source files, generated adapters, and checklists
 
 ---
@@ -96,6 +95,13 @@ If all three are "yes", it belongs here.
 ## Local Development
 
 The npm package is published under `@ryuenn3123`, while the GitHub repository is hosted under `fatidaprilian`.
+
+### Architecture Boundaries
+
+When contributing code to the CLI or the maintenance tools, respect the boundary between `lib/` and `scripts/`:
+
+- **`lib/`**: Contains the core CLI application logic. These files are executed by the package binary but are **never** copied into target user workspaces.
+- **`scripts/`**: Contains standalone tools (like validators, audits, and benchmarks) AND the MCP server (`scripts/mcp-server.mjs`). Code here must not depend on `lib/` because some scripts (like the MCP server) are copied directly to target workspaces where `lib/` does not exist.
 
 ```bash
 # Clone

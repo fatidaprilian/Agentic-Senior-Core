@@ -62,13 +62,13 @@ async function bumpVersion() {
     console.log('Updated package-lock.json');
   }
 
-  // 3. Update docs/deep_analysis_and_roadmap_backlog.md
-  const roadmapPath = path.join(ROOT_DIR, 'docs', 'deep_analysis_and_roadmap_backlog.md');
+  // 3. Update docs/deep-analysis-and-roadmap-backlog.md
+  const roadmapPath = path.join(ROOT_DIR, 'docs', 'deep-analysis-and-roadmap-backlog.md');
   if (await fileExists(roadmapPath)) {
     let roadmapContent = await readTextFile(roadmapPath);
     roadmapContent = roadmapContent.replace(`Current Version: ${oldVersion}`, `Current Version: ${newVersion}`);
     await writeTextFile(roadmapPath, roadmapContent);
-    console.log('Updated docs/deep_analysis_and_roadmap_backlog.md');
+    console.log('Updated docs/deep-analysis-and-roadmap-backlog.md');
   }
 
   // 4. Update legacy root adapters that carry release metadata.

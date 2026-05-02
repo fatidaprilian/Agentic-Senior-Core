@@ -56,6 +56,6 @@ We bundle Model Context Protocol capabilities with a local stdio runtime (`scrip
 - `.github/workflows/release-gate.yml` publishes machine-readable release-gate reports for every CI run.
 - `scripts/generate-sbom.mjs` emits a CycloneDX 1.5 JSON payload for supply-chain evidence.
 - `.github/workflows/sbom-compliance.yml` publishes SBOM artifacts for audit traceability.
-- `.agent-context/review-checklists/release-operations.md` and `docs/v1.8-operations-playbook.md` define operational release controls.
+- `.agent-context/review-checklists/architecture-review.md`, `.github/workflows/release-gate.yml`, and `scripts/release-gate.mjs` define operational release controls.
 
 Use `.agent-override.md` carefully to carve explicit exceptions bounded by `reason` and `expiry` parameters.

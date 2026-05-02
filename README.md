@@ -131,7 +131,7 @@ Full mapping reference: docs/terminology-mapping.md
 
 - FAQ: docs/faq.md
 - Deep dive internals: docs/deep-dive.md
-- V2 upgrade playbook: docs/v2-upgrade-playbook.md
+- Archived V2 upgrade playbook: docs/archive/v2-upgrade-playbook.md
 - Integration playbook: docs/integration-playbook.md
 - Benchmark and stack reference: docs/benchmark-reference.md
 - Terminology mapping reference: docs/terminology-mapping.md

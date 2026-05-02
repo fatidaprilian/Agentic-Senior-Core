@@ -14,7 +14,7 @@ export const FORMAL_ARTIFACT_PATHS = [
   '.instructions.md',
   'README.md',
   'CHANGELOG.md',
-  'docs/deep_analysis_and_roadmap_backlog.md',
+  'docs/deep-analysis-and-roadmap-backlog.md',
   '.agent-context/rules/api-docs.md',
   '.agent-context/review-checklists/pr-checklist.md',
   '.agent-context/prompts/review-code.md',
@@ -49,7 +49,7 @@ export const REQUIRED_HUMAN_WRITING_SNIPPETS = [
     ],
   },
   {
-    path: 'docs/deep_analysis_and_roadmap_backlog.md',
+    path: 'docs/deep-analysis-and-roadmap-backlog.md',
     snippets: [
       '## Part 6: Documentation and Explanation Standards (Mandatory)',
       'This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.',
