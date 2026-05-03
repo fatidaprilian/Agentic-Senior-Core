@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.42 - 2026-05-03
+### Changed
+- Made UI governance default to agent-chosen ambition for broad screens and redesigns, so expressive motion, spatial hierarchy, and distinctive composition are considered without waiting for the user to say "rich".
+- Added the Brave Redesign Default and expressive-path research requirement to the design bootstrap prompt.
+- Synced thin adapter hashes after the canonical instruction update.
+
+### Fixed
+- Added old-design regression checks so broad redesigns cannot pass as simplified versions of the previous composition with animation, media, depth, or interaction density removed.
+
 ## 3.0.41 - 2026-05-02
 ### Changed
 - Retired the static external benchmark watchlist flow so benchmark intelligence no longer depends on stale offline stack-selection snapshots.

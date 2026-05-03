@@ -9,7 +9,6 @@ Create or refine:
 This contract is a decision scaffold, not a style preset. We guide the agent; we do not pick the final style, stack, framework, palette, typography, layout paradigm, or animation library offline.
 
 ## Authority
-
 - Treat `.agent-context/` and current project docs as technical authority.
 - Treat `README.md` as overview, install, and user-facing context only. Do not use it as coding, architecture, or design authority when `.agent-context/` gives a stricter rule.
 - Use current repo evidence, product copy, route names, component names, user goals, and existing constraints as the source of truth.
@@ -18,7 +17,6 @@ This contract is a decision scaffold, not a style preset. We guide the agent; we
 - Before choosing a new UI, animation, scroll, 3D, canvas, chart, icon, styling, or component library, research current official docs.
 
 ## Required Order
-
 1. Read `AGENTS.md`, this prompt, `../rules/frontend-architecture.md`, current UI code, current project docs, and existing design docs.
 2. Refine existing `docs/DESIGN.md` and `docs/design-intent.json`; do not replace them blindly.
 3. If either design doc is missing, create it before UI implementation.
@@ -27,7 +25,6 @@ This contract is a decision scaffold, not a style preset. We guide the agent; we
 6. Keep both design docs synchronized after implementation.
 
 ## Creative Commitment Gate
-
 Before broad compliance review or UI implementation, record an agent-chosen visual direction in both design docs:
 - one concrete real-world anchor reference
 - one signature motion behavior more specific than "smooth"
@@ -37,7 +34,6 @@ Before broad compliance review or UI implementation, record an agent-chosen visu
 Reject generic anchors. Do not accept "modern", "clean", "premium", "expressive", "minimal", or "bold" as the anchor. Name a material, instrument, artifact class, architectural system, editorial genre, cinematic behavior, exhibition system, scientific apparatus, or industrial mechanism.
 
 ## Dynamic Avant-Garde Anchor Engine
-
 If no current-task research or visual reference exists, activate the Dynamic Avant-Garde Anchor Engine before coding.
 
 Rules:
@@ -50,7 +46,6 @@ Rules:
 - Use reduced-motion fallbacks instead of suppressing motion.
 
 ## Creative Ambition Floor
-
 Before UI code, record:
 - one product-derived palette move
 - one signature motion, spatial, or interaction behavior
@@ -59,8 +54,14 @@ Before UI code, record:
 
 Do not ship AI-safe UI. Record exact drift signals in `reviewRubric`; at minimum reject decorative grid wallpaper, default line backgrounds, soft glow backgrounds, generic abstract marks, and first-output composition with only local copy swapped in when they have no product function.
 
-## AI Color and Template Residue Audit
+## Brave Redesign Default
+For UI design work, the agent owns the ambition decision. For broad screens, redesigns, or new visual systems, treat expressive motion, spatial hierarchy, distinctive composition, and product-specific interaction as the baseline even when the user did not say "rich". Do not reduce the request to a safer version of the existing UI, a static implementation, or a component-kit rearrangement because research or dependency selection feels inconvenient.
 
+If the expressive path needs a new motion, 3D, canvas, scroll, or interaction library and web search is available, perform the official-doc research and record the decision. If web search is unavailable, use already-present dependencies or native browser capabilities while preserving the intended ambition, then mark library verification as pending.
+
+Only downshift ambition after naming the concrete blocker: product fit, content density, performance budget, accessibility, device support, package conflict, security risk, or missing runtime capability. Pair every downshift with a replacement interaction quality that still changes composition, hierarchy, feedback, or memorability.
+
+## AI Color and Template Residue Audit
 AI color drift happens when a palette uses safe defaults before product meaning.
 
 Complete the AI color audit before coding:
@@ -72,7 +73,6 @@ Complete the AI color audit before coding:
 Cream, slate, monochrome, purple-blue gradients, cyber-neon terminals, pale editorial surfaces, soft glow atmospheres, and dark control rooms are autopilot risks, not banned palettes.
 
 ## Motion and 3D Courage Rule
-
 Motion, 3D, canvas, WebGL, scroll choreography, and modern animation libraries are first-class UI options when they improve understanding, exploration, feedback, hierarchy, memorability, or confidence.
 
 Use modern, expressive interaction when it improves hierarchy, feedback, confidence, or memorability.
@@ -82,7 +82,6 @@ If rich motion or spatial UI is omitted, record the product, content-density, pe
 If 3D or canvas is used, record product role, interaction model, fallback path, runtime/library choice, loading state, keyboard path, and reduced-motion behavior.
 
 ## Token Derivation Audit
-
 Before implementation, `docs/design-intent.json` must include top-level `derivedTokenLogic`:
 - `anchorReference`
 - `colorDerivationSource`
@@ -94,7 +93,6 @@ Before implementation, `docs/design-intent.json` must include top-level `derived
 Every token must trace to `anchorReference`. If the rationale is "looks good", "common practice", "modern default", or "framework default", revise the token before code.
 
 ## Library Research Protocol
-
 If web search is available:
 - Verify each new UI-related library against current official docs.
 - Record source URL, fetched date, stable compatible version, purpose, risk, and fallback in `libraryDecisions[]`.
@@ -115,6 +113,7 @@ When the user says "redesign from zero", "redesain dari 0", "ulang dari 0", or "
 - Add `visualResetStrategy`.
 - Reset composition, hierarchy, palette/typography, motion or interaction, and responsive information architecture.
 - Do not ship a palette swap, dark-mode flip, or same hero with new colors.
+- Run the redesign regression test: if the result preserves the old hero structure, navigation grammar, card rhythm, motion density, image framing, or primary interaction model without explicit user-approved continuity, revise before implementation is considered complete.
 
 ## Responsive Recomposition Plan
 
