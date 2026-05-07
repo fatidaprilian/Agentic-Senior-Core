@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Changed
+- Tightened UI design governance so line, scanline, and calibration-mark backgrounds are rejected as decorative wallpaper unless they serve a named product function.
+- Tightened UI governance so generated design contracts reject testing/demo/placeholder UI copy and terminal-only core user flows unless the product scope explicitly justifies them.
+- Strengthened Docker governance so selected development/production Docker lanes require materialized assets and runbooks, not docs-only acknowledgment.
+
+### Fixed
+- Clarified that measurement, calibration, crop, route, timeline, and inspection marks belong to task-bound overlays or controls, not page or hero backgrounds.
+
+## 3.0.43 - 2026-05-07
+### Added
+- 
+
+### Changed
+- 
+
+### Fixed
+- 
 
 ## 3.0.42 - 2026-05-03
 ### Changed

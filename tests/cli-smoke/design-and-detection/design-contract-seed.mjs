@@ -84,7 +84,11 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.match(bootstrapDesignPrompt, /AI color audit/i);
       assert.match(bootstrapDesignPrompt, /motion, 3D, canvas, WebGL/i);
       assert.match(bootstrapDesignPrompt, /visually exploratory, product-derived palettes/);
-      assert.match(bootstrapDesignPrompt, /decorative grid wallpaper/);
+      assert.match(bootstrapDesignPrompt, /decorative grid, line, scanline, or calibration-mark wallpaper/);
+      assert.match(bootstrapDesignPrompt, /productionContentPolicy/);
+      assert.match(bootstrapDesignPrompt, /testing, demo, sample, placeholder, lorem, TODO, coming soon, and scaffold copy/);
+      assert.match(bootstrapDesignPrompt, /core user workflows terminal-only/);
+      assert.match(bootstrapDesignPrompt, /task-bound overlays or control affordances/);
       assert.match(bootstrapDesignPrompt, /representation-first/i);
       assert.match(bootstrapDesignPrompt, /Refine this scaffold seed instead of discarding it\./);
       assert.match(bootstrapDesignPrompt, /replace all placeholder expressive direction with agent-chosen decisions grounded in repo evidence/i);
@@ -128,6 +132,12 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.match(designIntentSeed.aiSafeUiAudit.interchangeabilityTest, /renamed/);
       assert.match(designIntentSeed.aiSafeUiAudit.paletteExplorationRule, /visually exploratory/);
       assert.match(designIntentSeed.aiSafeUiAudit.backgroundPatternRule, /product function/);
+      assert.match(designIntentSeed.aiSafeUiAudit.backgroundPatternRule, /calibration-mark backgrounds/);
+      assert.match(designIntentSeed.aiSafeUiAudit.backgroundPatternRule, /task overlays or controls/);
+      assert.equal(designIntentSeed.productionContentPolicy.status, 'agent-must-complete-before-ui-implementation');
+      assert.match(designIntentSeed.productionContentPolicy.userFacingCopyRule, /testing, demo, sample, placeholder/);
+      assert.match(designIntentSeed.productionContentPolicy.terminalDependencyRule, /Terminal commands/);
+      assert.equal(designIntentSeed.productionContentPolicy.blockingByDefault, true);
       assert.equal(designIntentSeed.aiSafeUiAudit.aiColorAudit.status, 'agent-must-complete-before-ui-implementation');
       assert.ok(designIntentSeed.aiSafeUiAudit.aiColorAudit.autopilotRisks.includes('cyber-neon-terminal-default'));
       assert.ok(designIntentSeed.aiSafeUiAudit.aiColorAudit.requiredEvidence.includes('product-specific-color-behavior-that-would-not-transfer'));
@@ -182,6 +192,8 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.equal(designIntentSeed.designExecutionHandoff.viewportMutationPlan.mobile.requiredSurfaceActions.length >= 2, true);
       assert.equal(designIntentSeed.designExecutionHandoff.viewportMutationPlan.mobile.forbiddenPatterns.length >= 1, true);
       assert.equal(designIntentSeed.designExecutionHandoff.implementationGuardrails.requireBuildFromHandoff, true);
+      assert.equal(designIntentSeed.designExecutionHandoff.implementationGuardrails.forbidTestingDemoCopyInUi, true);
+      assert.equal(designIntentSeed.designExecutionHandoff.implementationGuardrails.forbidTerminalOnlyUserFlows, true);
       assert.equal(designIntentSeed.reviewRubric.version, 'ui-rubric-v1');
       assert.equal(designIntentSeed.reviewRubric.genericityAutoFail, true);
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('missing-conceptual-anchor-without-external-research'));
@@ -190,6 +202,10 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('ai-color-default-palette-without-product-role-behavior'));
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('motion-or-3d-omitted-from-fear-without-fit-analysis'));
       assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('decorative-grid-or-glow-wallpaper-without-product-function'));
+      assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('decorative-line-or-calibration-wallpaper-without-product-function'));
+      assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('measurement-or-calibration-marks-used-as-page-background'));
+      assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('testing-demo-or-placeholder-copy-shipped-to-ui'));
+      assert.ok(designIntentSeed.reviewRubric.genericitySignals.includes('terminal-only-user-flow-without-product-reason'));
       assert.ok(designIntentSeed.reviewRubric.validBoldSignals.includes('three-at-a-glance-product-specific-signals'));
       assert.ok(designIntentSeed.reviewRubric.validBoldSignals.includes('motion-or-spatial-experience-derived-from-anchor'));
       assert.equal(designIntentSeed.reviewRubric.dimensions.length >= 5, true);
@@ -202,6 +218,10 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.ok(designIntentSeed.forbiddenPatterns.includes('restyle-instead-of-recomposition'));
       assert.ok(designIntentSeed.forbiddenPatterns.includes('ai-safe-ui-template-look'));
       assert.ok(designIntentSeed.forbiddenPatterns.includes('interchangeable-product-renaming-test-fails'));
+      assert.ok(designIntentSeed.forbiddenPatterns.includes('decorative-line-or-calibration-wallpaper-without-product-function'));
+      assert.ok(designIntentSeed.forbiddenPatterns.includes('measurement-or-calibration-marks-used-as-page-background'));
+      assert.ok(designIntentSeed.forbiddenPatterns.includes('testing-demo-or-placeholder-copy-shipped-to-ui'));
+      assert.ok(designIntentSeed.forbiddenPatterns.includes('terminal-only-user-flow-without-product-reason'));
       assert.equal(designIntentSeed.implementation.requireViewportMutationRules, true);
       assert.equal(designIntentSeed.implementation.requireMachineReadableContract, true);
       assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);

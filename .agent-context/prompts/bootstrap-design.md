@@ -52,7 +52,7 @@ Before UI code, record:
 - one morphology or composition choice that avoids interchangeable card stacks when the product allows it
 - at least three at-a-glance product-specific signals for new screens or broad redesigns
 
-Do not ship AI-safe UI. Record exact drift signals in `reviewRubric`; at minimum reject decorative grid wallpaper, default line backgrounds, soft glow backgrounds, generic abstract marks, and first-output composition with only local copy swapped in when they have no product function.
+Do not ship AI-safe UI. Record exact drift signals in `reviewRubric`; at minimum reject decorative grid wallpaper, default line backgrounds, calibration-mark wallpaper, soft glow backgrounds, generic abstract marks, testing/demo/placeholder UI copy, terminal-only user flows, and first-output composition with only local copy swapped in when they have no product function. Treat measurement, calibration, crop, route, timeline, and inspection marks as task overlays or control affordances only; never promote them to the page background, hero backdrop, or first-output visual texture.
 
 ## Brave Redesign Default
 For UI design work, the agent owns the ambition decision. For broad screens, redesigns, or new visual systems, treat expressive motion, spatial hierarchy, distinctive composition, and product-specific interaction as the baseline even when the user did not say "rich". Do not reduce the request to a safer version of the existing UI, a static implementation, or a component-kit rearrangement because research or dependency selection feels inconvenient.
@@ -148,7 +148,7 @@ The JSON is the source of truth for machine review. It must stay project-specifi
 - `motionPaletteDecision`
 - `conceptualAnchor`
 - `derivedTokenLogic`
-- `aiSafeUiAudit`
+- `aiSafeUiAudit` and `productionContentPolicy`
 - `tokenSystem`, `colorTruth`, `crossViewportAdaptation`, `motionSystem`, and `componentMorphology`
 - `accessibilityPolicy`
 - `designExecutionPolicy`
@@ -171,6 +171,7 @@ Block or flag:
 - default component-kit styling without product rationale
 - nonfunctional background effects, including decorative grid wallpaper
 - grid or line backgrounds used as filler instead of product function
+- testing, demo, sample, placeholder, lorem, TODO, coming soon, or scaffold labels visible in shipped UI unless they are real product states; terminal-only core user flows unless the product is explicitly a CLI, developer tool, or operational runbook
 - palette choices that use readability as an excuse for safe defaults
 - visual direction copied from unrelated memory or external references
 - genericity findings that cannot name the exact drift signal

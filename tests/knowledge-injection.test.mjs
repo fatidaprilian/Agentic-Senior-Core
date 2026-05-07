@@ -195,6 +195,10 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(dockerRuntimeRule, /compose\.yaml/i);
     assert.match(dockerRuntimeRule, /top-level Compose `version` field by default/i);
     assert.match(dockerRuntimeRule, /Use the latest stable compatible Docker base image/i);
+    assert.match(dockerRuntimeRule, /Selection Means Asset Materialization/i);
+    assert.match(dockerRuntimeRule, /compose\.prod\.yaml/i);
+    assert.match(dockerRuntimeRule, /\.dockerignore/i);
+    assert.match(dockerRuntimeRule, /do not execute Docker build, Compose, or registry commands/i);
   });
 
   it('design bootstrap rejects palette carryover from unrelated prior projects', () => {

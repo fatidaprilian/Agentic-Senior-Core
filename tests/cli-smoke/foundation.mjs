@@ -552,6 +552,13 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.match(bootstrapProjectContextPrompt, /Assumptions to Validate/);
       assert.match(bootstrapProjectContextPrompt, /Next Validation Action/);
       assert.match(bootstrapProjectContextPrompt, /Do not invent modules or architecture layers only to make the docs look complete\./);
+      assert.match(bootstrapProjectContextPrompt, /Docker Execution Gate/);
+      assert.match(bootstrapProjectContextPrompt, /Selected Docker strategy: Docker for both development and production/);
+      assert.match(bootstrapProjectContextPrompt, /Materialize Docker assets from the actual stack/);
+      assert.match(bootstrapProjectContextPrompt, /compose\.yaml for development/);
+      assert.match(bootstrapProjectContextPrompt, /compose\.prod\.yaml or a documented production Compose override/);
+      assert.match(bootstrapProjectContextPrompt, /\.dockerignore/);
+      assert.match(bootstrapProjectContextPrompt, /do not execute Docker build, Compose, or registry commands/);
 
       const compiledRulesContent = readFileSync(join(scaffoldingTargetDirectory, '.agent-instructions.md'), 'utf8');
       assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
@@ -569,6 +576,11 @@ export async function registerCliSmokeFoundationTests(t) {
         join(scaffoldingTargetDirectory, '.agent-context', 'state', 'onboarding-report.json')
       );
       assert.equal(onboardingReport.projectTopology, 'Microservice / distributed system');
+      assert.equal(onboardingReport.containerizationStrategy.selected, 'Docker for both development and production');
+      assert.equal(onboardingReport.containerizationStrategy.developmentRequired, true);
+      assert.equal(onboardingReport.containerizationStrategy.productionRequired, true);
+      assert.equal(onboardingReport.containerizationStrategy.materializationRequired, true);
+      assert.equal(onboardingReport.containerizationStrategy.requiredRuleFile, '.agent-context/rules/docker-runtime.md');
     } finally {
       rmSync(scaffoldingTargetDirectory, { recursive: true, force: true });
     }
