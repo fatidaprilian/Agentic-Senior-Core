@@ -81,10 +81,13 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] Motion is treated as part of the design language for modern UI work, with reduced-motion and performance safeguards instead of defaulting to static screens.
 - [ ] Broad redesigns pass the old-design regression test: the result is not the previous composition with animation, depth, media, or interaction density removed.
 - [ ] UI work records an agent-chosen ambition level; broad screens and redesigns researched an expressive path first, and any downshift names a concrete blocker plus replacement interaction quality.
+- [ ] UI foundation choices are dynamic and product-fit; no shadcn, native-only, Tailwind-only, or component-kit default was selected by habit or avoided from dependency fear.
+- [ ] Design intent separates locked outcomes from flexible expression; candidate signature moves, exact token primitives, literal anchor artifacts, and component-kit skins were not treated as permanent requirements without evidence or user approval.
 
 ## 8. Dependencies And Runtime
 
 - [ ] New dependencies are justified by capability, maintenance health, bundle/runtime cost, and current official docs.
+- [ ] Dependency avoidance was not treated as a default virtue; lightweight maintained libraries were considered when they improve correctness, accessibility, UX, maintainability, or delivery speed.
 - [ ] Official setup flows are preferred when they produce better-supported current defaults.
 - [ ] Docker, framework, package, and ecosystem claims were checked live when they could be stale.
 - [ ] Token optimization and memory continuity defaults remain enabled unless the user explicitly opts out.

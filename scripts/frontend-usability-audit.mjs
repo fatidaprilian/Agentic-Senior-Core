@@ -94,6 +94,8 @@ const REQUIRED_BOOTSTRAP_DESIGN_SNIPPETS = [
   'WCAG 2.2 AA is the hard floor',
   'APCA may be used only as advisory perceptual tuning',
   'unresearched dependency choices',
+  'Dynamic UI Foundation Selection',
+  'A new dependency, package count, or vague performance concern is not a blocker by itself.',
   'default component-kit styling without product rationale',
   'genericity findings that cannot name the exact drift signal',
 ];

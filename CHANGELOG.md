@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Changed
+
+### Fixed
+
+## 3.0.44 - 2026-05-09
+### Changed
+- Rebalanced dependency and performance governance so maintained lightweight libraries can be selected dynamically when they improve accessibility, UX, correctness, maintainability, or delivery speed.
+- Added dynamic UI foundation guidance so generated design contracts do not default to shadcn, native-only, Tailwind-only, or component-kit styling by habit.
+- Added a design flexibility layer so generated design contracts separate locked outcomes from flexible expression, keeping exact tokens, candidate signature moves, literal anchor artifacts, and component skins from becoming accidental hard requirements.
 - Tightened UI design governance so line, scanline, and calibration-mark backgrounds are rejected as decorative wallpaper unless they serve a named product function.
 - Tightened UI governance so generated design contracts reject testing/demo/placeholder UI copy and terminal-only core user flows unless the product scope explicitly justifies them.
 - Strengthened Docker governance so selected development/production Docker lanes require materialized assets and runbooks, not docs-only acknowledgment.

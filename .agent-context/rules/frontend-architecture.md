@@ -4,10 +4,7 @@ Load this rule for UI-facing work. Keep the loaded surface small.
 
 ## Activation
 
-Use this rule for:
-- UI, UX, page, screen, component, layout, landing, dashboard, form, onboarding, animation, interaction
-- redesign, reskin, visual refresh, responsive fix, hierarchy fix
-- frontend deliverables inside fullstack or backend work
+Use this rule for UI, UX, page, screen, component, layout, landing, dashboard, form, onboarding, animation, interaction, redesign, visual refresh, responsive fix, hierarchy fix, and frontend deliverables inside fullstack or backend work.
 
 ## Authority
 
@@ -16,16 +13,16 @@ Use this rule for:
 - Treat `README.md` as overview/install/user context only when design or architecture rules conflict.
 - Do not choose final style, framework, palette, typography, layout paradigm, or animation library offline.
 - Research current official docs before adding a new UI, animation, scroll, 3D, canvas, charting, icon, styling, or primitive library.
+- Dynamic UI Foundation: do not hardcode shadcn/ui, Tailwind-only, native-only, or any component library as the universal answer. Modern lightweight primitives, motion libraries, canvas/WebGL helpers, charting libraries, and styling tools are valid when product evidence, accessibility, interaction quality, maintainability, delivery speed, runtime constraints, and official docs support them.
 - Keep design continuity opt-in. Repo evidence outranks memory residue.
 
 ## Required Design Contract
 
-Before UI code, create or refine:
-- `docs/DESIGN.md`
-- `docs/design-intent.json`
+Before UI code, create or refine `docs/DESIGN.md` and `docs/design-intent.json`.
 
 The contract must record:
 - `motionPaletteDecision`
+- `designFlexibilityPolicy`
 - `conceptualAnchor`
 - `derivedTokenLogic`
 - `aiSafeUiAudit`
@@ -47,7 +44,7 @@ Use the old-design regression test for broad redesigns: if the UI reads as the p
 
 Background lines, grids, scanlines, noise, glows, blobs, abstract logos, calibration marks, and decorative geometry are invalid as wallpaper. Do not use grid or line backgrounds as first-output filler. Use them only for a named product function such as alignment, crop guidance, map/route orientation, timeline reading, measurement, status, or motion continuity.
 
-Measurement, calibration, crop, map, route, and inspection marks are task-bound overlays or control affordances. They must not become the page background, hero backdrop, or default visual texture.
+Measurement, calibration, crop, map, route, and inspection marks are task-bound overlays or control affordances. They must not become the page background, hero backdrop, or default visual texture. When a conceptual anchor and a forbidden visual motif conflict, the forbidden motif wins; translate the anchor into layout, hierarchy, density, typography, state behavior, materials, and interaction instead of literal decorative texture.
 
 Production UI must read as ship-ready: no visible testing, demo, sample, placeholder, lorem, TODO, coming soon, or scaffold labels unless they are intentional product states. User-facing workflows need an operable UI path; terminal-only core flows are valid only for CLI, developer-tool, or runbook products.
 
@@ -59,6 +56,7 @@ If the user gives no current-task visual research or reference:
 - Internally reject the safest dashboard, portal, card-grid, admin-shell, or minimalist-web-app mental model.
 - Record one real-world anchor reference, one signature motion behavior, and one typographic decision with role contrast.
 - Derive typography, spacing, morphology, motion, and responsive recomposition from that anchor.
+- Translate the anchor into workflow, hierarchy, density, typography, state behavior, and interaction before using literal artifacts. Do not turn anchor artifacts into required chrome, wallpaper, decorative props, or component-kit theme objects without a named product function.
 - Reject anchors described only by generic quality words such as modern, clean, premium, expressive, minimal, or bold.
 
 ## Motion, Palette, and 3D
@@ -70,9 +68,10 @@ If the user gives no current-task visual research or reference:
 - Do not default to dark slate, cream/beige/tan, purple-blue gradients, monochrome palettes, cyber-neon terminals, or uniform card surfaces without product evidence.
 - Treat motion, 3D, WebGL, canvas, scroll choreography, and animation libraries as first-class options.
 - Omit rich motion or spatial UI only after naming the product-fit reason and the replacement interaction quality.
-- For new screens or broad redesigns, research the expressive implementation path instead of defaulting to static native CSS. Use native or already-installed tools only when they can still deliver the chosen ambition, or when a concrete blocker is documented.
+- For new screens or broad redesigns, research the expressive implementation path instead of defaulting to static native CSS. Use native or already-installed tools only when they can still deliver the chosen ambition, or when a concrete blocker is documented. Do not downshift because adding a package feels inconvenient; downshift only for a concrete product-fit, accessibility, security, compatibility, device, maintenance, or measured performance reason.
 - Keep reduced-motion, keyboard, loading, performance, mobile, and non-3D fallbacks explicit.
-
+- Use component kits or headless primitives for behavior and accessibility when they fit. Replace library-default visual language with project-specific composition, tokens, motion, state treatment, and morphology.
+- Keep design-intent flexible: lock user goals, accessibility, production readiness, forbidden patterns, and approved continuity; keep exact palette primitives, font families, radius/shadow values, component skins, and candidate signature moves flexible until evidence or approval locks them.
 ## Zero-Based Redesign
 
 If the user asks for a redesign from zero:

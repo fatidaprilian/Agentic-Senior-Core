@@ -218,6 +218,10 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(bootstrapDesignPrompt, /review rubric/i);
     assert.match(bootstrapDesignPrompt, /genericity findings that cannot name the exact drift signal/i);
     assert.match(bootstrapDesignPrompt, /Use modern, expressive interaction/i);
+    assert.match(bootstrapDesignPrompt, /Dynamic UI Foundation Selection/i);
+    assert.match(bootstrapDesignPrompt, /Design Flexibility Layer/i);
+    assert.match(bootstrapDesignPrompt, /locked outcomes from flexible expression/i);
+    assert.match(bootstrapDesignPrompt, /A new dependency, package count, or vague performance concern is not a blocker by itself/i);
   });
 
   it('design contract seed keeps machine-readable context hygiene boundaries', () => {
@@ -232,9 +236,13 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(designContractSource, /forbidCarryoverWhenUnapproved/);
     assert.match(designContractSource, /approvedExternalConstraintUsage/);
     assert.match(designContractSource, /accessibilityPolicy/);
+    assert.match(designContractSource, /designFlexibilityPolicy/);
+    assert.match(designContractSource, /locked-outcomes-flexible-expression/);
+    assert.match(designContractSource, /literalTranslationPolicy/);
     assert.match(designContractSource, /hardComplianceFloor/);
     assert.match(designContractSource, /advisoryContrastModel/);
     assert.match(designContractSource, /designExecutionPolicy/);
+    assert.match(designContractSource, /separateRequiredOutcomesFromCandidateMoves/);
     assert.match(designContractSource, /reviewRubric/);
     assert.match(designContractSource, /representationStrategy/);
     assert.match(designContractSource, /requireSurfacePlan/);
@@ -254,6 +262,8 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(dependencyRule, /latest stable compatible dependency version/i);
     assert.match(dependencyRule, /official scaffolder or setup command/i);
     assert.match(dependencyRule, /Only step down to an older dependency version after documenting/i);
+    assert.match(dependencyRule, /Do not treat dependency avoidance as an engineering virtue by itself/i);
+    assert.match(dependencyRule, /performance-fear choices/i);
     assert.match(initPrompt, /latest stable compatible dependency set and official framework setup flow from live official documentation before coding unless a documented compatibility constraint blocks it/i);
   });
 });

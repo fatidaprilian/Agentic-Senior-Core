@@ -78,10 +78,14 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     assert.match(frontendRuleContent, /Do not ship interchangeable dashboard chrome, balanced card grids, centered marketing shells/);
     assert.match(frontendRuleContent, /Use the rename test:/);
     assert.match(frontendRuleContent, /Treat motion, 3D, WebGL, canvas, scroll choreography, and animation libraries as first-class options\./);
+    assert.match(frontendRuleContent, /Dynamic UI Foundation/);
+    assert.match(frontendRuleContent, /Keep design-intent flexible/);
+    assert.match(frontendRuleContent, /Do not downshift because adding a package feels inconvenient/);
     assert.match(frontendRuleContent, /Do not let repeated surfaces share one visual treatment by habit/);
     assert.match(frontendRuleContent, /Responsive quality is not scale-only\./);
     assert.match(frontendRuleContent, /Do not hardcode Zustand, React Query, smart\/dumb component doctrine/);
     assert.match(bootstrapDesignPromptContent, /This contract is a decision scaffold, not a style preset/);
+    assert.match(bootstrapDesignPromptContent, /Design Flexibility Layer/);
     assert.match(bootstrapDesignPromptContent, /Responsive Recomposition Plan/);
     assert.match(bootstrapDesignPromptContent, /research current official docs/);
     assert.match(instructionsContent, /UI Design Mode/);
