@@ -173,6 +173,7 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     );
     assert.ok(boundaryResultWithGuidance);
     assert.match(apiDocsRuleContent, /Documentation as Hard Rule \(Boundary-Aware\)/);
+    assert.match(apiDocsRuleContent, /Root `README\.md` is required for every fresh or existing project/);
     assert.match(prChecklistContent, /Public surface changes fail review if documentation updates are missing or stale in the same scope/);
     assert.match(prChecklistContent, /Documentation checks stay boundary-aware and only enforce touched scopes/);
   });

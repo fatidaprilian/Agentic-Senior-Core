@@ -34,7 +34,7 @@ Use this file as repo-local agent context. It records the current governance arc
 ## Agent Behavior
 
 1. Load the smallest relevant rule set.
-2. Use README only for overview/install/user context when governance files conflict.
+2. Use README only for public and developer overview, setup, usage, and user-facing context when governance files conflict.
 3. Preserve generated adapter sync before release.
 4. Treat stale generated state, dual lockfiles, and obsolete V2/V3 transition files as cleanup findings.
 5. Before claiming done, run the relevant validation gate and report any skipped checks.

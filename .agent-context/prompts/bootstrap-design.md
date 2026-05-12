@@ -8,7 +8,7 @@ This contract is a decision scaffold, not a style preset. We guide the agent; we
 
 ## Authority
 - Treat `.agent-context/` and current project docs as technical authority.
-- Treat `README.md` as overview, install, and user-facing context only. Do not use it as coding, architecture, or design authority when `.agent-context/` gives a stricter rule.
+- Treat `README.md` as public and developer overview, setup, usage, and user-facing context only. Do not use it as coding, architecture, or design authority when `.agent-context/` gives a stricter rule.
 - Use current repo evidence, product copy, route names, component names, user goals, and existing constraints as the source of truth.
 - Treat prior-chat visuals, unrelated project memory, benchmark screenshots, and famous-product aesthetics as tainted context unless the user explicitly approves continuity.
 - Keep external references non-copying; extract constraints only.

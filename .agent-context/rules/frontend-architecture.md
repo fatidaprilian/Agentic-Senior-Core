@@ -10,7 +10,7 @@ Use this rule for UI, UX, page, screen, component, layout, landing, dashboard, f
 
 - Use current repo evidence, the active brief, and current project docs as valid style context.
 - Treat `.agent-context/` as design governance authority.
-- Treat `README.md` as overview/install/user context only when design or architecture rules conflict.
+- Treat `README.md` as public and developer overview, setup, usage, and user-facing context only when design or architecture rules conflict.
 - Do not choose final style, framework, palette, typography, layout paradigm, or animation library offline.
 - Research current official docs before adding a new UI, animation, scroll, 3D, canvas, charting, icon, styling, or primitive library.
 - Dynamic UI Foundation: do not hardcode shadcn/ui, Tailwind-only, native-only, or any component library as the universal answer. Modern lightweight primitives, motion libraries, canvas/WebGL helpers, charting libraries, and styling tools are valid when product evidence, accessibility, interaction quality, maintainability, delivery speed, runtime constraints, and official docs support them.

@@ -4,6 +4,22 @@
 
 If a change affects an API, CLI command, exported library behavior, schema, event, or integration contract, update the matching docs in the same change.
 
+## Public README Boundary
+
+Root `README.md` is required for every fresh or existing project. This includes private projects, because a future maintainer still needs a clear public and developer entrypoint.
+
+README content must be safe for outside readers and useful for developers. It must explain what the project is, who it is for, how to set it up, how to run the main workflow, how to configure it, and where deeper docs live when those topics apply.
+
+Keep README overview-level. Do not make it the canonical governance source. Do not put secrets, private agent notes, hidden reasoning, backlog chatter, raw architecture debate, or internal policy dumps in it.
+
+Choose README sections from project evidence. Do not force a fixed template when a section does not apply. For private/internal projects, keep the same clear style but omit private URLs, credentials, customer names, and internal-only operational details that do not belong in repo docs.
+
+## Documentation Growth Model
+
+Documentation must evolve with the project. When behavior, setup, architecture, public contracts, data shape, deployment, or validation changes, update README and the matching docs in the same change.
+
+Start compact, then split only when a topic earns its own file. Good split signals are: the section is long, the workflow is owned separately, the content is referenced often, or the topic needs step-by-step care such as hardware setup, deployment, testing validation, operations, or troubleshooting.
+
 ## Contract Rules
 
 - Document the public surface before or alongside implementation.

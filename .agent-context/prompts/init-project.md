@@ -25,9 +25,12 @@ If the user describes a project or feature, the agent must:
 If the user asks to create, complete, fix, or review project docs, documentation, dokumen, `docs/*`, architecture docs, flow docs, API docs, or "lengkapkan docs", treat the request as documentation-first.
 
 The agent must:
-1. Materialize or refine required project docs before implementation: `docs/project-brief.md`, `docs/architecture-decision-record.md`, `docs/flow-overview.md`, `docs/api-contract.md` when APIs, firmware endpoints, CLI commands, or web application flows exist, `docs/database-schema.md` when persistent data exists, and `docs/DESIGN.md` plus `docs/design-intent.json` for UI scope.
+1. Materialize or refine required project docs before implementation: root `README.md` for every fresh or existing project; `docs/project-brief.md`; `docs/architecture-decision-record.md`; `docs/flow-overview.md`; `docs/api-contract.md` when APIs, firmware endpoints, CLI commands, or web application flows exist; `docs/database-schema.md` when persistent data exists; and `docs/DESIGN.md` plus `docs/design-intent.json` for UI scope.
 2. Write formal project docs in English by default unless the user explicitly asks for another documentation language.
-3. Stop after docs when the user only asked for docs. Do not write application, firmware, or UI code until the user explicitly asks for implementation or approves the implementation plan.
+3. Keep `README.md` public and developer friendly even for private projects: explain what the project is, who it is for, how to set it up, how to run the core workflow, how to configure it, and where deeper docs live. Do not put internal agent notes, private reasoning, secrets, or governance policy in the README.
+4. Keep documentation alive. When project behavior, setup, architecture, public contracts, data shape, deployment, or UI scope changes, update the matching docs in the same change.
+5. Avoid documentation sprawl. Add a new docs file only when the topic is stable, long enough to outgrow the README or core docs, or owned by a separate workflow such as hardware setup, deployment, troubleshooting, or testing validation.
+6. Stop after docs when the user only asked for docs. Do not write application, firmware, or UI code until the user explicitly asks for implementation or approves the implementation plan.
 
 ## Direct Constraint Mode
 

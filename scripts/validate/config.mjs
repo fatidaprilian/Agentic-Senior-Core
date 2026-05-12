@@ -195,6 +195,7 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
     path: '.instructions.md',
     snippets: [
       '### 1. Documentation-First Mode',
+      'root `README.md` for every fresh or existing project',
       'Stop after documentation when the user only asked for docs.',
       'Do not write application, firmware, or UI code',
     ],
@@ -203,6 +204,7 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
     path: '.agent-context/rules/architecture.md',
     snippets: [
       '## Universal SOP Baseline (Mandatory)',
+      'Root `README.md` must exist for every fresh or existing project',
       'Security and testing are non-negotiable baseline requirements.',
       'If required project context docs are missing, stop implementation and bootstrap docs before writing application code.',
     ],
@@ -211,6 +213,7 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
     path: '.agent-context/prompts/init-project.md',
     snippets: [
       '## Documentation-First Requests',
+      'root `README.md` for every fresh or existing project',
       'Stop after docs when the user only asked for docs.',
       'Write formal project docs in English by default',
     ],
@@ -219,6 +222,7 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
     path: '.agent-context/review-checklists/pr-checklist.md',
     snippets: [
       '### 15. Universal SOP Consolidation',
+      'Coding flow is blocked if root `README.md` is missing',
       'Coding flow is blocked if `docs/architecture-decision-record.md` (or `docs/Architecture-Decision-Record.md`) is missing',
       'UI implementation flow is blocked if `docs/DESIGN.md` or `docs/design-intent.json` is missing',
     ],
@@ -226,21 +230,23 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
   {
     path: '.agent-context/prompts/review-code.md',
     snippets: [
-      'Enforce Universal SOP hard gate: block coding flow when required project docs are missing (`docs/architecture-decision-record.md`, and for UI scope `docs/DESIGN.md` plus `docs/design-intent.json`).',
+      'Enforce Universal SOP hard gate: block coding flow when required project docs are missing (root `README.md`; `docs/architecture-decision-record.md`; and for UI scope `docs/DESIGN.md` plus `docs/design-intent.json`).',
     ],
   },
   {
     path: '.agent-context/prompts/refactor.md',
     snippets: [
-      '6. Enforce Universal SOP hard gate: stop implementation if `docs/architecture-decision-record.md` is missing, and for UI scope stop if `docs/DESIGN.md` or `docs/design-intent.json` is missing.',
+      '6. Enforce Universal SOP hard gate: stop implementation if root `README.md` is missing, if `docs/architecture-decision-record.md` is missing, or for UI scope if `docs/DESIGN.md` or `docs/design-intent.json` is missing.',
     ],
   },
   {
     path: 'lib/cli/compiler.mjs',
     snippets: [
       'Universal SOP hard block policy:',
+      'README.md must exist and read as a public and developer entrypoint',
       'Hard block: do not write application code until docs/project-brief.md and docs/architecture-decision-record.md exist.',
       'Documentation-first policy:',
+      'Keep README.md public and developer friendly',
       'For docs-only/docs-first requests, do not write application, firmware, or UI code until the user asks or approves an implementation plan.',
       'For UI scope: if docs/DESIGN.md or docs/design-intent.json is missing, execute bootstrap-design prompt before implementing UI surfaces.',
     ],

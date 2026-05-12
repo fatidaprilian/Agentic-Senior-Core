@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## 3.0.45 - 2026-05-12
+### Changed
+- Added a universal root `README.md` gate so fresh and existing projects have a public and developer entrypoint before implementation.
+- Updated project bootstrap guidance so README content stays public and developer friendly, plain, and free of secrets, internal agent notes, or governance policy dumps.
+- Added adaptive documentation growth guidance so docs stay current with project changes without creating extra files unless the topic is stable, distinct, or too large for core docs.
+
 ## 3.0.44 - 2026-05-09
 ### Changed
 - Rebalanced dependency and performance governance so maintained lightweight libraries can be selected dynamically when they improve accessibility, UX, correctness, maintainability, or delivery speed.

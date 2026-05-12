@@ -58,7 +58,7 @@ const REQUIRED_FRONTEND_RULE_SNIPPETS = [
   '## Activation',
   '## Authority',
   'Treat `.agent-context/` as design governance authority.',
-  'Treat `README.md` as overview/install/user context only',
+  'Treat `README.md` as public and developer overview, setup, usage, and user-facing context only',
   'Do not choose final style, framework, palette, typography, layout paradigm, or animation library offline.',
   'Keep design continuity opt-in.',
   'Repo evidence outranks memory residue.',

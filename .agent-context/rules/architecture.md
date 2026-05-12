@@ -32,17 +32,20 @@ The `.agent-context/rules/` directory is the default guidance source for impleme
 - Backend and frontend mindset checks are both required when a task spans API and UI boundaries.
 - Security and testing are non-negotiable baseline requirements.
 - Hard block before coding:
+  - Root `README.md` must exist for every fresh or existing project and read as a public and developer entrypoint, not an internal agent note.
   - `docs/project-brief.md` must exist.
   - `docs/architecture-decision-record.md` (alias: `docs/Architecture-Decision-Record.md`) must exist.
   - `docs/flow-overview.md` must exist.
   - If the project uses persistent data, `docs/database-schema.md` must exist.
   - If the project exposes API or web application flows, `docs/api-contract.md` must exist.
   - For UI scope, `docs/DESIGN.md` and `docs/design-intent.json` must exist.
-- Required docs coverage must include feature plan, architecture rationale, public contracts, data model when relevant, UI/design when relevant, security assumptions, testing strategy, delivery flow, and next validation actions.
+- Required docs coverage must include a public and developer README entrypoint, feature plan, architecture rationale, public contracts, data model when relevant, UI/design when relevant, security assumptions, testing strategy, delivery flow, and next validation actions.
 - If required project context docs are missing, stop implementation and bootstrap docs before writing application code.
 - Bootstrap flow: analyze the real repo plus the latest user prompt before authoring those docs.
 - Bootstrap docs must be adaptive and project-specific. Do not create generic placeholder templates.
 - When context is incomplete, separate confirmed facts from assumptions, add an `Assumptions to Validate` section, and end with the next validation action.
+- Keep docs current with project changes. Update README and the matching docs whenever setup, runtime, architecture, public contracts, data shape, UI scope, deployment, or validation flow changes.
+- Control docs file count. Keep the baseline compact, then add topic files only when a subject is stable, too long for README/core docs, or belongs to a distinct workflow such as hardware setup, deployment, testing validation, operations, or troubleshooting.
 
 ## Rules as Guardian (Cross-Session Consistency)
 

@@ -304,6 +304,7 @@ export async function registerDesignContractSeedSmokeTests(t) {
         join(fullstackScaffoldingTargetDirectory, '.agent-context', 'prompts', 'bootstrap-project-context.md'),
         'utf8'
       );
+      assert.match(bootstrapProjectPrompt, /^1\. README\.md$/m);
       assert.match(bootstrapProjectPrompt, /docs\/api-contract\.md/);
       assert.match(bootstrapProjectPrompt, /docs\/DESIGN\.md/);
       assert.match(bootstrapProjectPrompt, /docs\/design-intent\.json/);

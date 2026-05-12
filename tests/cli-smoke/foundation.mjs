@@ -543,12 +543,14 @@ export async function registerCliSmokeFoundationTests(t) {
       );
       assert.match(bootstrapProjectContextPrompt, /Dynamic Project Context Synthesis/);
       assert.match(bootstrapProjectContextPrompt, /Create or update these files in EN language/);
+      assert.match(bootstrapProjectContextPrompt, /^1\. README\.md$/m);
       assert.match(bootstrapProjectContextPrompt, /Project name: Nusantara API/);
       assert.match(bootstrapProjectContextPrompt, /Project topology decision: Microservice \/ distributed system/);
       assert.match(bootstrapProjectContextPrompt, /No copy-paste from external prose/);
       assert.match(bootstrapProjectContextPrompt, /If runtime or framework setup is unresolved, recommend the latest stable compatible option from the brief, constraints, and live official documentation before coding/);
       assert.match(bootstrapProjectContextPrompt, /For any ecosystem or technology claim, perform live web research and include citation metadata \(source \+ fetchedAt timestamp\) rather than relying on offline heuristics\./);
       assert.match(bootstrapProjectContextPrompt, /Write for native English speakers at an 8th-grade reading level\./);
+      assert.match(bootstrapProjectContextPrompt, /README\.md must be public and developer friendly/);
       assert.match(bootstrapProjectContextPrompt, /Assumptions to Validate/);
       assert.match(bootstrapProjectContextPrompt, /Next Validation Action/);
       assert.match(bootstrapProjectContextPrompt, /Do not invent modules or architecture layers only to make the docs look complete\./);
@@ -563,6 +565,7 @@ export async function registerCliSmokeFoundationTests(t) {
       const compiledRulesContent = readFileSync(join(scaffoldingTargetDirectory, '.agent-instructions.md'), 'utf8');
       assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
       assert.match(compiledRulesContent, /\.agent-context\/prompts\/bootstrap-project-context\.md/);
+      assert.match(compiledRulesContent, /Create README\.md as a public and developer entrypoint before coding continues/);
       assert.match(compiledRulesContent, /If docs\/project-brief\.md is missing, execute bootstrap-project-context prompt immediately\./);
       assert.match(compiledRulesContent, /docs\/flow-overview\.md must also exist before coding continues\./);
       assert.match(compiledRulesContent, /Do not use generic placeholder templates\./);
