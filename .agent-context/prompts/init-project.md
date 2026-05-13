@@ -10,12 +10,13 @@ When a new project is created or initialized, the agent must automatically:
 3. Review dynamic runtime signals from [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), repository evidence, task constraints, and live official documentation when runtime or ecosystem facts matter.
 4. If Docker or Compose is in scope, load [docker-runtime.md](../rules/docker-runtime.md) and verify the latest official Docker guidance before authoring container assets. Materialize the selected development/production assets rather than stopping at prose.
 5. For unresolved framework or package setup, recommend the latest stable compatible dependency set and official framework setup flow from live official documentation before coding unless a documented compatibility constraint blocks it.
+6. Do not default fresh web projects to Next.js, Tailwind-only styling, shadcn/ui, Vite, or any framework by habit, and do not avoid them because of this guard when they are the strongest fit. Treat explicit user constraints as constraints; otherwise compare project needs, runtime boundaries, hosting, data flow, team workflow, and official setup guidance before recommending.
 
 ## Required Planning Mode
 
 If the user describes a project or feature, the agent must:
 1. Clarify the delivery goals, runtime assumptions, constraints, and must-have capabilities before choosing implementation shape.
-2. If the user already named a stack or framework, treat it as an explicit constraint. If not, produce a short evidence-backed recommendation from the brief, repo evidence, and live official documentation before coding.
+2. If the user already named a stack or framework, treat it as an explicit constraint. If not, produce a short evidence-backed recommendation from the brief, repo evidence, and live official documentation before coding. Include at least one plausible alternative when the default-looking option is Next.js, Tailwind-only styling, shadcn/ui, or another familiar web stack.
 3. For existing projects, inspect real files first. Do not derive product name, description, runtime, architecture, or design direction from the folder name alone.
 4. Draft a high-level structure plan plus the docs/bootstrap artifacts that must exist before coding.
 5. Wait for user approval before scaffolding the project.
@@ -45,6 +46,7 @@ If the user specifies a framework, runtime, or architecture constraint, the agen
    - Every module must follow [architecture.md](../rules/architecture.md).
    - Every dependency must be justified per [efficiency-vs-hype.md](../rules/efficiency-vs-hype.md).
    - Use official framework setup commands or canonical starter flows when they produce newer, better-supported dependency defaults than manual package assembly.
+   - Do not assemble a framework project from scratch by habit when official setup commands create the supported structure. Manual assembly is allowed only for tiny prototypes, educational demos, unusual repo constraints, or a documented architecture reason.
    - If containerization is selected, Docker assets must follow [docker-runtime.md](../rules/docker-runtime.md) and the latest official Docker docs instead of stale blog-era patterns. Selected Docker lanes require files and runbooks, not docs-only acknowledgment.
 
 ## Runtime and Architecture Reference

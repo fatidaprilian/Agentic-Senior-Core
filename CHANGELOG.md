@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## 3.0.46 - 2026-05-13
+### Added
+
+### Changed
+- Added anti-room-anchor guidance so generated design contracts avoid `room`, `darkroom`, `counting room`, and similar place metaphors unless the product truly depends on that physical model.
+- Clarified external website inspiration boundaries: references may inform constraints, mechanics, and quality bars, but must not be copied as layout, palette, component skin, visual metaphor, or brand posture.
+- Tightened runtime and styling neutrality so fresh web projects do not default to Next.js, Tailwind-only styling, shadcn/ui, or from-scratch framework assembly by habit, while still allowing those choices when they are the strongest project fit.
+
+### Fixed
+
 ## 3.0.45 - 2026-05-12
 ### Changed
 - Added a universal root `README.md` gate so fresh and existing projects have a public and developer entrypoint before implementation.

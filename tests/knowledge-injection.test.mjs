@@ -222,6 +222,12 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(bootstrapDesignPrompt, /Design Flexibility Layer/i);
     assert.match(bootstrapDesignPrompt, /locked outcomes from flexible expression/i);
     assert.match(bootstrapDesignPrompt, /A new dependency, package count, or vague performance concern is not a blocker by itself/i);
+    assert.match(bootstrapDesignPrompt, /Do not default to spatial place metaphors/i);
+    assert.match(bootstrapDesignPrompt, /Prefer artifacts, custody flows, instruments, data behaviors/i);
+    assert.match(bootstrapDesignPrompt, /External Inspiration Boundary/i);
+    assert.match(bootstrapDesignPrompt, /Tailwind-first is valid only as an implementation fit/i);
+    assert.match(bootstrapDesignPrompt, /not as ideology or anti-ideology/i);
+    assert.match(bootstrapDesignPrompt, /official framework scaffolders or setup commands/i);
   });
 
   it('design contract seed keeps machine-readable context hygiene boundaries', () => {
@@ -239,6 +245,11 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(designContractSource, /designFlexibilityPolicy/);
     assert.match(designContractSource, /locked-outcomes-flexible-expression/);
     assert.match(designContractSource, /literalTranslationPolicy/);
+    assert.match(designContractSource, /spatialAutopilotPolicy/);
+    assert.match(designContractSource, /spatialMetaphorPolicy/);
+    assert.match(designContractSource, /externalWebsiteReferencePolicy/);
+    assert.match(designContractSource, /frameworkNeutralityPolicy/);
+    assert.match(designContractSource, /manual-framework-scaffold-used-when-official-setup-fits/);
     assert.match(designContractSource, /hardComplianceFloor/);
     assert.match(designContractSource, /advisoryContrastModel/);
     assert.match(designContractSource, /designExecutionPolicy/);
@@ -261,10 +272,17 @@ describe('Docker and Design Freshness Guidance', () => {
 
     assert.match(dependencyRule, /latest stable compatible dependency version/i);
     assert.match(dependencyRule, /official scaffolder or setup command/i);
+    assert.match(dependencyRule, /do not hand-assemble fresh framework projects by habit/i);
+    assert.match(dependencyRule, /Reject framework autopilot, not frameworks/i);
+    assert.match(dependencyRule, /not defaults or forbidden choices/i);
     assert.match(dependencyRule, /Only step down to an older dependency version after documenting/i);
     assert.match(dependencyRule, /Do not treat dependency avoidance as an engineering virtue by itself/i);
     assert.match(dependencyRule, /performance-fear choices/i);
     assert.match(initPrompt, /latest stable compatible dependency set and official framework setup flow from live official documentation before coding unless a documented compatibility constraint blocks it/i);
+    assert.match(initPrompt, /Do not default fresh web projects to Next\.js/i);
+    assert.match(initPrompt, /do not avoid them because of this guard/i);
+    assert.match(initPrompt, /at least one plausible alternative/i);
+    assert.match(initPrompt, /official setup commands create the supported structure/i);
   });
 });
 

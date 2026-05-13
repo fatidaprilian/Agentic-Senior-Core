@@ -12,6 +12,7 @@ Before adding or recommending a dependency:
 - check current official docs, release notes, and setup guidance when the ecosystem decision matters
 - choose the latest stable compatible dependency version unless a project constraint blocks it
 - use the official scaffolder or setup command when it creates the current supported project shape
+- do not hand-assemble fresh framework projects by habit when the official setup flow gives safer current defaults; document the reason when manual assembly is better
 - Only step down to an older dependency version after documenting the exact compatibility, runtime, platform, or ecosystem reason.
 - explain why the dependency is a better tradeoff than local implementation for the current task
 - avoid packages that are stale, thinly maintained, too heavy for the job, or added only because they are popular
@@ -19,3 +20,5 @@ Before adding or recommending a dependency:
 - do not reject a dependency only because it adds a package; reject it only when the project-fit, security, maintenance, compatibility, bundle/runtime, or ownership tradeoff is worse than the alternative
 
 Reject offline dependency decisions, outdated tutorial versions, trend choices, dependency avoidance choices, and performance-fear choices that are not grounded in the current repo, brief, and delivery tradeoffs.
+
+Reject framework autopilot, not frameworks. Next.js, Vite, Astro, React Router, SvelteKit, Laravel, plain HTML, and other runtimes are candidates, not defaults or forbidden choices. If the user did not constrain the stack, compare at least the strongest fit and one plausible alternative before implementation, then choose the technology that removes bottlenecks for this project.

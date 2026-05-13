@@ -13,7 +13,8 @@ Use this rule for UI, UX, page, screen, component, layout, landing, dashboard, f
 - Treat `README.md` as public and developer overview, setup, usage, and user-facing context only when design or architecture rules conflict.
 - Do not choose final style, framework, palette, typography, layout paradigm, or animation library offline.
 - Research current official docs before adding a new UI, animation, scroll, 3D, canvas, charting, icon, styling, or primitive library.
-- Dynamic UI Foundation: do not hardcode shadcn/ui, Tailwind-only, native-only, or any component library as the universal answer. Modern lightweight primitives, motion libraries, canvas/WebGL helpers, charting libraries, and styling tools are valid when product evidence, accessibility, interaction quality, maintainability, delivery speed, runtime constraints, and official docs support them.
+- Dynamic UI Foundation: do not hardcode shadcn/ui, Tailwind-only, native-only, or any component library as the universal answer, and do not avoid them out of guardrail fear when they fit. Tailwind-first is valid when the stack, token model, and team workflow support it; pure Tailwind, vanilla CSS, shadcn/ui, or any kit is not neutral by itself. Modern primitives, motion/canvas/WebGL helpers, charting libraries, and styling tools are valid when product evidence, accessibility, runtime constraints, and official docs support them.
+- For fresh projects, prefer official framework scaffolders or setup commands when official docs show they produce the current supported shape. Build files manually only when approved architecture, repo constraints, or learning/prototype scope makes that better.
 - Keep design continuity opt-in. Repo evidence outranks memory residue.
 
 ## Required Design Contract
@@ -54,6 +55,7 @@ If the user gives no current-task visual research or reference:
 - Do not count old UI, existing design docs, or scaffold seeds as research.
 - Choose one high-variance non-software conceptual anchor before UI code.
 - Internally reject the safest dashboard, portal, card-grid, admin-shell, or minimalist-web-app mental model.
+- Do not let the fallback anchor become a generic place metaphor. Avoid room, darkroom, counting room, control room, war room, studio, lab, cockpit, and command center unless the product actually depends on that place model; prefer product-specific artifacts, workflows, custody chains, instruments, data behaviors, material systems, editorial systems, service rituals, or interaction mechanisms over "where the UI lives".
 - Record one real-world anchor reference, one signature motion behavior, and one typographic decision with role contrast.
 - Derive typography, spacing, morphology, motion, and responsive recomposition from that anchor.
 - Translate the anchor into workflow, hierarchy, density, typography, state behavior, and interaction before using literal artifacts. Do not turn anchor artifacts into required chrome, wallpaper, decorative props, or component-kit theme objects without a named product function.
@@ -71,7 +73,7 @@ If the user gives no current-task visual research or reference:
 - For new screens or broad redesigns, research the expressive implementation path instead of defaulting to static native CSS. Use native or already-installed tools only when they can still deliver the chosen ambition, or when a concrete blocker is documented. Do not downshift because adding a package feels inconvenient; downshift only for a concrete product-fit, accessibility, security, compatibility, device, maintenance, or measured performance reason.
 - Keep reduced-motion, keyboard, loading, performance, mobile, and non-3D fallbacks explicit.
 - Use component kits or headless primitives for behavior and accessibility when they fit. Replace library-default visual language with project-specific composition, tokens, motion, state treatment, and morphology.
-- Keep design-intent flexible: lock user goals, accessibility, production readiness, forbidden patterns, and approved continuity; keep exact palette primitives, font families, radius/shadow values, component skins, and candidate signature moves flexible until evidence or approval locks them.
+- Keep design-intent flexible: lock user goals, accessibility, production readiness, forbidden patterns, and approved continuity; keep exact palette primitives, font families, radius/shadow values, component skins, candidate signature moves, and external website inspiration flexible until evidence or approval locks them. Convert references into product-fit rules; do not copy layout, palette, component skin, brand posture, or visual metaphor.
 ## Zero-Based Redesign
 
 If the user asks for a redesign from zero:
