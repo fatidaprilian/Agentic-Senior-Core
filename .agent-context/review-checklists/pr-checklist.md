@@ -61,6 +61,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] Scope applied: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations
 - [ ] Style scope review is advisory and does not block merge when API docs are synced in the same commit and contract details are correct
 - [ ] Required docs exist before implementation: public and developer root README; project brief; architecture decision; flow overview; API/public contract when relevant; data model when relevant; and UI design contract when relevant.
+- [ ] `docs/doc-index.md` exists whenever `docs/` exists and acts as a compact read-routing map instead of duplicating requirements or architecture.
 - [ ] For docs-only or docs-first requests, implementation code was not changed unless the user explicitly asked for it or approved an implementation plan.
 - [ ] Formal project docs use English by default unless the user requested another language or existing docs established one.
 - [ ] Docs cover feature plan, architecture rationale, public contracts, data model, UI/design, security assumptions, testing strategy, delivery flow, and next validation actions where relevant.
@@ -73,6 +74,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] Root README is public and developer friendly, even for private projects, and does not contain secrets, internal agent notes, private reasoning, or governance policy dumps.
 - [ ] Documentation grows with the project: README and matching docs were updated when setup, runtime, architecture, public contracts, data shape, deployment, validation, or UI scope changed.
 - [ ] Documentation file count stayed intentional: new docs files were added only for stable, distinct, or long workflows.
+- [ ] PRD, SRS, technical-design, or separate ERD files were added only when project evidence justified a distinct document.
 
 ## 7. UI And Accessibility
 
@@ -120,6 +122,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] Security and testing requirements remain mandatory after static template purge.
 - [ ] Coding flow is blocked if `docs/architecture-decision-record.md` (or `docs/Architecture-Decision-Record.md`) is missing
 - [ ] Coding flow is blocked if root `README.md` is missing
+- [ ] Coding flow is blocked if `docs/doc-index.md` is missing while `docs/` exists
 - [ ] UI implementation flow is blocked if `docs/DESIGN.md` or `docs/design-intent.json` is missing
 
 ## Verdict

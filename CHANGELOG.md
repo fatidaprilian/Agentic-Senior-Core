@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## 3.0.47 - 2026-05-14
+### Changed
+- Added `docs/doc-index.md` to project bootstrap guidance as the compact routing map for generated project docs, while keeping PRD, SRS, technical-design, and separate ERD files conditional on project evidence.
+- Updated init and upgrade flows to ensure `.agentic-backup/` is ignored in the target repository root `.gitignore` whenever local backup artifacts are created.
+
+### Fixed
+
 ## 3.0.46 - 2026-05-13
 ### Added
 

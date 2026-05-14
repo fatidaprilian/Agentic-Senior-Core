@@ -377,6 +377,27 @@ export async function registerCliSmokeFoundationTests(t) {
     }
   });
 
+  await t.test('upgrade ensures local backup artifacts are ignored', () => {
+    const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-backup-ignore-'));
+
+    try {
+      execSync(
+        `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
+      ).toString();
+
+      writeFileSync(join(upgradeTargetDirectory, '.gitignore'), 'node_modules/\n');
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
+      assert.match(upgradeOutput, /Local backup artifacts ignored in \.gitignore \(\.agentic-backup\/\)\./);
+
+      const gitignoreContent = readFileSync(join(upgradeTargetDirectory, '.gitignore'), 'utf8');
+      assert.match(gitignoreContent, /^\.agentic-backup\/$/m);
+      assert.equal((gitignoreContent.match(/\.agentic-backup\//g) || []).length, 1);
+    } finally {
+      rmSync(upgradeTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
   await t.test('upgrade regenerates the full compiled instruction surface', () => {
     const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-compiled-surface-'));
 
@@ -544,6 +565,7 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.match(bootstrapProjectContextPrompt, /Dynamic Project Context Synthesis/);
       assert.match(bootstrapProjectContextPrompt, /Create or update these files in EN language/);
       assert.match(bootstrapProjectContextPrompt, /^1\. README\.md$/m);
+      assert.match(bootstrapProjectContextPrompt, /^2\. docs\/doc-index\.md$/m);
       assert.match(bootstrapProjectContextPrompt, /Project name: Nusantara API/);
       assert.match(bootstrapProjectContextPrompt, /Project topology decision: Microservice \/ distributed system/);
       assert.match(bootstrapProjectContextPrompt, /No copy-paste from external prose/);
@@ -551,6 +573,8 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.match(bootstrapProjectContextPrompt, /For any ecosystem or technology claim, perform live web research and include citation metadata \(source \+ fetchedAt timestamp\) rather than relying on offline heuristics\./);
       assert.match(bootstrapProjectContextPrompt, /Write for native English speakers at an 8th-grade reading level\./);
       assert.match(bootstrapProjectContextPrompt, /README\.md must be public and developer friendly/);
+      assert.match(bootstrapProjectContextPrompt, /docs\/doc-index\.md is the low-token routing map for docs\/\*/);
+      assert.match(bootstrapProjectContextPrompt, /Add SRS, PRD, technical-design, or ERD docs only when project evidence triggers them/);
       assert.match(bootstrapProjectContextPrompt, /Assumptions to Validate/);
       assert.match(bootstrapProjectContextPrompt, /Next Validation Action/);
       assert.match(bootstrapProjectContextPrompt, /Do not invent modules or architecture layers only to make the docs look complete\./);
@@ -566,6 +590,7 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
       assert.match(compiledRulesContent, /\.agent-context\/prompts\/bootstrap-project-context\.md/);
       assert.match(compiledRulesContent, /Create README\.md as a public and developer entrypoint before coding continues/);
+      assert.match(compiledRulesContent, /Create docs\/doc-index\.md as the compact read-routing map whenever docs\/ exists\./);
       assert.match(compiledRulesContent, /If docs\/project-brief\.md is missing, execute bootstrap-project-context prompt immediately\./);
       assert.match(compiledRulesContent, /docs\/flow-overview\.md must also exist before coding continues\./);
       assert.match(compiledRulesContent, /Do not use generic placeholder templates\./);

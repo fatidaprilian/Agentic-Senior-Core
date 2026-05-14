@@ -33,6 +33,7 @@ The `.agent-context/rules/` directory is the default guidance source for impleme
 - Security and testing are non-negotiable baseline requirements.
 - Hard block before coding:
   - Root `README.md` must exist for every fresh or existing project and read as a public and developer entrypoint, not an internal agent note.
+  - `docs/doc-index.md` must exist whenever `docs/` exists. It is a compact read-routing map, not a replacement for project docs.
   - `docs/project-brief.md` must exist.
   - `docs/architecture-decision-record.md` (alias: `docs/Architecture-Decision-Record.md`) must exist.
   - `docs/flow-overview.md` must exist.
@@ -46,6 +47,19 @@ The `.agent-context/rules/` directory is the default guidance source for impleme
 - When context is incomplete, separate confirmed facts from assumptions, add an `Assumptions to Validate` section, and end with the next validation action.
 - Keep docs current with project changes. Update README and the matching docs whenever setup, runtime, architecture, public contracts, data shape, UI scope, deployment, or validation flow changes.
 - Control docs file count. Keep the baseline compact, then add topic files only when a subject is stable, too long for README/core docs, or belongs to a distinct workflow such as hardware setup, deployment, testing validation, operations, or troubleshooting.
+
+## Documentation Read Routing and Conditional Specs
+
+Use `README.md` for human orientation, then use `docs/doc-index.md` to choose the smallest relevant read set. Do not broad-read every Markdown file in `docs/` by default.
+
+- Read `docs/project-brief.md`, `docs/architecture-decision-record.md`, and `docs/flow-overview.md` for broad planning, new features, or architecture changes.
+- Read `docs/api-contract.md` only when API, CLI, firmware endpoint, web flow, event, or library contract behavior is in scope.
+- Read `docs/database-schema.md` only when persistence, migrations, data shape, or query behavior is in scope.
+- Read `docs/DESIGN.md` and `docs/design-intent.json` only for UI, UX, frontend, layout, component, or visual work.
+- Add `docs/prd.md` only when there is product-roadmap, user-story, metrics, product-owner, or feature-flag ownership that would otherwise bloat the project brief.
+- Add `docs/srs.md` only for contractual, regulated, multi-stakeholder, or acceptance-criteria-heavy projects. Do not create both PRD and SRS unless those owners and purposes are distinct.
+- Add `docs/technical-design.md` only for non-trivial architecture decisions, major refactors, cross-cutting behavior, or system interactions that outgrow the ADR and flow overview.
+- Keep ERD inside `docs/database-schema.md` for small and medium schemas. Add a separate ERD file only when relationship complexity makes the schema doc hard to scan.
 
 ## Rules as Guardian (Cross-Session Consistency)
 

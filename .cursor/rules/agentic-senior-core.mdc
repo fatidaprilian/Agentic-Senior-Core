@@ -7,7 +7,7 @@ alwaysApply: true
 
 Adapter Mode: thin
 Adapter Source: .instructions.md
-Canonical Snapshot SHA256: c66b5dfe48a25f0df297a1681aa6bab572da95d2201f09abf3767d38a2934591
+Canonical Snapshot SHA256: 728c7ecaa49ea69a3e9b03c1c88d25f310a1827f2cebb72de102b5ae5005ff0e
 
 This repository is governed by a strict instruction contract.
 Use [.instructions.md](../../.instructions.md) as the canonical policy source.

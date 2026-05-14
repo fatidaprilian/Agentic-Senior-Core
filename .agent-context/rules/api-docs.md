@@ -18,7 +18,11 @@ Choose README sections from project evidence. Do not force a fixed template when
 
 Documentation must evolve with the project. When behavior, setup, architecture, public contracts, data shape, deployment, or validation changes, update README and the matching docs in the same change.
 
+When `docs/` exists, keep `docs/doc-index.md` as the compact routing map for humans and agents. It should list active docs, their purpose, read triggers, status, and last update. It must not duplicate requirements, architecture, or API contracts.
+
 Start compact, then split only when a topic earns its own file. Good split signals are: the section is long, the workflow is owned separately, the content is referenced often, or the topic needs step-by-step care such as hardware setup, deployment, testing validation, operations, or troubleshooting.
+
+Use PRD, SRS, technical design, and ERD as conditional docs, not default boilerplate. PRD covers product intent and roadmap ownership. SRS covers contractual or complex acceptance criteria. Technical design covers architecture under pressure. ERD stays inside `docs/database-schema.md` unless the data model is large or relationship-heavy.
 
 ## Contract Rules
 

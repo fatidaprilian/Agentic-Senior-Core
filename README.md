@@ -34,6 +34,8 @@ One command to initialize rules, checklists, thin discovery adapters, and a comp
 > **See [docs/deep-dive.md](docs/deep-dive.md) and [docs/roadmap.md](docs/roadmap.md) for advanced configuration, planning mode, snapshot, and realtime options.**
 
 - This command writes `.agent-context/state/v3-purge-audit.json` and reports whether static directory deletion is safe.
+- When project docs are scaffolded, `docs/doc-index.md` is used as the compact map for deeper docs so agents can read the right files without scanning every Markdown file.
+- Local backup snapshots are written under `.agentic-backup/`; init and upgrade ensure that folder is ignored by the target repository.
 - Package scope is `@ryuenn3123`; the GitHub repository owner is `fatidaprilian`.
 
 ---
@@ -94,6 +96,8 @@ Use `--dry-run` first to preview changes safely, then apply with `--yes`.
 
 Upgrade now performs managed-surface synchronization by default: obsolete governance files under managed paths are pruned so the pack stays aligned with the latest release.
 Use `--no-prune` if you want to keep legacy managed files.
+
+When upgrade creates `.agentic-backup/`, it also keeps the target root `.gitignore` aligned with that local-only backup folder. The backup is for rollback safety, not a source of truth and not a file to commit.
 
 ## Instruction Entrypoints
 
