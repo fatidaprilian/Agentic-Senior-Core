@@ -44,7 +44,7 @@ const REQUIRED_VERIFIED_DOMAINS = new Set([
   'state-continuity',
 ]);
 const GOVERNANCE_SURFACE_PATHS = {
-  'canonical-instructions': '.instructions.md',
+  'canonical-instructions': 'AGENTS.md',
   'frontend-design-contract': '.agent-context/prompts/bootstrap-design.md',
   'frontend-architecture': '.agent-context/rules/frontend-architecture.md',
   'backend-architecture': '.agent-context/rules/architecture.md',
@@ -75,7 +75,7 @@ const BACKEND_GOVERNANCE_COVERAGE = [
     constraint: 'Global backend/API rule routing',
     status: 'strengthened',
     sourcePaths: [
-      '.instructions.md',
+      'AGENTS.md',
       '.agent-context/rules/architecture.md',
       '.agent-context/prompts/refactor.md',
     ],

@@ -1,7 +1,7 @@
 # Agentic-Senior-Core Roadmap Backlog
 
 Date: 2026-04-30
-Current Version: 3.0.47
+Current Version: 3.0.48
 Status: Phase 10 instruction-footprint simplification, Phase 11 cleanup/refactor audit, and Phase 12 post-release hygiene cleanup are complete.
 
 ---
@@ -23,10 +23,10 @@ Move completed detail to `CHANGELOG.md`, Git history, or validation output.
 
 ## Current Baseline
 
-- `.instructions.md` is the canonical instruction source.
-- Thin adapters are generated from `.instructions.md` and hash-synced.
+- `AGENTS.md` is the canonical installed instruction source.
+- `CLAUDE.md` and `GEMINI.md` are native import bridges to `AGENTS.md`.
 - `.agent-context/` holds managed rules, prompts, checklists, policies, and state.
-- Init/upgrade copy the canonical instruction surface and regenerate compiled guidance.
+- Init/upgrade copy the compact instruction surface and refresh onboarding state.
 - Rule loading is scope-resolved. Narrow tasks must not load broad unrelated rules.
 - Documentation-first requests must create/refine docs before implementation.
 - UI work must create/refine `docs/DESIGN.md` and `docs/design-intent.json` before UI code.
@@ -174,37 +174,37 @@ Current completed slice:
 - [x] Added README redirection to `.agent-context/` and current project docs.
 - [x] Updated thin adapter generation with authority, scoped loading, and bootstrap receipt wording.
 - [x] Added line-count validation for active instruction surfaces.
-- [x] Added generated bridge adapters for Claude, Gemini, Cursor, Windsurf, and GitHub path instructions.
-- [x] Converted legacy root `.cursorrules`, `.windsurfrules`, and `.clauderc` output into thin compatibility adapters.
+- [x] Added native import bridges for Claude and Gemini.
+- [x] Retired default generation for legacy root `.cursorrules`, `.windsurfrules`, `.clauderc`, and tool-specific copied instruction directories.
 - [x] Updated tests and audits for the new contract shape.
 
 Root footprint target:
 - [x] Keep `AGENTS.md` as the primary bridge.
 - [x] Add `CLAUDE.md` as a thin Claude import bridge.
 - [x] Add `GEMINI.md` as a thin Gemini import bridge.
-- [x] Keep `.instructions.md` canonical but compact.
+- [x] Keep `AGENTS.md` canonical but compact.
 - [x] Keep `.agent-context/` as managed canonical context.
-- [x] Keep `.github/copilot-instructions.md` and `.github/instructions/*.instructions.md` generated.
-- [x] Add Cursor rules under `.cursor/rules/*.mdc`.
-- [x] Add Windsurf rules under `.windsurf/rules/*.md`.
-- [x] Keep root `.cursorrules` and `.windsurfrules` as legacy thin adapters after migration tests passed.
+- [x] Stop generating `.github/copilot-instructions.md` and `.github/instructions/*.instructions.md` by default.
+- [x] Stop generating Cursor rules under `.cursor/rules/*.mdc` by default.
+- [x] Stop generating Windsurf rules under `.windsurf/rules/*.md` by default.
+- [x] Stop generating root `.cursorrules` and `.windsurfrules` by default.
 
 Migration checklist:
-- [x] Change `scripts/sync-thin-adapters.mjs` to generate imperative thin adapters with hash metadata.
+- [x] Change `scripts/sync-thin-adapters.mjs` to generate minimal native import bridges.
 - [x] Change `lib/cli/compiler.mjs` for the final entrypoint set.
 - [x] Change `lib/cli/commands/init.mjs`, `upgrade.mjs`, and `optimize.mjs` output and generated file lists.
 - [x] Change `lib/cli/constants.mjs`, `preflight.mjs`, and `backup.mjs` for new managed adapter files.
 - [x] Review `detector.mjs`, rollback handling, and legacy ignore rules before root adapter retirement.
 - [x] Update validation scripts for current contract checks.
-- [x] Generate `CLAUDE.md`, `GEMINI.md`, `.cursor/rules/*.mdc`, `.windsurf/rules/*.md`, and `.github/instructions/*.instructions.md`.
+- [x] Generate only `CLAUDE.md` and `GEMINI.md` as native import bridges.
 - [x] Move active long-form Cursor/Windsurf content out of root legacy files.
 - [x] Stop generating long-form root `.cursorrules`, `.windsurfrules`, and `.clauderc`.
-- [x] Decide `.gemini/instructions.md` is a thin bridge; keep compiled content only in `.agent-instructions.md`.
+- [x] Stop generating `.gemini/instructions.md`; keep project-specific decisions in onboarding state.
 - [x] Update adapter-path tests.
 - [x] Update README, CONTRIBUTING, FAQ, deep dive, integration playbook, semantic redundancy notes, and CHANGELOG.
 
 Done when:
-- [x] New projects no longer receive long root adapter files.
+- [x] New projects receive only `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.agent-context/` by default.
 - [x] Existing projects upgrade without losing user-owned instruction entrypoints.
 - [x] Validation blocks adapter drift and stale legacy root surfaces.
 - [x] Codex, Cursor, Windsurf, Copilot, Claude, and Gemini entrypoints have source-backed tests or manual verification notes.
@@ -240,7 +240,7 @@ Obsolete or confusing surfaces:
   - Reason: it describes `.agent-context/skills/`, tier routing, and a 100-page skill-platform plan that conflicts with current compact governance direction.
 - [x] Move stale historical planning docs to `docs/archive/` or add a clear historical banner.
   - Candidate files: `docs/roadmap.md`, `docs/v2-upgrade-playbook.md`, `docs/benchmark-reference.md`, `docs/analysis-priority-matrix.md`, `docs/rtk-comparison-and-sync-audit-2026-04-11.md`, and `docs/semantic-redundancy-scan-2026-04-11.md`.
-  - Result: kept the files in place for validator and reference stability, but added historical notes that redirect current policy to `.instructions.md`, `.agent-context/`, and this backlog.
+  - Result: kept the files in place for validator and reference stability, but added historical notes that redirect current policy to `AGENTS.md`, `.agent-context/`, and this backlog.
 
 Rename stale active terminology:
 - [x] Rename `skillTrust` and `verifiedSkillDomainCount` in `scripts/governance-weekly-report.mjs`, `.agent-context/state/weekly-governance-report.json`, and `tests/operations.test.mjs`.

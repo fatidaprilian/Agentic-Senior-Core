@@ -13,7 +13,6 @@ Thanks for wanting to make AI agents write better code. Here's how to contribute
 | Structural planning guidance update | `.agent-context/prompts/`, `lib/cli/compiler.mjs` | Scope planning, docs bootstrap, and project-context guidance |
 | New checklist | `.agent-context/review-checklists/` | Self-audit guide |
 | State intelligence update | `.agent-context/state/` | Architecture boundaries and dependency map |
-| Override policy update | `.agent-override.md` | Scoped rule exceptions |
 | MCP workflow update | `mcp.json` | Self-healing automation flow |
 | Bug fix | Any file | Typos, broken links, incorrect rules |
 | Improvement | Any file | Sharper wording, stricter boundaries |
@@ -63,7 +62,7 @@ If all three are "yes", it belongs here.
    - Core principle (1-2 sentences)
    - BANNED / REQUIRED sections with enforceable boundaries
    - Decision tree or quick ruleset when it reduces ambiguity
-3. Update `.instructions.md` or `.agent-context/` as the source, then regenerate thin adapters with `npm run sync:adapters`
+3. Update `AGENTS.md` or `.agent-context/` as the source, then verify thin adapters with `npm run check:adapters`
 4. Update `review-checklists/pr-checklist.md` when the rule is part of review scope
 5. Validate and PR
 
@@ -88,7 +87,7 @@ If all three are "yes", it belongs here.
 - Generic content that reads like it was auto-generated without thought
 - Rules without concrete enforcement boundaries
 - Stack profiles for languages the author doesn't actually use in production
-- PRs that don't update the relevant source files, generated adapters, and checklists
+- PRs that don't update the relevant source files, docs, validators, and checklists
 
 ---
 

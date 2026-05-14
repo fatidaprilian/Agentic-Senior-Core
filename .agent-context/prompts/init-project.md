@@ -40,7 +40,7 @@ The agent must:
 If the user specifies a framework, runtime, or architecture constraint, the agent must:
 1. Read [AGENTS.md](../../AGENTS.md) for role context.
 2. Resolve only the rules required by the explicit constraint and scope. Do not read unrelated backend, frontend, or DevOps rules by habit.
-3. Reference [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), [.cursorrules](../../.cursorrules), and [.windsurfrules](../../.windsurfrules) for runtime evidence and any explicit constraints already applied to this project.
+3. Reference [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), [AGENTS.md](../../AGENTS.md), and the relevant `.agent-context/` files for runtime evidence and any explicit constraints already applied to this project.
 4. Scaffold the initial project structure only after runtime and architecture decisions are explicit:
    - Create only the directories and files justified by the approved structure.
    - Set up configuration, validation, error handling, observability, health checks, and persistence only when they fit the approved runtime and project scope.
@@ -53,7 +53,7 @@ If the user specifies a framework, runtime, or architecture constraint, the agen
 
 ## Runtime and Architecture Reference
 
-See [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), [.cursorrules](../../.cursorrules), and [.windsurfrules](../../.windsurfrules) for the latest shipped runtime evidence, explicit constraints, and agent-decision status.
+See [.agent-context/state/onboarding-report.json](../state/onboarding-report.json), [AGENTS.md](../../AGENTS.md), and the relevant `.agent-context/` files for the latest shipped runtime evidence, explicit constraints, and agent-decision status.
 
 ## UI/UX Bootstrap
 

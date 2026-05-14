@@ -6,7 +6,6 @@ import {
   join,
   mkdirSync,
   mkdtempSync,
-  readFileSync,
   readJson,
   rmSync,
   tmpdir,
@@ -16,7 +15,7 @@ import { validateDesignIntentContract } from '../../../lib/cli/project-scaffolde
 import { detectProjectContext, detectUiScopeSignals } from '../../../lib/cli/detector.mjs';
 
 export async function registerOptimizationDefaultsSmokeTests(t) {
-  await t.test('optimize command enables token optimization policy and regenerates rules', () => {
+  await t.test('optimize command enables token optimization policy state', () => {
     const optimizationTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-optimize-'));
 
     try {
@@ -29,6 +28,7 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       ).toString();
 
       assert.match(optimizeOutput, /Token optimization enabled/);
+      assert.match(optimizeOutput, /Updated files: \.agent-context\/state\/token-optimization\.json and \.agent-context\/state\/token-optimization-report\.json/);
 
       const tokenStatePath = join(optimizationTargetDirectory, '.agent-context', 'state', 'token-optimization.json');
       const tokenState = readJson(tokenStatePath);
@@ -38,8 +38,7 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       assert.ok(Array.isArray(tokenState.commandRewriteMappings));
       assert.ok(tokenState.commandRewriteMappings.length >= 10);
 
-      const tokenRulesContent = readFileSync(join(optimizationTargetDirectory, '.agent-instructions.md'), 'utf8');
-      assert.match(tokenRulesContent, /TOKEN OPTIMIZATION PROFILE/);
+      assert.equal(existsSync(join(optimizationTargetDirectory, '.agent-instructions.md')), false);
 
       const tokenReportPath = join(
         optimizationTargetDirectory,
@@ -78,8 +77,7 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       assert.equal(initTokenState.selectedAgent, 'cursor');
       assert.ok(typeof initTokenState.externalProxy === 'object');
 
-      const initCompiledRulesContent = readFileSync(join(initOptimizationTargetDirectory, '.agent-instructions.md'), 'utf8');
-      assert.match(initCompiledRulesContent, /TOKEN OPTIMIZATION PROFILE/);
+      assert.equal(existsSync(join(initOptimizationTargetDirectory, '.agent-instructions.md')), false);
     } finally {
       rmSync(initOptimizationTargetDirectory, { recursive: true, force: true });
     }
@@ -120,13 +118,7 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       assert.ok(defaultTokenState.outputFoldingStrategy.preserveAlways.includes('error-message'));
       assert.ok(defaultTokenState.outputFoldingStrategy.safetyBoundary.includes('never hide failing checks'));
 
-      const defaultCompiledRules = readFileSync(join(defaultOptimizationTargetDirectory, '.agent-instructions.md'), 'utf8');
-      assert.match(defaultCompiledRules, /MEMORY CONTINUITY PROFILE/);
-      assert.match(defaultCompiledRules, /active-memory\.json/);
-      assert.match(defaultCompiledRules, /Refresh `?\.agent-context\/state\/active-memory\.json`? directly at natural task boundaries/);
-      assert.match(defaultCompiledRules, /Before the final response, update `project\.currentFocus`/);
-      assert.match(defaultCompiledRules, /TOKEN OPTIMIZATION PROFILE/);
-      assert.match(defaultCompiledRules, /Output folding policy/);
+      assert.equal(existsSync(join(defaultOptimizationTargetDirectory, '.agent-instructions.md')), false);
 
       const defaultOnboardingReport = readJson(
         join(defaultOptimizationTargetDirectory, '.agent-context', 'state', 'onboarding-report.json')
@@ -166,9 +158,7 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       );
       assert.equal(existsSync(optOutTokenStatePath), false);
 
-      const optOutCompiledRules = readFileSync(join(optOutOptimizationTargetDirectory, '.agent-instructions.md'), 'utf8');
-      assert.doesNotMatch(optOutCompiledRules, /MEMORY CONTINUITY PROFILE/);
-      assert.doesNotMatch(optOutCompiledRules, /TOKEN OPTIMIZATION PROFILE/);
+      assert.equal(existsSync(join(optOutOptimizationTargetDirectory, '.agent-instructions.md')), false);
 
       const optOutOnboardingReport = readJson(
         join(optOutOptimizationTargetDirectory, '.agent-context', 'state', 'onboarding-report.json')

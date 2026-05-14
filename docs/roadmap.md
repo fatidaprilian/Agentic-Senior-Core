@@ -1,6 +1,6 @@
 # Product Roadmap
 
-Historical note: This file preserves older release-track context. Use `docs/deep-analysis-and-roadmap-backlog.md` for the active next-work backlog and `.instructions.md` plus `.agent-context/` for current governance policy.
+Historical note: This file preserves older release-track context. Use `docs/deep-analysis-and-roadmap-backlog.md` for the active next-work backlog and `AGENTS.md` plus `.agent-context/` for current governance policy.
 
 This document tracks the product delivery plan and current execution reality.
 
@@ -145,8 +145,8 @@ Reference: docs/terminology-mapping.md
    - Define incident playbooks for governance failures and policy breaches.
 4. Dynamic context delivery modernization
    - Evaluate MCP-native domain retrieval for rule packs that are only needed during specific edits.
-   - Revisit RAG-style retrieval when compiled context becomes too dense for the current compiler model.
-   - Keep compiled rule files as the default until retrieval proves lower-friction and more reliable.
+   - Revisit RAG-style retrieval only when the current `AGENTS.md` plus lazy `.agent-context/` model becomes too dense.
+   - Keep native import bridges as the default unless host support regresses.
 
 ### V3.0 Top Goals Intake Policy (Roadmap-First)
 - All candidate work for V3.0 (optimization, refactor, reliability, security, and DX improvements) must be recorded in roadmap top goals before implementation starts.

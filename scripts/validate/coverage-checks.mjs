@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import { join, relative } from 'node:path';
 import {
   COMPLIANCE_ALIAS_TERMS,
@@ -383,7 +382,6 @@ export async function validateInstructionAdapters(context) {
   console.log('\nChecking instruction adapter consolidation...');
 
   const canonicalInstructionContent = normalizeLineEndings(await readTextFile(CANONICAL_INSTRUCTION_PATH));
-  const canonicalSnapshotHash = createHash('sha256').update(canonicalInstructionContent).digest('hex');
   const requiredBootstrapReceiptSnippets = [
     'Bootstrap Receipt',
     'loaded_files',
@@ -397,25 +395,24 @@ export async function validateInstructionAdapters(context) {
     'product categories are heuristics',
   ];
   const instructionFootprintLimits = [
-    { path: '.instructions.md', maxLines: 220 },
+    { path: 'AGENTS.md', maxLines: 180 },
     { path: '.agent-context/prompts/bootstrap-design.md', maxLines: 180 },
     { path: '.agent-context/rules/frontend-architecture.md', maxLines: 110 },
   ];
-  const legacyRootAdapterPaths = ['.cursorrules', '.windsurfrules'];
 
   for (const requiredBootstrapReceiptSnippet of requiredBootstrapReceiptSnippets) {
     if (canonicalInstructionContent.includes(requiredBootstrapReceiptSnippet)) {
-      pass(`.instructions.md includes bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
+      pass(`AGENTS.md includes bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
     } else {
-      fail(`.instructions.md is missing bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
+      fail(`AGENTS.md is missing bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
     }
   }
 
   for (const requiredUiReadabilitySnippet of requiredUiReadabilitySnippets) {
     if (canonicalInstructionContent.includes(requiredUiReadabilitySnippet)) {
-      pass(`.instructions.md includes UI readability snippet: ${requiredUiReadabilitySnippet}`);
+      pass(`AGENTS.md includes UI readability snippet: ${requiredUiReadabilitySnippet}`);
     } else {
-      fail(`.instructions.md is missing UI readability snippet: ${requiredUiReadabilitySnippet}`);
+      fail(`AGENTS.md is missing UI readability snippet: ${requiredUiReadabilitySnippet}`);
     }
   }
 
@@ -445,81 +442,17 @@ export async function validateInstructionAdapters(context) {
 
     const thinAdapterContent = await readTextFile(absoluteAdapterPath);
 
-    if (
-      thinAdapterContent.includes('Adapter Mode: thin')
-      && thinAdapterContent.includes('Adapter Source: .instructions.md')
-    ) {
-      pass(`${thinAdapterPath} declares thin adapter metadata`);
+    if (thinAdapterContent.trim() === '@AGENTS.md') {
+      pass(`${thinAdapterPath} imports AGENTS.md`);
     } else {
-      fail(`${thinAdapterPath} must declare Adapter Mode: thin and Adapter Source: .instructions.md`);
-    }
-
-    for (const requiredBootstrapReceiptSnippet of requiredBootstrapReceiptSnippets) {
-      if (thinAdapterContent.includes(requiredBootstrapReceiptSnippet)) {
-        pass(`${thinAdapterPath} includes bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
-      } else {
-        fail(`${thinAdapterPath} is missing bootstrap receipt snippet: ${requiredBootstrapReceiptSnippet}`);
-      }
-    }
-
-    for (const requiredUiReadabilitySnippet of requiredUiReadabilitySnippets) {
-      if (thinAdapterContent.includes(requiredUiReadabilitySnippet)) {
-        pass(`${thinAdapterPath} includes UI readability snippet: ${requiredUiReadabilitySnippet}`);
-      } else {
-        fail(`${thinAdapterPath} is missing UI readability snippet: ${requiredUiReadabilitySnippet}`);
-      }
-    }
-
-    const hashMatch = thinAdapterContent.match(/Canonical Snapshot SHA256:\s*([a-f0-9]{64})/);
-    if (!hashMatch) {
-      fail(`${thinAdapterPath} must declare Canonical Snapshot SHA256`);
-      continue;
-    }
-
-    if (hashMatch[1] === canonicalSnapshotHash) {
-      pass(`${thinAdapterPath} canonical hash matches .instructions.md`);
-    } else {
-      fail(`${thinAdapterPath} canonical hash drift detected (expected ${canonicalSnapshotHash})`);
+      fail(`${thinAdapterPath} must be exactly @AGENTS.md`);
     }
 
     const thinAdapterLineCount = thinAdapterContent.split(/\r?\n/u).length;
-    if (thinAdapterLineCount <= 80) {
+    if (thinAdapterLineCount <= 2) {
       pass(`${thinAdapterPath} remains thin (${thinAdapterLineCount} lines)`);
     } else {
       fail(`${thinAdapterPath} is too large for thin-adapter mode (${thinAdapterLineCount} lines)`);
-    }
-  }
-
-  for (const legacyRootAdapterPath of legacyRootAdapterPaths) {
-    const absoluteLegacyRootAdapterPath = join(ROOT_DIR, legacyRootAdapterPath);
-    if (!(await fileExists(absoluteLegacyRootAdapterPath))) {
-      fail(`Missing legacy root adapter file: ${legacyRootAdapterPath}`);
-      continue;
-    }
-
-    const legacyRootAdapterContent = await readTextFile(absoluteLegacyRootAdapterPath);
-    const requiredLegacyRootAdapterSnippets = [
-      'Generated by Agentic-Senior-Core CLI v',
-      'Adapter Mode: legacy-thin',
-      'Adapter Source: .agent-instructions.md',
-      'Canonical baseline: .instructions.md',
-      '.agent-instructions.md',
-      '.agent-context/rules/',
-    ];
-
-    for (const requiredLegacyRootAdapterSnippet of requiredLegacyRootAdapterSnippets) {
-      if (legacyRootAdapterContent.includes(requiredLegacyRootAdapterSnippet)) {
-        pass(`${legacyRootAdapterPath} includes legacy-thin snippet: ${requiredLegacyRootAdapterSnippet}`);
-      } else {
-        fail(`${legacyRootAdapterPath} is missing legacy-thin snippet: ${requiredLegacyRootAdapterSnippet}`);
-      }
-    }
-
-    const legacyRootAdapterLineCount = legacyRootAdapterContent.split(/\r?\n/u).length;
-    if (legacyRootAdapterLineCount <= 40) {
-      pass(`${legacyRootAdapterPath} remains thin (${legacyRootAdapterLineCount} lines)`);
-    } else {
-      fail(`${legacyRootAdapterPath} is too large for legacy-thin mode (${legacyRootAdapterLineCount} lines)`);
     }
   }
 }

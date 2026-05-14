@@ -21,7 +21,7 @@ npm run gate:release
 
 Required governance sources:
 
-- `.instructions.md`
+- `AGENTS.md`
 - `.agent-context/rules/`
 - `.agent-context/prompts/`
 - `.agent-context/state/`
@@ -29,21 +29,21 @@ Required governance sources:
 
 ## AI Host Entrypoint Verification
 
-Checked on 2026-04-29 against current vendor documentation.
+Checked on 2026-05-14 against current vendor documentation.
 
 | Host | Supported entrypoints | Source |
 | --- | --- | --- |
 | Codex | `AGENTS.md` | OpenAI Codex `AGENTS.md` documentation: https://github.com/openai/codex/blob/main/docs/agents_md.md |
-| Cursor | `.cursor/rules/*.mdc`, `AGENTS.md`, legacy `.cursorrules` | Cursor Rules documentation: https://docs.cursor.com/context/rules |
+| Cursor | `AGENTS.md`, `.cursor/rules/*.mdc`; legacy `.cursorrules` remains supported but deprecated | Cursor Rules documentation: https://docs.cursor.com/context/rules |
 | Windsurf | `AGENTS.md`, `.windsurf/rules/*.md` | Windsurf `AGENTS.md` documentation: https://docs.windsurf.com/windsurf/cascade/agents-md |
-| GitHub Copilot | `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md`, `AGENTS.md`, root `CLAUDE.md`, root `GEMINI.md` | GitHub Copilot repository instructions documentation: https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions |
-| Claude Code | `CLAUDE.md` | Claude Code memory documentation: https://code.claude.com/docs/en/memory |
-| Gemini CLI | `GEMINI.md` | Gemini CLI context file documentation: https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/gemini-md.md |
+| GitHub Copilot | `AGENTS.md`, `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md`, root `CLAUDE.md`, root `GEMINI.md` | GitHub Copilot repository instructions documentation: https://docs.github.com/en/copilot/how-tos/custom-instructions/adding-repository-custom-instructions-for-github-copilot |
+| Claude Code | `CLAUDE.md` with `@AGENTS.md` import | Claude Code memory documentation: https://code.claude.com/docs/en/memory |
+| Gemini CLI | `GEMINI.md` with `@AGENTS.md` import; `context.fileName` can also include `AGENTS.md` | Gemini CLI context file documentation: https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/gemini-md.md |
 
 Policy:
-- Keep `.instructions.md` canonical.
-- Keep `.agent-instructions.md` as the only compiled rulebook.
-- Keep vendor entrypoints thin unless a vendor requires a compiled file.
+- Keep `AGENTS.md` canonical.
+- Keep `CLAUDE.md` and `GEMINI.md` as native import bridges.
+- Keep vendor-specific generated entrypoints out of the default install unless a current vendor requirement justifies them.
 - Preserve user-owned instruction files during upgrade when they lack Agentic-Senior-Core managed markers.
 
 ## GitHub Actions Playbook
@@ -110,7 +110,7 @@ pipeline {
 
 ## VS Code Playbook
 
-1. Keep `.github/copilot-instructions.md` and `.github/instructions/agentic-senior-core.instructions.md` aligned with `.instructions.md`.
+1. Keep `AGENTS.md` as the canonical agent entrypoint.
 2. Use `.vscode/mcp.json` for local MCP registration (`node ./scripts/mcp-server.mjs`).
 3. Run `init` or `upgrade` after pulling governance changes:
 
@@ -120,19 +120,14 @@ npx @ryuenn3123/agentic-senior-core upgrade --yes
 ```
 
 4. Confirm generated files are present and current:
-- `.agent-instructions.md`
-- `.cursorrules` as a legacy thin adapter
-- `.windsurfrules` as a legacy thin adapter
+- `AGENTS.md`
 - `CLAUDE.md`
 - `GEMINI.md`
-- `.cursor/rules/agentic-senior-core.mdc`
-- `.windsurf/rules/agentic-senior-core.md`
 - `.agent-context/state/onboarding-report.json`
 
 ## JetBrains Playbook
 
 1. Load repository governance docs in AI assistant context:
-- `.instructions.md`
 - `AGENTS.md`
 - `.agent-context/review-checklists/pr-checklist.md`
 
@@ -151,9 +146,9 @@ npm run gate:release
 ## Integration Drift Checklist
 
 - CI and local commands are identical.
-- Instruction adapter files still point to `.instructions.md`.
-- `.agent-instructions.md` is regenerated after policy changes.
-- Legacy root adapters stay thin and point to `.agent-instructions.md` when present.
+- `CLAUDE.md` and `GEMINI.md` still import `AGENTS.md`.
+- `AGENTS.md` stays compact and delegates detailed rules to `.agent-context/`.
+- Legacy generated adapter files are not created by default.
 - Release gate remains green on both CI and local runs.
 
 ## Next Action

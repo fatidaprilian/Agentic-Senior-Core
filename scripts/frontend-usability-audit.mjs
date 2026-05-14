@@ -20,7 +20,7 @@ const REQUIRED_FILES = [
   'docs/roadmap.md',
   'docs/archive/v1.7-issue-breakdown.md',
   'docs/archive/v1.7-execution-playbook.md',
-  '.instructions.md',
+  'AGENTS.md',
   '.agent-context/prompts/bootstrap-design.md',
   'scripts/ui-design-judge.mjs',
   'scripts/ui-rubric-calibration.mjs',
@@ -173,7 +173,7 @@ function runAudit() {
   const roadmapPath = 'docs/roadmap.md';
   const frontendRulePath = '.agent-context/rules/frontend-architecture.md';
   const bootstrapDesignPromptPath = '.agent-context/prompts/bootstrap-design.md';
-  const instructionsPath = '.instructions.md';
+  const instructionsPath = 'AGENTS.md';
   const prChecklistPath = '.agent-context/review-checklists/pr-checklist.md';
   const architectureChecklistPath = '.agent-context/review-checklists/architecture-review.md';
   const designEvidenceExtractorPath = 'lib/cli/detector/design-evidence.mjs';

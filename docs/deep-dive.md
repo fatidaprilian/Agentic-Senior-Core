@@ -2,14 +2,14 @@
 
 Agentic-Senior-Core operates as a **Dynamic Rules Engine (Governance Engine)** that merges generalized best practices with project-specific structural definitions into files agents naturally read.
 
-The canonical source is `.instructions.md`. Init and upgrade generate `.agent-instructions.md` as the compiled project rulebook. Tool-specific entrypoints such as `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, Cursor rules, Windsurf rules, Copilot instructions, and Gemini instructions stay thin.
+The canonical installed source is `AGENTS.md`. Init and upgrade copy `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.agent-context/`; detailed rules stay lazy-loaded by task scope.
 
 ## The Compiler Workflow
 When you run the init command through `npm exec --package=github:fatidaprilian/Agentic-Senior-Core agentic-senior-core init` or `npx @ryuenn3123/agentic-senior-core init` after npm publish, the delivery CLI:
 1. **Scans** your working directory heuristically out-of-the-box (looking for `package.json`, `pom.xml`, etc.).
 2. **Prompts** you to confirm the Stack and Blueprint only when repository evidence is weak.
-3. **Compiles** modular knowledge components into `.agent-instructions.md`.
-4. **Writes** thin discovery adapters for supported tools and legacy root compatibility.
+3. **Records** selected profile, runtime evidence, and architecture decision status in `.agent-context/state/onboarding-report.json`.
+4. **Writes** `AGENTS.md`, native `CLAUDE.md`/`GEMINI.md` import bridges, and the lazy `.agent-context/` rule library.
 
 ### Distribution Modes
 - **Pre-publish mode**: use GitHub source execution (`npm exec --package=github:...`).
@@ -19,7 +19,7 @@ When you run the init command through `npm exec --package=github:fatidaprilian/A
 ### Upgrade Assistant (V1.6)
 - The CLI now includes `upgrade` mode for existing repositories.
 - `agentic-senior-core upgrade --dry-run` previews migration impact without writing files.
-- Apply mode rewrites `.agent-instructions.md`, refreshes thin adapters, refreshes policy thresholds, and records onboarding telemetry with `operationMode: upgrade`.
+- Apply mode refreshes `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.agent-context/`, policy thresholds, and onboarding telemetry with `operationMode: upgrade`.
 - Upgrade previews include line-count delta and selected stack/blueprint/CI state before write.
 
 ### Component Breakdown
@@ -58,4 +58,4 @@ We bundle Model Context Protocol capabilities with a local stdio runtime (`scrip
 - `.github/workflows/sbom-compliance.yml` publishes SBOM artifacts for audit traceability.
 - `.agent-context/review-checklists/architecture-review.md`, `.github/workflows/release-gate.yml`, and `scripts/release-gate.mjs` define operational release controls.
 
-Use `.agent-override.md` carefully to carve explicit exceptions bounded by `reason` and `expiry` parameters.
+Keep scoped exceptions in the relevant project docs or `.agent-context/` rule updates so the reviewed contract stays visible through the same files agents load.

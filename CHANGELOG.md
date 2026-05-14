@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## 3.0.48 - 2026-05-14
+### Changed
+- Made `AGENTS.md` the canonical installed instruction source and reduced the default root surface to `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.agent-context/`.
+- Updated init, upgrade, optimize, package publishing, docs, audits, validators, and smoke tests to stop generating compiled and legacy tool-specific instruction files by default.
+- Refreshed README guidance so setup, MCP opt-in behavior, managed legacy cleanup, and the release checklist match the current CLI behavior.
+
+### Fixed
+- Removed the stale source-repo override and IDE instruction surfaces so the repository matches the compact distribution contract while preserving active GitHub workflow files.
+- Retired the validator requirement for `.agent-override.md` and locked the new retired-override contract in smoke tests.
+
 ## 3.0.47 - 2026-05-14
 ### Changed
 - Added `docs/doc-index.md` to project bootstrap guidance as the compact routing map for generated project docs, while keeping PRD, SRS, technical-design, and separate ERD files conditional on project evidence.

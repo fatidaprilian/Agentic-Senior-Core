@@ -279,24 +279,16 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.deepEqual(designIntentSeed.implementation.requiredDeliverables, ['docs/DESIGN.md', 'docs/design-intent.json']);
       assert.deepEqual(validateDesignIntentContract(designIntentSeed), []);
 
-      const compiledRulesContent = readFileSync(join(uiScaffoldingTargetDirectory, '.agent-instructions.md'), 'utf8');
-      assert.match(compiledRulesContent, /\[UI TASK ANCHOR - READ FIRST\]/);
-      assert.match(compiledRulesContent, /Anchor Reference: agent-defined-anchor-reference/);
-      assert.match(compiledRulesContent, /Locked Outcomes:/);
-      assert.match(compiledRulesContent, /Flexible Expression:/);
-      assert.match(compiledRulesContent, /docs\/design-intent\.json/);
-      assert.match(compiledRulesContent, /Resolve the smallest relevant layer set before responding\./);
-      assert.match(compiledRulesContent, /LAYER 1: RULES \(SCOPE-RESOLVED\)/);
-      assert.match(compiledRulesContent, /- For UI scope: if docs\/DESIGN\.md or docs\/design-intent\.json is missing, execute bootstrap-design prompt before implementing UI surfaces\./);
-      assert.match(compiledRulesContent, /LAYER 5: EXECUTION PROMPTS AND UI TRIGGERS/);
-      assert.match(compiledRulesContent, /bootstrap-design\.md -> ui, ux, layout, screen, tailwind, frontend, redesign/);
+      assert.equal(existsSync(join(uiScaffoldingTargetDirectory, '.agent-instructions.md')), false);
 
       const agentsContent = readFileSync(join(uiScaffoldingTargetDirectory, 'AGENTS.md'), 'utf8');
-      assert.match(agentsContent, /Critical Bootstrap Floor/);
+      assert.match(agentsContent, /Canonical project instructions/);
+      assert.match(agentsContent, /UI Design Mode/);
       assert.match(agentsContent, /bootstrap-design\.md/);
       assert.match(agentsContent, /frontend-architecture\.md/);
       assert.match(agentsContent, /docs\/DESIGN\.md/);
       assert.match(agentsContent, /docs\/design-intent\.json/);
+      assert.match(agentsContent, /Motion\/Palette Decision/);
     } finally {
       rmSync(uiScaffoldingTargetDirectory, { recursive: true, force: true });
     }

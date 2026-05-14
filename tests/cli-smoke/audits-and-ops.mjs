@@ -14,10 +14,12 @@ import {
 } from './shared.mjs';
 
 export async function registerCliSmokeAuditsAndOpsTests(t) {
-  await t.test('validator checks override governance', () => {
+  await t.test('validator keeps root override file retired', () => {
     const validationOutput = execSync(`node ${join(process.cwd(), 'scripts', 'validate.mjs')}`).toString();
     assert.match(validationOutput, /RESULTS/);
-    assert.match(validationOutput, /Checking override governance/);
+    assert.equal(existsSync(join(process.cwd(), '.agent-override.md')), false);
+    assert.doesNotMatch(validationOutput, /Checking override governance/);
+    assert.doesNotMatch(validationOutput, /\.agent-override\.md/);
     assert.match(validationOutput, /Checking terminology mapping consistency/);
     assert.match(validationOutput, /Checking existing-project detection transparency coverage/);
     assert.match(validationOutput, /docs\/terminology-mapping\.md includes Dual-Term Mapping section/);
@@ -45,7 +47,7 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
       join(process.cwd(), '.agent-context', 'prompts', 'bootstrap-design.md'),
       'utf8'
     );
-    const instructionsContent = readFileSync(join(process.cwd(), '.instructions.md'), 'utf8');
+    const instructionsContent = readFileSync(join(process.cwd(), 'AGENTS.md'), 'utf8');
     const prChecklistContent = readFileSync(
       join(process.cwd(), '.agent-context', 'review-checklists', 'pr-checklist.md'),
       'utf8'
@@ -339,7 +341,7 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
 
   await t.test('preflight checks abort installation on conflict', () => {
     const preflightTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-preflight-'));
-    writeFileSync(join(preflightTargetDirectory, '.cursorrules'), 'Conflict');
+    writeFileSync(join(preflightTargetDirectory, 'AGENTS.md'), 'Conflict');
 
     try {
       execSync(`node ${cliPath} init ${preflightTargetDirectory} --preset frontend-ui`);
@@ -355,7 +357,7 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
 
   await t.test('transactional install performs automatic rollback on failure', () => {
     const rollbackTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-rollback-'));
-    const rulesPath = join(rollbackTargetDirectory, '.cursorrules');
+    const rulesPath = join(rollbackTargetDirectory, 'AGENTS.md');
     writeFileSync(rulesPath, 'Initial Rules Content');
 
     try {
@@ -369,20 +371,20 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
       const manifest = {
         timestamp: new Date().toISOString(),
         files: {
-          '.cursorrules': { action: 'restore', hash },
-          '.windsurfrules': { action: 'delete' },
+          'AGENTS.md': { action: 'restore', hash },
+          'CLAUDE.md': { action: 'delete' },
         },
       };
       writeFileSync(join(backupRoot, 'manifest.json'), JSON.stringify(manifest));
 
       writeFileSync(rulesPath, 'Corrupted Content');
-      writeFileSync(join(rollbackTargetDirectory, '.windsurfrules'), 'Should Be Deleted');
+      writeFileSync(join(rollbackTargetDirectory, 'CLAUDE.md'), 'Should Be Deleted');
 
       execSync(`node ${cliPath} rollback ${rollbackTargetDirectory}`);
 
       const restoredContent = readFileSync(rulesPath, 'utf8');
       assert.equal(restoredContent, 'Initial Rules Content');
-      assert.equal(existsSync(join(rollbackTargetDirectory, '.windsurfrules')), false);
+      assert.equal(existsSync(join(rollbackTargetDirectory, 'CLAUDE.md')), false);
     } finally {
       rmSync(rollbackTargetDirectory, { recursive: true, force: true });
     }

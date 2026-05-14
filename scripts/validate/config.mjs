@@ -1,31 +1,22 @@
 export const ALLOWED_SEVERITIES = new Set(['critical', 'high', 'medium', 'low']);
-export const OVERRIDE_WARNING_WINDOW_DAYS = 30;
 export const THIN_ADAPTER_PATHS = [
-  'AGENTS.md',
   'CLAUDE.md',
   'GEMINI.md',
-  '.github/copilot-instructions.md',
-  '.github/instructions/agentic-senior-core.instructions.md',
-  '.gemini/instructions.md',
-  '.cursor/rules/agentic-senior-core.mdc',
-  '.windsurf/rules/agentic-senior-core.md',
 ];
 export const FORMAL_ARTIFACT_PATHS = [
-  '.instructions.md',
+  'AGENTS.md',
   'README.md',
   'CHANGELOG.md',
+  'docs/doc-index.md',
+  'docs/project-brief.md',
+  'docs/flow-overview.md',
+  'docs/api-contract.md',
   'docs/deep-analysis-and-roadmap-backlog.md',
   '.agent-context/rules/api-docs.md',
   '.agent-context/review-checklists/pr-checklist.md',
   '.agent-context/prompts/review-code.md',
-  'AGENTS.md',
   'CLAUDE.md',
   'GEMINI.md',
-  '.github/copilot-instructions.md',
-  '.github/instructions/agentic-senior-core.instructions.md',
-  '.gemini/instructions.md',
-  '.cursor/rules/agentic-senior-core.mdc',
-  '.windsurf/rules/agentic-senior-core.md',
 ];
 export const REQUIRED_HUMAN_WRITING_SNIPPETS = [
   {
@@ -102,7 +93,7 @@ export const REQUIRED_DEVELOPER_FIRST_MENTION_PATTERNS = [
   {
     path: 'lib/cli/commands/init.mjs',
     label: 'Init command wording includes project guidance pack',
-    pattern: /copy the project guidance pack[^\n]*compile a single rulebook/iu,
+    pattern: /copy the project guidance pack[^\n]*AGENTS\.md and native import bridges/iu,
   },
   {
     path: 'lib/cli/commands/upgrade.mjs',
@@ -157,7 +148,7 @@ export const REQUIRED_DETECTION_TRANSPARENCY_SNIPPETS = [
 ];
 export const REQUIRED_STACK_DECISION_BOUNDARY_SNIPPETS = [
   {
-    path: '.instructions.md',
+    path: 'AGENTS.md',
     snippets: [
       'Do not silently choose frameworks or architecture from offline heuristics.',
       'produce a short recommendation from evidence and live official documentation before coding',
@@ -192,7 +183,7 @@ export const REQUIRED_STACK_DECISION_BOUNDARY_SNIPPETS = [
 ];
 export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
   {
-    path: '.instructions.md',
+    path: 'AGENTS.md',
     snippets: [
       '### 1. Documentation-First Mode',
       'root `README.md` for every fresh or existing project',
@@ -298,14 +289,12 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
   {
     path: 'AGENTS.md',
     snippets: [
-      'Critical Bootstrap Floor',
-      'If your host stops at this file',
+      'UI Design Mode',
       'bootstrap-design.md',
       'frontend-architecture.md',
       'docs/DESIGN.md',
       'docs/design-intent.json',
-      'does not replace bootstrap loading',
-      'documentation-first requests',
+      'Documentation-First Mode',
       'English by default',
       'do not write application, firmware, or UI code',
       'Motion/Palette Decision',
@@ -314,7 +303,7 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
     ],
   },
   {
-    path: '.instructions.md',
+    path: 'AGENTS.md',
     snippets: [
       'Resolve the smallest relevant layer set for the current request.',
       'UI Design Mode',
@@ -521,7 +510,7 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
 ];
 export const REQUIRED_DOCKER_RUNTIME_AUTOMATION_SNIPPETS = [
   {
-    path: '.instructions.md',
+    path: 'AGENTS.md',
     snippets: [
       'docker-runtime.md',
       'For Docker or Compose work, load `docker-runtime.md` and verify the latest official Docker docs before authoring container assets.',
@@ -549,7 +538,7 @@ export const REQUIRED_DOCKER_RUNTIME_AUTOMATION_SNIPPETS = [
 ];
 export const REQUIRED_DEPENDENCY_FRESHNESS_AUTOMATION_SNIPPETS = [
   {
-    path: '.instructions.md',
+    path: 'AGENTS.md',
     snippets: [
       'use the latest stable compatible dependency set and official setup flow',
     ],
@@ -583,7 +572,7 @@ export const FORBIDDEN_TEMPLATE_BOOTSTRAP_SNIPPETS = [
 ];
 export const FORBIDDEN_ACTIVE_BIAS_ANCHOR_SNIPPETS = [
   {
-    path: '.instructions.md',
+    path: 'AGENTS.md',
     snippets: [
       'illustrative, not exhaustive',
       'explicitly approved reference systems',

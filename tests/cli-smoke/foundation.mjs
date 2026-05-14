@@ -21,14 +21,21 @@ import {
 } from '../../lib/cli/commands/init.mjs';
 
 export async function registerCliSmokeFoundationTests(t) {
-  await t.test('published package surface includes canonical .instructions.md', () => {
+  await t.test('published package surface includes compact native instruction surface', () => {
     const packageJson = readJson(join(process.cwd(), 'package.json'));
     assert.equal(Array.isArray(packageJson.files), true);
-    assert.equal(packageJson.files.includes('.instructions.md'), true);
+    assert.equal(packageJson.files.includes('AGENTS.md'), true);
     assert.equal(packageJson.files.includes('CLAUDE.md'), true);
     assert.equal(packageJson.files.includes('GEMINI.md'), true);
-    assert.equal(packageJson.files.includes('.cursor/'), true);
-    assert.equal(packageJson.files.includes('.windsurf/'), true);
+    assert.equal(packageJson.files.includes('.agent-context/rules/'), true);
+    assert.equal(packageJson.files.includes('.instructions.md'), false);
+    assert.equal(packageJson.files.includes('.cursor/'), false);
+    assert.equal(packageJson.files.includes('.windsurf/'), false);
+    assert.equal(packageJson.files.includes('.github/'), false);
+    assert.equal(packageJson.files.includes('.gemini/'), false);
+    assert.equal(packageJson.files.includes('.agents/'), false);
+    assert.equal(packageJson.files.includes('.cursorrules'), false);
+    assert.equal(packageJson.files.includes('.windsurfrules'), false);
   });
 
   await t.test('shows help', () => {
@@ -93,7 +100,7 @@ export async function registerCliSmokeFoundationTests(t) {
       ).toString();
 
       assert.match(initOutput, /Existing project detection transparency:/);
-      assert.match(initOutput, /Active rules baseline: canonical \.instructions\.md -> compiled \.agent-instructions\.md \+ legacy thin root adapters/);
+      assert.match(initOutput, /Active rules baseline: canonical AGENTS\.md \+ \.agent-context\/ lazy rule library/);
       assert.match(initOutput, /Runtime decision: agent recommendation required from current repo\/brief evidence/);
       assert.match(initOutput, /Architecture decision: agent recommendation required from current repo\/brief evidence/);
 
@@ -113,15 +120,14 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.equal(onboardingReport.autoDetection?.detectionTransparency?.decision?.mode, 'existing-project-evidence-only');
       assert.equal(onboardingReport.autoDetection?.detectionTransparency?.decision?.selectedStackFileName, 'agent-decision-runtime.md');
 
-      const compiledRulesContent = readFileSync(join(existingProjectTargetDirectory, '.agent-instructions.md'), 'utf8');
-      assert.match(compiledRulesContent, /## LAYER 2: RUNTIME DECISION REQUIRED/);
-      assert.match(compiledRulesContent, /## LAYER 3: ARCHITECTURE DECISION REQUIRED/);
-      assert.doesNotMatch(compiledRulesContent, /## LAYER 3A: ADDITIONAL BLUEPRINT PROFILES/);
-
-      const legacyCursorAdapter = readFileSync(join(existingProjectTargetDirectory, '.cursorrules'), 'utf8');
-      assert.match(legacyCursorAdapter, /Adapter Mode: legacy-thin/);
-      assert.match(legacyCursorAdapter, /\.agent-instructions\.md/);
-      assert.doesNotMatch(legacyCursorAdapter, /## LAYER 2: RUNTIME DECISION REQUIRED/);
+      const installedAgentsContent = readFileSync(join(existingProjectTargetDirectory, 'AGENTS.md'), 'utf8');
+      assert.match(installedAgentsContent, /Runtime signals are evidence gates/i);
+      assert.match(installedAgentsContent, /Structural planning signals are not a hard whitelist/i);
+      assert.match(installedAgentsContent, /\.agent-context\/rules\//);
+      assert.equal(readFileSync(join(existingProjectTargetDirectory, 'CLAUDE.md'), 'utf8').trim(), '@AGENTS.md');
+      assert.equal(readFileSync(join(existingProjectTargetDirectory, 'GEMINI.md'), 'utf8').trim(), '@AGENTS.md');
+      assert.equal(existsSync(join(existingProjectTargetDirectory, '.agent-instructions.md')), false);
+      assert.equal(existsSync(join(existingProjectTargetDirectory, '.cursorrules')), false);
     } finally {
       rmSync(existingProjectTargetDirectory, { recursive: true, force: true });
     }
@@ -178,7 +184,7 @@ export async function registerCliSmokeFoundationTests(t) {
     }
   });
 
-  await t.test('init does not copy repository workflows and configures MCP templates by default', () => {
+  await t.test('init copies compact instruction surface and keeps MCP templates opt-in', () => {
     const optOutMcpTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-workflow-optout-mcp-'));
     const mcpTemplateTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-init-workflow-mcp-'));
 
@@ -188,26 +194,26 @@ export async function registerCliSmokeFoundationTests(t) {
       ).toString();
 
       assert.equal(existsSync(join(optOutMcpTargetDirectory, '.github', 'workflows', 'release-gate.yml')), false);
-      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.instructions.md')), true);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, 'AGENTS.md')), true);
       assert.equal(existsSync(join(optOutMcpTargetDirectory, 'CLAUDE.md')), true);
       assert.equal(existsSync(join(optOutMcpTargetDirectory, 'GEMINI.md')), true);
-      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.cursor', 'rules', 'agentic-senior-core.mdc')), true);
-      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.windsurf', 'rules', 'agentic-senior-core.md')), true);
-      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.github', 'copilot-instructions.md')), true);
-      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.github', 'instructions', 'agentic-senior-core.instructions.md')), true);
+      assert.equal(readFileSync(join(optOutMcpTargetDirectory, 'CLAUDE.md'), 'utf8').trim(), '@AGENTS.md');
+      assert.equal(readFileSync(join(optOutMcpTargetDirectory, 'GEMINI.md'), 'utf8').trim(), '@AGENTS.md');
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.instructions.md')), false);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.agent-instructions.md')), false);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.cursor', 'rules', 'agentic-senior-core.mdc')), false);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.windsurf', 'rules', 'agentic-senior-core.md')), false);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.github', 'copilot-instructions.md')), false);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.github', 'instructions', 'agentic-senior-core.instructions.md')), false);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.gemini', 'instructions.md')), false);
       assert.equal(existsSync(join(optOutMcpTargetDirectory, '.vscode', 'mcp.json')), false);
-      const generatedCopilotInstructions = readFileSync(join(optOutMcpTargetDirectory, '.github', 'copilot-instructions.md'), 'utf8');
-      const generatedGeminiInstructions = readFileSync(join(optOutMcpTargetDirectory, '.gemini', 'instructions.md'), 'utf8');
-      assert.match(generatedCopilotInstructions, /Adapter Mode: thin/);
-      assert.match(generatedGeminiInstructions, /Adapter Mode: thin/);
-      assert.doesNotMatch(generatedCopilotInstructions, /## LAYER 2: RUNTIME DECISION REQUIRED/);
-      assert.doesNotMatch(generatedGeminiInstructions, /## LAYER 2: RUNTIME DECISION REQUIRED/);
 
       execSync(
-        `node ${cliPath} init ${mcpTemplateTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize`
+        `node ${cliPath} init ${mcpTemplateTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize --mcp-template`
       ).toString();
 
-      assert.equal(existsSync(join(mcpTemplateTargetDirectory, '.instructions.md')), true);
+      assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'AGENTS.md')), true);
+      assert.equal(existsSync(join(mcpTemplateTargetDirectory, '.instructions.md')), false);
       assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'mcp.json')), false);
       assert.equal(existsSync(join(mcpTemplateTargetDirectory, '.vscode', 'mcp.json')), true);
       assert.equal(existsSync(join(mcpTemplateTargetDirectory, 'scripts', 'mcp-server.mjs')), true);
@@ -398,7 +404,7 @@ export async function registerCliSmokeFoundationTests(t) {
     }
   });
 
-  await t.test('upgrade regenerates the full compiled instruction surface', () => {
+  await t.test('upgrade refreshes compact instruction bridges and prunes managed legacy adapters', () => {
     const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-compiled-surface-'));
 
     try {
@@ -406,36 +412,42 @@ export async function registerCliSmokeFoundationTests(t) {
         `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
       ).toString();
 
-      writeFileSync(join(upgradeTargetDirectory, '.agent-instructions.md'), 'STALE compiled snapshot');
+      writeFileSync(join(upgradeTargetDirectory, 'CLAUDE.md'), 'Agentic-Senior-Core stale bridge\n');
+      writeFileSync(join(upgradeTargetDirectory, 'GEMINI.md'), 'Agentic-Senior-Core stale bridge\n');
+      writeFileSync(join(upgradeTargetDirectory, '.instructions.md'), 'Agentic-Senior-Core stale canonical snapshot');
+      writeFileSync(join(upgradeTargetDirectory, '.agent-instructions.md'), 'STALE compiled snapshot\nAgentic-Senior-Core');
       writeFileSync(join(upgradeTargetDirectory, '.cursorrules'), 'Generated by Agentic-Senior-Core CLI v0.0.0\nSTALE cursorrules');
       writeFileSync(join(upgradeTargetDirectory, '.windsurfrules'), 'Generated by Agentic-Senior-Core CLI v0.0.0\nSTALE windsurfrules');
       writeFileSync(join(upgradeTargetDirectory, '.clauderc'), 'Generated by Agentic-Senior-Core CLI v0.0.0\nSTALE clauderc');
+      mkdirSync(join(upgradeTargetDirectory, '.gemini'), { recursive: true });
+      mkdirSync(join(upgradeTargetDirectory, '.github', 'instructions'), { recursive: true });
+      mkdirSync(join(upgradeTargetDirectory, '.cursor', 'rules'), { recursive: true });
+      mkdirSync(join(upgradeTargetDirectory, '.windsurf', 'rules'), { recursive: true });
       writeFileSync(join(upgradeTargetDirectory, '.gemini', 'instructions.md'), 'Adapter Mode: thin\nAgentic-Senior-Core\nSTALE gemini');
       writeFileSync(join(upgradeTargetDirectory, '.github', 'copilot-instructions.md'), 'Adapter Mode: thin\nAgentic-Senior-Core\nSTALE copilot');
+      writeFileSync(join(upgradeTargetDirectory, '.github', 'instructions', 'agentic-senior-core.instructions.md'), 'Adapter Mode: thin\nAgentic-Senior-Core\nSTALE github instructions');
+      writeFileSync(join(upgradeTargetDirectory, '.cursor', 'rules', 'agentic-senior-core.mdc'), 'Adapter Mode: thin\nAgentic-Senior-Core\nSTALE cursor');
+      writeFileSync(join(upgradeTargetDirectory, '.windsurf', 'rules', 'agentic-senior-core.md'), 'Adapter Mode: thin\nAgentic-Senior-Core\nSTALE windsurf');
       const activeMemoryPath = join(upgradeTargetDirectory, '.agent-context', 'state', 'active-memory.json');
       const activeMemoryState = readJson(activeMemoryPath);
       activeMemoryState.project.currentFocus = 'Preserve this active task across upgrade.';
       writeFileSync(activeMemoryPath, `${JSON.stringify(activeMemoryState, null, 2)}\n`);
 
       const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
-      assert.match(upgradeOutput, /Refreshed files: \.instructions\.md, \.agent-instructions\.md, legacy thin adapters, generated bridge adapters, and \.agent-context\/state\/onboarding-report\.json/);
+      assert.match(upgradeOutput, /Refreshed files: AGENTS\.md, CLAUDE\.md, GEMINI\.md, \.agent-context\/, and \.agent-context\/state\/onboarding-report\.json/);
 
-      assert.doesNotMatch(readFileSync(join(upgradeTargetDirectory, '.agent-instructions.md'), 'utf8'), /STALE compiled snapshot/);
-      const upgradedCursorLegacyAdapter = readFileSync(join(upgradeTargetDirectory, '.cursorrules'), 'utf8');
-      const upgradedWindsurfLegacyAdapter = readFileSync(join(upgradeTargetDirectory, '.windsurfrules'), 'utf8');
-      assert.doesNotMatch(upgradedCursorLegacyAdapter, /STALE cursorrules/);
-      assert.doesNotMatch(upgradedWindsurfLegacyAdapter, /STALE windsurfrules/);
-      assert.match(upgradedCursorLegacyAdapter, /Adapter Mode: legacy-thin/);
-      assert.match(upgradedWindsurfLegacyAdapter, /Adapter Mode: legacy-thin/);
-      assert.doesNotMatch(readFileSync(join(upgradeTargetDirectory, '.clauderc'), 'utf8'), /STALE clauderc/);
-      const upgradedGeminiInstructions = readFileSync(join(upgradeTargetDirectory, '.gemini', 'instructions.md'), 'utf8');
-      const upgradedCopilotInstructions = readFileSync(join(upgradeTargetDirectory, '.github', 'copilot-instructions.md'), 'utf8');
-      assert.doesNotMatch(upgradedGeminiInstructions, /STALE gemini/);
-      assert.doesNotMatch(upgradedCopilotInstructions, /STALE copilot/);
-      assert.match(upgradedGeminiInstructions, /Adapter Mode: thin/);
-      assert.match(upgradedCopilotInstructions, /Adapter Mode: thin/);
-      assert.doesNotMatch(upgradedGeminiInstructions, /## LAYER 2: RUNTIME DECISION REQUIRED/);
-      assert.doesNotMatch(upgradedCopilotInstructions, /## LAYER 2: RUNTIME DECISION REQUIRED/);
+      assert.equal(readFileSync(join(upgradeTargetDirectory, 'CLAUDE.md'), 'utf8').trim(), '@AGENTS.md');
+      assert.equal(readFileSync(join(upgradeTargetDirectory, 'GEMINI.md'), 'utf8').trim(), '@AGENTS.md');
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.instructions.md')), false);
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.agent-instructions.md')), false);
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.cursorrules')), false);
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.windsurfrules')), false);
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.clauderc')), false);
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.gemini', 'instructions.md')), false);
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.github', 'copilot-instructions.md')), false);
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.github', 'instructions', 'agentic-senior-core.instructions.md')), false);
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.cursor', 'rules', 'agentic-senior-core.mdc')), false);
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.windsurf', 'rules', 'agentic-senior-core.md')), false);
       assert.equal(
         readJson(activeMemoryPath).project.currentFocus,
         'Preserve this active task across upgrade.'
@@ -466,11 +478,15 @@ export async function registerCliSmokeFoundationTests(t) {
       ]);
 
       for (const [relativeFilePath, fileContent] of userOwnedFiles) {
+        const relativePathSegments = relativeFilePath.split('/');
+        if (relativePathSegments.length > 1) {
+          mkdirSync(join(upgradeTargetDirectory, ...relativePathSegments.slice(0, -1)), { recursive: true });
+        }
         writeFileSync(join(upgradeTargetDirectory, ...relativeFilePath.split('/')), fileContent);
       }
 
       const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
-      assert.match(upgradeOutput, /User-owned instruction entrypoints preserved: 9/);
+      assert.match(upgradeOutput, /User-owned instruction entrypoints preserved: 3/);
 
       for (const [relativeFilePath, fileContent] of userOwnedFiles) {
         assert.equal(
@@ -480,8 +496,7 @@ export async function registerCliSmokeFoundationTests(t) {
         );
       }
 
-      const compiledRulesContent = readFileSync(join(upgradeTargetDirectory, '.agent-instructions.md'), 'utf8');
-      assert.match(compiledRulesContent, /AGENTIC-SENIOR-CORE DYNAMIC GOVERNANCE RULESET/);
+      assert.equal(readFileSync(join(upgradeTargetDirectory, 'AGENTS.md'), 'utf8'), userOwnedFiles.get('AGENTS.md'));
     } finally {
       rmSync(upgradeTargetDirectory, { recursive: true, force: true });
     }
@@ -511,13 +526,13 @@ export async function registerCliSmokeFoundationTests(t) {
 
     try {
       execSync(
-        `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true`
+        `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --mcp-template`
       ).toString();
 
       rmSync(join(upgradeTargetDirectory, 'scripts', 'mcp-server'), { recursive: true, force: true });
       assert.equal(existsSync(join(upgradeTargetDirectory, 'scripts', 'mcp-server', 'tool-registry.mjs')), false);
 
-      const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes --mcp-template`).toString();
 
       assert.match(upgradeOutput, /scripts\/mcp-server\/tool-registry\.mjs/);
       assert.equal(existsSync(join(upgradeTargetDirectory, 'scripts', 'mcp-server.mjs')), true);
@@ -529,7 +544,7 @@ export async function registerCliSmokeFoundationTests(t) {
     }
   });
 
-  await t.test('init generates AI bootstrap prompts in English by default and compiles Layer 9 bootstrap flow in same run', () => {
+  await t.test('init generates AI bootstrap prompts in English by default and keeps Layer 9 bootstrap flow reachable', () => {
     const scaffoldingTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-scaffold-config-'));
 
     try {
@@ -586,16 +601,14 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.match(bootstrapProjectContextPrompt, /\.dockerignore/);
       assert.match(bootstrapProjectContextPrompt, /do not execute Docker build, Compose, or registry commands/);
 
-      const compiledRulesContent = readFileSync(join(scaffoldingTargetDirectory, '.agent-instructions.md'), 'utf8');
-      assert.match(compiledRulesContent, /## LAYER 9: PROJECT CONTEXT \(MANDATORY\)/);
-      assert.match(compiledRulesContent, /\.agent-context\/prompts\/bootstrap-project-context\.md/);
-      assert.match(compiledRulesContent, /Create README\.md as a public and developer entrypoint before coding continues/);
-      assert.match(compiledRulesContent, /Create docs\/doc-index\.md as the compact read-routing map whenever docs\/ exists\./);
-      assert.match(compiledRulesContent, /If docs\/project-brief\.md is missing, execute bootstrap-project-context prompt immediately\./);
-      assert.match(compiledRulesContent, /docs\/flow-overview\.md must also exist before coding continues\./);
-      assert.match(compiledRulesContent, /Do not use generic placeholder templates\./);
-      assert.match(compiledRulesContent, /Latest user prompt defines current feature scope and product direction\./);
-      assert.match(compiledRulesContent, /Save generated docs under docs\/ and keep them updated when feature scope changes\./);
+      const installedAgentsContent = readFileSync(join(scaffoldingTargetDirectory, 'AGENTS.md'), 'utf8');
+      assert.match(installedAgentsContent, /Layer 9: Project Context/);
+      assert.match(installedAgentsContent, /Use root `README\.md` as the public and developer entrypoint/);
+      assert.match(installedAgentsContent, /Use `docs\/doc-index\.md` as the compact routing map/);
+      assert.match(installedAgentsContent, /docs\/project-brief\.md/);
+      assert.match(installedAgentsContent, /docs\/flow-overview\.md/);
+      assert.match(installedAgentsContent, /Create or refine required docs first/);
+      assert.equal(existsSync(join(scaffoldingTargetDirectory, '.agent-instructions.md')), false);
 
       const upgradePreviewOutput = execSync(`node ${cliPath} upgrade ${scaffoldingTargetDirectory} --dry-run`).toString();
       assert.doesNotMatch(upgradePreviewOutput, /Some project docs were generated from older template versions/);

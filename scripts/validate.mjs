@@ -16,10 +16,7 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import {
-  ALLOWED_SEVERITIES,
-  OVERRIDE_WARNING_WINDOW_DAYS,
-} from './validate/config.mjs';
+import { ALLOWED_SEVERITIES } from './validate/config.mjs';
 import {
   validateDependencyFreshnessAutomationCoverage,
   validateDetectionTransparencyCoverage,
@@ -40,15 +37,14 @@ import {
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
 const ROOT_DIR = resolve(dirname(SCRIPT_FILE_PATH), '..');
 const AGENT_CONTEXT_DIR = join(ROOT_DIR, '.agent-context');
-const CANONICAL_INSTRUCTION_PATH = join(ROOT_DIR, '.instructions.md');
+const CANONICAL_INSTRUCTION_PATH = join(ROOT_DIR, 'AGENTS.md');
 const PACKAGE_JSON_PATH = join(ROOT_DIR, 'package.json');
 const PACKAGE_LOCK_PATH = join(ROOT_DIR, 'package-lock.json');
 const BUN_LOCK_PATH = join(ROOT_DIR, 'bun.lock');
 const CHANGELOG_PATH = join(ROOT_DIR, 'CHANGELOG.md');
 const README_PATH = join(ROOT_DIR, 'README.md');
 const POLICY_FILE_PATH = join(ROOT_DIR, '.agent-context', 'policies', 'llm-judge-threshold.json');
-const OVERRIDE_FILE_PATH = join(ROOT_DIR, '.agent-override.md');
-const GENERATED_RULE_FILES = ['.cursorrules', '.windsurfrules'];
+const GENERATED_RULE_FILES = [];
 
 const validationResult = {
   passed: 0,
@@ -153,16 +149,17 @@ async function validateRequiredFiles() {
     'scripts/v3-purge-audit.mjs',
     'scripts/release-gate.mjs',
     'scripts/generate-sbom.mjs',
-    '.cursorrules',
-    '.windsurfrules',
-    '.agent-override.md',
     '.agent-context/policies/llm-judge-threshold.json',
     'mcp.json',
     'AGENTS.md',
-    '.github/copilot-instructions.md',
-    '.gemini/instructions.md',
+    'CLAUDE.md',
+    'GEMINI.md',
     'README.md',
     'CHANGELOG.md',
+    'docs/doc-index.md',
+    'docs/project-brief.md',
+    'docs/flow-overview.md',
+    'docs/api-contract.md',
     'docs/faq.md',
     'docs/deep-dive.md',
     'docs/terminology-mapping.md',
@@ -292,87 +289,6 @@ async function validateChecklistConsolidation() {
   }
 }
 
-function stripMarkdownCodeBlocks(markdownText) {
-  return markdownText.replace(/```[\s\S]*?```/g, '');
-}
-
-function parseOverrideExpiryDate(rawExpiryValue) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(rawExpiryValue)) {
-    return null;
-  }
-
-  const parsedDate = new Date(`${rawExpiryValue}T00:00:00.000Z`);
-  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
-}
-
-async function validateOverrideGovernance() {
-  console.log('\nChecking override governance...');
-
-  const overrideContent = await readTextFile(OVERRIDE_FILE_PATH);
-  const overrideContentWithoutCodeBlocks = stripMarkdownCodeBlocks(overrideContent);
-  const overrideEntryPattern = /\[Rule:\s*([^\]]+)\]([\s\S]*?)(?=\n\[Rule:|$)/g;
-  const overrideEntries = [];
-  let overrideEntryMatch = overrideEntryPattern.exec(overrideContentWithoutCodeBlocks);
-
-  while (overrideEntryMatch) {
-    const ruleName = overrideEntryMatch[1].trim();
-    const entryBody = overrideEntryMatch[2];
-    const ownerMatch = entryBody.match(/(?:^|\n)Owner:\s*(.+)/);
-    const expiryMatch = entryBody.match(/(?:^|\n)Expiry:\s*(.+)/);
-
-    overrideEntries.push({
-      ruleName,
-      owner: ownerMatch ? ownerMatch[1].trim() : '',
-      expiry: expiryMatch ? expiryMatch[1].trim() : '',
-    });
-
-    overrideEntryMatch = overrideEntryPattern.exec(overrideContentWithoutCodeBlocks);
-  }
-
-  if (overrideEntries.length === 0) {
-    pass('No active override entries found; governance baseline remains strict');
-    return;
-  }
-
-  const currentDate = new Date();
-
-  for (const overrideEntry of overrideEntries) {
-    const overrideContextLabel = `[Rule: ${overrideEntry.ruleName}]`;
-
-    if (!overrideEntry.owner) {
-      fail(`${overrideContextLabel} is missing Owner metadata`);
-      continue;
-    }
-
-    pass(`${overrideContextLabel} owner is defined`);
-
-    if (!overrideEntry.expiry) {
-      fail(`${overrideContextLabel} is missing Expiry metadata`);
-      continue;
-    }
-
-    const expiryDate = parseOverrideExpiryDate(overrideEntry.expiry);
-    if (!expiryDate) {
-      fail(`${overrideContextLabel} has invalid Expiry format (expected YYYY-MM-DD)`);
-      continue;
-    }
-
-    const remainingMilliseconds = expiryDate.getTime() - currentDate.getTime();
-    const remainingDays = Math.floor(remainingMilliseconds / (1000 * 60 * 60 * 24));
-
-    if (remainingMilliseconds < 0) {
-      fail(`${overrideContextLabel} is expired (${overrideEntry.expiry})`);
-      continue;
-    }
-
-    pass(`${overrideContextLabel} expiry is valid (${overrideEntry.expiry})`);
-
-    if (remainingDays <= OVERRIDE_WARNING_WINDOW_DAYS) {
-      warn(`${overrideContextLabel} expires in ${remainingDays} day(s); renew or remove soon`);
-    }
-  }
-}
-
 async function validateCrossReferences() {
   console.log('\nChecking internal links...');
 
@@ -468,10 +384,10 @@ async function validatePackageMetadata() {
     pass('package.json has no unnecessary devDependencies');
   }
 
-  if (Array.isArray(packageJson.files) && packageJson.files.includes('.instructions.md')) {
-    pass('package.json publishes canonical .instructions.md');
+  if (Array.isArray(packageJson.files) && packageJson.files.includes('AGENTS.md')) {
+    pass('package.json publishes canonical AGENTS.md');
   } else {
-    fail('package.json must publish .instructions.md so init and upgrade can copy the canonical root instructions file');
+    fail('package.json must publish AGENTS.md so init and upgrade can copy the canonical root instructions file');
   }
 
   if (await fileExists(BUN_LOCK_PATH)) {
@@ -639,7 +555,6 @@ async function main() {
   await validateMarkdownFiles();
   await validateRuleFiles();
   await validateChecklistConsolidation();
-  await validateOverrideGovernance();
   await validateAgentsManifest();
   await validateCrossReferences();
   await validatePackageMetadata();

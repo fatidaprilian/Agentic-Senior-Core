@@ -21,7 +21,7 @@
   "selectedBlueprint": null,
   "selectedAdditionalBlueprints": [],
   "ruleLoadingPolicy": {
-    "canonicalSource": ".instructions.md",
+    "canonicalSource": "AGENTS.md",
     "stackLoadingMode": "lazy",
     "domainRuleLoadingMode": "lazy",
     "loadedOnDemand": true,
@@ -63,22 +63,12 @@
       "declarationShown": true,
       "detectionSummary": "This folder looks like Typescript with high confidence based on package.json, tsconfig.json. Confidence gap: 0.94.",
       "activeRulesSummary": {
-        "canonicalSource": ".instructions.md",
-        "compiledRulebook": ".agent-instructions.md",
-        "legacyThinAdapters": [
-          ".cursorrules",
-          ".windsurfrules",
-          ".clauderc"
-        ],
+        "canonicalSource": "AGENTS.md",
+        "compiledRulebook": null,
+        "legacyThinAdapters": [],
         "generatedBridgeAdapters": [
-          "AGENTS.md",
           "CLAUDE.md",
-          "GEMINI.md",
-          ".cursor/rules/agentic-senior-core.mdc",
-          ".windsurf/rules/agentic-senior-core.md",
-          ".github/copilot-instructions.md",
-          ".github/instructions/agentic-senior-core.instructions.md",
-          ".gemini/instructions.md"
+          "GEMINI.md"
         ],
         "stackLoadingMode": "lazy",
         "domainRuleLoadingMode": "lazy",

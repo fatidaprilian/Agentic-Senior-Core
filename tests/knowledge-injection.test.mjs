@@ -2,7 +2,6 @@ import { describe, it } from 'node:test';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 
 const ROOT = process.cwd();
 
@@ -85,41 +84,16 @@ const LAYERS = [
  * Each entry must reference ALL 8 layers.
  */
 const FULL_INJECTION_ENTRY_POINTS = [
-  { name: '.instructions.md', path: '.instructions.md' },
+  { name: 'AGENTS.md', path: 'AGENTS.md' },
 ];
 
 /**
- * Delegating entry points that reference the full-injection files.
- * These must at minimum reference .agent-context/rules/ and point
- * to AGENTS.md or .instructions.md for the rest.
+ * Native import bridges that load the canonical AGENTS.md file.
  */
-const DELEGATING_ENTRY_POINTS = [
-  { name: 'AGENTS.md', path: 'AGENTS.md', delegatesTo: ['.instructions.md'] },
-  { name: 'CLAUDE.md', path: 'CLAUDE.md', delegatesTo: ['.instructions.md'] },
-  { name: 'GEMINI.md', path: 'GEMINI.md', delegatesTo: ['.instructions.md'] },
-  { name: 'copilot-instructions.md', path: '.github/copilot-instructions.md', delegatesTo: ['.instructions.md'] },
-  { name: '.github/instructions/agentic-senior-core.instructions.md', path: '.github/instructions/agentic-senior-core.instructions.md', delegatesTo: ['.instructions.md'] },
-  { name: '.cursorrules', path: '.cursorrules', delegatesTo: ['.agent-instructions.md'] },
-  { name: '.windsurfrules', path: '.windsurfrules', delegatesTo: ['.agent-instructions.md'] },
-  { name: '.gemini/instructions.md', path: '.gemini/instructions.md', delegatesTo: ['.instructions.md'] },
-  { name: '.cursor/rules/agentic-senior-core.mdc', path: '.cursor/rules/agentic-senior-core.mdc', delegatesTo: ['.instructions.md'] },
-  { name: '.windsurf/rules/agentic-senior-core.md', path: '.windsurf/rules/agentic-senior-core.md', delegatesTo: ['.instructions.md'] },
-];
-
-const THIN_ADAPTER_ENTRY_POINTS = [
-  { name: 'AGENTS.md', path: 'AGENTS.md' },
+const NATIVE_IMPORT_BRIDGES = [
   { name: 'CLAUDE.md', path: 'CLAUDE.md' },
   { name: 'GEMINI.md', path: 'GEMINI.md' },
-  { name: 'copilot-instructions.md', path: '.github/copilot-instructions.md' },
-  { name: '.github/instructions/agentic-senior-core.instructions.md', path: '.github/instructions/agentic-senior-core.instructions.md' },
-  { name: '.gemini/instructions.md', path: '.gemini/instructions.md' },
-  { name: '.cursor/rules/agentic-senior-core.mdc', path: '.cursor/rules/agentic-senior-core.mdc' },
-  { name: '.windsurf/rules/agentic-senior-core.md', path: '.windsurf/rules/agentic-senior-core.md' },
 ];
-
-function normalizeLineEndings(content) {
-  return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-}
 
 // ── Test: All layer files exist on disk ─────────────────────────────────────
 
@@ -175,8 +149,8 @@ describe('Full 8-Layer Injection Coverage', () => {
 });
 
 describe('Adaptive Strategy Guidance', () => {
-  it('.instructions.md keeps Layer 2 and Layer 3 evidence-gated without pattern anchors', () => {
-    const instructionsContent = readFileSync(join(ROOT, '.instructions.md'), 'utf-8');
+  it('AGENTS.md keeps Layer 2 and Layer 3 evidence-gated without pattern anchors', () => {
+    const instructionsContent = readFileSync(join(ROOT, 'AGENTS.md'), 'utf-8');
 
     assert.match(instructionsContent, /Runtime signals are evidence gates/i);
     assert.match(instructionsContent, /Ignore pattern frequency/i);
@@ -288,8 +262,8 @@ describe('Docker and Design Freshness Guidance', () => {
 
 // ── Test: Delegating entry points reference rules + delegate to full file ───
 
-describe('Delegating Entry Point Chain', () => {
-  for (const entryPoint of DELEGATING_ENTRY_POINTS) {
+describe('Native Import Bridges', () => {
+  for (const entryPoint of NATIVE_IMPORT_BRIDGES) {
     const entryPointPath = join(ROOT, entryPoint.path);
     if (!existsSync(entryPointPath)) {
       it(`${entryPoint.name} — file exists`, () => {
@@ -300,99 +274,27 @@ describe('Delegating Entry Point Chain', () => {
 
     const fileContent = readFileSync(entryPointPath, 'utf-8');
 
-    it(`${entryPoint.name} references .agent-context/rules/`, () => {
-      assert.ok(
-        fileContent.includes('.agent-context/rules/'),
-        `${entryPoint.name} does not reference .agent-context/rules/`
-      );
-    });
-
-    it(`${entryPoint.name} references runtime decision guidance`, () => {
-      const normalized = fileContent.toLowerCase();
-      assert.ok(
-        normalized.includes('runtime') && normalized.includes('evidence'),
-        `${entryPoint.name} does not reference runtime decision guidance`
-      );
-    });
-
-    it(`${entryPoint.name} references structural planning guidance`, () => {
-      const normalized = fileContent.toLowerCase();
-      assert.ok(
-        normalized.includes('structural planning')
-          || normalized.includes('constraints')
-          || normalized.includes('structure')
-          || normalized.includes('architecture boundaries'),
-        `${entryPoint.name} does not reference structural planning guidance`
-      );
-    });
-
-    it(`${entryPoint.name} references .agent-context/review-checklists/`, () => {
-      assert.ok(
-        fileContent.includes('review-checklist') || fileContent.includes('pr-checklist'),
-        `${entryPoint.name} does not reference review checklists`
-      );
-    });
-
-    it(`${entryPoint.name} references state awareness`, () => {
-      assert.ok(
-        fileContent.includes('.agent-context/state/') || fileContent.includes('architecture-map'),
-        `${entryPoint.name} does not reference state awareness`
-      );
-    });
-
-    for (const delegateTarget of entryPoint.delegatesTo) {
-      it(`${entryPoint.name} delegates to ${delegateTarget}`, () => {
-        assert.ok(
-          fileContent.includes(delegateTarget),
-          `${entryPoint.name} does not delegate to ${delegateTarget}`
-        );
-      });
-    }
-  }
-});
-
-describe('Thin Adapter Drift Metadata', () => {
-  const canonicalInstructionPath = join(ROOT, '.instructions.md');
-  const canonicalInstructionContent = normalizeLineEndings(readFileSync(canonicalInstructionPath, 'utf-8'));
-  const canonicalSnapshotHash = createHash('sha256').update(canonicalInstructionContent).digest('hex');
-
-  for (const adapterEntryPoint of THIN_ADAPTER_ENTRY_POINTS) {
-    const adapterEntryPointPath = join(ROOT, adapterEntryPoint.path);
-
-    it(`${adapterEntryPoint.name} is explicitly thin adapter`, () => {
-      const adapterContent = readFileSync(adapterEntryPointPath, 'utf-8');
-      assert.ok(
-        adapterContent.includes('Adapter Mode: thin')
-        && adapterContent.includes('Adapter Source: .instructions.md'),
-        `${adapterEntryPoint.name} must declare thin adapter metadata`
-      );
-    });
-
-    it(`${adapterEntryPoint.name} hash matches canonical snapshot`, () => {
-      const adapterContent = readFileSync(adapterEntryPointPath, 'utf-8');
-      const hashMatch = adapterContent.match(/Canonical Snapshot SHA256:\s*([a-f0-9]{64})/);
-      assert.ok(hashMatch, `${adapterEntryPoint.name} must declare Canonical Snapshot SHA256`);
+    it(`${entryPoint.name} imports AGENTS.md`, () => {
       assert.equal(
-        hashMatch[1],
-        canonicalSnapshotHash,
-        `${adapterEntryPoint.name} hash metadata drifted from .instructions.md`
+        fileContent.trim(),
+        '@AGENTS.md',
+        `${entryPoint.name} must stay as a one-line native import bridge`
       );
     });
   }
 });
 
 describe('Bootstrap Reliability Floor', () => {
-  it('AGENTS.md carries a critical bootstrap floor for hosts that stop at the adapter', () => {
+  it('AGENTS.md carries the canonical bootstrap contract', () => {
     const agentsContent = readFileSync(join(ROOT, 'AGENTS.md'), 'utf-8');
 
-    assert.match(agentsContent, /Critical Bootstrap Floor/);
-    assert.match(agentsContent, /If your host stops at this file/i);
+    assert.match(agentsContent, /Canonical project instructions/i);
+    assert.match(agentsContent, /Bootstrap Receipt/);
     assert.match(agentsContent, /bootstrap-design\.md/);
     assert.match(agentsContent, /frontend-architecture\.md/);
     assert.match(agentsContent, /docs\/DESIGN\.md/);
     assert.match(agentsContent, /docs\/design-intent\.json/);
-    assert.match(agentsContent, /Memory continuity/i);
-    assert.match(agentsContent, /does not replace bootstrap loading/i);
+    assert.match(agentsContent, /onboarding-report\.json/i);
     assert.match(agentsContent, /perform live web research/i);
   });
 });

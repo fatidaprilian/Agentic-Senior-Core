@@ -78,8 +78,8 @@ Use `README.md` for human orientation, then use `docs/doc-index.md` to choose th
 
 ## Single Source of Truth and Lazy Rule Loading
 
-- Canonical rule source is .instructions.md.
-- Adapter entry files stay thin and must point to the canonical source.
+- Canonical rule source is AGENTS.md.
+- Native adapter entry files stay thin and must import the canonical source.
 - Load global domain rules lazily based on touched scope.
 - Do not create or load stack-specific governance adapters as the baseline.
 - Runtime or framework evidence can clarify implementation details, but it must not replace the global architecture, security, data, API, error, event, and testing boundaries.

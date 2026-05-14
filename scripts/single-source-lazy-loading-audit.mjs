@@ -11,7 +11,6 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,28 +18,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const REPOSITORY_ROOT = resolve(__dirname, '..');
 
-const CANONICAL_SOURCE_PATH = '.instructions.md';
+const CANONICAL_SOURCE_PATH = 'AGENTS.md';
 const ADAPTER_PATHS = [
-  'AGENTS.md',
   'CLAUDE.md',
   'GEMINI.md',
-  '.github/copilot-instructions.md',
-  '.github/instructions/agentic-senior-core.instructions.md',
-  '.gemini/instructions.md',
-  '.cursor/rules/agentic-senior-core.mdc',
-  '.windsurf/rules/agentic-senior-core.md',
 ];
 const COMPILER_PATH = 'lib/cli/compiler.mjs';
 const ONBOARDING_REPORT_PATH = '.agent-context/state/onboarding-report.json';
 const ARCHITECTURE_RULE_PATH = '.agent-context/rules/architecture.md';
 const PR_CHECKLIST_PATH = '.agent-context/review-checklists/pr-checklist.md';
 const REVIEW_PROMPT_PATH = '.agent-context/prompts/review-code.md';
-const COMPILED_RULE_PATHS = ['.cursorrules', '.windsurfrules'];
-const REQUIRED_LEGACY_ROOT_ADAPTER_SNIPPETS = [
-  'Adapter Mode: legacy-thin',
-  'Adapter Source: .agent-instructions.md',
-  'Canonical baseline: .instructions.md',
-];
 
 const DEFAULT_WORKFLOW = 'standard';
 const SUPPORTED_WORKFLOWS = new Set([
@@ -69,7 +56,7 @@ const MAX_EAGER_STACK_MENTIONS = 4;
 
 const REQUIRED_ARCHITECTURE_RULE_SNIPPETS = [
   '## Single Source of Truth and Lazy Rule Loading',
-  'Canonical rule source is .instructions.md.',
+  'Canonical rule source is AGENTS.md.',
   'Load global domain rules lazily based on touched scope.',
   'Do not create or load stack-specific governance adapters as the baseline.',
 ];
@@ -273,11 +260,8 @@ function runAudit() {
     pushResult(results, true, 'canonical-source-exists', `${CANONICAL_SOURCE_PATH} is present`);
   }
 
-  const canonicalHash = canonicalSourceExists
-    ? createHash('sha256').update(normalizeLineEndings(canonicalSourceContent)).digest('hex')
-    : '';
-
-  let adapterHashPassCount = 0;
+  const canonicalHash = canonicalSourceExists ? 'native-import-bridges' : '';
+  let adapterImportPassCount = 0;
   const adapterChecks = [];
 
   for (const adapterPath of ADAPTER_PATHS) {
@@ -289,51 +273,27 @@ function runAudit() {
       adapterChecks.push({
         path: adapterPath,
         exists: false,
-        thinAdapterMode: false,
-        sourcePointerValid: false,
-        hashMatchesCanonical: false,
+        importsCanonical: false,
       });
       continue;
     }
 
     pushResult(results, true, 'adapter-file-exists', `${adapterPath} is present`);
 
-    const thinAdapterMode = adapterContent.includes('Adapter Mode: thin');
-    const sourcePointerValid = adapterContent.includes('Adapter Source: .instructions.md');
-    const hashMatch = adapterContent.match(/Canonical Snapshot SHA256:\s*([a-f0-9]{64})/);
-    const hashMatchesCanonical = Boolean(hashMatch && canonicalHash && hashMatch[1] === canonicalHash);
+    const importsCanonical = normalizeLineEndings(adapterContent).trim() === '@AGENTS.md';
 
-    if (!thinAdapterMode) {
-      failures.push(`${adapterPath} must stay in thin adapter mode`);
-      pushResult(results, false, 'adapter-thin-mode', `${adapterPath} is missing Adapter Mode: thin metadata`);
+    if (!importsCanonical) {
+      failures.push(`${adapterPath} must import canonical AGENTS.md`);
+      pushResult(results, false, 'adapter-canonical-import', `${adapterPath} is not @AGENTS.md`);
     } else {
-      pushResult(results, true, 'adapter-thin-mode', `${adapterPath} declares thin adapter mode`);
-    }
-
-    if (!sourcePointerValid) {
-      failures.push(`${adapterPath} must point to canonical source .instructions.md`);
-      pushResult(results, false, 'adapter-canonical-source-pointer', `${adapterPath} is missing canonical source pointer`);
-    } else {
-      pushResult(results, true, 'adapter-canonical-source-pointer', `${adapterPath} points to canonical source`);
-    }
-
-    if (!hashMatch) {
-      failures.push(`${adapterPath} must declare Canonical Snapshot SHA256`);
-      pushResult(results, false, 'adapter-canonical-hash', `${adapterPath} is missing Canonical Snapshot SHA256 metadata`);
-    } else if (!hashMatchesCanonical) {
-      failures.push(`${adapterPath} canonical hash drift detected`);
-      pushResult(results, false, 'adapter-canonical-hash', `${adapterPath} hash does not match ${CANONICAL_SOURCE_PATH}`);
-    } else {
-      adapterHashPassCount += 1;
-      pushResult(results, true, 'adapter-canonical-hash', `${adapterPath} hash matches canonical source`);
+      adapterImportPassCount += 1;
+      pushResult(results, true, 'adapter-canonical-import', `${adapterPath} imports AGENTS.md`);
     }
 
     adapterChecks.push({
       path: adapterPath,
       exists: true,
-      thinAdapterMode,
-      sourcePointerValid,
-      hashMatchesCanonical,
+      importsCanonical,
     });
   }
 
@@ -409,84 +369,11 @@ function runAudit() {
     }
   }
 
-  let compiledRulesCanonicalPassCount = 0;
   let eagerLoadingDetected = false;
   const compiledRuleChecks = [];
 
-  for (const compiledRulePath of COMPILED_RULE_PATHS) {
-    const compiledRuleContent = readText(compiledRulePath);
-
-    if (!compiledRuleContent) {
-      failures.push(`Missing compiled rules file: ${compiledRulePath}`);
-      pushResult(results, false, 'compiled-rules-file-exists', `Missing ${compiledRulePath}`);
-      compiledRuleChecks.push({
-        path: compiledRulePath,
-        exists: false,
-        canonicalBaselineDeclared: false,
-        stackMentionCount: 0,
-        eagerLoadingDetected: false,
-      });
-      continue;
-    }
-
-    pushResult(results, true, 'compiled-rules-file-exists', `${compiledRulePath} is present`);
-
-    const canonicalBaselineDeclared = compiledRuleContent.includes('Canonical baseline: .instructions.md');
-    if (canonicalBaselineDeclared) {
-      compiledRulesCanonicalPassCount += 1;
-      pushResult(results, true, 'compiled-rules-canonical-baseline', `${compiledRulePath} declares canonical baseline`);
-    } else {
-      failures.push(`${compiledRulePath} must declare canonical baseline ${CANONICAL_SOURCE_PATH}`);
-      pushResult(results, false, 'compiled-rules-canonical-baseline', `${compiledRulePath} is missing canonical baseline declaration`);
-    }
-
-    const stackMentionCount = countStackMentions(compiledRuleContent);
-    const isEagerLoading = stackMentionCount > MAX_EAGER_STACK_MENTIONS;
-    const missingLegacyAdapterSnippets = REQUIRED_LEGACY_ROOT_ADAPTER_SNIPPETS
-      .filter((requiredSnippet) => !compiledRuleContent.includes(requiredSnippet));
-
-    if (missingLegacyAdapterSnippets.length > 0) {
-      failures.push(`${compiledRulePath} must stay a legacy thin adapter`);
-      pushResult(
-        results,
-        false,
-        'legacy-root-adapter-thin-mode',
-        `${compiledRulePath} is missing: ${missingLegacyAdapterSnippets.join(', ')}`
-      );
-    } else {
-      pushResult(results, true, 'legacy-root-adapter-thin-mode', `${compiledRulePath} stays legacy-thin`);
-    }
-
-    if (isEagerLoading) {
-      eagerLoadingDetected = true;
-      failures.push(`${compiledRulePath} appears to preload too many stack profiles (${stackMentionCount})`);
-      pushResult(
-        results,
-        false,
-        'compiled-rules-lazy-loading-density',
-        `${compiledRulePath} has ${stackMentionCount} stack profile mentions; expected <= ${MAX_EAGER_STACK_MENTIONS}`
-      );
-    } else {
-      pushResult(
-        results,
-        true,
-        'compiled-rules-lazy-loading-density',
-        `${compiledRulePath} has ${stackMentionCount} stack profile mentions (lazy-loading threshold satisfied)`
-      );
-    }
-
-    compiledRuleChecks.push({
-      path: compiledRulePath,
-      exists: true,
-      canonicalBaselineDeclared,
-      stackMentionCount,
-      eagerLoadingDetected: isEagerLoading,
-    });
-  }
-
   const canonicalSourceEnforced = canonicalSourceExists
-    && adapterHashPassCount === ADAPTER_PATHS.length
-    && compiledRulesCanonicalPassCount === COMPILED_RULE_PATHS.length
+    && adapterImportPassCount === ADAPTER_PATHS.length
     && architectureCoverageComplete
     && checklistCoverageComplete
     && reviewPromptCoverageComplete;

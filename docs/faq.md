@@ -55,13 +55,13 @@ The root `mcp.json` is governance metadata for this repository, not the VS Code 
 This can happen on newer VS Code MCP schema validation where `$schema` is not required. For workspace MCP config, remove `$schema` and keep the `servers` object. MCP discovery and startup still work.
 
 ## Why does my agent still output bad code occasionally?
-While Agentic-Senior-Core curates the agent's workspace rules (`.instructions.md`, `.agent-instructions.md`, `AGENTS.md`, and tool-specific adapters), some models can still hallucinate under high context load or complex queries. Use a strong current model and chunk broad work into smaller requests.
+While Agentic-Senior-Core curates the agent's workspace rules (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.agent-context/`), some models can still hallucinate under high context load or complex queries. Use a strong current model and chunk broad work into smaller requests.
 
 ## Can I define my own exceptions?
-Yes, use the `.agent-override.md` file in your repository root to declare explicit scoped exceptions to the rules.
+Yes, but keep exceptions inside the relevant project docs or `.agent-context/` rule updates so agents see the same contract everyone reviews. Agentic-Senior-Core no longer ships a separate root override file.
 
 ## Does this support Copilot?
-Yes. The repository supports `.github/copilot-instructions.md` and path-specific `.github/instructions/agentic-senior-core.instructions.md`.
+For the default install, use `AGENTS.md`. GitHub Copilot also supports `.github/copilot-instructions.md` and path-specific `.github/instructions/*.instructions.md`, but Agentic-Senior-Core no longer generates those extra files by default.
 
 ## Can I run the CLI before npm publish and still choose options interactively?
 Yes. Use GitHub source execution:
