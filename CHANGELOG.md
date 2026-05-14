@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## 3.0.49 - 2026-05-14
+### Changed
+- Added a compact implementation craft layer to UI design bootstrap guidance so agents record CSS decisions for color space, typography scale, spatial rhythm, motion budget, and anti-attractor checks before UI code.
+- Added CSS production hardening to frontend architecture governance for overflow, responsive recomposition, motion timing, modern CSS technique selection, and implementation drift signals.
+- Extended generated design-intent seeds, completeness validation, AI synthesis prompts, frontend audits, and smoke coverage so the new craft fields are enforceable instead of prompt-only.
+
 ## 3.0.48 - 2026-05-14
 ### Changed
 - Made `AGENTS.md` the canonical installed instruction source and reduced the default root surface to `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.agent-context/`.

@@ -19,19 +19,7 @@ Use this rule for UI, UX, page, screen, component, layout, landing, dashboard, f
 
 ## Required Design Contract
 
-Before UI code, create or refine `docs/DESIGN.md` and `docs/design-intent.json`.
-
-The contract must record:
-- `motionPaletteDecision`
-- `designFlexibilityPolicy`
-- `conceptualAnchor`
-- `derivedTokenLogic`
-- `aiSafeUiAudit`
-- `designExecutionPolicy`
-- `designExecutionHandoff`
-- `reviewRubric`
-- `contextHygiene`
-- `libraryResearchStatus` and `libraryDecisions[]`
+Before UI code, create or refine `docs/DESIGN.md` and `docs/design-intent.json`. The contract must record `motionPaletteDecision`, `designFlexibilityPolicy`, `conceptualAnchor`, `derivedTokenLogic`, `aiSafeUiAudit`, `designExecutionPolicy`, `designExecutionHandoff`, `reviewRubric`, `contextHygiene`, `libraryResearchStatus`, and `libraryDecisions[]`.
 
 ## Anti-Generic UI Gate
 
@@ -71,6 +59,7 @@ If the user gives no current-task visual research or reference:
 - Treat motion, 3D, WebGL, canvas, scroll choreography, and animation libraries as first-class options.
 - Omit rich motion or spatial UI only after naming the product-fit reason and the replacement interaction quality.
 - For new screens or broad redesigns, research the expressive implementation path instead of defaulting to static native CSS. Use native or already-installed tools only when they can still deliver the chosen ambition, or when a concrete blocker is documented. Do not downshift because adding a package feels inconvenient; downshift only for a concrete product-fit, accessibility, security, compatibility, device, maintenance, or measured performance reason.
+- Prefer micro-interactions in 150-300ms, layout transitions in 300-500ms, transform/opacity for high-frequency motion, explicit easing, bounded stagger, and reduced-motion alternatives unless evidence changes the budget.
 - Keep reduced-motion, keyboard, loading, performance, mobile, and non-3D fallbacks explicit.
 - Use component kits or headless primitives for behavior and accessibility when they fit. Replace library-default visual language with project-specific composition, tokens, motion, state treatment, and morphology.
 - Keep design-intent flexible: lock user goals, accessibility, production readiness, forbidden patterns, and approved continuity; keep exact palette primitives, font families, radius/shadow values, component skins, candidate signature moves, and external website inspiration flexible until evidence or approval locks them. Convert references into product-fit rules; do not copy layout, palette, component skin, brand posture, or visual metaphor.
@@ -92,6 +81,7 @@ Responsive quality is not scale-only.
 - Tablet must regroup surfaces instead of shrinking desktop.
 - Desktop may expose more context but must not become interchangeable admin chrome.
 - At least one major surface must change position, grouping, priority, or disclosure strategy between mobile and desktop.
+- Prefer container queries, dynamic viewport units, support-checked selectors, subgrid, popover, or disclosure primitives when they simplify recomposition and fallbacks are clear.
 
 ## Accessibility
 
@@ -99,6 +89,12 @@ Responsive quality is not scale-only.
 - APCA is advisory perceptual tuning only.
 - Hard checks include focus visibility, focus appearance, target size, keyboard access, accessible authentication, color-only meaning, and dynamic status/state access.
 - Fix accessibility issues without flattening the UI into generic safe chrome unless no expressive safe option remains.
+
+## CSS Production Hardening
+
+- Plan overflow, wrapping, truncation, empty, loading, error, and extreme-content behavior before declaring a layout complete.
+- Prefer `min()`, `max()`, `clamp()`, stable aspect ratios, container-relative sizing, OKLCH, and tinted neutrals for new tokens when supported; preserve existing design-system tokens.
+- Treat recursive card nesting, uniform radius everywhere, shadow on every surface, arbitrary spacing, gray text on saturated color, and library-default skins as drift signals requiring product rationale.
 
 ## Implementation Boundaries
 

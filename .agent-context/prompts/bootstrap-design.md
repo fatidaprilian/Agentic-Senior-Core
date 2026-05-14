@@ -56,9 +56,7 @@ If the expressive path needs a new motion, 3D, canvas, scroll, or interaction li
 
 Only downshift ambition after naming the concrete blocker: product fit, content density, measured performance budget, accessibility, device support, package conflict, security risk, or missing runtime capability. A new dependency, package count, or vague performance concern is not a blocker by itself. Pair every downshift with a replacement interaction quality that still changes composition, hierarchy, feedback, or memorability.
 ## Design Flexibility Layer
-`docs/design-intent.json` must separate locked outcomes from flexible expression. The machine contract keeps review invariants stable; it must not freeze exact aesthetic implementation unless repo evidence, accessibility validation, implementation constraints, or explicit user approval locks it.
-
-Record `designFlexibilityPolicy`: lock user goals, runtime constraints, accessibility, production readiness, forbidden patterns, and approved continuity; keep exact palette primitives, font families, radius/shadow values, component-kit theme mapping, signature move implementation, literal anchor artifacts, and spatial metaphors flexible until validated or approved. Semantic roles are required; exact primitives are not automatically locked. Required experience outcomes are separate from candidate implementation moves. Libraries supply behavior, accessibility, primitives, and delivery speed; the project supplies final composition, theme, morphology, and visual language.
+`docs/design-intent.json` must separate locked outcomes from flexible expression. The machine contract keeps review invariants stable; it must not freeze exact aesthetic implementation unless repo evidence, accessibility validation, implementation constraints, or explicit user approval locks it. Record `designFlexibilityPolicy`: lock user goals, runtime constraints, accessibility, production readiness, forbidden patterns, and approved continuity; keep exact palette primitives, font families, radius/shadow values, component-kit theme mapping, signature move implementation, literal anchor artifacts, and spatial metaphors flexible until validated or approved. Semantic roles are required; exact primitives are not automatically locked.
 ## External Inspiration Boundary
 Using outside websites, benchmark apps, galleries, or component examples is useful for constraint discovery, interaction mechanics, and implementation options, but never as a style source to imitate. Extract why a pattern works, then translate it into a current-project rule. Do not copy layout rhythm, palette, component skin, visual metaphor, or brand posture from a reference unless the user explicitly approves that continuity and it passes product fit.
 
@@ -83,15 +81,15 @@ If rich motion or spatial UI is omitted, record the product, content-density, pe
 If 3D or canvas is used, record product role, interaction model, fallback path, runtime/library choice, loading state, keyboard path, and reduced-motion behavior.
 
 ## Token Derivation Audit
-Before implementation, `docs/design-intent.json` must include top-level `derivedTokenLogic`:
-- `anchorReference`
-- `colorDerivationSource`
-- `spacingDerivationSource`
-- `typographyDerivationSource`
-- `motionDerivationSource`
-- `validationRule`
+Before implementation, `docs/design-intent.json` must include top-level `derivedTokenLogic`: `anchorReference`, `colorDerivationSource`, `spacingDerivationSource`, `typographyDerivationSource`, `motionDerivationSource`, `colorSpace`, `spatialBaseUnit`, `typeScaleMethod`, `motionBudget`, and `validationRule`.
 
 Every semantic token role must trace to `anchorReference`. Exact primitive values stay flexible until repo evidence, accessibility validation, implementation constraints, or explicit user approval locks them. If the rationale is "looks good", "common practice", "modern default", or "framework default", derive the token again before UI code.
+
+## Implementation Craft Layer
+Before accepting the design contract, record explicit CSS craft decisions:
+- Color/typography: prefer OKLCH tokens and tinted neutrals for new CSS when supported, preserve existing token formats, name color commitment level, and prefer fluid `clamp()` scales with explicit role contrast, `text-wrap: balance`, and numeric typography decisions.
+- Spatial/motion: name `spatialBaseUnit`, major multiples, optical exceptions, and `motionBudget`; prefer transform/opacity choreography, explicit easing, bounded stagger, and reduced-motion behavior.
+- Implementation anti-attractor: list three default CSS reflexes this task might trigger, reject the most likely one, and choose one distinctive implementation move tied to the product.
 
 ## Library Research Protocol
 If web search is available:

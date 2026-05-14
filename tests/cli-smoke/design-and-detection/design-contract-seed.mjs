@@ -151,6 +151,10 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.ok(designIntentSeed.conceptualAnchor.finalAnchorContract.requiredFields.includes('motionRiskBudget'));
       assert.equal(designIntentSeed.derivedTokenLogic.anchorReference, designIntentSeed.conceptualAnchor.anchorReference);
       assert.equal(typeof designIntentSeed.derivedTokenLogic.colorDerivationSource, 'string');
+      assert.equal(typeof designIntentSeed.derivedTokenLogic.colorSpace, 'string');
+      assert.equal(typeof designIntentSeed.derivedTokenLogic.spatialBaseUnit, 'string');
+      assert.equal(typeof designIntentSeed.derivedTokenLogic.typeScaleMethod, 'string');
+      assert.equal(typeof designIntentSeed.derivedTokenLogic.motionBudget, 'string');
       assert.equal(designIntentSeed.derivedTokenLogic.validationRule.includes('anchorReference'), true);
       assert.equal(designIntentSeed.aiSafeUiAudit.status, 'agent-must-complete-before-ui-implementation');
       assert.equal(designIntentSeed.aiSafeUiAudit.blockingByDefault, true);
