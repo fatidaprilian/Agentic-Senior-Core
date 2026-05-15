@@ -15,6 +15,7 @@ Backend/API test rules:
 - Event or worker changes must test retry, duplicate-message handling, dead-letter or recovery behavior, and outbox relay semantics when those paths exist.
 - Distributed consistency changes must test the local transaction, publish/retry behavior, and compensating action or recovery path rather than only the happy path.
 - Tests should make the API contract obvious from the fixture names, inputs, and expected response shape.
+- Tests must exercise the failure paths the code claims to handle, not only the happy path. Prefer property-based or generated-input tests for invariants (validation, ordering, idempotency), explicit failure-injection tests for retry and recovery code, and contract tests at service boundaries when consumer and producer ownership is split.
 
 Do not test framework internals, third-party library behavior, private implementation trivia, or snapshots that only freeze noise.
 

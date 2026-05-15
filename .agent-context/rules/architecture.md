@@ -11,6 +11,7 @@ These principles are mandatory for backend and shared core modules.
 - Readability over brevity.
 - Keep transport, application, domain, and infrastructure concerns separated.
 - Favor explicit module boundaries over hidden cross-layer shortcuts.
+- Health endpoints distinguish liveness (the process is alive), readiness (the process can serve traffic), and startup (initialization complete) where the runtime supports it. A `200 OK` that does not check critical dependencies is not a readiness signal.
 
 ## Complexity Budget (Mandatory)
 
@@ -21,6 +22,7 @@ Prefer the smallest clear implementation that fully preserves behavior, safety, 
 - Prefer direct logic over extra wrappers, layers, classes, config, or state when the abstraction does not reduce real complexity.
 - Keep validation, error handling, fallback paths, accessibility, tests, security boundaries, and observability when they protect real behavior.
 - Run a final simplification pass before completion.
+- Run a domain-fit pass on public contracts before completion: if endpoint names, payload fields, error codes, table names, or event types could be renamed to another domain without changing shape, the contract is too generic; revise to express the actual domain verbs and invariants. This is the backend equivalent of the design rename test.
 - Do not optimize for line count alone.
 - Do not replace clear code with clever, dense, or surprising code.
 - Do not remove safeguards just because the happy path works.

@@ -54,6 +54,7 @@ If the user gives no current-task visual research or reference:
 - Product categories are heuristics, not style presets.
 - Choose motion density from task, content density, brand intent, device budget, performance, and accessibility.
 - Map states before coding: default, hover, focus-visible, active, disabled, loading, empty, error, success, transition.
+- Distinguish motion (visual continuity between states) from interaction design (state machines, focus transfer on route/modal/error transitions, optimistic updates where safe, skeleton shapes that match real content, `aria-live` for status, keyboard paths, scroll-driven progressive disclosure). Record at least one interaction-design decision per major flow alongside motion choices.
 - Prefer visually exploratory, product-derived palettes while preserving WCAG contrast and status clarity.
 - Do not default to dark slate, cream/beige/tan, purple-blue gradients, monochrome palettes, cyber-neon terminals, or uniform card surfaces without product evidence.
 - Treat motion, 3D, WebGL, canvas, scroll choreography, and animation libraries as first-class options.
@@ -94,6 +95,7 @@ Responsive quality is not scale-only.
 
 - Plan overflow, wrapping, truncation, empty, loading, error, and extreme-content behavior before declaring a layout complete.
 - Prefer `min()`, `max()`, `clamp()`, stable aspect ratios, container-relative sizing, OKLCH, and tinted neutrals for new tokens when supported; preserve existing design-system tokens.
+- Prefer composition primitives that match content meaning: named `grid-template-areas` for editorial regions, subgrid for nested alignment across siblings, container queries for component-level responsiveness independent of viewport, and explicit stacking context (`isolation: isolate`) when overlap or z-depth carries meaning. Do not default to flex column when content has structure that grid expresses better.
 - Treat recursive card nesting, uniform radius everywhere, shadow on every surface, arbitrary spacing, gray text on saturated color, and library-default skins as drift signals requiring product rationale.
 
 ## Implementation Boundaries

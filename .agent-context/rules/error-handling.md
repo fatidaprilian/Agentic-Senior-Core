@@ -16,5 +16,7 @@ Backend API error rules:
 - Domain and validation errors should keep machine-readable codes so tests, clients, and operators can distinguish expected failures from defects.
 - API boundary errors should include a safe correlation or trace identifier when observability exists, while protected logs keep the internal exception, actor, target, and trace context.
 - Distributed systems should preserve trace context across ingress and egress using the project's tracing standard, such as W3C Trace Context or OpenTelemetry propagation.
+- Prefer structured logging (key/value or JSON) over free-text strings, record at least one business metric per non-trivial operation alongside system metrics, and propagate correlation/trace IDs across async, queue, and worker boundaries.
+- Distinguish error reporting from error recovery. For calls to unreliable upstreams, record the recovery strategy: retry with backoff and jitter, circuit-breaker thresholds and reset behavior, fallback path (cached value, default, degraded mode), and partial-failure semantics for batch operations (per-item success/failure rather than all-or-nothing). "Catch and log" is reporting, not recovery.
 
 At boundaries, validate early, return safe user-facing errors, and keep machine-readable error context for operators and callers.

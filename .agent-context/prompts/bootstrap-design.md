@@ -87,7 +87,8 @@ Every semantic token role must trace to `anchorReference`. Exact primitive value
 
 ## Implementation Craft Layer
 Before accepting the design contract, record explicit CSS craft decisions:
-- Color/typography: prefer OKLCH tokens and tinted neutrals for new CSS when supported, preserve existing token formats, name color commitment level, and prefer fluid `clamp()` scales with explicit role contrast, `text-wrap: balance`, and numeric typography decisions.
+- Color: prefer OKLCH tokens and tinted neutrals for new CSS when supported, preserve existing token formats, name color commitment level, derive scales as a perceptual lightness curve (not linear) with semantic role layers (surface, foreground, border, focus, status, data) before primary/secondary/accent, record one accessible text-on-color pair per interactive step, and treat dark mode as a second derived palette with its own lightness curve; record `color-scheme`, prefer `light-dark()` for theme-switch tokens, and record the no-flash and persistence strategy.
+- Typography: prefer fluid `clamp()` scales with explicit role contrast, `text-wrap: balance`, and numeric typography decisions; treat type as a system rather than a font choice, recording one variable-axis decision (`wght`/`wdth`/`opsz` when available), one `font-feature-settings` choice tied to product role (tabular numerals for data, stylistic alternates or `case` for editorial voice), one measure (line-length budget), and an FOUT/FOIT strategy with `font-display` plus metric override when web fonts are loaded.
 - Spatial/motion: name `spatialBaseUnit`, major multiples, optical exceptions, and `motionBudget`; prefer transform/opacity choreography, explicit easing, bounded stagger, and reduced-motion behavior.
 - Implementation anti-attractor: list three default CSS reflexes this task might trigger, reject the most likely one, and choose one distinctive implementation move tied to the product.
 

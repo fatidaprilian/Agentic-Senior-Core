@@ -14,6 +14,7 @@ Hard rules:
 - retrieve secrets through environment, runtime secret injection, or the project's secret manager; do not store static secrets in source or plaintext config
 - keep `.env` and local secret files covered by `.gitignore`; commit only safe examples such as `.env.example`
 - treat transport encryption, secure cookies, and trusted proxy boundaries as deployment assumptions that must be documented when sensitive traffic is involved
+- when a public surface exists, record explicit decisions for: CORS allow-list (not `*` for credentialed requests), security headers (CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`), JWT pitfalls (algorithm pinning, expiration, refresh rotation, storage location), webhook signature verification with timing-safe compare, SSRF defense (egress allow-list or URL validation) when the server fetches user-supplied URLs, and per-resource authorization (not role-only) when records have owners
 
 Zero-trust API input rules:
 - Treat body, query, params, headers, cookies, uploaded files, webhook payloads, and background job payloads as untrusted until validated.

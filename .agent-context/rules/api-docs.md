@@ -29,6 +29,8 @@ Use PRD, SRS, technical design, and ERD as conditional docs, not default boilerp
 - Document the public surface before or alongside implementation.
 - Machine-readable API contracts should use the current project standard. If unresolved, the LLM must recommend a current maintained option from official docs.
 - HTTP APIs should prefer OpenAPI 3.1 when no stronger project standard exists.
+- Choose transport (REST, GraphQL, tRPC, gRPC, SSE, WebSocket) and shape (resource-oriented vs action/command-oriented) from domain evidence, not by habit. When the domain has verbs such as cancel, refund, dispatch, approve, or retry, prefer command endpoints over awkward `PATCH` shoehorns and record at least one alternative transport considered.
+- Treat HTTP as a behavioral contract, not just a shape. Document `ETag` and conditional requests for cacheable reads, `Cache-Control` and `Vary` when shared caches apply, rate-limit headers (`RateLimit-*` or `X-RateLimit-*`) with `Retry-After` when rate limiting exists, and require an `Idempotency-Key` request header on unsafe non-idempotent mutations.
 - List endpoints must document pagination, limits, filtering, sorting, and empty-state behavior.
 - Sensitive mutation endpoints must document idempotency behavior, retry safety, duplicate-submit handling, and any required idempotency key or request fingerprint.
 - Public error contracts must document stable machine-readable codes and any RFC 9457 Problem Details-style fields the project exposes, including safe trace or correlation identifiers when present.

@@ -9,3 +9,5 @@ Reject only these common LLM bad habits:
 - booleans, units, and side-effect functions whose names hide what they represent or change
 
 Prefer names that explain domain intent, user action, state, and boundary responsibility.
+
+Inline comments must explain why, not what. Non-obvious choices (retry strategy, index column order, denormalized field, intentional swallow with named recovery, magic constant tied to an external system) deserve a one-line rationale near the code; comments that paraphrase the code are noise.

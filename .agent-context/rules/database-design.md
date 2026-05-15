@@ -17,6 +17,8 @@ Backend data access rules:
 - Define maximum page size, payload size, and export limits so list responses cannot exhaust memory or connection pools.
 - Mutations that write more than one table, aggregate, queue, or external consistency boundary must run inside a transaction or document the compensating recovery path.
 - Repository and data-access layers own persistence mechanics. They must not hide business policy that belongs in application or domain logic.
+- Index design follows read patterns, not column lists. Prefer composite indexes with selectivity-correct column order (equality before range), partial indexes for soft-delete or status-filtered tables, and covering indexes when a hot read can be satisfied without a heap fetch. Record the read pattern that justifies each non-trivial index.
+- Record explicit decisions for delete semantics (hard delete, soft delete, append-only audit), tenant isolation (none, row-level with `tenant_id` plus row-level security, schema-per-tenant), and normalize-vs-denormalize trade-off for read-heavy or sparse data. Default to the simplest fit, but make the choice explicit in data docs rather than letting it become a side effect of the first migration.
 - Cross-domain persistence must respect ownership boundaries. Independent services must not share database tables as an integration contract; modular monoliths may share one database only when module ownership and access paths stay explicit.
 
 Docs must record entity ownership, relationships, constraints, data lifecycle, migration risk, and assumptions to validate.

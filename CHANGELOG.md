@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## 3.0.50 - 2026-05-15
+### Changed
+- Strengthened backend and API governance with explicit liveness/readiness/startup health semantics, domain-fit contract review, command-oriented endpoint guidance, cache and rate-limit documentation, and idempotency requirements for unsafe mutations.
+- Added deeper persistence, observability, recovery, security, naming, and testing guidance covering index rationale, delete and tenancy semantics, structured logs, retry/fallback strategy, public-surface security decisions, why-focused comments, and failure-path tests.
+- Expanded UI craft governance so generated design contracts treat color and typography as explicit systems, including perceptual palette curves, theme persistence, accessible text-on-color pairs, variable typography choices, and font loading strategy.
+
 ## 3.0.49 - 2026-05-14
 ### Changed
 - Added a compact implementation craft layer to UI design bootstrap guidance so agents record CSS decisions for color space, typography scale, spatial rhythm, motion budget, and anti-attractor checks before UI code.
