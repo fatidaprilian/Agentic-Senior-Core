@@ -211,7 +211,7 @@ Revised acceptance criteria:
 - 100% lossless roundtrip per file (existing `roundtrip-validate.mjs` ≥95% substantial-word overlap, validated per file in Task 1.2)
 
 **Tiny-rule policy (locked after Task 1.5 attempted batch):**
-The +15% per-file ceiling is meaningful for medium and large rules, but it breaks down on tiny files because the v4 structural floor is mostly fixed-cost. A trimmed frontmatter block plus one ID-prefixed H2 and numbered list markers added +64 to +104 OpenAI tokens on the first tiny-rule attempt, producing +31.56% to +41.88% despite lossless content. For files below 600 original OpenAI tokens, use the +120-token absolute overhead cap plus the aggregate +5% cap as the enforcement gate. Log the percentage anyway for transparency.
+The +15% per-file ceiling is meaningful for medium and large rules, but it breaks down on tiny files because the v4 structural floor is mostly fixed-cost. A trimmed frontmatter block plus one ID-prefixed H2 and numbered list markers added +64 to +104 OpenAI tokens on the first tiny-rule attempt, producing +31.56% to +41.88% despite lossless content. For files below 600 original OpenAI tokens, use the +120-token absolute overhead cap plus the aggregate +10% cap as the enforcement gate. Log the percentage anyway for transparency.
 
 **Aggregate cap resolution (locked 2026-05-16, Option B):**
 Task 1.5 originally stopped after the first six remaining small-rule migrations (`realtime.md`, `naming-conv.md`, `event-driven.md`, `performance.md`, `microservices.md`, `testing.md`). At that point OpenAI native `with_loaded_rules` was 81,574 tokens vs the Phase 0 baseline of 77,861 (+4.77%), leaving about 180 tokens before the original +5% cap. The next planned file, `error-handling.md`, is loaded by 5 fixtures; its required v4 frontmatter alone adds about +60 OpenAI tokens to the file, projecting a +300 aggregate floor before any ID headings or numbered directives.
@@ -275,8 +275,8 @@ The strategic decision is to relax the aggregate cap from +5% to +10%, backed by
 5. `microservices.md` (2,182 chars) — migrated
 6. `testing.md` (2,115 chars) — migrated
 7. `error-handling.md` (2,315 chars) — migrated
-8. `database-design.md` (2,765 chars)
-9. `security.md` (2,791 chars)
+8. `database-design.md` (2,765 chars) — migrated
+9. `security.md` (2,791 chars) — migrated
 10. `efficiency-vs-hype.md` (2,674 chars)
 11. `docker-runtime.md` (4,302 chars)
 12. `git-workflow.md` (5,176 chars)
