@@ -168,12 +168,16 @@ Maintain CLAUDE.md + GEMINI.md + .cursorrules + .windsurfrules + dll secara manu
 **3. Cache invalidation control**
 Kalau N files maintained manually, drift between files menyebabkan inconsistency. Auto-generate dari single source guarantees parity.
 
+**4. Context-file risk control**
+ArXiv 2602.11988 (Gloaguen et al., ETH Zurich, Feb 2026) menunjukkan repository-level context files tidak otomatis membantu. Pada SWE-bench-style tasks, context files cenderung menurunkan task success rates dibanding no context dan menaikkan inference cost >20%. Finding ini berlaku untuk **LLM-generated dan developer-written context files**. D2 tetap valid karena single source + adapter generator mengurangi drift, tetapi content harus minimal, factual, directive, dan tidak berisi unnecessary requirements.
+
 ### Sources (HIGH confidence — triangulated)
 
 - **agents.md official** — adoption metrics
 - **Linux Foundation AAIF announcement** — Desember 2025
 - **3 research reports** convergence
-- **ArXiv 2601.18341** ETH Zurich — AGENTS.md effective tapi watch content quality
+- **ArXiv 2602.11988** ETH Zurich — context files can reduce task success and increase inference cost >20%
+- **ArXiv 2601.18341** Robbes et al. — coding-agent adoption study across 129K GitHub repositories
 
 ### Edge Cases
 
@@ -189,7 +193,7 @@ Generate AGENTS.md template dari rules pack ini, bukan generate file native lang
 ### What NOT to Do
 
 - ❌ **Maintain N file manually** — drift inevitable
-- ❌ **Generate AGENTS.md content via LLM** — ETH Zurich -3% success
+- ❌ **Generate AGENTS.md content via LLM** — context files can hurt task success; keep canonical context minimal and human-audited
 - ❌ **Skip AGENTS.md** karena tool target tidak support — tetap bikin, lalu adapter
 - ❌ **Hardcode tool-specific format di rules content** — separation of concerns: rules = canonical, adapter = format
 
@@ -457,13 +461,15 @@ Reflection block (forcing function untuk citation) memitigasi:
 - **Default bias** (kembali ke generic solution)
 - **Drift** (awal patuh, makin lama lupa)
 
-**2. Compression Paradox (Pre-Registered RCT)**
+**2. Compression Paradox (provider-dependent + benchmark-dependent)**
 
-ArXiv 2603.23527 (Pre-Registered Randomized Trial, 5400 API calls):
-- Lossy compression input (LLMLingua aggressive r=0.2)
-- Picu **output inflation** sampai +2000% di model open
-- Total cost justru **NAIK 1.8%** karena output token >> input token cost
-- Confirms structural prohibition
+ArXiv 2603.23528 (Johnson, "Provider-Dependent Energy Effects") menunjukkan lossy prompt compression bukan optimisasi aman untuk rules content:
+- DeepSeek-Chat output expansion mencapai **+2,140%** pada MBPP dengan r=0.3
+- GPT-4o-mini comparatively stable, jadi efeknya **provider-dependent**
+- Input-token reduction saja bukan strategi cost/energy yang reliable karena output token bisa meledak
+- Confirms structural prohibition for rules content
+
+ArXiv 2603.23527 adalah replication/extension, bukan primary +2000% source. Finding utamanya: output explosion juga **benchmark-dependent** — severe di MBPP (56x) tetapi jauh lebih rendah di HumanEval (5x). Jadi klaim yang benar bukan "universal +2000%", melainkan "worst-case pada MBPP/DeepSeek, benchmark-dependent".
 
 **3. Anti-sycophancy critical 2026**
 
@@ -479,7 +485,8 @@ Benchmark komprehensif 693 trajectories untuk hallucination attribution. Provide
 ### Sources (HIGH confidence)
 
 - **MMMT-IF / ManyIFEval** — paper data
-- **ArXiv 2603.23527** — Compression Paradox RCT
+- **ArXiv 2603.23528** — Compression Paradox primary study
+- **ArXiv 2603.23527** — benchmark-dependent replication/extension
 - **ArXiv 2601.06818** — AgentHallu framework
 - **3 reports** convergence anti-halu mechanisms
 
@@ -526,8 +533,10 @@ Ranked by trust level. Klaim dari sources HIGH bisa dipakai langsung sebagai fou
 
 - **OpenReview ICLR 2026** — Curse of Instructions
 - **EACL Findings 2026** — Structured format superiority
-- **ArXiv 2601.18341** — ETH Zurich AGENTS.md study
-- **ArXiv 2603.23527** — Compression Paradox RCT
+- **ArXiv 2602.11988** — ETH Zurich AGENTS.md/context-file evaluation
+- **ArXiv 2601.18341** — Robbes et al. coding-agent adoption study
+- **ArXiv 2603.23528** — Compression Paradox primary study
+- **ArXiv 2603.23527** — Compression Paradox benchmark-dependent replication/extension
 - **ArXiv 2601.06818** — AgentHallu framework
 - **GitHub Issue anthropics/claude-code #46829** — TTL regression evidence
 - **agents.md official** — adoption metrics
@@ -560,7 +569,9 @@ Setiap kali decision di-update, log di sini dengan tanggal + alasan.
 |---|---|---|---|
 | 2026-05-16 | All D1-D6 | Initial creation | Triangulated dari 3 research reports |
 | 2026-05-16 | D1 | Added pilot finding caveat about lean-prose markup floor | Phase 1 Task 1.2 helper output on `frontend-architecture.md` measured +9.71% delta. Cost decomposition revealed structural markup floor of ~+282 tokens. The 15-25% token reduction estimate was inherited from generic prose-vs-structured comparisons and does not apply to already-condensed instruction text. Research-backed reasoning accuracy benefit remains valid; Phase 1 GATE B revised to gate on no-regression discipline plus citability quality. |
+| 2026-05-16 | D2 | Corrected AGENTS.md/context-file source attribution | ArXiv 2601.18341 is Robbes et al.'s coding-agent adoption study across 129K GitHub repositories, not an ETH Zurich content-quality study. The correct ETH Zurich source is arXiv 2602.11988 (Gloaguen et al., Feb 2026). Verified finding: both LLM-generated and developer-written context files tend to reduce task success rates versus no context and increase inference cost >20%. D2 remains valid, but the justification is context minimalism and drift control, not a narrow LLM-generated-only warning. |
+| 2026-05-16 | D6 | Corrected Compression Paradox source IDs and scope | ArXiv 2603.23528 is the primary Johnson paper with DeepSeek-Chat output expansion +2,140% at r=0.3 on MBPP. ArXiv 2603.23527 is the replication/extension showing output explosion is benchmark-dependent (MBPP severe, HumanEval lower) and GPT-4o-mini comparatively stable. The prohibition on lossy compression for rules remains valid, but the claim is worst-case MBPP/DeepSeek and benchmark-dependent, not universal +2000%. |
 
 ---
 
-**Last updated:** 2026-05-16. Updated D1 with Phase 1 pilot finding caveat. Update dokumen ini setiap encounter edge case yang sering terjadi (add ke section Edge Cases) atau setiap new research findings post-Mei 2026 yang challenge decisions yang ada.
+**Last updated:** 2026-05-16. Updated D1 with Phase 1 pilot finding caveat; corrected D2 AGENTS.md/context-file attribution; corrected D6 Compression Paradox source IDs and scope. Update dokumen ini setiap encounter edge case yang sering terjadi (add ke section Edge Cases) atau setiap new research findings post-Mei 2026 yang challenge decisions yang ada.
