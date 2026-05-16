@@ -122,9 +122,10 @@ Not OK example (ETH Zurich red flag):
 
 When one rule mentions another:
 
-- Inline reference in body: cite the section ID, e.g. `(see FE-014)`. The validate gate will check that referenced IDs exist.
+- Inline reference in body uses the machine-parseable form `[REF:<PREFIX>-NNN]` or `[REF:<PREFIX>-NNN-A]` for sub-IDs. The validate gate matches them with the regex `/\[REF:[A-Z]+-\d{3,4}\]/` and confirms every match resolves to an existing section ID somewhere in the rules pack.
 - Filesystem path references stay valid for backward compat (e.g. `frontend-architecture.md` mentions still resolve in the routing table).
-- Avoid wikilinks and arbitrary anchor IDs; only `<PREFIX>-NNN` form is canonical.
+- Avoid wikilinks, parenthesized prose like `(see FOO-014)`, and arbitrary anchor IDs. Only the `[REF:<PREFIX>-NNN]` form is canonical.
+- Phase 3 reflection blocks consume the same regex when validating that the agent cited a real rule before acting.
 
 ## 3. ID Prefix Table (Locked)
 
@@ -163,7 +164,7 @@ The validate gate gains these checks during Task 1.7:
 - `id.format` — every section heading matches `^## <PREFIX>-\d{3}(-[A-Z])?: .+$` for that file's prefix.
 - `id.contiguous-warn` — warns (not fails) if section IDs skip more than 5 numbers in a row, suggesting a forgotten tombstone.
 - `keywords.snippet-coverage` — every kebab-case keyword from the legacy `REQUIRED_*_SNIPPETS` validate config is present either in body, in `keywords` frontmatter, or has been moved to a documented new home.
-- `cross-ref.resolves` — every `<PREFIX>-NNN` mention in body resolves to a real section ID somewhere in the rules pack.
+- `cross-ref.resolves` — every `[REF:<PREFIX>-NNN]` mention in body matches the regex `/\[REF:[A-Z]+-\d{3,4}\]/` and resolves to a real section ID somewhere in the rules pack. Resolution is exact (case-sensitive prefix, exact integer).
 - `intro.length` — optional intro is max 3 sentences when present.
 
 ## 5. Migration Mapping for `frontend-architecture.md`
