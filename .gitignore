@@ -23,6 +23,11 @@ bun.lockb
 .agentic-backup/
 .benchmarks/
 
+# Benchmarks: track published results, ignore local cache
+benchmarks/.cache/
+!benchmarks/results/
+!benchmarks/results/*.json
+
 # Local generated artifacts
 .agent-instructions.md
 .clauderc
