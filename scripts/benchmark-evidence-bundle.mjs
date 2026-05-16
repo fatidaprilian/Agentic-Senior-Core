@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+// @file-size-exception: Pre-existing benchmark bundler (sequential per-section assembly); planned for split in Phase 1.
 /**
  * benchmark-evidence-bundle.mjs
  *

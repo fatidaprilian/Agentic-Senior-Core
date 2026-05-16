@@ -1,3 +1,4 @@
+// @file-size-exception: Pure config table aggregation (snippet expectation lists); deferred to Phase 1 split.
 export const ALLOWED_SEVERITIES = new Set(['critical', 'high', 'medium', 'low']);
 export const THIN_ADAPTER_PATHS = [
   'CLAUDE.md',

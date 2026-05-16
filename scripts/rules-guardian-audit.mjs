@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+// @file-size-exception: Pre-existing audit script (sequential rules-guardian checks); planned for split in Phase 1.
 /**
  * rules-guardian-audit.mjs
  *

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+// @file-size-exception: Pre-existing 600 LOC main validator orchestrator; planned for split in Phase 1 governance refactor.
 /**
  * validate.mjs — Repository Integrity Validator
  *
@@ -17,6 +18,7 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ALLOWED_SEVERITIES } from './validate/config.mjs';
+import { runAuditFileSize } from './audit-file-size.mjs';
 import {
   validateDependencyFreshnessAutomationCoverage,
   validateDetectionTransparencyCoverage,
@@ -495,6 +497,19 @@ async function validateDocumentationFlow() {
   }
 }
 
+async function validateFileSizeAudit() {
+  console.log('\nChecking file size threshold (audit:file-size)...');
+  const report = runAuditFileSize();
+
+  if (report.passed) {
+    pass(`File size audit clean: ${report.scannedFileCount} files scanned, ${report.exemptedCount} exempted under @file-size-exception`);
+  } else {
+    for (const violation of report.violations) {
+      fail(`File exceeds ${report.threshold} LOC: ${violation.filePath} (${violation.lineCount} LOC). Split into focused submodules or declare a justified // @file-size-exception: <reason> marker in the first 5 lines.`);
+    }
+  }
+}
+
 async function validateMcpConfiguration() {
   console.log('\nChecking MCP configuration...');
 
@@ -576,6 +591,7 @@ async function main() {
   await validateHumanWritingGovernance(coverageValidationContext);
   await validateInstructionAdapters(coverageValidationContext);
   await validateSkillPurgeSurface(coverageValidationContext);
+  await validateFileSizeAudit();
 
   console.log('\n===============================================');
   console.log('  RESULTS');
