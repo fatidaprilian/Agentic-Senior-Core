@@ -1,6 +1,6 @@
 # Phase 1 Outcome — Format Migration
 
-> **Status:** Completed on 2026-05-16. Phase 2 is awaiting GATE C approval.
+> **Status:** Completed on 2026-05-16. GATE C Option A was accepted; Phase 2 plan is generated.
 > **Scope:** Convert the internal rules pack to v4 numbered Markdown with YAML frontmatter and stable citation IDs.
 
 ---
@@ -113,7 +113,7 @@ The per-fixture percentages can exceed +10% on high-rule-load fixtures; the lock
 - Phase 1 increased cold input tokens by +8.86% in the primary OpenAI comparator. This is accepted under the revised +10% aggregate cap because the format's primary value is stable citability for Phase 3, not raw cold-token reduction.
 - `AGENTS.md` still has the existing non-blocking validator warning about no local manifest links.
 - Anthropic counts remain `cl100k_base` estimates because the API count-tokens call was unavailable during Phase 0; OpenAI and Gemini remain the high-confidence comparators.
-- `phase-2-caching.md` has not been generated. It waits for GATE C approval.
+- `phase-2-caching.md` is generated after GATE C Option A approval.
 
 ---
 
@@ -131,8 +131,10 @@ Source: Anthropic prompt caching docs, `https://docs.anthropic.com/en/docs/build
 
 ---
 
-## Gate C Questions
+## Gate C Resolution
 
-1. Confirm Phase 1 is complete.
-2. Approve Phase 2 caching direction or provide adjustments.
-3. Keep `4.0.0-rc.1` unpublished until Phase 5 hardening, unless early adopter RC feedback is needed sooner.
+Option A was accepted on 2026-05-16:
+
+1. Phase 1 is accepted as complete.
+2. Phase 2 caching direction is approved.
+3. `4.0.0-rc.1` remains unpublished until Phase 5 hardening.
