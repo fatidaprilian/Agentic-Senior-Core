@@ -347,12 +347,30 @@ Custom rules yang sering berubah = Layer 3 (dynamic), bukan Layer 2. Layer 2 = "
 
 Ya, tapi clear session sebelum task baru. Power user pattern: clear session kalau sudah >N turns. Saving 30-70%.
 
+### Per-Tool Caching Scope Matrix
+
+D4's measurable warm-cache reduction (e.g. 89.31% effective reduction reported in `benchmarks/results/cache-phase-2-2026-05-16.json` for Anthropic `with_loaded_rules`) is computed against direct provider APIs using documented prompt-caching multipliers. Many users consume this rules pack through IDE wrapper tools, which abstract the caching boundary. The benefit reaches them only as prefix stability, not as a measurable token-cost line item attributable to this package.
+
+**Scope statement:** Direct API integration plus Claude Code SDK programmatic mode = measurable saving via the documented multipliers. IDE wrapper integration (Cursor, Windsurf, Kiro, Codex CLI) = indirect benefit via prefix stability; the saving is not measurable from the rules pack side because the wrapper controls the request path.
+
+| Tool / integration | User control over cache | Measurable from rules pack | Documented saving | Source |
+|---|---|---|---|---|
+| Claude Code SDK (programmatic) | Yes — `cache_control` honored | Yes | up to 90% on cache reads | https://www.claude.com/blog/lessons-from-building-claude-code-prompt-caching-is-everything |
+| Claude Code CLI | No — caching internal | No | Indirect via prefix stability | https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts |
+| Cursor | No — caching abstracted | No | No public docs | https://docs.cursor.com/context/rules |
+| Windsurf | No — caching abstracted | No | No public docs | https://docs.windsurf.com/windsurf/cascade/memories |
+| Codex CLI / OpenAI | No — auto prefix detect | No | Eligibility only, model-specific pricing | https://developers.openai.com/codex |
+| Kiro | Unknown | No | No public caching docs | n/a |
+
+When reporting caching numbers, never publish a single universal "caching_saving" figure that mixes these integration modes. Use the per-integration JSON shape documented in `docs/benchmark-reference.md` ("Caching Effectiveness Reporting Format") and label each row with its integration mode.
+
 ### What NOT to Do
 
 - ❌ **Insert dynamic content di Layer 1** — invalidate cache
 - ❌ **Reorder Layer 1 antar request** — exact prefix match break
 - ❌ **Forget cache_control marker untuk Claude** — manual cache miss
 - ❌ **Skip layer separator markers** — agent harus tahu mana yang stable
+- ❌ **Publish universal caching saving across IDE wrappers** — measurable saving only applies to direct API plus Claude Code SDK programmatic; IDE wrapper saving is indirect prefix stability and not measurable from the rules pack side
 
 ---
 
@@ -571,7 +589,8 @@ Setiap kali decision di-update, log di sini dengan tanggal + alasan.
 | 2026-05-16 | D1 | Added pilot finding caveat about lean-prose markup floor | Phase 1 Task 1.2 helper output on `frontend-architecture.md` measured +9.71% delta. Cost decomposition revealed structural markup floor of ~+282 tokens. The 15-25% token reduction estimate was inherited from generic prose-vs-structured comparisons and does not apply to already-condensed instruction text. Research-backed reasoning accuracy benefit remains valid; Phase 1 GATE B revised to gate on no-regression discipline plus citability quality. |
 | 2026-05-16 | D2 | Corrected AGENTS.md/context-file source attribution | ArXiv 2601.18341 is Robbes et al.'s coding-agent adoption study across 129K GitHub repositories, not an ETH Zurich content-quality study. The correct ETH Zurich source is arXiv 2602.11988 (Gloaguen et al., Feb 2026). Verified finding: both LLM-generated and developer-written context files tend to reduce task success rates versus no context and increase inference cost >20%. D2 remains valid, but the justification is context minimalism and drift control, not a narrow LLM-generated-only warning. |
 | 2026-05-16 | D6 | Corrected Compression Paradox source IDs and scope | ArXiv 2603.23528 is the primary Johnson paper with DeepSeek-Chat output expansion +2,140% at r=0.3 on MBPP. ArXiv 2603.23527 is the replication/extension showing output explosion is benchmark-dependent (MBPP severe, HumanEval lower) and GPT-4o-mini comparatively stable. The prohibition on lossy compression for rules remains valid, but the claim is worst-case MBPP/DeepSeek and benchmark-dependent, not universal +2000%. |
+| 2026-05-16 | D4 | Added per-tool caching scope matrix and integration-mode caveat | The 89.31% Anthropic warm-cache effective reduction in `benchmarks/results/cache-phase-2-2026-05-16.json` is valid only for direct provider APIs and Claude Code SDK programmatic mode where `cache_control` is user-controlled. IDE wrapper integrations (Cursor, Windsurf, Codex CLI, Kiro) abstract the caching boundary; the benefit reaches those users as prefix stability, not as measurable token saving from the rules pack side. Added a 6-tool matrix with citation URLs and a "never publish a single universal caching_saving number" rule. Trust: HIGH (verified per-tool source URLs). |
 
 ---
 
-**Last updated:** 2026-05-16. Updated D1 with Phase 1 pilot finding caveat; corrected D2 AGENTS.md/context-file attribution; corrected D6 Compression Paradox source IDs and scope. Update dokumen ini setiap encounter edge case yang sering terjadi (add ke section Edge Cases) atau setiap new research findings post-Mei 2026 yang challenge decisions yang ada.
+**Last updated:** 2026-05-16. Updated D1 with Phase 1 pilot finding caveat; corrected D2 AGENTS.md/context-file attribution; corrected D6 Compression Paradox source IDs and scope; added D4 per-tool caching scope matrix and integration-mode caveat. Update dokumen ini setiap encounter edge case yang sering terjadi (add ke section Edge Cases) atau setiap new research findings post-Mei 2026 yang challenge decisions yang ada.
