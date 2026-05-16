@@ -28,8 +28,9 @@
 
 1. Run `npm run check:adapters` to verify native import bridges.
 2. Run `npm run validate` for repository integrity, docs, policy, and instruction-surface checks.
-3. Run `npm test` for CLI smoke tests, MCP tests, LLM judge tests, operations tests, UI rubric tests, and knowledge-injection tests.
-4. Run `npm run gate:release` before release or publish work.
+3. Run `npm run audit:cache-layer-contract` when prompt-caching layers, cache simulation, or validation wiring changes.
+4. Run `npm test` for CLI smoke tests, MCP tests, LLM judge tests, operations tests, UI rubric tests, and knowledge-injection tests.
+5. Run `npm run gate:release` before release or publish work.
 
 ## Failure And Rollback
 

@@ -320,17 +320,18 @@ The benchmark harness should produce the contract from the real assembled benchm
 4. Add tests for failure behavior if practical.
 
 **Acceptance criteria:**
-- [ ] `npm run audit:cache-layer-contract` exists.
-- [ ] `npm run validate` includes the audit.
-- [ ] Audit fails on volatile markers in cacheable layers.
-- [ ] Validate count increases from 557.
-- [ ] `npm test` count does not drop.
+- [x] `npm run audit:cache-layer-contract` exists.
+- [x] `npm run validate` includes the audit.
+- [x] Audit fails on volatile markers in cacheable layers.
+- [x] Validate count increases from 557.
+- [x] `npm test` count does not drop.
 
 **Files allowed:**
 - `scripts/audit-cache-layer-contract.mjs`
 - `scripts/validate.mjs`
 - `package.json`
 - `tests/operations.test.mjs`
+- `docs/flow-overview.md` (documentation-boundary gate sync)
 
 ---
 

@@ -376,6 +376,18 @@ test('Operations Tests', async (t) => {
     assert.equal(typeof tokenBenchmarkReport.summary.averageNativeSavingsPercent, 'number');
   });
 
+  await t.test('cache layer contract audit outputs machine-readable report', () => {
+    const cacheLayerAuditOutput = execSync(`node ${join(process.cwd(), 'scripts', 'audit-cache-layer-contract.mjs')} --json`).toString();
+    const cacheLayerAuditReport = JSON.parse(cacheLayerAuditOutput);
+
+    assert.equal(cacheLayerAuditReport.auditName, 'audit-cache-layer-contract');
+    assert.equal(cacheLayerAuditReport.passed, true);
+    assert.equal(cacheLayerAuditReport.violationCount, 0);
+    assert.equal(cacheLayerAuditReport.providerCount, 6);
+    assert.equal(cacheLayerAuditReport.fixtureCount, 10);
+    assert.equal(cacheLayerAuditReport.resultCount, 120);
+  });
+
   await t.test('quality trend report outputs machine-readable report', () => {
     const qualityTrendOutput = execSync(`node ${join(process.cwd(), 'scripts', 'quality-trend-report.mjs')} --stdout-only`).toString();
     const qualityTrendReport = JSON.parse(qualityTrendOutput);

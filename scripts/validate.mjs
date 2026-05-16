@@ -18,6 +18,7 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ALLOWED_SEVERITIES } from './validate/config.mjs';
+import { runCacheLayerContractAudit } from './audit-cache-layer-contract.mjs';
 import { runAuditFileSize } from './audit-file-size.mjs';
 import { runRuleIdUniquenessAudit } from './audit-rule-id-uniqueness.mjs';
 import {
@@ -148,6 +149,7 @@ async function validateRequiredFiles() {
     'scripts/rules-guardian-audit.mjs',
     'scripts/explain-on-demand-audit.mjs',
     'scripts/single-source-lazy-loading-audit.mjs',
+    'scripts/audit-cache-layer-contract.mjs',
     'scripts/sync-thin-adapters.mjs',
     'scripts/v3-purge-audit.mjs',
     'scripts/release-gate.mjs',
@@ -511,6 +513,19 @@ async function validateFileSizeAudit() {
   }
 }
 
+async function validateCacheLayerContractAudit() {
+  console.log('\nChecking cache layer contract (audit:cache-layer-contract)...');
+  const report = runCacheLayerContractAudit();
+
+  if (report.passed) {
+    pass(`Cache layer contract audit clean: ${report.providerCount} provider(s), ${report.fixtureCount} fixture(s), ${report.resultCount} result row(s)`);
+  } else {
+    for (const violation of report.violations) {
+      fail(`Cache layer contract violation [${violation.kind}]: ${violation.detail}`);
+    }
+  }
+}
+
 async function validateRuleIdUniquenessAudit() {
   console.log('\nChecking rule ID uniqueness (audit:rule-id-uniqueness)...');
   const report = runRuleIdUniquenessAudit();
@@ -605,6 +620,7 @@ async function main() {
   await validateHumanWritingGovernance(coverageValidationContext);
   await validateInstructionAdapters(coverageValidationContext);
   await validateSkillPurgeSurface(coverageValidationContext);
+  await validateCacheLayerContractAudit();
   await validateFileSizeAudit();
   await validateRuleIdUniquenessAudit();
 

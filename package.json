@@ -56,6 +56,7 @@
     "audit:rules-guardian": "node ./scripts/rules-guardian-audit.mjs",
     "audit:explain-on-demand": "node ./scripts/explain-on-demand-audit.mjs",
     "audit:single-source-lazy-loading": "node ./scripts/single-source-lazy-loading-audit.mjs",
+    "audit:cache-layer-contract": "node ./scripts/audit-cache-layer-contract.mjs",
     "audit:file-size": "node ./scripts/audit-file-size.mjs",
     "audit:rule-id-uniqueness": "node ./scripts/audit-rule-id-uniqueness.mjs",
     "audit:v3-purge": "node ./scripts/v3-purge-audit.mjs",
