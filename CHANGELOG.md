@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Split `scripts/llm-judge.mjs` into focused submodules under `scripts/llm-judge/` (constants, checklist-loader, diff-collection, prompting, providers, verdict). The CLI entry file keeps the same flags and exit semantics; behavior is unchanged.
 - Split `lib/cli/detector.mjs` into focused submodules under `lib/cli/detector/` (constants, workspace-scan, ui-signals, stack-detection). The aggregator preserves the public exports (`collectProjectMarkers`, `detectProjectContext`, `detectUiScopeSignals`, `buildDetectionSummary`, `formatDetectionCandidates`); behavior is unchanged.
 - Split `lib/cli/project-scaffolder/design-contract.mjs` into focused submodules under `design-contract/` (signal-vocab, seed-signals, sections/conceptual-anchor, sections/audits, sections/execution-handoff). The aggregator preserves the public exports (`shouldBootstrapDesignDocument`, `buildDesignIntentSeed`, `buildDesignIntentSeedFromSignals`, plus the validation re-exports); the produced contract JSON shape is unchanged.
+- Split `lib/cli/project-scaffolder/design-contract/validation.mjs` into focused validators under `design-contract/validation/` (helpers, completeness, structural-validators, anchor-validators, audit-validators, system-validators, execution-validators). The aggregator preserves the public exports (`validateDesignContractCompleteness`, `validateDesignIntentContract`); error messages and ordering are unchanged.
 
 ### Fixed
 
