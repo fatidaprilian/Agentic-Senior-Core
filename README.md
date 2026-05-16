@@ -10,7 +10,7 @@
 **Production-grade Rules Engine (Governance Engine) for AI coding agents.**
 Works with Cursor, Windsurf, GitHub Copilot, Claude Code, Gemini, and other LLM-powered IDE workflows.
 
-Current package version: 4.0.0-rc.1 (release candidate, unpublished). Last published version: 3.0.50.
+Current package version: 4.0.0. Last published version before this release: 3.0.50.
 
 Highlights:
 - Uses `AGENTS.md` as the canonical instruction entrypoint.
@@ -22,16 +22,14 @@ Highlights:
 
 ---
 
-## What's New in v4 (Release Candidate)
+## What's New in v4
 
-The internal `.agent-context/rules/` pack is now numbered Markdown with YAML frontmatter and stable section IDs (e.g. `FE-004`, `ARCH-009`, `API-006`). This is a breaking change for downstream consumers that parse rule headings; the migration guide lives in `CHANGELOG.md` under `4.0.0-rc.1`. Repository-wide impact:
+The internal `.agent-context/rules/` pack is now numbered Markdown with YAML frontmatter and stable section IDs (e.g. `FE-004`, `ARCH-009`, `API-006`). This is a breaking change for downstream consumers that parse rule headings; the migration guide lives in `CHANGELOG.md` under `4.0.0`. Repository-wide impact:
 
 - Rules are now citable by ID, which the new bounded reflection block in `AGENTS.md` and the validation MCP tools (`lookup_rule`, `validate_against_rules`, `audit_compliance`) rely on.
 - A three-layer prompt caching contract (D4 in `docs/plan/research-foundation.md`) is now enforced by `npm run audit:cache-layer-contract`.
 - A provider-free anti-halu benchmark is included (`benchmarks/anti-halu/`); pass rate and citation validity are reproducible locally.
 - Caching numbers are scoped per integration. The 89.31% Anthropic warm-cache effective reduction reported in `benchmarks/results/cache-phase-2-2026-05-16.json` applies to direct provider API and Claude Code SDK programmatic mode only. IDE wrapper integrations (Cursor, Windsurf, Codex CLI, Kiro) receive prefix stability without a measurable per-pack saving. See `docs/integration-playbook.md` for the per-tool matrix and `docs/benchmark-reference.md` for the required reporting JSON shape.
-
-`4.0.0-rc.1` is locked locally and unpublished. Publishing waits on the Gate D release decision documented in `docs/plan/phase-5-hardening.md`.
 
 
 ## 60-Second Start
