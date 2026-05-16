@@ -114,7 +114,7 @@ docs/plan/
 | Phase | Status | Started | Completed | Notes |
 |-------|--------|---------|-----------|-------|
 | Phase 0 — Baseline & Cleanup | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-0-outcome.md`. GATE D approved. |
-| Phase 1 — Format Migration | 🟡 Ready to start | — | — | Detailed di `phase-1-format.md`. Decision B = B1 (hard cut v4.0.0). |
+| Phase 1 — Format Migration | 🟡 In progress | 2026-05-16 | — | Detailed di `phase-1-format.md`. Task 1.5 stopped at aggregate cap; strategy revision locked Option A. |
 | Phase 2 — Caching Layer | ⏸ Locked | — | — | Generate setelah Phase 1 selesai |
 | Phase 3 — Anti-Halu | ⏸ Locked | — | — | Generate setelah Phase 2 selesai |
 | Phase 4 — Retrieval (conditional) | ⏸ Locked | — | — | Skip kalau Phase 3 quality target tercapai |
@@ -150,6 +150,7 @@ Decision yang sudah dijawab user dan locked:
 - **Decision B (Phase 1 timing): B1 (hard cut at v4.0.0).** Format lama di-drop, migration tool wajib. CHANGELOG migration guide mandatory.
 - **Anthropic counter accuracy:** Skip top-up. Claude tetap pakai `tiktoken cl100k_base` estimate dengan `accurate=false` flag (~0.11% deviation vs OpenAI native, acceptable as relative comparator).
 - **Tiny-rule token gate:** Rule files below 600 original OpenAI tokens keep the same v4 format but use a +120 OpenAI-token absolute overhead cap instead of the +15% per-file percentage cap. Aggregate Phase 1 cap remains +5%.
+- **Aggregate cap strategy:** Option A locked on 2026-05-16. Stop Task 1.5 after 8 migrated rules at OpenAI native +4.77% aggregate delta. Defer the 7 remaining pre-migration rules until a token-offset strategy is approved; do not relax the +5% aggregate cap silently.
 
 Tidak ada pending decision yang block Phase 1. Phase 2+ pending decisions akan ditambahkan saat phase relevant.
 
