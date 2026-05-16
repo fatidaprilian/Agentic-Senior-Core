@@ -6,9 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
+## 4.0.0-rc.1 - 2026-05-16
+### Breaking changes
+- Converted the internal `.agent-context/rules/` pack from prose Markdown to v4 numbered Markdown with YAML frontmatter and stable section IDs. Downstream consumers that parse rule headings must update from prose section names to `<PREFIX>-NNN` headings such as `FE-004`, `ARCH-009`, and `API-006`.
+- Removed the v3 prose-shape compatibility assumption for rule files. The package now treats frontmatter, `id_prefix`, `keywords`, and ID-prefixed `##` headings as the canonical rule format.
+
+### Migration guide
+Consumers that only import `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md` do not need code changes. The root routing table still names the same rule files and now includes each file's ID prefix for citation.
+
+Consumers that inspect `.agent-context/rules/*.md` directly should parse YAML frontmatter first, then use `## <PREFIX>-NNN: <Title>` headings as stable anchors. Do not depend on old prose-only headings, heading order without IDs, or unnumbered bullet structure.
+
 ### Changed
 - Added `scripts/migrate-rule-format.mjs` plus the focused submodules under `scripts/migrate-rule-format/` (`id-prefix-table`, `parse-legacy`, `render-new`, `roundtrip-validate`). The helper takes a legacy rule file and produces a v4 candidate with assigned section IDs, validates substance roundtrip at >=95% word-set overlap, and reports per-file token deltas using the offline OpenAI tiktoken counter. Used during Phase 1 Task 1.3 onwards. SDK in `devDependencies` only (`yaml`); runtime dependencies still empty.
 - Added `tests/migrate-rule-format.test.mjs` with 19 tests covering the prefix table, parser, renderer, sentence-boundary edge cases (file paths, dotted versions, domain literals, abbreviations), roundtrip checker, and the end-to-end migration helper. Test count rises from 125 to 144. The new test file is wired into `npm test`.
+- Updated release validation to accept full SemVer prerelease/build identifiers so release candidates such as `4.0.0-rc.1` pass the package metadata and release-gate checks.
 - Updated `.gitignore` to keep `*.candidate.md` files inside `.agent-context/rules/` and `.tmp-*.mjs` probes out of version control. Migration candidates are reviewer-only artifacts; the `--apply` flag overwrites the source file when ready.
 - Hardened `paragraphSplitsIntoDirectives` in the migration renderer. Sentence boundaries now require punctuation followed by whitespace plus an uppercase letter, backtick, or opening parenthesis. File paths (`docs/DESIGN.md`), dotted versions (`v1.5`), domain literals (`example.com`), and internal abbreviation periods (`e.g.`, `i.e.`) no longer break a paragraph mid-clause. Pilot delta on `frontend-architecture.md` improved from +9.71% to +9.06% as a side effect of recovering the FE-003 directives that the earlier splitter mangled.
 - Added `scripts/audit-rule-id-uniqueness.mjs` plus an `audit:rule-id-uniqueness` npm script wired into `npm run validate`. The audit checks YAML frontmatter shape, section ID prefix and uniqueness, `[REF:<PREFIX>-NNN]` resolution, optional `related: { <PARENT-ID>: [...refs] }` resolution, and ambiguous prose references (`see above`, `as noted earlier`, etc.) across `.agent-context/rules/`, `.agent-context/prompts/`, and `.agent-context/review-checklists/`. Pre-migration files (no YAML frontmatter) are skipped with a notice; the audit only enforces shape on migrated files.

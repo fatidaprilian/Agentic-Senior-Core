@@ -361,7 +361,7 @@ async function validatePackageMetadata() {
   console.log('\nChecking package metadata...');
 
   const packageJson = JSON.parse(await readTextFile(PACKAGE_JSON_PATH));
-  const versionPattern = /^\d+\.\d+\.\d+$/;
+  const versionPattern = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
   if (typeof packageJson.version !== 'string' || !versionPattern.test(packageJson.version)) {
     fail('package.json version must be a semantic version string');

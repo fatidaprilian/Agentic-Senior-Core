@@ -47,7 +47,7 @@ export function runStaticReleaseChecks(results, diagnostics) {
   if (!releaseVersion || !VERSION_PATTERN.test(releaseVersion)) {
     pushResult(results, false, 'version-semver', `Invalid package version: ${String(releaseVersion)}`);
   } else {
-    pushResult(results, true, 'version-semver', `Version ${releaseVersion} matches x.y.z format`);
+    pushResult(results, true, 'version-semver', `Version ${releaseVersion} matches SemVer format`);
   }
 
   const changelogContent = readText(changelogPath);
