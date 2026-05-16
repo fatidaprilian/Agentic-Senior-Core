@@ -1,23 +1,23 @@
 # Auto-generated handoff state. DO NOT EDIT MANUALLY.
 # Used by next agent via HANDOFF-CONTINUE prompt.
 
-generated_at: "2026-05-16T13:05:00Z"
+generated_at: "2026-05-16T13:55:00Z"
 agent_environment: "Codex"
 
 last_completed:
   phase: 1
-  task_id: "1.4"
-  task_description: "Migrate architecture.md to v4 numbered format"
-  commit_sha: "aa48d89"
-  completed_at: "2026-05-16T12:25:00Z"
+  task_id: "1.5-batch-2"
+  task_description: "Migrate six remaining small rule files to v4 numbered format"
+  commit_sha: "4cc7784"
+  completed_at: "2026-05-16T13:50:00Z"
 
 in_progress:
   phase: 1
   task_id: "1.5"
-  status: "not-started"
+  status: "blocked-on-user"
   files_being_modified: []
-  last_action_taken: "Resolved Task 1.5 tiny-rule escalation by adopting a +120 OpenAI-token absolute overhead cap for original files below 600 OpenAI tokens; reverted the failed tiny-file trial edits before policy update."
-  next_action_planned: "Resume Task 1.5: bulk-migrate the remaining 13 rule files in size-ascending order. For files below 600 original OpenAI tokens, track absolute overhead <=+120 tokens and log percent delta for transparency. For files at or above 600 original OpenAI tokens, keep the +15% per-file ceiling. Keep aggregate Phase 1 cap <=+5%."
+  last_action_taken: "Committed Task 1.5 small-rule batches: realtime.md, naming-conv.md, event-driven.md, performance.md, microservices.md, and testing.md. Tests passed 144/144; validate passed 556/0 with 2 existing warnings; refreshed baseline-2026-05-16.json."
+  next_action_planned: "Await user decision on aggregate cap escalation before migrating error-handling.md. Current OpenAI with_loaded_rules total is 81,574 vs Phase 0 baseline 77,861 (+4.77%), leaving only ~180 tokens before the +5% cap. error-handling.md is loaded in 5 fixtures; required frontmatter alone adds +60 tokens to the file, projecting a +300 aggregate floor before ID headings or numbered directives."
 
 metrics_so_far:
   baseline_reference: "benchmarks/results/baseline-2026-05-16.json"
@@ -39,10 +39,10 @@ metrics_so_far:
       sections: ["ARCH-001 through ARCH-012"]
       cross_refs_added: 1
       measured_at: "2026-05-16T12:20:00Z"
-  aggregate_delta_so_far_pct: 0.99
-  aggregate_delta_basis: "OpenAI native counts across 10 fixtures with_loaded_rules totals; +771 tokens out of ~77,861 baseline. Will recompute per Task 1.5 commit."
-  files_migrated: 2
-  files_remaining: 13
+  aggregate_delta_so_far_pct: 4.77
+  aggregate_delta_basis: "Superseded by Task 1.5 batch measurements; current OpenAI native with_loaded_rules total is 81,574 vs Phase 0 baseline 77,861 (+4.77%)."
+  files_migrated: 8
+  files_remaining: 7
 
 decisions_made_in_session:
   - decision: "Drop related: {} frontmatter map after pilot measurement"
@@ -71,17 +71,30 @@ decisions_made_in_session:
     commit_sha: "370655e"
 
 escalation_pending:
-  has_pending: false
-  category: null
-  question_for_user: null
-  context: null
-  options_presented: []
+  has_pending: true
+  category: "C-strategic"
+  question_for_user: "Current aggregate token delta is +4.77% and the next planned file (error-handling.md) has a required-frontmatter-only aggregate floor of +300 tokens, which would exceed the +5% Phase 1 cap. Choose whether to stop Phase 1 migration here and revisit format strategy, relax the aggregate cap, or change migration ordering/benchmark gates."
+  context: "Phase 1 GATE B aggregate cap is <=+5%. Current OpenAI native with_loaded_rules total: 81,574. Phase 0 baseline: 77,861. +5% cap: ~81,754. error-handling.md is loaded by 5 fixtures; required v4 frontmatter alone increases the file by +60 OpenAI tokens, projecting +300 aggregate before any ID headings or numbered directives."
+  options_presented:
+    - option: "A"
+      description: "Stop Task 1.5 now and revise the Phase 1 format/aggregate strategy before migrating more rule files."
+      recommendation_strength: "recommended"
+      tradeoffs: "Protects the locked +5% cap and avoids cosmetic migration. Requires strategic adjustment before all 15 rules can be v4."
+    - option: "B"
+      description: "Relax the aggregate cap from +5% to a higher no-regression threshold while keeping lossless IDs and per-file/tiny-file caps."
+      recommendation_strength: "neutral"
+      tradeoffs: "Allows all rules to migrate, but changes the main Phase 1 token discipline gate."
+    - option: "C"
+      description: "Reorder remaining migration by lowest fixture load first, then reassess aggregate cap before high-load files."
+      recommendation_strength: "discouraged"
+      tradeoffs: "May squeeze one more low-load file through, but delays the same strategic conflict and violates the planned size-ascending order."
 
 next_actions_for_continuation:
   - "Read AUTONOMOUS-EXECUTION-PROMPT.md sections AUTONOMOUS DECISION RULES + DATA INTEGRITY RULES + locked decisions list."
   - "Read docs/plan/phase-1-format.md Task 1.5 (bulk migration in size-ascending order)."
   - "Read .agent-context/rules/frontend-architecture.md and architecture.md as reference patterns for the v4 shape."
-  - "Begin Task 1.5: start with the smallest file (realtime.md, 907 chars). Per file: run `node scripts/migrate-rule-format.mjs <path>` when helper can parse the file; for flat tiny rules, manually preserve all directives in v4 format and calculate absolute token overhead."
+  - "Do not continue Task 1.5 until the aggregate cap escalation is resolved."
+  - "If approved to continue, next planned file by original order is error-handling.md."
   - "After every commit, run `npm test && npm run validate` and refresh baseline via `node --env-file=.env benchmarks/token-usage/run-baseline.mjs`."
   - "Track standard files against +15% per-file ceiling, tiny files (<600 original OpenAI tokens) against +120 OpenAI-token absolute overhead, and aggregate against +5% gate cap. Stop if the relevant cap is exceeded; lapor with decomposition."
   - "After all 13 files migrated, proceed to Task 1.6 (update AGENTS.md routing table) and Task 1.7 (consolidate validate snippet updates + finalize audit:rule-id-uniqueness wiring)."
