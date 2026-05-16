@@ -67,7 +67,7 @@ const AMBIGUOUS_PROSE_REFERENCE_PATTERNS = [
 
 function listRuleFiles() {
   return readdirSync(RULES_DIRECTORY)
-    .filter((filename) => filename.endsWith('.md'))
+    .filter((filename) => filename.endsWith('.md') && !filename.endsWith('.candidate.md'))
     .sort()
     .map((filename) => ({ filename, absolutePath: join(RULES_DIRECTORY, filename) }));
 }
@@ -203,27 +203,48 @@ export function runRuleIdUniquenessAudit() {
       idPrefix,
       sectionCount: sections.length,
       ambiguousProseCount: ambiguousProse.length,
-      relatedRefs: Array.isArray(frontmatter.related) ? [...frontmatter.related] : [],
+      knownSectionIdsInFile: sections.map((section) => section.id),
+      relatedRefs: (frontmatter.related && typeof frontmatter.related === 'object' && !Array.isArray(frontmatter.related))
+        ? frontmatter.related
+        : null,
     });
   }
 
   for (const fileEntry of perFile) {
-    if (fileEntry.status !== 'audited' || !Array.isArray(fileEntry.relatedRefs)) continue;
-    for (const relatedId of fileEntry.relatedRefs) {
-      if (typeof relatedId !== 'string' || !RULE_ID_PATTERN.test(relatedId)) {
+    if (fileEntry.status !== 'audited') continue;
+    if (!fileEntry.relatedRefs) continue;
+    for (const [parentId, relatedList] of Object.entries(fileEntry.relatedRefs)) {
+      if (!fileEntry.knownSectionIdsInFile.includes(parentId)) {
+        violations.push({
+          file: fileEntry.filename,
+          kind: 'related.parent-missing',
+          detail: `related map key '${parentId}' is not a section in this file`,
+        });
+      }
+      if (!Array.isArray(relatedList)) {
         violations.push({
           file: fileEntry.filename,
           kind: 'related.malformed',
-          detail: `related entry '${relatedId}' is not a valid <PREFIX>-NNN id`,
+          detail: `related[${parentId}] must be an array of <PREFIX>-NNN ids`,
         });
         continue;
       }
-      if (!allKnownSectionIds.has(relatedId)) {
-        violations.push({
-          file: fileEntry.filename,
-          kind: 'related.unresolved',
-          detail: `related entry '${relatedId}' does not resolve to any section in the rules pack`,
-        });
+      for (const relatedId of relatedList) {
+        if (typeof relatedId !== 'string' || !RULE_ID_PATTERN.test(relatedId)) {
+          violations.push({
+            file: fileEntry.filename,
+            kind: 'related.malformed',
+            detail: `related[${parentId}] entry '${relatedId}' is not a valid <PREFIX>-NNN id`,
+          });
+          continue;
+        }
+        if (!allKnownSectionIds.has(relatedId)) {
+          violations.push({
+            file: fileEntry.filename,
+            kind: 'related.unresolved',
+            detail: `related[${parentId}] entry '${relatedId}' does not resolve to any section in the rules pack`,
+          });
+        }
       }
     }
   }

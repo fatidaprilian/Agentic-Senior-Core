@@ -52,7 +52,7 @@ Optional keys (added only when they would otherwise drift):
 
 - `version` (integer) — schema version. **Omit on first migration** (v1 implicit). Add only when the schema itself bumps to v2 or higher.
 - `last_migrated` (ISO date string) — only used when external tooling cannot read git history. **Default: omit** (git log is the audit trail).
-- `related` (array of section IDs) — preserves conceptual grouping when one rule was split across multiple section IDs (e.g. `FE-004` was split into `FE-004` + `FE-013` + `FE-014` to stay under the 12-item cap). Each entry is a `<PREFIX>-NNN` form that must resolve to an existing section ID in the same rules pack. The validate audit checks this. Reciprocal references are encouraged: if A lists B in `related`, B should list A.
+- `related` (object map of section ID -> array of section IDs) — preserves conceptual grouping when one source rule was split across multiple section IDs (e.g. `FE-004` was split into `FE-004` + `FE-013` + `FE-014` to stay under the 12-item cap). Each key is a section ID inside this file; each value is an array of `<PREFIX>-NNN` form IDs that must resolve to existing sections in the same rules pack. Reciprocal references are encouraged: if A lists B, B should list A. The validate audit checks resolution and flags malformed entries.
 - `superseded_by` (string ID) — if a section was removed and rolled into another rule.
 - `experimental` (boolean) — true for rules under active iteration; default false.
 
