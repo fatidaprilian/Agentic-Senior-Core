@@ -1,0 +1,176 @@
+# Execution Plan — Agentic-Senior-Core v4
+
+> **Audience:** Maintainer (Farid) + AI coding agent yang dipakai untuk eksekusi.
+> **Bahasa:** Bahasa Indonesia untuk narasi, English untuk istilah teknis.
+> **Status:** Phase 0 ready to execute. Phase 1-5 outline saja, akan di-detail saat phase sebelumnya selesai.
+
+---
+
+## TUJUAN OVERALL
+
+Naikkan repo dari skor agregat **7.4/10 → 9.2-9.3/10** dalam 6 bulan dengan eksekusi terukur. Target dicapai bukan via marketing, melainkan via **public benchmark JSON yang reproducible per release**.
+
+**Goal substantif user:**
+- Token efficiency maksimal (target -40-60% reduction tanpa quality drop)
+- Cross-model compatibility (Claude, GPT, Gemini, Grok, open models)
+- Anti-halu mechanism yang real (bukan klaim tagline)
+- Tidak buang substansi rules (lossless restructure, bukan destructive compression)
+
+---
+
+## DECISIONS YANG SUDAH FINAL
+
+Decision di bawah ini sudah triangulated dari 3 sumber research independen (Perplexity + Claude + Gemini Deep Research, Mei 2026). **Jangan re-debate kecuali ada data baru yang bertentangan.**
+
+> 📚 **Untuk empirical foundation, edge cases, dan reasoning detail**, baca `research-foundation.md`. Setiap decision di sini punya section lengkap di sana dengan:
+> - Why (empirical reasoning)
+> - Sources (research yang back claim)
+> - Edge cases (situasi ambigu yang sering muncul)
+> - What NOT to do (anti-pattern)
+
+### D1: Format Instruksi → Numbered Markdown + YAML Frontmatter
+- Bukan prosa, bukan pure DSL
+- Cross-model compatible, ~15-25% token saving vs prose
+- Backed by EACL Findings 2026 (structured format +6.74% accuracy untuk reasoning)
+- Mitigates "Curse of Instructions" (rule retrievable per ID)
+
+### D2: Source Strategy → Single canonical AGENTS.md + thin adapter generator
+- AGENTS.md = source of truth tunggal
+- Auto-generate: CLAUDE.md (`@AGENTS.md` import), GEMINI.md, `.cursor/rules/main.mdc`, `.windsurfrules`
+- Backed by ETH Zurich study (ArXiv 2601.18341, 129K repos): AGENTS.md menang, **tapi hindari LLM-generated content** (-3% success, +20% cost)
+
+### D3: MCP Strategy → Optional + REPOSITION untuk validation, BUKAN delivery rules
+- MCP delivery untuk static rules = anti-pattern (3 sources convergence)
+- MCP yang valid: `validate_against_rules()`, `lookup_rule()`, `audit_compliance()`
+- Pattern reverse: MCP **mengecek** rules, bukan **mengirim** rules
+- Konsisten dengan Cloudflare Code Mode (98%+ token saving via dynamic discovery)
+
+### D4: Caching Architecture → Three-Layer Sandwich
+- Layer 1 STATIC PREFIX (cacheable, ~5K tokens): identity + tool defs + always-include critical rules
+- Layer 2 SEMI-STATIC (cacheable): project AGENTS.md + loaded skills
+- Layer 3 DYNAMIC (NOT cached): retrieved rules + code + user message + history
+- Universal ordering bekerja di semua provider (Claude, OpenAI, Gemini, Grok, DeepSeek)
+
+### D5: Retrieval Implementation → DEFER ke Phase 4, conditional
+- ~50 rules sekarang masih cukup dengan static always-include
+- Trigger: rules > 30 active OR miss-rate > 10% OR token cost masih > target
+- Stack saat dibutuhkan: nomic-embed-text v1.5 + sqlite-vec + lunr.js BM25 hybrid
+- Opt-in via `--retrieval` flag (hindari install size impact untuk casual user)
+
+### D6: Anti-Halu Stack → Three-mechanism layered
+- L1 Pre-prompt: numbered rules + ID + anti-sycophancy clause (zero cost)
+- L2 In-flight: reflection block dengan rule citation requirement (low cost)
+- L3 Post-hoc: MCP validation tool + AST linter di CI (medium cost)
+- **Strict prohibition:** No LLMLingua/lossy compression untuk rules (Compression Paradox paper: output inflation justru naikkan total cost)
+
+---
+
+## PROHIBITED PATTERNS (Hard Rules)
+
+Pattern di bawah ini dilarang absolut. Kalau agent menyarankan, **tolak dan rujuk dokumen ini**:
+
+1. **Lossy prompt compression untuk rules content** (LLMLingua, token-deletion, summarization yang membuang detail)
+2. **MCP server sebagai delivery mechanism untuk static rules** (anti-pattern)
+3. **Maintain N file paralel** (CLAUDE.md, GEMINI.md, .cursorrules) — harus auto-generated dari AGENTS.md tunggal
+4. **LLM-generated AGENTS.md content** (-3% task success per ETH Zurich, hindari prosa filosofis, keep faktual & directive)
+5. **Heavyweight runtime dependencies** untuk core (devDeps OK untuk benchmarks)
+6. **Implementasi tanpa baseline measurement** — Phase 0 wajib selesai sebelum optimasi apa pun
+
+---
+
+## CARA PAKAI FOLDER INI
+
+```
+docs/plan/
+├── 00-context.md            ← FILE INI. Baca dulu (overview).
+├── research-foundation.md   ← Empirical foundation + edge cases per decision.
+├── phase-0-baseline.md      ← Phase yang sedang aktif. Execute-ready.
+└── agent-prompt-template.md ← Template instruksi untuk paste ke IDE agent.
+```
+
+**Reading order untuk agent (WAJIB urut):**
+1. **`00-context.md`** (file ini) — overview, decisions summary, prohibited patterns
+2. **`research-foundation.md`** — detailed reasoning per decision + edge cases
+3. **`phase-X-Y.md`** — phase yang sedang aktif
+
+**Workflow:**
+1. Baca 3 file di atas urut
+2. Pakai `agent-prompt-template.md` sebagai prompt awal ke agent IDE
+3. Eksekusi task dalam phase, **berhenti di setiap GATE** untuk review
+4. Setelah phase selesai dan baseline tervalidasi, generate file phase berikutnya
+
+**Aturan untuk agent yang membaca dokumen ini:**
+- Eksekusi **per phase**, bukan loncat-loncat
+- Setiap task punya **acceptance criteria yang verifiable** — pastikan semua checklist tercapai sebelum claim done
+- Setiap **GATE** berarti STOP, lapor progress, tunggu approval user sebelum lanjut
+- Kalau ada ambiguity di edge case, **cek `research-foundation.md` section yang relevan** sebelum tanya user
+- Kalau tetap ambigu setelah cek research-foundation, **tanya user, jangan asumsi**
+- Jangan ubah file di luar scope phase yang sedang aktif
+
+---
+
+## STATUS TRACKING
+
+| Phase | Status | Started | Completed | Notes |
+|-------|--------|---------|-----------|-------|
+| Phase 0 — Baseline & Cleanup | 🟡 Ready to start | — | — | Detailed di `phase-0-baseline.md` |
+| Phase 1 — Format Migration | ⏸ Locked | — | — | Generate setelah Phase 0 selesai |
+| Phase 2 — Caching Layer | ⏸ Locked | — | — | Generate setelah Phase 1 selesai |
+| Phase 3 — Anti-Halu | ⏸ Locked | — | — | Generate setelah Phase 2 selesai |
+| Phase 4 — Retrieval (conditional) | ⏸ Locked | — | — | Skip kalau Phase 3 quality target tercapai |
+| Phase 5 — Hardening & Adoption | ⏸ Locked | — | — | Generate setelah Phase 3/4 selesai |
+
+---
+
+## SUCCESS METRICS (Final State Targets)
+
+Phase 5 target. Detail measurement methodology di phase masing-masing.
+
+| Metric | Baseline | Target | Source |
+|--------|----------|--------|--------|
+| Token per task (input, cold) | TBD Phase 0 | -40% | Token counter wrapper |
+| Token per task (input, warm cache) | TBD | -75% vs baseline cold | API headers |
+| Rule adherence rate (Claude) | TBD | ≥75% | AgentHallu eval |
+| Rule adherence rate (GPT) | TBD | ≥65% | AgentHallu eval |
+| Rule adherence rate (open) | TBD | ≥55% | AgentHallu eval |
+| Install size (core) | ~1.7MB | ≤2MB | npm pack |
+| Install size (with retrieval) | N/A | ≤120MB | npm pack opt-in |
+| Test coverage statement | ~8% | ≥80% | Node native --experimental-test-coverage |
+| OpenSSF Scorecard | unknown | ≥9.0 | scorecard.dev |
+| Validate gate count | 542 | ≥800 | npm run validate |
+
+**Critical mandate:** Setiap release publish JSON di `benchmarks/results/{version}.json`. Reproducible. **Inilah pembeda dari competitor yang klaim tanpa data.**
+
+---
+
+## PENDING DECISIONS
+
+Belum dijawab user, akan ditanya saat phase yang relevan:
+
+- **Decision B (Phase 1 timing):** Breaking change tolerance untuk migration ke numbered markdown?
+  - B1: Hard cut v4.0.0 (drop format lama, migration tool wajib)
+  - B2: Additive (support both, deprecate later)
+  - B3: Beta channel dulu 1-2 bulan, lalu hard cut
+
+Phase 0 tidak butuh keputusan ini — bisa start langsung.
+
+---
+
+## REFERENSI RESEARCH SOURCES
+
+Decisions di atas backed by:
+- **Perplexity Deep Research** Mei 2026 — token caching, MCP fatigue, AGENTS.md adoption
+- **Claude Deep Research** Mei 2026 — MMMT-IF data, Cloudflare Code Mode, ETH Zurich findings
+- **Gemini Deep Research** Mei 2026 — IFBench, Curse of Instructions, Compression Paradox
+
+Triangulation rule: klaim muncul di 2+ sources independen = HIGH confidence (decision-grade).
+
+**Untuk detail empirical foundation per decision**, lihat `research-foundation.md`. File itu berisi:
+- Per-decision reasoning chain
+- Specific paper references (ArXiv ID, DOI)
+- Edge cases yang sering muncul + jawaban backed-by-research
+- Anti-pattern yang harus ditolak
+
+---
+
+**Last updated:** Phase 0 generated. Update file ini setiap phase selesai dengan summary outcome.
