@@ -207,12 +207,12 @@ Phase 3 must not turn stable cacheable text into volatile task-specific text.
 4. Keep the benchmark deterministic and provider-free.
 
 **Acceptance criteria:**
-- [ ] Anti-halu fixture set exists.
-- [ ] Offline scorer exists.
-- [ ] Benchmark JSON exists.
-- [ ] Benchmark report includes pass rate and failure categories.
-- [ ] `npm test` count does not drop.
-- [ ] `npm run validate` passes.
+- [x] Anti-halu fixture set exists.
+- [x] Offline scorer exists.
+- [x] Benchmark JSON exists.
+- [x] Benchmark report includes pass rate and failure categories.
+- [x] `npm test` count does not drop.
+- [x] `npm run validate` passes.
 
 **Files allowed:**
 - `benchmarks/anti-halu/**`

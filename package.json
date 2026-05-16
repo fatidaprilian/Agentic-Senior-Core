@@ -74,6 +74,7 @@
     "benchmark:intelligence": "node ./scripts/benchmark-intelligence.mjs",
     "benchmark:continuity": "node ./scripts/memory-continuity-benchmark.mjs",
     "benchmark:cache-phase-2": "node ./benchmarks/token-usage/run-cache-simulation.mjs",
+    "benchmark:anti-halu": "node ./benchmarks/anti-halu/run-benchmark.mjs",
     "report:quality-trend": "node ./scripts/quality-trend-report.mjs",
     "report:docs-quality-drift": "node ./scripts/docs-quality-drift-report.mjs",
     "report:governance-weekly": "node ./scripts/governance-weekly-report.mjs",

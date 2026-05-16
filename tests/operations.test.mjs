@@ -7,6 +7,7 @@ import {
   createActiveMemorySnapshot,
   validateActiveMemorySnapshot,
 } from '../lib/cli/memory-continuity.mjs';
+import { scoreAntiHaluFixtures } from '../benchmarks/anti-halu/lib/scorer.mjs';
 import { runReflectionCitationAudit } from '../scripts/audit-reflection-citations.mjs';
 
 test('Operations Tests', async (t) => {
@@ -427,6 +428,42 @@ test('Operations Tests', async (t) => {
 
     assert.equal(report.passed, false);
     assert.ok(report.violations.some((violation) => violation.kind === 'reflection.snippet-missing'));
+  });
+
+  await t.test('anti-halu benchmark outputs machine-readable report', () => {
+    const antiHaluOutput = execSync(`node ${join(process.cwd(), 'benchmarks', 'anti-halu', 'run-benchmark.mjs')} --stdout-only`).toString();
+    const antiHaluReport = JSON.parse(antiHaluOutput);
+
+    assert.equal(antiHaluReport.benchmarkName, 'anti-halu-phase-3');
+    assert.equal(antiHaluReport.providerFree, true);
+    assert.equal(antiHaluReport.deterministic, true);
+    assert.ok(antiHaluReport.fixtureCount >= 5);
+    assert.equal(antiHaluReport.passRate, 1);
+    assert.equal(antiHaluReport.citationValidityRate, 1);
+    assert.equal(typeof antiHaluReport.failureCategories.rule_id_missing, 'number');
+    assert.equal(typeof antiHaluReport.failureCategories.unsupported_claim, 'number');
+  });
+
+  await t.test('anti-halu scorer rejects fake rule IDs and unsupported claims', () => {
+    const report = scoreAntiHaluFixtures([
+      {
+        id: 'negative-control',
+        category: 'negative_control',
+        risk: 'Synthetic failure control for the offline scorer.',
+        candidateResponse: 'This is compliant with FAKE-999 and 100% guaranteed to be correct.',
+        expectations: {
+          requiresRuleCitation: true,
+          expectedRuleIds: ['ARCH-005'],
+          requiresRefusal: false,
+          requiresCompliantAlternative: false,
+        },
+      },
+    ]);
+
+    assert.equal(report.passedCount, 0);
+    assert.equal(report.failureCategories.rule_id_missing, 1);
+    assert.equal(report.failureCategories.rule_id_unknown, 1);
+    assert.ok(report.failureCategories.unsupported_claim >= 1);
   });
 
   await t.test('quality trend report outputs machine-readable report', () => {
