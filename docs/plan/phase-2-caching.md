@@ -242,11 +242,21 @@ The benchmark harness should produce the contract from the real assembled benchm
 5. Emit `benchmarks/results/cache-phase-2-YYYY-MM-DD.json`.
 
 **Acceptance criteria:**
-- [ ] Script emits machine-readable JSON.
-- [ ] JSON separates measured token counts from economic projections.
-- [ ] Projections include `accurate`, `projectionQuality`, or equivalent flags.
-- [ ] Anthropic warm effective token math is reproducible from matrix constants.
-- [ ] No generation API is called.
+- [x] Script emits machine-readable JSON.
+- [x] JSON separates measured token counts from economic projections.
+- [x] Projections include `accurate`, `projectionQuality`, or equivalent flags.
+- [x] Anthropic warm effective token math is reproducible from matrix constants.
+- [x] No generation API is called.
+
+**Task 2.3 result (2026-05-16):**
+- Added `benchmarks/token-usage/lib/cache-economics.mjs`.
+- Added `benchmarks/token-usage/run-cache-simulation.mjs`.
+- Added `benchmarks/token-usage/lib/cache-economics.test.mjs`.
+- Added `benchmark:cache-phase-2`.
+- Emitted `benchmarks/results/cache-phase-2-2026-05-16.json` with 120 rows: 10 fixtures x 6 providers x 2 scenarios.
+- Kept token counting offline via `tiktoken-cl100k_base-offline-estimate`; provider generation APIs are not called.
+- For Anthropic `with_loaded_rules`, average total input is 8,483.1 tokens, average Layer 1+2 cacheable input is 8,417.6 tokens, average 5-minute warm-read effective tokens are 907.26, and break-even is 2 requests across all fixtures.
+- For OpenAI and Gemini, output records cache eligibility only; economic projections stay `eligibility-only`.
 
 **Files allowed:**
 - `benchmarks/token-usage/run-cache-simulation.mjs`
