@@ -278,7 +278,7 @@ The strategic decision is to relax the aggregate cap from +5% to +10%, backed by
 8. `database-design.md` (2,765 chars) — migrated
 9. `security.md` (2,791 chars) — migrated
 10. `efficiency-vs-hype.md` (2,674 chars) — migrated
-11. `docker-runtime.md` (4,302 chars)
+11. `docker-runtime.md` (4,302 chars) — migrated
 12. `git-workflow.md` (5,176 chars)
 13. `api-docs.md` (6,548 chars)
 
