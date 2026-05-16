@@ -2,7 +2,7 @@
 
 > **Audience:** Maintainer (Farid) + AI coding agent yang dipakai untuk eksekusi.
 > **Bahasa:** Bahasa Indonesia untuk narasi, English untuk istilah teknis.
-> **Status:** Phase 3 anti-halu execution is complete. Gate C is pending maintainer approval for the Phase 4 retrieval decision.
+> **Status:** Phase 0/1/2/3 complete. Gate C resolved on 2026-05-16 with Option A (skip Phase 4 retrieval). Phase 5 plan generated at `docs/plan/phase-5-hardening.md`; awaiting Gate A review before execution.
 
 ---
 
@@ -115,10 +115,10 @@ docs/plan/
 |-------|--------|---------|-----------|-------|
 | Phase 0 — Baseline & Cleanup | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-0-outcome.md`. GATE D approved. |
 | Phase 1 — Format Migration | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-1-outcome.md`. All 15 rules migrated to v4; final OpenAI aggregate +8.86% under the +10% cap. |
-| Phase 2 — Caching Layer | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-2-outcome.md`. Warm-cache simulation complete; RC remains unpublished. |
-| Phase 3 — Anti-Halu | Completed | 2026-05-16 | 2026-05-16 | See `phase-3-outcome.md`. Gate C recommendation: skip Phase 4 and proceed to Phase 5 after maintainer approval. |
-| Phase 4 — Retrieval (conditional) | Gate C Pending | — | — | Recommended skip: offline anti-halu pass rate 100%, citation validity 100%, warm-cache reduction 89.31%. |
-| Phase 5 — Hardening & Adoption | Locked | — | — | Generate after Gate C approval. |
+| Phase 2 — Caching Layer | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-2-outcome.md`. Warm-cache simulation complete; RC remains unpublished. Scope caveat added 2026-05-16: figures apply to direct API + Claude Code SDK programmatic only. |
+| Phase 3 — Anti-Halu | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-3-outcome.md`. Offline benchmark pass rate 100%, citation validity 100%. |
+| Phase 4 — Retrieval (conditional) | ⏭️ Skipped (Gate C 2026-05-16) | — | — | Gate C Option A: skip retrieval. Trigger remains conditional (rules >30, miss-rate >10%, or cache/token regression). |
+| Phase 5 — Hardening & Adoption | 📋 Plan ready (Gate A pending) | — | — | See `phase-5-hardening.md`. Generated 2026-05-16. Public-surface refresh, coverage uplift, supply-chain hardening, release-bundle, Gate D release decision. |
 
 ---
 
@@ -151,8 +151,14 @@ Decision yang sudah dijawab user dan locked:
 - **Anthropic counter accuracy:** Skip top-up. Claude tetap pakai `tiktoken cl100k_base` estimate dengan `accurate=false` flag (~0.11% deviation vs OpenAI native, acceptable as relative comparator).
 - **Tiny-rule token gate:** Rule files below 600 original OpenAI tokens keep the same v4 format but use a +120 OpenAI-token absolute overhead cap instead of the +15% per-file percentage cap. Aggregate Phase 1 cap is +10%.
 - **Aggregate cap strategy:** Option B locked on 2026-05-16. Relax aggregate cap from +5% to +10%, backed by Anthropic prompt-caching math (cache reads cost 0.1x base input price) and local pilot data. Continue Task 1.5 in original file order; keep per-file and tiny-file caps unchanged.
+- **Gate C (Phase 4 retrieval):** Option A locked on 2026-05-16. Skip Phase 4 retrieval. Trigger remains conditional on rules library >30 active, miss-rate >10%, or cache/token regression.
 
-Pending Gate C decision: accept Phase 3 outcome and decide whether to skip Phase 4 retrieval. Recommendation is Option A: skip Phase 4 for now and generate the Phase 5 hardening plan. `4.0.0-rc.1` remains unpublished until Phase 5, and no push occurred.
+Pending decisions:
+
+- **Gate A (Phase 5 plan review):** review `docs/plan/phase-5-hardening.md` before Task 5.1 begins.
+- **Gate D (Release decision):** publish `4.0.0`, publish `4.0.0-rc.1` under `next` dist-tag, or stay unpublished. Escalated after Task 5.6.
+
+`4.0.0-rc.1` remains unpublished until Gate D. No `git push` has occurred.
 
 ---
 
@@ -173,4 +179,4 @@ Triangulation rule: klaim muncul di 2+ sources independen = HIGH confidence (dec
 
 ---
 
-**Last updated:** Phase 3 completed 2026-05-16. Anti-halu benchmark pass rate is 100%, citation validity is 100%, cache-layer simulation remains healthy, `4.0.0-rc.1` remains unpublished, and Gate C is pending maintainer approval.
+**Last updated:** Phase 3 completed 2026-05-16. Gate C resolved on 2026-05-16 with Option A (skip Phase 4). Phase 5 hardening plan generated at `docs/plan/phase-5-hardening.md`; Gate A review pending. `4.0.0-rc.1` remains unpublished. Caching scope-fix pass closed on 2026-05-16 (per-tool matrix locked in `research-foundation.md` D4 and `docs/benchmark-reference.md`).

@@ -1,23 +1,23 @@
 # Auto-generated handoff state. DO NOT EDIT MANUALLY.
 # Used by next agent via HANDOFF-CONTINUE prompt.
 
-generated_at: "2026-05-16T14:47:19Z"
-agent_environment: "Codex"
+generated_at: "2026-05-16T15:30:00Z"
+agent_environment: "Kiro"
 
 last_completed:
   phase: 3
-  task_id: "3.6"
-  task_description: "Close Phase 3 anti-halu outcome and report Gate C recommendation"
-  commit_sha: "8dc2d8c"
-  completed_at: "2026-05-16T14:47:19Z"
+  task_id: "scope-fix + Gate C resolution + Phase 5 plan generation"
+  task_description: "Closed 6-task caching scope-fix pass, recorded Gate C Option A (skip Phase 4 retrieval), generated docs/plan/phase-5-hardening.md."
+  commit_sha: "<see latest after this commit>"
+  completed_at: "2026-05-16T15:30:00Z"
 
 in_progress:
-  phase: 3
-  task_id: "GATE-C"
+  phase: 5
+  task_id: "GATE-A"
   status: "awaiting-maintainer-decision"
   files_being_modified: []
-  last_action_taken: "Closed Phase 3 with docs/plan/phase-3-outcome.md, refreshed docs/plan/00-context.md, reran anti-halu and cache benchmarks, and committed the outcome."
-  next_action_planned: "Wait for maintainer Gate C decision. Recommended Option A: accept Phase 3, skip Phase 4 retrieval for now, and generate the Phase 5 hardening plan."
+  last_action_taken: "Generated Phase 5 hardening plan at docs/plan/phase-5-hardening.md, updated 00-context.md status table to mark Phase 4 skipped and Phase 5 plan-ready."
+  next_action_planned: "Wait for Gate A approval. After approval, start Task 5.1 (public surface refresh for v4)."
 
 metrics_so_far:
   baseline_reference: "benchmarks/results/baseline-2026-05-16.json"
@@ -25,82 +25,70 @@ metrics_so_far:
   phase_1_outcome_commit: "1b799f2"
   phase_2_outcome_commit: "b43dcdb"
   phase_3_outcome_commit: "8dc2d8c"
-  latest_aggregate_measurement:
-    provider: "anthropic"
-    scenario: "with_loaded_rules"
-    average_total_input_tokens: 8588.7
-    average_cacheable_layer_1_plus_2_tokens: 8523.2
-    average_warm_read_effective_tokens: 917.82
-    effective_reduction_percent: 89.31
-    projection_quality: "official-multiplier"
-  cache_simulation:
-    result_path: "benchmarks/results/cache-phase-2-2026-05-16.json"
-    result_rows: 120
-    fixture_count: 10
-    provider_count: 6
-    scenario_count: 2
-  anti_halu_benchmark:
-    result_path: "benchmarks/results/anti-halu-phase-3-2026-05-16.json"
-    fixture_count: 5
-    passed_count: 5
-    pass_rate_percent: 100
-    citation_validity_rate_percent: 100
-    unknown_rule_id_count: 0
-    failure_categories:
-      rule_id_missing: 0
-      rule_id_unknown: 0
-      conflict_handling: 0
-      alternative_missing: 0
-      unsupported_claim: 0
-  validation:
+  scope_fix_final_commit: "b2a60db"
+  gate_c_resolution: "Option A (skip Phase 4 retrieval, proceed to Phase 5)"
+  gate_c_resolved_at: "2026-05-16"
+  current_validation:
     npm_test: "176/176 pass"
     npm_run_validate: "565 pass, 0 failed, 2 existing warnings"
     npm_run_gate_release: "pass"
+    npm_pack_dry_run:
+      package_size_kb: 264.7
+      unpacked_size_mb: 1.0
+      total_files: 154
 
 decisions_made_in_session:
-  - decision: "Keep reflection bounded"
+  - decision: "Annotate D4 with per-tool caching scope matrix and integration-mode caveat"
     category: "A"
-    reasoning: "Phase 3 added a REFLECTION block limited to rule IDs, one-line risk, and one-line action; hidden chain-of-thought remains prohibited."
-    commit_sha: "840e13d"
-  - decision: "Use deterministic local MCP validation instead of MCP rule delivery"
+    reasoning: "User-directed scope-fix to prevent universal caching claims that mix direct API and IDE wrapper integrations. Six tools documented with citation URLs."
+    commit_sha: "6788115"
+  - decision: "Add scope caveat to phase-2-outcome.md"
     category: "A"
-    reasoning: "lookup_rule, validate_against_rules, and audit_compliance validate canonical local rule IDs without adding runtime dependencies or provider generation calls."
-    commit_sha: "20b73b7"
-  - decision: "Gate reflection citation drift in npm run validate"
+    reasoning: "Verbatim caveat next to 89.31% table; ensures phase outcome cannot be quoted out of context."
+    commit_sha: "c532412"
+  - decision: "Add scope caveat to phase-3-outcome.md"
     category: "A"
-    reasoning: "Canonical prompts and checklists that mention bounded reflection must retain required snippets and only cite known v4 rule IDs."
-    commit_sha: "b6b8340"
-  - decision: "Add provider-free anti-halu benchmark"
+    reasoning: "Verbatim caveat next to Token And Cache Impact table."
+    commit_sha: "a545f3c"
+  - decision: "Annotate cache-phase-2 benchmark JSON with integration_mode and scope_caveat"
     category: "A"
-    reasoning: "Phase 3 quality claims require a reproducible artifact before any provider-backed evaluation or release claim."
-    commit_sha: "75b4cf9"
-  - decision: "Recommend skipping Phase 4 retrieval for now"
-    category: "C-pending"
-    reasoning: "Offline anti-halu pass rate is 100%, citation validity is 100%, unresolved rule-miss categories are zero, and Anthropic warm-cache effective reduction remains 89.31%."
-    commit_sha: "8dc2d8c"
+    reasoning: "JSON-side annotation for downstream consumers; no number regenerated. anti-halu and baseline JSONs verified clean."
+    commit_sha: "567cf3f"
+  - decision: "Append Caching Effectiveness Reporting Format section to docs/benchmark-reference.md"
+    category: "A"
+    reasoning: "Required JSON shape splitting per integration mode (8 modes) so future caching reports cannot collapse into a universal saving figure."
+    commit_sha: "7d772ec"
+  - decision: "Audit public surfaces and add CHANGELOG audit-completed note"
+    category: "A"
+    reasoning: "README, AGENTS.md, package.json, faq.md, integration-playbook.md all clean. CHANGELOG note records the audit."
+    commit_sha: "b2a60db"
+  - decision: "Resolve Gate C with Option A (skip Phase 4 retrieval, proceed Phase 5)"
+    category: "C-resolved"
+    reasoning: "Confirmed by user. Trigger remains conditional on rules >30, miss-rate >10%, or cache/token regression."
+    commit_sha: "(this commit)"
+  - decision: "Generate docs/plan/phase-5-hardening.md"
+    category: "A"
+    reasoning: "Phase 5 plan mirrors phase-2/3 structure with 7 tasks plus Gates A/B/C/D. Public-surface refresh, coverage uplift, supply-chain hardening, release benchmark bundle, per-integration adoption playbook, release dry-run, outcome doc."
+    commit_sha: "(this commit)"
 
 escalation_pending:
   has_pending: true
   category: "C"
-  question_for_user: "Gate C: accept Phase 3 outcome and choose the Phase 4 retrieval path."
-  context: "Phase 3 is complete. Recommendation is Option A because benchmark pass rate is 100%, citation validity is 100%, unresolved rule-miss categories are zero, and warm-cache economics remain healthy. No push or publish occurred."
+  question_for_user: "Gate A: review docs/plan/phase-5-hardening.md and approve to start Task 5.1, or request adjustments."
+  context: "Phase 5 plan covers public-surface refresh (README v4, CHANGELOG, FAQ, integration playbook), coverage uplift toward >=80% statements / >=800 validate count, supply-chain hardening (npm audit, SBOM, scorecard), release benchmark bundle, per-integration adoption playbook, release dry-run, and Gate D release decision. No publish happens inside Phase 5."
   options_presented:
-    - "Option A: Accept Phase 3, skip Phase 4 retrieval for now, generate Phase 5 hardening plan. Recommended."
-    - "Option B: Accept Phase 3, generate a narrow Phase 4 retrieval spike before Phase 5."
-    - "Option C: Expand Phase 3 anti-halu fixtures before deciding Phase 4."
+    - "Approve plan as-is: respond 'go' or 'approve' to start Task 5.1."
+    - "Request adjustments: state which task or gate needs to change before execution."
 
 next_actions_for_continuation:
-  - "Do not push; user explicitly said no push until everything is finished."
-  - "Do not publish 4.0.0-rc.1 before Phase 5 unless the user gives an explicit override."
-  - "Wait for the maintainer's Gate C answer before generating Phase 5 or Phase 4 work."
-  - "If the user selects Option A, generate docs/plan/phase-5-hardening.md and keep Phase 4 marked skipped/locked."
-  - "If the user selects Option B, generate a narrow Phase 4 retrieval spike plan before Phase 5."
-  - "If the user selects Option C, expand benchmarks/anti-halu fixtures and rerun npm test, npm run validate, and npm run gate:release."
+  - "Wait for Gate A approval on docs/plan/phase-5-hardening.md."
+  - "On approval, start Task 5.1 public surface refresh (README, CHANGELOG, integration-playbook, faq, doc-index, mcp.json description)."
+  - "Do not push, do not publish. 4.0.0-rc.1 stays unpublished until Gate D."
+  - "After Task 5.1, continue 5.2 -> 5.7 silently per autonomous execution contract; only stop at Gate B (coverage pragmatism), Gate C (supply-chain hard finding), or Gate D (release decision)."
 
 notes_for_next_agent:
-  - "Active memory was refreshed locally but remains ignored/local-only."
-  - "Latest Phase 3 outcome commit is 8dc2d8c docs(phase-3): close anti-halu outcome."
-  - "Phase 3 outcome source of truth is docs/plan/phase-3-outcome.md."
-  - "Anti-halu benchmark source of truth is benchmarks/results/anti-halu-phase-3-2026-05-16.json."
-  - "Cache simulation was refreshed after Phase 3 prompt-surface changes; source of truth is benchmarks/results/cache-phase-2-2026-05-16.json."
-  - "OpenAI and Gemini cost projections must not invent universal multipliers. Use model-specific official pricing metadata or mark projections as estimates/unknown."
+  - "Per-tool caching scope matrix is the single source of truth for caching claims. Reference research-foundation.md D4 verbatim."
+  - "docs/benchmark-reference.md 'Caching Effectiveness Reporting Format' is the required JSON shape for any future caching report; do not collapse into a single universal saving."
+  - "Phase 5 success-metric targets >=80% test coverage and validate >=800 are stretch; Gate B in the plan governs honesty over padding."
+  - "AgentHallu provider-backed eval is escalation-only (Kategori C). Default Phase 5 path uses only the existing offline anti-halu benchmark."
+  - "OpenSSF Scorecard run is best-effort; missing GitHub auth is logged honestly, not faked."
