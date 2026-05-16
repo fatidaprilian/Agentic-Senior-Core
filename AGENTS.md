@@ -36,7 +36,7 @@ Location: `.agent-context/rules/`.
 
 Load only relevant rule files. Do not read the entire rule directory by default.
 
-Available rules: `naming-conv.md`, `architecture.md`, `security.md`, `performance.md`, `error-handling.md`, `testing.md`, `git-workflow.md`, `efficiency-vs-hype.md`, `api-docs.md`, `microservices.md`, `event-driven.md`, `database-design.md`, `realtime.md`, `frontend-architecture.md`, `docker-runtime.md`.
+Available rules: `naming-conv.md` (`NAME-*`, v4), `architecture.md` (`ARCH-*`, v4), `security.md` (`SEC-*`, planned), `performance.md` (`PERF-*`, v4), `error-handling.md` (`ERR-*`, planned), `testing.md` (`TEST-*`, v4), `git-workflow.md` (`GIT-*`, planned), `efficiency-vs-hype.md` (`DEP-*`, planned), `api-docs.md` (`API-*`, planned), `microservices.md` (`SVC-*`, v4), `event-driven.md` (`EVT-*`, v4), `database-design.md` (`DATA-*`, planned), `realtime.md` (`RT-*`, v4), `frontend-architecture.md` (`FE-*`, v4), `docker-runtime.md` (`DOCK-*`, planned).
 
 For Docker or Compose work, load `docker-runtime.md` and verify the latest official Docker docs before authoring container assets. Also perform live web research for Docker and framework/package setup claims. For framework or package setup work, use the latest stable compatible dependency set and official setup flow unless a documented compatibility constraint blocks it. Prefer official framework scaffolders when they create the supported project shape; manual file assembly needs a repo, prototype, learning, or architecture reason. New dependencies are allowed when they improve efficiency, delivery time, correctness, accessibility, UX, or maintainability. Do not treat dependency avoidance or vague performance fear as a default reason to skip a modern maintained library.
 
