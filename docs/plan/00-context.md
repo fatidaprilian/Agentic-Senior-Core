@@ -113,8 +113,8 @@ docs/plan/
 
 | Phase | Status | Started | Completed | Notes |
 |-------|--------|---------|-----------|-------|
-| Phase 0 — Baseline & Cleanup | 🟡 Ready to start | — | — | Detailed di `phase-0-baseline.md` |
-| Phase 1 — Format Migration | ⏸ Locked | — | — | Generate setelah Phase 0 selesai |
+| Phase 0 — Baseline & Cleanup | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-0-outcome.md`. Awaits GATE D approval to start Phase 1. |
+| Phase 1 — Format Migration | 🟡 Awaiting GATE D | — | — | Generate after GATE D approval |
 | Phase 2 — Caching Layer | ⏸ Locked | — | — | Generate setelah Phase 1 selesai |
 | Phase 3 — Anti-Halu | ⏸ Locked | — | — | Generate setelah Phase 2 selesai |
 | Phase 4 — Retrieval (conditional) | ⏸ Locked | — | — | Skip kalau Phase 3 quality target tercapai |
