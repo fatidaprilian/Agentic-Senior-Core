@@ -274,7 +274,7 @@ The strategic decision is to relax the aggregate cap from +5% to +10%, backed by
 4. `performance.md` (1,649 chars) — migrated
 5. `microservices.md` (2,182 chars) — migrated
 6. `testing.md` (2,115 chars) — migrated
-7. `error-handling.md` (2,315 chars)
+7. `error-handling.md` (2,315 chars) — migrated
 8. `database-design.md` (2,765 chars)
 9. `security.md` (2,791 chars)
 10. `efficiency-vs-hype.md` (2,674 chars)

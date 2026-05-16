@@ -41,6 +41,9 @@
 export function parseLegacyRuleFile(sourceText) {
   const lines = sourceText.replace(/\r\n/g, '\n').split('\n');
   const warnings = [];
+  const isH2 = (line) => line.startsWith('## ');
+  const isH1 = (line) => line.startsWith('# ');
+  const isColonSectionLabel = (line) => /^[A-Z][^:\n]+:$/.test(line.trim());
 
   let cursor = 0;
   while (cursor < lines.length && lines[cursor].trim() === '') {
@@ -87,17 +90,30 @@ export function parseLegacyRuleFile(sourceText) {
   /** @type {ParsedSection[]} */
   const sections = [];
   while (cursor < lines.length) {
-    if (!lines[cursor].startsWith('## ')) {
+    while (cursor < lines.length && lines[cursor].trim() === '') {
+      cursor += 1;
+    }
+    if (cursor >= lines.length) {
+      break;
+    }
+
+    let sectionTitle = '';
+    if (isH2(lines[cursor])) {
+      sectionTitle = lines[cursor].slice(3).trim();
+      cursor += 1;
+    } else if (isColonSectionLabel(lines[cursor])) {
+      sectionTitle = lines[cursor].trim().replace(/:$/, '');
+      cursor += 1;
+    } else if (!isH1(lines[cursor])) {
+      sectionTitle = sections.length === 0 ? 'General Guidance' : 'Boundary Summary';
+    } else {
       cursor += 1;
       continue;
     }
 
-    const sectionTitle = lines[cursor].slice(3).trim();
-    cursor += 1;
-
     /** @type {ContentBlock[]} */
     const blocks = [];
-    while (cursor < lines.length && !lines[cursor].startsWith('## ') && !lines[cursor].startsWith('# ')) {
+    while (cursor < lines.length && !isH2(lines[cursor]) && !isH1(lines[cursor]) && !isColonSectionLabel(lines[cursor])) {
       const line = lines[cursor];
 
       if (line.trim() === '') {
@@ -146,8 +162,9 @@ export function parseLegacyRuleFile(sourceText) {
       while (
         cursor < lines.length
         && lines[cursor].trim() !== ''
-        && !lines[cursor].startsWith('## ')
-        && !lines[cursor].startsWith('# ')
+        && !isH2(lines[cursor])
+        && !isH1(lines[cursor])
+        && !isColonSectionLabel(lines[cursor])
         && !/^\s*-\s+/.test(lines[cursor])
       ) {
         paragraphLines.push(lines[cursor].trim());

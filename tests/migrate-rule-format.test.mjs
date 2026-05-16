@@ -73,6 +73,32 @@ test('parseLegacyRuleFile throws when the file has no H1', () => {
   assert.throws(() => parseLegacyRuleFile('## Bad start\n\nNo H1 here.\n'), /missing top-level H1/);
 });
 
+test('parseLegacyRuleFile treats colon-labelled legacy blocks as sections', () => {
+  const sample = `# Error Handling Boundary
+
+Use normal framework errors.
+
+Reject these failure patterns:
+- swallowed errors
+- stack trace leaks
+
+Backend API error rules:
+- Use centralized middleware.
+- Return safe JSON errors.
+
+At boundaries, validate early and keep operator context.
+`;
+  const parsed = parseLegacyRuleFile(sample);
+  assert.equal(parsed.h1Title, 'Error Handling Boundary');
+  assert.equal(parsed.introParagraph, 'Use normal framework errors.');
+  assert.equal(parsed.sections.length, 2);
+  assert.equal(parsed.sections[0].title, 'Reject these failure patterns');
+  assert.equal(parsed.sections[0].blocks[0].kind, 'bullet-list');
+  assert.deepEqual(parsed.sections[0].blocks[0].items, ['swallowed errors', 'stack trace leaks']);
+  assert.equal(parsed.sections[1].title, 'Backend API error rules');
+  assert.equal(parsed.sections[1].blocks[1].kind, 'paragraph');
+});
+
 test('renderNewFormat assigns sequential IDs with the locked prefix', () => {
   const parsed = parseLegacyRuleFile(
     `# Demo Rule\n\nIntro line.\n\n## Section A\n\n- item a\n- item b\n\n## Section B\n\nA paragraph.\n`,
