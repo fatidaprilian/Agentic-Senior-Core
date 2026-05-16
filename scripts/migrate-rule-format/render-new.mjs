@@ -15,37 +15,35 @@
 
 import { stringify as stringifyYaml } from 'yaml';
 
-const TODAY_ISO = new Date().toISOString().slice(0, 10);
-
-function extractKeywordsFromLegacyTitleAndContent(parsedRuleFile) {
-  const candidateTokens = new Set();
-  const collectCandidatesFromText = (text) => {
-    for (const word of text.toLowerCase().match(/[a-z][a-z0-9]+(?:-[a-z0-9]+)*/g) ?? []) {
-      if (word.includes('-') && word.length >= 4 && word.length <= 60) {
-        candidateTokens.add(word);
-      }
+function pickKeywords(parsedRuleFile, prefixEntry) {
+  // Hand-picked first: the file's id_prefix lowercased and the domain itself
+  // are always relevant. Additional keywords are drawn from the highest-signal
+  // kebab-case tokens in the H1 + section titles, capped at 6 total. The
+  // validate gate snippet checks accept either body presence or this array, so
+  // we prioritize tokens that appear in section titles (more likely to be
+  // queried) over tokens buried in paragraphs.
+  const handPicked = new Set([prefixEntry.domain, prefixEntry.prefix.toLowerCase()]);
+  const titleSignal = parsedRuleFile.h1Title + ' ' + parsedRuleFile.sections.map((section) => section.title).join(' ');
+  for (const word of titleSignal.toLowerCase().match(/[a-z][a-z0-9]+(?:-[a-z0-9]+)*/g) ?? []) {
+    if (word.length >= 4 && word.length <= 32 && handPicked.size < 6) {
+      handPicked.add(word);
     }
-  };
-
-  collectCandidatesFromText(parsedRuleFile.h1Title);
-  if (parsedRuleFile.introParagraph) collectCandidatesFromText(parsedRuleFile.introParagraph);
-  for (const section of parsedRuleFile.sections) {
-    collectCandidatesFromText(section.title);
   }
-
-  return [...candidateTokens].sort().slice(0, 12);
+  return [...handPicked];
 }
 
 function renderFrontmatter(prefixEntry, parsedRuleFile) {
+  // Trimmed v4 frontmatter (per phase-1-format.md GATE B revision):
+  //   - drop `version` for first-time-v1 files (only meaningful when bumped)
+  //   - drop `last_migrated` (git history is the audit trail)
+  //   - cap `keywords` at 6 hand-picked entries instead of 12 auto-extracted
   const frontmatterObject = {
     id_prefix: prefixEntry.prefix,
     domain: prefixEntry.domain,
-    version: 1,
     priority: prefixEntry.priority,
     scope: prefixEntry.scope,
     applies_to: [...prefixEntry.appliesTo],
-    keywords: extractKeywordsFromLegacyTitleAndContent(parsedRuleFile),
-    last_migrated: TODAY_ISO,
+    keywords: pickKeywords(parsedRuleFile, prefixEntry),
   };
   const yamlBody = stringifyYaml(frontmatterObject, { lineWidth: 0 }).trimEnd();
   return `---\n${yamlBody}\n---\n`;

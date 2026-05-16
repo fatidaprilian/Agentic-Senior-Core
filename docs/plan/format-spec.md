@@ -18,24 +18,24 @@ Every rule file contains, in this order:
 
 ### 1.1 YAML Frontmatter Schema
 
-Required keys:
+Required keys (trimmed shape, locked at GATE B revision):
 
 ```yaml
 ---
 id_prefix: FE
 domain: frontend-architecture
-version: 1
 priority: high
 scope: ui
 applies_to:
   - frontend
   - fullstack
 keywords:
-  - ui
-  - ux
+  - frontend-architecture
+  - fe
   - design
-  - layout
-last_migrated: 2026-XX-XX
+  - interaction
+  - boundaries
+  - activation
 ---
 ```
 
@@ -43,17 +43,19 @@ Field semantics:
 
 - `id_prefix` (required, string) — 2-4 character uppercase prefix used in every section ID inside this file. Lock per file in section 3 below.
 - `domain` (required, string) — kebab-case slug matching the filename without extension. Used by validate gate to confirm filename and domain agree.
-- `version` (required, integer) — schema version starting at `1`. Bump only when frontmatter shape itself changes.
 - `priority` (required, enum) — one of `critical`, `high`, `medium`. Drives loading order when the agent loads multiple rule scopes simultaneously.
 - `scope` (required, enum) — one of `all-tasks`, `backend`, `ui`, `data`, `infra`, `governance`. Multi-scope rules pick the dominant scope; secondary scopes go in `applies_to`.
 - `applies_to` (required, array of strings) — domains that activate this rule. Drawn from `{frontend, backend, fullstack, infra, mobile, cli, library}`.
-- `keywords` (required, array of strings) — kebab-case keywords used by AGENTS.md routing and grep-based validate snippet checks. **Every kebab-case keyword that the validate gate currently looks for must appear here OR in the body. Keep them here when the keyword is metadata; keep them in the body when they are part of an active instruction.**
-- `last_migrated` (required, string ISO date) — date of the migration commit. Audit trail.
+- `keywords` (required, array of strings) — **4-6 hand-picked** kebab-case keywords. The first two slots are the file's `domain` and the lowercased `id_prefix`; remaining slots come from H1 and section titles. The validate gate accepts either body presence or this array. Cap at 6 to keep frontmatter small.
 
-Optional keys:
+Optional keys (added only when they would otherwise drift):
 
+- `version` (integer) — schema version. **Omit on first migration** (v1 implicit). Add only when the schema itself bumps to v2 or higher.
+- `last_migrated` (ISO date string) — only used when external tooling cannot read git history. **Default: omit** (git log is the audit trail).
 - `superseded_by` (string ID) — if a section was removed and rolled into another rule.
 - `experimental` (boolean) — true for rules under active iteration; default false.
+
+This trimmed shape was locked after Phase 1 GATE B revision. The original draft included `version: 1` and `last_migrated: <date>` by default; pilot measurement on `frontend-architecture.md` (helper output, +9.71% delta) made clear that frontmatter overhead at ~70 tokens was 33% of the regression. Trimming to the shape above removes ~15 tokens per file without losing audit value (git provides the migration date) or correctness (v1 is implicit when `version` is absent).
 
 ### 1.2 Section ID Convention
 

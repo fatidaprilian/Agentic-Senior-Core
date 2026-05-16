@@ -182,10 +182,12 @@ Sebelum lanjut Task 1.2, agent harus:
 - [ ] `frontend-architecture.md` migrated to new format
 - [ ] All cross-references updated
 - [ ] New baseline `benchmarks/results/baseline-{date}.json` produced
-- [ ] Token reduction ≥10% on fixtures that load this rule (otherwise → GATE B failure path)
-- [ ] `npm test` PASS (125+)
+- [ ] Per-file token delta within +15% of original (revised GATE B threshold; ≥10% reduction is no longer required)
+- [ ] 100% directives carry unique `FE-NNN` IDs; zero ambiguous prose references ("see above", "earlier", etc.)
+- [ ] All `[REF:FE-NNN]` cross-refs (if any) resolve
+- [ ] `npm test` PASS (137+)
 - [ ] `npm run validate` PASS — including all snippet checks for frontend-architecture.md
-- [ ] All rule IDs unique, all match `FE-` prefix from format-spec
+- [ ] Frontmatter schema compliant with trimmed shape (no `last_migrated`, no `version` for v1, keywords array 4-6 entries)
 
 **Files yang boleh dibuat/dimodifikasi:**
 - `.agent-context/rules/frontend-architecture.md`
@@ -198,12 +200,32 @@ Sebelum lanjut Task 1.2, agent harus:
 
 **STOP HERE. Tunggu user review pilot result.**
 
-**Acceptance branches:**
-- ✅ **PASS**: Token reduction ≥10% on relevant fixtures + all tests/validate pass + content roundtrip clean → proceed Task 1.4.
-- ⚠️ **MARGINAL**: 5-10% reduction → tampilkan numbers, ask user apakah lanjut atau adjust format spec.
-- ❌ **FAIL**: <5% reduction OR test/validate failure → STOP, lapor diagnostic, re-evaluate format choice. Don't migrate other files until format issue resolved.
+Original Phase 1 plan targeted ≥10% token reduction. **Pilot data (Task 1.2 raw helper output on frontend-architecture.md: +9.71% delta) showed this target was inherited from a generic prose-vs-structured estimate that does not apply to this repo's already-lean imperative prose.** Per the cost decomposition (frontmatter +70 tokens, section ID prefixes +56, numbered list prefixes +222 vs original `- ` bullets +54, total +282 tokens of pure structural markup), hitting -10% would require ~23% body compression — lossy, not restructure. Phase 1 pivots to the research-backed primary axis (citability, accuracy) per `research-foundation.md` D1 (EACL Findings 2026 cites +6.74% reasoning accuracy, not token reduction). Token discipline becomes a no-regression guard, not a reduction target.
 
-**Alasan gate:** Phase 1 success hinges on this single number. Kalau format migration tidak deliver expected reduction, Phase 1 perlu reconsider — migrating 14 more files dengan format yang tidak terbukti akan jadi waste.
+Revised acceptance criteria:
+
+**1. Token discipline (no-regression guard):**
+- Per-file delta vs the original v3 file: **must stay below +15%**
+- Aggregate delta across all 15 migrated rules: **must stay at or below +5%**
+- 100% lossless roundtrip per file (existing `roundtrip-validate.mjs` ≥95% substantial-word overlap, validated per file in Task 1.2)
+
+**2. Citability (research-backed primary axis):**
+- 100% of directives carry a unique stable rule ID under the locked prefix
+- 100% of `[REF:<PREFIX>-NNN]` references resolve to a real section ID
+- Zero ambiguous prose references in the migrated rules ("see above", "earlier", "the next section", etc.) — replace with explicit `[REF:...]`
+- New `audit:rule-id-uniqueness` check is wired into `npm run validate`
+
+**3. Structural quality:**
+- All existing validate gate snippet checks pass (snippets stay in body or move into frontmatter `keywords` per Task 1.7)
+- All cross-doc references updated (no broken anchors in `AGENTS.md`, `prompts/`, `review-checklists/`, or `docs/`)
+- Frontmatter schema compliant per `format-spec.md` section 1.1, with the trimmed shape applied: drop `version` for first-time-v1 files, drop `last_migrated` (git history is the audit trail), keywords array hand-picked at 4-6 entries (not 12 auto-extracted)
+
+**Acceptance branches:**
+- ✅ **PASS**: All three groups meet criteria → proceed Task 1.4.
+- ⚠️ **MARGINAL**: Per-file delta between +15% and +20%, OR aggregate delta between +5% and +10% → tampilkan numbers, ask user apakah lanjut atau revise format spec.
+- ❌ **FAIL**: Any per-file delta > +20%, OR aggregate > +10%, OR roundtrip drift, OR test/validate failure → STOP, lapor diagnostic, re-evaluate format choice. Do not migrate more files until format issue resolved.
+
+**Alasan gate (revised):** Phase 1 success now hinges on citability quality plus a no-regression token guard, not raw reduction. The pilot proved that already-lean imperative prose has minimal compressible surface; forcing token reduction would either kill a research-validated format or push the repo into ugly micro-optimizations that hurt readability. Phase 3 reflection blocks consume `[REF:FE-014]` style citations — that is where the format pays off, not at the `tiktoken` level.
 
 ---
 
@@ -217,7 +239,8 @@ Sebelum lanjut Task 1.2, agent harus:
 - [ ] `architecture.md` migrated
 - [ ] All cross-references updated
 - [ ] New baseline produced and committed
-- [ ] Token reduction ≥10% on fixtures that load this rule (task-02, task-06, task-07, task-08, task-09, task-10)
+- [ ] Per-file token delta within +15% of original
+- [ ] 100% directives carry unique `ARCH-NNN` IDs
 - [ ] `npm test && npm run validate` PASS
 - [ ] All rule IDs unique under `ARCH-` prefix
 
@@ -257,8 +280,9 @@ Sebelum lanjut Task 1.2, agent harus:
 
 **Aggregate acceptance criteria:**
 - [ ] All 15 rules in new format (frontend-architecture, architecture from earlier tasks + 13 here)
-- [ ] Final aggregate token reduction ≥15% across all 10 fixtures (avg of `with_loaded_rules` totals vs baseline)
+- [ ] **Aggregate token delta across all 10 fixtures stays at or below +5%** vs Phase 0 baseline (`baseline-2026-05-16.json`). No file > +15% delta.
 - [ ] Validate gate passes; all snippet checks still match (snippets may now appear in YAML keywords array OR body)
+- [ ] `audit:rule-id-uniqueness` (added in Task 1.7) reports zero collisions across the rules pack
 
 ---
 
@@ -286,9 +310,9 @@ Sebelum lanjut Task 1.2, agent harus:
 
 ---
 
-### Task 1.7: Update Validate Gate Snippet Checks
+### Task 1.7: Update Validate Gate Snippet Checks + Add Rule-ID Audit
 
-**Tujuan:** Snippet checks di `scripts/validate/config.mjs` mungkin perlu update karena content distribution berubah (some kebab-case keywords sekarang di YAML keywords array, some still di body).
+**Tujuan:** Snippet checks di `scripts/validate/config.mjs` mungkin perlu update karena content distribution berubah (some kebab-case keywords sekarang di YAML keywords array, some still di body). Plus add `audit:rule-id-uniqueness` to enforce GATE B citability axis going forward.
 
 **Steps:**
 1. Run `npm run validate` after Task 1.5 selesai
@@ -297,15 +321,26 @@ Sebelum lanjut Task 1.2, agent harus:
    - Decide: keep snippet (find new location in body), update path (kalau snippet sekarang di different file due to migration), or update validate config to look at YAML frontmatter `keywords` array
 4. Update `scripts/validate/config.mjs` minimally — prefer keep-snippet-in-body when possible (preserves grep-based discovery)
 5. Add `// @file-size-exception` re-check — config.mjs might grow if we add new snippet locations
+6. Build `scripts/audit-rule-id-uniqueness.mjs`. Reads every file under `.agent-context/rules/`, parses YAML frontmatter for `id_prefix`, parses every `## <PREFIX>-NNN: ` heading, and verifies:
+   - every section ID matches its file's `id_prefix`
+   - no ID is reused within a single file
+   - every `[REF:<PREFIX>-NNN]` mention in the rules pack OR in `prompts/` OR in `review-checklists/` resolves to a real section ID
+   - no ambiguous prose references ("see above", "earlier", "the next section") survive in any rule body
+7. Wire into `npm run validate` like `audit:file-size`. Add `audit:rule-id-uniqueness` to `package.json` scripts.
 
 **Acceptance criteria:**
 - [ ] All snippet checks pass
 - [ ] `scripts/validate/config.mjs` still under file-size budget OR `@file-size-exception` updated
 - [ ] No silent removal of governance snippets
+- [ ] `scripts/audit-rule-id-uniqueness.mjs` exists, exits 0 when clean, exits 1 on any of the 4 conditions above
+- [ ] Wired into `npm run validate`; `npm run validate` PASS
 
 **Files yang boleh dimodifikasi:**
 - `scripts/validate/config.mjs`
 - `scripts/validate/coverage-checks.mjs` (kalau perlu support YAML keyword check mode)
+- `scripts/validate.mjs` (wire new audit)
+- `scripts/audit-rule-id-uniqueness.mjs` (new)
+- `package.json` (new script)
 
 ---
 
@@ -433,6 +468,7 @@ Setelah Phase 1 selesai, repo akan punya:
 
 **Specific Phase 1 reminders:**
 - Roundtrip-validate every migration. Lossy = unacceptable.
-- Token reduction <10% on pilot = STOP, don't migrate more.
+- Per-file token delta cap is +15%. Aggregate cap is +5%. Anything above triggers GATE B failure path.
+- Citability is the primary axis: every directive carries a stable rule ID, no ambiguous prose references survive.
 - Hard cut to v4 means CHANGELOG migration guide is mandatory, not optional.
 - If snippet checks break en masse, do NOT delete checks. Find new home for the keywords (body or YAML keywords array).

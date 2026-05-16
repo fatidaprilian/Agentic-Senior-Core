@@ -79,6 +79,10 @@ Studi OpenReview ICLR mengidentifikasi fenomena "Curse of Instructions" — keti
 **2. Token efficiency tanpa kehilangan substansi (EACL Findings 2026)**
 Empirical study membuktikan structured format menghasilkan **+6.74% accuracy** untuk reasoning tasks vs prose. Estimasi token efficiency 15-30% gain (belum di-benchmark formal untuk instruction sets — itu tugas Phase 0 untuk validate).
 
+> **PILOT FINDING (Phase 1 Task 1.2 helper output, frontend-architecture.md):** For lean imperative prose (avg 14 words per directive, minimal connective tissue, kebab-case keywords inline), structural markup overhead exceeds prose compression savings. Measured cost decomposition vs original v3 file: frontmatter +70 tokens, section ID prefixes +56 tokens, numbered list prefixes +222 tokens (vs `- ` bullet prefixes +54 tokens, since `tiktoken o200k_base` does not always merge `<digit>.<space>` into a single token). Structural markup floor is ~+282 tokens before any prose savings. The 15-25% reduction estimate applies to **verbose prose**, not to already-condensed instruction text.
+>
+> The research-backed primary benefit (reasoning accuracy +6.74%, rule citability for reflection blocks per [REF:D6]) **remains valid**. Phase 1 GATE B was revised to gate on no-regression token discipline (per-file ≤+15%, aggregate ≤+5%) plus citability quality, not raw token reduction. See `phase-1-format.md` GATE B for the locked criteria.
+
 **3. Cross-model compatibility**
 Markdown adalah format yang dipahami **semua model 2026** native — Claude, GPT, Gemini, Grok, open models (Qwen, DeepSeek, Llama). Pure DSL gagal di model <12B parameter (MetaGlyph paper finding).
 
@@ -555,7 +559,8 @@ Setiap kali decision di-update, log di sini dengan tanggal + alasan.
 | Date | Decision | Change | Reason |
 |---|---|---|---|
 | 2026-05-16 | All D1-D6 | Initial creation | Triangulated dari 3 research reports |
+| 2026-05-16 | D1 | Added pilot finding caveat about lean-prose markup floor | Phase 1 Task 1.2 helper output on `frontend-architecture.md` measured +9.71% delta. Cost decomposition revealed structural markup floor of ~+282 tokens. The 15-25% token reduction estimate was inherited from generic prose-vs-structured comparisons and does not apply to already-condensed instruction text. Research-backed reasoning accuracy benefit remains valid; Phase 1 GATE B revised to gate on no-regression discipline plus citability quality. |
 
 ---
 
-**Last updated:** 2026-05-16. Update dokumen ini setiap encounter edge case yang sering terjadi (add ke section Edge Cases) atau setiap new research findings post-Mei 2026 yang challenge decisions yang ada.
+**Last updated:** 2026-05-16. Updated D1 with Phase 1 pilot finding caveat. Update dokumen ini setiap encounter edge case yang sering terjadi (add ke section Edge Cases) atau setiap new research findings post-Mei 2026 yang challenge decisions yang ada.
