@@ -1,23 +1,23 @@
 # Auto-generated handoff state. DO NOT EDIT MANUALLY.
 # Used by next agent via HANDOFF-CONTINUE prompt.
 
-generated_at: "2026-05-16T15:30:00Z"
+generated_at: "2026-05-16T16:30:00Z"
 agent_environment: "Kiro"
 
 last_completed:
-  phase: 3
-  task_id: "scope-fix + Gate C resolution + Phase 5 plan generation"
-  task_description: "Closed 6-task caching scope-fix pass, recorded Gate C Option A (skip Phase 4 retrieval), generated docs/plan/phase-5-hardening.md."
+  phase: 5
+  task_id: "5.7"
+  task_description: "Closed Phase 5 with phase-5-outcome.md, refreshed 00-context.md status table, and refreshed HANDOFF-STATE.md."
   commit_sha: "<see latest after this commit>"
-  completed_at: "2026-05-16T15:30:00Z"
+  completed_at: "2026-05-16T16:30:00Z"
 
 in_progress:
   phase: 5
-  task_id: "GATE-A"
+  task_id: "GATE-D"
   status: "awaiting-maintainer-decision"
   files_being_modified: []
-  last_action_taken: "Generated Phase 5 hardening plan at docs/plan/phase-5-hardening.md, updated 00-context.md status table to mark Phase 4 skipped and Phase 5 plan-ready."
-  next_action_planned: "Wait for Gate A approval. After approval, start Task 5.1 (public surface refresh for v4)."
+  last_action_taken: "Phase 5 execution complete. Public-surface refresh, coverage uplift, supply-chain hardening, release benchmark bundle, per-integration adoption playbook, release dry-run, outcome closeout."
+  next_action_planned: "Wait for Gate D maintainer decision: publish 4.0.0, publish RC under `next`, or stay unpublished."
 
 metrics_so_far:
   baseline_reference: "benchmarks/results/baseline-2026-05-16.json"
@@ -26,69 +26,78 @@ metrics_so_far:
   phase_2_outcome_commit: "b43dcdb"
   phase_3_outcome_commit: "8dc2d8c"
   scope_fix_final_commit: "b2a60db"
+  phase_5_plan_commit: "677b561"
+  phase_5_task_5_1_commit: "996f72d"
+  phase_5_task_5_2_commit: "adc5ac0"
+  phase_5_task_5_3_commit: "2ea31e2"
+  phase_5_task_5_4_commit: "cd11730"
   gate_c_resolution: "Option A (skip Phase 4 retrieval, proceed to Phase 5)"
   gate_c_resolved_at: "2026-05-16"
+  gate_d_status: "pending"
   current_validation:
-    npm_test: "176/176 pass"
-    npm_run_validate: "565 pass, 0 failed, 2 existing warnings"
+    npm_test: "186/186 pass"
+    npm_run_validate: "568 pass, 0 failed, 2 existing warnings"
     npm_run_gate_release: "pass"
+    npm_audit_full:
+      info: 0
+      low: 0
+      moderate: 0
+      high: 0
+      critical: 0
     npm_pack_dry_run:
-      package_size_kb: 264.7
-      unpacked_size_mb: 1.0
-      total_files: 154
+      package_size_kb: 271.6
+      unpacked_size_mb: 1.1
+      total_files: 157
+    release_bundle_audit: "pass on 4 hashed artifacts"
+    caching_scope_hygiene_audit: "pass on 6 public surfaces"
+  release_bundle_path: "benchmarks/results/release-bundle-4.0.0.json"
 
 decisions_made_in_session:
-  - decision: "Annotate D4 with per-tool caching scope matrix and integration-mode caveat"
+  - decision: "Refresh public surfaces for v4 release candidate"
     category: "A"
-    reasoning: "User-directed scope-fix to prevent universal caching claims that mix direct API and IDE wrapper integrations. Six tools documented with citation URLs."
-    commit_sha: "6788115"
-  - decision: "Add scope caveat to phase-2-outcome.md"
+    reasoning: "README, CHANGELOG, FAQ, integration playbook, and doc-index now describe v4 truthfully and route readers to the per-tool caching scope matrix."
+    commit_sha: "996f72d"
+  - decision: "Add caching scope hygiene audit and parser coverage tests"
     category: "A"
-    reasoning: "Verbatim caveat next to 89.31% table; ensures phase outcome cannot be quoted out of context."
-    commit_sha: "c532412"
-  - decision: "Add scope caveat to phase-3-outcome.md"
+    reasoning: "audit:caching-scope-hygiene catches universal caching claims that mix integration modes; 5 new parser-coverage tests close real edge-case gaps. Test count 176 -> 186; validate count 565 -> 567."
+    commit_sha: "adc5ac0"
+  - decision: "Apply Gate B coverage pragmatism"
+    category: "B"
+    reasoning: "Reaching the validate >=800 stretch target would require tautological coverage on already-covered paths. Stopped at the highest honest count and logged the reason in phase-5-outcome.md per Gate B in the plan."
+    commit_sha: "adc5ac0"
+  - decision: "Document supply-chain audit and scorecard absence honestly"
     category: "A"
-    reasoning: "Verbatim caveat next to Token And Cache Impact table."
-    commit_sha: "a545f3c"
-  - decision: "Annotate cache-phase-2 benchmark JSON with integration_mode and scope_caveat"
+    reasoning: "npm audit clean at every severity, lockfile consistent, SBOM regenerated. Scorecard CLI absent locally; logged honestly in benchmarks/results/scorecard-2026-05-16.json without fabricating a score."
+    commit_sha: "2ea31e2"
+  - decision: "Build release benchmark bundle and integrity audit"
     category: "A"
-    reasoning: "JSON-side annotation for downstream consumers; no number regenerated. anti-halu and baseline JSONs verified clean."
-    commit_sha: "567cf3f"
-  - decision: "Append Caching Effectiveness Reporting Format section to docs/benchmark-reference.md"
-    category: "A"
-    reasoning: "Required JSON shape splitting per integration mode (8 modes) so future caching reports cannot collapse into a universal saving figure."
-    commit_sha: "7d772ec"
-  - decision: "Audit public surfaces and add CHANGELOG audit-completed note"
-    category: "A"
-    reasoning: "README, AGENTS.md, package.json, faq.md, integration-playbook.md all clean. CHANGELOG note records the audit."
-    commit_sha: "b2a60db"
-  - decision: "Resolve Gate C with Option A (skip Phase 4 retrieval, proceed Phase 5)"
-    category: "C-resolved"
-    reasoning: "Confirmed by user. Trigger remains conditional on rules >30, miss-rate >10%, or cache/token regression."
-    commit_sha: "(this commit)"
-  - decision: "Generate docs/plan/phase-5-hardening.md"
-    category: "A"
-    reasoning: "Phase 5 plan mirrors phase-2/3 structure with 7 tasks plus Gates A/B/C/D. Public-surface refresh, coverage uplift, supply-chain hardening, release benchmark bundle, per-integration adoption playbook, release dry-run, outcome doc."
+    reasoning: "scripts/build-release-benchmark-bundle.mjs writes benchmarks/results/release-bundle-4.0.0.json referencing 4 artifacts by SHA-256; scripts/audit-release-bundle.mjs verifies hash integrity and is wired into npm run validate."
+    commit_sha: "cd11730"
+  - decision: "Skip provider-backed AgentHallu evaluation"
+    category: "C-pending"
+    reasoning: "Phase 5 plan marks provider-backed eval as Kategori C escalation. Phase 5 default path is offline anti-halu only. Logged as deferred in phase-5-outcome.md success-metric table."
     commit_sha: "(this commit)"
 
 escalation_pending:
   has_pending: true
   category: "C"
-  question_for_user: "Gate A: review docs/plan/phase-5-hardening.md and approve to start Task 5.1, or request adjustments."
-  context: "Phase 5 plan covers public-surface refresh (README v4, CHANGELOG, FAQ, integration playbook), coverage uplift toward >=80% statements / >=800 validate count, supply-chain hardening (npm audit, SBOM, scorecard), release benchmark bundle, per-integration adoption playbook, release dry-run, and Gate D release decision. No publish happens inside Phase 5."
+  question_for_user: "Gate D: choose the release path for 4.0.0-rc.1."
+  context: "Phase 5 dry-run state (2026-05-16): test count 186, validate count 568, release-gate pass, pack 271.6 kB / 1.1 MB / 157 files, npm audit 0 vulns at every severity, lockfile consistent, release bundle audit pass on 4 artifacts, caching scope hygiene audit pass on 6 public surfaces. 4.0.0-rc.1 remains unpublished. The Phase 5 outcome documents partial-attainment rows (validate stretch >=800 not padded; provider-backed AgentHallu eval deferred; OSSF Scorecard deferred)."
   options_presented:
-    - "Approve plan as-is: respond 'go' or 'approve' to start Task 5.1."
-    - "Request adjustments: state which task or gate needs to change before execution."
+    - "Option A: Bump 4.0.0-rc.1 to 4.0.0, publish, and tag. Recommended only when the maintainer accepts the partial-attainment rows."
+    - "Option B: Stay at 4.0.0-rc.1, publish under the `next` dist-tag for selected adopters."
+    - "Option C: Stay unpublished, queue a follow-up Phase 5.x cycle for any deferred metric."
 
 next_actions_for_continuation:
-  - "Wait for Gate A approval on docs/plan/phase-5-hardening.md."
-  - "On approval, start Task 5.1 public surface refresh (README, CHANGELOG, integration-playbook, faq, doc-index, mcp.json description)."
-  - "Do not push, do not publish. 4.0.0-rc.1 stays unpublished until Gate D."
-  - "After Task 5.1, continue 5.2 -> 5.7 silently per autonomous execution contract; only stop at Gate B (coverage pragmatism), Gate C (supply-chain hard finding), or Gate D (release decision)."
+  - "Do not push, do not publish, until Gate D approves."
+  - "On Option A: bump version to 4.0.0, finalize CHANGELOG with the candidate release-note draft from phase-5-outcome.md, run npm run gate:release one more time, then run npm publish."
+  - "On Option B: keep version at 4.0.0-rc.1, run npm publish --tag next."
+  - "On Option C: queue Phase 5.x with explicit deferred-metric work items (provider-backed AgentHallu eval, scorecard run, validate-count uplift via real-drift catchers)."
+  - "If the maintainer never approves a publish, the local 4.0.0-rc.1 stays as a tagged commit on main only; no remote action."
 
 notes_for_next_agent:
-  - "Per-tool caching scope matrix is the single source of truth for caching claims. Reference research-foundation.md D4 verbatim."
-  - "docs/benchmark-reference.md 'Caching Effectiveness Reporting Format' is the required JSON shape for any future caching report; do not collapse into a single universal saving."
-  - "Phase 5 success-metric targets >=80% test coverage and validate >=800 are stretch; Gate B in the plan governs honesty over padding."
-  - "AgentHallu provider-backed eval is escalation-only (Kategori C). Default Phase 5 path uses only the existing offline anti-halu benchmark."
-  - "OpenSSF Scorecard run is best-effort; missing GitHub auth is logged honestly, not faked."
+  - "Per-tool caching scope matrix is the single source of truth for caching claims (research-foundation.md D4)."
+  - "audit:caching-scope-hygiene blocks any future universal caching claim on README, AGENTS.md, FAQ, integration playbook, doc-index, or CHANGELOG."
+  - "audit:release-bundle blocks artifact hash drift between bundle and source files; if a benchmark file is regenerated, run `npm run build:release-bundle` again."
+  - "Scorecard CLI absence is documented in benchmarks/results/scorecard-2026-05-16.json with fallback signals; do not fabricate a score."
+  - "Phase 1 aggregate token delta vs Phase 0 baseline is +8.86% under +10% cap; the -40% cold reduction success metric remains aspirational and is paired with the D1 pilot caveat."

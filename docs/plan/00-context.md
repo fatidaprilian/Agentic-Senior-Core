@@ -2,7 +2,7 @@
 
 > **Audience:** Maintainer (Farid) + AI coding agent yang dipakai untuk eksekusi.
 > **Bahasa:** Bahasa Indonesia untuk narasi, English untuk istilah teknis.
-> **Status:** Phase 0/1/2/3 complete. Gate C resolved on 2026-05-16 with Option A (skip Phase 4 retrieval). Phase 5 plan generated at `docs/plan/phase-5-hardening.md`; awaiting Gate A review before execution.
+> **Status:** Phase 0/1/2/3 complete. Gate C resolved on 2026-05-16 with Option A (skip Phase 4 retrieval). Phase 5 hardening execution is complete on 2026-05-16. Gate D release decision is pending maintainer approval; `4.0.0-rc.1` remains unpublished and no `git push` has occurred.
 
 ---
 
@@ -118,7 +118,7 @@ docs/plan/
 | Phase 2 — Caching Layer | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-2-outcome.md`. Warm-cache simulation complete; RC remains unpublished. Scope caveat added 2026-05-16: figures apply to direct API + Claude Code SDK programmatic only. |
 | Phase 3 — Anti-Halu | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-3-outcome.md`. Offline benchmark pass rate 100%, citation validity 100%. |
 | Phase 4 — Retrieval (conditional) | ⏭️ Skipped (Gate C 2026-05-16) | — | — | Gate C Option A: skip retrieval. Trigger remains conditional (rules >30, miss-rate >10%, or cache/token regression). |
-| Phase 5 — Hardening & Adoption | 📋 Plan ready (Gate A pending) | — | — | See `phase-5-hardening.md`. Generated 2026-05-16. Public-surface refresh, coverage uplift, supply-chain hardening, release-bundle, Gate D release decision. |
+| Phase 5 — Hardening & Adoption | ✅ Completed (Gate D pending) | 2026-05-16 | 2026-05-16 | See `phase-5-outcome.md`. Test count 186, validate count 568, release bundle hashes verified, npm audit clean, pack 271.6 kB / 1.1 MB / 157 files. `4.0.0-rc.1` stays unpublished until Gate D. |
 
 ---
 
@@ -155,8 +155,7 @@ Decision yang sudah dijawab user dan locked:
 
 Pending decisions:
 
-- **Gate A (Phase 5 plan review):** review `docs/plan/phase-5-hardening.md` before Task 5.1 begins.
-- **Gate D (Release decision):** publish `4.0.0`, publish `4.0.0-rc.1` under `next` dist-tag, or stay unpublished. Escalated after Task 5.6.
+- **Gate D (Release decision):** publish `4.0.0`, publish `4.0.0-rc.1` under `next` dist-tag, or stay unpublished. Phase 5 escalation report is in `docs/plan/phase-5-outcome.md` "Gate D - Release Decision Escalation".
 
 `4.0.0-rc.1` remains unpublished until Gate D. No `git push` has occurred.
 
@@ -179,4 +178,4 @@ Triangulation rule: klaim muncul di 2+ sources independen = HIGH confidence (dec
 
 ---
 
-**Last updated:** Phase 3 completed 2026-05-16. Gate C resolved on 2026-05-16 with Option A (skip Phase 4). Phase 5 hardening plan generated at `docs/plan/phase-5-hardening.md`; Gate A review pending. `4.0.0-rc.1` remains unpublished. Caching scope-fix pass closed on 2026-05-16 (per-tool matrix locked in `research-foundation.md` D4 and `docs/benchmark-reference.md`).
+**Last updated:** Phase 5 completed 2026-05-16. Test count 186, validate count 568, release-gate pass, pack 271.6 kB / 1.1 MB / 157 files, `npm audit` clean. Gate D release decision is pending maintainer approval (Option A publish 4.0.0, Option B publish RC under `next`, Option C stay unpublished). `4.0.0-rc.1` remains unpublished. Caching scope-fix pass closed on 2026-05-16 (per-tool matrix locked in `research-foundation.md` D4 and enforced by `audit:caching-scope-hygiene`).
