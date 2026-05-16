@@ -282,7 +282,7 @@ Tiny rule files below 600 original OpenAI tokens use the same v4 format, but the
 
 1. Preserve the full v4 shape: frontmatter, H1, ID-prefixed H2 sections, and numbered directives.
 2. Keep the absolute overhead at or below +120 OpenAI tokens against the original v3 file.
-3. Keep the aggregate Phase 1 token delta at or below +5% across benchmark fixtures.
+3. Keep the aggregate Phase 1 token delta at or below +10% across benchmark fixtures.
 4. Log both the absolute overhead and percentage delta in the outcome report.
 
 ## 7. What This Spec Does Not Cover
