@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Documentation
+- Caching scope-fix pass (2026-05-16). Audited public-facing surfaces (`README.md`, `CHANGELOG.md` 4.0.0-rc.1 entries, `AGENTS.md`, `package.json` description, `docs/faq.md`, `docs/integration-playbook.md`, plus the rest of `docs/`) for universal caching claims that mix integration modes. Result: no overpromise language was found on the public surfaces; the canonical caching numbers live in `docs/plan/research-foundation.md` D4, `docs/plan/phase-2-outcome.md`, `docs/plan/phase-3-outcome.md`, and `benchmarks/results/cache-phase-2-2026-05-16.json`. Those four documents now carry the per-tool caching scope matrix, the direct-API-vs-IDE-wrapper caveat, and the per-integration JSON-shape requirement documented in `docs/benchmark-reference.md` "Caching Effectiveness Reporting Format". The 89.31% Anthropic warm-cache figure remains valid only for direct provider API integration and Claude Code SDK programmatic mode; IDE wrappers (Cursor, Windsurf, Codex CLI, Kiro) receive prefix stability that is not measurable from the rules pack side. No code, no runtime API, and no benchmark numbers were modified.
 
 ## 4.0.0-rc.1 - 2026-05-16
 ### Breaking changes
