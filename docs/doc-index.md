@@ -13,10 +13,12 @@ Use this file to pick the smallest useful docs set before loading deeper context
 ## Specialized References
 
 - `docs/DESIGN.md`: UI/design governance context for this repo's docs and assets.
-- `docs/integration-playbook.md`: CI/CD, IDE, and agent-entrypoint integration guidance.
+- `docs/integration-playbook.md`: CI/CD, IDE, and agent-entrypoint integration guidance, plus the per-tool caching scope matrix and per-integration adoption sections.
+- `docs/benchmark-reference.md`: Benchmark history and the canonical "Caching Effectiveness Reporting Format" for any caching report attributable to this pack.
 - `docs/deep-dive.md`: internal behavior details for advanced contributors.
 - `docs/terminology-mapping.md`: canonical terminology and developer-facing aliases.
 - `docs/deep-analysis-and-roadmap-backlog.md`: active roadmap and completed governance slices.
+- `docs/architecture-vision.md`: planned dynamic knowledge surfaces declared in `mcp.json` (status: planned).
 - `docs/faq.md`: common questions and troubleshooting context.
 
 ## Conditional Docs

@@ -77,3 +77,13 @@ After the package is published, the shorter equivalent is:
 ```bash
 npx @ryuenn3123/agentic-senior-core init
 ```
+
+## Does v4 save 89% on caching for me?
+The 89.31% effective-token reduction reported in `benchmarks/results/cache-phase-2-2026-05-16.json` is a direct provider API number. It is computed against Anthropic's documented prompt-caching multipliers using `cache_control` breakpoints that the integrator controls. It applies to direct Anthropic API integration and Claude Code SDK programmatic mode.
+
+If you use the rules pack through an IDE wrapper (Cursor, Windsurf, Codex CLI, Kiro), the wrapper controls the request path. The pack contributes prefix stability, which is not the same as a measurable per-pack saving. There is no honest way to attribute a single universal saving figure to those integrations.
+
+For the per-tool matrix and the required JSON shape when reporting caching numbers, see `docs/integration-playbook.md` "Per-Tool Caching Scope" and `docs/benchmark-reference.md` "Caching Effectiveness Reporting Format".
+
+## Why does v4 break v3 prose-shape parsers?
+v4 converts the internal `.agent-context/rules/` pack from prose Markdown to numbered Markdown with YAML frontmatter and stable section IDs (e.g. `FE-004`, `ARCH-009`, `API-006`). Consumers that only import `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md` do not need code changes; the routing table is intact. Consumers that parse `.agent-context/rules/*.md` directly need to switch to the new format: parse YAML frontmatter, then use `## <PREFIX>-NNN: <Title>` headings as stable anchors. The full migration guide lives in `CHANGELOG.md` under `4.0.0-rc.1`. The breaking change is intentional; v3 prose-shape compatibility was dropped because rule citability requires stable IDs (see `docs/plan/research-foundation.md` D1).
