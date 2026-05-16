@@ -355,13 +355,13 @@ The benchmark harness should produce the contract from the real assembled benchm
 8. Keep `4.0.0-rc.1` unpublished.
 
 **Acceptance criteria:**
-- [ ] `docs/plan/phase-2-outcome.md` exists.
-- [ ] `benchmarks/results/cache-phase-2-YYYY-MM-DD.json` exists.
-- [ ] `npm test` passes with count >= 145.
-- [ ] `npm run validate` passes with 0 failures.
-- [ ] `npm run gate:release` passes.
-- [ ] Git tracked working tree is clean after local commit.
-- [ ] No push and no publish occurred.
+- [x] `docs/plan/phase-2-outcome.md` exists.
+- [x] `benchmarks/results/cache-phase-2-YYYY-MM-DD.json` exists.
+- [x] `npm test` passes with count >= 145.
+- [x] `npm run validate` passes with 0 failures.
+- [x] `npm run gate:release` passes.
+- [x] Git tracked working tree is clean after local commit.
+- [x] No push and no publish occurred.
 
 ---
 

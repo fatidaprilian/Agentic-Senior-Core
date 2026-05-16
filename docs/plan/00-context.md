@@ -2,7 +2,7 @@
 
 > **Audience:** Maintainer (Farid) + AI coding agent yang dipakai untuk eksekusi.
 > **Bahasa:** Bahasa Indonesia untuk narasi, English untuk istilah teknis.
-> **Status:** Phase 1 completed. Phase 2 plan generated after GATE C Option A approval.
+> **Status:** Phase 2 completed. Phase 3 anti-halu plan is the next approval point.
 
 ---
 
@@ -115,8 +115,8 @@ docs/plan/
 |-------|--------|---------|-----------|-------|
 | Phase 0 — Baseline & Cleanup | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-0-outcome.md`. GATE D approved. |
 | Phase 1 — Format Migration | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-1-outcome.md`. All 15 rules migrated to v4; final OpenAI aggregate +8.86% under the +10% cap. |
-| Phase 2 — Caching Layer | 🟡 Ready | 2026-05-16 | — | `phase-2-caching.md` generated after GATE C Option A approval. |
-| Phase 3 — Anti-Halu | ⏸ Locked | — | — | Generate setelah Phase 2 selesai |
+| Phase 2 — Caching Layer | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-2-outcome.md`. Warm-cache simulation complete; RC remains unpublished. |
+| Phase 3 — Anti-Halu | 🟡 Ready | — | — | Generate after Phase 2 GATE C approval. |
 | Phase 4 — Retrieval (conditional) | ⏸ Locked | — | — | Skip kalau Phase 3 quality target tercapai |
 | Phase 5 — Hardening & Adoption | ⏸ Locked | — | — | Generate setelah Phase 3/4 selesai |
 
@@ -152,7 +152,7 @@ Decision yang sudah dijawab user dan locked:
 - **Tiny-rule token gate:** Rule files below 600 original OpenAI tokens keep the same v4 format but use a +120 OpenAI-token absolute overhead cap instead of the +15% per-file percentage cap. Aggregate Phase 1 cap is +10%.
 - **Aggregate cap strategy:** Option B locked on 2026-05-16. Relax aggregate cap from +5% to +10%, backed by Anthropic prompt-caching math (cache reads cost 0.1x base input price) and local pilot data. Continue Task 1.5 in original file order; keep per-file and tiny-file caps unchanged.
 
-Tidak ada pending decision yang block Phase 2. GATE C Option A is approved: generate `phase-2-caching.md`, keep `4.0.0-rc.1` unpublished until Phase 5, and do not push.
+Tidak ada pending decision yang block Phase 3 planning. Phase 2 GATE C result: caching layer is complete, `phase-2-outcome.md` is written, `4.0.0-rc.1` remains unpublished until Phase 5, and no push occurred.
 
 ---
 
@@ -173,4 +173,4 @@ Triangulation rule: klaim muncul di 2+ sources independen = HIGH confidence (dec
 
 ---
 
-**Last updated:** Phase 2 plan generated 2026-05-16 after GATE C Option A approval. All 15 rules are v4, `4.0.0-rc.1` remains unpublished, and Phase 2 caching execution is ready.
+**Last updated:** Phase 2 completed 2026-05-16. All 15 rules are v4, cache-layer simulation and audit gates are in place, `4.0.0-rc.1` remains unpublished, and Phase 3 anti-halu planning is ready.

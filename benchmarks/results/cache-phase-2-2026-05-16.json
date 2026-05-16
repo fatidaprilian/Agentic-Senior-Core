@@ -1,6 +1,6 @@
 {
   "report_version": "2.0.0",
-  "generated_at": "2026-05-16T14:10:22.338Z",
+  "generated_at": "2026-05-16T14:18:03.646Z",
   "description": "Phase 2 offline warm-cache simulation. Separates measured offline token counts from provider economic projections. No generation API was called.",
   "token_counting": {
     "method": "tiktoken-cl100k_base-offline-estimate",
