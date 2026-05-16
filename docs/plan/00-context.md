@@ -2,7 +2,7 @@
 
 > **Audience:** Maintainer (Farid) + AI coding agent yang dipakai untuk eksekusi.
 > **Bahasa:** Bahasa Indonesia untuk narasi, English untuk istilah teknis.
-> **Status:** Phase 3 anti-halu execution is active after maintainer approval.
+> **Status:** Phase 3 anti-halu execution is complete. Gate C is pending maintainer approval for the Phase 4 retrieval decision.
 
 ---
 
@@ -116,9 +116,9 @@ docs/plan/
 | Phase 0 — Baseline & Cleanup | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-0-outcome.md`. GATE D approved. |
 | Phase 1 — Format Migration | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-1-outcome.md`. All 15 rules migrated to v4; final OpenAI aggregate +8.86% under the +10% cap. |
 | Phase 2 — Caching Layer | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-2-outcome.md`. Warm-cache simulation complete; RC remains unpublished. |
-| Phase 3 — Anti-Halu | 🟡 Active | 2026-05-16 | — | `phase-3-anti-halu.md` generated after maintainer approval. |
-| Phase 4 — Retrieval (conditional) | ⏸ Locked | — | — | Skip kalau Phase 3 quality target tercapai |
-| Phase 5 — Hardening & Adoption | ⏸ Locked | — | — | Generate setelah Phase 3/4 selesai |
+| Phase 3 — Anti-Halu | Completed | 2026-05-16 | 2026-05-16 | See `phase-3-outcome.md`. Gate C recommendation: skip Phase 4 and proceed to Phase 5 after maintainer approval. |
+| Phase 4 — Retrieval (conditional) | Gate C Pending | — | — | Recommended skip: offline anti-halu pass rate 100%, citation validity 100%, warm-cache reduction 89.31%. |
+| Phase 5 — Hardening & Adoption | Locked | — | — | Generate after Gate C approval. |
 
 ---
 
@@ -152,7 +152,7 @@ Decision yang sudah dijawab user dan locked:
 - **Tiny-rule token gate:** Rule files below 600 original OpenAI tokens keep the same v4 format but use a +120 OpenAI-token absolute overhead cap instead of the +15% per-file percentage cap. Aggregate Phase 1 cap is +10%.
 - **Aggregate cap strategy:** Option B locked on 2026-05-16. Relax aggregate cap from +5% to +10%, backed by Anthropic prompt-caching math (cache reads cost 0.1x base input price) and local pilot data. Continue Task 1.5 in original file order; keep per-file and tiny-file caps unchanged.
 
-Tidak ada pending decision yang block Phase 3 execution. Phase 3 plan is generated; continue with anti-sycophancy, bounded reflection, local MCP validation tools, and offline anti-halu evaluation. `4.0.0-rc.1` remains unpublished until Phase 5, and no push occurred.
+Pending Gate C decision: accept Phase 3 outcome and decide whether to skip Phase 4 retrieval. Recommendation is Option A: skip Phase 4 for now and generate the Phase 5 hardening plan. `4.0.0-rc.1` remains unpublished until Phase 5, and no push occurred.
 
 ---
 
@@ -173,4 +173,4 @@ Triangulation rule: klaim muncul di 2+ sources independen = HIGH confidence (dec
 
 ---
 
-**Last updated:** Phase 3 plan generated 2026-05-16. All 15 rules are v4, cache-layer simulation and audit gates are in place, `4.0.0-rc.1` remains unpublished, and Phase 3 anti-halu execution is active.
+**Last updated:** Phase 3 completed 2026-05-16. Anti-halu benchmark pass rate is 100%, citation validity is 100%, cache-layer simulation remains healthy, `4.0.0-rc.1` remains unpublished, and Gate C is pending maintainer approval.

@@ -245,14 +245,14 @@ Phase 3 must not turn stable cacheable text into volatile task-specific text.
 9. Keep `4.0.0-rc.1` unpublished.
 
 **Acceptance criteria:**
-- [ ] `docs/plan/phase-3-outcome.md` exists.
-- [ ] Anti-halu benchmark JSON exists.
-- [ ] `npm test` passes with count >= 167.
-- [ ] `npm run validate` passes with 0 failures.
-- [ ] `npm run gate:release` passes.
-- [ ] Phase 4 trigger decision is reported.
-- [ ] Git tracked working tree is clean after local commit.
-- [ ] No push and no publish occurred.
+- [x] `docs/plan/phase-3-outcome.md` exists.
+- [x] Anti-halu benchmark JSON exists.
+- [x] `npm test` passes with count >= 167.
+- [x] `npm run validate` passes with 0 failures.
+- [x] `npm run gate:release` passes.
+- [x] Phase 4 trigger decision is reported.
+- [x] Git tracked working tree is clean after local commit.
+- [x] No push and no publish occurred.
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "report_version": "2.0.0",
-  "generated_at": "2026-05-16T14:18:03.646Z",
+  "generated_at": "2026-05-16T14:44:28.175Z",
   "description": "Phase 2 offline warm-cache simulation. Separates measured offline token counts from provider economic projections. No generation API was called.",
   "token_counting": {
     "method": "tiktoken-cl100k_base-offline-estimate",
@@ -66,9 +66,9 @@
       "scenario": "always_included",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 10,
-      "average_total_input_tokens": 2719.5,
-      "average_cacheable_layer_1_plus_2_tokens": 2654,
-      "average_warm_read_effective_tokens": 330.90000000000003,
+      "average_total_input_tokens": 2821.5,
+      "average_cacheable_layer_1_plus_2_tokens": 2756,
+      "average_warm_read_effective_tokens": 341.09999999999997,
       "projectionQuality": "official-multiplier",
       "accurate": true
     },
@@ -77,9 +77,9 @@
       "scenario": "with_loaded_rules",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 10,
-      "average_total_input_tokens": 8483.1,
-      "average_cacheable_layer_1_plus_2_tokens": 8417.6,
-      "average_warm_read_effective_tokens": 907.26,
+      "average_total_input_tokens": 8588.7,
+      "average_cacheable_layer_1_plus_2_tokens": 8523.2,
+      "average_warm_read_effective_tokens": 917.82,
       "projectionQuality": "official-multiplier",
       "accurate": true
     },
@@ -88,8 +88,8 @@
       "scenario": "always_included",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 10,
-      "average_total_input_tokens": 2719.5,
-      "average_cacheable_layer_1_plus_2_tokens": 2654,
+      "average_total_input_tokens": 2821.5,
+      "average_cacheable_layer_1_plus_2_tokens": 2756,
       "average_warm_read_effective_tokens": null,
       "projectionQuality": "eligibility-only",
       "accurate": false
@@ -99,8 +99,8 @@
       "scenario": "with_loaded_rules",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 10,
-      "average_total_input_tokens": 8483.1,
-      "average_cacheable_layer_1_plus_2_tokens": 8417.6,
+      "average_total_input_tokens": 8588.7,
+      "average_cacheable_layer_1_plus_2_tokens": 8523.2,
       "average_warm_read_effective_tokens": null,
       "projectionQuality": "eligibility-only",
       "accurate": false
@@ -110,8 +110,8 @@
       "scenario": "always_included",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 10,
-      "average_total_input_tokens": 2719.5,
-      "average_cacheable_layer_1_plus_2_tokens": 2654,
+      "average_total_input_tokens": 2821.5,
+      "average_cacheable_layer_1_plus_2_tokens": 2756,
       "average_warm_read_effective_tokens": null,
       "projectionQuality": "eligibility-only",
       "accurate": false
@@ -121,8 +121,8 @@
       "scenario": "with_loaded_rules",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 10,
-      "average_total_input_tokens": 8483.1,
-      "average_cacheable_layer_1_plus_2_tokens": 8417.6,
+      "average_total_input_tokens": 8588.7,
+      "average_cacheable_layer_1_plus_2_tokens": 8523.2,
       "average_warm_read_effective_tokens": null,
       "projectionQuality": "eligibility-only",
       "accurate": false
@@ -132,8 +132,8 @@
       "scenario": "always_included",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 0,
-      "average_total_input_tokens": 2719.5,
-      "average_cacheable_layer_1_plus_2_tokens": 2654,
+      "average_total_input_tokens": 2821.5,
+      "average_cacheable_layer_1_plus_2_tokens": 2756,
       "average_warm_read_effective_tokens": null,
       "projectionQuality": "none",
       "accurate": false
@@ -143,8 +143,8 @@
       "scenario": "with_loaded_rules",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 0,
-      "average_total_input_tokens": 8483.1,
-      "average_cacheable_layer_1_plus_2_tokens": 8417.6,
+      "average_total_input_tokens": 8588.7,
+      "average_cacheable_layer_1_plus_2_tokens": 8523.2,
       "average_warm_read_effective_tokens": null,
       "projectionQuality": "none",
       "accurate": false
@@ -154,8 +154,8 @@
       "scenario": "always_included",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 0,
-      "average_total_input_tokens": 2719.5,
-      "average_cacheable_layer_1_plus_2_tokens": 2654,
+      "average_total_input_tokens": 2821.5,
+      "average_cacheable_layer_1_plus_2_tokens": 2756,
       "average_warm_read_effective_tokens": null,
       "projectionQuality": "none",
       "accurate": false
@@ -165,8 +165,8 @@
       "scenario": "with_loaded_rules",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 0,
-      "average_total_input_tokens": 8483.1,
-      "average_cacheable_layer_1_plus_2_tokens": 8417.6,
+      "average_total_input_tokens": 8588.7,
+      "average_cacheable_layer_1_plus_2_tokens": 8523.2,
       "average_warm_read_effective_tokens": null,
       "projectionQuality": "none",
       "accurate": false
@@ -176,8 +176,8 @@
       "scenario": "always_included",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 0,
-      "average_total_input_tokens": 2719.5,
-      "average_cacheable_layer_1_plus_2_tokens": 2654,
+      "average_total_input_tokens": 2821.5,
+      "average_cacheable_layer_1_plus_2_tokens": 2756,
       "average_warm_read_effective_tokens": null,
       "projectionQuality": "none",
       "accurate": false
@@ -187,8 +187,8 @@
       "scenario": "with_loaded_rules",
       "fixture_count": 10,
       "layer_1_plus_2_eligible_count": 0,
-      "average_total_input_tokens": 8483.1,
-      "average_cacheable_layer_1_plus_2_tokens": 8417.6,
+      "average_total_input_tokens": 8588.7,
+      "average_cacheable_layer_1_plus_2_tokens": 8523.2,
       "average_warm_read_effective_tokens": null,
       "projectionQuality": "none",
       "accurate": false
@@ -211,12 +211,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2697
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2799
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -229,8 +229,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 3360.5,
-        "warm_read_effective_tokens": 308.40000000000003,
+        "first_request_effective_tokens": 3488,
+        "warm_read_effective_tokens": 318.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -254,12 +254,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5382,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8036,
-        "total_input_tokens": 8079
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8138,
+        "total_input_tokens": 8181
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -272,8 +272,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 10088,
-        "warm_read_effective_tokens": 846.6,
+        "first_request_effective_tokens": 10215.5,
+        "warm_read_effective_tokens": 856.8000000000001,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -297,12 +297,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2697
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2799
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -338,12 +338,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5382,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8036,
-        "total_input_tokens": 8079
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8138,
+        "total_input_tokens": 8181
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -379,12 +379,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2697
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2799
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -420,12 +420,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5382,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8036,
-        "total_input_tokens": 8079
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8138,
+        "total_input_tokens": 8181
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -461,12 +461,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2697
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2799
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -502,12 +502,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5382,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8036,
-        "total_input_tokens": 8079
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8138,
+        "total_input_tokens": 8181
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -543,12 +543,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2697
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2799
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -584,12 +584,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5382,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8036,
-        "total_input_tokens": 8079
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8138,
+        "total_input_tokens": 8181
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -625,12 +625,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2697
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2799
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -666,12 +666,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5382,
         "layer_3_dynamic_suffix": 43,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8036,
-        "total_input_tokens": 8079
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8138,
+        "total_input_tokens": 8181
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -707,12 +707,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2718
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2820
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -725,8 +725,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 3381.5,
-        "warm_read_effective_tokens": 329.40000000000003,
+        "first_request_effective_tokens": 3509,
+        "warm_read_effective_tokens": 339.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -750,12 +750,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 7677,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 10331,
-        "total_input_tokens": 10395
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 10433,
+        "total_input_tokens": 10497
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -768,8 +768,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 12977.75,
-        "warm_read_effective_tokens": 1097.1000000000001,
+        "first_request_effective_tokens": 13105.25,
+        "warm_read_effective_tokens": 1107.3,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -793,12 +793,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2718
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2820
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -834,12 +834,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 7677,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 10331,
-        "total_input_tokens": 10395
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 10433,
+        "total_input_tokens": 10497
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -875,12 +875,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2718
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2820
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -916,12 +916,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 7677,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 10331,
-        "total_input_tokens": 10395
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 10433,
+        "total_input_tokens": 10497
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -957,12 +957,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2718
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2820
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -998,12 +998,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 7677,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 10331,
-        "total_input_tokens": 10395
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 10433,
+        "total_input_tokens": 10497
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1039,12 +1039,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2718
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2820
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1080,12 +1080,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 7677,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 10331,
-        "total_input_tokens": 10395
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 10433,
+        "total_input_tokens": 10497
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1121,12 +1121,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2718
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2820
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1162,12 +1162,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 7677,
         "layer_3_dynamic_suffix": 64,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 10331,
-        "total_input_tokens": 10395
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 10433,
+        "total_input_tokens": 10497
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1203,12 +1203,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2719
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2821
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1221,8 +1221,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 3382.5,
-        "warm_read_effective_tokens": 330.40000000000003,
+        "first_request_effective_tokens": 3510,
+        "warm_read_effective_tokens": 340.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -1246,12 +1246,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 4959,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7613,
-        "total_input_tokens": 7678
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 7715,
+        "total_input_tokens": 7780
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1264,8 +1264,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 9581.25,
-        "warm_read_effective_tokens": 826.3000000000001,
+        "first_request_effective_tokens": 9708.75,
+        "warm_read_effective_tokens": 836.5,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -1289,12 +1289,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2719
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2821
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1330,12 +1330,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 4959,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7613,
-        "total_input_tokens": 7678
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 7715,
+        "total_input_tokens": 7780
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1371,12 +1371,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2719
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2821
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1412,12 +1412,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 4959,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7613,
-        "total_input_tokens": 7678
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 7715,
+        "total_input_tokens": 7780
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1453,12 +1453,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2719
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2821
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1494,12 +1494,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 4959,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7613,
-        "total_input_tokens": 7678
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 7715,
+        "total_input_tokens": 7780
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1535,12 +1535,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2719
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2821
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1576,12 +1576,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 4959,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7613,
-        "total_input_tokens": 7678
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 7715,
+        "total_input_tokens": 7780
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1617,12 +1617,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2719
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2821
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1658,12 +1658,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 4959,
         "layer_3_dynamic_suffix": 65,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7613,
-        "total_input_tokens": 7678
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 7715,
+        "total_input_tokens": 7780
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1699,12 +1699,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2723
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2825
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1717,8 +1717,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 3386.5,
-        "warm_read_effective_tokens": 334.40000000000003,
+        "first_request_effective_tokens": 3514,
+        "warm_read_effective_tokens": 344.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -1742,12 +1742,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8855
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8957
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1760,8 +1760,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 11051.5,
-        "warm_read_effective_tokens": 947.6,
+        "first_request_effective_tokens": 11179,
+        "warm_read_effective_tokens": 957.8000000000001,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -1785,12 +1785,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2723
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2825
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1826,12 +1826,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8855
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8957
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1867,12 +1867,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2723
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2825
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1908,12 +1908,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8855
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8957
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -1949,12 +1949,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2723
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2825
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -1990,12 +1990,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8855
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8957
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2031,12 +2031,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2723
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2825
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2072,12 +2072,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8855
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8957
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2113,12 +2113,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2723
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2825
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2154,12 +2154,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 69,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8855
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8957
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2195,12 +2195,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2713
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2815
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2213,8 +2213,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 3376.5,
-        "warm_read_effective_tokens": 324.40000000000003,
+        "first_request_effective_tokens": 3504,
+        "warm_read_effective_tokens": 334.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -2238,12 +2238,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8845
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8947
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2256,8 +2256,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 11041.5,
-        "warm_read_effective_tokens": 937.6,
+        "first_request_effective_tokens": 11169,
+        "warm_read_effective_tokens": 947.8000000000001,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -2281,12 +2281,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2713
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2815
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2322,12 +2322,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8845
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8947
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2363,12 +2363,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2713
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2815
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2404,12 +2404,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8845
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8947
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2445,12 +2445,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2713
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2815
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2486,12 +2486,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8845
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8947
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2527,12 +2527,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2713
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2815
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2568,12 +2568,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8845
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8947
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2609,12 +2609,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2713
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2815
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2650,12 +2650,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6132,
         "layer_3_dynamic_suffix": 59,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8786,
-        "total_input_tokens": 8845
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8888,
+        "total_input_tokens": 8947
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2691,12 +2691,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2717
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2819
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2709,8 +2709,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 3380.5,
-        "warm_read_effective_tokens": 328.40000000000003,
+        "first_request_effective_tokens": 3508,
+        "warm_read_effective_tokens": 338.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -2734,12 +2734,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6342,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8996,
-        "total_input_tokens": 9059
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9098,
+        "total_input_tokens": 9161
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2752,8 +2752,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 11308,
-        "warm_read_effective_tokens": 962.6,
+        "first_request_effective_tokens": 11435.5,
+        "warm_read_effective_tokens": 972.8000000000001,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -2777,12 +2777,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2717
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2819
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2818,12 +2818,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6342,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8996,
-        "total_input_tokens": 9059
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9098,
+        "total_input_tokens": 9161
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2859,12 +2859,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2717
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2819
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2900,12 +2900,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6342,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8996,
-        "total_input_tokens": 9059
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9098,
+        "total_input_tokens": 9161
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -2941,12 +2941,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2717
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2819
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -2982,12 +2982,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6342,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8996,
-        "total_input_tokens": 9059
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9098,
+        "total_input_tokens": 9161
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3023,12 +3023,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2717
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2819
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3064,12 +3064,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6342,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8996,
-        "total_input_tokens": 9059
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9098,
+        "total_input_tokens": 9161
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3105,12 +3105,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2717
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2819
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3146,12 +3146,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 6342,
         "layer_3_dynamic_suffix": 63,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8996,
-        "total_input_tokens": 9059
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9098,
+        "total_input_tokens": 9161
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3187,12 +3187,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2741
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2843
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3205,8 +3205,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 3404.5,
-        "warm_read_effective_tokens": 352.40000000000003,
+        "first_request_effective_tokens": 3532,
+        "warm_read_effective_tokens": 362.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -3230,12 +3230,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5263,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7917,
-        "total_input_tokens": 8004
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8019,
+        "total_input_tokens": 8106
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3248,8 +3248,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 9983.25,
-        "warm_read_effective_tokens": 878.7,
+        "first_request_effective_tokens": 10110.75,
+        "warm_read_effective_tokens": 888.9000000000001,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -3273,12 +3273,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2741
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2843
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3314,12 +3314,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5263,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7917,
-        "total_input_tokens": 8004
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8019,
+        "total_input_tokens": 8106
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3355,12 +3355,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2741
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2843
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3396,12 +3396,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5263,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7917,
-        "total_input_tokens": 8004
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8019,
+        "total_input_tokens": 8106
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3437,12 +3437,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2741
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2843
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3478,12 +3478,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5263,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7917,
-        "total_input_tokens": 8004
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8019,
+        "total_input_tokens": 8106
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3519,12 +3519,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2741
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2843
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3560,12 +3560,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5263,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7917,
-        "total_input_tokens": 8004
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8019,
+        "total_input_tokens": 8106
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3601,12 +3601,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2741
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2843
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3642,12 +3642,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5263,
         "layer_3_dynamic_suffix": 87,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 7917,
-        "total_input_tokens": 8004
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8019,
+        "total_input_tokens": 8106
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3683,12 +3683,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2728
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2830
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3701,8 +3701,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 3391.5,
-        "warm_read_effective_tokens": 339.40000000000003,
+        "first_request_effective_tokens": 3519,
+        "warm_read_effective_tokens": 349.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -3726,12 +3726,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5911,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8565,
-        "total_input_tokens": 8639
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8667,
+        "total_input_tokens": 8741
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3744,8 +3744,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 10780.25,
-        "warm_read_effective_tokens": 930.5,
+        "first_request_effective_tokens": 10907.75,
+        "warm_read_effective_tokens": 940.7,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -3769,12 +3769,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2728
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2830
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3810,12 +3810,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5911,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8565,
-        "total_input_tokens": 8639
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8667,
+        "total_input_tokens": 8741
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3851,12 +3851,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2728
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2830
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3892,12 +3892,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5911,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8565,
-        "total_input_tokens": 8639
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8667,
+        "total_input_tokens": 8741
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -3933,12 +3933,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2728
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2830
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -3974,12 +3974,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5911,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8565,
-        "total_input_tokens": 8639
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8667,
+        "total_input_tokens": 8741
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4015,12 +4015,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2728
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2830
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4056,12 +4056,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5911,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8565,
-        "total_input_tokens": 8639
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8667,
+        "total_input_tokens": 8741
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4097,12 +4097,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2728
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2830
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4138,12 +4138,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 5911,
         "layer_3_dynamic_suffix": 74,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 8565,
-        "total_input_tokens": 8639
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 8667,
+        "total_input_tokens": 8741
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4179,12 +4179,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2715
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2817
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4197,8 +4197,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 3378.5,
-        "warm_read_effective_tokens": 326.40000000000003,
+        "first_request_effective_tokens": 3506,
+        "warm_read_effective_tokens": 336.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -4222,12 +4222,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 3440,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 6094,
-        "total_input_tokens": 6155
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 6196,
+        "total_input_tokens": 6257
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4240,8 +4240,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 7678.5,
-        "warm_read_effective_tokens": 670.4,
+        "first_request_effective_tokens": 7806,
+        "warm_read_effective_tokens": 680.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -4265,12 +4265,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2715
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2817
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4306,12 +4306,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 3440,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 6094,
-        "total_input_tokens": 6155
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 6196,
+        "total_input_tokens": 6257
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4347,12 +4347,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2715
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2817
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4388,12 +4388,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 3440,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 6094,
-        "total_input_tokens": 6155
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 6196,
+        "total_input_tokens": 6257
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4429,12 +4429,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2715
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2817
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4470,12 +4470,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 3440,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 6094,
-        "total_input_tokens": 6155
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 6196,
+        "total_input_tokens": 6257
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4511,12 +4511,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2715
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2817
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4552,12 +4552,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 3440,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 6094,
-        "total_input_tokens": 6155
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 6196,
+        "total_input_tokens": 6257
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4593,12 +4593,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2715
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2817
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4634,12 +4634,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 3440,
         "layer_3_dynamic_suffix": 61,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 6094,
-        "total_input_tokens": 6155
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 6196,
+        "total_input_tokens": 6257
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4675,12 +4675,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2724
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2826
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4693,8 +4693,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 3387.5,
-        "warm_read_effective_tokens": 335.40000000000003,
+        "first_request_effective_tokens": 3515,
+        "warm_read_effective_tokens": 345.6,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -4718,12 +4718,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
-        "layer_2_semi_static_context": 6398,
+        "layer_1_static_prefix": 2756,
+        "layer_2_semi_static_context": 6434,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 9052,
-        "total_input_tokens": 9122
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9190,
+        "total_input_tokens": 9260
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4736,8 +4736,8 @@
         "costModelType": "documented-multiplier",
         "ttl": "5m",
         "cacheScope": "layer-1-plus-layer-2",
-        "first_request_effective_tokens": 11385,
-        "warm_read_effective_tokens": 975.2,
+        "first_request_effective_tokens": 11557.5,
+        "warm_read_effective_tokens": 989,
         "break_even_read_count": 2,
         "multipliers": {
           "writeMultiplier": 1.25,
@@ -4761,12 +4761,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2724
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2826
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4802,12 +4802,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
-        "layer_2_semi_static_context": 6398,
+        "layer_1_static_prefix": 2756,
+        "layer_2_semi_static_context": 6434,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 9052,
-        "total_input_tokens": 9122
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9190,
+        "total_input_tokens": 9260
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4843,12 +4843,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2724
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2826
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4884,12 +4884,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
-        "layer_2_semi_static_context": 6398,
+        "layer_1_static_prefix": 2756,
+        "layer_2_semi_static_context": 6434,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 9052,
-        "total_input_tokens": 9122
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9190,
+        "total_input_tokens": 9260
       },
       "eligibility": {
         "minimum_cacheable_tokens": 1024,
@@ -4925,12 +4925,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2724
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2826
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -4966,12 +4966,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
-        "layer_2_semi_static_context": 6398,
+        "layer_1_static_prefix": 2756,
+        "layer_2_semi_static_context": 6434,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 9052,
-        "total_input_tokens": 9122
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9190,
+        "total_input_tokens": 9260
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -5007,12 +5007,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2724
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2826
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -5048,12 +5048,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
-        "layer_2_semi_static_context": 6398,
+        "layer_1_static_prefix": 2756,
+        "layer_2_semi_static_context": 6434,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 9052,
-        "total_input_tokens": 9122
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9190,
+        "total_input_tokens": 9260
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -5089,12 +5089,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
+        "layer_1_static_prefix": 2756,
         "layer_2_semi_static_context": 0,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 2654,
-        "total_input_tokens": 2724
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 2756,
+        "total_input_tokens": 2826
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
@@ -5130,12 +5130,12 @@
       "token_counts": {
         "method": "tiktoken-cl100k_base-offline-estimate",
         "accurate": false,
-        "layer_1_static_prefix": 2654,
-        "layer_2_semi_static_context": 6398,
+        "layer_1_static_prefix": 2756,
+        "layer_2_semi_static_context": 6434,
         "layer_3_dynamic_suffix": 70,
-        "cache_eligible_layer_1_tokens": 2654,
-        "cache_eligible_layer_1_plus_2_tokens": 9052,
-        "total_input_tokens": 9122
+        "cache_eligible_layer_1_tokens": 2756,
+        "cache_eligible_layer_1_plus_2_tokens": 9190,
+        "total_input_tokens": 9260
       },
       "eligibility": {
         "minimum_cacheable_tokens": null,
