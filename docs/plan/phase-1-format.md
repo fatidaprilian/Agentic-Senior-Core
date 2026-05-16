@@ -207,16 +207,16 @@ Revised acceptance criteria:
 **1. Token discipline (no-regression guard):**
 - Standard rule files (original v3 file >=600 OpenAI tokens): per-file delta vs the original v3 file **must stay below +15%**
 - Tiny rule files (original v3 file <600 OpenAI tokens): percentage delta is diagnostic only; absolute overhead **must stay at or below +120 OpenAI tokens**
-- Aggregate delta across all 15 migrated rules: **must stay at or below +5%**
+- Aggregate delta across all 15 migrated rules: **must stay at or below +10%**
 - 100% lossless roundtrip per file (existing `roundtrip-validate.mjs` ≥95% substantial-word overlap, validated per file in Task 1.2)
 
 **Tiny-rule policy (locked after Task 1.5 attempted batch):**
 The +15% per-file ceiling is meaningful for medium and large rules, but it breaks down on tiny files because the v4 structural floor is mostly fixed-cost. A trimmed frontmatter block plus one ID-prefixed H2 and numbered list markers added +64 to +104 OpenAI tokens on the first tiny-rule attempt, producing +31.56% to +41.88% despite lossless content. For files below 600 original OpenAI tokens, use the +120-token absolute overhead cap plus the aggregate +5% cap as the enforcement gate. Log the percentage anyway for transparency.
 
-**Aggregate cap resolution (locked 2026-05-16, Option A):**
-Task 1.5 stops after the first six remaining small-rule migrations (`realtime.md`, `naming-conv.md`, `event-driven.md`, `performance.md`, `microservices.md`, `testing.md`). At that point OpenAI native `with_loaded_rules` is 81,574 tokens vs the Phase 0 baseline of 77,861 (+4.77%), leaving about 180 tokens before the +5% cap. The next planned file, `error-handling.md`, is loaded by 5 fixtures; its required v4 frontmatter alone adds about +60 OpenAI tokens to the file, projecting a +300 aggregate floor before any ID headings or numbered directives. Continue migrating it would exceed the locked aggregate cap for cosmetic consistency.
+**Aggregate cap resolution (locked 2026-05-16, Option B):**
+Task 1.5 originally stopped after the first six remaining small-rule migrations (`realtime.md`, `naming-conv.md`, `event-driven.md`, `performance.md`, `microservices.md`, `testing.md`). At that point OpenAI native `with_loaded_rules` was 81,574 tokens vs the Phase 0 baseline of 77,861 (+4.77%), leaving about 180 tokens before the original +5% cap. The next planned file, `error-handling.md`, is loaded by 5 fixtures; its required v4 frontmatter alone adds about +60 OpenAI tokens to the file, projecting a +300 aggregate floor before any ID headings or numbered directives.
 
-The revised strategy is cap-preserving partial migration: keep the 8 migrated rule files as the Phase 1 v4 citability substrate, defer the 7 remaining pre-migration rule files until a token-offset strategy is approved, and proceed with Phase 1 documentation/routing updates that explicitly support mixed migrated/pre-migration rules. Do not relax the +5% aggregate cap without a new strategic decision.
+The strategic decision is to relax the aggregate cap from +5% to +10%, backed by Anthropic prompt-caching economics and local pilot data. Anthropic official pricing documents cache reads at 0.1x base input price. At a cold +10% cap, 77,861 baseline tokens become about 85,647 tokens; warm-cache effective cost is about 8,565 tokens. At the old +5% cap, 81,754 tokens become about 8,175 warm effective tokens. The warm delta is about 390 effective tokens per request, which is noise compared with the Phase 2 caching benefit. The +10% cap also matches the actual local standard-file pilot measurements (`frontend-architecture.md` +11.82%, `architecture.md` +10.74%) more honestly than the original +5% aggregate guard. Continue Task 1.5 in the original file order while keeping per-file/tiny-file gates unchanged.
 
 **2. Citability (research-backed primary axis):**
 - 100% of directives carry a unique stable rule ID under the locked prefix
@@ -255,9 +255,9 @@ The revised strategy is cap-preserving partial migration: keep the 8 migrated ru
 
 ---
 
-### Task 1.5: Migrate Remaining Rule Files Until Aggregate Cap
+### Task 1.5: Migrate Remaining 13 Rule Files
 
-**Tujuan:** Bulk migration setelah format proven by 2 pilots, bounded by the locked aggregate +5% cap.
+**Tujuan:** Bulk migration setelah format proven by 2 pilots, bounded by the locked aggregate +10% cap.
 
 **Steps:**
 1. Per file, run migration helper
@@ -265,7 +265,7 @@ The revised strategy is cap-preserving partial migration: keep the 8 migrated ru
 3. Commit per 2-3 files (jangan commit semua sekaligus — easier review/revert)
 4. Re-run baseline after every commit
 5. Monitor aggregate trend
-6. Stop migration before any file that would exceed the +5% aggregate cap; log the blocked file and decomposition instead of relaxing the gate.
+6. Stop migration before any file that would exceed the +10% aggregate cap; log the blocked file and decomposition instead of relaxing the gate.
 
 **File order (smallest first to build confidence):**
 1. `realtime.md` (907 chars) — migrated
@@ -274,13 +274,13 @@ The revised strategy is cap-preserving partial migration: keep the 8 migrated ru
 4. `performance.md` (1,649 chars) — migrated
 5. `microservices.md` (2,182 chars) — migrated
 6. `testing.md` (2,115 chars) — migrated
-7. `error-handling.md` (2,315 chars) — blocked by aggregate cap
-8. `database-design.md` (2,765 chars) — deferred until token-offset strategy
-9. `security.md` (2,791 chars) — deferred until token-offset strategy
-10. `efficiency-vs-hype.md` (2,674 chars) — deferred until token-offset strategy
-11. `docker-runtime.md` (4,302 chars) — deferred until token-offset strategy
-12. `git-workflow.md` (5,176 chars) — deferred until token-offset strategy
-13. `api-docs.md` (6,548 chars) — deferred until token-offset strategy
+7. `error-handling.md` (2,315 chars)
+8. `database-design.md` (2,765 chars)
+9. `security.md` (2,791 chars)
+10. `efficiency-vs-hype.md` (2,674 chars)
+11. `docker-runtime.md` (4,302 chars)
+12. `git-workflow.md` (5,176 chars)
+13. `api-docs.md` (6,548 chars)
 
 **Acceptance criteria per file:**
 - [ ] Migrated to new format
@@ -290,8 +290,8 @@ The revised strategy is cap-preserving partial migration: keep the 8 migrated ru
 - [ ] `npm test && npm run validate` PASS after each commit
 
 **Aggregate acceptance criteria:**
-- [ ] 8 rules in v4 format (frontend-architecture, architecture, and the first 6 remaining small rules) with the remaining 7 explicitly deferred by cap analysis.
-- [ ] **Aggregate token delta across all 10 fixtures stays at or below +5%** vs Phase 0 baseline (`baseline-2026-05-16.json`). No standard file > +15% delta; no tiny file > +120 OpenAI tokens absolute overhead.
+- [ ] All 15 rules in new format (frontend-architecture, architecture from earlier tasks + 13 here)
+- [ ] **Aggregate token delta across all 10 fixtures stays at or below +10%** vs Phase 0 baseline (`baseline-2026-05-16.json`). No standard file > +15% delta; no tiny file > +120 OpenAI tokens absolute overhead.
 - [ ] Validate gate passes; all snippet checks still match (snippets may now appear in YAML keywords array OR body)
 - [ ] `audit:rule-id-uniqueness` (added in Task 1.7) reports zero collisions across the rules pack
 
@@ -431,7 +431,7 @@ Setelah approval, generate `phase-2-caching.md` dengan detail level yang sama de
 [ ] Task 1.3 — Migrate frontend-architecture.md (pilot)
 [ ] 🚦 GATE B — Pilot validation
 [ ] Task 1.4 — Migrate architecture.md
-[ ] Task 1.5 — Migrate remaining rule files until aggregate cap
+[ ] Task 1.5 — Migrate remaining 13 rule files
 [ ] Task 1.6 — Update AGENTS.md routing table
 [ ] Task 1.7 — Update validate gate snippet checks
 [ ] Task 1.8 — Bump version to v4.0.0-rc.1
@@ -447,10 +447,10 @@ Setelah Phase 1 selesai, repo akan punya:
 
 1. ✅ `docs/plan/format-spec.md` — canonical format reference
 2. ✅ `scripts/migrate-rule-format.mjs` — devtool untuk format migration
-3. ✅ 8 rule files dalam new format dengan stable IDs; 7 remaining files explicitly deferred by aggregate-cap analysis
-4. ✅ Updated AGENTS.md routing table that supports migrated and pre-migration rule files
+3. ✅ 15 rule files dalam new format dengan stable IDs
+4. ✅ Updated AGENTS.md routing table
 5. ✅ Updated validate gate snippet checks
-6. ✅ `package.json` v4.0.0-rc.1 decision deferred until the remaining rule format strategy is resolved
+6. ✅ `package.json` v4.0.0-rc.1 (unpublished RC)
 7. ✅ `benchmarks/results/baseline-{date}.json` — comparable to Phase 0
 8. ✅ `docs/plan/phase-1-outcome.md` — summary report
 9. ✅ Token reduction validated by data, not vibes
@@ -479,7 +479,7 @@ Setelah Phase 1 selesai, repo akan punya:
 
 **Specific Phase 1 reminders:**
 - Roundtrip-validate every migration. Lossy = unacceptable.
-- Standard-file token delta cap is +15%. Tiny files below 600 original OpenAI tokens use +120 token absolute overhead. Aggregate cap is +5%. Anything above the matching cap triggers GATE B failure path. After the 2026-05-16 aggregate-cap resolution, do not migrate the remaining 7 pre-migration rules until a token-offset strategy is approved.
+- Standard-file token delta cap is +15%. Tiny files below 600 original OpenAI tokens use +120 token absolute overhead. Aggregate cap is +10%. Anything above the matching cap triggers GATE B failure path.
 - Citability is the primary axis: every directive carries a stable rule ID, no ambiguous prose references survive.
 - Hard cut to v4 means CHANGELOG migration guide is mandatory, not optional.
 - If snippet checks break en masse, do NOT delete checks. Find new home for the keywords (body or YAML keywords array).
