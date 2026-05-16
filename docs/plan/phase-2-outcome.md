@@ -55,6 +55,8 @@ Source of truth: `benchmarks/results/cache-phase-2-2026-05-16.json`.
 
 Anthropic break-even read count is 2 for both scenarios. The first request is more expensive than a cold uncached request because the cache write multiplier applies. The second request is where the cached path becomes cheaper.
 
+> **Scope caveat (added 2026-05-16 as part of caching-claim scope-fix pass):** The 89.31% effective-token reduction reported above is computed against the **direct provider API path** using Anthropic's documented prompt-caching multipliers. It applies cleanly to direct Anthropic API integration and to Claude Code SDK programmatic mode where `cache_control` is user-controlled. It does **not** translate into a measurable, attributable saving for users who consume this rules pack through IDE wrapper tools (Cursor, Windsurf, Codex CLI, Kiro). Those wrappers abstract the caching boundary; the benefit reaches their users only as prefix stability, which is not measurable from the rules pack side. See `docs/plan/research-foundation.md` D4 "Per-Tool Caching Scope Matrix" for the per-tool breakdown and citation URLs, and see `docs/benchmark-reference.md` "Caching Effectiveness Reporting Format" for the required per-integration reporting shape.
+
 ---
 
 ## Cache Layer Integrity
