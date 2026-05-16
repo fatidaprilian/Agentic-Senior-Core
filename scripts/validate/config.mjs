@@ -23,7 +23,7 @@ export const REQUIRED_HUMAN_WRITING_SNIPPETS = [
   {
     path: '.agent-context/rules/api-docs.md',
     snippets: [
-      '## Human Writing Standard (Mandatory)',
+      '## API-006: Human Writing Standard (Mandatory)',
       'This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.',
       'Style baseline findings are advisory by default and must not block endpoint-change commits that already include accurate docs/spec updates.',
       'Write formal project docs in English by default',
