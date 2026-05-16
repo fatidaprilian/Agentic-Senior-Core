@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Fixed
+- Cross-platform release bundle integrity. `scripts/build-release-benchmark-bundle.mjs` and `scripts/audit-release-bundle.mjs` now normalize CRLF to LF before computing SHA-256 hashes for referenced artifacts. Without this, a Windows working tree with CRLF line endings on a JSON artifact (`benchmarks/results/scorecard-2026-05-16.json` was the affected file) produced a different hash than the same file checked out on Linux CI, causing `audit:release-bundle` to fail in `npm run validate` after the v4.0.0 push. The 4.0.0 release bundle was rebuilt with the normalized hashes; no Phase 0-3 source artifact changed.
 
 ## 4.0.0 - 2026-05-16
 ### Breaking changes

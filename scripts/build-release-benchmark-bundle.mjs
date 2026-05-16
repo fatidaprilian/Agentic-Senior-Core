@@ -48,8 +48,11 @@ const SOURCE_ARTIFACTS = [
 ];
 
 function sha256Hex(buffer) {
+  // Normalize CRLF -> LF before hashing so bundle integrity is reproducible
+  // across platforms (Windows working tree may be CRLF; CI checkouts are LF).
+  const normalized = buffer.toString('utf8').replace(/\r\n/g, '\n');
   const hash = createHash('sha256');
-  hash.update(buffer);
+  hash.update(normalized, 'utf8');
   return hash.digest('hex');
 }
 
