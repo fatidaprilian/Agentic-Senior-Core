@@ -52,6 +52,7 @@ Optional keys (added only when they would otherwise drift):
 
 - `version` (integer) — schema version. **Omit on first migration** (v1 implicit). Add only when the schema itself bumps to v2 or higher.
 - `last_migrated` (ISO date string) — only used when external tooling cannot read git history. **Default: omit** (git log is the audit trail).
+- `related` (array of section IDs) — preserves conceptual grouping when one rule was split across multiple section IDs (e.g. `FE-004` was split into `FE-004` + `FE-013` + `FE-014` to stay under the 12-item cap). Each entry is a `<PREFIX>-NNN` form that must resolve to an existing section ID in the same rules pack. The validate audit checks this. Reciprocal references are encouraged: if A lists B in `related`, B should list A.
 - `superseded_by` (string ID) — if a section was removed and rolled into another rule.
 - `experimental` (boolean) — true for rules under active iteration; default false.
 
@@ -119,6 +120,33 @@ OK example:
 
 Not OK example (ETH Zurich red flag):
 > "Security is everyone's responsibility. We believe defense-in-depth is the right way to think about modern systems..."
+
+#### Intro Classification Rubric (locked, applied during migration)
+
+When deciding whether to keep, inline, or delete an existing intro paragraph during migration, classify each sentence using this rubric:
+
+**FACTUAL or DIRECTIVE (KEEP):**
+- "Load this rule for X" or "Use this rule when Y" (when-to-load statements)
+- "Applies to Y, not Z" (scope statements)
+- "Keep N small" or "Keep loaded surface bounded" (operational constraints)
+- "Pair with [REF:X]" (cross-reference guidance)
+- Names a primary risk in plain factual form: "X violation means Y data loss"
+
+**PHILOSOPHICAL or MOTIVATIONAL (DELETE):**
+- "We believe ___" or "Our team values ___" or "We strive for ___"
+- "___ is important because ___" without a verb-led action
+- Aspirational text: "Quality matters", "Code is communication"
+- Justification prose without an actionable instruction
+- Long historical context that does not change behavior
+
+**BORDERLINE (STOP, ask user):**
+- Mixed: factual plus motivational in the same paragraph that cannot be cleanly separated
+- Context-setting that helps the reader but is not directly operational
+- Domain disclaimers that might still be referenced from prompts/
+
+Per format spec section 1.5, intros are optional. When in doubt during migration, prefer to delete and let the section IDs carry the load. Every word saved here compounds across the rules pack.
+
+When migrating, log word-count removed (zero, partial, full) in the phase outcome file so the change is auditable.
 
 ## 2. Cross-Reference Convention
 

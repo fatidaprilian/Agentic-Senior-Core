@@ -19,6 +19,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ALLOWED_SEVERITIES } from './validate/config.mjs';
 import { runAuditFileSize } from './audit-file-size.mjs';
+import { runRuleIdUniquenessAudit } from './audit-rule-id-uniqueness.mjs';
 import {
   validateDependencyFreshnessAutomationCoverage,
   validateDetectionTransparencyCoverage,
@@ -510,6 +511,19 @@ async function validateFileSizeAudit() {
   }
 }
 
+async function validateRuleIdUniquenessAudit() {
+  console.log('\nChecking rule ID uniqueness (audit:rule-id-uniqueness)...');
+  const report = runRuleIdUniquenessAudit();
+
+  if (report.passed) {
+    pass(`Rule ID audit clean: ${report.migratedFileCount} migrated rule file(s), ${report.skippedFileCount} pre-migration, ${report.knownSectionIdCount} section ID(s), ${report.refMentionCount} [REF:] mention(s) all resolve`);
+  } else {
+    for (const violation of report.violations) {
+      fail(`Rule ID violation [${violation.kind}] in ${violation.file}: ${violation.detail}`);
+    }
+  }
+}
+
 async function validateMcpConfiguration() {
   console.log('\nChecking MCP configuration...');
 
@@ -592,6 +606,7 @@ async function main() {
   await validateInstructionAdapters(coverageValidationContext);
   await validateSkillPurgeSurface(coverageValidationContext);
   await validateFileSizeAudit();
+  await validateRuleIdUniquenessAudit();
 
   console.log('\n===============================================');
   console.log('  RESULTS');

@@ -14,7 +14,7 @@ import { join } from 'node:path';
 
 import { ID_PREFIX_TABLE, getPrefixEntry } from '../scripts/migrate-rule-format/id-prefix-table.mjs';
 import { parseLegacyRuleFile } from '../scripts/migrate-rule-format/parse-legacy.mjs';
-import { renderNewFormat } from '../scripts/migrate-rule-format/render-new.mjs';
+import { paragraphSplitsIntoDirectives, renderNewFormat } from '../scripts/migrate-rule-format/render-new.mjs';
 import { roundtripSubstanceCheck } from '../scripts/migrate-rule-format/roundtrip-validate.mjs';
 import { migrateOneRuleFile } from '../scripts/migrate-rule-format.mjs';
 
@@ -146,4 +146,66 @@ test('migrateOneRuleFile rejects unknown filenames', async () => {
   } finally {
     rmSync(tempDirectoryPath, { recursive: true, force: true });
   }
+});
+
+test('paragraphSplitsIntoDirectives keeps file paths intact', () => {
+  const sentences = paragraphSplitsIntoDirectives('Before UI code, create or refine docs/DESIGN.md and docs/design-intent.json. The contract must record motionPaletteDecision.');
+  assert.equal(sentences.length, 2);
+  assert.match(sentences[0], /docs\/DESIGN\.md and docs\/design-intent\.json\.$/);
+  assert.match(sentences[1], /^The contract must record motionPaletteDecision\.$/);
+});
+
+test('paragraphSplitsIntoDirectives keeps package and module paths intact', () => {
+  const sentences = paragraphSplitsIntoDirectives('Update package.json before commit. Run scripts under src/index.ts.');
+  assert.equal(sentences.length, 2);
+  assert.match(sentences[0], /^Update package\.json before commit\.$/);
+  assert.match(sentences[1], /^Run scripts under src\/index\.ts\.$/);
+});
+
+test('paragraphSplitsIntoDirectives keeps dotted versions intact', () => {
+  const sentences = paragraphSplitsIntoDirectives('Use v1.5 for the helper. Bump to 2.0.0 only after acceptance.');
+  assert.equal(sentences.length, 2);
+  assert.match(sentences[0], /^Use v1\.5 for the helper\.$/);
+  assert.match(sentences[1], /^Bump to 2\.0\.0 only after acceptance\.$/);
+});
+
+test('paragraphSplitsIntoDirectives keeps domain names intact', () => {
+  const sentences = paragraphSplitsIntoDirectives('Reference example.com when external. Cite github.io for static demos.');
+  assert.equal(sentences.length, 2);
+  assert.match(sentences[0], /^Reference example\.com when external\.$/);
+  assert.match(sentences[1], /^Cite github\.io for static demos\.$/);
+});
+
+test('paragraphSplitsIntoDirectives does not split on internal abbreviation periods', () => {
+  // e.g. and i.e. are mid-sentence abbreviations. Splitting at their internal
+  // period would break "e.g." away from the rest of the clause. The trailing
+  // period after "e.g." followed by a lowercase continuation must not split.
+  const sentencesEg = paragraphSplitsIntoDirectives('Validate inputs e.g. user ids and request bodies. Reject silent coercion.');
+  assert.equal(sentencesEg.length, 2, 'e.g. internal periods must not split mid-clause');
+  assert.match(sentencesEg[0], /e\.g\. user ids and request bodies\.$/);
+  assert.match(sentencesEg[1], /^Reject silent coercion\.$/);
+
+  const sentencesIe = paragraphSplitsIntoDirectives('Pin the algorithm i.e. RS256 or ES256. Reject alg none.');
+  assert.equal(sentencesIe.length, 2, 'i.e. internal periods must not split mid-clause');
+  assert.match(sentencesIe[0], /i\.e\. RS256 or ES256\.$/);
+
+  // "etc." followed by a capital letter is intentionally a real sentence
+  // boundary in English. The splitter is allowed to split there; we only
+  // promise that the period inside "etc." itself is not used as a boundary.
+  const sentencesEtcLowercase = paragraphSplitsIntoDirectives('Cover request validation, auth, error shapes, etc. and pagination defaults.');
+  assert.equal(sentencesEtcLowercase.length, 1, 'etc. followed by lowercase continuation must not split');
+});
+
+test('paragraphSplitsIntoDirectives still splits on real sentence boundaries', () => {
+  const sentences = paragraphSplitsIntoDirectives('First directive. Second directive. Third directive.');
+  assert.equal(sentences.length, 3);
+  assert.match(sentences[0], /^First directive\.$/);
+  assert.match(sentences[1], /^Second directive\.$/);
+  assert.match(sentences[2], /^Third directive\.$/);
+});
+
+test('paragraphSplitsIntoDirectives handles trailing fragment without final punctuation', () => {
+  const sentences = paragraphSplitsIntoDirectives('First directive. Tail without punctuation');
+  assert.equal(sentences.length, 2);
+  assert.match(sentences[1], /^Tail without punctuation$/);
 });

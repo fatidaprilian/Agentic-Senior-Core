@@ -54,15 +54,48 @@ function renderIntroParagraph(parsedRuleFile) {
   return `${parsedRuleFile.introParagraph}\n\n`;
 }
 
-function paragraphSplitsIntoDirectives(paragraphText) {
-  // Sentence boundary heuristic: end of sentence is `.`, `!`, or `?` followed
-  // by whitespace and an uppercase letter, OR end of string. Avoids splitting
-  // on intra-token periods like `docs/DESIGN.md` or template literals like
-  // `{} .json`. The trailing punctuation stays attached to the prior sentence.
-  const sentences = paragraphText.match(/[^.!?]+(?:[.!?](?=\s+[A-Z`]|$|\s*$))?/g) ?? [paragraphText];
-  return sentences
-    .map((sentence) => sentence.trim())
-    .filter((sentence) => sentence.length > 0);
+// Common abbreviations that end with a period but are not sentence endings.
+// Mid-sentence occurrences like "etc. The next..." would otherwise be split
+// at the abbreviation. Pre-masking is the cheapest fix and is easy to extend.
+const NON_SENTENCE_ENDING_ABBREVIATIONS = Object.freeze(['e.g', 'i.e', 'etc', 'vs', 'cf', 'Mr', 'Dr', 'Mrs', 'Inc', 'Ltd']);
+const ABBREVIATION_MASK_TOKEN = '\u0001';
+
+function maskAbbreviationPeriods(paragraphText) {
+  let masked = paragraphText;
+  for (const abbreviation of NON_SENTENCE_ENDING_ABBREVIATIONS) {
+    const escaped = abbreviation.replace(/\./g, '\\.');
+    masked = masked.replace(new RegExp(`\\b${escaped}\\.`, 'g'), `${abbreviation}${ABBREVIATION_MASK_TOKEN}`);
+  }
+  return masked;
+}
+
+function unmaskAbbreviationPeriods(text) {
+  return text.replace(new RegExp(ABBREVIATION_MASK_TOKEN, 'g'), '.');
+}
+
+export function paragraphSplitsIntoDirectives(paragraphText) {
+  // A `.` `!` or `?` ends a sentence only when it is followed by whitespace
+  // and an uppercase letter, a backtick (next clause starts with `code`), or
+  // an opening parenthesis. This rule recognizes:
+  //   - file paths     "docs/DESIGN.md"        period + lowercase, no whitespace -> not a boundary
+  //   - dotted versions "v1.5", "2.0.0"        period + digit -> not a boundary
+  //   - domain literals "example.com"          period + lowercase -> not a boundary
+  //   - abbreviations  "e.g.", "i.e.", "etc."  pre-masked so their internal periods do not split
+  // Everything else is treated as sentence-final.
+  const masked = maskAbbreviationPeriods(paragraphText);
+  const SENTENCE_BOUNDARY = /([.!?])\s+(?=[A-Z`(])/g;
+  const sentences = [];
+  let cursor = 0;
+  for (const match of masked.matchAll(SENTENCE_BOUNDARY)) {
+    const sentenceEnd = match.index + match[1].length;
+    sentences.push(unmaskAbbreviationPeriods(masked.slice(cursor, sentenceEnd)).trim());
+    cursor = match.index + match[0].length;
+  }
+  const tail = unmaskAbbreviationPeriods(masked.slice(cursor)).trim();
+  if (tail.length > 0) {
+    sentences.push(tail);
+  }
+  return sentences.filter((sentence) => sentence.length > 0);
 }
 
 function renderBlockAsNumberedItem(block) {
