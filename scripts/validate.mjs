@@ -19,6 +19,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ALLOWED_SEVERITIES } from './validate/config.mjs';
 import { runCacheLayerContractAudit } from './audit-cache-layer-contract.mjs';
+import { runCachingScopeHygieneAudit } from './audit-caching-scope-hygiene.mjs';
 import { runAuditFileSize } from './audit-file-size.mjs';
 import { runReflectionCitationAudit } from './audit-reflection-citations.mjs';
 import { runRuleIdUniquenessAudit } from './audit-rule-id-uniqueness.mjs';
@@ -553,6 +554,19 @@ async function validateReflectionCitationAudit() {
   }
 }
 
+async function validateCachingScopeHygieneAudit() {
+  console.log('\nChecking caching scope hygiene (audit:caching-scope-hygiene)...');
+  const report = runCachingScopeHygieneAudit();
+
+  if (report.passed) {
+    pass(`Caching scope hygiene clean: ${report.surfaceCount} public surface(s), ${report.totalClaimCount} caching saving claim(s) all integration-scoped`);
+  } else {
+    for (const violation of report.violations) {
+      fail(`Caching scope hygiene violation [${violation.kind}] in ${violation.file}:${violation.line}: ${violation.detail}`);
+    }
+  }
+}
+
 async function validateMcpConfiguration() {
   console.log('\nChecking MCP configuration...');
 
@@ -636,6 +650,7 @@ async function main() {
   await validateSkillPurgeSurface(coverageValidationContext);
   await validateCacheLayerContractAudit();
   await validateReflectionCitationAudit();
+  await validateCachingScopeHygieneAudit();
   await validateFileSizeAudit();
   await validateRuleIdUniquenessAudit();
 

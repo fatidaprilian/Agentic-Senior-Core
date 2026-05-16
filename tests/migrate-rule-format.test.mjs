@@ -235,3 +235,52 @@ test('paragraphSplitsIntoDirectives handles trailing fragment without final punc
   assert.equal(sentences.length, 2);
   assert.match(sentences[1], /^Tail without punctuation$/);
 });
+
+test('parseLegacyRuleFile throws when the file does not start with an H1', () => {
+  const sample = 'Just a paragraph with no heading.\n\nSecond line.\n';
+  assert.throws(() => parseLegacyRuleFile(sample), /Legacy file missing top-level H1/);
+});
+
+test('parseLegacyRuleFile records a warning when the intro paragraph exceeds 3 sentences', () => {
+  const sample = `# Verbose Rule\n\nOne. Two. Three. Four.\n\n## Section\n\nBody.\n`;
+  const parsed = parseLegacyRuleFile(sample);
+  assert.equal(parsed.h1Title, 'Verbose Rule');
+  assert.equal(parsed.introParagraph, 'One. Two. Three. Four.');
+  assert.ok(parsed.warnings.some((warning) => warning.includes('Intro paragraph has')), () => `expected an intro-length warning, got ${JSON.stringify(parsed.warnings)}`);
+});
+
+test('parseLegacyRuleFile parses colon-labelled legacy sections after the intro paragraph', () => {
+  // The first colon line after H1 is absorbed into the intro paragraph because
+  // the parser captures everything before the first H2 / colon block boundary.
+  // Subsequent colon-labelled blocks are recognized as section titles.
+  const sample = `# Colon Rule\n\nIntro paragraph here.\n\nSection One:\n\n- bullet a\n- bullet b\n\nSection Two:\n\nA paragraph block.\n`;
+  const parsed = parseLegacyRuleFile(sample);
+  assert.equal(parsed.h1Title, 'Colon Rule');
+  assert.equal(parsed.introParagraph, 'Intro paragraph here.');
+  assert.equal(parsed.sections.length, 2);
+  assert.equal(parsed.sections[0].title, 'Section One');
+  assert.equal(parsed.sections[1].title, 'Section Two');
+  assert.equal(parsed.sections[1].blocks[0].kind, 'paragraph');
+});
+
+test('parseLegacyRuleFile preserves nested bullets as continuation text on the parent item', () => {
+  const sample = `# Nested Rule\n\n## Section\n\n- parent bullet one\n  - nested clarification a\n  - nested clarification b\n- parent bullet two\n`;
+  const parsed = parseLegacyRuleFile(sample);
+  assert.equal(parsed.sections.length, 1);
+  const [block] = parsed.sections[0].blocks;
+  assert.equal(block.kind, 'bullet-list');
+  assert.equal(block.items.length, 2);
+  assert.match(block.items[0], /parent bullet one/);
+  assert.match(block.items[0], /nested clarification a/);
+  assert.match(block.items[0], /nested clarification b/);
+  assert.equal(block.items[1], 'parent bullet two');
+});
+
+test('parseLegacyRuleFile names a section General Guidance when content precedes any heading after intro', () => {
+  // A legacy file with no H2 and content directly after the intro should still
+  // produce a single section. The parser falls back to "General Guidance".
+  const sample = `# Headless Rule\n\nIntro line.\n\n- alpha\n- beta\n`;
+  const parsed = parseLegacyRuleFile(sample);
+  assert.equal(parsed.sections.length, 1);
+  assert.equal(parsed.sections[0].title, 'General Guidance');
+});
