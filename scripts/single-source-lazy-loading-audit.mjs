@@ -55,7 +55,7 @@ const STACK_CATALOG_FILE_NAMES = [
 const MAX_EAGER_STACK_MENTIONS = 4;
 
 const REQUIRED_ARCHITECTURE_RULE_SNIPPETS = [
-  '## Single Source of Truth and Lazy Rule Loading',
+  '## ARCH-007: Single Source of Truth and Lazy Rule Loading',
   'Canonical rule source is AGENTS.md.',
   'Load global domain rules lazily based on touched scope.',
   'Do not create or load stack-specific governance adapters as the baseline.',

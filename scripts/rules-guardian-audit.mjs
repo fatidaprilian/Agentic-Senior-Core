@@ -37,7 +37,7 @@ const SUPPORTED_WORKFLOWS = new Set([
 const CORE_PATTERN_SIGNALS = [
   {
     pattern: 'layer-separation',
-    snippet: '## Layer Boundaries (Mandatory)',
+    snippet: '## ARCH-009: Layer Boundaries (Mandatory)',
   },
   {
     pattern: 'agent-decides-topology',
@@ -54,7 +54,7 @@ const CORE_PATTERN_SIGNALS = [
 ];
 
 const REQUIRED_ARCHITECTURE_RULE_SNIPPETS = [
-  '## Rules as Guardian (Cross-Session Consistency)',
+  '## ARCH-005: Rules as Guardian (Cross-Session Consistency)',
   'Session handoff must include active architecture contract summary.',
   'Detect drift before changing runtime choices, topology, public contracts, or core patterns.',
   'Direction changes require explicit user confirmation before applying changes.',

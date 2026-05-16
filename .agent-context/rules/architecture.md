@@ -1,39 +1,54 @@
+---
+id_prefix: ARCH
+domain: architecture
+priority: critical
+scope: all-tasks
+applies_to:
+  - backend
+  - frontend
+  - fullstack
+keywords:
+  - architecture
+  - arch
+  - separation
+  - concerns
+  - structure
+  - universal
+---
+
 # Architecture - Separation of Concerns and Structure
 
 > If a service imports transport concerns or raw persistence concerns directly, the architecture is already drifting.
 
-## Universal Backend Principles (Mandatory)
+## ARCH-001: Universal Backend Principles (Mandatory)
 
-These principles are mandatory for backend and shared core modules.
+1. These principles are mandatory for backend and shared core modules.
+2. No clever hacks.
+3. No premature abstraction.
+4. Readability over brevity.
+5. Keep transport, application, domain, and infrastructure concerns separated.
+6. Favor explicit module boundaries over hidden cross-layer shortcuts.
+7. Health endpoints distinguish liveness (the process is alive), readiness (the process can serve traffic), and startup (initialization complete) where the runtime supports it. A `200 OK` that does not check critical dependencies is not a readiness signal.
 
-- No clever hacks.
-- No premature abstraction.
-- Readability over brevity.
-- Keep transport, application, domain, and infrastructure concerns separated.
-- Favor explicit module boundaries over hidden cross-layer shortcuts.
-- Health endpoints distinguish liveness (the process is alive), readiness (the process can serve traffic), and startup (initialization complete) where the runtime supports it. A `200 OK` that does not check critical dependencies is not a readiness signal.
+## ARCH-002: Complexity Budget (Mandatory)
 
-## Complexity Budget (Mandatory)
+1. Prefer the smallest clear implementation that fully preserves behavior, safety, and maintainability.
+2. If two implementations are equivalent in behavior and quality, choose the one with fewer moving parts.
+3. Remove code that does not carry behavior, safety, clarity, maintainability, or test value.
+4. Prefer direct logic over extra wrappers, layers, classes, config, or state when the abstraction does not reduce real complexity.
+5. Keep validation, error handling, fallback paths, accessibility, tests, security boundaries, and observability when they protect real behavior.
+6. Run a final simplification pass before completion.
+7. Run a domain-fit pass on public contracts before completion: if endpoint names, payload fields, error codes, table names, or event types could be renamed to another domain without changing shape, the contract is too generic; revise to express the actual domain verbs and invariants. This is the backend equivalent of the design rename test (see [REF:FE-004]).
+8. Do not optimize for line count alone.
+9. Do not replace clear code with clever, dense, or surprising code.
+10. Do not remove safeguards just because the happy path works.
 
-Prefer the smallest clear implementation that fully preserves behavior, safety, and maintainability.
+## ARCH-003: Universal SOP Baseline (Mandatory)
 
-- If two implementations are equivalent in behavior and quality, choose the one with fewer moving parts.
-- Remove code that does not carry behavior, safety, clarity, maintainability, or test value.
-- Prefer direct logic over extra wrappers, layers, classes, config, or state when the abstraction does not reduce real complexity.
-- Keep validation, error handling, fallback paths, accessibility, tests, security boundaries, and observability when they protect real behavior.
-- Run a final simplification pass before completion.
-- Run a domain-fit pass on public contracts before completion: if endpoint names, payload fields, error codes, table names, or event types could be renamed to another domain without changing shape, the contract is too generic; revise to express the actual domain verbs and invariants. This is the backend equivalent of the design rename test.
-- Do not optimize for line count alone.
-- Do not replace clear code with clever, dense, or surprising code.
-- Do not remove safeguards just because the happy path works.
-
-## Universal SOP Baseline (Mandatory)
-
-The `.agent-context/rules/` directory is the default guidance source for implementation and review.
-
-- Backend and frontend mindset checks are both required when a task spans API and UI boundaries.
-- Security and testing are non-negotiable baseline requirements.
-- Hard block before coding:
+1. The `.agent-context/rules/` directory is the default guidance source for implementation and review.
+2. Backend and frontend mindset checks are both required when a task spans API and UI boundaries.
+3. Security and testing are non-negotiable baseline requirements.
+4. Hard block before coding:
   - Root `README.md` must exist for every fresh or existing project and read as a public and developer entrypoint, not an internal agent note.
   - `docs/doc-index.md` must exist whenever `docs/` exists. It is a compact read-routing map, not a replacement for project docs.
   - `docs/project-brief.md` must exist.
@@ -42,91 +57,89 @@ The `.agent-context/rules/` directory is the default guidance source for impleme
   - If the project uses persistent data, `docs/database-schema.md` must exist.
   - If the project exposes API or web application flows, `docs/api-contract.md` must exist.
   - For UI scope, `docs/DESIGN.md` and `docs/design-intent.json` must exist.
-- Required docs coverage must include a public and developer README entrypoint, feature plan, architecture rationale, public contracts, data model when relevant, UI/design when relevant, security assumptions, testing strategy, delivery flow, and next validation actions.
-- If required project context docs are missing, stop implementation and bootstrap docs before writing application code.
-- Bootstrap flow: analyze the real repo plus the latest user prompt before authoring those docs.
-- Bootstrap docs must be adaptive and project-specific. Do not create generic placeholder templates.
-- When context is incomplete, separate confirmed facts from assumptions, add an `Assumptions to Validate` section, and end with the next validation action.
-- Keep docs current with project changes. Update README and the matching docs whenever setup, runtime, architecture, public contracts, data shape, UI scope, deployment, or validation flow changes.
-- Control docs file count. Keep the baseline compact, then add topic files only when a subject is stable, too long for README/core docs, or belongs to a distinct workflow such as hardware setup, deployment, testing validation, operations, or troubleshooting.
+5. Required docs coverage must include a public and developer README entrypoint, feature plan, architecture rationale, public contracts, data model when relevant, UI/design when relevant, security assumptions, testing strategy, delivery flow, and next validation actions.
+6. If required project context docs are missing, stop implementation and bootstrap docs before writing application code.
+7. Bootstrap flow: analyze the real repo plus the latest user prompt before authoring those docs.
+8. Bootstrap docs must be adaptive and project-specific. Do not create generic placeholder templates.
+9. When context is incomplete, separate confirmed facts from assumptions, add an `Assumptions to Validate` section, and end with the next validation action.
+10. Keep docs current with project changes. Update README and the matching docs whenever setup, runtime, architecture, public contracts, data shape, UI scope, deployment, or validation flow changes.
+11. Control docs file count. Keep the baseline compact, then add topic files only when a subject is stable, too long for README/core docs, or belongs to a distinct workflow such as hardware setup, deployment, testing validation, operations, or troubleshooting.
 
-## Documentation Read Routing and Conditional Specs
+## ARCH-004: Documentation Read Routing and Conditional Specs
 
-Use `README.md` for human orientation, then use `docs/doc-index.md` to choose the smallest relevant read set. Do not broad-read every Markdown file in `docs/` by default.
+1. Use `README.md` for human orientation, then use `docs/doc-index.md` to choose the smallest relevant read set.
+2. Do not broad-read every Markdown file in `docs/` by default.
+3. Read `docs/project-brief.md`, `docs/architecture-decision-record.md`, and `docs/flow-overview.md` for broad planning, new features, or architecture changes.
+4. Read `docs/api-contract.md` only when API, CLI, firmware endpoint, web flow, event, or library contract behavior is in scope.
+5. Read `docs/database-schema.md` only when persistence, migrations, data shape, or query behavior is in scope.
+6. Read `docs/DESIGN.md` and `docs/design-intent.json` only for UI, UX, frontend, layout, component, or visual work.
+7. Add `docs/prd.md` only when there is product-roadmap, user-story, metrics, product-owner, or feature-flag ownership that would otherwise bloat the project brief.
+8. Add `docs/srs.md` only for contractual, regulated, multi-stakeholder, or acceptance-criteria-heavy projects. Do not create both PRD and SRS unless those owners and purposes are distinct.
+9. Add `docs/technical-design.md` only for non-trivial architecture decisions, major refactors, cross-cutting behavior, or system interactions that outgrow the ADR and flow overview.
+10. Keep ERD inside `docs/database-schema.md` for small and medium schemas. Add a separate ERD file only when relationship complexity makes the schema doc hard to scan.
 
-- Read `docs/project-brief.md`, `docs/architecture-decision-record.md`, and `docs/flow-overview.md` for broad planning, new features, or architecture changes.
-- Read `docs/api-contract.md` only when API, CLI, firmware endpoint, web flow, event, or library contract behavior is in scope.
-- Read `docs/database-schema.md` only when persistence, migrations, data shape, or query behavior is in scope.
-- Read `docs/DESIGN.md` and `docs/design-intent.json` only for UI, UX, frontend, layout, component, or visual work.
-- Add `docs/prd.md` only when there is product-roadmap, user-story, metrics, product-owner, or feature-flag ownership that would otherwise bloat the project brief.
-- Add `docs/srs.md` only for contractual, regulated, multi-stakeholder, or acceptance-criteria-heavy projects. Do not create both PRD and SRS unless those owners and purposes are distinct.
-- Add `docs/technical-design.md` only for non-trivial architecture decisions, major refactors, cross-cutting behavior, or system interactions that outgrow the ADR and flow overview.
-- Keep ERD inside `docs/database-schema.md` for small and medium schemas. Add a separate ERD file only when relationship complexity makes the schema doc hard to scan.
+## ARCH-005: Rules as Guardian (Cross-Session Consistency)
 
-## Rules as Guardian (Cross-Session Consistency)
+1. Session handoff must include active architecture contract summary.
+2. Contract summary must include explicit user constraints, runtime/architecture decision status, active project docs, and the core patterns currently evidenced by the repo.
+3. Detect drift before changing runtime choices, topology, public contracts, or core patterns.
+4. Direction changes require explicit user confirmation before applying changes.
+5. When confirmation is provided, record the rationale in session notes or PR context.
 
-- Session handoff must include active architecture contract summary.
-- Contract summary must include explicit user constraints, runtime/architecture decision status, active project docs, and the core patterns currently evidenced by the repo.
-- Detect drift before changing runtime choices, topology, public contracts, or core patterns.
-- Direction changes require explicit user confirmation before applying changes.
-- When confirmation is provided, record the rationale in session notes or PR context.
+## ARCH-006: Invisible State Management with Explain-on-Demand
 
-## Invisible State Management with Explain-on-Demand
+1. Default responses must avoid unnecessary state-file internals.
+2. State internals are exposed only on explicit user request.
+3. Diagnostic mode explains relevant state decisions when needed.
+4. Keep default explanations concise and outcome-first.
 
-- Default responses must avoid unnecessary state-file internals.
-- State internals are exposed only on explicit user request.
-- Diagnostic mode explains relevant state decisions when needed.
-- Keep default explanations concise and outcome-first.
+## ARCH-007: Single Source of Truth and Lazy Rule Loading
 
-## Single Source of Truth and Lazy Rule Loading
+1. Canonical rule source is AGENTS.md.
+2. Native adapter entry files stay thin and must import the canonical source.
+3. Load global domain rules lazily based on touched scope.
+4. Do not create or load stack-specific governance adapters as the baseline.
+5. Runtime or framework evidence can clarify implementation details, but it must not replace the global architecture, security, data, API, error, event, and testing boundaries.
+6. Keep rule-loading output deterministic for init and release validation.
 
-- Canonical rule source is AGENTS.md.
-- Native adapter entry files stay thin and must import the canonical source.
-- Load global domain rules lazily based on touched scope.
-- Do not create or load stack-specific governance adapters as the baseline.
-- Runtime or framework evidence can clarify implementation details, but it must not replace the global architecture, security, data, API, error, event, and testing boundaries.
-- Keep rule-loading output deterministic for init and release validation.
+## ARCH-008: Architecture Decision Boundary
 
-## Architecture Decision Boundary
+1. Do not force a default architecture label before the repo, delivery model, and boundary evidence are clear.
+2. Do not split into distributed services without evidence.
+3. Do not keep everything in one process by habit either.
+4. Service separation only makes sense when multiple signals are true, such as:
+5. frequent deploy conflicts across domains
+6. clear scale mismatch between domains
+7. separate team ownership causing repeated coupling pain
+8. hard fault-isolation requirements
+9. already-stable contracts and data boundaries
 
-Do not force a default architecture label before the repo, delivery model, and boundary evidence are clear.
+## ARCH-009: Layer Boundaries (Mandatory)
 
-Do not split into distributed services without evidence. Do not keep everything in one process by habit either.
+1. Transport or controller layer: parse input, validate shape, enforce auth at the edge, return protocol responses. No business policy, no raw SQL, no external workflow orchestration.
+2. Application or service layer: business rules, orchestration, transactions, and use-case flow. No request or response objects, no UI formatting, no raw transport dependencies.
+3. Domain layer: pure business invariants, calculations, value objects, and policies. No framework, network, database, or file-system coupling.
+4. Infrastructure or repository layer: database, queue, cache, file system, and external API adapters. No business policy hidden in queries or adapters.
 
-Service separation only makes sense when multiple signals are true, such as:
+## ARCH-010: Dependency Direction
 
-- frequent deploy conflicts across domains
-- clear scale mismatch between domains
-- separate team ownership causing repeated coupling pain
-- hard fault-isolation requirements
-- already-stable contracts and data boundaries
+1. Dependencies flow inward: transport to application to domain.
+2. Infrastructure depends inward through interfaces or well-defined ports.
+3. Domain must not depend on infrastructure.
+4. Application must not depend on transport details.
 
-## Layer Boundaries (Mandatory)
+## ARCH-011: Project Structure and File Size Discipline
 
-- Transport or controller layer: parse input, validate shape, enforce auth at the edge, return protocol responses. No business policy, no raw SQL, no external workflow orchestration.
-- Application or service layer: business rules, orchestration, transactions, and use-case flow. No request or response objects, no UI formatting, no raw transport dependencies.
-- Domain layer: pure business invariants, calculations, value objects, and policies. No framework, network, database, or file-system coupling.
-- Infrastructure or repository layer: database, queue, cache, file system, and external API adapters. No business policy hidden in queries or adapters.
+1. Group code by feature or domain, not by one giant technical folder per type.
+2. Backend feature modules use `src/modules/<feature>/...` when the repo has no stronger existing convention.
+3. Frontend feature modules use `src/features/<feature>/...` when the repo has no stronger existing convention.
+4. Cross-cutting utilities belong in explicit shared locations, not scattered feature internals.
+5. Files above roughly 1000 lines are a refactor trigger, not a success signal.
+6. Preserve one clear public entrypoint per module when helpful, but move implementation into smaller focused files.
+7. Keep code compact because the design is understood, not because safeguards were removed.
 
-## Dependency Direction
+## ARCH-012: Module Communication
 
-- Dependencies flow inward: transport to application to domain.
-- Infrastructure depends inward through interfaces or well-defined ports.
-- Domain must not depend on infrastructure.
-- Application must not depend on transport details.
-
-## Project Structure and File Size Discipline
-
-- Group code by feature or domain, not by one giant technical folder per type.
-- Backend feature modules use `src/modules/<feature>/...` when the repo has no stronger existing convention.
-- Frontend feature modules use `src/features/<feature>/...` when the repo has no stronger existing convention.
-- Cross-cutting utilities belong in explicit shared locations, not scattered feature internals.
-- Files above roughly 1000 lines are a refactor trigger, not a success signal.
-- Preserve one clear public entrypoint per module when helpful, but move implementation into smaller focused files.
-- Keep code compact because the design is understood, not because safeguards were removed.
-
-## Module Communication
-
-- Import through a module's public API instead of reaching into internal files.
-- Keep contracts explicit at boundaries between modules.
-- If a new developer cannot find the full flow of a feature in one clear area, the structure is too diffuse.
+1. Import through a module's public API instead of reaching into internal files.
+2. Keep contracts explicit at boundaries between modules.
+3. If a new developer cannot find the full flow of a feature in one clear area, the structure is too diffuse.

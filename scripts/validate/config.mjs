@@ -196,7 +196,7 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
   {
     path: '.agent-context/rules/architecture.md',
     snippets: [
-      '## Universal SOP Baseline (Mandatory)',
+      '## ARCH-003: Universal SOP Baseline (Mandatory)',
       'Root `README.md` must exist for every fresh or existing project',
       '`docs/doc-index.md` must exist whenever `docs/` exists',
       'Security and testing are non-negotiable baseline requirements.',

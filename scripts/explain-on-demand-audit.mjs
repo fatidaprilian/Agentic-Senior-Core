@@ -26,7 +26,7 @@ const SUPPORTED_MODES = new Set([DEFAULT_MODE, 'diagnostic']);
 const DEFAULT_WORKFLOW = 'standard';
 
 const REQUIRED_ARCHITECTURE_RULE_SNIPPETS = [
-  '## Invisible State Management with Explain-on-Demand',
+  '## ARCH-006: Invisible State Management with Explain-on-Demand',
   'Default responses must avoid unnecessary state-file internals.',
   'State internals are exposed only on explicit user request.',
   'Diagnostic mode explains relevant state decisions when needed.',
