@@ -180,6 +180,14 @@ export async function measureFixture(fixture, providerSpec, countFn) {
     providerSpec.model,
   );
 
+  const fallbackReasons = Array.from(
+    new Set(
+      [userMessageCount, alwaysIncludedSystemCount, withLoadedRulesSystemCount]
+        .map((r) => r.fallback_reason)
+        .filter((r) => typeof r === 'string' && r.length > 0),
+    ),
+  );
+
   return {
     fixture_id: fixture.id,
     fixture_filename: fixture._filename,
@@ -190,6 +198,7 @@ export async function measureFixture(fixture, providerSpec, countFn) {
     accurate: alwaysIncludedSystemCount.accurate
       && withLoadedRulesSystemCount.accurate
       && userMessageCount.accurate,
+    fallback_reasons: fallbackReasons,
     scenarios: {
       always_included: {
         description: 'AGENTS.md only — lower-bound system prompt always shipped to the agent',

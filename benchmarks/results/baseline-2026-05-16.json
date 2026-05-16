@@ -1,6 +1,6 @@
 {
   "report_version": "0.1.0",
-  "generated_at": "2026-05-16T08:39:02.813Z",
+  "generated_at": "2026-05-16T08:48:53.273Z",
   "description": "Phase 0 token-usage baseline. Measures system-prompt + user-message token counts across providers using free count-tokens APIs and tiktoken estimates. No generation API was called.",
   "schema": {
     "scenarios": {
@@ -13,7 +13,7 @@
       "provider": "anthropic",
       "model": "claude-sonnet-4-5-20250929",
       "fixture_count": 10,
-      "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+      "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
       "accurate_overall": false
     },
     {
@@ -27,8 +27,8 @@
       "provider": "gemini",
       "model": "gemini-2.5-flash",
       "fixture_count": 10,
-      "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-      "accurate_overall": false
+      "measurement_method": "gemini-models-count-tokens",
+      "accurate_overall": true
     }
   ],
   "runs": [
@@ -43,8 +43,13 @@
           "fixture_category": "scaffolding",
           "provider": "anthropic",
           "model": "claude-sonnet-4-5-20250929",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
+          "fallback_reasons": [
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZb5ATiD59xF6ouB5A\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZcwXnfcS4zfaWb99N\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZeX2xnK8Z2aHbu3fA\"}"
+          ],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -85,8 +90,13 @@
           "fixture_category": "scaffolding",
           "provider": "anthropic",
           "model": "claude-sonnet-4-5-20250929",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
+          "fallback_reasons": [
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZgGCg8XUbfrbXNgid\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZhsCPFrRRupWodzwW\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZjZtWcgZbtDP4QVHD\"}"
+          ],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -129,8 +139,13 @@
           "fixture_category": "scaffolding",
           "provider": "anthropic",
           "model": "claude-sonnet-4-5-20250929",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
+          "fallback_reasons": [
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZmGLf4JEFt9cZDegf\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZnsaCqD4VQJ5J8u1c\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZpckJ2DFq7oSGBaVf\"}"
+          ],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -171,8 +186,13 @@
           "fixture_category": "design-ui",
           "provider": "anthropic",
           "model": "claude-sonnet-4-5-20250929",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
+          "fallback_reasons": [
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZrEUqoSZd1jtnDqFv\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZstwoC7zYGQPaBRiK\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZun3ydTawopLFZ1D8\"}"
+          ],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -211,8 +231,13 @@
           "fixture_category": "design-ui",
           "provider": "anthropic",
           "model": "claude-sonnet-4-5-20250929",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
+          "fallback_reasons": [
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZwSGgjeRjUJXexebX\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZy2WkZTkRbdvYkUKu\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xZzru2fcSAAPinEeNs\"}"
+          ],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -251,8 +276,13 @@
           "fixture_category": "backend",
           "provider": "anthropic",
           "model": "claude-sonnet-4-5-20250929",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
+          "fallback_reasons": [
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xa2XMaantXGjvyMQ2C\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xa4ZPeNAsJhwZBjn9B\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xa66fLVMupiUr8XW1q\"}"
+          ],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -295,8 +325,13 @@
           "fixture_category": "backend",
           "provider": "anthropic",
           "model": "claude-sonnet-4-5-20250929",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
+          "fallback_reasons": [
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xa7o7To7FSz6D1mpSz\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xa9M8CVwtDq2hDgSr7\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xaAudt7CxMBAp4e2rv\"}"
+          ],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -339,8 +374,13 @@
           "fixture_category": "security",
           "provider": "anthropic",
           "model": "claude-sonnet-4-5-20250929",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
+          "fallback_reasons": [
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xaCMwud7QfsRa86mSV\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xaDxC7QQkqYYdsw88e\"}",
+            "400 terminated"
+          ],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -382,8 +422,13 @@
           "fixture_category": "refactor",
           "provider": "anthropic",
           "model": "claude-sonnet-4-5-20250929",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
+          "fallback_reasons": [
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xaHGNhwuUWDEGm1Jo7\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xaJscUKp7eW2jeN757\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xaLzN7qUra8rn9Hmjo\"}"
+          ],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -423,8 +468,13 @@
           "fixture_category": "review",
           "provider": "anthropic",
           "model": "claude-sonnet-4-5-20250929",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
+          "fallback_reasons": [
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xaNQSUGuyuSHNvYdM4\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xaPvijUcjHXPbzDMWu\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb5xaRaCCbjbXWGTC6J7h\"}"
+          ],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -476,6 +526,7 @@
           "model": "gpt-4o-2024-08-06",
           "measurement_method": "tiktoken-encoding-for-model",
           "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -518,6 +569,7 @@
           "model": "gpt-4o-2024-08-06",
           "measurement_method": "tiktoken-encoding-for-model",
           "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -562,6 +614,7 @@
           "model": "gpt-4o-2024-08-06",
           "measurement_method": "tiktoken-encoding-for-model",
           "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -604,6 +657,7 @@
           "model": "gpt-4o-2024-08-06",
           "measurement_method": "tiktoken-encoding-for-model",
           "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -644,6 +698,7 @@
           "model": "gpt-4o-2024-08-06",
           "measurement_method": "tiktoken-encoding-for-model",
           "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -684,6 +739,7 @@
           "model": "gpt-4o-2024-08-06",
           "measurement_method": "tiktoken-encoding-for-model",
           "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -728,6 +784,7 @@
           "model": "gpt-4o-2024-08-06",
           "measurement_method": "tiktoken-encoding-for-model",
           "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -772,6 +829,7 @@
           "model": "gpt-4o-2024-08-06",
           "measurement_method": "tiktoken-encoding-for-model",
           "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -815,6 +873,7 @@
           "model": "gpt-4o-2024-08-06",
           "measurement_method": "tiktoken-encoding-for-model",
           "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -856,6 +915,7 @@
           "model": "gpt-4o-2024-08-06",
           "measurement_method": "tiktoken-encoding-for-model",
           "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
@@ -905,15 +965,16 @@
           "fixture_category": "scaffolding",
           "provider": "gemini",
           "model": "gemini-2.5-flash",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-          "accurate": false,
+          "measurement_method": "gemini-models-count-tokens",
+          "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
               "input_token_breakdown": {
-                "system_prompt": 2544,
-                "user_message": 43,
-                "total": 2587
+                "system_prompt": 2773,
+                "user_message": 41,
+                "total": 2814
               },
               "component_chars": {
                 "agents_md": 11999
@@ -922,9 +983,9 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7355,
-                "user_message": 43,
-                "total": 7398
+                "system_prompt": 7828,
+                "user_message": 41,
+                "total": 7869
               },
               "component_chars": {
                 "agents_md": 11999,
@@ -947,15 +1008,16 @@
           "fixture_category": "scaffolding",
           "provider": "gemini",
           "model": "gemini-2.5-flash",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-          "accurate": false,
+          "measurement_method": "gemini-models-count-tokens",
+          "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
               "input_token_breakdown": {
-                "system_prompt": 2544,
-                "user_message": 64,
-                "total": 2608
+                "system_prompt": 2773,
+                "user_message": 70,
+                "total": 2843
               },
               "component_chars": {
                 "agents_md": 11999
@@ -964,9 +1026,9 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 9459,
-                "user_message": 64,
-                "total": 9523
+                "system_prompt": 10101,
+                "user_message": 70,
+                "total": 10171
               },
               "component_chars": {
                 "agents_md": 11999,
@@ -991,15 +1053,16 @@
           "fixture_category": "scaffolding",
           "provider": "gemini",
           "model": "gemini-2.5-flash",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-          "accurate": false,
+          "measurement_method": "gemini-models-count-tokens",
+          "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
               "input_token_breakdown": {
-                "system_prompt": 2544,
-                "user_message": 65,
-                "total": 2609
+                "system_prompt": 2773,
+                "user_message": 66,
+                "total": 2839
               },
               "component_chars": {
                 "agents_md": 11999
@@ -1008,9 +1071,9 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7005,
-                "user_message": 65,
-                "total": 7070
+                "system_prompt": 7535,
+                "user_message": 66,
+                "total": 7601
               },
               "component_chars": {
                 "agents_md": 11999,
@@ -1033,15 +1096,16 @@
           "fixture_category": "design-ui",
           "provider": "gemini",
           "model": "gemini-2.5-flash",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-          "accurate": false,
+          "measurement_method": "gemini-models-count-tokens",
+          "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
               "input_token_breakdown": {
-                "system_prompt": 2544,
-                "user_message": 69,
-                "total": 2613
+                "system_prompt": 2773,
+                "user_message": 70,
+                "total": 2843
               },
               "component_chars": {
                 "agents_md": 11999
@@ -1050,9 +1114,9 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8323,
-                "user_message": 69,
-                "total": 8392
+                "system_prompt": 8788,
+                "user_message": 70,
+                "total": 8858
               },
               "component_chars": {
                 "agents_md": 11999,
@@ -1073,15 +1137,16 @@
           "fixture_category": "design-ui",
           "provider": "gemini",
           "model": "gemini-2.5-flash",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-          "accurate": false,
+          "measurement_method": "gemini-models-count-tokens",
+          "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
               "input_token_breakdown": {
-                "system_prompt": 2544,
-                "user_message": 59,
-                "total": 2603
+                "system_prompt": 2773,
+                "user_message": 61,
+                "total": 2834
               },
               "component_chars": {
                 "agents_md": 11999
@@ -1090,9 +1155,9 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8323,
-                "user_message": 59,
-                "total": 8382
+                "system_prompt": 8788,
+                "user_message": 61,
+                "total": 8849
               },
               "component_chars": {
                 "agents_md": 11999,
@@ -1113,15 +1178,16 @@
           "fixture_category": "backend",
           "provider": "gemini",
           "model": "gemini-2.5-flash",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-          "accurate": false,
+          "measurement_method": "gemini-models-count-tokens",
+          "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
               "input_token_breakdown": {
-                "system_prompt": 2544,
-                "user_message": 63,
-                "total": 2607
+                "system_prompt": 2773,
+                "user_message": 65,
+                "total": 2838
               },
               "component_chars": {
                 "agents_md": 11999
@@ -1130,9 +1196,9 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8039,
-                "user_message": 63,
-                "total": 8102
+                "system_prompt": 8561,
+                "user_message": 65,
+                "total": 8626
               },
               "component_chars": {
                 "agents_md": 11999,
@@ -1157,15 +1223,16 @@
           "fixture_category": "backend",
           "provider": "gemini",
           "model": "gemini-2.5-flash",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-          "accurate": false,
+          "measurement_method": "gemini-models-count-tokens",
+          "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
               "input_token_breakdown": {
-                "system_prompt": 2544,
-                "user_message": 87,
-                "total": 2631
+                "system_prompt": 2773,
+                "user_message": 91,
+                "total": 2864
               },
               "component_chars": {
                 "agents_md": 11999
@@ -1174,9 +1241,9 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7022,
-                "user_message": 87,
-                "total": 7109
+                "system_prompt": 7484,
+                "user_message": 91,
+                "total": 7575
               },
               "component_chars": {
                 "agents_md": 11999,
@@ -1201,15 +1268,16 @@
           "fixture_category": "security",
           "provider": "gemini",
           "model": "gemini-2.5-flash",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-          "accurate": false,
+          "measurement_method": "gemini-models-count-tokens",
+          "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
               "input_token_breakdown": {
-                "system_prompt": 2544,
-                "user_message": 74,
-                "total": 2618
+                "system_prompt": 2773,
+                "user_message": 82,
+                "total": 2855
               },
               "component_chars": {
                 "agents_md": 11999
@@ -1218,9 +1286,9 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7704,
-                "user_message": 74,
-                "total": 7778
+                "system_prompt": 8219,
+                "user_message": 82,
+                "total": 8301
               },
               "component_chars": {
                 "agents_md": 11999,
@@ -1244,15 +1312,16 @@
           "fixture_category": "refactor",
           "provider": "gemini",
           "model": "gemini-2.5-flash",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-          "accurate": false,
+          "measurement_method": "gemini-models-count-tokens",
+          "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
               "input_token_breakdown": {
-                "system_prompt": 2544,
-                "user_message": 61,
-                "total": 2605
+                "system_prompt": 2773,
+                "user_message": 76,
+                "total": 2849
               },
               "component_chars": {
                 "agents_md": 11999
@@ -1261,9 +1330,9 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 5579,
-                "user_message": 61,
-                "total": 5640
+                "system_prompt": 6014,
+                "user_message": 76,
+                "total": 6090
               },
               "component_chars": {
                 "agents_md": 11999,
@@ -1285,15 +1354,16 @@
           "fixture_category": "review",
           "provider": "gemini",
           "model": "gemini-2.5-flash",
-          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
-          "accurate": false,
+          "measurement_method": "gemini-models-count-tokens",
+          "accurate": true,
+          "fallback_reasons": [],
           "scenarios": {
             "always_included": {
               "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
               "input_token_breakdown": {
-                "system_prompt": 2544,
-                "user_message": 70,
-                "total": 2614
+                "system_prompt": 2773,
+                "user_message": 72,
+                "total": 2845
               },
               "component_chars": {
                 "agents_md": 11999
@@ -1302,9 +1372,9 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8486,
-                "user_message": 70,
-                "total": 8556
+                "system_prompt": 9056,
+                "user_message": 72,
+                "total": 9128
               },
               "component_chars": {
                 "agents_md": 11999,
