@@ -149,6 +149,7 @@ Decision yang sudah dijawab user dan locked:
 
 - **Decision B (Phase 1 timing): B1 (hard cut at v4.0.0).** Format lama di-drop, migration tool wajib. CHANGELOG migration guide mandatory.
 - **Anthropic counter accuracy:** Skip top-up. Claude tetap pakai `tiktoken cl100k_base` estimate dengan `accurate=false` flag (~0.11% deviation vs OpenAI native, acceptable as relative comparator).
+- **Tiny-rule token gate:** Rule files below 600 original OpenAI tokens keep the same v4 format but use a +120 OpenAI-token absolute overhead cap instead of the +15% per-file percentage cap. Aggregate Phase 1 cap remains +5%.
 
 Tidak ada pending decision yang block Phase 1. Phase 2+ pending decisions akan ditambahkan saat phase relevant.
 

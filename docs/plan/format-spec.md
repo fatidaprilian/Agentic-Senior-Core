@@ -276,6 +276,15 @@ For section 6.2's example, the substantial words from before and after match alm
 
 Roundtrip pass.
 
+## 6.4 Tiny-Rule Measurement Policy
+
+Tiny rule files below 600 original OpenAI tokens use the same v4 format, but their token gate is measured by absolute overhead instead of percentage delta. The v4 structure adds a mostly fixed frontmatter + ID-heading + numbering floor, so the original +15% ceiling overreacts on files where 70-105 structural tokens can represent more than 30% of the file. For these files:
+
+1. Preserve the full v4 shape: frontmatter, H1, ID-prefixed H2 sections, and numbered directives.
+2. Keep the absolute overhead at or below +120 OpenAI tokens against the original v3 file.
+3. Keep the aggregate Phase 1 token delta at or below +5% across benchmark fixtures.
+4. Log both the absolute overhead and percentage delta in the outcome report.
+
 ## 7. What This Spec Does Not Cover
 
 - **Reflection block format inside prompts.** That is Phase 3 anti-halu work. This spec covers rule files only.
