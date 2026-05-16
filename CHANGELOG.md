@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 - Split `lib/cli/detector/design-evidence.mjs` into focused submodules (`design-evidence/{constants,file-traversal,utility-helpers,structured-attribute-evidence,summary,collector}.mjs`). The aggregator preserves the public exports (`collectFrontendDesignEvidence`, `FRONTEND_SCAN_IGNORE_DIRECTORY_NAMES`); behavior is unchanged.
+- Split `scripts/llm-judge.mjs` into focused submodules under `scripts/llm-judge/` (constants, checklist-loader, diff-collection, prompting, providers, verdict). The CLI entry file keeps the same flags and exit semantics; behavior is unchanged.
 
 ### Fixed
 
