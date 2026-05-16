@@ -186,3 +186,72 @@ Notes:
 - A benchmark report that fabricates an "OpenAI saving" number when only eligibility, not pricing-backed multipliers, was measured.
 
 When the per-integration shape is not yet populated for a new integration, mark its row with `measurable_from_rules_pack: false`, `effective_reduction_percent: null`, and a `note` explaining why. Do not omit the row.
+
+## Release Benchmark Bundle
+
+The release benchmark bundle is the single hash-verified manifest that a release candidate references. It does not regenerate any Phase 0-3 numbers; it only points to the locked artifacts and records SHA-256 hashes plus a non-marketing summary section.
+
+### Build the bundle
+
+```bash
+npm run build:release-bundle
+```
+
+Output: `benchmarks/results/release-bundle-<release_target>.json`. The current release target is `4.0.0`; the corresponding output file is `benchmarks/results/release-bundle-4.0.0.json`.
+
+### Verify the bundle
+
+```bash
+npm run audit:release-bundle
+```
+
+This audit is also wired into `npm run validate`. It fails when:
+
+- the bundle file is missing or invalid JSON;
+- a referenced artifact path is missing;
+- a referenced artifact's SHA-256 hash drifts from the recorded value;
+- the bundle's `release_status` is not one of `release-candidate-unpublished` or `released`.
+
+### Bundle shape
+
+```json
+{
+  "bundle_version": "<semver>",
+  "release_target": "<semver>",
+  "release_status": "release-candidate-unpublished | released",
+  "generated_at": "<ISO 8601>",
+  "description": "<non-marketing summary>",
+  "sources": {
+    "research_foundation": "docs/plan/research-foundation.md",
+    "d4_caching_scope_matrix": "docs/plan/research-foundation.md#d4",
+    "caching_reporting_format": "docs/benchmark-reference.md",
+    "phase_2_outcome": "docs/plan/phase-2-outcome.md",
+    "phase_3_outcome": "docs/plan/phase-3-outcome.md",
+    "phase_5_plan": "docs/plan/phase-5-hardening.md"
+  },
+  "integrity": {
+    "hash_algorithm": "SHA-256",
+    "missing_artifact_count": 0,
+    "missing_artifacts": []
+  },
+  "artifacts": [
+    {
+      "artifact_id": "<short id>",
+      "role": "token-baseline | cache-simulation | anti-halu-benchmark | supply-chain-snapshot",
+      "relative_path": "benchmarks/results/<file>.json",
+      "description": "<short>",
+      "status": "present",
+      "sha256": "<hex>",
+      "size_bytes": 0,
+      "summary": { "...": "role-specific" }
+    }
+  ]
+}
+```
+
+### Anti-patterns
+
+- Re-running Phase 0-3 measurements at release time. The bundle is reference-only.
+- Editing artifact files manually after the bundle is built without re-running `build:release-bundle`. The audit will catch the hash drift.
+- Inserting a marketing-style universal "X% caching saving" claim into the bundle description. Use the per-integration JSON shape from "Caching Effectiveness Reporting Format" instead.
+- Setting `release_status` to `released` before Gate D approves publication.

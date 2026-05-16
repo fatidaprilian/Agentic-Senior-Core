@@ -22,6 +22,7 @@ import { runCacheLayerContractAudit } from './audit-cache-layer-contract.mjs';
 import { runCachingScopeHygieneAudit } from './audit-caching-scope-hygiene.mjs';
 import { runAuditFileSize } from './audit-file-size.mjs';
 import { runReflectionCitationAudit } from './audit-reflection-citations.mjs';
+import { runReleaseBundleAudit } from './audit-release-bundle.mjs';
 import { runRuleIdUniquenessAudit } from './audit-rule-id-uniqueness.mjs';
 import {
   validateDependencyFreshnessAutomationCoverage,
@@ -567,6 +568,19 @@ async function validateCachingScopeHygieneAudit() {
   }
 }
 
+async function validateReleaseBundleAudit() {
+  console.log('\nChecking release benchmark bundle (audit:release-bundle)...');
+  const report = runReleaseBundleAudit();
+
+  if (report.passed) {
+    pass(`Release bundle integrity clean: ${report.artifactCount} artifact(s), release_target=${report.releaseTarget}, release_status=${report.releaseStatus}`);
+  } else {
+    for (const violation of report.violations) {
+      fail(`Release bundle violation [${violation.kind}]: ${violation.detail}`);
+    }
+  }
+}
+
 async function validateMcpConfiguration() {
   console.log('\nChecking MCP configuration...');
 
@@ -651,6 +665,7 @@ async function main() {
   await validateCacheLayerContractAudit();
   await validateReflectionCitationAudit();
   await validateCachingScopeHygieneAudit();
+  await validateReleaseBundleAudit();
   await validateFileSizeAudit();
   await validateRuleIdUniquenessAudit();
 
