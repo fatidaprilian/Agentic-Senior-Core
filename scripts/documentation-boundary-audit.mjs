@@ -107,6 +107,7 @@ function runGitFileQuery(commandArguments) {
       cwd: REPOSITORY_ROOT,
       encoding: 'utf8',
       maxBuffer: 1024 * 1024,
+      stdio: ['ignore', 'pipe', 'ignore'],
     });
 
     return parseGitFileList(rawOutput);

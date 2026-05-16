@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `audit:file-size` script that enforces a 500 LOC threshold across `bin/`, `lib/`, and `scripts/` (excluding test files). Files that genuinely need to exceed the limit can declare a `// @file-size-exception: <reason>` marker in the first 5 lines. The check is wired into `npm run validate`. The seven currently oversize files (`lib/cli/commands/init.mjs`, `lib/cli/compiler.mjs`, `lib/cli/memory-continuity.mjs`, `scripts/benchmark-evidence-bundle.mjs`, `scripts/rules-guardian-audit.mjs`, `scripts/validate/config.mjs`, `scripts/validate.mjs`) are exempted with a reason and queued for a Phase 1 split.
 
 ### Fixed
+- Suppressed git stderr noise from audit and judge scripts (`documentation-boundary-audit`, `context-triggered-audit`, `explain-on-demand-audit`, `rules-guardian-audit`, `single-source-lazy-loading-audit`, `ui-design-judge/git-input`, `llm-judge/diff-collection`). Each `git` invocation now passes `stdio: ['ignore', 'pipe', 'ignore']` so that the JS-level `try/catch` fallback no longer leaks `fatal: ambiguous argument 'HEAD~1..HEAD'` to the test output on shallow clones or initial-commit repos.
 
 ## 3.0.50 - 2026-05-15
 ### Changed

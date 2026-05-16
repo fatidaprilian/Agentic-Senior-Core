@@ -62,6 +62,7 @@ export function collectPullRequestDiff() {
       cwd: REPOSITORY_ROOT,
       encoding: /** @type {'utf-8'} */ ('utf-8'),
       maxBuffer: 1024 * 1024 * 8,
+      stdio: ['ignore', 'pipe', 'ignore'],
     });
   } catch {
     try {
@@ -70,6 +71,7 @@ export function collectPullRequestDiff() {
         cwd: REPOSITORY_ROOT,
         encoding: /** @type {'utf-8'} */ ('utf-8'),
         maxBuffer: 1024 * 1024 * 8,
+        stdio: ['ignore', 'pipe', 'ignore'],
       });
     } catch {
       return '';
@@ -103,6 +105,7 @@ export function collectChangedFiles() {
       cwd: REPOSITORY_ROOT,
       encoding: /** @type {'utf-8'} */ ('utf-8'),
       maxBuffer: 1024 * 1024 * 2,
+      stdio: ['ignore', 'pipe', 'ignore'],
     });
     return output.split(/\r?\n/u).map((filePath) => filePath.trim()).filter(Boolean);
   } catch {

@@ -42,6 +42,7 @@ export function collectPullRequestDiff() {
     cwd: REPOSITORY_ROOT,
     encoding: /** @type {'utf-8'} */ ('utf-8'),
     maxBuffer: 1024 * 1024 * 8,
+    stdio: /** @type {['ignore', 'pipe', 'ignore']} */ (['ignore', 'pipe', 'ignore']),
   };
 
   const githubBaseSha = process.env.GITHUB_BASE_SHA;
