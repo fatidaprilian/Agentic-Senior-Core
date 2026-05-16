@@ -66,6 +66,8 @@ Source of truth: `benchmarks/results/cache-phase-2-2026-05-16.json`.
 
 The prior Phase 2 Anthropic `with_loaded_rules` average total input was 8,483.1 tokens. Phase 3 raised that by 105.6 tokens (+1.24%) while preserving the same 89.31% warm-read effective-token reduction. The cache split remains intact: Layer 1 and Layer 2 remain cacheable, while task-specific evidence and generated citations stay dynamic.
 
+> **Scope caveat (added 2026-05-16 as part of caching-claim scope-fix pass):** The 89.31% effective-token reduction reported above is computed against the **direct provider API path** using Anthropic's documented prompt-caching multipliers. It applies cleanly to direct Anthropic API integration and to Claude Code SDK programmatic mode where `cache_control` is user-controlled. It does **not** translate into a measurable, attributable saving for users who consume this rules pack through IDE wrapper tools (Cursor, Windsurf, Codex CLI, Kiro). Those wrappers abstract the caching boundary; the benefit reaches their users only as prefix stability, which is not measurable from the rules pack side. See `docs/plan/research-foundation.md` D4 "Per-Tool Caching Scope Matrix" for the per-tool breakdown and citation URLs, and see `docs/benchmark-reference.md` "Caching Effectiveness Reporting Format" for the required per-integration reporting shape.
+
 ---
 
 ## Risks And Limits
