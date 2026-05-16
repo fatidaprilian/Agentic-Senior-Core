@@ -113,8 +113,8 @@ docs/plan/
 
 | Phase | Status | Started | Completed | Notes |
 |-------|--------|---------|-----------|-------|
-| Phase 0 — Baseline & Cleanup | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-0-outcome.md`. Awaits GATE D approval to start Phase 1. |
-| Phase 1 — Format Migration | 🟡 Awaiting GATE D | — | — | Generate after GATE D approval |
+| Phase 0 — Baseline & Cleanup | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-0-outcome.md`. GATE D approved. |
+| Phase 1 — Format Migration | 🟡 Ready to start | — | — | Detailed di `phase-1-format.md`. Decision B = B1 (hard cut v4.0.0). |
 | Phase 2 — Caching Layer | ⏸ Locked | — | — | Generate setelah Phase 1 selesai |
 | Phase 3 — Anti-Halu | ⏸ Locked | — | — | Generate setelah Phase 2 selesai |
 | Phase 4 — Retrieval (conditional) | ⏸ Locked | — | — | Skip kalau Phase 3 quality target tercapai |
@@ -145,14 +145,12 @@ Phase 5 target. Detail measurement methodology di phase masing-masing.
 
 ## PENDING DECISIONS
 
-Belum dijawab user, akan ditanya saat phase yang relevan:
+Decision yang sudah dijawab user dan locked:
 
-- **Decision B (Phase 1 timing):** Breaking change tolerance untuk migration ke numbered markdown?
-  - B1: Hard cut v4.0.0 (drop format lama, migration tool wajib)
-  - B2: Additive (support both, deprecate later)
-  - B3: Beta channel dulu 1-2 bulan, lalu hard cut
+- **Decision B (Phase 1 timing): B1 (hard cut at v4.0.0).** Format lama di-drop, migration tool wajib. CHANGELOG migration guide mandatory.
+- **Anthropic counter accuracy:** Skip top-up. Claude tetap pakai `tiktoken cl100k_base` estimate dengan `accurate=false` flag (~0.11% deviation vs OpenAI native, acceptable as relative comparator).
 
-Phase 0 tidak butuh keputusan ini — bisa start langsung.
+Tidak ada pending decision yang block Phase 1. Phase 2+ pending decisions akan ditambahkan saat phase relevant.
 
 ---
 
@@ -173,4 +171,4 @@ Triangulation rule: klaim muncul di 2+ sources independen = HIGH confidence (dec
 
 ---
 
-**Last updated:** Phase 0 generated. Update file ini setiap phase selesai dengan summary outcome.
+**Last updated:** Phase 0 completed 2026-05-16. Decision B = B1 locked at GATE D. Phase 1 ready. Update file ini setiap phase selesai dengan summary outcome.
