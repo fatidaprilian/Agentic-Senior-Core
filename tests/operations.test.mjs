@@ -7,6 +7,7 @@ import {
   createActiveMemorySnapshot,
   validateActiveMemorySnapshot,
 } from '../lib/cli/memory-continuity.mjs';
+import { runReflectionCitationAudit } from '../scripts/audit-reflection-citations.mjs';
 
 test('Operations Tests', async (t) => {
   await t.test('release gate outputs machine-readable report', () => {
@@ -386,6 +387,46 @@ test('Operations Tests', async (t) => {
     assert.equal(cacheLayerAuditReport.providerCount, 6);
     assert.equal(cacheLayerAuditReport.fixtureCount, 10);
     assert.equal(cacheLayerAuditReport.resultCount, 120);
+  });
+
+  await t.test('reflection citation audit outputs machine-readable report', () => {
+    const reflectionAuditOutput = execSync(`node ${join(process.cwd(), 'scripts', 'audit-reflection-citations.mjs')} --json`).toString();
+    const reflectionAuditReport = JSON.parse(reflectionAuditOutput);
+
+    assert.equal(reflectionAuditReport.auditName, 'audit-reflection-citations');
+    assert.equal(reflectionAuditReport.passed, true);
+    assert.equal(reflectionAuditReport.violationCount, 0);
+    assert.ok(reflectionAuditReport.knownRuleIdCount >= 1);
+  });
+
+  await t.test('reflection citation audit rejects unknown rule IDs', () => {
+    const report = runReflectionCitationAudit({
+      sourceOverrides: {
+        'AGENTS.md': [
+          '## Bounded Reflection',
+          'REFLECTION',
+          'Rules: FAKE-999',
+          'Risk:',
+          'Action:',
+          'valid rule IDs',
+          'hidden chain-of-thought',
+        ].join('\n'),
+      },
+    });
+
+    assert.equal(report.passed, false);
+    assert.ok(report.violations.some((violation) => violation.kind === 'rule-id.unknown'));
+  });
+
+  await t.test('reflection citation audit rejects missing required snippets', () => {
+    const report = runReflectionCitationAudit({
+      sourceOverrides: {
+        'AGENTS.md': 'No reflection contract here.',
+      },
+    });
+
+    assert.equal(report.passed, false);
+    assert.ok(report.violations.some((violation) => violation.kind === 'reflection.snippet-missing'));
   });
 
   await t.test('quality trend report outputs machine-readable report', () => {

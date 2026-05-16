@@ -171,11 +171,11 @@ Phase 3 must not turn stable cacheable text into volatile task-specific text.
 5. Add operations test coverage for machine-readable output.
 
 **Acceptance criteria:**
-- [ ] `npm run audit:reflection-citations` exists.
-- [ ] `npm run validate` includes the audit.
-- [ ] Audit fails on unknown rule IDs.
-- [ ] Audit fails when required reflection snippets are missing.
-- [ ] `npm test` count increases.
+- [x] `npm run audit:reflection-citations` exists.
+- [x] `npm run validate` includes the audit.
+- [x] Audit fails on unknown rule IDs.
+- [x] Audit fails when required reflection snippets are missing.
+- [x] `npm test` count increases.
 
 **Files allowed:**
 - `scripts/audit-reflection-citations.mjs`

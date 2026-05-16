@@ -20,6 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { ALLOWED_SEVERITIES } from './validate/config.mjs';
 import { runCacheLayerContractAudit } from './audit-cache-layer-contract.mjs';
 import { runAuditFileSize } from './audit-file-size.mjs';
+import { runReflectionCitationAudit } from './audit-reflection-citations.mjs';
 import { runRuleIdUniquenessAudit } from './audit-rule-id-uniqueness.mjs';
 import {
   validateDependencyFreshnessAutomationCoverage,
@@ -539,6 +540,19 @@ async function validateRuleIdUniquenessAudit() {
   }
 }
 
+async function validateReflectionCitationAudit() {
+  console.log('\nChecking reflection citations (audit:reflection-citations)...');
+  const report = runReflectionCitationAudit();
+
+  if (report.passed) {
+    pass(`Reflection citation audit clean: ${report.surfaceCount} surface(s), ${report.knownRuleIdCount} known rule ID(s)`);
+  } else {
+    for (const violation of report.violations) {
+      fail(`Reflection citation violation [${violation.kind}] in ${violation.file}: ${violation.detail}`);
+    }
+  }
+}
+
 async function validateMcpConfiguration() {
   console.log('\nChecking MCP configuration...');
 
@@ -621,6 +635,7 @@ async function main() {
   await validateInstructionAdapters(coverageValidationContext);
   await validateSkillPurgeSurface(coverageValidationContext);
   await validateCacheLayerContractAudit();
+  await validateReflectionCitationAudit();
   await validateFileSizeAudit();
   await validateRuleIdUniquenessAudit();
 

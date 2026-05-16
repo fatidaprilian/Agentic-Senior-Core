@@ -29,15 +29,17 @@
 1. Run `npm run check:adapters` to verify native import bridges.
 2. Run `npm run validate` for repository integrity, docs, policy, and instruction-surface checks.
 3. Run `npm run audit:cache-layer-contract` when prompt-caching layers, cache simulation, or validation wiring changes.
-4. Run `npm test` for CLI smoke tests, MCP tests, LLM judge tests, operations tests, UI rubric tests, and knowledge-injection tests.
-5. Run `npm run gate:release` before release or publish work.
+4. Run `npm run audit:reflection-citations` when bounded reflection text, citation requirements, rule IDs, prompts, or review checklists change.
+5. Run `npm test` for CLI smoke tests, MCP tests, LLM judge tests, operations tests, UI rubric tests, and knowledge-injection tests.
+6. Run `npm run gate:release` before release or publish work.
 
 ## Anti-Halu Flow
 
 1. Keep stable rule text in the canonical governance surface.
 2. If a user request conflicts with stricter `.agent-context/` rules, refuse or redirect with the relevant rule ID.
 3. Use MCP compliance tools when rule citations need deterministic checking: `lookup_rule`, `validate_against_rules`, and `audit_compliance`.
-4. Keep task-specific evidence, command output, and generated citations in the dynamic request layer.
+4. Use `npm run audit:reflection-citations` to verify bounded reflection snippets and cited rule IDs in canonical prompts and checklists.
+5. Keep task-specific evidence, command output, and generated citations in the dynamic request layer.
 
 ## Failure And Rollback
 
