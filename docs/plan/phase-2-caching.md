@@ -165,11 +165,18 @@ The benchmark harness should produce the contract from the real assembled benchm
 5. Document that Phase 2 produces a contract and simulator, not live provider cache writes.
 
 **Acceptance criteria:**
-- [ ] Provider matrix exists and is imported by the benchmark/simulator code.
-- [ ] Source metadata includes official URLs and `verifiedAt: "2026-05-16"`.
-- [ ] Anthropic cost model includes read/write multipliers.
-- [ ] OpenAI/Gemini entries avoid fake universal pricing.
-- [ ] No runtime dependency is added.
+- [x] Provider matrix exists and is imported by the benchmark test entrypoint.
+- [x] Source metadata includes official URLs and `verifiedAt: "2026-05-16"`.
+- [x] Anthropic cost model includes read/write multipliers.
+- [x] OpenAI/Gemini entries avoid fake universal pricing.
+- [x] No runtime dependency is added.
+
+**Task 2.1 result (2026-05-16):**
+- Added `benchmarks/token-usage/lib/provider-cache-matrix.mjs`.
+- Added `benchmarks/token-usage/lib/provider-cache-matrix.test.mjs`.
+- Wired the new test into `npm test`, raising the test count from 145 to 153.
+- Kept OpenAI and Gemini economic projections at `eligibility-only`; no universal pricing multiplier was invented.
+- Kept Grok, DeepSeek, and Qwen as `estimate-only` until official caching sources are verified.
 
 **Files allowed:**
 - `benchmarks/token-usage/lib/provider-cache-matrix.mjs`
@@ -387,4 +394,3 @@ Do not publish the RC at this gate.
 - Commit locally after each complete task if code changes are substantial.
 - Do not push.
 - Do not run `npm publish`.
-
