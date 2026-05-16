@@ -1,7 +1,8 @@
 // @ts-check
+// @file-size-exception: Standalone MCP dispatcher intentionally keeps copied tool handlers together; Phase 3 adds bounded rule-validation handlers here.
 
 import { existsSync } from 'node:fs';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import { dirname, resolve, sep } from 'node:path';
 import {
@@ -17,6 +18,10 @@ import {
   STATE_DIRECTORY,
   TEST_SUITE_ARGS,
 } from './constants.mjs';
+
+const RULES_DIRECTORY = resolve(REPOSITORY_ROOT, '.agent-context', 'rules');
+const RULE_SECTION_HEADING_PATTERN = /^##\s+([A-Z]+-\d{3,4}(?:-[A-Z])?):\s+(.+)$/gm;
+const RULE_ID_INPUT_PATTERN = /^[A-Z]+-\d{3,4}(?:-[A-Z])?$/;
 
 function buildCommandOutput(commandLabel, commandArguments, exitCode, stdoutContent, stderrContent) {
   const outputSections = [
@@ -48,6 +53,125 @@ function buildJsonResult(payload, isError = false) {
     ],
     isError,
   };
+}
+
+function normalizeRuleId(rawRuleId) {
+  return typeof rawRuleId === 'string' ? rawRuleId.trim().toUpperCase() : '';
+}
+
+function normalizeRuleIdList(rawRuleIds) {
+  if (!Array.isArray(rawRuleIds)) {
+    return [];
+  }
+
+  return Array.from(new Set(rawRuleIds.map(normalizeRuleId).filter(Boolean)));
+}
+
+async function buildRuleSectionIndex() {
+  const index = new Map();
+  const filenames = (await readdir(RULES_DIRECTORY))
+    .filter((filename) => filename.endsWith('.md') && !filename.endsWith('.candidate.md'))
+    .sort();
+
+  for (const filename of filenames) {
+    const relativePath = `.agent-context/rules/${filename}`;
+    const sourceText = await readFile(resolve(RULES_DIRECTORY, filename), 'utf8');
+    const matches = [...sourceText.matchAll(RULE_SECTION_HEADING_PATTERN)];
+
+    for (let matchIndex = 0; matchIndex < matches.length; matchIndex += 1) {
+      const match = matches[matchIndex];
+      const nextMatch = matches[matchIndex + 1];
+      const sectionStart = match.index || 0;
+      const sectionEnd = nextMatch?.index ?? sourceText.length;
+      const ruleId = match[1];
+      index.set(ruleId, {
+        ruleId,
+        title: match[2].trim(),
+        path: relativePath,
+        content: sourceText.slice(sectionStart, sectionEnd).trim(),
+      });
+    }
+  }
+
+  return index;
+}
+
+async function runLookupRuleTool(toolArguments = {}) {
+  const ruleId = normalizeRuleId(toolArguments.ruleId);
+  if (!RULE_ID_INPUT_PATTERN.test(ruleId)) {
+    return buildJsonResult({
+      error: 'ruleId must use the stable <PREFIX>-NNN format.',
+      input: toolArguments.ruleId || null,
+    }, true);
+  }
+
+  const ruleIndex = await buildRuleSectionIndex();
+  const ruleEntry = ruleIndex.get(ruleId);
+  if (!ruleEntry) {
+    return buildJsonResult({
+      error: `Unknown rule ID: ${ruleId}`,
+      ruleId,
+      knownRuleCount: ruleIndex.size,
+    }, true);
+  }
+
+  return buildJsonResult({
+    found: true,
+    ...ruleEntry,
+  });
+}
+
+async function runValidateAgainstRulesTool(toolArguments = {}) {
+  const ruleIds = normalizeRuleIdList(toolArguments.ruleIds);
+  const ruleIndex = await buildRuleSectionIndex();
+  const invalidFormatIds = ruleIds.filter((ruleId) => !RULE_ID_INPUT_PATTERN.test(ruleId));
+  const unknownRuleIds = ruleIds.filter((ruleId) => RULE_ID_INPUT_PATTERN.test(ruleId) && !ruleIndex.has(ruleId));
+  const resolvedRules = ruleIds
+    .filter((ruleId) => ruleIndex.has(ruleId))
+    .map((ruleId) => {
+      const ruleEntry = ruleIndex.get(ruleId);
+      return {
+        ruleId,
+        title: ruleEntry.title,
+        path: ruleEntry.path,
+      };
+    });
+  const passed = ruleIds.length > 0 && invalidFormatIds.length === 0 && unknownRuleIds.length === 0;
+
+  return buildJsonResult({
+    passed,
+    checkedAt: new Date().toISOString(),
+    summary: typeof toolArguments.summary === 'string' ? toolArguments.summary.trim() || null : null,
+    ruleCount: ruleIds.length,
+    resolvedRules,
+    invalidFormatIds,
+    unknownRuleIds,
+  }, !passed);
+}
+
+async function runAuditComplianceTool(toolArguments = {}) {
+  const validationResult = await runValidateAgainstRulesTool(toolArguments);
+  const validationPayload = JSON.parse(validationResult.content[0].text);
+  const scope = typeof toolArguments.scope === 'string' ? toolArguments.scope.trim().toLowerCase() : '';
+  const warnings = [];
+
+  if (!scope) {
+    warnings.push({
+      kind: 'scope.missing',
+      detail: 'Provide scope when checking whether cited rules match a changed boundary.',
+    });
+  }
+
+  return buildJsonResult({
+    auditName: 'mcp-audit-compliance',
+    reportVersion: '1.0.0',
+    generatedAt: new Date().toISOString(),
+    scope: scope || null,
+    passed: validationPayload.passed,
+    failureCount: validationPayload.passed ? 0 : validationPayload.invalidFormatIds.length + validationPayload.unknownRuleIds.length,
+    warnings,
+    ruleValidation: validationPayload,
+  }, !validationPayload.passed);
 }
 
 function normalizePlainText(rawText) {
@@ -416,6 +540,18 @@ export async function executeToolCall(toolName, toolArguments = {}) {
     }
 
     return runNodeCommand('forbidden_content_check', ['./scripts/forbidden-content-check.mjs']);
+  }
+
+  if (toolName === 'lookup_rule') {
+    return runLookupRuleTool(toolArguments);
+  }
+
+  if (toolName === 'validate_against_rules') {
+    return runValidateAgainstRulesTool(toolArguments);
+  }
+
+  if (toolName === 'audit_compliance') {
+    return runAuditComplianceTool(toolArguments);
   }
 
   if (toolName === 'research_fetch') {

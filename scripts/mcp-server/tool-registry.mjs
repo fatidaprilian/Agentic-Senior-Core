@@ -62,6 +62,61 @@ export function buildToolDefinitions() {
 
   toolDefinitions.push(
     {
+      name: 'lookup_rule',
+      description: 'Look up a canonical .agent-context rule section by stable rule ID.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          ruleId: {
+            type: 'string',
+            description: 'Stable rule section ID, such as ARCH-003 or API-001.',
+          },
+        },
+        required: ['ruleId'],
+        additionalProperties: false,
+      },
+    },
+    {
+      name: 'validate_against_rules',
+      description: 'Validate that cited rule IDs resolve to canonical rule sections.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          ruleIds: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Rule IDs cited by a response, plan, or review.',
+          },
+          summary: {
+            type: 'string',
+            description: 'Optional one-line context for the validation request.',
+          },
+        },
+        required: ['ruleIds'],
+        additionalProperties: false,
+      },
+    },
+    {
+      name: 'audit_compliance',
+      description: 'Run a lightweight compliance audit over cited rule IDs and scope labels.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          ruleIds: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Rule IDs used as the compliance basis.',
+          },
+          scope: {
+            type: 'string',
+            description: 'Optional changed scope label, such as api, security, testing, architecture, ui, or release.',
+          },
+        },
+        required: ['ruleIds'],
+        additionalProperties: false,
+      },
+    },
+    {
       name: 'research_fetch',
       description: 'Fetch external documentation/news content and return query-focused excerpts with citation metadata.',
       inputSchema: {

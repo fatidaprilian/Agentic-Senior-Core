@@ -140,13 +140,13 @@ Phase 3 must not turn stable cacheable text into volatile task-specific text.
 5. Do not add runtime dependencies.
 
 **Acceptance criteria:**
-- [ ] MCP tool registry exposes `lookup_rule`.
-- [ ] MCP tool registry exposes `validate_against_rules`.
-- [ ] MCP tool registry exposes `audit_compliance`.
-- [ ] Tools return machine-readable JSON.
-- [ ] Unknown rule IDs fail clearly.
-- [ ] Existing MCP tests pass.
-- [ ] `npm test` count increases.
+- [x] MCP tool registry exposes `lookup_rule`.
+- [x] MCP tool registry exposes `validate_against_rules`.
+- [x] MCP tool registry exposes `audit_compliance`.
+- [x] Tools return machine-readable JSON.
+- [x] Unknown rule IDs fail clearly.
+- [x] Existing MCP tests pass.
+- [x] `npm test` count increases.
 
 **Files allowed:**
 - `scripts/mcp-server/tool-registry.mjs`

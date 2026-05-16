@@ -36,7 +36,8 @@
 
 1. Keep stable rule text in the canonical governance surface.
 2. If a user request conflicts with stricter `.agent-context/` rules, refuse or redirect with the relevant rule ID.
-3. Keep task-specific evidence, command output, and generated citations in the dynamic request layer.
+3. Use MCP compliance tools when rule citations need deterministic checking: `lookup_rule`, `validate_against_rules`, and `audit_compliance`.
+4. Keep task-specific evidence, command output, and generated citations in the dynamic request layer.
 
 ## Failure And Rollback
 
