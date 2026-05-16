@@ -387,7 +387,7 @@ Detail reasoning per decision di `docs/plan/research-foundation.md`. Yang tidak 
 
 Plus locked operational decisions (di phase plans, tidak di research-foundation):
 
-- **GATE B Phase 1 (revised):** per-file ≤+15%, aggregate ≤+5%, citability primary, lossless 100%
+- **GATE B Phase 1 (revised):** per-file ≤+15%, tiny-rule overhead ≤+120 OpenAI tokens below 600 original tokens, aggregate ≤+10%, citability primary, lossless 100%
 - **Sub-ID split:** Option B (append-at-end) dengan related cross-ref optional
 - **Intro classification rubric:** 3-bucket (KEEP/DELETE/ASK) — definisi di format-spec.md
 - **Intro paragraph DELETE behavior:** log word count di outcome, transparency

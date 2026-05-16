@@ -2,7 +2,7 @@
 
 > **Audience:** Maintainer (Farid) + AI coding agent yang dipakai untuk eksekusi.
 > **Bahasa:** Bahasa Indonesia untuk narasi, English untuk istilah teknis.
-> **Status:** Phase 0 ready to execute. Phase 1-5 outline saja, akan di-detail saat phase sebelumnya selesai.
+> **Status:** Phase 1 completed. Phase 2 awaiting GATE C approval.
 
 ---
 
@@ -37,7 +37,7 @@ Decision di bawah ini sudah triangulated dari 3 sumber research independen (Perp
 ### D2: Source Strategy → Single canonical AGENTS.md + thin adapter generator
 - AGENTS.md = source of truth tunggal
 - Auto-generate: CLAUDE.md (`@AGENTS.md` import), GEMINI.md, `.cursor/rules/main.mdc`, `.windsurfrules`
-- Backed by ETH Zurich study (ArXiv 2601.18341, 129K repos): AGENTS.md menang, **tapi hindari LLM-generated content** (-3% success, +20% cost)
+- Backed by ETH Zurich context-file study (arXiv 2602.11988): context files can reduce SWE-bench-style task success and raise inference cost, so keep agent instructions factual, directive, and minimal.
 
 ### D3: MCP Strategy → Optional + REPOSITION untuk validation, BUKAN delivery rules
 - MCP delivery untuk static rules = anti-pattern (3 sources convergence)
@@ -61,7 +61,7 @@ Decision di bawah ini sudah triangulated dari 3 sumber research independen (Perp
 - L1 Pre-prompt: numbered rules + ID + anti-sycophancy clause (zero cost)
 - L2 In-flight: reflection block dengan rule citation requirement (low cost)
 - L3 Post-hoc: MCP validation tool + AST linter di CI (medium cost)
-- **Strict prohibition:** No LLMLingua/lossy compression untuk rules (Compression Paradox paper: output inflation justru naikkan total cost)
+- **Strict prohibition:** No LLMLingua/lossy compression untuk rules. Compression Paradox evidence is benchmark-dependent but shows severe worst-case output expansion on MBPP/DeepSeek, so lossless structure is the safe rules path.
 
 ---
 
@@ -114,8 +114,8 @@ docs/plan/
 | Phase | Status | Started | Completed | Notes |
 |-------|--------|---------|-----------|-------|
 | Phase 0 — Baseline & Cleanup | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-0-outcome.md`. GATE D approved. |
-| Phase 1 — Format Migration | 🟡 In progress | 2026-05-16 | — | Detailed di `phase-1-format.md`. Task 1.5 stopped at aggregate cap; strategy revision locked Option A. |
-| Phase 2 — Caching Layer | ⏸ Locked | — | — | Generate setelah Phase 1 selesai |
+| Phase 1 — Format Migration | ✅ Completed | 2026-05-16 | 2026-05-16 | See `phase-1-outcome.md`. All 15 rules migrated to v4; final OpenAI aggregate +8.86% under the +10% cap. |
+| Phase 2 — Caching Layer | 🟡 Awaiting GATE | — | — | Generate `phase-2-caching.md` after GATE C approval. |
 | Phase 3 — Anti-Halu | ⏸ Locked | — | — | Generate setelah Phase 2 selesai |
 | Phase 4 — Retrieval (conditional) | ⏸ Locked | — | — | Skip kalau Phase 3 quality target tercapai |
 | Phase 5 — Hardening & Adoption | ⏸ Locked | — | — | Generate setelah Phase 3/4 selesai |
@@ -152,7 +152,7 @@ Decision yang sudah dijawab user dan locked:
 - **Tiny-rule token gate:** Rule files below 600 original OpenAI tokens keep the same v4 format but use a +120 OpenAI-token absolute overhead cap instead of the +15% per-file percentage cap. Aggregate Phase 1 cap is +10%.
 - **Aggregate cap strategy:** Option B locked on 2026-05-16. Relax aggregate cap from +5% to +10%, backed by Anthropic prompt-caching math (cache reads cost 0.1x base input price) and local pilot data. Continue Task 1.5 in original file order; keep per-file and tiny-file caps unchanged.
 
-Tidak ada pending decision yang block Phase 1. Phase 2+ pending decisions akan ditambahkan saat phase relevant.
+Tidak ada pending decision yang block Phase 1. Phase 2 requires GATE C approval before generating `phase-2-caching.md`.
 
 ---
 
@@ -173,4 +173,4 @@ Triangulation rule: klaim muncul di 2+ sources independen = HIGH confidence (dec
 
 ---
 
-**Last updated:** Phase 0 completed 2026-05-16. Decision B = B1 locked at GATE D. Phase 1 ready. Update file ini setiap phase selesai dengan summary outcome.
+**Last updated:** Phase 1 completed 2026-05-16. All 15 rules migrated to v4, `4.0.0-rc.1` prepared but unpublished, and Phase 2 caching awaits GATE C approval.

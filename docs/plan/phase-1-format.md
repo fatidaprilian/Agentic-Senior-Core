@@ -1,6 +1,6 @@
 # Phase 1 — Format Migration
 
-> **Status:** 🟡 Ready to execute (after GATE D approval)
+> **Status:** ✅ Completed on 2026-05-16
 > **Estimated effort:** 12-20 jam aktif (2-3 minggu kalender, tergantung availability)
 > **Prerequisite:** Phase 0 complete (`phase-0-outcome.md`), Decision B = **B1 (hard cut at v4.0.0)**, baseline locked at `benchmarks/results/baseline-2026-05-16.json`
 
@@ -248,10 +248,10 @@ The strategic decision is to relax the aggregate cap from +5% to +10%, backed by
 - [ ] `architecture.md` migrated
 - [ ] All cross-references updated
 - [ ] New baseline produced and committed
-- [ ] Per-file token delta within +15% of original
-- [ ] 100% directives carry unique `ARCH-NNN` IDs
-- [ ] `npm test && npm run validate` PASS
-- [ ] All rule IDs unique under `ARCH-` prefix
+- [x] Per-file token delta within +15% of original
+- [x] 100% directives carry unique `ARCH-NNN` IDs
+- [x] `npm test && npm run validate` PASS
+- [x] All rule IDs unique under `ARCH-` prefix
 
 ---
 
@@ -283,17 +283,17 @@ The strategic decision is to relax the aggregate cap from +5% to +10%, backed by
 13. `api-docs.md` (6,548 chars) — migrated
 
 **Acceptance criteria per file:**
-- [ ] Migrated to new format
-- [ ] Cross-references updated
-- [ ] All IDs unique under file's prefix
-- [ ] Standard files stay within +15% token delta; tiny files (<600 original OpenAI tokens) stay within +120 token absolute overhead
-- [ ] `npm test && npm run validate` PASS after each commit
+- [x] Migrated to new format
+- [x] Cross-references updated
+- [x] All IDs unique under file's prefix
+- [x] Standard files stay within +15% token delta; tiny files (<600 original OpenAI tokens) stay within +120 token absolute overhead
+- [x] `npm test && npm run validate` PASS after each commit
 
 **Aggregate acceptance criteria:**
-- [ ] All 15 rules in new format (frontend-architecture, architecture from earlier tasks + 13 here)
-- [ ] **Aggregate token delta across all 10 fixtures stays at or below +10%** vs Phase 0 baseline (`baseline-2026-05-16.json`). No standard file > +15% delta; no tiny file > +120 OpenAI tokens absolute overhead.
-- [ ] Validate gate passes; all snippet checks still match (snippets may now appear in YAML keywords array OR body)
-- [ ] `audit:rule-id-uniqueness` (added in Task 1.7) reports zero collisions across the rules pack
+- [x] All 15 rules in new format (frontend-architecture, architecture from earlier tasks + 13 here)
+- [x] **Aggregate token delta across all 10 fixtures stays at or below +10%** vs Phase 0 baseline (`baseline-2026-05-16.json`). No standard file > +15% delta; no tiny file > +120 OpenAI tokens absolute overhead.
+- [x] Validate gate passes; all snippet checks still match (snippets may now appear in YAML keywords array OR body)
+- [x] `audit:rule-id-uniqueness` (added in Task 1.7) reports zero collisions across the rules pack
 
 ---
 
@@ -310,10 +310,10 @@ The strategic decision is to relax the aggregate cap from +5% to +10%, backed by
 4. Run `npm test && npm run validate`
 
 **Acceptance criteria:**
-- [ ] AGENTS.md updated
-- [ ] Still <= 180 lines (existing snippet check)
-- [ ] All routing scopes still functional (test by running `frontend-usability-audit` and equivalent — they read AGENTS.md content)
-- [ ] `npm test && npm run validate` PASS
+- [x] AGENTS.md updated
+- [x] Still <= 180 lines (existing snippet check)
+- [x] All routing scopes still functional (test by running `frontend-usability-audit` and equivalent — they read AGENTS.md content)
+- [x] `npm test && npm run validate` PASS
 
 **Files yang boleh dimodifikasi:**
 - `AGENTS.md`
@@ -340,11 +340,11 @@ The strategic decision is to relax the aggregate cap from +5% to +10%, backed by
 7. Wire into `npm run validate` like `audit:file-size`. Add `audit:rule-id-uniqueness` to `package.json` scripts.
 
 **Acceptance criteria:**
-- [ ] All snippet checks pass
-- [ ] `scripts/validate/config.mjs` still under file-size budget OR `@file-size-exception` updated
-- [ ] No silent removal of governance snippets
-- [ ] `scripts/audit-rule-id-uniqueness.mjs` exists, exits 0 when clean, exits 1 on any of the 4 conditions above
-- [ ] Wired into `npm run validate`; `npm run validate` PASS
+- [x] All snippet checks pass
+- [x] `scripts/validate/config.mjs` still under file-size budget OR `@file-size-exception` updated
+- [x] No silent removal of governance snippets
+- [x] `scripts/audit-rule-id-uniqueness.mjs` exists, exits 0 when clean, exits 1 on any of the 4 conditions above
+- [x] Wired into `npm run validate`; `npm run validate` PASS
 
 **Files yang boleh dimodifikasi:**
 - `scripts/validate/config.mjs`
@@ -369,11 +369,11 @@ The strategic decision is to relax the aggregate cap from +5% to +10%, backed by
 4. Run validate's version-consistency check — must pass
 
 **Acceptance criteria:**
-- [ ] `package.json` version updated
-- [ ] `package-lock.json` consistent
-- [ ] CHANGELOG.md has 4.0.0-rc.1 section
-- [ ] `npm run validate` PASS (especially version consistency check)
-- [ ] **DO NOT** run `npm publish` — RC stays unpublished until Phase 5 hardening
+- [x] `package.json` version updated
+- [x] `package-lock.json` consistent
+- [x] CHANGELOG.md has 4.0.0-rc.1 section
+- [x] `npm run validate` PASS (especially version consistency check)
+- [x] **DO NOT** run `npm publish` — RC stays unpublished until Phase 5 hardening
 
 **Files yang boleh dimodifikasi:**
 - `package.json`
@@ -398,10 +398,10 @@ The strategic decision is to relax the aggregate cap from +5% to +10%, backed by
 3. Generate first version of `phase-2-caching.md` **menunggu approval user**
 
 **Acceptance criteria:**
-- [ ] `docs/plan/phase-1-outcome.md` ada dan komprehensif
-- [ ] `00-context.md` status table updated
-- [ ] Token reduction data backed by `benchmarks/results/baseline-{date}.json`
-- [ ] `phase-2-caching.md` not auto-generated; wait for user approval at GATE D
+- [x] `docs/plan/phase-1-outcome.md` ada dan komprehensif
+- [x] `00-context.md` status table updated
+- [x] Token reduction data backed by `benchmarks/results/baseline-{date}.json`
+- [x] `phase-2-caching.md` not auto-generated; wait for user approval at GATE C
 
 ---
 
@@ -425,17 +425,17 @@ Setelah approval, generate `phase-2-caching.md` dengan detail level yang sama de
 ## SUMMARY CHECKLIST PHASE 1
 
 ```
-[ ] Task 1.1 — Define canonical format spec
-[ ] 🚦 GATE A — Review format spec
-[ ] Task 1.2 — Build migration helper tool
-[ ] Task 1.3 — Migrate frontend-architecture.md (pilot)
-[ ] 🚦 GATE B — Pilot validation
-[ ] Task 1.4 — Migrate architecture.md
-[ ] Task 1.5 — Migrate remaining 13 rule files
-[ ] Task 1.6 — Update AGENTS.md routing table
-[ ] Task 1.7 — Update validate gate snippet checks
-[ ] Task 1.8 — Bump version to v4.0.0-rc.1
-[ ] Task 1.9 — Outcome report + Phase 2 recommendation
+[x] Task 1.1 — Define canonical format spec
+[x] 🚦 GATE A — Review format spec
+[x] Task 1.2 — Build migration helper tool
+[x] Task 1.3 — Migrate frontend-architecture.md (pilot)
+[x] 🚦 GATE B — Pilot validation
+[x] Task 1.4 — Migrate architecture.md
+[x] Task 1.5 — Migrate remaining 13 rule files
+[x] Task 1.6 — Update AGENTS.md routing table
+[x] Task 1.7 — Update validate gate snippet checks
+[x] Task 1.8 — Bump version to v4.0.0-rc.1
+[x] Task 1.9 — Outcome report + Phase 2 recommendation
 [ ] 🚦 GATE C — Approval Phase 2 direction
 ```
 
