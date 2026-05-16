@@ -1,25 +1,36 @@
 {
   "version": "1.1",
   "name": "agentic-senior-core",
-  "description": "MCP configuration for governance-aware diagnostics, scoped rule loading, and self-healing workflows with dynamic knowledge injection.",
+  "description": "MCP configuration for governance-aware diagnostics and scoped rule loading. Five knowledge layers ship as concrete file-backed surfaces today; four additional layers are declared as planned dynamic surfaces. See docs/architecture-vision.md for the roadmap.",
   "knowledgeLayers": {
     "enabled": true,
-    "description": "9-layer dynamic knowledge injection for AI agents",
+    "description": "Knowledge layer registry. 5 layers are file-backed and active today (rules, prompts, state, policies, project-context). 4 layers are reserved as planned dynamic surfaces (stack-strategies, architecture-playbooks, execution-contracts, governance-modes) and resolve to no-op until implemented in a later phase.",
+    "implementedLayerCount": 5,
+    "plannedLayerCount": 4,
+    "totalDeclaredLayers": 9,
+    "roadmapReference": "docs/architecture-vision.md",
     "layers": {
       "rules": {
         "path": ".agent-context/rules",
         "count": 15,
-        "autoLoad": true
+        "autoLoad": true,
+        "status": "implemented"
       },
       "stack-strategies": {
         "path": "dynamic",
         "autoLoad": true,
-        "type": "virtual"
+        "type": "virtual",
+        "status": "planned",
+        "plannedPhase": "phase-2-or-later",
+        "rationale": "Reserved for runtime-decision-signal cache derived from detected project stack."
       },
       "architecture-playbooks": {
         "path": "dynamic",
         "autoLoad": true,
-        "type": "virtual"
+        "type": "virtual",
+        "status": "planned",
+        "plannedPhase": "phase-2-or-later",
+        "rationale": "Reserved for structural-planning playbooks derived from repo evidence."
       },
       "execution-contracts": {
         "path": "dynamic",
@@ -29,12 +40,16 @@
           "review-checklists",
           "policies"
         ],
-        "type": "virtual"
+        "type": "virtual",
+        "status": "planned",
+        "plannedPhase": "phase-3-anti-halu",
+        "rationale": "Reserved for active-contract resolution. Today the agent reads prompts, review-checklists, and policies directly from their file-backed layers; the dedicated execution-contract resolver is planned for the validation MCP tools in Phase 3."
       },
       "prompts": {
         "path": ".agent-context/prompts",
         "count": 4,
         "autoLoad": true,
+        "status": "implemented",
         "templates": [
           "init-project",
           "bootstrap-design",
@@ -50,22 +65,28 @@
           "regulated",
           "startup"
         ],
-        "type": "virtual"
+        "type": "virtual",
+        "status": "planned",
+        "plannedPhase": "phase-2-or-later",
+        "rationale": "Reserved for governance-mode selection metadata. Profile selection lives in policy files today and the mode-resolver is planned."
       },
       "state": {
         "path": ".agent-context/state",
         "count": 22,
-        "autoLoad": true
+        "autoLoad": true,
+        "status": "implemented"
       },
       "policies": {
         "path": ".agent-context/policies",
         "count": 1,
-        "autoLoad": true
+        "autoLoad": true,
+        "status": "implemented"
       },
       "project-context": {
         "path": "docs",
         "count": 0,
         "autoLoad": false,
+        "status": "implemented",
         "sources": [
           "project-brief",
           "architecture-decision-record",

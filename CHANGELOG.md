@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Suppressed git stderr noise from audit and judge scripts (`documentation-boundary-audit`, `context-triggered-audit`, `explain-on-demand-audit`, `rules-guardian-audit`, `single-source-lazy-loading-audit`, `ui-design-judge/git-input`, `llm-judge/diff-collection`). Each `git` invocation now passes `stdio: ['ignore', 'pipe', 'ignore']` so that the JS-level `try/catch` fallback no longer leaks `fatal: ambiguous argument 'HEAD~1..HEAD'` to the test output on shallow clones or initial-commit repos.
+- Honestly disclosed knowledge-layer status in `mcp.json`. Five implemented layers (rules, prompts, state, policies, project-context) are tagged `status: "implemented"`; the four virtual layers (stack-strategies, architecture-playbooks, execution-contracts, governance-modes) now carry `status: "planned"` plus `plannedPhase` and `rationale` fields. Top-level descriptions reference the new `docs/architecture-vision.md` roadmap so the registry no longer reads as a "9-layer dynamic injection" capability claim.
 
 ## 3.0.50 - 2026-05-15
 ### Changed
