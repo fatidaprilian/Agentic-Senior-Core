@@ -284,14 +284,23 @@ The benchmark harness should produce the contract from the real assembled benchm
 3. Keep code samples minimal and clearly non-secret.
 
 **Acceptance criteria:**
-- [ ] Provider blueprints are linked from `docs/plan/phase-2-caching.md`.
-- [ ] Examples do not contain real API keys.
-- [ ] Each provider notes how to observe cache usage in response metadata.
-- [ ] OpenAI and Gemini examples do not claim exact savings unless pricing metadata exists.
+- [x] Provider blueprints are linked from `docs/plan/phase-2-caching.md`.
+- [x] Examples do not contain real API keys.
+- [x] Each provider notes how to observe cache usage in response metadata.
+- [x] OpenAI and Gemini examples do not claim exact savings unless pricing metadata exists.
+
+**Task 2.4 result (2026-05-16):**
+- Added `docs/plan/cache-provider-request-shapes.md`.
+- Documented Claude `cache_control`, OpenAI automatic prefix caching plus `prompt_cache_key`, and Gemini explicit `cachedContent` shapes.
+- Included cache invalidation risks and observation metadata per provider.
+- Kept Grok, DeepSeek, and Qwen out of request-shape examples until official caching docs are verified.
+- No API keys or real secrets are included.
 
 **Files allowed:**
 - `docs/plan/cache-provider-request-shapes.md`
 - `docs/plan/phase-2-caching.md`
+
+**Blueprint link:** `docs/plan/cache-provider-request-shapes.md`
 
 ---
 
