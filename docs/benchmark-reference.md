@@ -52,3 +52,137 @@ npm run report:docs-quality-drift
 ## Runtime and Stack Boundary
 
 This repository no longer publishes static stack-fit tables or external benchmark watchlists. Runtime and dependency recommendations must come from the target repository evidence, the user's constraints, and current official documentation when ecosystem facts matter.
+
+## Caching Effectiveness Reporting Format
+
+This section defines the required shape for any document, JSON artifact, README claim, or release note that reports prompt-caching numbers attributable to this rules pack. It exists to prevent a single universal "caching saving" figure from mixing integration modes that have very different control surfaces.
+
+### Why per-integration
+
+Caching benefit is not a property of the rules pack alone. It is a joint property of:
+
+1. The rules pack content (Layer 1 and Layer 2 stability).
+2. The provider's caching mechanics (multiplier, TTL, eligibility threshold).
+3. The integration path the user runs (direct API, programmatic SDK, or IDE wrapper).
+
+When the user runs through an IDE wrapper, the wrapper controls the request path. The rules pack contributes prefix stability, but the saving is not measurable from the rules pack side because we do not see the wrapper's actual request shape.
+
+### Integration modes
+
+Recognized integration modes:
+
+- `direct_api_anthropic`
+- `direct_api_openai`
+- `direct_api_gemini`
+- `claude_code_sdk_programmatic`
+- `claude_code_cli`
+- `cursor`
+- `windsurf`
+- `codex_cli_openai`
+- `kiro`
+
+When a new integration is added, append it here and to the per-integration JSON shape below. Do not collapse two integrations into one row even if they target the same provider.
+
+### Required JSON shape
+
+Any caching-effectiveness report MUST split results per integration mode. Use the following shape:
+
+```json
+{
+  "report_version": "<semver>",
+  "generated_at": "<ISO 8601 timestamp>",
+  "description": "<short>",
+  "integration_breakdown": [
+    {
+      "integration_mode": "direct_api_anthropic",
+      "control_surface": "user-controlled cache_control",
+      "measurable_from_rules_pack": true,
+      "method": "<e.g. tiktoken-cl100k_base-offline-estimate plus documented multiplier>",
+      "scenario": "<e.g. with_loaded_rules>",
+      "average_total_input_tokens": 0,
+      "average_cacheable_layer_1_plus_2_tokens": 0,
+      "average_warm_read_effective_tokens": 0,
+      "effective_reduction_percent": 0,
+      "source_url": "<official caching docs URL>",
+      "verified_at": "<ISO date>"
+    },
+    {
+      "integration_mode": "direct_api_openai",
+      "control_surface": "automatic prefix detection",
+      "measurable_from_rules_pack": false,
+      "method": "eligibility-only",
+      "scenario": "<e.g. with_loaded_rules>",
+      "average_total_input_tokens": 0,
+      "average_cacheable_layer_1_plus_2_tokens": 0,
+      "average_warm_read_effective_tokens": null,
+      "effective_reduction_percent": null,
+      "source_url": "<official caching docs URL>",
+      "verified_at": "<ISO date>",
+      "note": "Model-specific pricing required; do not encode a universal multiplier."
+    },
+    {
+      "integration_mode": "claude_code_sdk_programmatic",
+      "control_surface": "user-controlled cache_control via SDK",
+      "measurable_from_rules_pack": true,
+      "method": "<documented multiplier>",
+      "source_url": "https://www.claude.com/blog/lessons-from-building-claude-code-prompt-caching-is-everything"
+    },
+    {
+      "integration_mode": "claude_code_cli",
+      "control_surface": "internal to CLI",
+      "measurable_from_rules_pack": false,
+      "method": "indirect-via-prefix-stability",
+      "source_url": "https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts",
+      "note": "Caching is not user-controlled. The rules pack's contribution is prefix stability; the saving is not measurable from the rules pack side."
+    },
+    {
+      "integration_mode": "cursor",
+      "control_surface": "abstracted by IDE",
+      "measurable_from_rules_pack": false,
+      "method": "indirect-via-prefix-stability",
+      "source_url": "https://docs.cursor.com/context/rules",
+      "note": "Caching is not user-controlled. The rules pack's contribution is prefix stability; the saving is not measurable from the rules pack side."
+    },
+    {
+      "integration_mode": "windsurf",
+      "control_surface": "abstracted by IDE",
+      "measurable_from_rules_pack": false,
+      "method": "indirect-via-prefix-stability",
+      "source_url": "https://docs.windsurf.com/windsurf/cascade/memories",
+      "note": "Caching is not user-controlled. The rules pack's contribution is prefix stability; the saving is not measurable from the rules pack side."
+    },
+    {
+      "integration_mode": "codex_cli_openai",
+      "control_surface": "automatic prefix detection",
+      "measurable_from_rules_pack": false,
+      "method": "indirect-via-prefix-stability",
+      "source_url": "https://developers.openai.com/codex",
+      "note": "Caching is not user-controlled. The rules pack's contribution is prefix stability; the saving is not measurable from the rules pack side."
+    },
+    {
+      "integration_mode": "kiro",
+      "control_surface": "no public caching docs",
+      "measurable_from_rules_pack": false,
+      "method": "indirect-via-prefix-stability",
+      "source_url": null,
+      "note": "No public caching documentation. Treat as indirect prefix stability only."
+    }
+  ]
+}
+```
+
+Notes:
+
+- `measurable_from_rules_pack` MUST be `true` only for integration modes where this rules pack can produce a verifiable, reproducible token-cost reduction figure with a citable provider multiplier or documented pricing path.
+- `effective_reduction_percent` MUST be `null` when `measurable_from_rules_pack` is `false`. Do not insert estimates or aspirational numbers.
+- `source_url` MUST point to official documentation. Blog posts and engineering write-ups are acceptable when the official docs do not cover the specific behavior; mark them in `note` if so.
+- When publishing a single headline number anywhere (README, CHANGELOG, marketing page), label it explicitly with its `integration_mode`. Never publish a single universal "caching_saving" figure that mixes these integration modes.
+
+### Anti-patterns
+
+- A README line that says "v4 saves 89% on caching" without naming the integration mode.
+- A JSON artifact that emits a `caching_saving` field at the top level without `integration_mode`.
+- A CHANGELOG entry that quotes Anthropic warm-cache numbers as if they applied to Cursor or Windsurf users.
+- A benchmark report that fabricates an "OpenAI saving" number when only eligibility, not pricing-backed multipliers, was measured.
+
+When the per-integration shape is not yet populated for a new integration, mark its row with `measurable_from_rules_pack: false`, `effective_reduction_percent: null`, and a `note` explaining why. Do not omit the row.
