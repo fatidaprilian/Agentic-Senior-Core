@@ -1,0 +1,14 @@
+{
+  "id": "task-07-fix-n-plus-1-orm",
+  "category": "backend",
+  "description": "Existing Django app, user laporkan endpoint /api/projects/ lambat. Bottleneck terindikasi N+1 di related tasks dan owner serializer.",
+  "user_message": "Our /api/projects/ endpoint in apps/projects/views.py is taking 3-5 seconds for 100 records. Profiling shows N+1 queries on related Task and Owner objects. Fix the N+1 without changing the response shape, and add a regression test that asserts the SQL query count.",
+  "expected_rules_triggered": [
+    "database-design",
+    "performance",
+    "testing",
+    "refactor"
+  ],
+  "context_size_target": "small",
+  "notes": "Refactor + performance fix. Tests whether refactor prompt activation is sensible for a targeted bug fix. Regression test enforcement is testing rule territory."
+}

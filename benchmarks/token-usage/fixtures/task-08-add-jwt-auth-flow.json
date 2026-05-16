@@ -1,0 +1,16 @@
+{
+  "id": "task-08-add-jwt-auth-flow",
+  "category": "security",
+  "description": "Existing Node.js Fastify app tanpa auth, user minta tambah JWT auth flow lengkap dengan refresh token rotation dan logout invalidation.",
+  "user_message": "Add JWT-based authentication to our Fastify app at services/api. Requirements: short-lived access tokens (15 min), refresh tokens with rotation on use, secure HttpOnly cookies, /auth/login, /auth/refresh, /auth/logout endpoints. Logout must invalidate the refresh token server-side. Pin the algorithm and reject 'none'. Include rate limiting on the login endpoint.",
+  "expected_rules_triggered": [
+    "security",
+    "error-handling",
+    "api-docs",
+    "database-design",
+    "testing",
+    "architecture"
+  ],
+  "context_size_target": "medium",
+  "notes": "Auth/secrets scope per AGENTS.md routing. Triggers security as primary, plus testing because auth needs negative-path tests. database-design because refresh token store is persistent."
+}

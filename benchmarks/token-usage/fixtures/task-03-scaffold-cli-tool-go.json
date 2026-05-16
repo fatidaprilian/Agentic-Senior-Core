@@ -1,0 +1,15 @@
+{
+  "id": "task-03-scaffold-cli-tool-go",
+  "category": "scaffolding",
+  "description": "Fresh repo kosong, user minta CLI tool baru di Go menggunakan cobra untuk file synchronization across SSH.",
+  "user_message": "Create a new Go CLI tool called 'syncr' that uses cobra. It should have subcommands: 'push <local> <remote>', 'pull <remote> <local>', and 'status'. Use go modules, set up golangci-lint, and structure the project so commands are unit-testable.",
+  "expected_rules_triggered": [
+    "architecture",
+    "naming-conv",
+    "testing",
+    "error-handling",
+    "init-project"
+  ],
+  "context_size_target": "small",
+  "notes": "Non-web scaffolding to ensure rules pack delivers reasonable signal even when frontend-architecture and database-design are NOT triggered. Tests cross-language fit."
+}

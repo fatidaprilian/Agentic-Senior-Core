@@ -1,0 +1,17 @@
+{
+  "id": "task-06-add-paginated-list-endpoint",
+  "category": "backend",
+  "description": "Existing Express + Prisma app, user minta tambah GET /api/orders endpoint dengan pagination cursor-based, filter by status, dan sorting.",
+  "user_message": "Add a GET /api/orders endpoint in our Express + Prisma app at services/api. It should support cursor-based pagination (limit + cursor), filter by status (pending|paid|shipped|cancelled), and sort by createdAt desc. Make sure error responses follow our existing error contract and include OpenAPI docs.",
+  "expected_rules_triggered": [
+    "architecture",
+    "api-docs",
+    "database-design",
+    "error-handling",
+    "performance",
+    "testing",
+    "security"
+  ],
+  "context_size_target": "medium",
+  "notes": "Endpoint/API contract scope union from AGENTS.md routing table. Performance triggers because of pagination + index considerations. Security because of input validation."
+}
