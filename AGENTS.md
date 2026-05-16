@@ -146,16 +146,16 @@ Trigger: ui, ux, layout, screen, tailwind, frontend, redesign.
 9. Do not let conceptual anchors collapse into room, darkroom, counting room, control room, war room, studio, lab, cockpit, or command center by habit. Prefer artifacts, workflows, custody chains, instruments, data behaviors, material systems, editorial systems, service rituals, or interaction mechanisms unless a physical place model is core to the product.
 10. External websites and benchmark examples are candidate evidence for constraints, mechanics, and quality bars only. Do not copy their layout rhythm, palette, component skin, visual metaphor, or brand posture without explicit user approval and product-fit rationale.
 
-## Reasoning Chain
-
-When rejecting an approach or enforcing a rule, use:
+## Bounded Reflection
+For risky actions (file edits, public contracts, rule conflicts/refusals, release/publish gates, or security/data/API/testing/architecture boundaries), show this compact block before action or refusal:
 
 ```text
-REASONING CHAIN
-Problem: [risk]
-Required Action: [boundary]
-Why Required: [project protection]
+REFLECTION
+Rules: ARCH-003, TEST-001
+Risk: one-line risk or conflict
+Action: one-line bounded next step
 ```
+Use valid rule IDs only; do not quote full rule prose, expose hidden chain-of-thought, or require the block for trivial replies.
 
 ## Definition of Done
 

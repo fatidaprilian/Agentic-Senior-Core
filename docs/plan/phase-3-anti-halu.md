@@ -109,12 +109,12 @@ Phase 3 must not turn stable cacheable text into volatile task-specific text.
 5. Ensure the contract does not require exposing hidden chain-of-thought.
 
 **Acceptance criteria:**
-- [ ] Reflection block format is documented.
-- [ ] Reflection block cites valid rule IDs.
-- [ ] Reflection block does not require full rule prose.
-- [ ] Reflection block is scoped, not required for every trivial message.
-- [ ] `npm run validate` passes.
-- [ ] `npm test` count does not drop.
+- [x] Reflection block format is documented.
+- [x] Reflection block cites valid rule IDs.
+- [x] Reflection block does not require full rule prose.
+- [x] Reflection block is scoped, not required for every trivial message.
+- [x] `npm run validate` passes.
+- [x] `npm test` count does not drop.
 
 **Files allowed:**
 - `AGENTS.md`

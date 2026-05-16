@@ -6,6 +6,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 
 - [ ] The agent read `AGENTS.md` and the smallest relevant rule set.
 - [ ] For non-trivial coding, review, planning, or governance work, the agent produced a Bootstrap Receipt with loaded files, selected rules, skipped rules, unreachable files, and validation plan before implementation output.
+- [ ] Risky actions used the AGENTS.md Bounded Reflection block with valid rule IDs, one-line rationale, and no copied rule prose or hidden chain-of-thought.
 - [ ] Existing project context came from real files, docs, package metadata, and changed code, not folder name alone.
 - [ ] Runtime, framework, library, topology, and design choices are explicit user constraints or agent recommendations from current evidence.
 - [ ] No offline default stack, blueprint, vendor, or visual style was treated as authoritative.
