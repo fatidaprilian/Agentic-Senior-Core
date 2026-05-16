@@ -75,11 +75,11 @@ Phase 3 must not turn stable cacheable text into volatile task-specific text.
 5. Update docs that describe the installed instruction contract.
 
 **Acceptance criteria:**
-- [ ] Canonical instruction surface includes anti-sycophancy behavior.
-- [ ] Rule citation requirement references existing v4 IDs.
-- [ ] No new root adapter policy duplication.
-- [ ] `npm run validate` passes.
-- [ ] `npm test` count does not drop.
+- [x] Canonical instruction surface includes anti-sycophancy behavior.
+- [x] Rule citation requirement references existing v4 IDs.
+- [x] No new root adapter policy duplication.
+- [x] `npm run validate` passes.
+- [x] `npm test` count does not drop.
 
 **Files allowed:**
 - `AGENTS.md`

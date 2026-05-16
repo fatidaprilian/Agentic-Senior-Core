@@ -32,6 +32,12 @@
 4. Run `npm test` for CLI smoke tests, MCP tests, LLM judge tests, operations tests, UI rubric tests, and knowledge-injection tests.
 5. Run `npm run gate:release` before release or publish work.
 
+## Anti-Halu Flow
+
+1. Keep stable rule text in the canonical governance surface.
+2. If a user request conflicts with stricter `.agent-context/` rules, refuse or redirect with the relevant rule ID.
+3. Keep task-specific evidence, command output, and generated citations in the dynamic request layer.
+
 ## Failure And Rollback
 
 - Init and upgrade abort on preflight failures.
