@@ -1,0 +1,1329 @@
+{
+  "report_version": "0.1.0",
+  "generated_at": "2026-05-16T08:39:02.813Z",
+  "description": "Phase 0 token-usage baseline. Measures system-prompt + user-message token counts across providers using free count-tokens APIs and tiktoken estimates. No generation API was called.",
+  "schema": {
+    "scenarios": {
+      "always_included": "AGENTS.md only — what every task always ships.",
+      "with_loaded_rules": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand routing."
+    }
+  },
+  "providers": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5-20250929",
+      "fixture_count": 10,
+      "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+      "accurate_overall": false
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-4o-2024-08-06",
+      "fixture_count": 10,
+      "measurement_method": "tiktoken-encoding-for-model",
+      "accurate_overall": true
+    },
+    {
+      "provider": "gemini",
+      "model": "gemini-2.5-flash",
+      "fixture_count": 10,
+      "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+      "accurate_overall": false
+    }
+  ],
+  "runs": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5-20250929",
+      "fixture_count": 10,
+      "results": [
+        {
+          "fixture_id": "task-01-init-react-typescript-tailwind",
+          "fixture_filename": "task-01-init-react-typescript-tailwind.json",
+          "fixture_category": "scaffolding",
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-5-20250929",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 43,
+                "total": 2587
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7355,
+                "user_message": 43,
+                "total": 7398
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 24662
+              },
+              "resolved_rules": [
+                "frontend-architecture",
+                "naming-conv",
+                "testing",
+                "efficiency-vs-hype",
+                "init-project"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-02-add-billing-microservice",
+          "fixture_filename": "task-02-add-billing-microservice.json",
+          "fixture_category": "scaffolding",
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-5-20250929",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 64,
+                "total": 2608
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 9459,
+                "user_message": 64,
+                "total": 9523
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 35087
+              },
+              "resolved_rules": [
+                "architecture",
+                "microservices",
+                "database-design",
+                "docker-runtime",
+                "api-docs",
+                "testing",
+                "init-project"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-03-scaffold-cli-tool-go",
+          "fixture_filename": "task-03-scaffold-cli-tool-go.json",
+          "fixture_category": "scaffolding",
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-5-20250929",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 65,
+                "total": 2609
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7005,
+                "user_message": 65,
+                "total": 7070
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 22481
+              },
+              "resolved_rules": [
+                "architecture",
+                "naming-conv",
+                "testing",
+                "error-handling",
+                "init-project"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-04-redesign-dashboard-component",
+          "fixture_filename": "task-04-redesign-dashboard-component.json",
+          "fixture_category": "design-ui",
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-5-20250929",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 69,
+                "total": 2613
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8323,
+                "user_message": 69,
+                "total": 8392
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 29406
+              },
+              "resolved_rules": [
+                "frontend-architecture",
+                "bootstrap-design",
+                "performance"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-05-add-page-transition-motion",
+          "fixture_filename": "task-05-add-page-transition-motion.json",
+          "fixture_category": "design-ui",
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-5-20250929",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 59,
+                "total": 2603
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8323,
+                "user_message": 59,
+                "total": 8382
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 29406
+              },
+              "resolved_rules": [
+                "frontend-architecture",
+                "bootstrap-design",
+                "performance"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-06-add-paginated-orders-list",
+          "fixture_filename": "task-06-add-paginated-orders-list.json",
+          "fixture_category": "backend",
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-5-20250929",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 63,
+                "total": 2607
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8039,
+                "user_message": 63,
+                "total": 8102
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 27922
+              },
+              "resolved_rules": [
+                "architecture",
+                "api-docs",
+                "database-design",
+                "error-handling",
+                "performance",
+                "testing",
+                "security"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-07-webhook-retry-dlq",
+          "fixture_filename": "task-07-webhook-retry-dlq.json",
+          "fixture_category": "backend",
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-5-20250929",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 87,
+                "total": 2631
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7022,
+                "user_message": 87,
+                "total": 7109
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 23023
+              },
+              "resolved_rules": [
+                "event-driven",
+                "error-handling",
+                "database-design",
+                "security",
+                "testing",
+                "architecture",
+                "performance"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-08-add-jwt-auth-flow",
+          "fixture_filename": "task-08-add-jwt-auth-flow.json",
+          "fixture_category": "security",
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-5-20250929",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 74,
+                "total": 2618
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7704,
+                "user_message": 74,
+                "total": 7778
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 26243
+              },
+              "resolved_rules": [
+                "security",
+                "error-handling",
+                "api-docs",
+                "database-design",
+                "testing",
+                "architecture"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-09-split-large-nestjs-module",
+          "fixture_filename": "task-09-split-large-nestjs-module.json",
+          "fixture_category": "refactor",
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-5-20250929",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 61,
+                "total": 2605
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 5579,
+                "user_message": 61,
+                "total": 5640
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 15312
+              },
+              "resolved_rules": [
+                "architecture",
+                "naming-conv",
+                "testing",
+                "refactor"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-10-review-pr-diff",
+          "fixture_filename": "task-10-review-pr-diff.json",
+          "fixture_category": "review",
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-5-20250929",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 70,
+                "total": 2614
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8486,
+                "user_message": 70,
+                "total": 8556
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 29854
+              },
+              "resolved_rules": [
+                "review-code",
+                "pr-checklist",
+                "architecture-review",
+                "security",
+                "testing",
+                "api-docs",
+                "error-handling"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-4o-2024-08-06",
+      "fixture_count": 10,
+      "results": [
+        {
+          "fixture_id": "task-01-init-react-typescript-tailwind",
+          "fixture_filename": "task-01-init-react-typescript-tailwind.json",
+          "fixture_category": "scaffolding",
+          "provider": "openai",
+          "model": "gpt-4o-2024-08-06",
+          "measurement_method": "tiktoken-encoding-for-model",
+          "accurate": true,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2545,
+                "user_message": 44,
+                "total": 2589
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7353,
+                "user_message": 44,
+                "total": 7397
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 24662
+              },
+              "resolved_rules": [
+                "frontend-architecture",
+                "naming-conv",
+                "testing",
+                "efficiency-vs-hype",
+                "init-project"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-02-add-billing-microservice",
+          "fixture_filename": "task-02-add-billing-microservice.json",
+          "fixture_category": "scaffolding",
+          "provider": "openai",
+          "model": "gpt-4o-2024-08-06",
+          "measurement_method": "tiktoken-encoding-for-model",
+          "accurate": true,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2545,
+                "user_message": 66,
+                "total": 2611
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 9440,
+                "user_message": 66,
+                "total": 9506
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 35087
+              },
+              "resolved_rules": [
+                "architecture",
+                "microservices",
+                "database-design",
+                "docker-runtime",
+                "api-docs",
+                "testing",
+                "init-project"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-03-scaffold-cli-tool-go",
+          "fixture_filename": "task-03-scaffold-cli-tool-go.json",
+          "fixture_category": "scaffolding",
+          "provider": "openai",
+          "model": "gpt-4o-2024-08-06",
+          "measurement_method": "tiktoken-encoding-for-model",
+          "accurate": true,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2545,
+                "user_message": 64,
+                "total": 2609
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7003,
+                "user_message": 64,
+                "total": 7067
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 22481
+              },
+              "resolved_rules": [
+                "architecture",
+                "naming-conv",
+                "testing",
+                "error-handling",
+                "init-project"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-04-redesign-dashboard-component",
+          "fixture_filename": "task-04-redesign-dashboard-component.json",
+          "fixture_category": "design-ui",
+          "provider": "openai",
+          "model": "gpt-4o-2024-08-06",
+          "measurement_method": "tiktoken-encoding-for-model",
+          "accurate": true,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2545,
+                "user_message": 68,
+                "total": 2613
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8305,
+                "user_message": 68,
+                "total": 8373
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 29406
+              },
+              "resolved_rules": [
+                "frontend-architecture",
+                "bootstrap-design",
+                "performance"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-05-add-page-transition-motion",
+          "fixture_filename": "task-05-add-page-transition-motion.json",
+          "fixture_category": "design-ui",
+          "provider": "openai",
+          "model": "gpt-4o-2024-08-06",
+          "measurement_method": "tiktoken-encoding-for-model",
+          "accurate": true,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2545,
+                "user_message": 59,
+                "total": 2604
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8305,
+                "user_message": 59,
+                "total": 8364
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 29406
+              },
+              "resolved_rules": [
+                "frontend-architecture",
+                "bootstrap-design",
+                "performance"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-06-add-paginated-orders-list",
+          "fixture_filename": "task-06-add-paginated-orders-list.json",
+          "fixture_category": "backend",
+          "provider": "openai",
+          "model": "gpt-4o-2024-08-06",
+          "measurement_method": "tiktoken-encoding-for-model",
+          "accurate": true,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2545,
+                "user_message": 64,
+                "total": 2609
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8033,
+                "user_message": 64,
+                "total": 8097
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 27922
+              },
+              "resolved_rules": [
+                "architecture",
+                "api-docs",
+                "database-design",
+                "error-handling",
+                "performance",
+                "testing",
+                "security"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-07-webhook-retry-dlq",
+          "fixture_filename": "task-07-webhook-retry-dlq.json",
+          "fixture_category": "backend",
+          "provider": "openai",
+          "model": "gpt-4o-2024-08-06",
+          "measurement_method": "tiktoken-encoding-for-model",
+          "accurate": true,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2545,
+                "user_message": 85,
+                "total": 2630
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7020,
+                "user_message": 85,
+                "total": 7105
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 23023
+              },
+              "resolved_rules": [
+                "event-driven",
+                "error-handling",
+                "database-design",
+                "security",
+                "testing",
+                "architecture",
+                "performance"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-08-add-jwt-auth-flow",
+          "fixture_filename": "task-08-add-jwt-auth-flow.json",
+          "fixture_category": "security",
+          "provider": "openai",
+          "model": "gpt-4o-2024-08-06",
+          "measurement_method": "tiktoken-encoding-for-model",
+          "accurate": true,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2545,
+                "user_message": 74,
+                "total": 2619
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7696,
+                "user_message": 74,
+                "total": 7770
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 26243
+              },
+              "resolved_rules": [
+                "security",
+                "error-handling",
+                "api-docs",
+                "database-design",
+                "testing",
+                "architecture"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-09-split-large-nestjs-module",
+          "fixture_filename": "task-09-split-large-nestjs-module.json",
+          "fixture_category": "refactor",
+          "provider": "openai",
+          "model": "gpt-4o-2024-08-06",
+          "measurement_method": "tiktoken-encoding-for-model",
+          "accurate": true,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2545,
+                "user_message": 61,
+                "total": 2606
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 5575,
+                "user_message": 61,
+                "total": 5636
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 15312
+              },
+              "resolved_rules": [
+                "architecture",
+                "naming-conv",
+                "testing",
+                "refactor"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-10-review-pr-diff",
+          "fixture_filename": "task-10-review-pr-diff.json",
+          "fixture_category": "review",
+          "provider": "openai",
+          "model": "gpt-4o-2024-08-06",
+          "measurement_method": "tiktoken-encoding-for-model",
+          "accurate": true,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2545,
+                "user_message": 70,
+                "total": 2615
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8476,
+                "user_message": 70,
+                "total": 8546
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 29854
+              },
+              "resolved_rules": [
+                "review-code",
+                "pr-checklist",
+                "architecture-review",
+                "security",
+                "testing",
+                "api-docs",
+                "error-handling"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "provider": "gemini",
+      "model": "gemini-2.5-flash",
+      "fixture_count": 10,
+      "results": [
+        {
+          "fixture_id": "task-01-init-react-typescript-tailwind",
+          "fixture_filename": "task-01-init-react-typescript-tailwind.json",
+          "fixture_category": "scaffolding",
+          "provider": "gemini",
+          "model": "gemini-2.5-flash",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 43,
+                "total": 2587
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7355,
+                "user_message": 43,
+                "total": 7398
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 24662
+              },
+              "resolved_rules": [
+                "frontend-architecture",
+                "naming-conv",
+                "testing",
+                "efficiency-vs-hype",
+                "init-project"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-02-add-billing-microservice",
+          "fixture_filename": "task-02-add-billing-microservice.json",
+          "fixture_category": "scaffolding",
+          "provider": "gemini",
+          "model": "gemini-2.5-flash",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 64,
+                "total": 2608
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 9459,
+                "user_message": 64,
+                "total": 9523
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 35087
+              },
+              "resolved_rules": [
+                "architecture",
+                "microservices",
+                "database-design",
+                "docker-runtime",
+                "api-docs",
+                "testing",
+                "init-project"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-03-scaffold-cli-tool-go",
+          "fixture_filename": "task-03-scaffold-cli-tool-go.json",
+          "fixture_category": "scaffolding",
+          "provider": "gemini",
+          "model": "gemini-2.5-flash",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 65,
+                "total": 2609
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7005,
+                "user_message": 65,
+                "total": 7070
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 22481
+              },
+              "resolved_rules": [
+                "architecture",
+                "naming-conv",
+                "testing",
+                "error-handling",
+                "init-project"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-04-redesign-dashboard-component",
+          "fixture_filename": "task-04-redesign-dashboard-component.json",
+          "fixture_category": "design-ui",
+          "provider": "gemini",
+          "model": "gemini-2.5-flash",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 69,
+                "total": 2613
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8323,
+                "user_message": 69,
+                "total": 8392
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 29406
+              },
+              "resolved_rules": [
+                "frontend-architecture",
+                "bootstrap-design",
+                "performance"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-05-add-page-transition-motion",
+          "fixture_filename": "task-05-add-page-transition-motion.json",
+          "fixture_category": "design-ui",
+          "provider": "gemini",
+          "model": "gemini-2.5-flash",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 59,
+                "total": 2603
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8323,
+                "user_message": 59,
+                "total": 8382
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 29406
+              },
+              "resolved_rules": [
+                "frontend-architecture",
+                "bootstrap-design",
+                "performance"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-06-add-paginated-orders-list",
+          "fixture_filename": "task-06-add-paginated-orders-list.json",
+          "fixture_category": "backend",
+          "provider": "gemini",
+          "model": "gemini-2.5-flash",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 63,
+                "total": 2607
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8039,
+                "user_message": 63,
+                "total": 8102
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 27922
+              },
+              "resolved_rules": [
+                "architecture",
+                "api-docs",
+                "database-design",
+                "error-handling",
+                "performance",
+                "testing",
+                "security"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-07-webhook-retry-dlq",
+          "fixture_filename": "task-07-webhook-retry-dlq.json",
+          "fixture_category": "backend",
+          "provider": "gemini",
+          "model": "gemini-2.5-flash",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 87,
+                "total": 2631
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7022,
+                "user_message": 87,
+                "total": 7109
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 23023
+              },
+              "resolved_rules": [
+                "event-driven",
+                "error-handling",
+                "database-design",
+                "security",
+                "testing",
+                "architecture",
+                "performance"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-08-add-jwt-auth-flow",
+          "fixture_filename": "task-08-add-jwt-auth-flow.json",
+          "fixture_category": "security",
+          "provider": "gemini",
+          "model": "gemini-2.5-flash",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 74,
+                "total": 2618
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 7704,
+                "user_message": 74,
+                "total": 7778
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 26243
+              },
+              "resolved_rules": [
+                "security",
+                "error-handling",
+                "api-docs",
+                "database-design",
+                "testing",
+                "architecture"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-09-split-large-nestjs-module",
+          "fixture_filename": "task-09-split-large-nestjs-module.json",
+          "fixture_category": "refactor",
+          "provider": "gemini",
+          "model": "gemini-2.5-flash",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 61,
+                "total": 2605
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 5579,
+                "user_message": 61,
+                "total": 5640
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 15312
+              },
+              "resolved_rules": [
+                "architecture",
+                "naming-conv",
+                "testing",
+                "refactor"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        },
+        {
+          "fixture_id": "task-10-review-pr-diff",
+          "fixture_filename": "task-10-review-pr-diff.json",
+          "fixture_category": "review",
+          "provider": "gemini",
+          "model": "gemini-2.5-flash",
+          "measurement_method": "tiktoken-cl100k_base-estimate-no-api-key",
+          "accurate": false,
+          "scenarios": {
+            "always_included": {
+              "description": "AGENTS.md only — lower-bound system prompt always shipped to the agent",
+              "input_token_breakdown": {
+                "system_prompt": 2544,
+                "user_message": 70,
+                "total": 2614
+              },
+              "component_chars": {
+                "agents_md": 11999
+              }
+            },
+            "with_loaded_rules": {
+              "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
+              "input_token_breakdown": {
+                "system_prompt": 8486,
+                "user_message": 70,
+                "total": 8556
+              },
+              "component_chars": {
+                "agents_md": 11999,
+                "loaded_rules_chars": 29854
+              },
+              "resolved_rules": [
+                "review-code",
+                "pr-checklist",
+                "architecture-review",
+                "security",
+                "testing",
+                "api-docs",
+                "error-handling"
+              ],
+              "unresolved_rules": []
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
