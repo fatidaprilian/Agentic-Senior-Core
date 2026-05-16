@@ -201,11 +201,19 @@ The benchmark harness should produce the contract from the real assembled benchm
 5. Ensure the dynamic layer includes the fixture user message and any volatile context.
 
 **Acceptance criteria:**
-- [ ] Existing `npm test` still passes.
-- [ ] New tests prove Layer 1 hash stays stable across fixtures.
-- [ ] New tests prove Layer 3 differs when the user message differs.
-- [ ] Existing baseline runner output remains backward-compatible.
-- [ ] No dynamic fields appear in Layer 1 or Layer 2.
+- [x] Existing `npm test` still passes.
+- [x] New tests prove Layer 1 hash stays stable across fixtures.
+- [x] New tests prove Layer 3 differs when the user message differs.
+- [x] Existing baseline runner output remains backward-compatible.
+- [x] No dynamic fields appear in Layer 1 or Layer 2.
+
+**Task 2.2 result (2026-05-16):**
+- Added `benchmarks/token-usage/lib/cache-layer-contract.mjs`.
+- Added `buildCacheLayeredScenarioPrompts()` to `benchmarks/token-usage/runners/_shared.mjs`.
+- Added `benchmarks/token-usage/lib/cache-layer-contract.test.mjs`.
+- Preserved `measureFixture()` output shape for historical baseline compatibility.
+- Proved Layer 1 hash stability across all 10 fixtures and Layer 3 user-message variance.
+- Raised `npm test` count from 153 to 160.
 
 **Files allowed:**
 - `benchmarks/token-usage/runners/_shared.mjs`

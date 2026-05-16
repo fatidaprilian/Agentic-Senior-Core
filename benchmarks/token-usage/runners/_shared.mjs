@@ -17,6 +17,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildCacheLayerContract, validateCacheLayerContract } from '../lib/cache-layer-contract.mjs';
 
 const SHARED_FILE_PATH = fileURLToPath(import.meta.url);
 const SHARED_DIR = path.dirname(SHARED_FILE_PATH);
@@ -92,6 +93,37 @@ export function loadFixtures() {
   });
 }
 
+function buildRuleAssembly(fixture) {
+  const resolvedRules = [];
+  const unresolvedRules = [];
+  const ruleBodies = [];
+  const ruleInputSources = [];
+
+  for (const ruleSlug of fixture.expected_rules_triggered ?? []) {
+    const resolved = resolveRuleSlug(ruleSlug);
+    if (resolved === null) {
+      unresolvedRules.push(ruleSlug);
+      continue;
+    }
+    resolvedRules.push(ruleSlug);
+    ruleInputSources.push(`${resolved.source}/${resolved.slug}.md`);
+    ruleBodies.push(
+      [
+        `# -- ${resolved.source}/${resolved.slug}.md --`,
+        resolved.content.trimEnd(),
+      ].join('\n'),
+    );
+  }
+
+  return {
+    resolvedRules,
+    unresolvedRules,
+    ruleBodies,
+    ruleInputSources,
+    semiStaticContext: ruleBodies.join('\n\n'),
+  };
+}
+
 /**
  * Build the two scenario prompts for a fixture.
  *
@@ -153,6 +185,55 @@ export function buildScenarioPrompts(fixture) {
       unresolvedRules,
     },
     userMessage: fixture.user_message,
+  };
+}
+
+/**
+ * Build Phase 2 cache-layer contracts for each historical benchmark scenario.
+ * This keeps measureFixture output unchanged while giving cache simulation code
+ * a deterministic layered view of the same fixture assembly.
+ *
+ * @param {object} fixture
+ * @returns {object}
+ */
+export function buildCacheLayeredScenarioPrompts(fixture) {
+  const built = buildScenarioPrompts(fixture);
+  const agentsMarkdown = readAgentsMarkdown();
+  const ruleAssembly = buildRuleAssembly(fixture);
+  const staticPrefix = agentsMarkdown;
+  const userMessage = built.userMessage ?? '';
+  const legacyLoadedPromptPrefix = agentsMarkdown.trimEnd();
+  const semiStaticContext = built.withLoadedRules.systemPrompt
+    .startsWith(legacyLoadedPromptPrefix)
+    ? built.withLoadedRules.systemPrompt
+      .slice(legacyLoadedPromptPrefix.length)
+      .replace(/^\n\n/, '')
+    : ruleAssembly.semiStaticContext;
+
+  const alwaysIncluded = buildCacheLayerContract({
+    layer1StaticPrefix: staticPrefix,
+    layer2SemiStaticContext: '',
+    layer3DynamicSuffix: userMessage,
+    layer2InputSources: [],
+  });
+  const withLoadedRules = buildCacheLayerContract({
+    layer1StaticPrefix: staticPrefix,
+    layer2SemiStaticContext: semiStaticContext,
+    layer3DynamicSuffix: userMessage,
+    layer2InputSources: ruleAssembly.ruleInputSources,
+  });
+
+  validateCacheLayerContract(alwaysIncluded);
+  validateCacheLayerContract(withLoadedRules);
+
+  return {
+    alwaysIncluded,
+    withLoadedRules: {
+      ...withLoadedRules,
+      resolvedRules: built.withLoadedRules.resolvedRules,
+      unresolvedRules: built.withLoadedRules.unresolvedRules,
+    },
+    userMessage,
   };
 }
 
