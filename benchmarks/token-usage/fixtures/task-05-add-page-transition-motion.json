@@ -1,7 +1,7 @@
 {
   "id": "task-05-add-page-transition-motion",
   "category": "design-ui",
-  "description": "Existing Vue 3 app, user minta tambah page transition motion antar route. UI + interaction only, tidak ubah data layer.",
+  "description": "Existing Vue 3 app. User asks to add page transition motion between routes. UI and interaction only, no data layer changes.",
   "user_message": "Add page transition animations between routes in our Vue 3 SPA at apps/web. Use whatever motion library best fits, or native View Transitions API if browser support allows. The transition should signal hierarchy of navigation: forward push, backward pop, lateral switch. Ensure prefers-reduced-motion is respected.",
   "expected_rules_triggered": [
     "frontend-architecture",
@@ -9,5 +9,5 @@
     "performance"
   ],
   "context_size_target": "small",
-  "notes": "Smaller UI ask than task-04. Tests whether rules pack stays focused (no over-loading) on a simple UI change. prefers-reduced-motion is accessibility floor."
+  "notes": "Smaller UI ask than task-04. Tests whether the rules pack stays focused without over-loading on a simple UI change. The prefers-reduced-motion check is the accessibility floor."
 }

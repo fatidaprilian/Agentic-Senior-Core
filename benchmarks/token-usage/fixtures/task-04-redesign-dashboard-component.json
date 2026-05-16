@@ -1,7 +1,7 @@
 {
   "id": "task-04-redesign-dashboard-component",
   "category": "design-ui",
-  "description": "Existing Next.js app, user minta redesign dashboard analytics component yang sudah ada supaya lebih ekspresif. UI-only request.",
+  "description": "Existing Next.js app. User asks to redesign the existing analytics dashboard component to be more expressive. UI-only request.",
   "user_message": "Redesign the analytics dashboard at app/(internal)/analytics/page.tsx. The current version is generic and corporate. I want a more distinctive editorial layout with stronger hierarchy, real motion when KPI numbers change, and a clear focal narrative for the top three metrics. Keep accessibility WCAG 2.2 AA. Preserve the current data contract.",
   "expected_rules_triggered": [
     "frontend-architecture",
@@ -9,5 +9,5 @@
     "performance"
   ],
   "context_size_target": "medium",
-  "notes": "UI Design Mode trigger. Should NOT load backend-only rules (database-design, microservices). Should require Motion/Palette decision + conceptual anchor + design-intent.json."
+  "notes": "UI Design Mode trigger. Should NOT load backend-only rules such as database-design or microservices. Should require a Motion/Palette decision, a conceptual anchor, and design-intent.json."
 }

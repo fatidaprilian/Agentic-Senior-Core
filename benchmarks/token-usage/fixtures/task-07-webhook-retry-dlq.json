@@ -1,0 +1,17 @@
+{
+  "id": "task-07-webhook-retry-dlq",
+  "category": "backend",
+  "description": "Existing Node.js Express app receives Stripe webhooks. User wants robust handling with idempotency, retry-with-backoff, and a dead letter queue for poison messages.",
+  "user_message": "Add reliable Stripe webhook handling at services/api/src/webhooks/stripe.ts. Requirements: verify signature, dedupe by event.id (idempotency store), retry transient downstream failures with exponential backoff (max 5 attempts), route persistent failures to a dead letter queue, expose a small admin endpoint to inspect and replay DLQ entries. Use whatever queue technology fits the existing stack (BullMQ if Redis is already wired up).",
+  "expected_rules_triggered": [
+    "event-driven",
+    "error-handling",
+    "database-design",
+    "security",
+    "testing",
+    "architecture",
+    "performance"
+  ],
+  "context_size_target": "medium",
+  "notes": "Queue/worker/events scope per AGENTS.md routing union. event-driven is the primary trigger. security because of webhook signature verification. database-design because of idempotency store. Distinct signal from task-06 (which is endpoint/API contract scope)."
+}

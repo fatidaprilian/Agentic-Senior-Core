@@ -1,7 +1,7 @@
 {
-  "id": "task-09-split-large-controller",
+  "id": "task-09-split-large-nestjs-module",
   "category": "refactor",
-  "description": "Existing NestJS app, user minta split UserController yang sudah 720 LOC ke smaller controllers per concern (profile, settings, sessions, notifications) tanpa break public API.",
+  "description": "Existing NestJS app. User asks to split the 720 LOC UserController into smaller controllers per concern (profile, settings, sessions, notifications) without breaking the public API.",
   "user_message": "Refactor src/users/users.controller.ts (currently 720 LOC) by splitting it into focused controllers: profile.controller.ts, settings.controller.ts, sessions.controller.ts, notifications.controller.ts. The public REST routes must stay identical. Keep the existing service layer untouched. Update the module wiring and run the integration tests.",
   "expected_rules_triggered": [
     "architecture",
@@ -10,5 +10,5 @@
     "refactor"
   ],
   "context_size_target": "medium",
-  "notes": "Refactor mode trigger. Public API preservation is architecture concern. Should NOT trigger security or microservices."
+  "notes": "Refactor mode trigger. Public API preservation is an architecture concern. Should NOT trigger security or microservices."
 }

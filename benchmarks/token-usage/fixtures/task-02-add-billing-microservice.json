@@ -1,7 +1,7 @@
 {
-  "id": "task-02-add-fastapi-microservice",
+  "id": "task-02-add-billing-microservice",
   "category": "scaffolding",
-  "description": "Existing Python monorepo, user minta tambah satu service FastAPI baru untuk billing dengan PostgreSQL backend dan Docker compose entry.",
+  "description": "Existing Python monorepo. User asks to add a new FastAPI billing service with a PostgreSQL backend and a docker-compose entry.",
   "user_message": "Add a new FastAPI microservice called 'billing-service' to our monorepo at services/billing-service. It needs PostgreSQL via SQLAlchemy 2.x async, Alembic migrations, a /healthz endpoint, and an entry in our docker-compose.yml. Follow whatever pattern is already established in services/orders-service.",
   "expected_rules_triggered": [
     "architecture",
@@ -13,5 +13,5 @@
     "init-project"
   ],
   "context_size_target": "medium",
-  "notes": "Multi-service work activates microservices + architecture + database union. Docker rule triggers because of compose entry."
+  "notes": "Multi-service work activates the microservices plus architecture plus database-design union. The docker-runtime rule triggers because of the compose entry."
 }
