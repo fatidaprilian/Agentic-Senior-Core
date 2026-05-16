@@ -1,6 +1,6 @@
 {
   "report_version": "0.1.0",
-  "generated_at": "2026-05-16T12:30:37.349Z",
+  "generated_at": "2026-05-16T12:33:46.031Z",
   "description": "Phase 0 token-usage baseline. Measures system-prompt + user-message token counts across providers using free count-tokens APIs and tiktoken estimates. No generation API was called.",
   "schema": {
     "scenarios": {
@@ -46,9 +46,9 @@
           "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
           "fallback_reasons": [
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUFBRfxUdsFai9uTyL\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUH4nXhhbvW9zMurrV\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUJdYS1feifvMXaKdx\"}"
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiBfj6zdGw5sJQQ8Lo\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiE566nRXDmJ5UuTWx\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiFygvgdRhwCAYxnc7\"}"
           ],
           "scenarios": {
             "always_included": {
@@ -65,13 +65,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7710,
+                "system_prompt": 7809,
                 "user_message": 43,
-                "total": 7753
+                "total": 7852
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 25632
+                "loaded_rules_chars": 25929
               },
               "resolved_rules": [
                 "frontend-architecture",
@@ -93,9 +93,9 @@
           "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
           "fallback_reasons": [
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FULF2kopoAHfu1dHHR\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUMrGJxtuHnCzT275e\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUPfQiUMihTZBA33UJ\"}"
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiHZw3WmF2n8tTjJoh\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiKQZs2ojcAfadgWfv\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiMJfUeHm3dboePnqP\"}"
           ],
           "scenarios": {
             "always_included": {
@@ -112,13 +112,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 9667,
+                "system_prompt": 9864,
                 "user_message": 64,
-                "total": 9731
+                "total": 9928
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 35546
+                "loaded_rules_chars": 36175
               },
               "resolved_rules": [
                 "architecture",
@@ -142,9 +142,9 @@
           "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
           "fallback_reasons": [
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUSiDEDeyxHChxX76d\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUULSZa1ngS37NDhbp\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUW2Pp93uUVc6VaiN5\"}"
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiNuAE8bDaWh5x2Zu4\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiQYdYEE8maQkftMiy\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiS6eaaQDjuRGaPCsK\"}"
           ],
           "scenarios": {
             "always_included": {
@@ -161,13 +161,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7311,
+                "system_prompt": 7410,
                 "user_message": 65,
-                "total": 7376
+                "total": 7475
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 23281
+                "loaded_rules_chars": 23578
               },
               "resolved_rules": [
                 "architecture",
@@ -189,9 +189,9 @@
           "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
           "fallback_reasons": [
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUXfcpQuwN2yvsP1zZ\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUZKqGxcUgYukKqTEk\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUb3WoWTYc4yFLwRMb\"}"
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiTp5o7To4ZRCbPhm8\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiVLMp2p48gBykeWHn\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiX7mcnNNN2Fp9syhS\"}"
           ],
           "scenarios": {
             "always_included": {
@@ -208,13 +208,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8580,
+                "system_prompt": 8676,
                 "user_message": 69,
-                "total": 8649
+                "total": 8745
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 30035
+                "loaded_rules_chars": 30363
               },
               "resolved_rules": [
                 "frontend-architecture",
@@ -234,9 +234,9 @@
           "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
           "fallback_reasons": [
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUcfzgDPDpwV1FpJqr\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUeLhjUT2kKiM3MFNt\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUgNFRk3D3YJ7KVfMw\"}"
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiZBJ2EjvX4tPm2i2t\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiatEhdFUrqdTYi44f\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FicWiRXvXCW9wHA8Kz\"}"
           ],
           "scenarios": {
             "always_included": {
@@ -253,13 +253,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8580,
+                "system_prompt": 8676,
                 "user_message": 59,
-                "total": 8639
+                "total": 8735
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 30035
+                "loaded_rules_chars": 30363
               },
               "resolved_rules": [
                 "frontend-architecture",
@@ -279,9 +279,9 @@
           "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
           "fallback_reasons": [
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUhtH6Mw6Uh7oiRwPa\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUjWFpiiVuptqTUy9D\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUmDhQPKxkVhAZ76jZ\"}"
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FieDu6ibUj4ZTC4QF1\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FifhhntTdEcVXP3aHp\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FihR8srEpHiNRx98sr\"}"
           ],
           "scenarios": {
             "always_included": {
@@ -298,13 +298,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8247,
+                "system_prompt": 8442,
                 "user_message": 63,
-                "total": 8310
+                "total": 8505
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 28381
+                "loaded_rules_chars": 29006
               },
               "resolved_rules": [
                 "architecture",
@@ -328,9 +328,9 @@
           "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
           "fallback_reasons": [
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUnzMgBmLEdVbGeARM\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUqShJuookVMBTUevT\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUs4gRcK2xe2LBy3po\"}"
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6Fij5bemwE4P37CXz3b\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FikjKNKbo4rbLQ2SUo\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FinWyF7FaQN9AsHx9n\"}"
           ],
           "scenarios": {
             "always_included": {
@@ -347,13 +347,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7337,
+                "system_prompt": 7532,
                 "user_message": 87,
-                "total": 7424
+                "total": 7619
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 23839
+                "loaded_rules_chars": 24464
               },
               "resolved_rules": [
                 "event-driven",
@@ -377,9 +377,9 @@
           "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
           "fallback_reasons": [
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUtWjr4UhoerSTnQxk\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUv2H61LLESoL8v1Pr\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUwc2atJHfSMfTsp1N\"}"
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FipNbEmpewiSSQ8SdA\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6Fiqw6w7ixWVHtSt5k1\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FisXbnQZbfui4iSoSR\"}"
           ],
           "scenarios": {
             "always_included": {
@@ -396,13 +396,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7912,
+                "system_prompt": 8011,
                 "user_message": 74,
-                "total": 7986
+                "total": 8085
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 26702
+                "loaded_rules_chars": 26999
               },
               "resolved_rules": [
                 "security",
@@ -425,9 +425,9 @@
           "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
           "fallback_reasons": [
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUyGz3ycSfTp5Qt2pJ\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FUzpG6TuYSf3VF1Bvp\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FV2Rk5xEdi1vYQmz6J\"}"
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FiuQDP1VBSVi1VviGJ\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FivyDtHbNnGgupcnyg\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6Fixch8YuzdUkAXwAKJ\"}"
           ],
           "scenarios": {
             "always_included": {
@@ -444,13 +444,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 5885,
+                "system_prompt": 5984,
                 "user_message": 61,
-                "total": 5946
+                "total": 6045
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 16112
+                "loaded_rules_chars": 16409
               },
               "resolved_rules": [
                 "architecture",
@@ -471,9 +471,9 @@
           "measurement_method": "tiktoken-cl100k_base-estimate-anthropic-call-failed",
           "accurate": false,
           "fallback_reasons": [
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FV46CnvPRQRMszgvpS\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FV5VYYmhyNz2F7PwTU\"}",
-            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FV75YRUwpPujmm7fqC\"}"
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6FizLdDsAMJjVSHQBSn\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6Fj1y6vyXc3qCZPZnTm\"}",
+            "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cb6Fj3W8DTc5eayxkxNLD\"}"
           ],
           "scenarios": {
             "always_included": {
@@ -490,13 +490,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8486,
+                "system_prompt": 8585,
                 "user_message": 70,
-                "total": 8556
+                "total": 8655
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 29854
+                "loaded_rules_chars": 30151
               },
               "resolved_rules": [
                 "review-code",
@@ -542,13 +542,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7709,
+                "system_prompt": 7808,
                 "user_message": 44,
-                "total": 7753
+                "total": 7852
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 25632
+                "loaded_rules_chars": 25929
               },
               "resolved_rules": [
                 "frontend-architecture",
@@ -585,13 +585,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 9649,
+                "system_prompt": 9849,
                 "user_message": 66,
-                "total": 9715
+                "total": 9915
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 35546
+                "loaded_rules_chars": 36175
               },
               "resolved_rules": [
                 "architecture",
@@ -630,13 +630,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7311,
+                "system_prompt": 7410,
                 "user_message": 64,
-                "total": 7375
+                "total": 7474
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 23281
+                "loaded_rules_chars": 23578
               },
               "resolved_rules": [
                 "architecture",
@@ -673,13 +673,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8562,
+                "system_prompt": 8660,
                 "user_message": 68,
-                "total": 8630
+                "total": 8728
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 30035
+                "loaded_rules_chars": 30363
               },
               "resolved_rules": [
                 "frontend-architecture",
@@ -714,13 +714,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8562,
+                "system_prompt": 8660,
                 "user_message": 59,
-                "total": 8621
+                "total": 8719
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 30035
+                "loaded_rules_chars": 30363
               },
               "resolved_rules": [
                 "frontend-architecture",
@@ -755,13 +755,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8242,
+                "system_prompt": 8439,
                 "user_message": 64,
-                "total": 8306
+                "total": 8503
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 28381
+                "loaded_rules_chars": 29006
               },
               "resolved_rules": [
                 "architecture",
@@ -800,13 +800,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7335,
+                "system_prompt": 7532,
                 "user_message": 85,
-                "total": 7420
+                "total": 7617
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 23839
+                "loaded_rules_chars": 24464
               },
               "resolved_rules": [
                 "event-driven",
@@ -845,13 +845,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7905,
+                "system_prompt": 8004,
                 "user_message": 74,
-                "total": 7979
+                "total": 8078
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 26702
+                "loaded_rules_chars": 26999
               },
               "resolved_rules": [
                 "security",
@@ -889,13 +889,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 5883,
+                "system_prompt": 5982,
                 "user_message": 61,
-                "total": 5944
+                "total": 6043
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 16112
+                "loaded_rules_chars": 16409
               },
               "resolved_rules": [
                 "architecture",
@@ -931,13 +931,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8476,
+                "system_prompt": 8575,
                 "user_message": 70,
-                "total": 8546
+                "total": 8645
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 29854
+                "loaded_rules_chars": 30151
               },
               "resolved_rules": [
                 "review-code",
@@ -983,13 +983,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8243,
+                "system_prompt": 8355,
                 "user_message": 41,
-                "total": 8284
+                "total": 8396
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 25632
+                "loaded_rules_chars": 25929
               },
               "resolved_rules": [
                 "frontend-architecture",
@@ -1026,13 +1026,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 10348,
+                "system_prompt": 10572,
                 "user_message": 70,
-                "total": 10418
+                "total": 10642
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 35546
+                "loaded_rules_chars": 36175
               },
               "resolved_rules": [
                 "architecture",
@@ -1071,13 +1071,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7895,
+                "system_prompt": 8007,
                 "user_message": 66,
-                "total": 7961
+                "total": 8073
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 23281
+                "loaded_rules_chars": 23578
               },
               "resolved_rules": [
                 "architecture",
@@ -1114,13 +1114,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 9090,
+                "system_prompt": 9208,
                 "user_message": 70,
-                "total": 9160
+                "total": 9278
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 30035
+                "loaded_rules_chars": 30363
               },
               "resolved_rules": [
                 "frontend-architecture",
@@ -1155,13 +1155,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 9090,
+                "system_prompt": 9208,
                 "user_message": 61,
-                "total": 9151
+                "total": 9269
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 30035
+                "loaded_rules_chars": 30363
               },
               "resolved_rules": [
                 "frontend-architecture",
@@ -1196,13 +1196,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8808,
+                "system_prompt": 9038,
                 "user_message": 65,
-                "total": 8873
+                "total": 9103
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 28381
+                "loaded_rules_chars": 29006
               },
               "resolved_rules": [
                 "architecture",
@@ -1241,13 +1241,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 7867,
+                "system_prompt": 8097,
                 "user_message": 91,
-                "total": 7958
+                "total": 8188
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 23839
+                "loaded_rules_chars": 24464
               },
               "resolved_rules": [
                 "event-driven",
@@ -1286,13 +1286,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 8466,
+                "system_prompt": 8578,
                 "user_message": 82,
-                "total": 8548
+                "total": 8660
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 26702
+                "loaded_rules_chars": 26999
               },
               "resolved_rules": [
                 "security",
@@ -1330,13 +1330,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 6374,
+                "system_prompt": 6486,
                 "user_message": 76,
-                "total": 6450
+                "total": 6562
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 16112
+                "loaded_rules_chars": 16409
               },
               "resolved_rules": [
                 "architecture",
@@ -1372,13 +1372,13 @@
             "with_loaded_rules": {
               "description": "AGENTS.md plus rules resolved from expected_rules_triggered — realistic on-demand-routed delivery",
               "input_token_breakdown": {
-                "system_prompt": 9056,
+                "system_prompt": 9168,
                 "user_message": 72,
-                "total": 9128
+                "total": 9240
               },
               "component_chars": {
                 "agents_md": 11999,
-                "loaded_rules_chars": 29854
+                "loaded_rules_chars": 30151
               },
               "resolved_rules": [
                 "review-code",
