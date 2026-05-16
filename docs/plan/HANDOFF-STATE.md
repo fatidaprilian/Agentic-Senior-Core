@@ -8,7 +8,7 @@ last_completed:
   phase: 3
   task_id: "GATE-C"
   task_description: "Approve Phase 3 and generate anti-halu plan"
-  commit_sha: "pending"
+  commit_sha: "90e7d9a"
   completed_at: "2026-05-16T14:25:48Z"
 
 in_progress:
@@ -81,6 +81,6 @@ next_actions_for_continuation:
 notes_for_next_agent:
   - "Active memory was refreshed locally but remains ignored/local-only."
   - "Latest Phase 2 task commit is b43dcdb docs(phase-2): close caching outcome; latest handoff refresh before Phase 3 was 2310239."
-  - "After committing the Phase 3 plan, replace last_completed.commit_sha pending with that commit SHA."
+  - "Latest Phase 3 plan commit is 90e7d9a docs(phase-3): generate anti-halu plan."
   - "Phase 2 should not call provider generation APIs. It simulates and validates cache eligibility and effective-token economics."
   - "OpenAI and Gemini cost projections must not invent universal multipliers. Use model-specific official pricing metadata or mark projections as estimates/unknown."
