@@ -3,6 +3,7 @@ id_prefix: API
 domain: api-docs
 priority: high
 scope: backend
+last_validated: 2026-05-17
 applies_to:
   - backend
   - fullstack
@@ -61,6 +62,7 @@ keywords:
 6. Do not write "see code" as the contract.
 7. Do not expose generic `object` or `any` contract shapes when the boundary can be typed.
 8. Public error shapes must be safe, stable, and documented.
+9. Versioning, deprecation, and support-window obligations for any public surface live in `api-versioning.md`; load it together with this rule when authoring or reviewing a versioned contract change [REF:VER-001].
 
 ## API-006: Human Writing Standard (Mandatory)
 
@@ -107,3 +109,15 @@ keywords:
 3. Separate facts from assumptions explicitly.
 4. End major explanations with a clear next action.
 5. Read the text out loud before shipping. If it sounds robotic, rewrite it.
+
+## API-012: Idempotency as Runtime Invariant
+
+1. Side-effect-producing endpoints (a `POST` that creates a resource, a `PUT` or `PATCH` that mutates a resource, a request that issues a charge, a request that triggers a downstream notification) must accept an idempotency identifier on retry. The identifier is a caller-supplied key on each logical attempt; the producer commits the effect once and stores enough state to recognize the same key.
+2. The server must return the original response on duplicate submissions of the same idempotency identifier within a documented retention window. The retention window must be long enough to cover the platform's worst-case retry interval (network retry plus client-side retry plus operator-driven replay) and is recorded in the API contract per endpoint, not picked at random per call site.
+3. The idempotency identifier scope must be documented: per caller, per resource, per tenant, or globally. A scope mismatch (one tenant's key colliding with another's) is a data-leak bug, not a load-balancing edge case.
+4. The contract must distinguish three duplicate outcomes: replay-of-same-success (return the original 2xx response unchanged), replay-after-permanent-failure (return the original 4xx response unchanged), and replay-with-different-payload-under-same-key (reject with a clear error so the caller does not silently overwrite the recorded result with a new request body).
+5. Storage for idempotency state must be durable across process restarts; in-memory caches are not sufficient on multi-instance deployments. The store may be the same database, a separate key-value store, or a platform-equivalent dedup layer, provided durability and lookup latency are recorded.
+6. Reject "the database's primary-key constraint will catch duplicates" as a substitute for an idempotency layer; primary-key collisions surface as 5xx-shaped errors that callers retry, which makes the problem worse.
+7. Reject silent acceptance of duplicate side-effect-producing requests without a key. A caller that retried without a key gets a 400-class response that names the missing key, not a second charge.
+8. Authority for the rules above includes IETF RFC 9110 for HTTP method idempotency semantics and successor specifications for the `Idempotency-Key` request header where the platform standardizes one. Verify the current standardization status at audit time, because the header has been a draft and an RFC at different points in its history.
+<!-- DURABILITY CHECK: Rule relies exclusively on architectural invariants and relative operational thresholds. Valid beyond standard tooling lifecycles. -->

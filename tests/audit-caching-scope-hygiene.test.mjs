@@ -92,9 +92,9 @@ test('runCachingScopeHygieneAudit treats unrelated digit-percent strings as non-
 
   const report = runCachingScopeHygieneAudit({
     sourceOverrides: {
-      'docs/roadmap.md': sourceText,
+      'docs/archive/HISTORY.md': sourceText,
     },
-    surfaceList: ['docs/roadmap.md'],
+    surfaceList: ['docs/archive/HISTORY.md'],
   });
 
   assert.equal(report.passed, true);

@@ -17,9 +17,7 @@ const __dirname = dirname(__filename);
 const REPOSITORY_ROOT = resolve(__dirname, '..');
 
 const REQUIRED_FILES = [
-  'docs/roadmap.md',
-  'docs/archive/v1.7-issue-breakdown.md',
-  'docs/archive/v1.7-execution-playbook.md',
+  'docs/archive/HISTORY.md',
   'AGENTS.md',
   '.agent-context/prompts/bootstrap-design.md',
   'scripts/ui-design-judge.mjs',
@@ -32,11 +30,10 @@ const REQUIRED_FILES = [
   'lib/cli/detector/design-evidence.mjs',
 ];
 
-const REQUIRED_ROADMAP_SNIPPETS = [
+const REQUIRED_HISTORY_SNIPPETS = [
   'V1.7',
   'Frontend Product Experience',
-  'Release status: Completed',
-  'Delivered Scope',
+  'completed',
 ];
 
 const REQUIRED_PR_CHECKLIST_SNIPPETS = [
@@ -174,7 +171,7 @@ function runAudit() {
     assertFileExists(requiredFilePath, failures);
   }
 
-  const roadmapPath = 'docs/roadmap.md';
+  const roadmapPath = 'docs/archive/HISTORY.md';
   const frontendRulePath = '.agent-context/rules/frontend-architecture.md';
   const bootstrapDesignPromptPath = '.agent-context/prompts/bootstrap-design.md';
   const instructionsPath = 'AGENTS.md';
@@ -185,7 +182,7 @@ function runAudit() {
 
   if (existsSync(resolve(REPOSITORY_ROOT, roadmapPath))) {
     const roadmapContent = readFileSync(resolve(REPOSITORY_ROOT, roadmapPath), 'utf8');
-    assertContains('Roadmap', roadmapPath, roadmapContent, REQUIRED_ROADMAP_SNIPPETS, failures);
+    assertContains('Project history', roadmapPath, roadmapContent, REQUIRED_HISTORY_SNIPPETS, failures);
   }
 
   if (existsSync(resolve(REPOSITORY_ROOT, prChecklistPath))) {

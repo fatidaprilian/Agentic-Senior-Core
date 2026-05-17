@@ -124,7 +124,7 @@ function buildSectionBody(blocks) {
 
 /**
  * @param {{ prefix: string, domain: string, priority: string, scope: string, appliesTo: string[] }} prefixEntry
- * @param {ReturnType<typeof import('./parse-legacy.mjs').parseLegacyRuleFile>} parsedRuleFile
+ * @param {ReturnType<typeof import('../../docs/archive/migrations/migrate-rule-format/parse-legacy.mjs').parseLegacyRuleFile>} parsedRuleFile
  * @returns {{ rendered: string, sectionAssignments: Array<{ sectionTitle: string, sectionId: string, itemCount: number }>, warnings: string[] }}
  */
 export function renderNewFormat(prefixEntry, parsedRuleFile) {

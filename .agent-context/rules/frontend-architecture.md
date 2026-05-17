@@ -3,6 +3,7 @@ id_prefix: FE
 domain: frontend-architecture
 priority: high
 scope: ui
+last_validated: 2026-05-17
 applies_to:
   - frontend
   - fullstack
@@ -107,6 +108,14 @@ Load this rule for UI-facing work. Keep the loaded surface small.
 4. Keep component states recognizable across hover, focus, loading, success, empty, and error.
 5. Do not let repeated surfaces share one visual treatment by habit; repetition needs a product reason.
 
+## FE-012: Data State Surface
+
+1. Every data-displaying surface must explicitly handle, with distinct UI, the period before any data has arrived for the first time, the case where the result set is empty by query or by absence, the case where prior data is visible while new data fetches in the background, recoverable error, and limited-connectivity or cached-fallback when the product operates outside continuous network coverage.
+2. The surface must not collapse multiple data states into a single generic spinner, a single generic empty illustration, or a single generic error message; each state carries different operator and user information and must be distinguishable at a glance.
+3. Do not treat a stale-while-revalidate refresh as a loading state; show the prior data with a visible freshness indicator and update in place when the new result arrives.
+4. Status changes between these states must be announced to assistive technology through the platform's accessible-status mechanism, per WCAG 2.2 status-message guidance, so non-visual users learn that the surface moved from loading to populated, populated to empty, or populated to error.
+5. Reject "spinner everywhere" as the default UI for any non-trivial data surface. Reject empty states that look identical to error states. Reject error states that do not name a recovery path.
+
 ## FE-013: Background and Wallpaper Discipline
 
 1. Background lines, grids, scanlines, noise, glows, blobs, abstract logos, calibration marks, and decorative geometry are invalid as wallpaper.
@@ -132,3 +141,29 @@ Load this rule for UI-facing work. Keep the loaded surface small.
 
 1. Use component kits or headless primitives for behavior and accessibility when they fit. Replace library-default visual language with project-specific composition, tokens, motion, state treatment, and morphology.
 2. Keep design-intent flexible: lock user goals, accessibility, production readiness, forbidden patterns, and approved continuity; keep exact palette primitives, font families, radius/shadow values, component skins, candidate signature moves, and external website inspiration flexible until evidence or approval locks them. Convert references into product-fit rules; do not copy layout, palette, component skin, brand posture, or visual metaphor.
+
+## FE-017: Interactivity Priority
+
+1. Components that require client-side state, event handling, or interactive behavior must be the smallest unit that genuinely needs them. Wrapping, layout, narrative, and content-presentation components must remain server-rendered or static unless they themselves manage state or handle events.
+2. The interactive boundary must be drawn deliberately. Promoting a wrapper to client-side just to host a deeper child's interactivity is a defect.
+3. Use the platform's primitive for interactivity-priority hints (component-level interactivity boundaries, partial hydration, islands, or the framework equivalent) rather than a global default that hydrates everything.
+4. Operationally, measure responsiveness through Interaction to Next Paint (INP) or the platform's current Core Web Vitals threshold; a regression in INP that originates from over-eager interactivity is a defect, not a runtime cost to accept.
+5. Reject "make the whole page interactive so this one button works". Reject promoting a layout component to interactive without a recorded reason. Reject defaulting to a heavyweight client-side runtime when the surface is read-only.
+
+## FE-018: Internationalization as Layout
+
+1. Direction-sensitive spacing, alignment, and positioning must use direction-agnostic properties: CSS logical properties (`margin-inline-start`, `padding-block-end`, `inset-inline`, `border-inline-end`) or the framework or design-token equivalent. Physical-direction properties (`margin-left`, `padding-right`, `left`, `border-right`) are forbidden in shared layout code that may render in any locale.
+2. Icons must be classified at design time as direction-conveying (arrows, send/forward, undo/redo, slider handles, chevrons that imply navigation) or object-representing (a magnifying glass, a clock face, a brand mark). Direction-conveying icons must mirror with layout direction; object-representing icons must not. Decisions must be recorded in the icon system, not improvised per use.
+3. Plan a documented text-expansion budget for the project's target locales: short labels in some languages expand by 30 to 100 percent versus English, and the layout must absorb that growth without truncation, overflow, or breaking visual hierarchy. Record the assumed budget per surface and verify representative long-string fixtures during review.
+4. Bidirectional content (mixed left-to-right and right-to-left runs in a single string) must use the platform's bidi isolation primitive so a single embedded token cannot reorder surrounding content.
+5. Reject hardcoded physical-direction properties in shared codebases. Reject icon mirroring decisions left to per-component improvisation. Reject "we will fix it when we localize" as a substitute for a documented expansion budget.
+
+## FE-019: Theme as Context
+
+1. A theme switch is a change in lighting and surface model, not a color inversion. The same brand color does not produce the same perceptual result against a high-luminance surface as against a low-luminance surface; tokens must be re-derived per theme, not algebraically inverted.
+2. Elevation and depth must be expressible without depending on drop-shadows alone. Drop-shadows lose contrast at low surface luminance; depth tokens must combine surface-color shifts, border treatments, or platform-equivalent material cues so the elevation hierarchy remains legible across themes.
+3. Brand colors carried across themes must be individually verified against the active theme's contrast floor. Two colors with identical chroma can pass contrast on one theme and fail on another; per-theme verification is mandatory and cannot be substituted with a single light-mode test.
+4. Theme tokens must include explicit mappings for status (success, warning, error, info), focus-visible, and disabled states per theme. A token that exists only on one theme is incomplete.
+5. Reject color inversion as a substitute for a re-derived theme. Reject reliance on drop-shadows as the sole elevation cue. Reject deferring per-theme contrast verification to runtime.
+6. Authority for the perceptually-uniform color reasoning above is illustrative across modern color-science work; the OKLCH color space is one example of a perceptually-uniform space and may be used to express tokens, but it is not required. The universal fallback for delivery is sRGB; on platforms or surfaces where wide-gamut delivery is supported and verified, wider color spaces may be used. Verify the platform's current color-management capabilities at audit time.
+<!-- DURABILITY CHECK: Rule relies exclusively on architectural invariants and relative operational thresholds. Valid beyond standard tooling lifecycles. -->

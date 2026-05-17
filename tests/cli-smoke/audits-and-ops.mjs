@@ -22,7 +22,7 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     assert.doesNotMatch(validationOutput, /\.agent-override\.md/);
     assert.match(validationOutput, /Checking terminology mapping consistency/);
     assert.match(validationOutput, /Checking existing-project detection transparency coverage/);
-    assert.match(validationOutput, /docs\/terminology-mapping\.md includes Dual-Term Mapping section/);
+    assert.match(validationOutput, /README\.md includes Terminology Mapping \(Final\)/);
   });
 
   await t.test('detection benchmark prints machine-readable metrics', () => {

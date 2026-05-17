@@ -9,6 +9,11 @@
  * that each claim is integration-scoped per `docs/architecture/decisions-foundation.md`
  * D4 "Per-Tool Caching Scope Matrix".
  *
+ * Boundary: this audit covers PUBLIC-PROSE hygiene only (preventing
+ * universal "X% caching saving" claims that mix integration modes). For the
+ * technical provider/fixture/result-JSON contract see
+ * audit-cache-layer-contract.mjs.
+ *
  * The rule: never publish a single universal "X% caching saving" figure that
  * mixes integration modes. Every numerical caching saving claim on a public
  * surface must either:

@@ -23,7 +23,6 @@ import {
 export function runStaticReleaseChecks(results, diagnostics) {
   const packageJsonPath = 'package.json';
   const changelogPath = 'CHANGELOG.md';
-  const roadmapPath = 'docs/roadmap.md';
 
   const packageJsonContent = readText(packageJsonPath);
   if (!packageJsonContent) {
@@ -61,13 +60,14 @@ export function runStaticReleaseChecks(results, diagnostics) {
     pushResult(results, true, 'changelog-version-entry', `Found release header for ${releaseVersion}`);
   }
 
-  const roadmapContent = readText(roadmapPath);
-  if (!roadmapContent) {
-    pushResult(results, false, 'roadmap-exists', `Missing ${roadmapPath}`);
-  } else if (!roadmapContent.includes('V1.8')) {
-    pushResult(results, false, 'roadmap-v18', 'Roadmap does not mention V1.8 release track');
+  const historyPath = 'docs/archive/HISTORY.md';
+  const historyContent = readText(historyPath);
+  if (!historyContent) {
+    pushResult(results, false, 'history-exists', `Missing ${historyPath}`);
+  } else if (!historyContent.includes('V1.8')) {
+    pushResult(results, false, 'history-v18', 'Project history does not mention V1.8 release track');
   } else {
-    pushResult(results, true, 'roadmap-v18', 'Roadmap includes V1.8 release track');
+    pushResult(results, true, 'history-v18', 'Project history includes V1.8 release track');
   }
 
   try {

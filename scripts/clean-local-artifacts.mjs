@@ -15,7 +15,6 @@ const LOCAL_ARTIFACT_PATHS = [
   '.zed',
   '.agentic-backup',
   '.agent-context/state/active-memory.json',
-  '.agent-context/state/v3-purge-audit.json',
   '.agent-context/state/llm-judge-report.json',
   '.agent-context/state/benchmark-analysis.json',
   '.agent-context/state/benchmark-evidence-bundle.json',

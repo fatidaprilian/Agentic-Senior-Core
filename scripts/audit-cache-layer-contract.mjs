@@ -5,6 +5,11 @@
  * Phase 2 cache-layer integrity gate. Validates provider cache metadata,
  * fixture segmentation, and the emitted cache simulation JSON without calling
  * provider APIs.
+ *
+ * Boundary: this audit covers the TECHNICAL contract (provider matrix,
+ * layer definitions, fixture segmentation, simulation result JSON shape).
+ * For public-prose hygiene around caching saving figures see
+ * audit-caching-scope-hygiene.mjs.
  */
 
 import { existsSync, readFileSync } from 'node:fs';

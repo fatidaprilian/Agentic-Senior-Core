@@ -51,7 +51,6 @@ export const REQUIRED_HUMAN_WRITING_SNIPPETS = [
 ];
 export const TERMINOLOGY_REFERENCE_PATHS = [
   'README.md',
-  'docs/roadmap.md',
 ];
 export const REQUIRED_TERMINOLOGY_ROW_PATTERNS = [
   {
@@ -69,7 +68,6 @@ export const REQUIRED_TERMINOLOGY_ROW_PATTERNS = [
 ];
 export const REQUIRED_TERMINOLOGY_RULE_SNIPPET =
   'Rule: on first mention in developer-facing docs, include canonical term in parentheses.';
-export const TERMINOLOGY_REFERENCE_DOCUMENT_PATH = 'docs/terminology-mapping.md';
 export const REQUIRED_DEVELOPER_FIRST_MENTION_PATTERNS = [
   {
     path: 'README.md',

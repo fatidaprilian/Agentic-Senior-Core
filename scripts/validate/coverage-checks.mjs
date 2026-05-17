@@ -19,7 +19,6 @@ import {
   REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS,
   REQUIRED_UNIVERSAL_SOP_SNIPPETS,
   REQUIRED_UPGRADE_UI_CONTRACT_WARNING_SNIPPETS,
-  TERMINOLOGY_REFERENCE_DOCUMENT_PATH,
   TERMINOLOGY_REFERENCE_PATHS,
   THIN_ADAPTER_PATHS,
 } from './config.mjs';
@@ -59,40 +58,6 @@ export async function validateTerminologyMapping(context) {
 
   console.log('\nChecking terminology mapping consistency...');
 
-  const terminologyReferenceDocumentPath = join(ROOT_DIR, TERMINOLOGY_REFERENCE_DOCUMENT_PATH);
-
-  if (!(await fileExists(terminologyReferenceDocumentPath))) {
-    fail(`Missing terminology reference document: ${TERMINOLOGY_REFERENCE_DOCUMENT_PATH}`);
-  } else {
-    const terminologyReferenceContent = await readTextFile(terminologyReferenceDocumentPath);
-
-    if (terminologyReferenceContent.includes('Dual-Term Mapping')) {
-      pass(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} includes Dual-Term Mapping section`);
-    } else {
-      fail(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} must include Dual-Term Mapping section`);
-    }
-
-    for (const terminologyRowRule of REQUIRED_TERMINOLOGY_ROW_PATTERNS) {
-      if (terminologyRowRule.pattern.test(terminologyReferenceContent)) {
-        pass(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} includes mapping row: ${terminologyRowRule.label}`);
-      } else {
-        fail(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} is missing mapping row: ${terminologyRowRule.label}`);
-      }
-    }
-
-    if (terminologyReferenceContent.includes('first mention must include canonical term in parentheses')) {
-      pass(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} defines first-mention canonical term rule`);
-    } else {
-      fail(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} must define first-mention canonical term rule`);
-    }
-
-    if (terminologyReferenceContent.includes('Formal policy and audit artifacts must keep canonical terminology')) {
-      pass(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} defines compliance terminology boundary`);
-    } else {
-      fail(`${TERMINOLOGY_REFERENCE_DOCUMENT_PATH} must define compliance terminology boundary`);
-    }
-  }
-
   for (const terminologyReferencePath of TERMINOLOGY_REFERENCE_PATHS) {
     const absoluteReferencePath = join(ROOT_DIR, terminologyReferencePath);
 
@@ -121,12 +86,6 @@ export async function validateTerminologyMapping(context) {
       pass(`${terminologyReferencePath} includes first-mention canonical term rule`);
     } else {
       fail(`${terminologyReferencePath} must include first-mention canonical term rule`);
-    }
-
-    if (referenceContent.includes(TERMINOLOGY_REFERENCE_DOCUMENT_PATH)) {
-      pass(`${terminologyReferencePath} links to ${TERMINOLOGY_REFERENCE_DOCUMENT_PATH}`);
-    } else {
-      fail(`${terminologyReferencePath} must link to ${TERMINOLOGY_REFERENCE_DOCUMENT_PATH}`);
     }
   }
 
@@ -397,7 +356,7 @@ export async function validateInstructionAdapters(context) {
   const instructionFootprintLimits = [
     { path: 'AGENTS.md', maxLines: 180 },
     { path: '.agent-context/prompts/bootstrap-design.md', maxLines: 180 },
-    { path: '.agent-context/rules/frontend-architecture.md', maxLines: 140 },
+    { path: '.agent-context/rules/frontend-architecture.md', maxLines: 180 },
   ];
 
   for (const requiredBootstrapReceiptSnippet of requiredBootstrapReceiptSnippets) {

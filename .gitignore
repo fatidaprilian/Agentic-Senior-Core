@@ -36,6 +36,7 @@ test_output.txt
 validate_output.txt
 release-gate-report.json
 .tmp-*.mjs
+STAGE-CHECKPOINT.md
 .agent-context/rules/*.candidate.md
 .agent-context/state/v3-purge-audit.json
 .agent-context/state/llm-judge-report.json
