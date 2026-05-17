@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.0.3 - 2026-05-17
+### Added
+- New CSS-level anti-repeat audit: `npm run audit:typography-palette-anti-repeat` (script `scripts/audit-typography-palette-anti-repeat.mjs`, helper `lib/cli/audits/typography-palette-anti-repeat-audit.mjs`). Scans `*.css`, `*.scss`, `*.sass`, `*.less`, and Tailwind / theme / design-tokens config files for `font-family` declarations and color values, then cross-checks them against `researchDossier.metadata.antiRepeatLedger`. Typography matches are exact and reported as `BOUNDARY_TYPOGRAPHY_LEDGER_VIOLATION` (blocking). Palette matches block by default with `BOUNDARY_PALETTE_LEDGER_VIOLATION`: hex-vs-hex requires exact normalized equality and OKLCH-vs-OKLCH uses an L*C*H perceptual distance threshold (default 0.04). Cross-type comparisons (hex vs OKLCH or vice versa) are intentionally out of scope and tracked in `docs/deep-analysis-and-roadmap-backlog.md`. Pass `--palette-advisory` (or `treatPaletteAsAdvisory: true`) to opt a project into advisory-only palette reporting; release stays unblocked by palette findings while typography still blocks. The audit is wired into `npm run validate`.
+- User-facing CLI subcommand `audit:design-anti-repeat` exposed on the published bin. `npx @ryuenn3123/agentic-senior-core audit:design-anti-repeat` runs the audit against the user's current working directory, so consumer projects can scan their own `globals.css`, `tailwind.config.js`, theme files, and design tokens against the anti-repeat ledger that lives in their `docs/design-intent.json`. Skip behavior is friendly: missing design contract or missing dossier metadata print an actionable next step and exit 0. Typography violations and (default-blocking) palette violations exit 1. Help text: `npx @ryuenn3123/agentic-senior-core audit:design-anti-repeat --help`.
+
+### Changed
+- `npx @ryuenn3123/agentic-senior-core upgrade` now prints a one-line next-step suggestion at the end of a successful run pointing UI-scope users at the new audit subcommand.
+
+### Fixed
+- `audit:design-anti-repeat --threshold <number>` no longer treats the numeric threshold value as the target directory when no explicit target directory is provided.
+
 ## 4.0.2 - 2026-05-17
 
 ### Added

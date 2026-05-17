@@ -15,6 +15,7 @@ import { runMcpServerCommand } from '../lib/cli/commands/mcp.mjs';
 import { runOptimizeCommand, parseOptimizeArguments } from '../lib/cli/commands/optimize.mjs';
 import { runInitCommand, parseInitArguments } from '../lib/cli/commands/init.mjs';
 import { runUpgradeCommand, parseUpgradeArguments } from '../lib/cli/commands/upgrade.mjs';
+import { runDesignAntiRepeatAuditCommand } from '../lib/cli/commands/audit-design-anti-repeat.mjs';
 
 async function main() {
   const commandArgument = process.argv[2];
@@ -61,6 +62,11 @@ async function main() {
   if (commandArgument === 'mcp') {
     await runMcpServerCommand();
     return;
+  }
+
+  if (commandArgument === 'audit:design-anti-repeat') {
+    const auditExitCode = await runDesignAntiRepeatAuditCommand(commandArguments);
+    exit(auditExitCode);
   }
 
   console.error(`Unknown command: ${commandArgument}`);

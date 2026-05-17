@@ -1,7 +1,7 @@
 # Agentic-Senior-Core Roadmap Backlog
 
 Date: 2026-04-30
-Current Version: 3.0.50
+Current Version: 4.0.3
 Status: Phase 10 instruction-footprint simplification, Phase 11 cleanup/refactor audit, and Phase 12 post-release hygiene cleanup are complete.
 
 ---
@@ -328,6 +328,7 @@ Decision:
 ## Deferred
 
 - Full maker-checker multi-agent design orchestration.
+- Cross-type palette comparison in `audit:typography-palette-anti-repeat`. The audit currently compares hex-vs-hex (exact) and OKLCH-vs-OKLCH (perceptual distance). It does not compare a CSS hex declaration against an OKLCH ledger entry, or vice versa, because that requires an sRGB-to-OKLab-to-OKLCH conversion pipeline plus round-trip verification. Tracked here so the gap stays visible. When taken on, ship with known-color round-trip tests and a documented tolerance budget before flipping cross-type matching to blocking.
 - Heavy long-term memory architecture.
 - Heavy screenshot or browser-capture infrastructure as a baseline requirement.
 - Style-trend chasing as policy.

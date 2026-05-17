@@ -20,6 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { ALLOWED_SEVERITIES } from './validate/config.mjs';
 import { runCacheLayerContractAudit } from './audit-cache-layer-contract.mjs';
 import { runCachingScopeHygieneAudit } from './audit-caching-scope-hygiene.mjs';
+import { runTypographyPaletteAntiRepeatAudit } from '../lib/cli/audits/typography-palette-anti-repeat-audit.mjs';
 import { runAuditFileSize } from './audit-file-size.mjs';
 import { runReflectionCitationAudit } from './audit-reflection-citations.mjs';
 import { runReleaseBundleAudit } from './audit-release-bundle.mjs';
@@ -153,6 +154,9 @@ async function validateRequiredFiles() {
     'scripts/explain-on-demand-audit.mjs',
     'scripts/single-source-lazy-loading-audit.mjs',
     'scripts/audit-cache-layer-contract.mjs',
+    'scripts/audit-typography-palette-anti-repeat.mjs',
+    'lib/cli/audits/typography-palette-anti-repeat-audit.mjs',
+    'lib/cli/commands/audit-design-anti-repeat.mjs',
     'scripts/sync-thin-adapters.mjs',
     'scripts/v3-purge-audit.mjs',
     'scripts/release-gate.mjs',
@@ -569,6 +573,34 @@ async function validateCachingScopeHygieneAudit() {
   }
 }
 
+async function validateTypographyPaletteAntiRepeatAudit() {
+  console.log('\nChecking typography and palette anti-repeat ledger (audit:typography-palette-anti-repeat)...');
+  const report = runTypographyPaletteAntiRepeatAudit({ repositoryRootPath: ROOT_DIR });
+
+  if (report.skipped) {
+    pass(`Typography/palette anti-repeat audit skipped: ${report.reason}`);
+    return;
+  }
+
+  if (report.passed) {
+    pass(`Typography/palette anti-repeat audit clean: ${report.filesScanned} CSS/token file(s) scanned, 0 blocking typography violation(s), ${report.paletteFindingCount} palette finding(s) (${report.paletteSeverity})`);
+    return;
+  }
+
+  for (const violation of report.typographyViolations) {
+    fail(`Typography ledger violation [${violation.kind}] in ${violation.file}:${violation.line}: ${violation.detail}`);
+  }
+  if (report.paletteSeverity === 'blocking') {
+    for (const finding of report.paletteFindings) {
+      fail(`Palette ledger violation [${finding.kind}] in ${finding.file}:${finding.line}: ${finding.detail}`);
+    }
+  } else {
+    for (const finding of report.paletteFindings) {
+      warn(`Palette ledger advisory [${finding.kind}] in ${finding.file}:${finding.line}: ${finding.detail}`);
+    }
+  }
+}
+
 async function validateReleaseBundleAudit() {
   console.log('\nChecking release benchmark bundle (audit:release-bundle)...');
   const report = runReleaseBundleAudit();
@@ -666,6 +698,7 @@ async function main() {
   await validateCacheLayerContractAudit();
   await validateReflectionCitationAudit();
   await validateCachingScopeHygieneAudit();
+  await validateTypographyPaletteAntiRepeatAudit();
   await validateReleaseBundleAudit();
   await validateFileSizeAudit();
   await validateRuleIdUniquenessAudit();
