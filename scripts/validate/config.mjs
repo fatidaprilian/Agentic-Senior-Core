@@ -376,6 +376,13 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'Anti-Repeat Ledger Gate',
       'previousAnchors',
       'previousMotionSignatures',
+      'Dimensional split',
+      'typographyClusters',
+      'paletteClusters',
+      'layoutClusters',
+      'motionClusters',
+      'imageryClusters',
+      'tokenContinuityClassification',
     ],
   },
   {

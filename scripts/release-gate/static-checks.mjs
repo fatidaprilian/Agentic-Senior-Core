@@ -79,7 +79,12 @@ export function runStaticReleaseChecks(results, diagnostics) {
         stackFileName: 'agent-decision-runtime.md',
         blueprintFileName: 'agent-decision-architecture.md',
       },
-      status: 'release-gate-seed-validation',
+      // Seed status so `tokenContinuityClassification: pending-research`
+      // is a valid placeholder. This probe asserts seed-shape completeness,
+      // not active-contract behavior; an agent or user fills the contract
+      // with anchor-derived / continuity-retained / newly-introduced once
+      // the dossier is filled.
+      status: 'seed-needs-design-synthesis',
     }));
     const designContractIssues = validateDesignContractCompleteness(designIntentSeed);
 

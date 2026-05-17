@@ -20,7 +20,8 @@ This contract is a decision scaffold, not a style preset. We guide the agent; we
 5. Encode `repoEvidence.designEvidenceSummary` when onboarding or detector evidence exists.
 6. Keep both design docs synchronized after implementation.
 7. Complete the Section 3-5 gates from `research-design.md` before UI implementation: `conceptualAnchor.categoryCodes.candidateEntries`, `conceptualAnchor.morphologicalExploration` (selected and uncomfortable combinations), and `conceptualAnchor.anchorCandidates.candidates` (exactly five, each with the strengthened rename test recorded).
-8. After agent and user select an anchor, set `researchDossier.metadata.researchVerifiedAt` to today's ISO date and flip `status` from any seed value to `active`. This closes the freshness window for additive UI tasks within `freshnessWindowDays`.
+8. Set `derivedTokenLogic.tokenContinuityClassification` for each of typography, palette, motion, and spacing. Use `anchor-derived` only when the token choice is causally tied to the anchor's real-world reality. Use `continuity-retained` when the token is kept from a previous design iteration without re-derivation. Use `newly-introduced` when the token is fresh but not anchor-derived. If any token category is `continuity-retained`, the typography, palette, or motion entry in `researchDossier.metadata.antiRepeatLedger` stays as historical record, and the classification declares the retention is intentional with explicit rationale recorded in the matching `derivationSource` field.
+9. After agent and user select an anchor, set `researchDossier.metadata.researchVerifiedAt` to today's ISO date and flip `status` from any seed value to `active`. This closes the freshness window for additive UI tasks within `freshnessWindowDays`.
 ## Creative Commitment Gate
 Before broad compliance review or UI implementation, record an agent-chosen visual direction in both design docs:
 - one concrete real-world anchor reference

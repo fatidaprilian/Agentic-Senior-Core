@@ -74,6 +74,19 @@ const BOUNDARY_RULES = [
       'README.md',
     ],
     trigger(filePath) {
+      // Path-based exclusion: design-contract JSON shape lives under
+      // lib/cli/project-scaffolder/. Files like research-dossier-migration.mjs
+      // describe agent-prompt JSON contract migrations, not database schema
+      // or persistent-store migrations, so they must not trigger this boundary
+      // even when the filename contains the words "schema" or "migration".
+      // Tests for those design-contract migrations are excluded for the same
+      // reason.
+      if (filePath.startsWith('lib/cli/project-scaffolder/')) {
+        return false;
+      }
+      if (filePath.startsWith('tests/') && /research-dossier|design-contract/i.test(filePath)) {
+        return false;
+      }
       return !isDocumentationFilePath(filePath)
         && /(database|schema|migration|repository|sql|prisma|typeorm|knex)/i.test(filePath);
     },

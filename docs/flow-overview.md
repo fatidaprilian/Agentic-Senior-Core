@@ -41,6 +41,14 @@
 4. Use `npm run audit:reflection-citations` to verify bounded reflection snippets and cited rule IDs in canonical prompts and checklists.
 5. Keep task-specific evidence, command output, and generated citations in the dynamic request layer.
 
+## UI Design Flow
+
+1. On any UI keyword (ui, ux, layout, screen, tailwind, frontend, redesign), read `.agent-context/prompts/bootstrap-design.md`, `.agent-context/prompts/research-design.md`, and `.agent-context/rules/frontend-architecture.md`.
+2. Detect user-explicit redesign first; redesign requests bypass the freshness gate but never the anti-repeat ledger.
+3. Inspect `docs/design-intent.json`. When the file is missing, the status is a seed value, or `researchDossier.metadata.researchVerifiedAt` is null or older than `freshnessWindowDays` (90 by default), run the research dossier prompt to produce category-cliche identification, a morphological matrix, and five anchor candidates with the strengthened rename test, then run the bootstrap prompt and stamp `researchVerifiedAt` to today's ISO date.
+4. When the dossier is fresh and no explicit redesign is requested, run the bootstrap prompt only for additive UI tasks; do not auto-refresh `researchVerifiedAt`.
+5. Treat anti-repeat ledger entries (`previousAnchors`, `previousPalettes`, `previousMotionSignatures`, `previousTypographyChoices`) as a hard blocklist when generating anchor candidates. Restating an existing direction with new wording is REVISE, not pass.
+
 ## Failure And Rollback
 
 - Init and upgrade abort on preflight failures.

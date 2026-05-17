@@ -30,18 +30,18 @@ test('Research Dossier Migration', async (t) => {
   await t.test('buildResearchDossierMetadata extracts signature-level descriptors from existing contract', () => {
     const designIntentContract = {
       conceptualAnchor: {
-        anchorReference: 'dermatology contact sheet',
-        specificReferencePoint: 'silver halide patient archive',
+        anchorReference: 'archival ledger',
+        specificReferencePoint: 'paper records bound by date',
       },
       colorTruth: {
-        intent: 'desaturated clinical neutrals with bromine accent',
+        intent: 'desaturated neutrals with single chroma accent',
       },
       derivedTokenLogic: {
-        colorDerivationSource: 'archive-room neutrals derived from anchor',
+        colorDerivationSource: 'archival neutrals derived from anchor',
         motionBudget: 'micro 80ms entrance / 200ms layout / no parallax',
       },
       motionPaletteDecision: {
-        signatureMotion: 'dossier card tilt-and-drop on archive open',
+        signatureMotion: 'page-flip in stacks on record open',
       },
     };
 
@@ -51,15 +51,15 @@ test('Research Dossier Migration', async (t) => {
     });
 
     assert.equal(metadata.antiRepeatLedger.previousAnchors.length, 1);
-    assert.match(metadata.antiRepeatLedger.previousAnchors[0].summary, /dermatology contact sheet/);
-    assert.match(metadata.antiRepeatLedger.previousAnchors[0].summary, /silver halide patient archive/);
+    assert.match(metadata.antiRepeatLedger.previousAnchors[0].summary, /archival ledger/);
+    assert.match(metadata.antiRepeatLedger.previousAnchors[0].summary, /paper records bound by date/);
     assert.equal(metadata.antiRepeatLedger.previousAnchors[0].source, 'migrated-from-existing-design-intent');
 
     assert.equal(metadata.antiRepeatLedger.previousPalettes.length, 1);
-    assert.match(metadata.antiRepeatLedger.previousPalettes[0].summary, /clinical neutrals|bromine accent/);
+    assert.match(metadata.antiRepeatLedger.previousPalettes[0].summary, /neutrals|chroma accent/);
 
     assert.equal(metadata.antiRepeatLedger.previousMotionSignatures.length, 1);
-    assert.match(metadata.antiRepeatLedger.previousMotionSignatures[0].summary, /tilt-and-drop/);
+    assert.match(metadata.antiRepeatLedger.previousMotionSignatures[0].summary, /page-flip/);
   });
 
   await t.test('buildResearchDossierMetadata skips placeholder anchors and missing fields', () => {
@@ -86,12 +86,12 @@ test('Research Dossier Migration', async (t) => {
         mode: 'dynamic',
         status: 'active',
         conceptualAnchor: {
-          anchorReference: 'dermatology contact sheet',
-          specificReferencePoint: 'silver halide patient archive',
+          anchorReference: 'archival ledger',
+          specificReferencePoint: 'paper records bound by date',
         },
-        colorTruth: { intent: 'clinical neutrals with bromine accent' },
+        colorTruth: { intent: 'desaturated neutrals with single chroma accent' },
         derivedTokenLogic: { motionBudget: 'micro 80ms entrance' },
-        motionPaletteDecision: { signatureMotion: 'archive tilt-and-drop' },
+        motionPaletteDecision: { signatureMotion: 'page-flip in stacks' },
       };
       const designIntentPath = join(tempDirectoryPath, 'design-intent.json');
       writeFileSync(designIntentPath, JSON.stringify(existingContract, null, 2), 'utf8');
@@ -103,8 +103,8 @@ test('Research Dossier Migration', async (t) => {
       const migrated = JSON.parse(readFileSync(designIntentPath, 'utf8'));
       assert.equal(migrated.researchDossier.metadata.researchVerifiedAt, null);
       assert.equal(migrated.researchDossier.metadata.antiRepeatLedger.previousAnchors.length, 1);
-      assert.match(migrated.researchDossier.metadata.antiRepeatLedger.previousAnchors[0].summary, /dermatology contact sheet/);
-      assert.equal(migrated.conceptualAnchor.anchorReference, 'dermatology contact sheet');
+      assert.match(migrated.researchDossier.metadata.antiRepeatLedger.previousAnchors[0].summary, /archival ledger/);
+      assert.equal(migrated.conceptualAnchor.anchorReference, 'archival ledger');
 
       const secondMigration = await migrateExistingDesignIntentToResearchDossierSchema(designIntentPath);
       assert.equal(secondMigration.migrated, false);
@@ -159,5 +159,58 @@ test('Research Dossier Migration', async (t) => {
     } finally {
       rmSync(tempDirectoryPath, { recursive: true, force: true });
     }
+  });
+});
+
+test('Research Dossier Migration — Typography Ledger', async (t) => {
+  await t.test('migrateExistingDesignIntentToResearchDossierSchema captures typography tokens from a legacy fixture', async () => {
+    const tempDirectoryPath = mkdtempSync(join(tmpdir(), 'research-dossier-migration-typography-'));
+    try {
+      // Pre-research-dossier fixture: a legacy design-intent.json with no
+      // researchDossier block but populated typographyTokens, simulating an
+      // existing project upgrading to the schema for the first time.
+      const legacyDesignIntentContract = {
+        mode: 'dynamic',
+        status: 'active',
+        conceptualAnchor: {
+          anchorReference: 'archival ledger',
+          specificReferencePoint: 'paper records bound by date',
+        },
+        colorTruth: { intent: 'muted neutrals' },
+        derivedTokenLogic: { motionBudget: 'micro 80ms entrance' },
+        motionPaletteDecision: { signatureMotion: 'page-flip in stacks' },
+        tokenSystem: {
+          typographyTokens: {
+            display: 'Display-Family-A',
+            body: 'Body-Family-B',
+            mono: 'Mono-Family-C',
+          },
+        },
+      };
+      const designIntentPath = join(tempDirectoryPath, 'design-intent.json');
+      writeFileSync(designIntentPath, JSON.stringify(legacyDesignIntentContract, null, 2), 'utf8');
+
+      const result = await migrateExistingDesignIntentToResearchDossierSchema(designIntentPath);
+      assert.equal(result.migrated, true);
+
+      const migrated = JSON.parse(readFileSync(designIntentPath, 'utf8'));
+      const typographyLedger = migrated.researchDossier.metadata.antiRepeatLedger.previousTypographyChoices;
+      assert.equal(typographyLedger.length, 1);
+      assert.match(typographyLedger[0].summary, /display: Display-Family-A/);
+      assert.match(typographyLedger[0].summary, /body: Body-Family-B/);
+      assert.match(typographyLedger[0].summary, /mono: Mono-Family-C/);
+      assert.equal(typographyLedger[0].source, 'migrated-from-existing-design-intent');
+      assert.equal(typographyLedger[0].blockedBecause, 'previously-shipped-typography-trio');
+    } finally {
+      rmSync(tempDirectoryPath, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('buildResearchDossierMetadata returns empty typography entry when tokenSystem.typographyTokens is absent', () => {
+    const metadata = buildResearchDossierMetadata({
+      designIntentContract: { conceptualAnchor: { anchorReference: 'whatever' }, tokenSystem: {} },
+      populateLedgerFromExistingContract: true,
+    });
+    assert.deepEqual(metadata.antiRepeatLedger.previousTypographyChoices, []);
   });
 });

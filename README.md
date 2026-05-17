@@ -63,6 +63,8 @@ The intended behavior is agent-led, not offline-template-led:
 - Modern UI claims: research current-year libraries and patterns when relevant; 2026 work should use 2026 evidence, and future years should update automatically through agent research.
 - Anti-generic rule: avoid safe dashboard shells, admin panels, card grids, scale-only mobile layouts, and static no-motion interfaces unless the product context explicitly justifies them.
 
+UI design work runs a research dossier prompt (`.agent-context/prompts/research-design.md`) before the bootstrap prompt. The dossier captures product reading, reference intake, category cliches, a morphological matrix, and five anchor candidates with a strengthened rename test. The contract carries a 90-day `researchVerifiedAt` freshness gate and an anti-repeat ledger seeded from prior anchor, palette, motion, and typography choices on existing projects, so additive UI work within the freshness window skips the research stage while redesigns and stale dossiers re-run it.
+
 ---
 
 ## MCP Quick Setup (VS Code)

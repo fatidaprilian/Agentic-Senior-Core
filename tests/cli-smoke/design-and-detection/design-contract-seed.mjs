@@ -217,6 +217,16 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.deepEqual(designIntentSeed.researchDossier.metadata.antiRepeatLedger.previousAnchors, []);
       assert.deepEqual(designIntentSeed.researchDossier.metadata.antiRepeatLedger.previousPalettes, []);
       assert.deepEqual(designIntentSeed.researchDossier.metadata.antiRepeatLedger.previousMotionSignatures, []);
+      assert.deepEqual(designIntentSeed.researchDossier.metadata.antiRepeatLedger.previousTypographyChoices, []);
+      assert.equal(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.typography, 'pending-research');
+      assert.equal(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.palette, 'pending-research');
+      assert.equal(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.motion, 'pending-research');
+      assert.equal(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.spacing, 'pending-research');
+      assert.ok(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.validValues.includes('anchor-derived'));
+      assert.ok(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.validValues.includes('continuity-retained'));
+      assert.ok(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.validValues.includes('newly-introduced'));
+      assert.ok(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.validValues.includes('pending-research'));
+      assert.match(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.rule, /continuity-retained/);
       assert.equal(designIntentSeed.derivedTokenLogic.anchorReference, designIntentSeed.conceptualAnchor.anchorReference);
       assert.equal(typeof designIntentSeed.derivedTokenLogic.colorDerivationSource, 'string');
       assert.equal(typeof designIntentSeed.derivedTokenLogic.colorSpace, 'string');

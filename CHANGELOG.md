@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.0.2 - 2026-05-17
+
+### Added
+- `antiRepeatLedger.previousTypographyChoices` now extracts existing `tokenSystem.typographyTokens` during research-dossier migration, closing a loophole where redesigns could keep the previous design's exact font trio without the ledger flagging it.
+- `derivedTokenLogic.tokenContinuityClassification` requires explicit classification per token category (typography, palette, motion, spacing) on every contract: `anchor-derived`, `continuity-retained`, `newly-introduced`, or `pending-research` for fresh seeds. Continuity is now declared, not implied through free-text `derivationSource`.
+- `research-design.md` Section 3 now requires a dimensional category-code split (`typographyClusters`, `paletteClusters`, `layoutClusters`, `motionClusters`, `imageryClusters`) instead of collapsing into broad category-level codes, plus a self-check requirement so the agent's own typography, palette, and motion picks must not silently match an item in the agent's own identified `categoryCodes` without an explicit continuity claim or a revised pick.
+
+### Changed
+- `bootstrap-design.md` now requires `tokenContinuityClassification` to be set after research dossier consumption, before the final write-back step.
+
+### Migration
+- Existing projects re-run `npx upgrade` to populate `previousTypographyChoices` in the anti-repeat ledger and to seed `tokenContinuityClassification` with `pending-research` placeholders. Migration is idempotent and additive; existing tokens, anchors, and palettes are not modified.
+
 ## 4.0.1 - 2026-05-17
 ### Added
 - Added `.agent-context/prompts/research-design.md` as the UI research dossier contract. UI work now has explicit product-reading, reference-intake, category-code, morphological-exploration, and five-anchor candidate gates before implementation.

@@ -90,6 +90,23 @@ Self-test: read each category code aloud to someone unfamiliar with the project.
 
 Output: at least three category codes per product surface in `categoryCodes`. Each entry must pass the specificity self-test, must include the one-sentence reason that pattern is the default for the category, and must include an explicit one-sentence rejection note ("I will not ship this; here is the trap it sets") so the cliche cannot quietly become the target.
 
+### Dimensional split (mandatory)
+
+Category codes must be broken down by dimension. Do not collapse multiple dimensions into a single category-level cliche. Each cluster lists the patterns that the product category will default to without intervention.
+
+- `typographyClusters`: font family combinations that are the category default. Be explicit about font families. Name the actual trio or pair that this product's category currently defaults to, derived from live portfolio observation for THIS task. Do not anchor on examples from other categories or other timeframes.
+- `paletteClusters`: palette signatures that are the category default.
+- `layoutClusters`: layout patterns that are the category default.
+- `motionClusters`: motion signatures that are the category default.
+- `imageryClusters`: image style or visual treatment that is the category default.
+
+Self-check before proceeding to Section 4: do the typography choices the agent is about to commit to in `derivedTokenLogic` (or downstream token sections) overlap with any item in `typographyClusters`? If yes, the agent must either:
+
+1. Flag the typography as a continuity choice with an explicit rationale, set `derivedTokenLogic.tokenContinuityClassification.typography` to `continuity-retained`, and record the reason that font family swap is deferred. The previous typography ledger entry stays as historical record; the classification declares the retention is intentional. OR
+2. Revise the typography pick to escape the autopilot cluster and set `tokenContinuityClassification.typography` to `anchor-derived` only when the new choice is causally tied to the anchor's real-world reality.
+
+This self-check applies to every dimension, not only typography. Do not let an output token match a category-code item from the agent's own list without explicit (1) or (2) treatment per dimension. Pretending continuity is derivation is the failure mode this gate exists to prevent.
+
 ## Section 4 — Morphological Exploration
 
 A morphological matrix forces the design space to be explored beyond the first idea.
