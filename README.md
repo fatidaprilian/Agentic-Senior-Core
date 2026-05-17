@@ -27,7 +27,7 @@ Highlights:
 The internal `.agent-context/rules/` pack is now numbered Markdown with YAML frontmatter and stable section IDs (e.g. `FE-004`, `ARCH-009`, `API-006`). This is a breaking change for downstream consumers that parse rule headings; the migration guide lives in `CHANGELOG.md` under `4.0.0`. Repository-wide impact:
 
 - Rules are now citable by ID, which the new bounded reflection block in `AGENTS.md` and the validation MCP tools (`lookup_rule`, `validate_against_rules`, `audit_compliance`) rely on.
-- A three-layer prompt caching contract (D4 in `docs/plan/research-foundation.md`) is now enforced by `npm run audit:cache-layer-contract`.
+- A three-layer prompt caching contract (D4 in `docs/architecture/decisions-foundation.md`) is now enforced by `npm run audit:cache-layer-contract`.
 - A provider-free anti-halu benchmark is included (`benchmarks/anti-halu/`); pass rate and citation validity are reproducible locally.
 - Caching numbers are scoped per integration. The 89.31% Anthropic warm-cache effective reduction reported in `benchmarks/results/cache-phase-2-2026-05-16.json` applies to direct provider API and Claude Code SDK programmatic mode only. IDE wrapper integrations (Cursor, Windsurf, Codex CLI, Kiro) receive prefix stability without a measurable per-pack saving. See `docs/integration-playbook.md` for the per-tool matrix and `docs/benchmark-reference.md` for the required reporting JSON shape.
 

@@ -33,7 +33,7 @@ Setiap suite punya README sendiri di sub-folder. Lihat `token-usage/README.md` u
 - Tracked di git (`benchmarks/results/*.json` whitelisted di `.gitignore`).
 - Naming: `{suite-name}-{YYYY-MM-DD}.json` atau `{suite-name}-{semver}.json`.
 - Tidak boleh berisi raw API response yang bisa expose secrets atau data user.
-- Latest baseline per suite di-link dari `docs/plan/phase-0-outcome.md` setelah Phase 0 selesai.
+- Latest baseline per suite is referenced from `docs/archive/phase-2-outcome.md` and the live decision authority in `docs/architecture/decisions-foundation.md`.
 
 ## Why This Exists
 

@@ -6,7 +6,7 @@
  *
  * Phase 5 drift catcher. Scans user-facing surfaces (README, AGENTS.md, FAQ,
  * integration playbook, CHANGELOG) for caching numerical claims and verifies
- * that each claim is integration-scoped per `docs/plan/research-foundation.md`
+ * that each claim is integration-scoped per `docs/architecture/decisions-foundation.md`
  * D4 "Per-Tool Caching Scope Matrix".
  *
  * The rule: never publish a single universal "X% caching saving" figure that
@@ -16,8 +16,8 @@
  *      (direct API, Claude Code SDK programmatic, Cursor, Windsurf, Codex CLI,
  *      Kiro, IDE wrapper) within +/- 600 characters of the figure, OR
  *   2. live in a documented exempt context (Phase 1 aggregate-cap CHANGELOG
- *      rationale, plan files under docs/plan/, benchmark JSON under
- *      benchmarks/results/, the canonical D4 matrix itself).
+ *      rationale, archived plan files under docs/archive/, benchmark JSON
+ *      under benchmarks/results/, the canonical D4 matrix itself).
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -200,7 +200,7 @@ export function runCachingScopeHygieneAudit(options = {}) {
           file: surfacePath,
           line: lineNumber,
           kind: 'caching-claim.missing-integration-scope',
-          detail: `Caching saving claim "${claim.matchedText.trim()}" lacks an integration-mode marker within +/- ${CONTEXT_WINDOW_RADIUS} chars. Add a per-tool / direct-API / IDE-wrapper label, or move the figure under a clearly-scoped paragraph. Source of truth: docs/plan/research-foundation.md D4.`,
+          detail: `Caching saving claim "${claim.matchedText.trim()}" lacks an integration-mode marker within +/- ${CONTEXT_WINDOW_RADIUS} chars. Add a per-tool / direct-API / IDE-wrapper label, or move the figure under a clearly-scoped paragraph. Source of truth: docs/architecture/decisions-foundation.md D4.`,
         });
       }
     }

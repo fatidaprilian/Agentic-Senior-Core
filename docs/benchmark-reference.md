@@ -222,12 +222,12 @@ This audit is also wired into `npm run validate`. It fails when:
   "generated_at": "<ISO 8601>",
   "description": "<non-marketing summary>",
   "sources": {
-    "research_foundation": "docs/plan/research-foundation.md",
-    "d4_caching_scope_matrix": "docs/plan/research-foundation.md#d4",
+    "research_foundation": "docs/architecture/decisions-foundation.md",
+    "d4_caching_scope_matrix": "docs/architecture/decisions-foundation.md#d4",
     "caching_reporting_format": "docs/benchmark-reference.md",
-    "phase_2_outcome": "docs/plan/phase-2-outcome.md",
-    "phase_3_outcome": "docs/plan/phase-3-outcome.md",
-    "phase_5_plan": "docs/plan/phase-5-hardening.md"
+    "phase_2_outcome": "docs/archive/phase-2-outcome.md",
+    "phase_3_outcome": "docs/archive/phase-3-outcome.md",
+    "phase_5_plan": "docs/archive/phase-5-hardening.md"
   },
   "integrity": {
     "hash_algorithm": "SHA-256",

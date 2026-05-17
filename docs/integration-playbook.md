@@ -155,7 +155,7 @@ npm run gate:release
 
 The v4 governance pack benefits from prompt caching, but the measurable saving depends on the integration path. The pack does not control the request path inside IDE wrappers, so any single universal "X% caching saving" claim mixes integration modes that have different control surfaces.
 
-Source of truth: `docs/plan/research-foundation.md` D4 "Per-Tool Caching Scope Matrix".
+Source of truth: `docs/architecture/decisions-foundation.md` D4 "Per-Tool Caching Scope Matrix".
 
 | Tool / integration | User control over cache | Measurable from rules pack | Documented saving | Source |
 | --- | --- | --- | --- | --- |

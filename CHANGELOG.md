@@ -6,8 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
+## 4.0.1 - 2026-05-17
+### Added
+- Added `.agent-context/prompts/research-design.md` as the UI research dossier contract. UI work now has explicit product-reading, reference-intake, category-code, morphological-exploration, and five-anchor candidate gates before implementation.
+- Added research dossier metadata migration for existing `docs/design-intent.json` files, including compact anti-repeat ledger seeding from prior anchor, palette, and motion signatures.
+- Added focused validation and tests for research dossier metadata, category-code specificity, morphological matrix shape, anchor candidate rename tests, and seed-status handling.
+
+### Changed
+- Updated `AGENTS.md`, `bootstrap-design.md`, design-intent seed generation, and prompt builders so UI Design Mode loads `research-design.md`, routes by freshness state, preserves anti-repeat history, and blocks repeated spatial/default anchor patterns.
+- Moved live v4 decision docs from `docs/plan/` into `docs/architecture/`, moved historical phase outcomes into `docs/archive/`, and refreshed doc routing plus benchmark references to point at the new authority split.
+
 ### Fixed
-- Cross-platform release bundle integrity. `scripts/build-release-benchmark-bundle.mjs` and `scripts/audit-release-bundle.mjs` now normalize CRLF to LF before computing SHA-256 hashes for referenced artifacts. Without this, a Windows working tree with CRLF line endings on a JSON artifact (`benchmarks/results/scorecard-2026-05-16.json` was the affected file) produced a different hash than the same file checked out on Linux CI, causing `audit:release-bundle` to fail in `npm run validate` after the v4.0.0 push. The 4.0.0 release bundle was rebuilt with the normalized hashes; no Phase 0-3 source artifact changed.
+- Fixed cross-platform release bundle integrity. Release-bundle generation and audit now normalize CRLF to LF before computing SHA-256 hashes, preventing Windows working trees from producing hashes that fail Linux CI. The 4.0.0 release bundle was rebuilt with normalized hashes; no Phase 0-3 source artifact changed.
 
 ## 4.0.0 - 2026-05-16
 ### Breaking changes

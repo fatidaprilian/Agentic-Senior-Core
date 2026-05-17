@@ -158,6 +158,7 @@ async function validateRequiredFiles() {
     'scripts/release-gate.mjs',
     'scripts/generate-sbom.mjs',
     '.agent-context/policies/llm-judge-threshold.json',
+    '.agent-context/prompts/research-design.md',
     'mcp.json',
     'AGENTS.md',
     'CLAUDE.md',

@@ -2,7 +2,7 @@
 
 /**
  * Renders a parsed legacy rule file plus a prefix-table entry into the v4
- * canonical format defined in `docs/plan/format-spec.md`.
+ * canonical format defined in `docs/architecture/format-spec.md`.
  *
  * Section IDs auto-assign sequentially starting at 001. The renderer never
  * skips integers; humans introduce gaps manually during review by editing

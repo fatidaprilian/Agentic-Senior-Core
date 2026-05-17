@@ -56,7 +56,7 @@ Governance-mode selection metadata. Profile selection (`platform`, `regulated`, 
 | Phase 4 | Retrieval (conditional, opt-in) | none directly; retrieval is orthogonal |
 | Phase 5 | Hardening and adoption | activate, document, and benchmark the now-implemented planned layers |
 
-This mapping is a forecast, not a contract. The plan files in `docs/plan/` carry the operational schedule.
+This mapping is a forecast, not a contract. The phase outcome and hardening files in `docs/archive/` carry the historical operational record; the live decision authority is in `docs/architecture/decisions-foundation.md`.
 
 ## Why Declare Planned Layers Up Front
 
@@ -80,6 +80,7 @@ Two reasons:
 ## Related Documents
 
 - `mcp.json` — single source of truth for layer status fields.
-- `docs/plan/00-context.md` — v4 upgrade decisions and prohibited patterns.
-- `docs/plan/research-foundation.md` — empirical foundation for the decisions that drive the planned phases.
+- `docs/architecture/decisions-foundation.md` — empirical foundation for the v4 decisions that drove the planned phases.
+- `docs/architecture/format-spec.md` — canonical rule-file format used by the migration helper and the citation contract.
+- `docs/archive/phase-2-outcome.md`, `docs/archive/phase-3-outcome.md`, `docs/archive/phase-5-hardening.md`, `docs/archive/phase-5-outcome.md` — historical operational record.
 - `AGENTS.md` — current rules-pack routing table that consumes the implemented layers today.

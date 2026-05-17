@@ -13,12 +13,14 @@ This contract is a decision scaffold, not a style preset. We guide the agent; we
 - Keep external references non-copying; extract constraints only.
 - Before choosing a new UI, animation, scroll, 3D, canvas, chart, icon, styling, or component library, research current official docs.
 ## Required Order
-1. Read `AGENTS.md`, this prompt, `../rules/frontend-architecture.md`, current UI code, current project docs, and existing design docs.
+1. Read `AGENTS.md`, this prompt, `research-design.md`, `../rules/frontend-architecture.md`, current UI code, current project docs, and existing design docs.
 2. Refine existing `docs/DESIGN.md` and `docs/design-intent.json`; do not replace them blindly.
 3. If either design doc is missing, create it before UI implementation.
 4. Record `motionPaletteDecision` before UI code; product categories are heuristics, not style presets.
 5. Encode `repoEvidence.designEvidenceSummary` when onboarding or detector evidence exists.
 6. Keep both design docs synchronized after implementation.
+7. Complete the Section 3-5 gates from `research-design.md` before UI implementation: `conceptualAnchor.categoryCodes.candidateEntries`, `conceptualAnchor.morphologicalExploration` (selected and uncomfortable combinations), and `conceptualAnchor.anchorCandidates.candidates` (exactly five, each with the strengthened rename test recorded).
+8. After agent and user select an anchor, set `researchDossier.metadata.researchVerifiedAt` to today's ISO date and flip `status` from any seed value to `active`. This closes the freshness window for additive UI tasks within `freshnessWindowDays`.
 ## Creative Commitment Gate
 Before broad compliance review or UI implementation, record an agent-chosen visual direction in both design docs:
 - one concrete real-world anchor reference

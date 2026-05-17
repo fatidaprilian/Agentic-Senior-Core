@@ -1,7 +1,7 @@
 // @ts-check
 
 /**
- * Locked ID prefix table per `docs/plan/format-spec.md` section 3.
+ * Locked ID prefix table per `docs/architecture/format-spec.md` section 3.
  * The migration helper reads this map to assign frontmatter and section IDs.
  * Lock new entries here when adding a new rule file; never invent prefixes inline.
  */

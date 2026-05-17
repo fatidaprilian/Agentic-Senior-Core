@@ -5,7 +5,7 @@
  * scripts/migrate-rule-format.mjs
  *
  * Phase 1 Task 1.2 migration helper. Converts a legacy v3 rule file into the
- * canonical v4 format defined in docs/plan/format-spec.md. Output is written
+ * canonical v4 format defined in docs/architecture/format-spec.md. Output is written
  * to a `.candidate.md` sibling so the human migrator can review the diff
  * before replacing the original.
  *

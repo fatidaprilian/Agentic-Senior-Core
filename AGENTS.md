@@ -73,9 +73,10 @@ Load the matching prompt only:
 - `init-project.md` -> create, build, new project, scaffold
 - `refactor.md` -> refactor, improve, clean up, fix
 - `review-code.md` -> review, audit, check, analyze
-- `bootstrap-design.md` -> ui, ux, layout, screen, tailwind, frontend, redesign
+- `bootstrap-design.md` -> ui, ux, layout, screen, tailwind, frontend, redesign (always paired with `research-design.md` for the Section 3-5 dossier gate)
+- `research-design.md` -> design research dossier (Section 3 categoryCodes, Section 4 morphologicalExploration, Section 5 anchorCandidates with strengthened rename test). Loads before `bootstrap-design.md` whenever the dossier is missing, the design contract status is a seed, `researchDossier.metadata.researchVerifiedAt` is null or older than `freshnessWindowDays`, or the user explicitly requests a redesign.
 
-For UI-only work, load `bootstrap-design.md` and `frontend-architecture.md` first; do not eagerly load unrelated backend-only rules unless the request crosses that boundary. The valid style context is current repo evidence, current brief, and current project docs. External references, prior-chat memory, unrelated-project visuals, and remembered screenshots are tainted unless the user makes them current-task constraints. Treat WCAG 2.2 AA as the hard compliance floor and APCA as advisory perceptual tuning only. Do not require screenshot capture as a baseline dependency.
+For UI-only work, load `bootstrap-design.md`, `research-design.md`, and `frontend-architecture.md` first; do not eagerly load unrelated backend-only rules unless the request crosses that boundary. The valid style context is current repo evidence, current brief, and current project docs. External references, prior-chat memory, unrelated-project visuals, and remembered screenshots are tainted unless the user makes them current-task constraints. Treat WCAG 2.2 AA as the hard compliance floor and APCA as advisory perceptual tuning only. Do not require screenshot capture as a baseline dependency.
 
 ### Layer 6: Governance Modes
 
@@ -135,14 +136,14 @@ Load `pr-checklist.md` and `architecture-review.md`, then report defects, risks,
 
 Trigger: ui, ux, layout, screen, tailwind, frontend, redesign.
 
-1. Read `bootstrap-design.md` and `frontend-architecture.md`.
-2. Read UI-relevant repo evidence from state, current UI code, and `docs/*`.
-3. Include a one-line Motion/Palette Decision before UI code; product categories are heuristics, not style presets.
-4. Before UI code, record one real-world anchor, one signature motion behavior, and one typographic role contrast.
-5. Ensure `docs/design-intent.json` includes `conceptualAnchor.anchorReference`, top-level `derivedTokenLogic`, `libraryResearchStatus`, `libraryDecisions[]`, and motion/palette decisions.
-6. Generate or refine `docs/DESIGN.md` plus `docs/design-intent.json` before UI implementation.
-7. Keep context isolated; do not eagerly load unrelated backend-only rules.
-8. In UI Design Mode, choose the ambition level proactively. For broad screens or redesigns, treat expressive motion, spatial hierarchy, distinctive composition, and product-specific interaction as the baseline even when the user did not say "rich"; quiet or static surfaces require a concrete product, performance, accessibility, device, or dependency reason.
+1. Read `bootstrap-design.md`, `research-design.md`, and `frontend-architecture.md`. Read UI-relevant repo evidence from state, current UI code, and `docs/*`.
+2. Detect user-explicit redesign first ("redesign from zero", "redesain dari 0", "ulang dari 0", "research ulang", any explicit reset). It bypasses the freshness gate; run research-design.md regardless of dossier age and treat existing direction as anti-repeat ledger input only.
+3. Route by `docs/design-intent.json` state. File missing, status one of `seed-needs-design-synthesis`, `seed-generated-during-init`, `seed-generated-during-upgrade`, OR active with `researchDossier.metadata.researchVerifiedAt` null or older than `freshnessWindowDays` (90): run research-design.md, then bootstrap-design.md, then flip status to active and write today's ISO date to `researchVerifiedAt`. Active and fresh and no explicit redesign: run bootstrap-design.md only for additive UI tasks; do not auto-refresh `researchVerifiedAt`.
+4. Scenario routing: backend-only init then later UI request (Scenario B) requires `npx @ryuenn3123/agentic-senior-core upgrade` to re-sync UI governance when `bootstrap-design.md` or `research-design.md` is missing; upgrade-migrated metadata (Scenario D) and init on existing project that already had design-intent.json (Scenario E) populate the anti-repeat ledger from previous anchor, palette, and motion. Treat every ledger entry as a hard blocklist when running research-design.md.
+5. Anti-repeat ledger contract: read `researchDossier.metadata.antiRepeatLedger` before producing candidates. The five Section 5 anchor candidates must each differ from every blocklisted entry on at least conceptual family, hierarchy implication, and motion implication. Restating an existing direction with new wording is REVISE.
+6. Include a one-line Motion/Palette Decision before UI code; product categories are heuristics, not style presets. Record one real-world anchor, one signature motion behavior, and one typographic role contrast.
+7. Ensure `docs/design-intent.json` includes `conceptualAnchor.anchorReference`, top-level `derivedTokenLogic`, `researchDossier.metadata`, `libraryResearchStatus`, `libraryDecisions[]`, and motion/palette decisions. Generate or refine `docs/DESIGN.md` plus `docs/design-intent.json` before UI implementation.
+8. Keep context isolated; do not eagerly load unrelated backend-only rules. For broad screens or redesigns, treat expressive motion, spatial hierarchy, distinctive composition, and product-specific interaction as the baseline; quiet or static surfaces require a concrete product, performance, accessibility, device, or dependency reason.
 9. Do not let conceptual anchors collapse into room, darkroom, counting room, control room, war room, studio, lab, cockpit, or command center by habit. Prefer artifacts, workflows, custody chains, instruments, data behaviors, material systems, editorial systems, service rituals, or interaction mechanisms unless a physical place model is core to the product.
 10. External websites and benchmark examples are candidate evidence for constraints, mechanics, and quality bars only. Do not copy their layout rhythm, palette, component skin, visual metaphor, or brand posture without explicit user approval and product-fit rationale.
 
