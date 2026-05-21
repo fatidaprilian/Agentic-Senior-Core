@@ -18,7 +18,7 @@ Write instructions as imperative gates:
 - Add validation when a rule can drift.
 
 ## Bootstrap Receipt
-For non-trivial coding, review, planning, or governance work, emit a concise Bootstrap Receipt before implementation output or file edits:
+For non-trivial coding, review, planning, or governance work, run `agentic-senior-core context` first if available, or `npx @ryuenn3123/agentic-senior-core context` when only the package is available, then emit a concise Bootstrap Receipt before implementation output or file edits:
 - `loaded_files`: files actually read
 - `selected_rules`: files selected for this scope and why
 - `skipped_rules`: out-of-scope categories left unloaded
@@ -159,7 +159,6 @@ Action: one-line bounded next step
 Use valid rule IDs only; do not quote full rule prose, expose hidden chain-of-thought, or require the block for trivial replies.
 
 ## Definition of Done
-
 Never claim done without:
 1. Relevant rules applied.
 2. PR and architecture checklists considered.

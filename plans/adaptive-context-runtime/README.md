@@ -1,7 +1,7 @@
 # Adaptive Context Runtime Plan
 
-Status: planned, MVP started.
-Last updated: 2026-05-21.
+Status: in progress, live hardening.
+Last updated: 2026-05-22.
 
 Adaptive Context Runtime is the foundation plan for making Agentic-Senior-Core (ASC) choose the smallest sufficient context for each coding-agent request.
 
@@ -42,6 +42,7 @@ The planned local-first pipeline is:
 ```text
 User request
   -> deterministic trigger rules
+  -> implication rules and repository context signals
   -> local multi-label classifier
   -> uncertainty check
   -> selected rules/prompts/docs/state
@@ -52,22 +53,28 @@ User request
 
 Use a large language model (LLM) only for uncertain or open-world cases. Do not add a second LLM call as the default front door.
 
-## Minimum Viable Prototype
+## Live Runtime Hardening
 
-Start with a docs-only and benchmark-first prototype:
+The current implementation must move beyond literal keyword matching before later token-saving layers become the focus:
 
-1. Create a fixture set of real user prompts.
+1. Keep a fixture set of real user prompts, including implicit and Indonesian phrasing.
 2. Label each fixture with required ASC rule families.
 3. Add high-precision deterministic triggers for obvious cases.
-4. Test embedding k-nearest-neighbor or SetFit-style classification as the local semantic layer.
-5. Report missed required labels, extra labels, and ambiguous prompts.
-6. Produce a selected context manifest for each fixture.
+4. Add implication rules for common combinations, such as migration plus failure, query plus slow, config plus exposed key, and auth middleware plus duplication.
+5. Use repository context signals from known touched file paths when available.
+6. Test embedding k-nearest-neighbor or SetFit-style classification as the local semantic layer after deterministic misses are measured.
+7. Report missed required labels, extra labels, and ambiguous prompts.
+8. Produce a selected context manifest for each fixture.
 
-The first prototype does not need to call a model. It only needs to prove that ASC can choose the right context pack.
+The runtime path does not need to call a model by default. It must prove that ASC can choose the right context pack locally and fall back only when uncertainty is genuinely high.
 
 Current MVP files:
 
 - `lib/cli/adaptive-context.mjs`: deterministic rule-family classifier and manifest builder.
+- `lib/cli/adaptive-context/catalog.mjs`: rule-family triggers and selected docs/state catalogs.
+- `lib/cli/adaptive-context/implications.mjs`: cross-label implication rules for natural phrasing.
+- `lib/cli/adaptive-context/file-signals.mjs`: file path signals for repository-context-aware selection.
+- `lib/cli/commands/context.mjs`: public CLI resolver for non-MCP usage.
 - `scripts/adaptive-context/fixtures.mjs`: labeled fixture prompts.
 - `scripts/adaptive-context-benchmark.mjs`: machine-readable fixture benchmark.
 - `tests/adaptive-context.test.mjs`: behavior tests for label selection, fallback mode, and catalog coverage.

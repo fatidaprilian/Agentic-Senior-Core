@@ -15,6 +15,7 @@ import { runMcpServerCommand } from '../lib/cli/commands/mcp.mjs';
 import { runOptimizeCommand, parseOptimizeArguments } from '../lib/cli/commands/optimize.mjs';
 import { runInitCommand, parseInitArguments } from '../lib/cli/commands/init.mjs';
 import { runUpgradeCommand, parseUpgradeArguments } from '../lib/cli/commands/upgrade.mjs';
+import { runContextCommand } from '../lib/cli/commands/context.mjs';
 import { runDesignAntiRepeatAuditCommand } from '../lib/cli/commands/audit-design-anti-repeat.mjs';
 
 async function main() {
@@ -45,6 +46,11 @@ async function main() {
   if (commandArgument === 'optimize') {
     const optimizeOptions = parseOptimizeArguments(commandArguments);
     await runOptimizeCommand(optimizeOptions.targetDirectory, optimizeOptions);
+    return;
+  }
+
+  if (commandArgument === 'context') {
+    await runContextCommand(commandArguments);
     return;
   }
 

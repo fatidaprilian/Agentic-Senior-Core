@@ -42,6 +42,66 @@ test('adaptive context manifest keeps unknown requests in fallback mode', () => 
   assert.equal(manifest.fallbackRequired, true);
 });
 
+test('adaptive context manifest handles implicit natural requests', () => {
+  const cases = [
+    {
+      requestText: 'something broke after I pushed the migration yesterday',
+      expectedLabels: ['MIG', 'ERR'],
+    },
+    {
+      requestText: 'this page flickers on mobile and text overlaps',
+      expectedLabels: ['FE'],
+    },
+    {
+      requestText: 'audit pembayaran ini, takut kebuka akses user lain',
+      expectedLabels: ['SEC'],
+    },
+    {
+      requestText: 'bisa cek kenapa checkout lemot banget pas query order',
+      expectedLabels: ['DATA', 'PERF'],
+    },
+    {
+      requestText: 'update env var for staging without exposing key',
+      expectedLabels: ['CFG', 'SEC'],
+    },
+    {
+      requestText: 'remove duplicate code in auth middleware',
+      expectedLabels: ['SEC', 'ARCH'],
+    },
+  ];
+
+  for (const caseEntry of cases) {
+    const manifest = buildSelectedContextManifest({
+      requestText: caseEntry.requestText,
+    });
+
+    for (const expectedLabel of caseEntry.expectedLabels) {
+      assert.ok(
+        manifest.labels.includes(expectedLabel),
+        `${caseEntry.requestText} should select ${expectedLabel}`
+      );
+    }
+    assert.equal(manifest.fallbackRequired, false);
+  }
+});
+
+test('adaptive context manifest uses file context signals', () => {
+  const manifest = buildSelectedContextManifest({
+    requestText: 'fix this behavior',
+    contextFiles: [
+      'src/app/login/page.tsx',
+      'src/middleware/auth.ts',
+      'prisma/migrations/20260522_add_orders/migration.sql',
+    ],
+  });
+
+  assert.ok(manifest.contextFiles.includes('src/app/login/page.tsx'));
+  assert.ok(manifest.labels.includes('FE'));
+  assert.ok(manifest.labels.includes('SEC'));
+  assert.ok(manifest.labels.includes('DATA'));
+  assert.ok(manifest.labels.includes('MIG'));
+});
+
 test('adaptive context catalog covers every shipped rule family', () => {
   const rulePaths = getRuleFamilyCatalog().map((ruleFamily) => ruleFamily.rulePath);
 

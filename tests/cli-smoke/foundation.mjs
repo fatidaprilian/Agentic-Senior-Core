@@ -44,9 +44,28 @@ export async function registerCliSmokeFoundationTests(t) {
     assert.match(output, /init/);
     assert.doesNotMatch(output, /--profile-pack/);
     assert.match(output, /--no-memory-continuity/);
+    assert.match(output, /context "<request>"/);
+    assert.match(output, /--file/);
 
     assert.match(output, /quality checks \(guardrails\)/i);
     assert.match(output, /frontend-ui/);
+  });
+
+  await t.test('context command emits adaptive manifest JSON', () => {
+    const contextOutput = execSync(
+      `node ${cliPath} context "tolong refactor auth flow, cek security dan test" --request-id smoke-auth-refactor --file src/app/login/page.tsx --json`
+    ).toString();
+    const manifest = JSON.parse(contextOutput);
+
+    assert.equal(manifest.schemaVersion, 'adaptive-context-manifest-v1');
+    assert.equal(manifest.requestId, 'smoke-auth-refactor');
+    assert.ok(manifest.labels.includes('SEC'));
+    assert.ok(manifest.labels.includes('ARCH'));
+    assert.ok(manifest.labels.includes('TEST'));
+    assert.ok(manifest.labels.includes('FE'));
+    assert.deepEqual(manifest.contextFiles, ['src/app/login/page.tsx']);
+    assert.ok(manifest.selectedRules.includes('.agent-context/rules/security.md'));
+    assert.equal(manifest.fallbackRequired, false);
   });
 
   await t.test('launch command shows numbered startup choices', () => {
@@ -122,6 +141,7 @@ export async function registerCliSmokeFoundationTests(t) {
 
       const installedAgentsContent = readFileSync(join(existingProjectTargetDirectory, 'AGENTS.md'), 'utf8');
       assert.match(installedAgentsContent, /Runtime signals are evidence gates/i);
+      assert.match(installedAgentsContent, /agentic-senior-core context/);
       assert.match(installedAgentsContent, /Structural planning signals are not a hard whitelist/i);
       assert.match(installedAgentsContent, /\.agent-context\/rules\//);
       assert.equal(readFileSync(join(existingProjectTargetDirectory, 'CLAUDE.md'), 'utf8').trim(), '@AGENTS.md');

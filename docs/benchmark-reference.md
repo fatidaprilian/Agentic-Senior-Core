@@ -41,6 +41,8 @@ npm run benchmark:continuity
 
 The Adaptive Context benchmark verifies that local deterministic triggers can map request text to the required ASC rule families before any model call is made.
 
+Current fixture scope: 20 labeled prompts, including mixed Indonesian requests, implicit failure language, frontend visual defects, configuration exposure, worker silence, and auth middleware cleanup.
+
 Refresh the report:
 
 ```bash
@@ -48,6 +50,14 @@ npm run benchmark:adaptive-context
 ```
 
 Output: machine-readable JSON on stdout with fixture results, selected rule labels, selected rule files, selected prompts, selected docs, uncertainty, and fallback status.
+
+The same manifest shape is exposed to users through:
+
+```bash
+agentic-senior-core context "<request>" --json --file src/app/page.tsx
+```
+
+File path signals are optional. They let the resolver select context from known touched files instead of request wording alone.
 
 Generate docs-quality drift report:
 
