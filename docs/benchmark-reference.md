@@ -31,10 +31,23 @@ npm run benchmark:token
 
 ```bash
 npm run benchmark:detection
+npm run benchmark:adaptive-context
 npm run benchmark:writer-judge
 npm run benchmark:bundle
 npm run benchmark:continuity
 ```
+
+## Adaptive Context Benchmark
+
+The Adaptive Context benchmark verifies that local deterministic triggers can map request text to the required ASC rule families before any model call is made.
+
+Refresh the report:
+
+```bash
+npm run benchmark:adaptive-context
+```
+
+Output: machine-readable JSON on stdout with fixture results, selected rule labels, selected rule files, selected prompts, selected docs, uncertainty, and fallback status.
 
 Generate docs-quality drift report:
 

@@ -1,13 +1,18 @@
 # Runtime Token Saver Plan
 
 Status: planned, unshipped.
-Last updated: 2026-05-18.
+Last updated: 2026-05-21.
 
 This folder preserves the product and architecture decisions for the dynamic-output token saver. It is intentionally separate from `README.md` and `CHANGELOG.md` because the current stable release should not be changed until a real runtime feature exists.
 
-See also `plans/prefixbridge-cache-runtime/` for the static-prefix cache runtime. The two plans are complementary:
+See `plans/README.md` for the current build order. See also `plans/adaptive-context-runtime/` for context selection and `plans/prefixbridge-cache-runtime/` for the static-prefix cache runtime.
+
+The plans are complementary:
 
 ```text
+Adaptive Context Runtime
+  chooses the rules, prompts, docs, and state needed for the request.
+
 PrefixBridge
   reduces repeated static input cost and latency through provider prompt caching.
 
@@ -75,7 +80,7 @@ RTK: external CLI token saver reference and competitor
 
 ## Priority Rule
 
-PrefixBridge should be validated first if the goal is a more differentiated technology. ASCX remains important because prompt caching does not reduce dynamic tool-output bloat.
+Adaptive Context Runtime should be validated first because it decides which evidence policy applies to each request. ASCX remains the next runtime-saving layer because prompt caching does not reduce dynamic tool-output bloat.
 
 ## Release Rule
 

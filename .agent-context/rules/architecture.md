@@ -143,3 +143,13 @@ keywords:
 1. Import through a module's public API instead of reaching into internal files.
 2. Keep contracts explicit at boundaries between modules.
 3. If a new developer cannot find the full flow of a feature in one clear area, the structure is too diffuse.
+
+## ARCH-013: Natural Implementation Pass
+
+1. Treat "human-readable" code as code that a maintainer can trace, test, and change safely. Do not optimize for looking hand-written at the expense of behavior.
+2. Write new code and refactors as a clear sequence of intent: validate the input, name the domain state, perform the operation, then return or report the outcome.
+3. Prefer early returns for invalid, empty, or unauthorized paths when they reduce nesting and make the happy path easier to follow.
+4. Keep functions focused on one responsibility, but do not create tiny helper chains unless the helper names a real domain condition, removes repeated logic, or makes the main flow easier to read.
+5. Avoid dense one-liners, nested ternaries, speculative classes, factories, interfaces, design patterns, and extra layers when direct code preserves the same guarantees.
+6. Match the local project style before introducing a new pattern. Do not make code generic enough to fit any product.
+7. Run a final naturalness pass before completion: domain names are specific, booleans expose state or permission, comments explain why only, edge cases are explicit, and simplification did not remove validation, error handling, fallbacks, accessibility, tests, security boundaries, or observability.

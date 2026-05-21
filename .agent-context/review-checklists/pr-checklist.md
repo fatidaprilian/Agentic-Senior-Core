@@ -27,6 +27,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] No premature abstraction (base classes/util layers created only after repeated stable patterns)
 - [ ] Readability over brevity for maintainability
 - [ ] Complexity budget was applied: equivalent behavior uses fewer moving parts without losing validation, error handling, fallbacks, accessibility, tests, or security boundaries.
+- [ ] Natural implementation pass was applied: the main flow is traceable, names are domain-specific, helpers carry real meaning, and compact code did not hide safeguards.
 - [ ] Controllers, route handlers, and transport adapters do not contain business policy, raw queries, or cross-resource orchestration.
 - [ ] Services or use cases own business flow, transaction boundaries, and mutation safety.
 - [ ] Repositories or adapters own persistence/external IO details without hiding business decisions.

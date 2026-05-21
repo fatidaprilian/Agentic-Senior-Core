@@ -1,19 +1,21 @@
 # Product Decision: PrefixBridge
 
 Status: planned, unshipped.
-Last updated: 2026-05-18.
+Last updated: 2026-05-21.
 
 ## Decision
 
-Build PrefixBridge as a planned cache-aware runtime layer. Keep the previous runtime token saver plan, but treat it as a complementary dynamic-output saver.
+Build PrefixBridge as a planned cache-aware runtime layer. Keep it complementary to Adaptive Context Runtime and the ASCX runtime token saver.
 
 Priority order:
 
-1. PrefixBridge cache runtime.
+1. Adaptive Context Runtime.
 2. ASCX runtime token saver.
-3. Optional dashboard or control plane.
+3. PrefixBridge cache runtime.
+4. Quality routing.
+5. Optional dashboard or control plane.
 
-Reason: PrefixBridge is more differentiated. RTK-like command compression is useful, but the category already exists. PrefixBridge targets a newer gap: provider prompt caching is powerful, but many AI coding tools do not expose cache controls or stable prefix diagnostics.
+Reason: PrefixBridge is differentiated, but it optimizes selected stable context. The foundation should first decide which ASC rules, prompts, docs, and state belong in context for each request.
 
 ## What PrefixBridge Owns
 
@@ -38,14 +40,15 @@ It does not own:
 
 ## Relationship To Other Plans
 
-PrefixBridge and ASCX should both exist eventually.
+Adaptive Context Runtime, PrefixBridge, and ASCX should all exist eventually.
 
 ```text
-PrefixBridge: repeated static input cost
+Adaptive Context Runtime: context selection
 ASCX: bulky dynamic tool output
+PrefixBridge: repeated static input cost for selected stable context
 ```
 
-If only one is built first, build PrefixBridge first because it creates a stronger product distinction.
+If only one is built first, build Adaptive Context Runtime first because it improves correctness before cost optimization.
 
 ## Why This Is Not 9Router
 
@@ -63,7 +66,7 @@ PrefixBridge asks:
 Which part of this prompt is stable enough to cache, and can we prove the cache hit?
 ```
 
-The product should not compete on provider count. It should compete on deterministic cache boundaries and project-context stability.
+The product should not compete on provider count. It should compete on deterministic cache boundaries and selected project-context stability.
 
 ## Why This Is Not RTK
 
@@ -87,6 +90,6 @@ Do not claim total session savings until measured.
 
 ## Build Recommendation
 
-Build a narrow MVP.
+Build a narrow MVP after the Adaptive Context Runtime validation spike proves selected rule packs are stable enough to cache.
 
 Do not build a general router or universal OpenAI-to-Anthropic translator first. Prove the cache boundary idea with a Claude-only path and official cache usage fields.

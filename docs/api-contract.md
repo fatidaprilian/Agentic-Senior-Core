@@ -37,6 +37,7 @@ Init and upgrade generate or refresh these default instruction surfaces:
 | `npm run validate` | Runs repository integrity, docs, policy, and coverage checks. |
 | `npm test` | Runs the Node test suite. |
 | `npm run gate:release` | Runs release-gate and forbidden-content checks. |
+| `npm run benchmark:adaptive-context` | Runs the local Adaptive Context fixture benchmark and emits a selected-context manifest report. |
 
 ## Compatibility
 

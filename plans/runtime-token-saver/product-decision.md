@@ -1,7 +1,7 @@
 # Product Decision: Runtime Token Saver
 
 Status: planned, unshipped.
-Last updated: 2026-05-18.
+Last updated: 2026-05-21.
 
 ## Current State
 
@@ -19,13 +19,14 @@ That is useful, but it is not a real runtime token saver yet.
 
 Freeze the current stable surface. Do not ship another token optimization update until Agentic-Senior-Core can provide a real runtime token saver.
 
-Build an ASC-native runtime token saver as the next major feature.
+Build an ASC-native runtime token saver after the Adaptive Context Runtime validation spike.
 
 The product should become:
 
 ```text
 Agentic-Senior-Core
 = agent governance
++ adaptive context selection
 + safe runtime token saving for coding-agent evidence
 ```
 

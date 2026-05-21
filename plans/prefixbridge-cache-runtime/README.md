@@ -1,7 +1,7 @@
 # PrefixBridge Cache Runtime Plan
 
 Status: planned, unshipped.
-Last updated: 2026-05-18.
+Last updated: 2026-05-21.
 
 PrefixBridge is a planned cache-aware runtime for AI coding agents and chat IDEs. It is not a provider router and not a command-output compressor. It focuses on one job: make stable project guidance and skill context cache-friendly for providers that support prompt caching.
 
@@ -37,19 +37,24 @@ The bridge does not reduce logical context size. It reduces repeated input proce
 
 ## Layer Split
 
-Use both plans:
+Use the root plan order in `plans/README.md`.
+
+PrefixBridge is now positioned as an optimization layer after Adaptive Context Runtime selects the right stable context.
 
 ```text
-PrefixBridge
-  saves repeated static prefix cost
-  examples: rules, skills, system prompt, tool policy, project profile
+Adaptive Context Runtime
+  decides which rules, prompts, docs, and state should be active.
 
 ASCX Runtime Token Saver
   saves dynamic tool-output tokens
   examples: git diff, npm test, rg output, stack traces
+
+PrefixBridge
+  saves repeated static prefix cost for selected stable context
+  examples: rules, skills, system prompt, tool policy, project profile
 ```
 
-They solve different problems and can be implemented in phases.
+They solve different problems. PrefixBridge should not decide relevance; it should cache context that another layer has already selected.
 
 ## Proposed Commands
 

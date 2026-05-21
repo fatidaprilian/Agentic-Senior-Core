@@ -20,6 +20,7 @@ Before editing:
 Refactor rules:
 - Improve clarity, boundaries, naming, validation, error handling, tests, and docs.
 - Prioritize maintainability over compressed one-liners.
+- Apply the natural implementation pass from architecture.md: keep the main flow traceable, use early returns where they reduce nesting, and avoid helper chains that only make the code look abstract.
 - Do not choose a stack, framework, library, or topology from offline assumptions.
 - Keep module boundaries explicit and project-specific.
 - Split large files when the split makes the flow easier to understand.

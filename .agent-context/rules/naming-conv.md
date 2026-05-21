@@ -27,6 +27,9 @@ Use the target language and framework conventions. Do not invent a naming style 
 3. Reject names that require reading the implementation to understand the value.
 4. Keep file and directory naming styles consistent inside the same feature unless a framework reason requires mixed styles.
 5. Reject booleans, units, and side-effect functions whose names hide what they represent or change.
-6. Inline comments must explain why, not what.
-7. Put a one-line rationale near non-obvious choices that deserve explanation, such as retry strategy, index column order, denormalized field, intentional swallow with named recovery, or magic constant tied to an external system.
-8. Treat comments that paraphrase the code as noise.
+6. Name collections as collections when the language convention supports it.
+7. Name side-effect functions with an action plus the domain outcome they change.
+8. Avoid broad function names that describe activity without domain intent.
+9. Inline comments must explain why, not what.
+10. Put a one-line rationale near non-obvious choices that deserve explanation, such as retry strategy, index column order, denormalized field, intentional swallow with named recovery, or magic constant tied to an external system.
+11. Treat comments that paraphrase the code as noise.
