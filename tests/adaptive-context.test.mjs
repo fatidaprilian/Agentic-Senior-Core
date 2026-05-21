@@ -14,7 +14,10 @@ test('adaptive context fixture benchmark selects required labels', () => {
   assert.equal(report.passed, true);
   assert.equal(report.failedCount, 0);
   assert.equal(report.missedRequiredLabelCount, 0);
+  assert.equal(report.extraLabelCount, 0);
   assert.equal(report.fixtureCount, ADAPTIVE_CONTEXT_FIXTURES.length);
+  assert.equal(report.budgetSummary.overRecommendedFixtureCount, 0);
+  assert.equal(report.budgetSummary.fallbackFixtureCount, 0);
 });
 
 test('adaptive context manifest selects auth review context', () => {
@@ -28,6 +31,8 @@ test('adaptive context manifest selects auth review context', () => {
   assert.ok(manifest.selectedRules.includes('.agent-context/rules/api-docs.md'));
   assert.ok(manifest.selectedPrompts.includes('.agent-context/prompts/review-code.md'));
   assert.ok(manifest.selectedDocs.includes('docs/api-contract.md'));
+  assert.equal(manifest.budget.status, 'within-budget');
+  assert.equal(manifest.budget.selectedRuleCount, 4);
   assert.equal(manifest.fallbackRequired, false);
 });
 
@@ -39,7 +44,23 @@ test('adaptive context manifest keeps unknown requests in fallback mode', () => 
 
   assert.deepEqual(manifest.labels, []);
   assert.equal(manifest.uncertainty, 'high');
+  assert.equal(manifest.budget.status, 'within-budget');
+  assert.equal(manifest.budget.selectedRuleCount, 0);
   assert.equal(manifest.fallbackRequired, true);
+});
+
+test('adaptive context avoids broad generic trigger over-selection', () => {
+  const manifest = buildSelectedContextManifest({
+    requestId: 'token-budget-hardening',
+    requestText: 'Tighten adaptive context token budget and benchmark reporting for real request corpus.',
+  });
+
+  assert.ok(manifest.labels.includes('ARCH'));
+  assert.ok(manifest.labels.includes('TEST'));
+  assert.equal(manifest.labels.includes('SEC'), false);
+  assert.equal(manifest.labels.includes('API'), false);
+  assert.equal(manifest.budget.status, 'within-budget');
+  assert.equal(manifest.fallbackRequired, false);
 });
 
 test('adaptive context manifest handles implicit natural requests', () => {

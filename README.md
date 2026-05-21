@@ -74,7 +74,7 @@ One command to initialize `AGENTS.md`, native import bridges, checklists, polici
 > **See [docs/doc-index.md](docs/doc-index.md), [docs/deep-dive.md](docs/deep-dive.md), and [docs/deep-analysis-and-roadmap-backlog.md](docs/deep-analysis-and-roadmap-backlog.md) for deeper CLI, architecture, integration, and roadmap context.**
 
 - Default init copies the compact instruction surface and writes onboarding, selected policy, token optimization, and memory continuity state.
-- Installed agents are instructed to run the Adaptive Context resolver when available before selecting task rules; file path signals can be passed when the agent already knows the touched files.
+- Installed agents are instructed to run the Adaptive Context resolver when available before selecting task rules; file path signals can be passed when the agent already knows the touched files, and the manifest reports when selected rules exceed the normal context budget.
 - MCP workspace files are disabled by default. Add `--mcp-template` when you want starter IDE MCP configuration files.
 - When project docs are scaffolded, `docs/doc-index.md` is used as the compact map for deeper docs so agents can read the right files without scanning every Markdown file.
 - Local backup snapshots are written under `.agentic-backup/`; init and upgrade ensure that folder is ignored by the target repository.
@@ -122,7 +122,7 @@ If you see `Property $schema is not allowed`, keep `.vscode/mcp.json` without `$
 |---------|---------|
 | `agentic-senior-core init` | Initialize the compact project guidance pack and native agent entrypoints |
 | `agentic-senior-core upgrade --dry-run` | Preview managed-surface upgrades |
-| `agentic-senior-core context "<request>" --json --file src/app/page.tsx` | Resolve request labels, rules, prompts, docs, file signals, and fallback status |
+| `agentic-senior-core context "<request>" --json --file src/app/page.tsx` | Resolve request labels, rules, prompts, docs, file signals, budget status, and fallback status |
 | `agentic-senior-core optimize --show` | Show token optimization state |
 | `npm run clean:local` | Remove ignored local reports, backups, benchmarks, and active-memory state |
 | `agentic-senior-core mcp` | Start local MCP stdio runtime |

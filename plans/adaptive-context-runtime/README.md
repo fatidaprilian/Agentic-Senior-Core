@@ -62,9 +62,10 @@ The current implementation must move beyond literal keyword matching before late
 3. Add high-precision deterministic triggers for obvious cases.
 4. Add implication rules for common combinations, such as migration plus failure, query plus slow, config plus exposed key, and auth middleware plus duplication.
 5. Use repository context signals from known touched file paths when available.
-6. Test embedding k-nearest-neighbor or SetFit-style classification as the local semantic layer after deterministic misses are measured.
-7. Report missed required labels, extra labels, and ambiguous prompts.
-8. Produce a selected context manifest for each fixture.
+6. Keep a context budget in the manifest so broad requests are visible before they load too many rule families.
+7. Test embedding k-nearest-neighbor or SetFit-style classification as the local semantic layer after deterministic misses are measured.
+8. Report missed required labels, extra labels, budget status, and ambiguous prompts.
+9. Produce a selected context manifest for each fixture.
 
 The runtime path does not need to call a model by default. It must prove that ASC can choose the right context pack locally and fall back only when uncertainty is genuinely high.
 
@@ -96,6 +97,11 @@ Each classified request should produce a manifest like:
   "selectedPrompts": ["review-code.md"],
   "skippedRules": ["frontend-architecture.md", "docker-runtime.md"],
   "uncertainty": "low",
+  "budget": {
+    "status": "within-budget",
+    "selectedRuleCount": 4,
+    "maxRecommendedRuleCount": 5
+  },
   "fallbackRequired": false
 }
 ```
@@ -140,6 +146,7 @@ Before implementation:
 3. Missed required labels are treated as higher severity than extra labels.
 4. Selected context never omits mandatory security or testing rules for risky coding tasks.
 5. Ambiguous requests can fall back to manual or LLM-assisted classification.
+6. Normal fixtures stay within the recommended rule budget unless the request is intentionally broad.
 
 Before release:
 

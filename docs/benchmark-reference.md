@@ -41,7 +41,7 @@ npm run benchmark:continuity
 
 The Adaptive Context benchmark verifies that local deterministic triggers can map request text to the required ASC rule families before any model call is made.
 
-Current fixture scope: 20 labeled prompts, including mixed Indonesian requests, implicit failure language, frontend visual defects, configuration exposure, worker silence, and auth middleware cleanup.
+Current fixture scope: 31 labeled prompts, including mixed Indonesian requests, implicit failure language, frontend visual defects, configuration exposure, worker silence, auth middleware cleanup, budget false-positive checks, idempotent endpoints, realtime recovery, and dependency update requests.
 
 Refresh the report:
 
@@ -49,7 +49,7 @@ Refresh the report:
 npm run benchmark:adaptive-context
 ```
 
-Output: machine-readable JSON on stdout with fixture results, selected rule labels, selected rule files, selected prompts, selected docs, uncertainty, and fallback status.
+Output: machine-readable JSON on stdout with fixture results, selected rule labels, selected rule files, selected prompts, selected docs, uncertainty, budget summary, and fallback status.
 
 The same manifest shape is exposed to users through:
 

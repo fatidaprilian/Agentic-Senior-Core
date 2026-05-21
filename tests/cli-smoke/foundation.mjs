@@ -64,6 +64,8 @@ export async function registerCliSmokeFoundationTests(t) {
     assert.ok(manifest.labels.includes('TEST'));
     assert.ok(manifest.labels.includes('FE'));
     assert.deepEqual(manifest.contextFiles, ['src/app/login/page.tsx']);
+    assert.equal(manifest.budget.status, 'within-budget');
+    assert.ok(manifest.budget.selectedRuleCount <= manifest.budget.maxRecommendedRuleCount);
     assert.ok(manifest.selectedRules.includes('.agent-context/rules/security.md'));
     assert.equal(manifest.fallbackRequired, false);
   });
