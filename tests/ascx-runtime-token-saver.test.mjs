@@ -27,6 +27,8 @@ test('ascx fixture benchmark preserves evidence for supported MVP commands', asy
     assert.equal(report.summary.falseSuccessCount, 0);
     assert.equal(report.summary.teeWriteFailures, 0);
     assert.equal(report.summary.evidencePreservationPassRate, 1);
+    assert.equal(report.summary.continuationPassRate, 1);
+    assert.ok(report.summary.continuationCheckCount >= ASCX_RUNTIME_TOKEN_SAVER_FIXTURES.length);
   } finally {
     fs.rmSync(tempDirectoryPath, { recursive: true, force: true });
   }
@@ -35,9 +37,11 @@ test('ascx fixture benchmark preserves evidence for supported MVP commands', asy
 test('ascx lexer classifies pipe and redirect syntax as unsafe passthrough', () => {
   const pipeCommand = parseAscxCommand(['npm', 'test', '|', 'tee', 'test.log']);
   const redirectCommand = parseAscxCommand(['git', 'status', '>', 'status.txt']);
+  const gitDiffCommand = parseAscxCommand(['git', 'diff']);
 
   assert.equal(classifyAscxInvocation(pipeCommand).kind, 'unsafe-for-compression');
   assert.equal(classifyAscxInvocation(redirectCommand).kind, 'unsafe-for-compression');
+  assert.equal(classifyAscxInvocation(gitDiffCommand).adapterName, 'git-diff');
 });
 
 test('ascx writes raw tee for failing compressed command and preserves exit code', async () => {

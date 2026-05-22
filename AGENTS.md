@@ -28,7 +28,7 @@ For non-trivial coding, review, planning, or governance work, run `agentic-senio
 Keep it short. Do not load every rule just to fill it out.
 
 ## Command Economy
-Avoid repeated command output. Do not rerun broad inspections unless edits changed the result. Prefer targeted reads, concise diffs, and `ascx git status` / `ascx npm test` when available; use raw commands for pipes, redirects, or unsupported commands.
+Avoid repeated command output. Do not rerun broad inspections unless edits changed the result. Prefer targeted reads, concise diffs, and `ascx git status` / `ascx git diff` / `ascx npm test` when available; use raw commands for pipes, redirects, or unsupported commands.
 
 ## Layer Index
 ### Layer 1: Rules (21 Files) [SCOPE-RESOLVED]
@@ -67,9 +67,8 @@ Execution Contracts are dynamic execution contracts from prompts, review checkli
 
 ### Layer 5: Prompts
 
-Location: `.agent-context/prompts/`.
-
-Load the matching prompt only:
+Location: `.agent-context/prompts/`. Load the matching prompt only, plus `compact-natural-mode.md` as the default final-response contract:
+- `compact-natural-mode.md` -> final response shape, evidence preservation, and compact natural prose
 - `init-project.md` -> create, build, new project, scaffold
 - `refactor.md` -> refactor, improve, clean up, fix
 - `review-code.md` -> review, audit, check, analyze

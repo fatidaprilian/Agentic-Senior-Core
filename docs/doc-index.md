@@ -15,6 +15,7 @@ Use this file to pick the smallest useful docs set before loading deeper context
 - `docs/DESIGN.md`: UI/design governance context for this repo's docs and assets.
 - `docs/integration-playbook.md`: CI/CD, IDE, and agent-entrypoint integration guidance, plus the per-tool caching scope matrix and per-integration adoption sections.
 - `docs/benchmark-reference.md`: Benchmark history and the canonical "Caching Effectiveness Reporting Format" for any caching report attributable to this pack.
+- `plans/compact-natural-mode/`: response-compression plan, task formats, integration surface, and benchmark gates. The installed prompt lives at `.agent-context/prompts/compact-natural-mode.md`.
 - `docs/architecture/decisions-foundation.md`: empirical foundation for the v4 decisions; cite this when defending caching, format, or anti-halu choices.
 - `docs/architecture/format-spec.md`: canonical rule-file format used by the citation contract.
 - `docs/deep-dive.md`: internal behavior details for advanced contributors.

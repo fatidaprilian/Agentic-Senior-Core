@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.0 - 2026-05-22
+
+### Added
+- Added the `ascx` token saver command wrapper (`bin/ascx.js` CLI prefix) with custom, high-signal adapters for common commands:
+  - `git status`: filters untracked/staged paths and presents an optimized clean summary for agent parsing.
+  - `git diff`: compresses large diffs (summarizes counts, renames, additions/deletions, and patterns like lockfiles/vendor) while passing small, high-fidelity changes through raw to maximize context precision.
+  - `npm test`: captures execution logs, normalizes progress/interactive prompts, and provides structured completion summaries.
+- Added `Compact Natural Mode` response compression (`.agent-context/prompts/compact-natural-mode.md`) to guide AI agents into writing professional, concise, CITATION-anchored prose and eliminating verbose fillers/politeness.
+- Added judged token benchmarks for response compression (`npm run benchmark:compact-natural`) and command token reduction (`npm run benchmark:ascx`).
+- Added full test coverage for the `ascx` command wrapper, adapters, and `compact-natural-mode` integration (203/203 tests passing).
+
+### Changed
+- Integrated `Compact Natural Mode` as the default final-response contract in canonical instructions `AGENTS.md`.
+- Updated CLI scaffolding (`init` and `upgrade`) to copy the new response compression prompts recursively and auto-enable optimization defaults.
+- Onboarding and metadata generation now record `responseCompression.defaultOn: true`.
+
 ## 4.1.0 - 2026-05-17
 
 ### Changed

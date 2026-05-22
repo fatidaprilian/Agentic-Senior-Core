@@ -123,10 +123,11 @@ Examples:
 
 ```bash
 ascx git status
+ascx git diff
 ascx npm test
 ```
 
-Only `git status` and `npm test` are compressed in the MVP. Other commands pass through until their adapters have fixtures and evidence gates.
+Only `git status`, `git diff`, and `npm test` are compressed in the MVP. Other commands pass through until their adapters have fixtures and evidence gates.
 
 Exit code behavior:
 

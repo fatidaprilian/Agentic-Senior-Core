@@ -5,7 +5,7 @@
 1. Resolve the target directory and run preflight checks.
 2. Detect whether the target is a fresh or existing project.
 3. Copy the compact governance surface: `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.agent-context/`.
-4. Write policy, memory continuity, token optimization, and onboarding state when enabled.
+4. Write policy, memory continuity, default token optimization, Compact Natural response-compression metadata, and onboarding state when enabled.
 5. Scaffold project documentation prompts or seed docs only when the selected scope requires them.
 6. Report the selected profile, runtime evidence status, architecture decision status, and validation guidance.
 
@@ -14,7 +14,7 @@
 1. Detect the current project and managed governance surface.
 2. Preview stale managed files, UI contract gaps, and onboarding state.
 3. Back up relevant files under `.agentic-backup/` and ensure the backup folder is ignored.
-4. Refresh the compact governance surface and preserve user-owned instruction entrypoints.
+4. Refresh the compact governance surface, including Compact Natural Mode, and preserve user-owned instruction entrypoints.
 5. Rewrite policy and onboarding state with `operationMode: upgrade`.
 
 ## Optimize Flow
@@ -22,7 +22,7 @@
 1. Require an initialized repository with an onboarding report.
 2. Write `.agent-context/state/token-optimization.json`.
 3. Write `.agent-context/state/token-optimization-report.json`.
-4. Prefer local ASCX wrappers for supported command output compression: `ascx git status` and `ascx npm test`.
+4. Prefer local ASCX wrappers for supported command output compression: `ascx git status`, `ascx git diff`, and `ascx npm test`.
 5. Use `asc optimize status` for a non-mutating readiness check.
 6. Use `asc optimize doctor` when tee write safety or double-compression risk needs diagnosis.
 7. Print the selected agent profile and optional external proxy hook guidance for commands outside the ASCX MVP.

@@ -1,6 +1,6 @@
 # Agentic-Senior-Core Runtime Plans
 
-Status: active roadmap with Phase 1 and Phase 2 runtime work in progress.
+Status: active roadmap with Phase 1 through Phase 3 runtime work in progress.
 Last updated: 2026-05-22.
 
 This folder contains runtime plans and implementation notes. A plan changes the stable package surface only after the corresponding runtime path exists and passes validation.
@@ -12,9 +12,10 @@ Build the runtime stack in this order:
 ```text
 1. Adaptive Context Runtime
 2. ASCX Runtime Token Saver
-3. PrefixBridge Cache Runtime
-4. Quality Routing
-5. Gateway or dashboard control plane
+3. Compact Natural Mode
+4. PrefixBridge Cache Runtime
+5. Quality Routing
+6. Gateway or dashboard control plane
 ```
 
 ## Why This Order Changed
@@ -67,7 +68,20 @@ Owns:
 
 This comes after adaptive context because tool-output compression should follow the same evidence policy chosen for the request type.
 
-### 3. PrefixBridge Cache Runtime
+### 3. Compact Natural Mode
+
+Path: `plans/compact-natural-mode/`
+
+Owns later:
+
+- task-aware response compression
+- filler removal without caveman-style dialect
+- preservation rules for commands, paths, errors, assumptions, validation status, decisions, risks, and next actions
+- benchmarks for semantic equivalence, actionability, evidence preservation, register quality, and token reduction
+
+Do not build this inside ASCX. ASCX compresses command output before it enters the agent context. Compact Natural Mode compresses the agent's final user-facing response after the command-output layer is stable.
+
+### 4. PrefixBridge Cache Runtime
 
 Path: `plans/prefixbridge-cache-runtime/`
 
@@ -81,7 +95,7 @@ Owns:
 
 This is still useful, but it should accelerate selected stable context rather than decide which context belongs in the prompt.
 
-### 4. Quality Routing
+### 5. Quality Routing
 
 Path: not created yet.
 
@@ -93,7 +107,7 @@ Owns later:
 
 Do not build this first. Routing can backfire if it sends nearly every coding request to the strongest model or routes risky requests to weak models.
 
-### 5. Gateway Or Dashboard
+### 6. Gateway Or Dashboard
 
 Path: separate future repo or late-stage plan.
 
@@ -104,6 +118,7 @@ Do not put provider account routing, dashboards, subscription rotation, or multi
 Current next action:
 
 1. Keep Adaptive Context Runtime as the context-selection foundation.
-2. Validate the `ascx` MVP with `npm run benchmark:ascx`.
-3. Expand ASCX only after `git status` and `npm test` preserve required evidence at 100%.
-4. Defer PrefixBridge until selected context and dynamic output compression are both stable.
+2. Keep the ASCX whitelist frozen at `git status`, `git diff`, and `npm test` until the next adapter has its own evidence and continuation fixtures.
+3. Keep Compact Natural Mode enabled through the installed prompt only while benchmark gates stay green.
+4. Treat ASCX and Compact Natural as default-on init behavior; keep MCP and PrefixBridge separate.
+5. Defer PrefixBridge until selected context, dynamic output compression, and response compression are all stable.

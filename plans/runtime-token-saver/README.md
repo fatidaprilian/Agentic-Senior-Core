@@ -3,7 +3,7 @@
 Status: MVP implemented locally, pending release.
 Last updated: 2026-05-22.
 
-This folder preserves the product and architecture decisions for the dynamic-output token saver. The first local runtime path now exists as the explicit `ascx` wrapper for `git status` and `npm test`.
+This folder preserves the product and architecture decisions for the dynamic-output token saver. The first local runtime path now exists as the explicit `ascx` wrapper for `git status`, `git diff`, and `npm test`.
 
 See `plans/README.md` for the current build order. See also `plans/adaptive-context-runtime/` for context selection and `plans/prefixbridge-cache-runtime/` for the static-prefix cache runtime.
 
@@ -60,6 +60,7 @@ Current MVP surface:
 
 ```bash
 ascx git status
+ascx git diff
 ascx npm test
 asc optimize status
 asc optimize doctor
@@ -91,6 +92,8 @@ RTK: external CLI token saver reference and competitor
 
 Adaptive Context Runtime should be validated first because it decides which evidence policy applies to each request. ASCX remains the next runtime-saving layer because prompt caching does not reduce dynamic tool-output bloat.
 
+Compact Natural Mode belongs after ASCX is stable. It should optimize user-facing agent responses, not command output, and must not enter this phase until ASCX adapters have proven evidence preservation with fixtures.
+
 ## Release Rule
 
 Do not expand public release messaging beyond measured local behavior.
@@ -102,6 +105,7 @@ MVP release bar:
 3. Summaries preserve command, exit code, file path, line number, and root error.
 4. Unsafe shell syntax passes through without compression.
 5. Benchmarks show token reduction without hiding debugging evidence.
+6. Continuation checks prove the compact output still supports the next correct agent action.
 
 Later runtime bar:
 

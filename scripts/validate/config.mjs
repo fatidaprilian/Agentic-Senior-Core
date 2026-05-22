@@ -15,6 +15,7 @@ export const FORMAL_ARTIFACT_PATHS = [
   'docs/deep-analysis-and-roadmap-backlog.md',
   '.agent-context/rules/api-docs.md',
   '.agent-context/review-checklists/pr-checklist.md',
+  '.agent-context/prompts/compact-natural-mode.md',
   '.agent-context/prompts/review-code.md',
   'CLAUDE.md',
   'GEMINI.md',

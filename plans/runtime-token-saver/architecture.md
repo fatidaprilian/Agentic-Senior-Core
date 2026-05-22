@@ -27,10 +27,11 @@ Use:
 
 ```bash
 ascx git status
+ascx git diff
 ascx npm test
 ```
 
-`git diff`, `rg`, build output, and TypeScript compiler output remain later adapters.
+`rg`, build output, and TypeScript compiler output remain later adapters.
 
 `asc` remains the product CLI:
 
@@ -86,11 +87,11 @@ Unsafe examples:
 MVP whitelist:
 
 - `git status`
+- `git diff`
 - `npm test`
 
 Later adapters:
 
-- `git diff`
 - `rg`
 - `npm run build`
 - `npm run lint`

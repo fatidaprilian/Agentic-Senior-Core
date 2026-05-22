@@ -30,6 +30,7 @@ export async function registerCliSmokeFoundationTests(t) {
     assert.equal(packageJson.files.includes('CLAUDE.md'), true);
     assert.equal(packageJson.files.includes('GEMINI.md'), true);
     assert.equal(packageJson.files.includes('.agent-context/rules/'), true);
+    assert.equal(packageJson.files.includes('.agent-context/prompts/'), true);
     assert.equal(packageJson.files.includes('.instructions.md'), false);
     assert.equal(packageJson.files.includes('.cursor/'), false);
     assert.equal(packageJson.files.includes('.windsurf/'), false);
@@ -49,6 +50,7 @@ export async function registerCliSmokeFoundationTests(t) {
     assert.match(output, /context "<request>"/);
     assert.match(output, /--file/);
     assert.match(output, /ascx git status/);
+    assert.match(output, /ascx git diff/);
     assert.match(output, /asc optimize status/);
     assert.match(output, /asc optimize doctor/);
 
@@ -150,9 +152,12 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.match(installedAgentsContent, /Runtime signals are evidence gates/i);
       assert.match(installedAgentsContent, /agentic-senior-core context/);
       assert.match(installedAgentsContent, /ascx git status/);
+      assert.match(installedAgentsContent, /ascx git diff/);
       assert.match(installedAgentsContent, /ascx npm test/);
+      assert.match(installedAgentsContent, /compact-natural-mode\.md/);
       assert.match(installedAgentsContent, /Structural planning signals are not a hard whitelist/i);
       assert.match(installedAgentsContent, /\.agent-context\/rules\//);
+      assert.equal(existsSync(join(existingProjectTargetDirectory, '.agent-context', 'prompts', 'compact-natural-mode.md')), true);
       assert.equal(readFileSync(join(existingProjectTargetDirectory, 'CLAUDE.md'), 'utf8').trim(), '@AGENTS.md');
       assert.equal(readFileSync(join(existingProjectTargetDirectory, 'GEMINI.md'), 'utf8').trim(), '@AGENTS.md');
       assert.equal(existsSync(join(existingProjectTargetDirectory, '.agent-instructions.md')), false);
@@ -226,6 +231,7 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.equal(existsSync(join(optOutMcpTargetDirectory, 'AGENTS.md')), true);
       assert.equal(existsSync(join(optOutMcpTargetDirectory, 'CLAUDE.md')), true);
       assert.equal(existsSync(join(optOutMcpTargetDirectory, 'GEMINI.md')), true);
+      assert.equal(existsSync(join(optOutMcpTargetDirectory, '.agent-context', 'prompts', 'compact-natural-mode.md')), true);
       assert.equal(readFileSync(join(optOutMcpTargetDirectory, 'CLAUDE.md'), 'utf8').trim(), '@AGENTS.md');
       assert.equal(readFileSync(join(optOutMcpTargetDirectory, 'GEMINI.md'), 'utf8').trim(), '@AGENTS.md');
       assert.equal(existsSync(join(optOutMcpTargetDirectory, '.instructions.md')), false);

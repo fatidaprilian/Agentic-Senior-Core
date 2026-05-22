@@ -41,6 +41,9 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
         return mapping.rawCommand === 'git status' && mapping.optimizedCommand === 'ascx git status';
       }));
       assert.ok(tokenState.commandRewriteMappings.some((mapping) => {
+        return mapping.rawCommand === 'git diff' && mapping.optimizedCommand === 'ascx git diff';
+      }));
+      assert.ok(tokenState.commandRewriteMappings.some((mapping) => {
         return mapping.rawCommand === 'npm test' && mapping.optimizedCommand === 'ascx npm test';
       }));
 
@@ -117,6 +120,7 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
 
       assert.match(defaultInitOutput, /Project memory continuity metadata enabled/);
       assert.match(defaultInitOutput, /Token optimization policy enabled for agent/);
+      assert.match(defaultInitOutput, /Default response mode: Compact Natural Mode enabled/);
 
       const defaultMemoryState = readJson(
         join(defaultOptimizationTargetDirectory, '.agent-context', 'state', 'memory-continuity.json')
@@ -139,6 +143,7 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       assert.equal(defaultTokenState.enabled, true);
       assert.equal(defaultTokenState.outputFoldingStrategy?.mode, 'compact-high-signal-output');
       assert.ok(defaultTokenState.commandRewriteMappings.some((mapping) => mapping.optimizedCommand === 'ascx git status'));
+      assert.ok(defaultTokenState.commandRewriteMappings.some((mapping) => mapping.optimizedCommand === 'ascx git diff'));
       assert.ok(defaultTokenState.commandRewriteMappings.some((mapping) => mapping.optimizedCommand === 'ascx npm test'));
       assert.ok(defaultTokenState.outputFoldingStrategy.preserveAlways.includes('error-message'));
       assert.ok(defaultTokenState.outputFoldingStrategy.safetyBoundary.includes('never hide failing checks'));
@@ -151,6 +156,11 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       assert.equal(defaultOnboardingReport.memoryContinuity?.enabled, true);
       assert.equal(defaultOnboardingReport.memoryContinuity?.activeSnapshotFile, '.agent-context/state/active-memory.json');
       assert.equal(defaultOnboardingReport.tokenOptimization?.enabled, true);
+      assert.equal(defaultOnboardingReport.responseCompression?.enabled, true);
+      assert.equal(defaultOnboardingReport.responseCompression?.mode, 'compact-natural-mode');
+      assert.equal(defaultOnboardingReport.responseCompression?.defaultOn, true);
+      assert.equal(defaultOnboardingReport.responseCompression?.promptFile, '.agent-context/prompts/compact-natural-mode.md');
+      assert.equal(existsSync(join(defaultOptimizationTargetDirectory, '.agent-context', 'prompts', 'compact-natural-mode.md')), true);
 
       const optOutInitOutput = execSync(
         `node ${cliPath} init ${optOutOptimizationTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize --no-memory-continuity`

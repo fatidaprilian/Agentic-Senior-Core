@@ -45,6 +45,13 @@ The benchmark must measure more than token count. It must measure whether the co
 - raw tee read count
 - double-compression warnings
 
+### Agent Continuation
+
+- continuation check count
+- continuation pass rate
+- failed continuation check count
+- next-action support for changed files, hunk anchors, failing tests, raw tee decisions, and unsafe passthrough cases
+
 ## Fixture Categories
 
 Fixtures live under:
@@ -64,7 +71,13 @@ Current MVP fixture scope:
 - `git status` clean repo
 - `git status` many modified files
 - `git status` staged and unstaged changes
+- `git diff` small diff
+- `git diff` large diff with truncation
+- `git diff` generated lockfile noise
+- `git diff` binary file signal
+- `git diff` deleted file
 - `npm test` all pass
+- `npm test` pass with expected error-like logs
 - `npm test` one failure
 - `npm test` multiple failures
 - `npm test` crash before tests run
@@ -79,7 +92,7 @@ Fixture categories:
    - staged and unstaged changes
    - untracked files
 
-2. Later: Git diff
+2. Git diff (implemented)
    - small diff
    - large diff
    - binary file signal
@@ -135,8 +148,9 @@ Do not release runtime token saver until these are true:
 6. Unsupported commands pass through safely.
 7. Unsafe shell constructs pass through safely.
 8. The benchmark report separates token savings from evidence quality.
-9. Later: `doctor` detects RTK and 9Router overlap risk.
-10. Windows behavior is documented honestly before broad release claims.
+9. Continuation pass rate is 100% for the MVP fixture set.
+10. Later: `doctor` detects RTK and 9Router overlap risk.
+11. Windows behavior is documented honestly before broad release claims.
 
 ## Acceptance Targets
 
@@ -156,7 +170,7 @@ These are starting targets, not marketing claims. Public claims need measured da
 
 Token savings alone are not enough.
 
-Add small continuation probes:
+Current fixtures include small continuation probes:
 
 - Can the agent identify the failing file?
 - Can the agent identify the failing line?
@@ -181,7 +195,10 @@ Current report shape:
     "estimatedTokenReduction": 0,
     "evidencePreservationPassRate": 0,
     "falseSuccessCount": 0,
-    "teeWriteFailures": 0
+    "teeWriteFailures": 0,
+    "continuationPassRate": 0,
+    "continuationCheckCount": 0,
+    "failedContinuationCheckCount": 0
   }
 }
 ```

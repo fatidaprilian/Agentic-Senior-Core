@@ -33,6 +33,7 @@ npm run benchmark:token
 npm run benchmark:detection
 npm run benchmark:adaptive-context
 npm run benchmark:ascx
+npm run benchmark:compact-natural
 npm run benchmark:writer-judge
 npm run benchmark:bundle
 npm run benchmark:continuity
@@ -64,7 +65,7 @@ File path signals are optional. They let the resolver select context from known 
 
 The ASCX benchmark verifies that the explicit local `ascx` wrapper can reduce noisy command output while preserving debugging evidence.
 
-Current fixture scope: `git status` clean/staged/unstaged/noisy output, `npm test` passing/failing/crashing output, and unsafe pipe/redirect passthrough cases.
+Current fixture scope: `git status` clean/staged/unstaged/noisy output, `git diff` small/large/generated/binary/deleted output, `npm test` passing/failing/crashing output including expected error-like logs in passing tests, and unsafe pipe/redirect passthrough cases.
 
 Refresh the report:
 
@@ -72,15 +73,29 @@ Refresh the report:
 npm run benchmark:ascx
 ```
 
-Output: machine-readable JSON on stdout with fixture results, compression state, original exit code, raw tee path status, estimated token reduction, evidence preservation pass rate, false success count, and tee write failures.
+Output: machine-readable JSON on stdout with fixture results, compression state, original exit code, raw tee path status, estimated token reduction, evidence preservation pass rate, continuation pass rate, false success count, and tee write failures.
 
-Current MVP contract: only `git status` and `npm test` are compressed. Unsupported commands and unsafe shell syntax pass through without compression.
+Current MVP contract: only `git status`, `git diff`, and `npm test` are compressed. Unsupported commands and unsafe shell syntax pass through without compression.
 
 Generate docs-quality drift report:
 
 ```bash
 npm run report:docs-quality-drift
 ```
+
+## Compact Natural Mode Benchmark
+
+The Compact Natural benchmark verifies that user-facing agent replies can become shorter without losing required technical evidence, actionability, calibration, or professional register.
+
+Refresh the report:
+
+```bash
+npm run benchmark:compact-natural
+```
+
+Output: machine-readable JSON on stdout with fixture results, Compact Quality Score (CQS), estimated token reduction, mandatory evidence failures, semantic/actionability/calibration failures, register failures, and negative-control escape count.
+
+Current fixture design is bias-safe by default: fixtures store required evidence atoms, claims, actions, and negative controls rather than long canonical "ideal answer" examples. The benchmark is deterministic and provider-free.
 
 ## Writer-Judge and Evidence Outputs
 
