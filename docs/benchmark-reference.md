@@ -32,6 +32,7 @@ npm run benchmark:token
 ```bash
 npm run benchmark:detection
 npm run benchmark:adaptive-context
+npm run benchmark:ascx
 npm run benchmark:writer-judge
 npm run benchmark:bundle
 npm run benchmark:continuity
@@ -58,6 +59,22 @@ agentic-senior-core context "<request>" --json --file src/app/page.tsx
 ```
 
 File path signals are optional. They let the resolver select context from known touched files instead of request wording alone.
+
+## ASCX Runtime Token Saver Benchmark
+
+The ASCX benchmark verifies that the explicit local `ascx` wrapper can reduce noisy command output while preserving debugging evidence.
+
+Current fixture scope: `git status` clean/staged/unstaged/noisy output, `npm test` passing/failing/crashing output, and unsafe pipe/redirect passthrough cases.
+
+Refresh the report:
+
+```bash
+npm run benchmark:ascx
+```
+
+Output: machine-readable JSON on stdout with fixture results, compression state, original exit code, raw tee path status, estimated token reduction, evidence preservation pass rate, false success count, and tee write failures.
+
+Current MVP contract: only `git status` and `npm test` are compressed. Unsupported commands and unsafe shell syntax pass through without compression.
 
 Generate docs-quality drift report:
 

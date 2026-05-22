@@ -1,7 +1,7 @@
 # Runtime Token Saver Benchmark Plan
 
-Status: planned, unshipped.
-Last updated: 2026-05-18.
+Status: MVP benchmark implemented locally.
+Last updated: 2026-05-22.
 
 ## Benchmark Goal
 
@@ -47,11 +47,29 @@ The benchmark must measure more than token count. It must measure whether the co
 
 ## Fixture Categories
 
-Create fixtures under a future benchmark folder. Suggested location:
+Fixtures live under:
 
 ```text
 benchmarks/runtime-token-saver/
 ```
+
+Run the MVP benchmark:
+
+```bash
+npm run benchmark:ascx
+```
+
+Current MVP fixture scope:
+
+- `git status` clean repo
+- `git status` many modified files
+- `git status` staged and unstaged changes
+- `npm test` all pass
+- `npm test` one failure
+- `npm test` multiple failures
+- `npm test` crash before tests run
+- unsafe pipe passthrough
+- unsafe redirect passthrough
 
 Fixture categories:
 
@@ -61,28 +79,28 @@ Fixture categories:
    - staged and unstaged changes
    - untracked files
 
-2. Git diff
+2. Later: Git diff
    - small diff
    - large diff
    - binary file signal
    - generated file noise
    - deleted file
 
-3. Git log
+3. Later: Git log
    - short history
    - long history
    - merge commits
    - reverse order request
 
-4. Search output
+4. Later: Search output
    - `rg` with many matches
    - repeated matches in vendor folders
    - no matches
    - binary match warning
 
 5. JavaScript and TypeScript
-   - `npm test`
-   - `npm run build`
+   - `npm test` in MVP
+   - `npm run build` later
    - `tsc --noEmit`
    - Vitest failures
    - Jest failures
@@ -116,9 +134,9 @@ Do not release runtime token saver until these are true:
 5. Every compressed failure includes a raw output path.
 6. Unsupported commands pass through safely.
 7. Unsafe shell constructs pass through safely.
-8. `doctor` detects RTK and 9Router overlap risk.
-9. Windows behavior is documented honestly.
-10. The benchmark report separates token savings from evidence quality.
+8. The benchmark report separates token savings from evidence quality.
+9. Later: `doctor` detects RTK and 9Router overlap risk.
+10. Windows behavior is documented honestly before broad release claims.
 
 ## Acceptance Targets
 
@@ -150,7 +168,7 @@ The saved output passes only if it supports the next correct engineering action.
 
 ## Benchmark Output
 
-Future report shape:
+Current report shape:
 
 ```json
 {

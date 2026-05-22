@@ -1,7 +1,7 @@
-# Planned Command Surface
+# Runtime Token Saver Command Surface
 
-Status: planned, unshipped.
-Last updated: 2026-05-18.
+Status: `ascx` MVP implemented locally; `asc optimize status` and `asc optimize doctor` implemented as readiness surfaces.
+Last updated: 2026-05-22.
 
 ## Short Alias
 
@@ -70,7 +70,7 @@ warnings: [...]
 next_action: ...
 ```
 
-This replaces or complements `agentic-senior-core optimize --show`.
+This complements `agentic-senior-core optimize --show`, which remains the JSON state view.
 
 ## `asc optimize off`
 
@@ -101,7 +101,7 @@ Checks:
 - tee folder writable
 - raw tee cleanup status
 - RTK binary present
-- 9Router endpoint reachable
+- 9Router endpoint reachable in a later phase; current doctor reports `not-checked` to avoid localhost probing by default
 - likely double-compression risk
 - supported shell detected
 - native Windows limitations
@@ -123,11 +123,10 @@ Examples:
 
 ```bash
 ascx git status
-ascx git diff
-ascx rg "TODO"
 ascx npm test
-ascx npm run build
 ```
+
+Only `git status` and `npm test` are compressed in the MVP. Other commands pass through until their adapters have fixtures and evidence gates.
 
 Exit code behavior:
 

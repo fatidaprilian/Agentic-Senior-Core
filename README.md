@@ -123,9 +123,16 @@ If you see `Property $schema is not allowed`, keep `.vscode/mcp.json` without `$
 | `agentic-senior-core init` | Initialize the compact project guidance pack and native agent entrypoints |
 | `agentic-senior-core upgrade --dry-run` | Preview managed-surface upgrades |
 | `agentic-senior-core context "<request>" --json --file src/app/page.tsx` | Resolve request labels, rules, prompts, docs, file signals, budget status, and fallback status |
+| `ascx git status` | Run `git status` through the local evidence-preserving output wrapper |
+| `ascx npm test` | Run `npm test` through the local evidence-preserving output wrapper |
 | `agentic-senior-core optimize --show` | Show token optimization state |
+| `asc optimize status` | Check ASCX runtime token saver readiness |
+| `asc optimize doctor` | Diagnose ASCX availability, tee write safety, and compression conflicts |
 | `npm run clean:local` | Remove ignored local reports, backups, benchmarks, and active-memory state |
 | `agentic-senior-core mcp` | Start local MCP stdio runtime |
+
+`ascx` currently compresses only `git status` and `npm test`. Other commands, pipes, redirects, and unsupported shell shapes pass through without compression. Compressed output keeps a structured footer with command, exit code, filter name, estimated token reduction, and a raw tee path when safety requires it.
+`asc` is a short alias for the main `agentic-senior-core` CLI. The doctor does not probe localhost services in this phase; `9router` status remains `not-checked`.
 
 ---
 
@@ -195,6 +202,7 @@ Compliance boundary: formal policy and audit artifacts must keep canonical termi
 npm run validate
 npm test
 npm run gate:release
+npm run benchmark:ascx
 ```
 
 ---

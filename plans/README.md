@@ -1,9 +1,9 @@
 # Agentic-Senior-Core Runtime Plans
 
-Status: planned, unshipped.
-Last updated: 2026-05-21.
+Status: active roadmap with Phase 1 and Phase 2 runtime work in progress.
+Last updated: 2026-05-22.
 
-This folder contains future runtime plans only. These plans do not change the stable package surface until a real runtime feature exists and passes validation.
+This folder contains runtime plans and implementation notes. A plan changes the stable package surface only after the corresponding runtime path exists and passes validation.
 
 ## Current Build Order
 
@@ -101,9 +101,9 @@ Do not put provider account routing, dashboards, subscription rotation, or multi
 
 ## Next Validation Action
 
-Start with `plans/adaptive-context-runtime/`:
+Current next action:
 
-1. Build a fixture set of real user prompts mapped to ASC rule labels.
-2. Test deterministic rules plus embedding k-nearest-neighbor or SetFit-style classification.
-3. Measure label precision, missed required rules, and extra injected rules.
-4. Only then decide whether PrefixBridge should cache the selected rule packs.
+1. Keep Adaptive Context Runtime as the context-selection foundation.
+2. Validate the `ascx` MVP with `npm run benchmark:ascx`.
+3. Expand ASCX only after `git status` and `npm test` preserve required evidence at 100%.
+4. Defer PrefixBridge until selected context and dynamic output compression are both stable.

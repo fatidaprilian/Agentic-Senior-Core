@@ -11,10 +11,16 @@ This project exposes a command-line API through the `agentic-senior-core` binary
 | `agentic-senior-core init [target-directory]` | Initializes the compact governance surface, state files, optional docs bootstrap prompts, and optional MCP helper files. |
 | `agentic-senior-core upgrade [target-directory]` | Refreshes managed governance assets, preserves user-owned instruction files, updates onboarding state, and can prune stale managed `.agent-context/` files. |
 | `agentic-senior-core context "<request>" [--json] [--request-id <id>] [--file <path>] [--files <paths>]` | Resolves a request into the Adaptive Context manifest with selected labels, rules, prompts, docs, state, file signals, uncertainty, budget status, and fallback status. |
-| `agentic-senior-core optimize [target-directory]` | Enables, disables, or reports token optimization state for an initialized repository. |
+| `agentic-senior-core optimize [install\|off\|status\|doctor] [target-directory]` | Enables, disables, reports, or diagnoses token optimization state for an initialized repository. |
+| `asc optimize status [target-directory]` | Short alias for checking ASCX runtime token saver readiness. |
+| `asc optimize doctor [target-directory]` | Short alias for diagnosing ASCX availability, tee write safety, and double-compression warnings. |
 | `agentic-senior-core rollback [target-directory]` | Restores files from the latest `.agentic-backup/manifest.json`. |
 | `agentic-senior-core mcp` | Starts the local MCP stdio runtime. |
 | `agentic-senior-core --version` | Prints the package version. |
+| `ascx git status` | Executes `git status`, compresses supported status output, preserves exit code and changed-file evidence, and tees raw output when truncation or high-risk compression occurs. |
+| `ascx npm test` | Executes `npm test`, compresses TAP-like test output, preserves exit code, failing test names, assertion/root errors, file paths, and writes raw tee output for failed commands. |
+
+`ascx` is an explicit local command wrapper. Unsupported commands and unsafe shell syntax such as pipes or redirects pass through without compression.
 
 ## Default Generated Surface
 
@@ -41,6 +47,7 @@ Init and upgrade generate or refresh these default instruction surfaces:
 | `npm test` | Runs the Node test suite. |
 | `npm run gate:release` | Runs release-gate and forbidden-content checks. |
 | `npm run benchmark:adaptive-context` | Runs the local Adaptive Context fixture benchmark and emits a selected-context manifest report. |
+| `npm run benchmark:ascx` | Runs the local ASCX Runtime Token Saver fixture benchmark for `git status`, `npm test`, and unsafe passthrough cases. |
 
 ## Compatibility
 

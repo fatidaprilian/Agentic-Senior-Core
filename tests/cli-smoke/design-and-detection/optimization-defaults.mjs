@@ -37,6 +37,12 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       assert.equal(tokenState.selectedAgent, 'copilot');
       assert.ok(Array.isArray(tokenState.commandRewriteMappings));
       assert.ok(tokenState.commandRewriteMappings.length >= 10);
+      assert.ok(tokenState.commandRewriteMappings.some((mapping) => {
+        return mapping.rawCommand === 'git status' && mapping.optimizedCommand === 'ascx git status';
+      }));
+      assert.ok(tokenState.commandRewriteMappings.some((mapping) => {
+        return mapping.rawCommand === 'npm test' && mapping.optimizedCommand === 'ascx npm test';
+      }));
 
       assert.equal(existsSync(join(optimizationTargetDirectory, '.agent-instructions.md')), false);
 
@@ -50,6 +56,23 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       assert.equal(tokenReport.enabled, true);
       assert.equal(tokenReport.selectedAgent, 'copilot');
       assert.ok(typeof tokenReport.externalProxy === 'object');
+
+      const statusOutput = execSync(
+        `node ${cliPath} optimize status ${optimizationTargetDirectory}`
+      ).toString();
+      assert.match(statusOutput, /Runtime token saver status/);
+      assert.match(statusOutput, /initialized: yes/);
+      assert.match(statusOutput, /ascx: found/);
+      assert.match(statusOutput, /tee: writable/);
+      assert.match(statusOutput, /9router: not-checked/);
+
+      const doctorOutput = execSync(
+        `node ${cliPath} optimize doctor ${optimizationTargetDirectory}`
+      ).toString();
+      assert.match(doctorOutput, /ASCX runtime token saver doctor/);
+      assert.match(doctorOutput, /ascx: found/);
+      assert.match(doctorOutput, /tee: writable/);
+      assert.match(doctorOutput, /next_action:/);
     } finally {
       rmSync(optimizationTargetDirectory, { recursive: true, force: true });
     }
@@ -115,6 +138,8 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       );
       assert.equal(defaultTokenState.enabled, true);
       assert.equal(defaultTokenState.outputFoldingStrategy?.mode, 'compact-high-signal-output');
+      assert.ok(defaultTokenState.commandRewriteMappings.some((mapping) => mapping.optimizedCommand === 'ascx git status'));
+      assert.ok(defaultTokenState.commandRewriteMappings.some((mapping) => mapping.optimizedCommand === 'ascx npm test'));
       assert.ok(defaultTokenState.outputFoldingStrategy.preserveAlways.includes('error-message'));
       assert.ok(defaultTokenState.outputFoldingStrategy.safetyBoundary.includes('never hide failing checks'));
 

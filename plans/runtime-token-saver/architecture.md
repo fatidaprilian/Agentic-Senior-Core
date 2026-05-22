@@ -1,7 +1,7 @@
 # Runtime Token Saver Architecture
 
-Status: planned, unshipped.
-Last updated: 2026-05-18.
+Status: MVP implemented locally, pending release.
+Last updated: 2026-05-22.
 
 ## Architecture Summary
 
@@ -27,10 +27,10 @@ Use:
 
 ```bash
 ascx git status
-ascx git diff
-ascx rg "pattern"
 ascx npm test
 ```
+
+`git diff`, `rg`, build output, and TypeScript compiler output remain later adapters.
 
 `asc` remains the product CLI:
 
@@ -67,9 +67,10 @@ Classify each invocation:
 ```text
 compressible
 passthrough
-unsupported
 unsafe-for-compression
 ```
+
+Unsupported commands are passthrough with an unsupported-command reason.
 
 Unsafe examples:
 
@@ -82,15 +83,15 @@ Unsafe examples:
 
 ### 3. Command Adapters
 
-Start with a small whitelist:
+MVP whitelist:
 
 - `git status`
-- `git diff`
-- `git log`
-- `rg`
-- `ls`
-- `tree` when available
 - `npm test`
+
+Later adapters:
+
+- `git diff`
+- `rg`
 - `npm run build`
 - `npm run lint`
 - TypeScript compiler output

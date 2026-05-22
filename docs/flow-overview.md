@@ -22,7 +22,10 @@
 1. Require an initialized repository with an onboarding report.
 2. Write `.agent-context/state/token-optimization.json`.
 3. Write `.agent-context/state/token-optimization-report.json`.
-4. Print the selected agent profile and optional external proxy hook guidance.
+4. Prefer local ASCX wrappers for supported command output compression: `ascx git status` and `ascx npm test`.
+5. Use `asc optimize status` for a non-mutating readiness check.
+6. Use `asc optimize doctor` when tee write safety or double-compression risk needs diagnosis.
+7. Print the selected agent profile and optional external proxy hook guidance for commands outside the ASCX MVP.
 
 ## Validation Flow
 

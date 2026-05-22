@@ -24,6 +24,8 @@ export async function registerCliSmokeFoundationTests(t) {
   await t.test('published package surface includes compact native instruction surface', () => {
     const packageJson = readJson(join(process.cwd(), 'package.json'));
     assert.equal(Array.isArray(packageJson.files), true);
+    assert.equal(packageJson.bin.asc, 'bin/agentic-senior-core.js');
+    assert.equal(packageJson.bin.ascx, 'bin/ascx.js');
     assert.equal(packageJson.files.includes('AGENTS.md'), true);
     assert.equal(packageJson.files.includes('CLAUDE.md'), true);
     assert.equal(packageJson.files.includes('GEMINI.md'), true);
@@ -46,6 +48,9 @@ export async function registerCliSmokeFoundationTests(t) {
     assert.match(output, /--no-memory-continuity/);
     assert.match(output, /context "<request>"/);
     assert.match(output, /--file/);
+    assert.match(output, /ascx git status/);
+    assert.match(output, /asc optimize status/);
+    assert.match(output, /asc optimize doctor/);
 
     assert.match(output, /quality checks \(guardrails\)/i);
     assert.match(output, /frontend-ui/);
@@ -144,6 +149,8 @@ export async function registerCliSmokeFoundationTests(t) {
       const installedAgentsContent = readFileSync(join(existingProjectTargetDirectory, 'AGENTS.md'), 'utf8');
       assert.match(installedAgentsContent, /Runtime signals are evidence gates/i);
       assert.match(installedAgentsContent, /agentic-senior-core context/);
+      assert.match(installedAgentsContent, /ascx git status/);
+      assert.match(installedAgentsContent, /ascx npm test/);
       assert.match(installedAgentsContent, /Structural planning signals are not a hard whitelist/i);
       assert.match(installedAgentsContent, /\.agent-context\/rules\//);
       assert.equal(readFileSync(join(existingProjectTargetDirectory, 'CLAUDE.md'), 'utf8').trim(), '@AGENTS.md');

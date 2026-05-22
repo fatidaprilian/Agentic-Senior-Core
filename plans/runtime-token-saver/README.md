@@ -1,9 +1,9 @@
 # Runtime Token Saver Plan
 
-Status: planned, unshipped.
-Last updated: 2026-05-21.
+Status: MVP implemented locally, pending release.
+Last updated: 2026-05-22.
 
-This folder preserves the product and architecture decisions for the dynamic-output token saver. It is intentionally separate from `README.md` and `CHANGELOG.md` because the current stable release should not be changed until a real runtime feature exists.
+This folder preserves the product and architecture decisions for the dynamic-output token saver. The first local runtime path now exists as the explicit `ascx` wrapper for `git status` and `npm test`.
 
 See `plans/README.md` for the current build order. See also `plans/adaptive-context-runtime/` for context selection and `plans/prefixbridge-cache-runtime/` for the static-prefix cache runtime.
 
@@ -34,7 +34,7 @@ The runtime token saver should focus on coding-agent evidence, not account routi
 
 ## Target Command Surface
 
-Preferred short command names:
+Later short product command names:
 
 ```bash
 asc init
@@ -54,7 +54,16 @@ agentic-senior-core optimize --show
 agentic-senior-core mcp
 ```
 
-The current `optimize --show` behavior is a policy/status view. The future `optimize install` behavior must install or enable runtime compression.
+The current `optimize --show` behavior is a JSON policy view. `asc optimize status` and `asc optimize doctor` now provide human-readable ASCX readiness checks. Full install/off lifecycle behavior remains the later product surface.
+
+Current MVP surface:
+
+```bash
+ascx git status
+ascx npm test
+asc optimize status
+asc optimize doctor
+```
 
 ## Product Positioning
 
@@ -84,12 +93,17 @@ Adaptive Context Runtime should be validated first because it decides which evid
 
 ## Release Rule
 
-Do not update public release messaging for this feature until the runtime path exists and can pass benchmarks.
+Do not expand public release messaging beyond measured local behavior.
 
-Minimum release bar:
+MVP release bar:
 
 1. `ascx` can execute and compress a small whitelist of commands.
 2. Failed commands write raw output to a local tee file.
 3. Summaries preserve command, exit code, file path, line number, and root error.
-4. `asc optimize doctor` detects double-compression risk with RTK or 9Router.
+4. Unsafe shell syntax passes through without compression.
 5. Benchmarks show token reduction without hiding debugging evidence.
+
+Later runtime bar:
+
+1. `asc optimize doctor` can probe optional external runtimes only when the user opts in.
+2. Additional adapters prove their own evidence contracts before entering the whitelist.

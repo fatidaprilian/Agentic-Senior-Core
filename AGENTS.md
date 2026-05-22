@@ -28,7 +28,7 @@ For non-trivial coding, review, planning, or governance work, run `agentic-senio
 Keep it short. Do not load every rule just to fill it out.
 
 ## Command Economy
-Avoid repeated command output. Do not rerun broad inspections unless edits changed the result. Prefer targeted reads, targeted searches, concise diffs, and final validation gates.
+Avoid repeated command output. Do not rerun broad inspections unless edits changed the result. Prefer targeted reads, concise diffs, and `ascx git status` / `ascx npm test` when available; use raw commands for pipes, redirects, or unsupported commands.
 
 ## Layer Index
 ### Layer 1: Rules (21 Files) [SCOPE-RESOLVED]
