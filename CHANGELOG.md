@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.2 - 2026-05-23
+
+### Changed
+- Tightened `AGENTS.md` instruction framing: Default Activation is now a set of strict imperative binary checks (`Always`, `Never`, `Skip only for`); Knowledge Inventory Checklist requires a hard stop if files are unreachable.
+- Cleaned up duplicate skip conditions in the Bootstrap Receipt section and corrected "MCP validation" to "Project validation" in the Definition of Done.
+
 ## 4.2.1 - 2026-05-23
 
 ### Changed

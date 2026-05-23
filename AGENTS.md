@@ -25,10 +25,12 @@ For non-trivial coding, review, planning, or governance work, run `agentic-senio
 - `unreachable_files`: required files that could not be read
 - `validation_plan`: expected checks before completion
 
-Keep it short. Do not load every rule just to fill it out. Skip this receipt and do not run the context command for trivial tasks (e.g., simple version bumps, minor typo fixes, or simple commits).
+Keep it short. Do not load every rule just to fill it out.
 
 ## Default Activation And Command Economy
-At session start, enforce default-on surfaces: run `agentic-senior-core context` for non-trivial work, prefer prefixing noisy commands (like builds, tests, git logs, or searches) with `ascx` to automatically reduce token usage, and apply `compact-natural-mode.md` for final replies. Avoid repeated command output; use raw commands for pipes, redirects, or unsupported commands.
+Before any non-trivial task, run `agentic-senior-core context` and emit the Bootstrap Receipt. Skip only for trivial tasks: version bumps, typo fixes, single-line commits.
+Always prefix noisy shell commands with `ascx`: builds, tests, git diff, git log, rg searches. Use raw commands only for pipes, redirects, or commands not supported by ascx.
+Always read and apply `.agent-context/prompts/compact-natural-mode.md` for every final user-facing reply. Never repeat full command output; reference tee file paths when truncated.
 
 ## Layer Index
 ### Layer 1: Rules (21 Files) [SCOPE-RESOLVED]
@@ -163,11 +165,11 @@ Never claim done without:
 2. PR and architecture checklists considered.
 3. Universal SOP gates satisfied: public and developer root `README.md`; `docs/architecture-decision-record.md`; plus `docs/DESIGN.md` and `docs/design-intent.json` for UI scope.
 4. If `.agent-context/state/active-memory.json` exists and material project progress happened, refresh it while preserving privacy rules and user-owned entries.
-5. MCP validation passed through `npm run validate`.
+5. Project validation passed through `npm run validate`.
 
 ## Knowledge Inventory Checklist
 
-Verify reachability when relevant: Layer 1 Rules, Layer 2 Runtime Decision Signals, Layer 3 Structural Planning Signals, Layer 4 Execution Contracts, Layer 5 Prompts, Layer 6 Governance Modes, Layer 7 State, Layer 8 Policies, Layer 9 Project Context.
+Verify reachability of relevant files in Layer 1 to Layer 9 before generating implementation code. If a required instruction file is missing or unreachable, halt and report the missing dependency.
 
 ## Operating Gates
 
