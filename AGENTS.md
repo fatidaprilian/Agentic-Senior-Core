@@ -29,7 +29,7 @@ Keep it short. Do not load every rule just to fill it out.
 
 ## Default Activation And Command Economy
 Before any non-trivial task, run `agentic-senior-core context` and emit the Bootstrap Receipt. Skip only for trivial tasks: version bumps, typo fixes, single-line commits.
-Always prefix noisy shell commands with `ascx`: builds, tests, git diff, git log, rg searches. Use raw commands only for pipes, redirects, or commands not supported by ascx.
+Always prefix noisy shell commands: `ascx git status`, `ascx git diff`, `ascx npm test`, `ascx rg` searches. Use raw commands only for pipes, redirects, or commands not supported by ascx.
 Always read and apply `.agent-context/prompts/compact-natural-mode.md` for every final user-facing reply. Never repeat full command output; reference tee file paths when truncated.
 
 ## Layer Index
