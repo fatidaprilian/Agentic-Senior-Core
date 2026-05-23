@@ -18,7 +18,7 @@ Write instructions as imperative gates:
 - Add validation when a rule can drift.
 
 ## Bootstrap Receipt
-For non-trivial coding, review, planning, or governance work, run `agentic-senior-core context` first if available, or `npx @ryuenn3123/agentic-senior-core context` when only the package is available, then emit a concise Bootstrap Receipt before implementation output or file edits:
+For non-trivial work, run `agentic-senior-core context "<task_description>"` (or `npx @ryuenn3123/agentic-senior-core context "<task_description>"`) and emit a concise Bootstrap Receipt before implementation output or file edits:
 - `loaded_files`: files actually read
 - `selected_rules`: files selected for this scope and why
 - `skipped_rules`: out-of-scope categories left unloaded
@@ -28,7 +28,7 @@ For non-trivial coding, review, planning, or governance work, run `agentic-senio
 Keep it short. Do not load every rule just to fill it out.
 
 ## Default Activation And Command Economy
-Before any non-trivial task, run `agentic-senior-core context` and emit the Bootstrap Receipt. Skip only for trivial tasks: version bumps, typo fixes, single-line commits.
+Before any non-trivial task, run `agentic-senior-core context "<task_description>"` and emit the Bootstrap Receipt. Skip only for trivial tasks: version bumps, typo fixes, single-line commits.
 Always prefix noisy shell commands: `ascx git status`, `ascx git diff`, `ascx npm test`, `ascx rg` searches. Use raw commands only for pipes, redirects, or commands not supported by ascx.
 Always read and apply `.agent-context/prompts/compact-natural-mode.md` for every final user-facing reply. Never repeat full command output; reference tee file paths when truncated.
 
