@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.3 - 2026-05-23
+
+### Changed
+- Clarified the `context` command instruction in `AGENTS.md` by explicitly including the `"<task_description>"` placeholder to prevent initial execution failures.
+
 ## 4.2.2 - 2026-05-23
 
 ### Changed
