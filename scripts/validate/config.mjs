@@ -281,6 +281,11 @@ export const REQUIRED_UPGRADE_UI_CONTRACT_WARNING_SNIPPETS = [
       'Planned seed on apply: docs/design-intent.json',
       'Upgrade synchronizes governance assets and can seed docs/design-intent.json, but it does not author project-specific docs/DESIGN.md automatically.',
       'detectUiScopeSignals',
+    ],
+  },
+  {
+    path: 'lib/cli/commands/upgrade/design-intent-seed.mjs',
+    snippets: [
       'seed-generated-during-upgrade',
     ],
   },

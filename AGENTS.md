@@ -25,10 +25,10 @@ For non-trivial coding, review, planning, or governance work, run `agentic-senio
 - `unreachable_files`: required files that could not be read
 - `validation_plan`: expected checks before completion
 
-Keep it short. Do not load every rule just to fill it out.
+Keep it short. Do not load every rule just to fill it out. Skip this receipt and do not run the context command for trivial tasks (e.g., simple version bumps, minor typo fixes, or simple commits).
 
-## Command Economy
-Avoid repeated command output. Do not rerun broad inspections unless edits changed the result. Prefer targeted reads, concise diffs, and `ascx git status` / `ascx git diff` / `ascx npm test` when available; use raw commands for pipes, redirects, or unsupported commands.
+## Default Activation And Command Economy
+At session start, enforce default-on surfaces: run `agentic-senior-core context` for non-trivial work, prefer `ascx git status` / `ascx git diff` / `ascx npm test` when available, and apply `compact-natural-mode.md` for final replies. Avoid repeated command output; use raw commands for pipes, redirects, or unsupported commands.
 
 ## Layer Index
 ### Layer 1: Rules (21 Files) [SCOPE-RESOLVED]

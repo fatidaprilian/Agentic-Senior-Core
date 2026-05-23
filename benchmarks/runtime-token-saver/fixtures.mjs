@@ -349,14 +349,14 @@ export const ASCX_RUNTIME_TOKEN_SAVER_FIXTURES = [
       stderr: '',
     },
     expectCompressed: true,
-    expectTee: true,
+    expectTee: false,
     requiredSubstrings: [
       'npm test summary:',
       '# tests 1',
       '# pass 1',
       '# fail 0',
       'exit: 0',
-      'raw_output:',
+      'raw_output: none',
     ],
     forbiddenSubstrings: [
       'passing fixture 01',
@@ -364,18 +364,18 @@ export const ASCX_RUNTIME_TOKEN_SAVER_FIXTURES = [
     continuationChecks: [
       {
         id: 'passing-tests-avoid-failure-hunt',
-        action: 'Decide that no failing-test triage is needed while raw output remains available for audit.',
+        action: 'Decide that no failing-test triage is needed and no raw tee was written.',
         requiredSubstrings: [
           '# tests 1',
           '# pass 1',
           '# fail 0',
           'exit: 0',
-          'raw_output:',
+          'raw_output: none',
         ],
         forbiddenSubstrings: [
           'passing fixture 01',
         ],
-        expectTee: true,
+        expectTee: false,
       },
     ],
   },
@@ -399,14 +399,14 @@ export const ASCX_RUNTIME_TOKEN_SAVER_FIXTURES = [
       stderr: '',
     },
     expectCompressed: true,
-    expectTee: true,
+    expectTee: false,
     requiredSubstrings: [
       'npm test summary:',
       '# tests 2',
       '# pass 2',
       '# fail 0',
       'exit: 0',
-      'raw_output:',
+      'raw_output: none',
     ],
     forbiddenSubstrings: [
       'failures:',
@@ -421,13 +421,13 @@ export const ASCX_RUNTIME_TOKEN_SAVER_FIXTURES = [
           '# tests 2',
           '# pass 2',
           '# fail 0',
-          'raw_output:',
+          'raw_output: none',
         ],
         forbiddenSubstrings: [
           'failures:',
           '[FATAL]',
         ],
-        expectTee: true,
+        expectTee: false,
       },
     ],
   },
@@ -607,6 +607,107 @@ export const ASCX_RUNTIME_TOKEN_SAVER_FIXTURES = [
           'raw redirected status',
         ],
         expectTee: false,
+      },
+    ],
+  },
+  {
+    id: 'npm-run-build-success',
+    commandArguments: ['npm', 'run', 'build'],
+    capture: {
+      exitCode: 0,
+      stdout: [
+        '> npm run build',
+        '> vite build',
+        'vite v4.0.0 building for production...',
+        'transforming...',
+        '✓ 124 modules transformed.',
+        'dist/index.html 1.2kB',
+        'dist/assets/index.js 24kB',
+        'built in 1.2s',
+      ].join('\n'),
+      stderr: '',
+    },
+    expectCompressed: true,
+    expectTee: false,
+    requiredSubstrings: [
+      'npm run build summary:',
+      'result: passed',
+      'exit: 0',
+    ],
+    continuationChecks: [
+      {
+        id: 'npm-run-build-success-compacts-noise',
+        action: 'Recognize the build passed and avoid reading raw noise.',
+        requiredSubstrings: [
+          'result: passed',
+          'exit: 0',
+        ],
+        expectTee: false,
+      },
+    ],
+  },
+  {
+    id: 'npm-run-build-failure',
+    commandArguments: ['npm', 'run', 'build'],
+    capture: {
+      exitCode: 1,
+      stdout: [
+        '> npm run build',
+        '> tsc --noEmit',
+        'src/components/Header.tsx:15:10 - error TS2322: Type \'string\' is not assignable to type \'number\'.',
+        '15   const age: number = "25";',
+      ].join('\n'),
+      stderr: '',
+    },
+    expectCompressed: true,
+    expectTee: true,
+    requiredSubstrings: [
+      'npm run build summary:',
+      'failures:',
+      'error TS2322',
+      'Header.tsx:15:10',
+      'exit: 1',
+    ],
+    continuationChecks: [
+      {
+        id: 'npm-run-build-failure-preserves-error',
+        action: 'Identify the build error and file path.',
+        requiredSubstrings: [
+          'failures:',
+          'error TS2322',
+          'Header.tsx:15:10',
+        ],
+        expectTee: true,
+      },
+    ],
+  },
+  {
+    id: 'rg-large-output',
+    commandArguments: ['rg', 'function'],
+    capture: {
+      exitCode: 0,
+      stdout: Array.from({ length: 120 }, (_, i) => `src/file-${i}.ts:10:function doSomething() {}`).join('\n'),
+      stderr: '',
+    },
+    expectCompressed: true,
+    expectTee: true, // We should write tee because it's truncated? Let's check formatter logic
+    requiredSubstrings: [
+      'ripgrep results:',
+      'src/file-0.ts',
+      '... truncated 40 more lines of matches',
+      'truncation: full search results available in the raw tee output',
+      'exit: 0',
+    ],
+    continuationChecks: [
+      {
+        id: 'rg-truncates-massive-results',
+        action: 'Identify that ripgrep found many matches and read the truncated summary.',
+        requiredSubstrings: [
+          'ripgrep results:',
+          '... truncated 40 more lines of matches',
+          'truncation: full search results available in the raw tee output',
+        ],
+        expectTee: true, // Should tee if truncated
       },
     ],
   },

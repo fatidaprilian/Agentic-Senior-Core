@@ -5,8 +5,10 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { evaluateAscxFixtures } from '../lib/cli/ascx/fixture-evaluator.mjs';
+import { HIGH_RISK_REDUCTION_PERCENT, shouldWriteSafetyTee } from '../lib/cli/ascx/formatter.mjs';
 import { classifyAscxInvocation, parseAscxCommand } from '../lib/cli/ascx/lexer.mjs';
 import { runAscx } from '../lib/cli/ascx/runtime.mjs';
+import { MAX_TEE_FILES, writeRawTeeFile } from '../lib/cli/ascx/tee-writer.mjs';
 import { ASCX_RUNTIME_TOKEN_SAVER_FIXTURES } from '../benchmarks/runtime-token-saver/fixtures.mjs';
 
 function createTempDirectory() {
@@ -80,7 +82,7 @@ test('ascx writes raw tee for failing compressed command and preserves exit code
 });
 
 test('ascx passthrough leaves unsupported commands uncompressed', async () => {
-  const result = await runAscx(['rg', 'TODO'], {
+  const result = await runAscx(['grep', 'TODO'], {
     async executeCommand() {
       return {
         exitCode: 0,
@@ -116,4 +118,102 @@ test('ascx keeps environment-prefixed commands in passthrough mode', async () =>
   assert.deepEqual(result.parsedCommand.environment, ['ASCX_ENV_PREFIX_TEST=ok']);
   assert.equal(result.stdout, 'ok');
   assert.equal(result.compressed, false);
+});
+
+test('ascx skips tee for confident adapter with high reduction on exit 0', () => {
+  const confident = shouldWriteSafetyTee({
+    adapterResult: { confident: true, truncated: false },
+    exitCode: 0,
+    reductionPercent: HIGH_RISK_REDUCTION_PERCENT + 10,
+  });
+  const notConfident = shouldWriteSafetyTee({
+    adapterResult: { confident: false, truncated: false },
+    exitCode: 0,
+    reductionPercent: HIGH_RISK_REDUCTION_PERCENT + 10,
+  });
+  const undefinedConfidence = shouldWriteSafetyTee({
+    adapterResult: { truncated: false },
+    exitCode: 0,
+    reductionPercent: HIGH_RISK_REDUCTION_PERCENT + 10,
+  });
+  const failingConfident = shouldWriteSafetyTee({
+    adapterResult: { confident: true, truncated: false },
+    exitCode: 1,
+    reductionPercent: 10,
+  });
+  const truncated = shouldWriteSafetyTee({
+    adapterResult: { confident: true, truncated: true },
+    exitCode: 0,
+    reductionPercent: 10,
+  });
+
+  assert.equal(confident, false, 'confident exit-0 must not trigger tee');
+  assert.equal(notConfident, true, 'not confident must trigger tee');
+  assert.equal(undefinedConfidence, true, 'undefined confidence with high reduction must trigger tee');
+  assert.equal(failingConfident, true, 'exit !== 0 must always trigger tee');
+  assert.equal(truncated, true, 'truncated must always trigger tee');
+});
+
+test('ascx tee sweep caps files at MAX_TEE_FILES', async () => {
+  const tempDirectoryPath = createTempDirectory();
+  const teeDirectoryPath = path.join(tempDirectoryPath, 'tee');
+
+  try {
+    const totalFiles = MAX_TEE_FILES + 5;
+
+    for (let i = 0; i < totalFiles; i++) {
+      const sequenceNumber = String(i).padStart(3, '0');
+      await writeRawTeeFile({
+        commandText: `test-sweep-${sequenceNumber}`,
+        cwd: tempDirectoryPath,
+        exitCode: 0,
+        rawOutput: `output ${sequenceNumber}`,
+        teeDirectoryPath,
+      });
+    }
+
+    const remaining = fs.readdirSync(teeDirectoryPath).filter((name) => name.endsWith('.log'));
+    assert.equal(remaining.length, MAX_TEE_FILES);
+
+    const oldestSurvivor = remaining.sort()[0];
+    assert.ok(
+      !oldestSurvivor.includes('test-sweep-000'),
+      'oldest files should have been swept',
+    );
+  } finally {
+    fs.rmSync(tempDirectoryPath, { recursive: true, force: true });
+  }
+});
+
+test('ascx does not write tee for confident passing npm test', async () => {
+  const tempDirectoryPath = createTempDirectory();
+
+  try {
+    const result = await runAscx(['npm', 'test'], {
+      cwd: tempDirectoryPath,
+      teeDirectoryPath: path.join(tempDirectoryPath, 'tee'),
+      async executeCommand() {
+        return {
+          exitCode: 0,
+          stdout: [
+            'TAP version 13',
+            '# Subtest: example passes',
+            'ok 1 - example passes',
+            '# tests 1',
+            '# pass 1',
+            '# fail 0',
+            '# duration_ms 5.2',
+          ].join('\n'),
+          stderr: '',
+        };
+      },
+    });
+
+    assert.equal(result.exitCode, 0);
+    assert.equal(result.compressed, true);
+    assert.equal(result.rawTeePath, null, 'confident pass must not produce tee file');
+    assert.match(result.stdout, /raw_output: none/);
+  } finally {
+    fs.rmSync(tempDirectoryPath, { recursive: true, force: true });
+  }
 });

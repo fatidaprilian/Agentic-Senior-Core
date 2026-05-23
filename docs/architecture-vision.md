@@ -18,9 +18,9 @@ These five layers are file-backed and resolve to concrete content at runtime.
 
 | Layer | Path | What it does today |
 |-------|------|--------------------|
-| `rules` | `.agent-context/rules/` | 15 rule files; loaded on-demand per AGENTS.md routing. |
-| `prompts` | `.agent-context/prompts/` | 4 trigger-mode prompts (`init-project`, `bootstrap-design`, `refactor`, `review-code`). |
-| `state` | `.agent-context/state/` | Active-memory snapshot, dependency map, architecture map, benchmark history. |
+| `rules` | `.agent-context/rules/` | 21 rule files; loaded on-demand per AGENTS.md routing. |
+| `prompts` | `.agent-context/prompts/` | 6 prompts (`init-project`, `research-design`, `bootstrap-design`, `refactor`, `review-code`, `compact-natural-mode`). |
+| `state` | `.agent-context/state/` | Tracked seed/config files plus local-only generated reports when rerun. |
 | `policies` | `.agent-context/policies/` | LLM-judge thresholds and profile selection. |
 | `project-context` | `docs/` | Project docs (`project-brief`, `architecture-decision-record`, `flow-overview`, etc.). Lazy-loaded when the agent needs them. |
 
@@ -82,5 +82,5 @@ Two reasons:
 - `mcp.json` — single source of truth for layer status fields.
 - `docs/architecture/decisions-foundation.md` — empirical foundation for the v4 decisions that drove the planned phases.
 - `docs/architecture/format-spec.md` — canonical rule-file format used by the migration helper and the citation contract.
-- `docs/archive/phase-2-outcome.md`, `docs/archive/phase-3-outcome.md`, `docs/archive/phase-5-hardening.md`, `docs/archive/phase-5-outcome.md` — historical operational record.
+- `docs/archive/HISTORY.md` - consolidated historical operational record.
 - `AGENTS.md` — current rules-pack routing table that consumes the implemented layers today.

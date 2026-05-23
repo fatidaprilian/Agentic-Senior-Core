@@ -31,7 +31,6 @@ The fifteen v4 rule files plus the six added in 4.1.0 live under `.agent-context
 
 - `docs/archive/HISTORY.md`: consolidated record of phase outcomes, archived playbooks, retired roadmap, and dated audit snapshots; do not treat as live decisions.
 - `docs/archive/CHANGELOG-archive.md`: pre-v3 release history.
-- `docs/archive/migrations/`: one-shot v3-to-v4 migration tooling kept for reference; not on any active code path.
 
 ## Conditional Docs
 

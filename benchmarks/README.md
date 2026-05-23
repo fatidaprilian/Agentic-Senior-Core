@@ -1,40 +1,60 @@
 # Benchmarks
 
-Reproducible measurement suites untuk repo ini. Setiap release publish hasil benchmark di `benchmarks/results/{name}-{date}.json` supaya klaim bisa diverifikasi.
+Reproducible measurement suites for this repository. Release-facing claims must point to tracked JSON evidence under `benchmarks/results/` or to deterministic benchmark commands that print machine-readable output.
 
 ## Folder Structure
 
-```
+```text
 benchmarks/
-├── token-usage/        Token measurement per provider untuk rules pack delivery
-├── results/            Output JSON yang dipublish per release (tracked di git)
-└── README.md
+|-- anti-halu/              Provider-free anti-hallucination fixtures and scorer
+|-- compact-natural-mode/   Response compression fixtures and scorer
+|-- runtime-token-saver/    ASCX command-output compression fixtures
+|-- token-usage/            Provider token-counting and cache simulation benchmark
+|-- results/                Tracked release evidence JSON
+`-- README.md
 ```
 
 ## Active Benchmarks
 
 | Suite | Folder | Status | Output |
-|-------|--------|--------|--------|
-| Token usage baseline | `token-usage/` | Phase 0 (in progress) | `results/baseline-{YYYY-MM-DD}.json` |
+| --- | --- | --- | --- |
+| Token usage baseline | `token-usage/` | Historical release evidence | `results/baseline-{YYYY-MM-DD}.json` |
+| Cache simulation | `token-usage/` | Historical release evidence | `results/cache-phase-2-{YYYY-MM-DD}.json` |
+| Anti-halu benchmark | `anti-halu/` | Active deterministic gate | `results/anti-halu-phase-3-{YYYY-MM-DD}.json` |
+| ASCX runtime token saver | `runtime-token-saver/` | Active deterministic gate | stdout via `npm run benchmark:ascx` |
+| Compact Natural Mode | `compact-natural-mode/` | Active deterministic gate | stdout via `npm run benchmark:compact-natural` |
+| Release benchmark bundle | `results/` | Active integrity gate | `results/release-bundle-{semver}.json` |
 
 ## Running Benchmarks
 
-Setiap suite punya README sendiri di sub-folder. Lihat `token-usage/README.md` untuk instruksi spesifik.
+Use the package scripts for active gates:
+
+```bash
+npm run benchmark:adaptive-context
+npm run benchmark:ascx
+npm run benchmark:compact-natural
+npm run benchmark:anti-halu
+npm run build:release-bundle
+npm run audit:release-bundle
+```
+
+See `benchmarks/token-usage/README.md` for the provider token-counting benchmark details.
 
 ## Reproducibility Requirements
 
-1. Node version: lihat `package.json#engines` (jika ada) atau gunakan Node 22 LTS minimum.
-2. Tidak boleh tambah dependency runtime ke core (`package.json#dependencies`). Benchmark hanya boleh pakai `devDependencies`.
-3. Output JSON harus deterministic — jika ada nilai yang berubah antar run (timestamp, host info), pisahkan ke field metadata terpisah.
-4. Setiap result file harus include schema version + timestamp + tooling version supaya hasil lama tetap interpretable.
+1. Use Node 22 or the runtime version documented by the current package metadata.
+2. Do not add runtime dependencies to the core package for benchmark-only work. Benchmark tooling belongs in `devDependencies`.
+3. Keep JSON output deterministic where possible. If timestamps or host facts vary, isolate them in metadata fields.
+4. Include schema version, timestamp, and tooling version when a result file is tracked so older evidence remains interpretable.
 
 ## Result Files Convention
 
-- Tracked di git (`benchmarks/results/*.json` whitelisted di `.gitignore`).
-- Naming: `{suite-name}-{YYYY-MM-DD}.json` atau `{suite-name}-{semver}.json`.
-- Tidak boleh berisi raw API response yang bisa expose secrets atau data user.
-- Latest baseline per suite is referenced from `docs/archive/phase-2-outcome.md` and the live decision authority in `docs/architecture/decisions-foundation.md`.
+- Track release evidence under `benchmarks/results/*.json`.
+- Use `{suite-name}-{YYYY-MM-DD}.json` or `{suite-name}-{semver}.json`.
+- Do not store raw API responses, secrets, tokens, or user data.
+- Historical phase outcomes are consolidated in `docs/archive/HISTORY.md`.
+- Live benchmark reporting rules are in `docs/benchmark-reference.md`.
 
 ## Why This Exists
 
-Klaim seperti "hemat 40% token" atau "rule adherence +14pt" tanpa data reproducible = marketing. Suite di folder ini = comparator wajib untuk setiap claim di README atau release notes.
+Claims such as "40% token saving" or "rule adherence improved" need reproducible evidence. These suites are the comparator surface for README, changelog, release, and planning claims.

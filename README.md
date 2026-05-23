@@ -68,7 +68,7 @@ A coding agent that has read every framework tutorial still ships junior-grade w
 ### How It Works
 
 1. Agent reads `AGENTS.md` at the start of each session.
-2. `AGENTS.md` instructs the agent to run the Adaptive Context resolver, which selects only the rules, prompts, and docs relevant to the current task.
+2. `AGENTS.md` activates the default triad: Adaptive Context for scoped rule selection, ASCX wrappers for supported noisy commands, and Compact Natural Mode for final replies.
 3. For shell commands, the agent uses `ascx` wrappers that compress noisy output while preserving debugging evidence (exit codes, file paths, line numbers, root errors, truncation markers, and raw tee paths).
 4. For final replies, the agent applies `.agent-context/prompts/compact-natural-mode.md` so answers stay concise without losing commands, paths, errors, assumptions, validation status, risks, or next actions.
 5. Detailed rules live under `.agent-context/rules/` and load by scope: 21 rule files covering architecture, security, performance, testing, database, API, frontend, Docker, observability, resilience, migrations, background jobs, configuration, and versioning.

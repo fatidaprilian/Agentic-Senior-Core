@@ -47,8 +47,8 @@ We bundle Model Context Protocol capabilities with a local stdio runtime (`scrip
 - Severity values are normalized to `critical|high|medium|low` for consistent behavior in GitHub Actions and GitLab CI parsing.
 
 ## Frontend Usability Gate (V1.7)
-- Frontend governance release adds `.agent-context/review-checklists/frontend-usability.md` as the release quality baseline.
-- `scripts/frontend-usability-audit.mjs` validates required frontend execution assets and outputs a machine-readable audit report.
+- Frontend governance now routes through `.agent-context/rules/frontend-architecture.md`, `.agent-context/prompts/bootstrap-design.md`, `.agent-context/review-checklists/pr-checklist.md`, and `.agent-context/review-checklists/architecture-review.md`.
+- `scripts/frontend-usability-audit.mjs` validates the current frontend governance assets and archived execution evidence, then outputs a machine-readable audit report.
 - `.github/workflows/frontend-usability-gate.yml` runs the audit and publishes report artifacts per workflow run.
 
 ## Release Operations and Compliance (V1.8)

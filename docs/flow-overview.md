@@ -5,7 +5,7 @@
 1. Resolve the target directory and run preflight checks.
 2. Detect whether the target is a fresh or existing project.
 3. Copy the compact governance surface: `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.agent-context/`.
-4. Write policy, memory continuity, default token optimization, Compact Natural response-compression metadata, and onboarding state when enabled.
+4. Write policy, memory continuity, default token optimization, Compact Natural response-compression metadata, onboarding state, and local `.gitignore` entries for generated ASCX runtime artifacts when enabled.
 5. Scaffold project documentation prompts or seed docs only when the selected scope requires them.
 6. Report the selected profile, runtime evidence status, architecture decision status, and validation guidance.
 
@@ -13,9 +13,10 @@
 
 1. Detect the current project and managed governance surface.
 2. Preview stale managed files, UI contract gaps, and onboarding state.
-3. Back up relevant files under `.agentic-backup/` and ensure the backup folder is ignored.
+3. Back up relevant files under `.agentic-backup/` and ensure backup plus ASCX runtime artifact paths are ignored.
 4. Refresh the compact governance surface, including Compact Natural Mode, and preserve user-owned instruction entrypoints.
-5. Rewrite policy and onboarding state with `operationMode: upgrade`.
+5. Backfill missing default token optimization state unless the existing onboarding report explicitly opted out.
+6. Rewrite policy and onboarding state with `operationMode: upgrade`.
 
 ## Optimize Flow
 

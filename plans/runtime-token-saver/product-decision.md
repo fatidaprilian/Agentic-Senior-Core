@@ -1,25 +1,25 @@
 # Product Decision: Runtime Token Saver
 
-Status: planned, unshipped.
-Last updated: 2026-05-21.
+Status: ASCX MVP implemented locally; broader install/off lifecycle remains planned.
+Last updated: 2026-05-23.
 
 ## Current State
 
-The current token optimization feature is mostly guidance:
+The original token optimization feature was mostly guidance:
 
 - It can write token optimization state.
 - It can tell agents to prefer compact commands.
 - It can detect external tools when present.
-- It cannot guarantee that a coding agent actually follows the guidance.
-- It cannot compress raw command output unless the runtime path is controlled by another tool.
+- It could not guarantee that a coding agent actually followed the guidance.
+- It could not compress raw command output unless the runtime path was controlled by another tool.
 
-That is useful, but it is not a real runtime token saver yet.
+The first runtime path now exists as the explicit `ascx` wrapper. It compresses only the measured MVP command set: `git status`, `git diff`, and `npm test`. Unknown commands and unsafe shell syntax still pass through without compression.
 
 ## Decision
 
-Freeze the current stable surface. Do not ship another token optimization update until Agentic-Senior-Core can provide a real runtime token saver.
+Keep the runtime surface conservative. Do not expand ASCX beyond the measured command whitelist until each adapter has fixtures, evidence-preservation checks, and continuation checks.
 
-Build an ASC-native runtime token saver after the Adaptive Context Runtime validation spike.
+Keep `asc optimize status` and `asc optimize doctor` as readiness surfaces. The full `asc optimize install` and `asc optimize off` lifecycle remains planned.
 
 The product should become:
 
@@ -44,7 +44,7 @@ Compress less blindly. Preserve the evidence that matters.
 
 ## Differentiator
 
-ASC Token Saver should be evidence-preserving:
+ASCX Token Saver should stay evidence-preserving:
 
 - Preserve failing command.
 - Preserve exit code.
@@ -94,7 +94,7 @@ If ASC runtime saver is active, warn about RTK or 9Router Token Saver.
 
 ## Product Modes
 
-Planned modes:
+Product modes:
 
 ```text
 policy-only
@@ -106,7 +106,7 @@ conflict-risk
 
 Meanings:
 
-- `policy-only`: current stable behavior; guidance exists but no runtime wrapper is active.
+- `policy-only`: guidance exists but no runtime wrapper is active.
 - `runtime-on`: ASC wrapper is available and configured.
 - `runtime-off`: ASC runtime saver is intentionally disabled.
 - `external-runtime-detected`: RTK or 9Router appears active.
@@ -114,10 +114,10 @@ Meanings:
 
 ## User-Facing Rule
 
-The next release should be easy to explain:
+The product should stay easy to explain:
 
 ```text
 Run asc init for governance.
-Run asc optimize install for real runtime token saving.
+Run ascx for explicit evidence-preserving command compression.
 Run asc optimize doctor if you use RTK, 9Router, Cursor, Claude Code, Codex, or another agent runtime.
 ```

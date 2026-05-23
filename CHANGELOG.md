@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.1 - 2026-05-23
+
+### Changed
+- Made init and upgrade write explicit `.gitignore` entries for generated ASCX runtime artifacts and clarified the default Adaptive Context, ASCX, and Compact Natural activation cues.
+- Upgrade now backfills missing default token optimization state for older initialized repositories while preserving an existing token-optimization opt-out.
+- Refreshed repository-health documentation so benchmark references, CLI contract docs, and runtime token-saver plans match the current ASCX and Compact Natural Mode surface.
+- Updated the repo-local onboarding report version to the current package version.
+
+### Removed
+- Removed empty `.gitkeep` placeholders from benchmark directories that now contain tracked files.
+- Removed archived v3-to-v4 migration helper files whose own archive README marked them as historical-only and not runnable in place.
+
 ## 4.2.0 - 2026-05-22
 
 ### Added

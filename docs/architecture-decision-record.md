@@ -9,7 +9,7 @@ Accepted - 2026-05-07
 - The repository prioritizes deterministic governance checks and cross-platform compatibility.
 
 ## Decision
-- Keep the core runtime as a Node.js ESM CLI with a single bin entry in package metadata.
+- Keep the core runtime as a Node.js ESM CLI with explicit command-line bins for the main CLI (`agentic-senior-core`/`asc`) and the ASCX wrapper (`ascx`).
 - Store governance assets under `.agent-context/` and expose thin adapters at the repo root for external tooling.
 - Use repo-local scripts for validation and release gates to keep enforcement deterministic and consistent.
 - Require `docs/doc-index.md` as the compact routing map whenever generated project docs exist. Keep PRD, SRS, technical-design, and separate ERD files conditional so docs stay useful without becoming template sprawl.

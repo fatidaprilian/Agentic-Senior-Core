@@ -368,6 +368,7 @@ export async function registerCliSmokeFoundationTests(t) {
       assert.match(upgradeOutput, /Upgrade preview/);
       assert.match(upgradeOutput, /Running managed guidance upgrade for an existing repository\./);
       assert.match(upgradeOutput, /CI\/CD quality checks \(guardrails\): enabled/);
+      assert.match(upgradeOutput, /Default activation cues: Adaptive Context bootstrap, ASCX wrappers, Compact Natural replies/);
       assert.match(upgradeOutput, /Dry run enabled/);
     } finally {
       rmSync(upgradeTargetDirectory, { recursive: true, force: true });
@@ -418,7 +419,7 @@ export async function registerCliSmokeFoundationTests(t) {
     }
   });
 
-  await t.test('upgrade ensures local backup artifacts are ignored', () => {
+  await t.test('upgrade ensures local runtime artifacts are ignored and backfills token state', () => {
     const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-backup-ignore-'));
 
     try {
@@ -427,13 +428,58 @@ export async function registerCliSmokeFoundationTests(t) {
       ).toString();
 
       writeFileSync(join(upgradeTargetDirectory, '.gitignore'), 'node_modules/\n');
+      rmSync(join(upgradeTargetDirectory, '.agent-context', 'state', 'token-optimization.json'), { force: true });
 
       const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
       assert.match(upgradeOutput, /Local backup artifacts ignored in \.gitignore \(\.agentic-backup\/\)\./);
+      assert.match(upgradeOutput, /Local runtime artifacts ignored in \.gitignore/);
+      assert.match(upgradeOutput, /\.agent-context\/state\/token-optimization\.json \(seed\)/);
 
       const gitignoreContent = readFileSync(join(upgradeTargetDirectory, '.gitignore'), 'utf8');
       assert.match(gitignoreContent, /^\.agentic-backup\/$/m);
+      assert.match(gitignoreContent, /^\.agent-context\/state\/token-saver\/$/m);
+      assert.match(gitignoreContent, /^\.agent-context\/state\/token-optimization-report\.json$/m);
       assert.equal((gitignoreContent.match(/\.agentic-backup\//g) || []).length, 1);
+
+      const tokenOptimizationState = readJson(
+        join(upgradeTargetDirectory, '.agent-context', 'state', 'token-optimization.json')
+      );
+      assert.equal(tokenOptimizationState.enabled, true);
+      assert.ok(tokenOptimizationState.commandRewriteMappings.some((mapping) => {
+        return mapping.optimizedCommand === 'ascx npm test';
+      }));
+
+      const onboardingReport = readJson(
+        join(upgradeTargetDirectory, '.agent-context', 'state', 'onboarding-report.json')
+      );
+      assert.equal(onboardingReport.tokenOptimization?.enabled, true);
+    } finally {
+      rmSync(upgradeTargetDirectory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('upgrade preserves token optimization opt-out while ignoring runtime artifacts', () => {
+    const upgradeTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-upgrade-token-optout-'));
+
+    try {
+      execSync(
+        `node ${cliPath} init ${upgradeTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --no-token-optimize`
+      ).toString();
+
+      writeFileSync(join(upgradeTargetDirectory, '.gitignore'), 'node_modules/\n');
+
+      const upgradeOutput = execSync(`node ${cliPath} upgrade ${upgradeTargetDirectory} --yes`).toString();
+      assert.match(upgradeOutput, /Token optimization policy: disabled \(preserved opt-out\)/);
+      assert.equal(existsSync(join(upgradeTargetDirectory, '.agent-context', 'state', 'token-optimization.json')), false);
+
+      const gitignoreContent = readFileSync(join(upgradeTargetDirectory, '.gitignore'), 'utf8');
+      assert.match(gitignoreContent, /^\.agent-context\/state\/token-saver\/$/m);
+      assert.match(gitignoreContent, /^\.agent-context\/state\/token-optimization-report\.json$/m);
+
+      const onboardingReport = readJson(
+        join(upgradeTargetDirectory, '.agent-context', 'state', 'onboarding-report.json')
+      );
+      assert.equal(onboardingReport.tokenOptimization?.enabled, false);
     } finally {
       rmSync(upgradeTargetDirectory, { recursive: true, force: true });
     }

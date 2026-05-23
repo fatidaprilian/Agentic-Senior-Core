@@ -6,6 +6,7 @@ import {
   join,
   mkdirSync,
   mkdtempSync,
+  readFileSync,
   readJson,
   rmSync,
   tmpdir,
@@ -120,6 +121,7 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
 
       assert.match(defaultInitOutput, /Project memory continuity metadata enabled/);
       assert.match(defaultInitOutput, /Token optimization policy enabled for agent/);
+      assert.match(defaultInitOutput, /Default activation cues: Adaptive Context bootstrap, ASCX command wrappers, Compact Natural final replies/);
       assert.match(defaultInitOutput, /Default response mode: Compact Natural Mode enabled/);
 
       const defaultMemoryState = readJson(
@@ -147,6 +149,10 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       assert.ok(defaultTokenState.commandRewriteMappings.some((mapping) => mapping.optimizedCommand === 'ascx npm test'));
       assert.ok(defaultTokenState.outputFoldingStrategy.preserveAlways.includes('error-message'));
       assert.ok(defaultTokenState.outputFoldingStrategy.safetyBoundary.includes('never hide failing checks'));
+
+      const defaultGitignoreContent = readFileSync(join(defaultOptimizationTargetDirectory, '.gitignore'), 'utf8');
+      assert.match(defaultGitignoreContent, /^\.agent-context\/state\/token-saver\/$/m);
+      assert.match(defaultGitignoreContent, /^\.agent-context\/state\/token-optimization-report\.json$/m);
 
       assert.equal(existsSync(join(defaultOptimizationTargetDirectory, '.agent-instructions.md')), false);
 
@@ -192,6 +198,10 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
         'token-optimization.json'
       );
       assert.equal(existsSync(optOutTokenStatePath), false);
+
+      const optOutGitignoreContent = readFileSync(join(optOutOptimizationTargetDirectory, '.gitignore'), 'utf8');
+      assert.match(optOutGitignoreContent, /^\.agent-context\/state\/token-saver\/$/m);
+      assert.match(optOutGitignoreContent, /^\.agent-context\/state\/token-optimization-report\.json$/m);
 
       assert.equal(existsSync(join(optOutOptimizationTargetDirectory, '.agent-instructions.md')), false);
 

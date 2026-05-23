@@ -1,7 +1,7 @@
 # Agentic-Senior-Core Roadmap Backlog
 
 Date: 2026-04-30
-Current Version: 4.0.3
+Current Version: 4.2.1
 Status: Phase 10 instruction-footprint simplification, Phase 11 cleanup/refactor audit, and Phase 12 post-release hygiene cleanup are complete.
 
 ---
@@ -227,7 +227,7 @@ Immediate cleanup candidates:
 - [x] Delete tracked `input.txt`.
   - Reason: it is throwaway CLI input (`1`, `4`, `1`, `1`, `Testing`) with no repo references.
 - [x] Keep ignored local artifacts out of package tarballs.
-  - Reason: `npm pack --dry-run` currently includes ignored `.agent-context/state/active-memory.json` and `.agent-context/state/v3-purge-audit.json` when they exist locally because the package ships the whole `.agent-context/` tree.
+  - Reason: older package metadata could include ignored `.agent-context/state/active-memory.json` and other generated state when those files existed locally.
   - Result: `package.json` now allowlists stable `.agent-context/` subtrees and required state seeds instead of shipping the whole directory.
 - [x] Decide whether `test_output.txt`, `.benchmarks/`, `.agentic-backup/`, and local `active-memory.json` need a documented cleanup command.
   - Reason: they are ignored and not tracked, but they make the root look noisy during local work.

@@ -148,9 +148,7 @@ export function buildReleaseBenchmarkBundle(options = {}) {
       research_foundation: 'docs/architecture/decisions-foundation.md',
       d4_caching_scope_matrix: 'docs/architecture/decisions-foundation.md#d4',
       caching_reporting_format: 'docs/benchmark-reference.md',
-      phase_2_outcome: 'docs/archive/phase-2-outcome.md',
-      phase_3_outcome: 'docs/archive/phase-3-outcome.md',
-      phase_5_plan: 'docs/archive/phase-5-hardening.md',
+      historical_record: 'docs/archive/HISTORY.md',
     },
     integrity: {
       hash_algorithm: 'SHA-256',

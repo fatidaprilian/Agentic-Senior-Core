@@ -25,6 +25,8 @@ const LOCAL_ARTIFACT_PATHS = [
   '.agent-context/state/docs-quality-drift-report.json',
   '.agent-context/state/memory-continuity-benchmark.json',
   '.agent-context/state/quality-trend-report.json',
+  '.agent-context/state/token-saver',
+  '.agent-context/state/token-optimization-report.json',
   '.agent-context/state/token-optimization-benchmark.json',
   '.agent-context/state/weekly-governance-report.json',
 ];
