@@ -46,16 +46,14 @@ Preview changes with `--dry-run`, then apply with `--yes`. Upgrade prunes obsole
 | `agentic-senior-core init` | Initialize the compact project guidance pack and native agent entrypoints |
 | `agentic-senior-core upgrade --dry-run` | Preview managed-surface upgrades |
 | `agentic-senior-core context "<request>" --json --file src/app/page.tsx` | Resolve request labels, rules, prompts, docs, file signals, budget status, and fallback status |
-| `ascx git status` | Run `git status` through the local evidence-preserving output wrapper |
-| `ascx git diff` | Run `git diff` through the local evidence-preserving diff summary wrapper |
-| `ascx npm test` | Run `npm test` through the local evidence-preserving output wrapper |
+| `ascx <command>` | Run a command through the local evidence-preserving output wrapper (safely falls back to passthrough if unsupported) |
 | `asc optimize status` | Check ASCX runtime token saver readiness |
 | `asc optimize doctor` | Diagnose ASCX availability, tee write safety, and compression conflicts |
 | `agentic-senior-core optimize --show` | Show token optimization state |
 | `agentic-senior-core mcp` | Start local MCP stdio runtime |
 | `npm run clean:local` | Remove ignored local reports, backups, benchmarks, and active-memory state |
 
-`ascx` currently compresses only `git status`, `git diff`, and `npm test`. Other commands, pipes, redirects, and unsupported shell shapes pass through without compression. Compressed output includes a structured footer with command, exit code, filter name, estimated token reduction, and a raw tee path when safety requires it.
+`ascx` dynamically compresses supported commands with noisy output (e.g., builds, tests, searches, and git logs). Other commands, pipes, redirects, and unsupported shell shapes safely pass through without compression. Compressed output includes a structured footer with command, exit code, filter name, estimated token reduction, and a raw tee path when safety requires it.
 
 `asc` is a short alias for the main `agentic-senior-core` CLI. The doctor does not probe localhost services in this phase; `9router` status remains `not-checked`.
 

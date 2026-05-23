@@ -28,7 +28,7 @@ For non-trivial coding, review, planning, or governance work, run `agentic-senio
 Keep it short. Do not load every rule just to fill it out. Skip this receipt and do not run the context command for trivial tasks (e.g., simple version bumps, minor typo fixes, or simple commits).
 
 ## Default Activation And Command Economy
-At session start, enforce default-on surfaces: run `agentic-senior-core context` for non-trivial work, prefer `ascx git status` / `ascx git diff` / `ascx npm test` when available, and apply `compact-natural-mode.md` for final replies. Avoid repeated command output; use raw commands for pipes, redirects, or unsupported commands.
+At session start, enforce default-on surfaces: run `agentic-senior-core context` for non-trivial work, prefer prefixing noisy commands (like builds, tests, git logs, or searches) with `ascx` to automatically reduce token usage, and apply `compact-natural-mode.md` for final replies. Avoid repeated command output; use raw commands for pipes, redirects, or unsupported commands.
 
 ## Layer Index
 ### Layer 1: Rules (21 Files) [SCOPE-RESOLVED]
