@@ -26,6 +26,7 @@ Options:
 - Add `--mcp-template` to generate VS Code MCP workspace config.
 - Default init keeps MCP files opt-in.
 - Add `--no-token-optimize` only when you do not want ASCX command guidance enabled.
+- Add `--local-only` to ignore instructions (AGENTS.md, .agent-context/, and bridges) in .gitignore so they are not pushed to GitHub.
 - Local backup snapshots are written under `.agentic-backup/` and excluded from version control.
 
 ## Upgrade

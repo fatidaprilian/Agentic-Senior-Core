@@ -707,4 +707,31 @@ export async function registerCliSmokeFoundationTests(t) {
       rmSync(scaffoldingTargetDirectory, { recursive: true, force: true });
     }
   });
+
+  await t.test('init ignores AI governance files when --local-only is passed', () => {
+    const localOnlyTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-local-only-'));
+
+    try {
+      const initOutput = execSync(
+        `node ${cliPath} init ${localOnlyTargetDirectory} --profile balanced --stack typescript --blueprint api-nextjs --ci true --local-only --no-token-optimize`
+      ).toString();
+
+      assert.match(initOutput, /AI governance files ignored in \.gitignore/);
+
+      const gitignoreContent = readFileSync(join(localOnlyTargetDirectory, '.gitignore'), 'utf8');
+      assert.match(gitignoreContent, /# agentic-senior-core: local-only governance files/);
+      assert.match(gitignoreContent, /^\.agent-context\/$/m);
+      assert.match(gitignoreContent, /^AGENTS\.md$/m);
+      assert.match(gitignoreContent, /^CLAUDE\.md$/m);
+      assert.match(gitignoreContent, /^GEMINI\.md$/m);
+      assert.match(gitignoreContent, /^mcp\.json$/m);
+
+      const onboardingReport = readJson(
+        join(localOnlyTargetDirectory, '.agent-context', 'state', 'onboarding-report.json')
+      );
+      assert.equal(onboardingReport.localOnly, true);
+    } finally {
+      rmSync(localOnlyTargetDirectory, { recursive: true, force: true });
+    }
+  });
 }

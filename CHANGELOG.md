@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.4 - 2026-05-23
+
+### Added
+- Added option to keep AI instructions and governance files local-only. Appends `.agent-context/`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `mcp.json` to `.gitignore` to prevent pushing to GitHub. Supported via `--local-only` flag and interactive setup interview prompt.
+
 ## 4.2.3 - 2026-05-23
 
 ### Changed
