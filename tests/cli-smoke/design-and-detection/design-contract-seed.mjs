@@ -153,7 +153,7 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.equal(designIntentSeed.conceptualAnchor.candidateSelectionPolicy.preferDistinctiveOverSafe, true);
       assert.equal(designIntentSeed.conceptualAnchor.candidateSelectionPolicy.doNotRevealHiddenCandidateList, true);
       assert.equal(designIntentSeed.conceptualAnchor.candidateSelectionPolicy.avoidSpatialPlaceMetaphorByDefault, true);
-      assert.equal(designIntentSeed.conceptualAnchor.candidateSelectionPolicy.preferMechanismOverPlace, true);
+      assert.equal(designIntentSeed.conceptualAnchor.candidateSelectionPolicy.preferSpecificOverGeneric, true);
       assert.equal(designIntentSeed.conceptualAnchor.anchorReference, 'agent-defined-anchor-reference');
       assert.equal(designIntentSeed.conceptualAnchor.creativeCommitmentPolicy.requiredBeforeComplianceReview, true);
       assert.ok(designIntentSeed.conceptualAnchor.creativeCommitmentPolicy.requiredCommitmentFields.includes('signatureMotion'));
