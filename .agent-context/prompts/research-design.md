@@ -95,9 +95,12 @@ Consumer / mobile:
 Data / analytics:
 → Retool, Posthog, Metabase, Grafana (or equivalents)
 
-You may fetch other modern digital products that fit the category. 
-DO NOT fetch Wikipedia, generic documentation sites, Dribbble templates, 
-or non-product informational pages as design references.
+For every product category:
+→ Also check: Awwwards, Godly.website, and Layers.to for 
+  state-of-the-art quality references in that category.
+
+DO NOT fetch: Wikipedia, Dribbble templates, or generic blog posts 
+about "best UI design practices."
 
 For each reference: fetch the actual page this session, record what 
 mechanic or hierarchy is borrowed, and explicitly state what is NOT 
@@ -201,6 +204,7 @@ From the selected morphological combination, generate exactly five anchor candid
 
 Hard constraints on anchors:
 - The anchor must be concrete and googleable. "Modern", "clean", "premium", "expressive", "minimal", "bold", "futuristic", "elegant" are not anchors.
+- Specific premium digital products are valid anchors when the borrowed element is an interaction mechanic, hierarchy pattern, or motion behavior — not a palette or brand. Be specific enough that the reference fails the rename test.
 - Do not default to spatial place metaphors such as room, darkroom, control room, counting room, war room, studio, lab, cockpit, command center. Use them only when the product genuinely depends on a physical place model. Prefer artifacts, custody flows, instruments, data behaviors, materials, editorial systems, service rituals, or interaction mechanisms.
 - Pass the strengthened rename test: mentally rename the product to three genuinely different categories. Categories must be remote from each other and from the actual product (for example, if the product is a health app, test against fintech dashboard, kids educational game, and industrial equipment monitoring console).
 

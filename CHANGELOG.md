@@ -7,8 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.7 - 2026-05-24
+### Changed
+- Removed famous brand references (Apple, Linear, Stripe) from `bootstrap-design.md` prompts and replaced them with generic placeholders to prevent unintentional AI anchor bias.
+- Translated Indonesian Reference Routing instructions in `research-design.md` to English to maintain language consistency across the project.
+
 ## 4.2.6 - 2026-05-24
 ### Changed
+- Shifted UI design research governance from physical-first to digital-first, allowing the agent to use premium contemporary digital products as concrete anchors (e.g., specific interactions on Apple M3 page or Linear).
+- Expanded Reference Routing to explicitly direct the agent to check Awwwards, Godly.website, and Layers.to for state-of-the-art UI research.
 - Refined UI design research governance to safely handle existing UI projects by explicitly capturing current UI state as the anchor to avoid destructive re-designs during additive UI tasks.
 - Made Reference Routing more adaptive by allowing agent fetching from other modern digital product equivalents instead of strictly limiting to a hardcoded domain list, while explicitly blocking low-signal sources like Wikipedia and Dribbble.
 

@@ -61,7 +61,12 @@ Before broad compliance review or UI implementation, record an agent-chosen visu
 - one signature motion behavior more specific than "smooth"
 - one typographic decision with meaningful role contrast
 - one authored visual bet visible in the first viewport
-Reject generic anchors. Do not accept "modern", "clean", "premium", "expressive", "minimal", or "bold" as the anchor. Name a material, instrument, artifact class, architectural system, editorial genre, cinematic behavior, exhibition system, scientific apparatus, or industrial mechanism.
+Reject generic anchors. Do not accept "modern", "clean", "premium", "expressive", "minimal", or "bold" as the anchor. Name a specific real-world reference. Valid options include:
+- A specific premium digital experience (e.g., "[Specific Brand] hardware launch page full-bleed section transitions", "[Specific Tool] homepage keyboard-first density rhythm", "[Specific Fintech] marketing site gradient mesh motion")
+- A cinematic campaign or editorial system
+- A material, instrument, or physical mechanism
+
+The reference must be googleable and specific. "Brand-X-style" fails. "[Brand X] M3 reveal page scroll-locked section reveals" passes.
 ## Dynamic Avant-Garde Anchor Engine
 If no current-task research or visual reference exists, activate the Dynamic Avant-Garde Anchor Engine before coding.
 Rules:
