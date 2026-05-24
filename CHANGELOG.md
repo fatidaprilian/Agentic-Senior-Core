@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.5 - 2026-05-24
+### Changed
+- Made UI design research freshness rolling-current from the session date instead of relying on fixed year labels.
+- Marked research vocabulary such as evidence, dossier, anchor, category-code, morphology, rename-test, and source-freshness as internal-only so generated frontend output stays product-native.
+- Added generated design-contract, validation, frontend audit, and test coverage for unbiased design freshness and internal research vocabulary boundaries.
+- Clarified global CLI installation usage in README and init output for direct `ascx` / `agentic-senior-core` commands.
+
 ## 4.2.4 - 2026-05-23
 
 ### Added

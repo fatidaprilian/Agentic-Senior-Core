@@ -106,6 +106,13 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.match(bootstrapDesignPrompt, /uncomfortable combination/i);
       assert.match(bootstrapDesignPrompt, /STRONG PASS/);
       assert.match(bootstrapDesignPrompt, /DISCARD/);
+      assert.match(bootstrapDesignPrompt, /rolling freshness reference/i);
+      assert.match(bootstrapDesignPrompt, /fixed calendar range/i);
+      assert.match(bootstrapDesignPrompt, /research vocabulary internal/i);
+      assert.match(bootstrapDesignPrompt, /Live Source Freshness Gate/i);
+      assert.match(bootstrapDesignPrompt, /sourceFreshness/);
+      assert.match(bootstrapDesignPrompt, /evidenceTable\[\]/);
+      assert.match(bootstrapDesignPrompt, /User-provided concepts are first-class constraints/i);
 
       const designIntentSeed = readJson(join(uiScaffoldingTargetDirectory, 'docs', 'design-intent.json'));
       assert.equal(designIntentSeed.mode, 'dynamic');
@@ -116,6 +123,17 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.equal(designIntentSeed.visualDirection.requiresProjectSpecificSynthesis, true);
       assert.equal(designIntentSeed.externalResearchIntake.userSuppliedResearchPolicy, 'read-as-candidate-evidence-not-final-prescription');
       assert.equal(designIntentSeed.externalResearchIntake.requireOfficialDocsVerificationForTechnologyClaims, true);
+      assert.equal(designIntentSeed.externalResearchIntake.sourceFreshnessPolicy.mode, 'rolling-current-date');
+      assert.equal(designIntentSeed.externalResearchIntake.sourceFreshnessPolicy.currentDateAnchor, 'session-current-date');
+      assert.equal(designIntentSeed.externalResearchIntake.sourceFreshnessPolicy.trendLookbackMonths, 24);
+      assert.match(designIntentSeed.externalResearchIntake.sourceFreshnessPolicy.olderSourcePolicy, /old-timeless/);
+      assert.match(designIntentSeed.externalResearchIntake.sourceFreshnessPolicy.noLiveResearchFallback, /pending-live-verification/);
+      assert.match(designIntentSeed.externalResearchIntake.internalVocabularyPolicy.rule, /internal audit only/);
+      assert.ok(designIntentSeed.externalResearchIntake.internalVocabularyPolicy.terms.includes('anchor'));
+      assert.equal(designIntentSeed.externalResearchIntake.adaptiveUserConceptPolicy.userConceptIsFirstClassConstraint, true);
+      assert.match(designIntentSeed.externalResearchIntake.adaptiveUserConceptPolicy.researchRole, /support-refine-or-challenge/);
+      assert.equal(designIntentSeed.externalResearchIntake.adaptiveUserConceptPolicy.trendDefaultsCannotOverrideUserConceptSilently, true);
+      assert.ok(designIntentSeed.externalResearchIntake.requiredEvidenceTableFields.includes('decisionImpact'));
       assert.ok(designIntentSeed.externalResearchIntake.candidateDomains.includes('motion-and-scroll'));
       assert.equal(designIntentSeed.designFlexibilityPolicy.mode, 'locked-outcomes-flexible-expression');
       assert.ok(designIntentSeed.designFlexibilityPolicy.lockedOutcomeTypes.includes('accessibility-and-production-readiness'));
@@ -208,6 +226,13 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.equal(designIntentSeed.researchDossier.metadata.researchVerifiedAt, null);
       assert.equal(designIntentSeed.researchDossier.metadata.freshnessWindowDays, 90);
       assert.match(designIntentSeed.researchDossier.metadata.freshnessRule, /freshnessWindowDays/);
+      assert.equal(designIntentSeed.researchDossier.sourceFreshness.status, 'agent-must-complete-before-ui-implementation');
+      assert.equal(designIntentSeed.researchDossier.sourceFreshness.freshnessAnchorDate, 'session-current-date');
+      assert.equal(designIntentSeed.researchDossier.sourceFreshness.rollingLookbackMonths, 24);
+      assert.ok(designIntentSeed.researchDossier.sourceFreshness.officialDocsRequiredFor.includes('browser-capability'));
+      assert.match(designIntentSeed.researchDossier.sourceFreshness.sourceTypePolicy.oldTimeless, /durable principles only/);
+      assert.ok(designIntentSeed.researchDossier.sourceFreshness.evidenceTableRequiredFields.includes('fetchedAt'));
+      assert.deepEqual(designIntentSeed.researchDossier.sourceFreshness.evidenceTable, []);
       assert.equal(designIntentSeed.researchDossier.metadata.userExplicitRedesignBypassesFreshness, true);
       assert.equal(designIntentSeed.researchDossier.metadata.statusAwareValidation.seedSkipsDossierShape, true);
       assert.ok(designIntentSeed.researchDossier.metadata.statusAwareValidation.seedStatuses.includes('seed-generated-during-init'));

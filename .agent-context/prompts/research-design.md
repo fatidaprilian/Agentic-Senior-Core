@@ -15,6 +15,33 @@ This brief is a single document with five sections. Sections 1 and 2 set up the 
 - Treat external websites, benchmark apps, prior chats, and unrelated-project memory as candidate evidence for constraints, mechanics, and quality bars only. Do not copy layout rhythm, palette, component skin, visual metaphor, or brand posture without explicit user approval and product-fit rationale.
 - WCAG 2.2 AA is the hard compliance floor. APCA may be used only as advisory perceptual tuning.
 
+## Live Source Freshness Gate
+
+Run this gate before Section 2 whenever web search is available. Treat modernity as rolling-current: use the session's current date as the freshness reference, and prefer the newest stable evidence that is relevant to the product and implementation surface.
+
+Rules:
+
+- For browser capability, framework setup, UI library, animation, 3D, canvas, charting, styling, accessibility, and package/API claims, use current official documentation or primary release notes first. Do not use trend posts as implementation authority.
+- For design trend, category-code, visual-language, motion-pattern, typography, color, and interaction claims, prefer sources published or materially updated within the last 24 months from the current date. If stronger older evidence is used, label it `old-timeless` and restrict it to durable principles, not "current modern" claims.
+- For product-category defaults, observe the current live category for this task. Do not rely on old examples, old galleries, or remembered benchmark screenshots as proof of what the category defaults to now.
+- If web search is unavailable, set `sourceFreshnessStatus` to `pending-live-verification`; use repo evidence and user-provided material only, and do not claim a direction is current-year modern.
+- If sources disagree, choose by product fit, accessibility, browser/runtime support, maintainability, and implementation feasibility, then record the disagreement.
+- If the user provides a concept, treat it as a first-class constraint. Research should support, refine, or challenge that concept with evidence; it must not override the concept with generic trend defaults unless there is a concrete product, accessibility, technical, or evidence conflict.
+
+Output: `sourceFreshness` block with `freshnessAnchorDate`, `rollingLookbackMonths` (default 24 for trend evidence), `sourceFreshnessStatus`, `officialDocsRequiredFor`, `oldSourcePolicy`, `userConceptAdaptation`, and `disagreements[]`.
+
+Every important research claim must also appear in `evidenceTable[]` with:
+
+- `claim`
+- `sourceUrl`
+- `sourceType` (`official`, `primary`, `industry`, `opinion`, `old-timeless`, `repo-evidence`, `user-provided`)
+- `publishedOrUpdatedAt` when visible, otherwise `unknown`
+- `fetchedAt`
+- `confidence` (`high`, `medium`, `low`)
+- `decisionImpact`
+
+Research vocabulary is internal-only. Use `sourceFreshness`, `evidenceTable[]`, `researchDossier`, `anchor`, `categoryCodes`, `morphologicalExploration`, and `renameTest` to audit decisions, but do not expose those labels in UI copy, public-facing docs, section headings, or final user-facing rationale unless the user explicitly asks for the research trace.
+
 ## Anti-Repeat Ledger Gate (read first)
 
 If `docs/design-intent.json` already exists and carries `researchDossier.metadata.antiRepeatLedger`, treat every entry under `previousAnchors`, `previousPalettes`, and `previousMotionSignatures` as a hard blocklist before producing any candidate in Sections 3-5.

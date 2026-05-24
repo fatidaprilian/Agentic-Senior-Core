@@ -1,5 +1,4 @@
 # Bootstrap Dynamic Design Contract
-
 Use this prompt for UI, UX, frontend layout, screen, Tailwind, animation, 3D, canvas, or redesign work.
 
 Create or refine `docs/DESIGN.md` for human reasoning and `docs/design-intent.json` for machine-readable design intent, guardrails, and review signals.
@@ -10,8 +9,9 @@ This contract is a decision scaffold, not a style preset. We guide the agent; we
 - Treat `README.md` as public and developer overview, setup, usage, and user-facing context only. Do not use it as coding, architecture, or design authority when `.agent-context/` gives a stricter rule.
 - Use current repo evidence, product copy, route names, component names, user goals, and existing constraints as the source of truth.
 - Treat prior-chat visuals, unrelated project memory, benchmark screenshots, and famous-product aesthetics as tainted context unless the user explicitly approves continuity.
-- Keep external references non-copying; extract constraints only.
+- Keep external references non-copying and research vocabulary internal; extract constraints only, and do not leak evidence, dossier, anchor, category-code, morphology, rename-test, or source-freshness labels into UI copy or final rationale unless requested.
 - Before choosing a new UI, animation, scroll, 3D, canvas, chart, icon, styling, or component library, research current official docs.
+- For design research, use the session current date as the rolling freshness reference. Prefer the newest relevant official or primary evidence; never define modern by a fixed calendar range.
 ## Required Order
 1. Read `AGENTS.md`, this prompt, `research-design.md`, `../rules/frontend-architecture.md`, current UI code, current project docs, and existing design docs.
 2. Refine existing `docs/DESIGN.md` and `docs/design-intent.json`; do not replace them blindly.
@@ -22,17 +22,16 @@ This contract is a decision scaffold, not a style preset. We guide the agent; we
 7. Complete the Section 3-5 gates from `research-design.md` before UI implementation: `conceptualAnchor.categoryCodes.candidateEntries`, `conceptualAnchor.morphologicalExploration` (selected and uncomfortable combinations), and `conceptualAnchor.anchorCandidates.candidates` (exactly five, each with the strengthened rename test recorded).
 8. Set `derivedTokenLogic.tokenContinuityClassification` for each of typography, palette, motion, and spacing. Use `anchor-derived` only when the token choice is causally tied to the anchor's real-world reality. Use `continuity-retained` when the token is kept from a previous design iteration without re-derivation. Use `newly-introduced` when the token is fresh but not anchor-derived. If any token category is `continuity-retained`, the typography, palette, or motion entry in `researchDossier.metadata.antiRepeatLedger` stays as historical record, and the classification declares the retention is intentional with explicit rationale recorded in the matching `derivationSource` field.
 9. After agent and user select an anchor, set `researchDossier.metadata.researchVerifiedAt` to today's ISO date and flip `status` from any seed value to `active`. This closes the freshness window for additive UI tasks within `freshnessWindowDays`.
+10. Complete the Live Source Freshness Gate from `research-design.md` before claiming that a visual pattern, library, browser feature, accessibility requirement, or interaction style is current. Record `sourceFreshness` and `evidenceTable[]` in `docs/design-intent.json`.
 ## Creative Commitment Gate
 Before broad compliance review or UI implementation, record an agent-chosen visual direction in both design docs:
 - one concrete real-world anchor reference
 - one signature motion behavior more specific than "smooth"
 - one typographic decision with meaningful role contrast
 - one authored visual bet visible in the first viewport
-
 Reject generic anchors. Do not accept "modern", "clean", "premium", "expressive", "minimal", or "bold" as the anchor. Name a material, instrument, artifact class, architectural system, editorial genre, cinematic behavior, exhibition system, scientific apparatus, or industrial mechanism.
 ## Dynamic Avant-Garde Anchor Engine
 If no current-task research or visual reference exists, activate the Dynamic Avant-Garde Anchor Engine before coding.
-
 Rules:
 - Treat old design docs, prior UI, and scaffold seeds as evidence, not research.
 - Internally consider at least three high-variance anchors.
@@ -50,7 +49,6 @@ Before UI code, record:
 - one signature motion, spatial, or interaction behavior
 - one morphology or composition choice that avoids interchangeable card stacks when the product allows it
 - at least three at-a-glance product-specific signals for new screens or broad redesigns
-
 Do not ship AI-safe UI. Record exact drift signals in `reviewRubric`; at minimum reject decorative grid wallpaper, default line backgrounds, calibration-mark wallpaper, soft glow backgrounds, generic abstract marks, testing/demo/placeholder UI copy, terminal-only user flows, and first-output composition with only local copy swapped in when they have no product function. Treat measurement, calibration, crop, route, timeline, and inspection marks as task overlays or control affordances only; never promote them to the page background, hero backdrop, or first-output visual texture. If a conceptual anchor suggests a forbidden motif, the forbidden motif wins; express the anchor through workflow, hierarchy, density, typography, material behavior, state design, and interaction grammar instead of literal wallpaper.
 ## Brave Redesign Default
 For UI design work, the agent owns the ambition decision. For broad screens, redesigns, or new visual systems, treat expressive motion, spatial hierarchy, distinctive composition, and product-specific interaction as the baseline even when the user did not say "rich". Do not reduce the request to a safer version of the existing UI, a static implementation, or a component-kit rearrangement because research or dependency selection feels inconvenient.
@@ -62,6 +60,10 @@ Only downshift ambition after naming the concrete blocker: product fit, content 
 `docs/design-intent.json` must separate locked outcomes from flexible expression. The machine contract keeps review invariants stable; it must not freeze exact aesthetic implementation unless repo evidence, accessibility validation, implementation constraints, or explicit user approval locks it. Record `designFlexibilityPolicy`: lock user goals, runtime constraints, accessibility, production readiness, forbidden patterns, and approved continuity; keep exact palette primitives, font families, radius/shadow values, component-kit theme mapping, signature move implementation, literal anchor artifacts, and spatial metaphors flexible until validated or approved. Semantic roles are required; exact primitives are not automatically locked.
 ## External Inspiration Boundary
 Using outside websites, benchmark apps, galleries, or component examples is useful for constraint discovery, interaction mechanics, and implementation options, but never as a style source to imitate. Extract why a pattern works, then translate it into a current-project rule. Do not copy layout rhythm, palette, component skin, visual metaphor, or brand posture from a reference unless the user explicitly approves that continuity and it passes product fit.
+
+## Adaptive Research Freshness
+Modern is relative to the current date, not a fixed release year: implementation/platform claims require current official docs or primary release notes; trend, category-code, and visual-language claims prefer sources published or materially updated within the last 24 months; older sources must be labeled `old-timeless` and cannot prove a current-year trend.
+User-provided concepts are first-class constraints; adapt research to support, refine, or challenge the concept, and if live research is unavailable set source freshness to pending verification instead of claiming current-year modernity.
 
 ## AI Color and Template Residue Audit
 AI color drift happens when a palette uses safe defaults before product meaning.
@@ -133,7 +135,6 @@ Define viewport mutation rules:
 - For each viewport, name what is reordered, merged, hidden, disclosed, promoted, and forbidden.
 
 ## Required `docs/DESIGN.md` Sections
-
 1. Design Intent and Product Personality
 2. Audience and Use-Context Signals
 3. Visual Direction and Distinctive Moves

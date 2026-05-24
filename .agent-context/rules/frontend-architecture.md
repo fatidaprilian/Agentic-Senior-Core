@@ -31,9 +31,12 @@ Load this rule for UI-facing work. Keep the loaded surface small.
 3. Treat `README.md` as public and developer overview, setup, usage, and user-facing context only when design or architecture rules conflict.
 4. Do not choose final style, framework, palette, typography, layout paradigm, or animation library offline.
 5. Research current official docs before adding a new UI, animation, scroll, 3D, canvas, charting, icon, styling, or primitive library.
-6. Dynamic UI Foundation: do not hardcode shadcn/ui, Tailwind-only, native-only, or any component library as the universal answer, and do not avoid them out of guardrail fear when they fit. Tailwind-first is valid when the stack, token model, and team workflow support it; pure Tailwind, vanilla CSS, shadcn/ui, or any kit is not neutral by itself. Modern primitives, motion/canvas/WebGL helpers, charting libraries, and styling tools are valid when product evidence, accessibility, runtime constraints, and official docs support them.
-7. For fresh projects, prefer official framework scaffolders or setup commands when official docs show they produce the current supported shape. Build files manually only when approved architecture, repo constraints, or learning/prototype scope makes that better.
-8. Keep design continuity opt-in. Repo evidence outranks memory residue.
+6. Use the current date as the freshness anchor for design research. Trend and category-default claims should come from the newest relevant evidence, preferably material published or updated within the last 24 months. Older sources are acceptable only as labeled durable principles, not proof that a direction is currently modern.
+7. Treat user-provided concepts as first-class constraints. Adapt research to support, refine, or challenge the concept with evidence; do not override it with trend defaults unless a concrete product, accessibility, technical, or evidence conflict is recorded.
+8. Keep research vocabulary internal. Evidence, dossier, anchor, category-code, morphology, rename-test, and freshness labels may guide decisions, but must not appear in UI copy, public-facing docs, or final user-facing rationale unless the user explicitly asks for the research trace.
+9. Dynamic UI Foundation: do not hardcode shadcn/ui, Tailwind-only, native-only, or any component library as the universal answer, and do not avoid them out of guardrail fear when they fit. Tailwind-first is valid when the stack, token model, and team workflow support it; pure Tailwind, vanilla CSS, shadcn/ui, or any kit is not neutral by itself. Modern primitives, motion/canvas/WebGL helpers, charting libraries, and styling tools are valid when product evidence, accessibility, runtime constraints, and official docs support them.
+10. For fresh projects, prefer official framework scaffolders or setup commands when official docs show they produce the current supported shape. Build files manually only when approved architecture, repo constraints, or learning/prototype scope makes that better.
+11. Keep design continuity opt-in. Repo evidence outranks memory residue.
 
 ## FE-003: Required Design Contract
 

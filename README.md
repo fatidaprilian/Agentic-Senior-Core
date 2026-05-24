@@ -42,6 +42,9 @@ Preview changes with `--dry-run`, then apply with `--yes`. Upgrade prunes obsole
 
 ## Core Commands
 
+> [!NOTE]
+> To run commands directly without `npx` (e.g., `ascx` or `agentic-senior-core`), install the CLI globally: `npm install -g @ryuenn3123/agentic-senior-core`.
+
 | Command | Purpose |
 |---------|---------|
 | `agentic-senior-core init` | Initialize the compact project guidance pack and native agent entrypoints |

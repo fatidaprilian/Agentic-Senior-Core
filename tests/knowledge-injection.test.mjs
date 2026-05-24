@@ -203,6 +203,12 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(bootstrapDesignPrompt, /Tailwind-first is valid only as an implementation fit/i);
     assert.match(bootstrapDesignPrompt, /not as ideology or anti-ideology/i);
     assert.match(bootstrapDesignPrompt, /official framework scaffolders or setup commands/i);
+    assert.match(bootstrapDesignPrompt, /rolling freshness reference/i);
+    assert.match(bootstrapDesignPrompt, /fixed calendar range/i);
+    assert.match(bootstrapDesignPrompt, /Adaptive Research Freshness/i);
+    assert.match(bootstrapDesignPrompt, /research vocabulary internal/i);
+    assert.match(bootstrapDesignPrompt, /User-provided concepts are first-class constraints/i);
+    assert.match(bootstrapDesignPrompt, /pending verification/i);
   });
 
   it('design contract seed keeps machine-readable context hygiene boundaries', () => {
