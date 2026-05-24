@@ -69,6 +69,44 @@ Before any visual choice, write a structured product reading:
 
 Output: `productReading` block. Each field must be one sentence, evidence-backed from repo or brief. Speculation is not allowed; if a field is unknown, name it as such and stop until the user resolves it.
 
+## Reference Routing
+
+After Section 1, identify the product category. Then run web_search 
+and web_fetch on the matching domains below (or other modern, highly-regarded digital product equivalents) before picking any anchor.
+
+Developer tool / CLI / AI infrastructure:
+→ Linear, Raycast, Vercel, Warp, Resend, Railway (or equivalents)
+
+SaaS / B2B productivity:
+→ Notion, Loom, Cron, Superhuman, Intercom (or equivalents)
+
+AI product / API:
+→ Anthropic, Perplexity, ElevenLabs, Replicate, Mistral (or equivalents)
+
+Ecommerce:
+→ SSENSE, Allbirds, Represent, Shopify examples (or equivalents)
+
+Design tool / creative:
+→ Framer, Spline, Rive, Penpot (or equivalents)
+
+Consumer / mobile:
+→ Arc browser, Craft, Things, Bear (or equivalents)
+
+Data / analytics:
+→ Retool, Posthog, Metabase, Grafana (or equivalents)
+
+You may fetch other modern digital products that fit the category. 
+DO NOT fetch Wikipedia, generic documentation sites, Dribbble templates, 
+or non-product informational pages as design references.
+
+For each reference: fetch the actual page this session, record what 
+mechanic or hierarchy is borrowed, and explicitly state what is NOT 
+borrowed (palette, component skin, layout rhythm).
+
+If the anchor concept you're considering would make sense to someone 
+from 1920, it's too archival. The anchor must be legible to someone 
+who uses the web today.
+
 ## Section 2 — Reference Intake
 
 Reference material is fuel for variance, not a style source.

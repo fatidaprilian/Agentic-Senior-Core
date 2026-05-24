@@ -4,6 +4,16 @@ Use this prompt for UI, UX, frontend layout, screen, Tailwind, animation, 3D, ca
 Create or refine `docs/DESIGN.md` for human reasoning and `docs/design-intent.json` for machine-readable design intent, guardrails, and review signals.
 
 This contract is a decision scaffold, not a style preset. We guide the agent; we do not pick the final style, stack, framework, palette, typography, layout paradigm, or animation library offline.
+
+## MANDATORY FIRST STEP
+
+Check `docs/design-intent.json`:
+- If `status` contains "seed" OR `researchDossier.metadata.researchVerifiedAt` is null → STOP.
+- Do NOT write UI code.
+- Do NOT fill `conceptualAnchor`, color tokens, typography tokens, or motion tokens with concrete values.
+- **Existing UI exception**: If the project already has a mature UI and the user only asked for an additive feature (not a redesign), you may skip Sections 3-5 of `research-design.md`. Instead, document the existing direction as the `conceptualAnchor`, set token classifications to `continuity-retained`, set `status` to `active`, set `researchVerifiedAt` to today's date, and proceed.
+- Otherwise, run `research-design.md` Sections 3, 4, and 5 first. All three must produce filled artifacts before proceeding.
+- The scaffold file is a structure only. Filling placeholders without completing research is a violation of this contract.
 ## Authority
 - Treat `.agent-context/` and current project docs as technical authority.
 - Treat `README.md` as public and developer overview, setup, usage, and user-facing context only. Do not use it as coding, architecture, or design authority when `.agent-context/` gives a stricter rule.
@@ -23,6 +33,28 @@ This contract is a decision scaffold, not a style preset. We guide the agent; we
 8. Set `derivedTokenLogic.tokenContinuityClassification` for each of typography, palette, motion, and spacing. Use `anchor-derived` only when the token choice is causally tied to the anchor's real-world reality. Use `continuity-retained` when the token is kept from a previous design iteration without re-derivation. Use `newly-introduced` when the token is fresh but not anchor-derived. If any token category is `continuity-retained`, the typography, palette, or motion entry in `researchDossier.metadata.antiRepeatLedger` stays as historical record, and the classification declares the retention is intentional with explicit rationale recorded in the matching `derivationSource` field.
 9. After agent and user select an anchor, set `researchDossier.metadata.researchVerifiedAt` to today's ISO date and flip `status` from any seed value to `active`. This closes the freshness window for additive UI tasks within `freshnessWindowDays`.
 10. Complete the Live Source Freshness Gate from `research-design.md` before claiming that a visual pattern, library, browser feature, accessibility requirement, or interaction style is current. Record `sourceFreshness` and `evidenceTable[]` in `docs/design-intent.json`.
+## Internal Vocabulary Rule
+
+The following terms are internal process labels only. 
+They must NEVER appear in:
+- UI copy or component text
+- Public-facing documentation
+- Section headings in DESIGN.md
+- Any text the user reads in the product
+
+Forbidden in output: evidence, dossier, anchor, category-code, 
+morphological, rename test, freshness gate, ledger, accession, 
+provenance, custody, specimen, taxonomy, invariant.
+
+Translate all decisions into plain product language before writing 
+them into DESIGN.md or any UI-facing artifact.
+
+Good: "Typography uses a serif display font paired with monospace for 
+code blocks, creating clear hierarchy between narrative and technical content."
+
+Bad: "The anchor-derived typographic decision pairs a display serif 
+with strict mono per the morphological exploration output."
+
 ## Creative Commitment Gate
 Before broad compliance review or UI implementation, record an agent-chosen visual direction in both design docs:
 - one concrete real-world anchor reference
