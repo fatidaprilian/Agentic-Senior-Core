@@ -10,6 +10,7 @@ import {
   REQUIRED_DETECTION_TRANSPARENCY_SNIPPETS,
   REQUIRED_DETERMINISTIC_BOUNDARY_ENFORCEMENT_SNIPPETS,
   REQUIRED_DEVELOPER_FIRST_MENTION_PATTERNS,
+  REQUIRED_DIAGRAM_FORMAT_SNIPPETS,
   REQUIRED_DOCKER_RUNTIME_AUTOMATION_SNIPPETS,
   REQUIRED_HUMAN_WRITING_SNIPPETS,
   REQUIRED_STACK_DECISION_BOUNDARY_SNIPPETS,
@@ -166,6 +167,16 @@ export async function validateUniversalSopConsolidationCoverage(context) {
     coverageRules: REQUIRED_UNIVERSAL_SOP_SNIPPETS,
     missingLabel: 'Universal SOP source',
     snippetLabel: 'Universal SOP snippet',
+    context,
+  });
+}
+
+export async function validateDiagramFormatCoverage(context) {
+  await validateSnippetCoverage({
+    heading: 'Checking documentation diagram format coverage...',
+    coverageRules: REQUIRED_DIAGRAM_FORMAT_SNIPPETS,
+    missingLabel: 'diagram format source',
+    snippetLabel: 'diagram format snippet',
     context,
   });
 }

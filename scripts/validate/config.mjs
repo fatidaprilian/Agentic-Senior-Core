@@ -218,19 +218,28 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
       '### 15. Universal SOP Consolidation',
       'Coding flow is blocked if root `README.md` is missing',
       'Coding flow is blocked if `docs/architecture-decision-record.md` (or `docs/Architecture-Decision-Record.md`) is missing',
+      'Coding flow is blocked if `docs/flow-overview.md` is missing',
+      'Coding flow is blocked if `docs/database-schema.md` is missing while the project uses persistent data',
+      'Coding flow is blocked if `docs/api-contract.md` is missing while the project exposes API or web application flows',
       'UI implementation flow is blocked if `docs/DESIGN.md` or `docs/design-intent.json` is missing',
     ],
   },
   {
     path: '.agent-context/prompts/review-code.md',
     snippets: [
-      'Enforce Universal SOP hard gate: block coding flow when required project docs are missing (root `README.md`; `docs/doc-index.md` when `docs/` exists; `docs/architecture-decision-record.md`; and for UI scope `docs/DESIGN.md` plus `docs/design-intent.json`).',
+      'Enforce Universal SOP hard gate: block coding flow when required project docs are missing',
+      'docs/flow-overview.md',
+      'docs/database-schema.md',
+      'docs/api-contract.md',
     ],
   },
   {
     path: '.agent-context/prompts/refactor.md',
     snippets: [
-      '6. Enforce Universal SOP hard gate: stop implementation if root `README.md` is missing, if `docs/doc-index.md` is missing while `docs/` exists, if `docs/architecture-decision-record.md` is missing, or for UI scope if `docs/DESIGN.md` or `docs/design-intent.json` is missing.',
+      'Enforce Universal SOP hard gate: stop implementation if root `README.md` is missing',
+      'docs/flow-overview.md',
+      'docs/database-schema.md',
+      'docs/api-contract.md',
     ],
   },
   {
@@ -244,6 +253,23 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
       'Keep README.md public and developer friendly',
       'For docs-only/docs-first requests, do not write application, firmware, or UI code until the user asks or approves an implementation plan.',
       'For UI scope: if docs/DESIGN.md or docs/design-intent.json is missing, execute bootstrap-design prompt before implementing UI surfaces.',
+    ],
+  },
+];
+export const REQUIRED_DIAGRAM_FORMAT_SNIPPETS = [
+  {
+    path: '.agent-context/rules/api-docs.md',
+    snippets: [
+      '## API-013: Documentation Diagram Format (Mandatory)',
+      'Mermaid.js as the default diagram format',
+      'Do not use PlantUML',
+      'convert the relevant sections to Mermaid diagrams in the same change',
+    ],
+  },
+  {
+    path: 'lib/cli/project-scaffolder/prompt-builders.mjs',
+    snippets: [
+      'Mermaid.js as the default diagram format',
     ],
   },
 ];

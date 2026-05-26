@@ -29,6 +29,7 @@ import {
   validateDependencyFreshnessAutomationCoverage,
   validateDetectionTransparencyCoverage,
   validateDeterministicBoundaryEnforcementCoverage,
+  validateDiagramFormatCoverage,
   validateDockerRuntimeAutomationCoverage,
   validateHumanWritingGovernance,
   validateInstructionAdapters,
@@ -688,6 +689,7 @@ async function main() {
   await validateDetectionTransparencyCoverage(coverageValidationContext);
   await validateStackDecisionBoundaryCoverage(coverageValidationContext);
   await validateUniversalSopConsolidationCoverage(coverageValidationContext);
+  await validateDiagramFormatCoverage(coverageValidationContext);
   await validateTemplateFreeBootstrapCoverage(coverageValidationContext);
   await validateUpgradeUiContractWarningCoverage(coverageValidationContext);
   await validateUiDesignAutomationCoverage(coverageValidationContext);

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.8 - 2026-05-26
+### Changed
+- Strengthened Universal SOP hard gates to block application code implementation when required project documentation (`flow-overview.md`, `database-schema.md`, `api-contract.md`) is missing.
+- Mandated Mermaid.js as the default diagram format for all documentation and forbade PlantUML, ASCII art, Graphviz DOT, and Structurizr DSL to improve LLM token efficiency and consistency.
+
 ## 4.2.7 - 2026-05-24
 ### Changed
 - Removed famous brand references (Apple, Linear, Stripe) from `bootstrap-design.md` prompts and replaced them with generic placeholders to prevent unintentional AI anchor bias.

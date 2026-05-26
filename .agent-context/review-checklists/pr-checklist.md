@@ -122,9 +122,13 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 
 - [ ] `.agent-context/rules/` remains the default guidance source for implementation and review.
 - [ ] Security and testing requirements remain mandatory after static template purge.
+- [ ] Coding flow is blocked if `docs/project-brief.md` is missing
 - [ ] Coding flow is blocked if `docs/architecture-decision-record.md` (or `docs/Architecture-Decision-Record.md`) is missing
 - [ ] Coding flow is blocked if root `README.md` is missing
 - [ ] Coding flow is blocked if `docs/doc-index.md` is missing while `docs/` exists
+- [ ] Coding flow is blocked if `docs/flow-overview.md` is missing
+- [ ] Coding flow is blocked if `docs/database-schema.md` is missing while the project uses persistent data
+- [ ] Coding flow is blocked if `docs/api-contract.md` is missing while the project exposes API or web application flows
 - [ ] UI implementation flow is blocked if `docs/DESIGN.md` or `docs/design-intent.json` is missing
 
 ## Verdict

@@ -121,3 +121,13 @@ keywords:
 7. Reject silent acceptance of duplicate side-effect-producing requests without a key. A caller that retried without a key gets a 400-class response that names the missing key, not a second charge.
 8. Authority for the rules above includes IETF RFC 9110 for HTTP method idempotency semantics and successor specifications for the `Idempotency-Key` request header where the platform standardizes one. Verify the current standardization status at audit time, because the header has been a draft and an RFC at different points in its history.
 <!-- DURABILITY CHECK: Rule relies exclusively on architectural invariants and relative operational thresholds. Valid beyond standard tooling lifecycles. -->
+
+## API-013: Documentation Diagram Format (Mandatory)
+
+1. Use Mermaid.js as the default diagram format for all project documentation diagrams: flowcharts, sequence diagrams, ER diagrams, architecture diagrams, C4 model diagrams, and state machine diagrams.
+2. Embed Mermaid diagrams as fenced code blocks with the `mermaid` language tag inside Markdown files.
+3. Do not use PlantUML, ASCII art diagrams, Graphviz DOT, or Structurizr DSL. These formats lack native rendering in GitHub, GitLab, and VS Code Markdown preview, or have lower LLM generation accuracy.
+4. D2 is on the watch list. Do not adopt D2 until GitHub ships native rendering support.
+5. Keep diagrams at macro-architecture and critical-flow level. Do not diagram micro-logic or individual function internals unless the complexity warrants it.
+6. When updating project behavior, update the matching diagrams in the same change. Stale diagrams are worse than no diagrams.
+7. When updating an existing doc that contains prose-only flow descriptions, architecture explanations, or data model descriptions without diagrams, convert the relevant sections to Mermaid diagrams in the same change.

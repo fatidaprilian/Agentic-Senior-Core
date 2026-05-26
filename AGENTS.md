@@ -103,8 +103,8 @@ Trigger: docs, documentation, dokumen, `docs/*`, architecture docs, flow docs, A
 
 1. Load `architecture.md`, `api-docs.md`, and only additional rules required by scope.
 2. Create or refine required docs first: root `README.md` for every fresh or existing project; `docs/doc-index.md` whenever `docs/` exists; `docs/project-brief.md`; `docs/architecture-decision-record.md`; `docs/flow-overview.md`; `docs/api-contract.md` for APIs, firmware endpoints, CLI commands, or web application flows; `docs/database-schema.md` for persistent data; and `docs/DESIGN.md` plus `docs/design-intent.json` for UI scope.
-3. Use `docs/doc-index.md` as the compact read-routing map. Add PRD, SRS, technical-design, or separate ERD only when project evidence justifies them.
-4. Write formal project docs in English by default unless the user asks otherwise.
+3. Use Mermaid.js as the default diagram format for all documentation diagrams (flowcharts, sequence, ER, C4, state). Embed as fenced `mermaid` code blocks. Do not use PlantUML, ASCII art diagrams, Graphviz DOT, or Structurizr DSL. When updating existing docs that contain prose-only descriptions, convert relevant sections to Mermaid diagrams in the same change.
+4. Use `docs/doc-index.md` as the compact read-routing map; add PRD, SRS, technical-design, or separate ERD only when justified. Write formal project docs in English by default.
 5. Stop after documentation when the user only asked for docs. Do not write application, firmware, or UI code until the user asks or approves implementation; do not write application, firmware, or UI code before approval.
 
 ### 2. New Project Planning
@@ -163,7 +163,7 @@ Use valid rule IDs only; do not quote full rule prose, expose hidden chain-of-th
 Never claim done without:
 1. Relevant rules applied.
 2. PR and architecture checklists considered.
-3. Universal SOP gates satisfied: public and developer root `README.md`; `docs/architecture-decision-record.md`; plus `docs/DESIGN.md` and `docs/design-intent.json` for UI scope.
+3. Universal SOP gates satisfied: public and developer root `README.md`; `docs/doc-index.md` when `docs/` exists; `docs/project-brief.md`; `docs/architecture-decision-record.md`; `docs/flow-overview.md`; `docs/database-schema.md` when persistent data exists; `docs/api-contract.md` when API or web application flows exist; plus `docs/DESIGN.md` and `docs/design-intent.json` for UI scope.
 4. If `.agent-context/state/active-memory.json` exists and material project progress happened, refresh it while preserving privacy rules and user-owned entries.
 5. Project validation passed through `npm run validate`.
 

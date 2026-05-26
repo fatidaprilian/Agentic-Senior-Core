@@ -11,7 +11,7 @@ Before reviewing:
 3. Read .agent-context/review-checklists/architecture-review.md only when architecture or boundaries changed.
 4. Load only the rules relevant to the changed scope.
 5. For UI changes, load .agent-context/prompts/bootstrap-design.md, .agent-context/rules/frontend-architecture.md, docs/DESIGN.md, and docs/design-intent.json when present.
-6. Enforce Universal SOP hard gate: block coding flow when required project docs are missing (root `README.md`; `docs/doc-index.md` when `docs/` exists; `docs/architecture-decision-record.md`; and for UI scope `docs/DESIGN.md` plus `docs/design-intent.json`).
+6. Enforce Universal SOP hard gate: block coding flow when required project docs are missing (root `README.md`; `docs/doc-index.md` when `docs/` exists; `docs/project-brief.md`; `docs/architecture-decision-record.md`; `docs/flow-overview.md`; `docs/database-schema.md` when persistent data exists; `docs/api-contract.md` when API or web application flows exist; and for UI scope `docs/DESIGN.md` plus `docs/design-intent.json`).
 7. Enforce single-source and lazy-loading policy: canonical rule source must be explicitly enforced, global domain governance must load lazily based on touched scope, and conflicting duplicate rule instructions must not appear during normal flow.
 
 Prioritize findings in this order:
