@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.0 - 2026-05-27
+### Changed
+- Clarified Reference Routing in `research-design.md` to explicitly forbid using gallery homepages (e.g., Godly.website, Awwwards) as anchors, requiring the agent to drill down and fetch a specific featured product URL instead.
+
 ## 4.2.9 - 2026-05-27
 ### Changed
 - Simplified UI design research prompts (`research-design.md`) and the `design-intent.json` contract seed to remove the morphological matrix, uncomfortable combinations, and 5-anchor generation ceremony. Retained the product-reading, explicit category-cliche rejection, and specific anchor references.

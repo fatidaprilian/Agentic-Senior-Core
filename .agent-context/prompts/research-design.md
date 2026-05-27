@@ -96,13 +96,16 @@ Data / analytics:
 → Retool, Posthog, Metabase, Grafana (or equivalents)
 
 For every product category:
-→ Also check: Awwwards, Godly.website, and Layers.to for 
-  state-of-the-art quality references in that category.
+→ Also check galleries like Awwwards, Godly.website, and Layers.to to find 
+  state-of-the-art quality references. 
+  CRITICAL: DO NOT use the gallery homepage itself as a reference. You must 
+  find a specific featured product/website from those galleries, fetch THAT 
+  specific product's URL, and use it as your anchor.
 
 DO NOT fetch: Wikipedia, Dribbble templates, or generic blog posts 
 about "best UI design practices."
 
-For each reference: fetch the actual page this session, record what 
+For each reference: fetch the actual product page this session, record what 
 mechanic or hierarchy is borrowed, and explicitly state what is NOT 
 borrowed (palette, component skin, layout rhythm).
 
