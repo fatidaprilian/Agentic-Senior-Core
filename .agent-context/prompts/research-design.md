@@ -120,122 +120,52 @@ Reference material is fuel for variance, not a style source.
 
 If references are not provided by the user and web search is unavailable, set `referenceIntakeStatus` to `internal-evidence-only` and constrain Sections 3 to 5 to repo evidence and project docs.
 
-## Section 3 — Category Code Identification
+## Section 3 — Creative Direction
 
-Before exploring variance, name the cliches the product category will default to without intervention. These are the patterns reviewers recognize on sight as "the standard look" for the category.
+Before UI code, commit to a specific visual direction. The agent tends to converge toward generic, "on distribution" outputs. In frontend design this creates what users call the "AI slop" aesthetic. This section exists to prevent that.
 
-This list becomes `categoryCodes` in the design-intent.json. Specificity standard: a category code is only valid if someone can recognize the exact cliche from the text description alone, without seeing the UI and without knowing the product name.
+### 3a. Category defaults to avoid
 
-Fails specificity:
-- `clean typography` (too abstract, applies to anything)
-- `modern color palette` (not falsifiable)
-- `smooth animations` (describes nothing specific)
+Name at least three specific cliches your product category will fall into without intervention. Be specific enough that someone unfamiliar with the project can visualize the exact aesthetic trap from the text alone.
 
-Examples of cliches described with sufficient specificity. Read carefully: these examples illustrate the description format. They are themselves AI-defaultable cliches of their categories. They are NOT target aesthetics. They are not aesthetic candidates for any product. They appear here so you can see what specificity reads like; you are not allowed to ship them.
+Common AI-safe cliches to name and reject when your product sits anywhere near them:
 
-The three example categories below were chosen specifically because they are unlikely to overlap with common software products, to prevent leakage:
-
-- `children's storybook illustration site: hand-painted gouache textures with irregular hand-lettered titles, off-grid spreads with whitespace gutters, page-turn pacing rather than scroll` (instantly recognizable as kids book category default)
-- `luxury car configurator: full-bleed monochrome photography on black, ultra-thin sans-serif tracked wide, slow horizontal scroll with locked vertical alignment, micro-counters that tick instead of slide` (instantly recognizable as luxury auto category default)
-- `academic philosophy journal: high-contrast black-on-cream, book-class serif body at 11pt with generous leading, footnote markers with hover panels, numbered table-of-contents navigation, no hero imagery` (instantly recognizable as academic journal category default)
-
-Anti-leakage rule: listing a cliche is identifying a trap, not endorsing an aesthetic. If your product happens to fall in one of the example categories above, the matching cliche still must appear in your `categoryCodes` AND must carry an explicit rejection note. The same applies to the AI-safe defaults below.
-
-Common AI-safe cliches you must list and reject if your product is anywhere near them. Software products almost always pattern-match one of these without intervention:
-
-- `dev-tool default: condensed tabular numerics with minimal chrome and monospace code blocks on dark slate background, sans-serif metadata at 11–12px, monochrome status dots, single-line settings rows`
-- `AI-startup landing default: purple-to-pink gradient hero with floating 3D glass cards, sans-serif display type at 700–900 weight, vague hero copy, three-up feature grid below the fold`
-- `health/wellness app default: mint accent on white surface with coral status indicators, rounded pill-shaped buttons, friendly sans-serif at high weight, soft drop shadows on cards`
-- `SaaS admin default: left-side icon-only nav, top utility bar, three-card KPI row above a single data table, neutral grey-on-white with one accent color, modal-driven detail flows`
+- `dev-tool default: condensed tabular numerics with minimal chrome and monospace code blocks on dark slate background, sans-serif metadata at 11-12px, monochrome status dots`
+- `AI-startup landing default: purple-to-pink gradient hero with floating 3D glass cards, sans-serif display type at 700-900 weight, vague hero copy, three-up feature grid`
+- `SaaS admin default: left-side icon-only nav, top utility bar, three-card KPI row above a single data table, neutral grey-on-white with one accent color`
 - `marketing site default: hero image with one-line headline plus subhead, three feature tiles below, two pricing tiers, testimonial carousel, footer link grid`
 
-If you find yourself describing your selected direction in the same shape as any of these, you have inverted the test. Revise.
+Each category default must include a one-sentence rejection note explaining the trap it sets.
 
-Self-test: read each category code aloud to someone unfamiliar with the project.
+Output: `categoryCodes[]` with at least three entries in `docs/design-intent.json`. Each entry has `description`, `categoryDefaultReason`, and `rejectionNote`.
 
-- If they cannot visualize a specific aesthetic direction from the text alone, the code is too abstract. Revise until it passes.
-- If they say "yeah that's basically the X cliche", the description is specific enough. The cliche then belongs on your reject list, not on your candidate list.
+### 3b. Anchor reference
 
-Output: at least three category codes per product surface in `categoryCodes`. Each entry must pass the specificity self-test, must include the one-sentence reason that pattern is the default for the category, and must include an explicit one-sentence rejection note ("I will not ship this; here is the trap it sets") so the cliche cannot quietly become the target.
+Pick one concrete, googleable real-world reference whose mechanics (not surface) translate to your UI. The anchor must be specific enough that renaming the product to a different category breaks coherence.
 
-### Dimensional split (mandatory)
+Hard constraints:
+- Reject generic quality words as anchors: "modern", "clean", "premium", "expressive", "minimal", "bold", "futuristic", "elegant" are not anchors.
+- Specific premium digital products are valid anchors when the borrowed element is an interaction mechanic, hierarchy pattern, or motion behavior -- not a palette or brand.
+- Do not default to spatial place metaphors (room, darkroom, control room, studio, lab, cockpit, command center). Prefer artifacts, workflows, instruments, data behaviors, materials, editorial systems, or interaction mechanisms.
+- Draw from IDE themes, cultural aesthetics, cinematic campaigns, editorial systems, material artifacts, or specific product experiences for inspiration.
 
-Category codes must be broken down by dimension. Do not collapse multiple dimensions into a single category-level cliche. Each cluster lists the patterns that the product category will default to without intervention.
+Output: `conceptualAnchor.anchorReference` in `docs/design-intent.json`.
 
-- `typographyClusters`: font family combinations that are the category default. Be explicit about font families. Name the actual trio or pair that this product's category currently defaults to, derived from live portfolio observation for THIS task. Do not anchor on examples from other categories or other timeframes.
-- `paletteClusters`: palette signatures that are the category default.
-- `layoutClusters`: layout patterns that are the category default.
-- `motionClusters`: motion signatures that are the category default.
-- `imageryClusters`: image style or visual treatment that is the category default.
+### 3c. Four creative commitments (record before coding)
 
-Self-check before proceeding to Section 4: do the typography choices the agent is about to commit to in `derivedTokenLogic` (or downstream token sections) overlap with any item in `typographyClusters`? If yes, the agent must either:
+1. **Typography**: Choose distinctive fonts with meaningful role contrast. Avoid overused families (Inter, Roboto, Arial, Space Grotesk, system fonts). Pick choices that elevate the aesthetic. Record one variable-axis or pairing decision.
+2. **Color and palette**: Commit to a cohesive product-derived palette. Dominant colors with sharp accents outperform timid, evenly-distributed palettes. Name what product evidence makes the palette fit and one color behavior that would not transfer to another category.
+3. **Motion and interaction**: Define one signature motion behavior more specific than "smooth." Focus on high-impact moments: one well-orchestrated page load with staggered reveals creates more delight than scattered micro-interactions. Use CSS-only or a modern motion library.
+4. **Composition**: Make one composition choice that avoids interchangeable card stacks. Create atmosphere and depth rather than defaulting to solid backgrounds.
 
-1. Flag the typography as a continuity choice with an explicit rationale, set `derivedTokenLogic.tokenContinuityClassification.typography` to `continuity-retained`, and record the reason that font family swap is deferred. The previous typography ledger entry stays as historical record; the classification declares the retention is intentional. OR
-2. Revise the typography pick to escape the autopilot cluster and set `tokenContinuityClassification.typography` to `anchor-derived` only when the new choice is causally tied to the anchor's real-world reality.
+Avoid generic AI-generated aesthetics:
+- Overused font families and cliched color schemes (particularly purple gradients)
+- Predictable layouts and cookie-cutter component patterns
+- Solid-color backgrounds without atmosphere or depth
 
-This self-check applies to every dimension, not only typography. Do not let an output token match a category-code item from the agent's own list without explicit (1) or (2) treatment per dimension. Pretending continuity is derivation is the failure mode this gate exists to prevent.
+Interpret creatively and make unexpected choices that feel genuinely designed for the context. Vary between light and dark themes, different fonts, different aesthetics. The agent still tends to converge on common choices across generations; resist this.
 
-## Section 4 — Morphological Exploration
-
-A morphological matrix forces the design space to be explored beyond the first idea.
-
-Choose five or six dimensions that matter for this product. Common dimensions include hierarchy, density, type role contrast, motion language, state vocabulary, material logic, color behavior, composition rhythm, and interaction grammar. Generate four or five values per dimension. Do not include the category code defaults from Section 3 as values; the matrix is for variance, not for ratifying the cliche.
-
-Output a 5x5 or 6x5 morphological matrix. Then:
-
-1. Highlight the combination that becomes the basis for Section 5 candidates.
-2. Highlight at least ONE combination that feels instinctively wrong or uncomfortable but CAN be argued with product logic. This is the uncomfortable combination requirement.
-
-The uncomfortable combination exists to prove the matrix actually spans the design space. If every combination in the matrix feels safe, shippable, and unobjectionable, the matrix has not explored far enough; it is clustering in the safe-creative zone.
-
-Rules for the uncomfortable combination:
-- It must be genuinely uncomfortable (the agent's first reaction is "this would not work").
-- It must be arguable (the agent can construct a two-sentence product-logic justification for why it could work despite discomfort).
-- It must not be random noise (uncomfortable plus unjustifiable equals waste, not exploration).
-- The user is not required to choose it. Its purpose is to prove the design space was explored beyond the comfort boundary.
-
-If the agent cannot produce an uncomfortable-but-arguable combination, the dimensions chosen are too narrow. Widen at least one dimension and regenerate the matrix.
-
-Output: `morphologicalExploration` block with `dimensions[]`, `matrix` (rendered as a Markdown table inside `docs/DESIGN.md` and as a structured array inside `docs/design-intent.json`), `selectedCombination`, `uncomfortableCombination` ({ `combinationLabel`, `discomfortReason`, `productLogicJustification` }).
-
-## Section 5 — Anchor Candidates
-
-From the selected morphological combination, generate exactly five anchor candidates. An anchor is a real-world reference whose mechanics, hierarchy, density, type roles, state language, and motion behavior translate into UI grammar without copying its surface.
-
-Hard constraints on anchors:
-- The anchor must be concrete and googleable. "Modern", "clean", "premium", "expressive", "minimal", "bold", "futuristic", "elegant" are not anchors.
-- Specific premium digital products are valid anchors when the borrowed element is an interaction mechanic, hierarchy pattern, or motion behavior — not a palette or brand. Be specific enough that the reference fails the rename test.
-- Do not default to spatial place metaphors such as room, darkroom, control room, counting room, war room, studio, lab, cockpit, command center. Use them only when the product genuinely depends on a physical place model. Prefer artifacts, custody flows, instruments, data behaviors, materials, editorial systems, service rituals, or interaction mechanisms.
-- Pass the strengthened rename test: mentally rename the product to three genuinely different categories. Categories must be remote from each other and from the actual product (for example, if the product is a health app, test against fintech dashboard, kids educational game, and industrial equipment monitoring console).
-
-Strengthened rename test scoring:
-- UI still coherent in zero of three renamed categories: anchor is highly specific. STRONG PASS.
-- UI still coherent in one of three: anchor is specific enough. PASS with note.
-- UI still coherent in two of three: anchor is too generic. REVISE the anchor to add product-specific constraints until it fails in at least two of three.
-- UI still coherent in three of three: anchor is category-agnostic. DISCARD immediately.
-
-Test-category freshness: do not reuse the same three test categories across every anchor. Pick fresh categories per anchor. Categories used in earlier examples (fintech dashboard, kids educational game, industrial equipment monitoring console) are listed only as illustration of "remote from each other"; they are not a fixed test triple. Reusing the same triple lets the agent memorize the pass condition instead of stress-testing the anchor.
-
-The three test categories must be stated explicitly in the dossier alongside each anchor's rename test result. This makes the test auditable by human reviewers.
-
-For EACH of the five candidates, record:
-
-- `anchorReference` (concrete, googleable)
-- `conceptualFamily`
-- `jobFit` (one sentence linking to product)
-- `hierarchyImplication`
-- `densityImplication`
-- `typeImplication` (variable axis or pairing logic, not just family)
-- `stateLanguage` (loading, empty, error, partial, stale, optimistic, success using the anchor's own vocabulary)
-- `motionImplication` (choreography rule, what state change it serves)
-- `whatItRulesOut` (proves variance)
-- `renameTest`:
-  - `testCategories`: three remote categories used for testing
-  - `results`: coherent or incoherent per category, in order
-  - `verdict`: STRONG PASS, PASS, REVISE, or DISCARD
-- `categoryCodeOverlap` check: list any Section 3 category codes this candidate accidentally inherits, with reasoning
-
-Output: `anchorCandidates[]` (length five). Discard any candidate with `verdict: DISCARD` before selection. The selected anchor populates `conceptualAnchor.anchorReference` and `derivedTokenLogic.anchorReference` (they must match exactly).
+Output: Record all four commitments in `docs/design-intent.json` before UI code. The `derivedTokenLogic.tokenContinuityClassification` must classify each of typography, palette, motion, and spacing as `anchor-derived`, `continuity-retained`, or `newly-introduced` with rationale.
 
 ## Done Criteria
 
@@ -243,9 +173,9 @@ The brief is complete when:
 
 1. `productReading` is filled with evidence-backed sentences.
 2. `referenceIntake[]` records the borrowed mechanic and the explicit non-copy boundary per reference (or `referenceIntakeStatus: internal-evidence-only` is set).
-3. `categoryCodes[]` has at least three entries that pass the specificity self-test.
-4. `morphologicalExploration` has a 5x5 or 6x5 matrix, a selected combination, and an uncomfortable combination with the three required fields.
-5. `anchorCandidates[]` has exactly five entries; each has a complete `renameTest`; the selected anchor has `verdict: STRONG PASS` or `verdict: PASS`.
+3. `categoryCodes[]` has at least three entries with rejection notes.
+4. One anchor reference is recorded that passes the specificity test (renaming the product to a different category breaks coherence).
+5. Four creative commitments are recorded with product-derived rationale.
 6. Generic anchors and spatial-place defaults are rejected with the rejection reason recorded.
 
 Only after the brief is complete does the agent move on to `docs/DESIGN.md` and the rest of `docs/design-intent.json` (token logic, motion budget, accessibility policy, review rubric, library decisions, etc., per `bootstrap-design.md`).

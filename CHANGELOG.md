@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.9 - 2026-05-27
+### Changed
+- Simplified UI design research prompts (`research-design.md`) and the `design-intent.json` contract seed to remove the morphological matrix, uncomfortable combinations, and 5-anchor generation ceremony. Retained the product-reading, explicit category-cliche rejection, and specific anchor references.
+
 ## 4.2.8 - 2026-05-26
 ### Changed
 - Strengthened Universal SOP hard gates to block application code implementation when required project documentation (`flow-overview.md`, `database-schema.md`, `api-contract.md`) is missing.
