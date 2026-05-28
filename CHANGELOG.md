@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.2 - 2026-05-28
+### Fixed
+- Removed explicit mentions of Godly.website and Awwwards from `research-design.md` to prevent LLMs from hallucinating discovery platform URLs as direct product sources.
+
 ## 4.3.1 - 2026-05-28
 ### Added
 - Added new ASCX token-saving wrappers for `npm install` (and `yarn/pnpm` equivalents) and `tsc` to drastically compress output noise while preserving critical failure logs.

@@ -81,7 +81,7 @@ Before fetching any reference, use the `productReading` output to derive search 
 
 4. **Cross-domain pull.** Identify one domain that shares the same interaction model but a different visual vocabulary. Pull one reference from there. Example: portfolio -> scientific publication, exhibition catalog, film press kit -- anything with "demonstrate body of work" as the core verb but a different surface expectation.
 
-5. **Gallery check.** Also check galleries like Awwwards, Godly.website, and Layers.to to find state-of-the-art quality references for the derived direction. CRITICAL: DO NOT use the gallery homepage itself as a reference. Find a specific featured product/website, fetch THAT product's URL, and use it as evidence.
+5. **Gallery check.** Find state-of-the-art quality references for the derived direction by searching the web. CRITICAL: DO NOT use gallery homepages or discovery platforms as references. You must drill down to find a specific featured product/website, fetch THAT specific product's URL, and use it as evidence.
 
 DO NOT fetch: Wikipedia, Dribbble templates, or generic blog posts about "best UI design practices."
 
