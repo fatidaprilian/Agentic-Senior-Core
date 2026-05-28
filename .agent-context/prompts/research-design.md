@@ -44,7 +44,7 @@ Research vocabulary is internal-only. Use `sourceFreshness`, `evidenceTable[]`, 
 
 ## Anti-Repeat Ledger Gate (read first)
 
-If `docs/design-intent.json` already exists and carries `researchDossier.metadata.antiRepeatLedger`, treat every entry under `previousAnchors`, `previousPalettes`, and `previousMotionSignatures` as a hard blocklist before producing any candidate in Sections 3-5.
+If `docs/design-intent.json` already exists and carries `researchDossier.metadata.antiRepeatLedger`, treat every entry under `previousAnchors`, `previousPalettes`, `previousMotionSignatures`, and `previousStructuralFingerprints` as a hard blocklist before producing any candidate in Sections 3-5.
 
 Rules:
 
@@ -69,49 +69,25 @@ Before any visual choice, write a structured product reading:
 
 Output: `productReading` block. Each field must be one sentence, evidence-backed from repo or brief. Speculation is not allowed; if a field is unknown, name it as such and stop until the user resolves it.
 
-## Reference Routing
+## Default Detection Protocol
 
-After Section 1, identify the product category. Then run web_search 
-and web_fetch on the matching domains below (or other modern, highly-regarded digital product equivalents) before picking any anchor.
+Before fetching any reference, use the `productReading` output to derive search direction. Do not self-select from a fixed category list.
 
-Developer tool / CLI / AI infrastructure:
-→ Linear, Raycast, Vercel, Warp, Resend, Railway (or equivalents)
+1. **Name defaults.** Name three design directions the agent is most tempted to use for this brief. For each, write one sentence naming the specific visual pattern (layout, palette, density, motion, typography, composition).
 
-SaaS / B2B productivity:
-→ Notion, Loom, Cron, Superhuman, Intercom (or equivalents)
+2. **Argue against each default.** For each default, write one sentence on why it would flatten what is specific about THIS product's core verb, data shape, or context of use. The argument must reference a `productReading` field, not a generic aesthetic opinion.
 
-AI product / API:
-→ Anthropic, Perplexity, ElevenLabs, Replicate, Mistral (or equivalents)
+3. **Derive search direction from the argument.** The rejection argument reveals what the product needs that the default cannot provide. Use that need as the search query for `web_search` and `web_fetch`. Search by the product's core characteristic pair (medium x intent), not by product category name. Example: core verb "demonstrate" + data shape "narrative" -> search "editorial portfolio interaction design" not "portfolio sites."
 
-Ecommerce:
-→ SSENSE, Allbirds, Represent, Shopify examples (or equivalents)
+4. **Cross-domain pull.** Identify one domain that shares the same interaction model but a different visual vocabulary. Pull one reference from there. Example: portfolio -> scientific publication, exhibition catalog, film press kit -- anything with "demonstrate body of work" as the core verb but a different surface expectation.
 
-Design tool / creative:
-→ Framer, Spline, Rive, Penpot (or equivalents)
+5. **Gallery check.** Also check galleries like Awwwards, Godly.website, and Layers.to to find state-of-the-art quality references for the derived direction. CRITICAL: DO NOT use the gallery homepage itself as a reference. Find a specific featured product/website, fetch THAT product's URL, and use it as evidence.
 
-Consumer / mobile:
-→ Arc browser, Craft, Things, Bear (or equivalents)
+DO NOT fetch: Wikipedia, Dribbble templates, or generic blog posts about "best UI design practices."
 
-Data / analytics:
-→ Retool, Posthog, Metabase, Grafana (or equivalents)
+For each reference: fetch the actual product page this session, record what mechanic or hierarchy is borrowed, and explicitly state what is NOT borrowed (palette, component skin, layout rhythm).
 
-For every product category:
-→ Also check galleries like Awwwards, Godly.website, and Layers.to to find 
-  state-of-the-art quality references. 
-  CRITICAL: DO NOT use the gallery homepage itself as a reference. You must 
-  find a specific featured product/website from those galleries, fetch THAT 
-  specific product's URL, and use it as your anchor.
-
-DO NOT fetch: Wikipedia, Dribbble templates, or generic blog posts 
-about "best UI design practices."
-
-For each reference: fetch the actual product page this session, record what 
-mechanic or hierarchy is borrowed, and explicitly state what is NOT 
-borrowed (palette, component skin, layout rhythm).
-
-If the anchor concept you're considering would make sense to someone 
-from 1920, it's too archival. The anchor must be legible to someone 
-who uses the web today.
+If the anchor concept you're considering would make sense to someone from 1920, it's too archival. The anchor must be legible to someone who uses the web today.
 
 ## Section 2 — Reference Intake
 

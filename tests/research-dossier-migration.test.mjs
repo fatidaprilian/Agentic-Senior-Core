@@ -25,6 +25,7 @@ test('Research Dossier Migration', async (t) => {
     assert.deepEqual(metadata.antiRepeatLedger.previousAnchors, []);
     assert.deepEqual(metadata.antiRepeatLedger.previousPalettes, []);
     assert.deepEqual(metadata.antiRepeatLedger.previousMotionSignatures, []);
+    assert.deepEqual(metadata.antiRepeatLedger.previousStructuralFingerprints, []);
   });
 
   await t.test('buildResearchDossierMetadata extracts signature-level descriptors from existing contract', () => {
@@ -77,6 +78,7 @@ test('Research Dossier Migration', async (t) => {
     assert.deepEqual(metadata.antiRepeatLedger.previousAnchors, []);
     assert.deepEqual(metadata.antiRepeatLedger.previousPalettes, []);
     assert.deepEqual(metadata.antiRepeatLedger.previousMotionSignatures, []);
+    assert.deepEqual(metadata.antiRepeatLedger.previousStructuralFingerprints, []);
   });
 
   await t.test('migrateExistingDesignIntentToResearchDossierSchema injects metadata when absent', async () => {

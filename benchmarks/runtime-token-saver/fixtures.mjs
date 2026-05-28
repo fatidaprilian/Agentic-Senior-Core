@@ -711,4 +711,126 @@ export const ASCX_RUNTIME_TOKEN_SAVER_FIXTURES = [
       },
     ],
   },
+  {
+    id: 'npm-install-success',
+    commandArguments: ['npm', 'install'],
+    capture: {
+      exitCode: 0,
+      stdout: [
+        'npm WARN deprecated package...',
+        'added 142 packages in 12s',
+      ].join('\n'),
+      stderr: '',
+    },
+    expectCompressed: true,
+    expectTee: false,
+    requiredSubstrings: [
+      'npm install summary:',
+      'added 142 packages in 12s',
+      'exit: 0',
+    ],
+    continuationChecks: [
+      {
+        id: 'npm-install-success-compacts-noise',
+        action: 'Recognize the install passed and avoid reading raw noise.',
+        requiredSubstrings: [
+          'added 142 packages in 12s',
+          'exit: 0',
+        ],
+        expectTee: false,
+      },
+    ],
+  },
+  {
+    id: 'npm-install-failure',
+    commandArguments: ['npm', 'install'],
+    capture: {
+      exitCode: 1,
+      stdout: '',
+      stderr: [
+        'npm WARN deprecated package...',
+        'npm ERR! code ERESOLVE',
+        'npm ERR! ERESOLVE unable to resolve dependency tree',
+      ].join('\n'),
+    },
+    expectCompressed: true,
+    expectTee: true,
+    requiredSubstrings: [
+      'npm install summary:',
+      'failures:',
+      'npm ERR! code ERESOLVE',
+      'exit: 1',
+    ],
+    continuationChecks: [
+      {
+        id: 'npm-install-failure-preserves-error',
+        action: 'Identify the installation error.',
+        requiredSubstrings: [
+          'failures:',
+          'npm ERR! code ERESOLVE',
+        ],
+        expectTee: true,
+      },
+    ],
+  },
+  {
+    id: 'tsc-success',
+    commandArguments: ['tsc'],
+    capture: {
+      exitCode: 0,
+      stdout: '',
+      stderr: '',
+    },
+    expectCompressed: true,
+    expectTee: false,
+    requiredSubstrings: [
+      'tsc summary:',
+      'result: passed',
+      'exit: 0',
+    ],
+    continuationChecks: [
+      {
+        id: 'tsc-success-compacts-noise',
+        action: 'Recognize the typecheck passed.',
+        requiredSubstrings: [
+          'result: passed',
+          'exit: 0',
+        ],
+        expectTee: false,
+      },
+    ],
+  },
+  {
+    id: 'tsc-failure',
+    commandArguments: ['tsc'],
+    capture: {
+      exitCode: 1,
+      stdout: [
+        'src/components/Header.tsx:15:10 - error TS2322: Type \'string\' is not assignable to type \'number\'.',
+        '15   const age: number = "25";',
+      ].join('\n'),
+      stderr: '',
+    },
+    expectCompressed: true,
+    expectTee: true,
+    requiredSubstrings: [
+      'tsc summary:',
+      'failures:',
+      'error TS2322',
+      'Header.tsx:15:10',
+      'exit: 1',
+    ],
+    continuationChecks: [
+      {
+        id: 'tsc-failure-preserves-error',
+        action: 'Identify the typecheck error and file path.',
+        requiredSubstrings: [
+          'failures:',
+          'error TS2322',
+          'Header.tsx:15:10',
+        ],
+        expectTee: true,
+      },
+    ],
+  },
 ];

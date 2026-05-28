@@ -87,6 +87,18 @@ Before UI code, record:
 - one morphology or composition choice that avoids interchangeable card stacks when the product allows it
 - at least three at-a-glance product-specific signals for new screens or broad redesigns
 Do not ship AI-safe UI. Record exact drift signals in `reviewRubric`; at minimum reject decorative grid wallpaper, default line backgrounds, calibration-mark wallpaper, soft glow backgrounds, generic abstract marks, testing/demo/placeholder UI copy, terminal-only user flows, and first-output composition with only local copy swapped in when they have no product function. Treat measurement, calibration, crop, route, timeline, and inspection marks as task overlays or control affordances only; never promote them to the page background, hero backdrop, or first-output visual texture. If a conceptual anchor suggests a forbidden motif, the forbidden motif wins; express the anchor through workflow, hierarchy, density, typography, material behavior, state design, and interaction grammar instead of literal wallpaper.
+## Pre-Emit Identity Check
+
+Before outputting any UI code, mockup, or design direction, answer:
+
+1. **Specificity test**: If the product name and all text were removed from this UI, would a designer still identify what product category and what specific product this was built for? If the answer is "no" or "only category, not this specific product" -- revise the concept, not the details.
+
+2. **Structural variety test**: Does the hero or primary viewport avoid the centred-everything composition (large name centered, subtitle below, CTA below that)? If yes, pass. If no, name the product reason for centred composition or revise.
+
+3. **Default detection test**: Name the one design default you were most tempted to use. Confirm it was rejected or adapted with a product-specific reason, not merely avoided.
+
+Failure on any test requires revision before output. This check is not optional and applies to both new designs and additive UI tasks that change composition.
+
 ## Brave Redesign Default
 For UI design work, the agent owns the ambition decision. For broad screens, redesigns, or new visual systems, treat expressive motion, spatial hierarchy, distinctive composition, and product-specific interaction as the baseline even when the user did not say "rich". Do not reduce the request to a safer version of the existing UI, a static implementation, or a component-kit rearrangement because research or dependency selection feels inconvenient.
 

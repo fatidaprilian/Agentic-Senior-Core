@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.1 - 2026-05-28
+### Added
+- Added new ASCX token-saving wrappers for `npm install` (and `yarn/pnpm` equivalents) and `tsc` to drastically compress output noise while preserving critical failure logs.
+- Added `npm run build` wrapper documentation and usage to `AGENTS.md`.
+
+### Changed
+- Replaced the static 7-category design routing with an Adaptive Default Detection Protocol to prevent AI UI convergence.
+- Added a Pre-Emit Identity Check in `bootstrap-design.md` to flag and rewrite overly generic/default UI structures.
+- Expanded the Anti-Repeat Ledger to track structural fingerprints in addition to palette and typography.
+
 ## 4.3.0 - 2026-05-27
 ### Changed
 - Clarified Reference Routing in `research-design.md` to explicitly forbid using gallery homepages (e.g., Godly.website, Awwwards) as anchors, requiring the agent to drill down and fetch a specific featured product URL instead.

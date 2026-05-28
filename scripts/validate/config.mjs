@@ -393,6 +393,7 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'genericity findings that cannot name the exact drift signal',
       'research-design.md',
       'Section 3 gate from `research-design.md`',
+      'Pre-Emit Identity Check',
     ],
   },
   {

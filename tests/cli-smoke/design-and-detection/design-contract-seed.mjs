@@ -189,6 +189,7 @@ export async function registerDesignContractSeedSmokeTests(t) {
       assert.deepEqual(designIntentSeed.researchDossier.metadata.antiRepeatLedger.previousPalettes, []);
       assert.deepEqual(designIntentSeed.researchDossier.metadata.antiRepeatLedger.previousMotionSignatures, []);
       assert.deepEqual(designIntentSeed.researchDossier.metadata.antiRepeatLedger.previousTypographyChoices, []);
+      assert.deepEqual(designIntentSeed.researchDossier.metadata.antiRepeatLedger.previousStructuralFingerprints, []);
       assert.equal(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.typography, 'pending-research');
       assert.equal(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.palette, 'pending-research');
       assert.equal(designIntentSeed.derivedTokenLogic.tokenContinuityClassification.motion, 'pending-research');

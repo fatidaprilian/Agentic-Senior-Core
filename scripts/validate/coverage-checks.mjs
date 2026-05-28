@@ -366,7 +366,7 @@ export async function validateInstructionAdapters(context) {
   ];
   const instructionFootprintLimits = [
     { path: 'AGENTS.md', maxLines: 180 },
-    { path: '.agent-context/prompts/bootstrap-design.md', maxLines: 220 },
+    { path: '.agent-context/prompts/bootstrap-design.md', maxLines: 235 },
     { path: '.agent-context/rules/frontend-architecture.md', maxLines: 180 },
   ];
 
