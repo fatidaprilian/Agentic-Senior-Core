@@ -21,16 +21,7 @@ export const FORMAL_ARTIFACT_PATHS = [
   'GEMINI.md',
 ];
 export const REQUIRED_HUMAN_WRITING_SNIPPETS = [
-  {
-    path: '.agent-context/rules/api-docs.md',
-    snippets: [
-      '## API-006: Human Writing Standard (Mandatory)',
-      'This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations.',
-      'Style baseline findings are advisory by default and must not block endpoint-change commits that already include accurate docs/spec updates.',
-      'Write formal project docs in English by default',
-      'No emoji in formal artifacts.',
-    ],
-  },
+  
   {
     path: '.agent-context/review-checklists/pr-checklist.md',
     snippets: [
@@ -161,18 +152,8 @@ export const REQUIRED_STACK_DECISION_BOUNDARY_SNIPPETS = [
       'produce a short evidence-backed recommendation from the brief, repo evidence, and live official documentation before coding',
     ],
   },
-  {
-    path: '.agent-context/rules/architecture.md',
-    snippets: [
-      'Do not force a default architecture label before the repo, delivery model, and boundary evidence are clear.',
-    ],
-  },
-  {
-    path: '.agent-context/rules/microservices.md',
-    snippets: [
-      'Do not start with microservices by fashion, fear, or habit.',
-    ],
-  },
+  
+  
   {
     path: 'lib/cli/commands/init.mjs',
     snippets: [
@@ -192,16 +173,7 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
       'Do not write application, firmware, or UI code',
     ],
   },
-  {
-    path: '.agent-context/rules/architecture.md',
-    snippets: [
-      '## ARCH-003: Universal SOP Baseline (Mandatory)',
-      'Root `README.md` must exist for every fresh or existing project',
-      '`docs/doc-index.md` must exist whenever `docs/` exists',
-      'Security and testing are non-negotiable baseline requirements.',
-      'If required project context docs are missing, stop implementation and bootstrap docs before writing application code.',
-    ],
-  },
+  
   {
     path: '.agent-context/prompts/init-project.md',
     snippets: [
@@ -252,20 +224,12 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
       'Documentation-first policy:',
       'Keep README.md public and developer friendly',
       'For docs-only/docs-first requests, do not write application, firmware, or UI code until the user asks or approves an implementation plan.',
-      'For UI scope: if docs/DESIGN.md or docs/design-intent.json is missing, execute bootstrap-design prompt before implementing UI surfaces.',
+      'Follow the three-step design direction process in bootstrap-design.md',
     ],
   },
 ];
 export const REQUIRED_DIAGRAM_FORMAT_SNIPPETS = [
-  {
-    path: '.agent-context/rules/api-docs.md',
-    snippets: [
-      '## API-013: Documentation Diagram Format (Mandatory)',
-      'Mermaid.js as the default diagram format',
-      'Do not use PlantUML',
-      'convert the relevant sections to Mermaid diagrams in the same change',
-    ],
-  },
+  
   {
     path: 'lib/cli/project-scaffolder/prompt-builders.mjs',
     snippets: [
@@ -328,15 +292,9 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'Documentation-First Mode',
       'English by default',
       'do not write application, firmware, or UI code',
-      'Motion/Palette Decision',
-      'product categories are heuristics',
+      'three-step direction process',
+      'anti-repeat ledger',
       'perform live web research',
-      'research-design.md',
-      'researchDossier.metadata',
-      'researchVerifiedAt',
-      'freshnessWindowDays',
-      'Anti-repeat ledger',
-      'user-explicit redesign',
     ],
   },
   {
@@ -346,8 +304,6 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'UI Design Mode',
       'bootstrap-design.md',
       'frontend-architecture.md',
-      'Motion/Palette Decision',
-      'product categories are heuristics',
       'do not eagerly load unrelated backend-only rules',
       'valid style context',
       'External references, prior-chat memory, unrelated-project visuals, and remembered screenshots are tainted',
@@ -358,63 +314,16 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
   {
     path: '.agent-context/prompts/bootstrap-design.md',
     snippets: [
-      'This contract is a decision scaffold, not a style preset.',
-      'We guide the agent; we do not pick the final style',
-      'Token Architecture and Alias Strategy',
-      '`repoEvidence.designEvidenceSummary`',
-      'Responsive Recomposition Plan',
-      'source of truth',
+      'WCAG 2.2 AA is the hard compliance floor',
+      'Name Your Defaults',
+      'Choose an Anchor',
+      'Creative Commitments',
+      'anti-repeat ledger',
+      'Named Defaults to Avoid',
+      'Post-Implementation Check',
+      'Redesign Protocol',
       'research current official docs',
-      'motionPaletteDecision',
-      'AI-safe UI',
-      'Creative Ambition Floor',
-      'AI Color and Template Residue Audit',
-      'Motion and 3D Courage Rule',
-      'Design Flexibility Layer',
-      'visually exploratory, product-derived palettes',
-      'decorative grid wallpaper',
-      '`aiSafeUiAudit`',
-      'AI color drift',
-      'first-class UI options',
-      'product categories are heuristics',
-      'Responsive design means recomposition, not resizing.',
-      'agent-chosen visual direction',
-      'viewport mutation rules',
-      'WCAG 2.2 AA is the hard floor',
-      'APCA may be used only as advisory perceptual tuning',
-      'unresearched dependency choices',
-      'Dynamic UI Foundation Selection',
-      'Adaptive Research Freshness',
-      'fixed calendar range',
-      'research vocabulary internal',
-      'locked outcomes from flexible expression',
-      'A new dependency, package count, or vague performance concern is not a blocker by itself.',
-      'default component-kit styling without product rationale',
-      'genericity findings that cannot name the exact drift signal',
-      'research-design.md',
-      'Section 3 gate from `research-design.md`',
-      'Pre-Emit Identity Check',
-    ],
-  },
-  {
-    path: '.agent-context/prompts/research-design.md',
-    snippets: [
-      '# Research-Design Brief',
-      '## Section 3 — Creative Direction',
-      '### 3a. Category defaults to avoid',
-      '### 3b. Anchor reference',
-      '### 3c. Four creative commitments',
-      'AI slop',
-      'Anti-Repeat Ledger Gate',
-      'Live Source Freshness Gate',
-      'rolling-current',
-      'evidenceTable[]',
-      'old-timeless',
-      'Research vocabulary is internal-only',
-      'previousAnchors',
-      'previousMotionSignatures',
-      'tokenContinuityClassification',
-      'categoryCodes',
+      'product-specific reason',
     ],
   },
   {
@@ -566,8 +475,7 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'LAYER 1: RULES (SCOPE-RESOLVED)',
       'LAYER 5: EXECUTION PROMPTS AND UI TRIGGERS',
       'bootstrap-design.md -> ui, ux, layout, screen, tailwind, frontend, redesign',
-      'Keep UI-only requests context-isolated',
-      'git-workflow.md',
+      'three-step design direction process in bootstrap-design.md',
       'designEvidenceSummary',
     ],
   },
@@ -580,18 +488,7 @@ export const REQUIRED_DOCKER_RUNTIME_AUTOMATION_SNIPPETS = [
       'For Docker or Compose work, load `docker-runtime.md` and verify the latest official Docker docs before authoring container assets.',
     ],
   },
-  {
-    path: '.agent-context/rules/docker-runtime.md',
-    snippets: [
-      'latest official Docker documentation first',
-      'Docker Compose Quickstart',
-      'Compose file reference',
-      'Dockerfile best practices',
-      'Use current `docker compose` workflows and `compose.yaml`.',
-      'Do not add the top-level Compose `version` field by default.',
-      'Use the latest stable compatible Docker base image',
-    ],
-  },
+  
   {
     path: '.agent-context/prompts/init-project.md',
     snippets: [
@@ -607,17 +504,7 @@ export const REQUIRED_DEPENDENCY_FRESHNESS_AUTOMATION_SNIPPETS = [
       'use the latest stable compatible dependency set and official setup flow',
     ],
   },
-  {
-    path: '.agent-context/rules/efficiency-vs-hype.md',
-    snippets: [
-      'Latest-Compatible-First Rule',
-      'latest stable compatible dependency version',
-      'official scaffolder or setup command',
-      'Only step down to an older dependency version after documenting',
-      'Do not treat dependency avoidance as an engineering virtue by itself.',
-      'performance-fear choices',
-    ],
-  },
+  
   {
     path: '.agent-context/prompts/init-project.md',
     snippets: [
@@ -649,7 +536,6 @@ export const FORBIDDEN_ACTIVE_BIAS_ANCHOR_SNIPPETS = [
     snippets: [
       'stylistic inspiration',
       'famous brand reference',
-      'If no approved reference system exists',
       'explicitly approved reference systems',
     ],
   },

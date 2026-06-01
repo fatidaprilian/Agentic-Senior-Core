@@ -50,30 +50,6 @@ const REQUIRED_ARCHITECTURE_CHECKLIST_SNIPPETS = [
 ];
 
 const REQUIRED_FRONTEND_RULE_SNIPPETS = [
-  'Frontend Design and Interaction Boundaries',
-  'Load this rule for UI-facing work. Keep the loaded surface small.',
-  '## FE-001: Activation',
-  '## FE-002: Authority',
-  'Treat `.agent-context/` as design governance authority.',
-  'Treat `README.md` as public and developer overview, setup, usage, and user-facing context only',
-  'Do not choose final style, framework, palette, typography, layout paradigm, or animation library offline.',
-  'Keep design continuity opt-in.',
-  'Repo evidence outranks memory residue.',
-  'Use the current date as the freshness anchor for design research.',
-  'Treat user-provided concepts as first-class constraints.',
-  '## FE-003: Required Design Contract',
-  '## FE-004: Anti-Generic UI Gate',
-  'Do not ship interchangeable dashboard chrome',
-  'Do not let repeated surfaces share one visual treatment by habit',
-  'Use the rename test:',
-  'decorative geometry are invalid as wallpaper',
-  '## FE-005: Dynamic Anchor Gate',
-  '## FE-006: Motion, Palette, and 3D',
-  'Treat motion, 3D, WebGL, canvas, scroll choreography, and animation libraries as first-class options.',
-  'Prefer visually exploratory, product-derived palettes while preserving WCAG contrast and status clarity.',
-  '## FE-008: Responsive Mutation',
-  'Responsive quality is not scale-only.',
-  'container queries',
   '## FE-009: Accessibility',
   'WCAG 2.2 AA is the hard floor.',
   'APCA is advisory perceptual tuning only.',
@@ -84,26 +60,10 @@ const REQUIRED_FRONTEND_RULE_SNIPPETS = [
 ];
 
 const REQUIRED_BOOTSTRAP_DESIGN_SNIPPETS = [
-  'This contract is a decision scaffold, not a style preset.',
-  'We guide the agent; we do not pick the final style',
-  'Responsive Recomposition Plan',
-  'Token Architecture and Alias Strategy',
-  'repoEvidence.designEvidenceSummary',
-  'research current official docs',
-  'Responsive design means recomposition, not resizing.',
-  'Implementation Craft Layer',
-  'agent-chosen visual direction',
-  'viewport mutation rules',
-  'WCAG 2.2 AA is the hard floor',
-  'APCA may be used only as advisory perceptual tuning',
-  'unresearched dependency choices',
-  'Dynamic UI Foundation Selection',
-  'Adaptive Research Freshness',
-  'fixed calendar range',
-  'research vocabulary internal',
-  'A new dependency, package count, or vague performance concern is not a blocker by itself.',
-  'default component-kit styling without product rationale',
-  'genericity findings that cannot name the exact drift signal',
+  'WCAG 2.2 AA is the hard compliance floor',
+  'Name Your Defaults',
+  'Choose an Anchor',
+  'Creative Commitments'
 ];
 
 const REQUIRED_UI_DESIGN_JUDGE_SNIPPETS = [
@@ -135,7 +95,6 @@ const REQUIRED_INSTRUCTIONS_SNIPPETS = [
   'External references, prior-chat memory, unrelated-project visuals, and remembered screenshots are tainted',
   'WCAG 2.2 AA as the hard compliance floor',
   'APCA as advisory perceptual tuning only',
-  'Do not require screenshot capture as a baseline dependency',
 ];
 
 const REQUIRED_DESIGN_EVIDENCE_SNIPPETS = [

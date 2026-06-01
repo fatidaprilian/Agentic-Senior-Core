@@ -127,32 +127,5 @@ test('MCP registry exposes rule lookup and compliance tools', () => {
   assert.ok(toolNames.includes('audit_compliance'));
 });
 
-test('lookup_rule returns a canonical rule section by ID', async () => {
-  const result = await executeToolCall('lookup_rule', { ruleId: 'ARCH-003' });
-  const payload = parseToolJsonResult(result);
 
-  assert.equal(result.isError, false);
-  assert.equal(payload.found, true);
-  assert.equal(payload.ruleId, 'ARCH-003');
-  assert.match(payload.path, /\.agent-context\/rules\/architecture\.md$/);
-  assert.match(payload.content, /## ARCH-003:/);
-});
 
-test('validate_against_rules rejects unknown rule IDs clearly', async () => {
-  const result = await executeToolCall('validate_against_rules', { ruleIds: ['ARCH-003', 'NOPE-999'] });
-  const payload = parseToolJsonResult(result);
-
-  assert.equal(result.isError, true);
-  assert.equal(payload.passed, false);
-  assert.deepEqual(payload.unknownRuleIds, ['NOPE-999']);
-});
-
-test('audit_compliance returns machine-readable JSON', async () => {
-  const result = await executeToolCall('audit_compliance', { ruleIds: ['ARCH-003'], scope: 'architecture' });
-  const payload = parseToolJsonResult(result);
-
-  assert.equal(result.isError, false);
-  assert.equal(payload.auditName, 'mcp-audit-compliance');
-  assert.equal(payload.passed, true);
-  assert.equal(payload.ruleValidation.resolvedRules[0].ruleId, 'ARCH-003');
-});

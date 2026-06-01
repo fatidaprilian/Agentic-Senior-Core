@@ -135,7 +135,7 @@ Adds six backend rule files (`OBS-*`, `RES-*`, `MIG-*`, `JOB-*`, `CFG-*`, `VER-*
 
 Numbered Markdown rules with stable section IDs, bounded reflection, provider-free anti-halu benchmark, three-layer prompt caching contract, and per-integration caching scope enforcement. Caching numbers are scoped per integration; IDE wrapper integrations receive prefix stability without a measurable per-pack saving. See [docs/benchmark-reference.md](docs/benchmark-reference.md) for the reporting format and [CHANGELOG.md](CHANGELOG.md) for details.
 
-Current package version: 4.2.0. Last published version: 4.0.3.
+Current package version: 4.3.3. Last published version: 4.3.2.
 
 ---
 

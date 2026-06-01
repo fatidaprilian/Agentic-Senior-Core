@@ -44,6 +44,7 @@ export const REQUIRED_BACKEND_REVIEW_CHECKLIST_SNIPPETS = [
   'Backend/API governance was applied through global domain rules',
 ];
 
+export const REQUIRED_RELEASE_VERSION = '4.3.4';
 export const REQUIRED_REFACTOR_PROMPT_SNIPPETS = [
   'Enforce backend universal principles: no clever hacks, no premature abstraction, readability over brevity.',
   'Prioritize maintainability over compressed one-liners.',
