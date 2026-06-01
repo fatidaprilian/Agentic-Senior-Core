@@ -59,4 +59,4 @@ When the user says "redesign from zero" or equivalent: treat existing UI as beha
 
 ## Required Docs
 
-Generate or refine `docs/DESIGN.md` (human-readable design direction) and `docs/design-intent.json` (machine-readable intent with `conceptualAnchor`, creative commitments, and anti-repeat ledger) before UI implementation.
+Generate or refine `docs/DESIGN.md` before UI implementation. Keep design rationale, creative commitments, and any anti-repeat notes in the markdown contract instead of a separate machine-readable JSON file.

@@ -17,7 +17,7 @@ This project exposes command-line APIs through the `agentic-senior-core`/`asc` m
 | `asc optimize doctor [target-directory]` | Short alias for diagnosing ASCX availability, tee write safety, and double-compression warnings. |
 | `agentic-senior-core rollback [target-directory]` | Restores files from the latest `.agentic-backup/manifest.json`. |
 | `agentic-senior-core mcp` | Starts the local MCP stdio runtime. |
-| `agentic-senior-core audit:design-anti-repeat [target-directory] [--json] [--palette-advisory] [--threshold <number>]` | Scans target-project CSS and design-token files against the typography and palette anti-repeat ledger in `docs/design-intent.json`. |
+| `agentic-senior-core audit:design-anti-repeat [target-directory] [--json] [--palette-advisory] [--threshold <number>]` | Deprecated compatibility command. It exits successfully with a retirement notice because design anti-repeat guidance now lives in `docs/DESIGN.md`. |
 | `agentic-senior-core --version` | Prints the package version. |
 | `ascx git status` | Executes `git status`, compresses supported status output, preserves exit code and changed-file evidence, and tees raw output when truncation or high-risk compression occurs. |
 | `ascx git diff` | Executes `git diff`, compresses supported unified diff output, preserves changed files, hunk anchors, binary/deleted/generated markers, truncation markers, and tees raw output when detail is removed. |

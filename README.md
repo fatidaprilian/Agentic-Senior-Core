@@ -115,7 +115,7 @@ If you see `Property $schema is not allowed`, keep `.vscode/mcp.json` without `$
 
 ## Design Direction
 
-For UI, UX, layout, screen, Tailwind, frontend, or redesign work, the pack routes agents through a research dossier prompt and design bootstrap before code changes. The flow synthesizes a conceptual anchor, derives typography, spacing, morphology, motion, and responsive behavior, and carries a 90-day freshness gate with an anti-repeat ledger to avoid recycling the same visual direction. Existing projects read the real repository and docs first; fresh projects ask the agent to recommend the stack from current evidence instead of hardcoding a framework.
+For UI, UX, layout, screen, Tailwind, frontend, or redesign work, the pack routes agents through a compact design bootstrap before code changes. The flow asks the agent to reject generic defaults, choose a concrete interaction anchor, record creative commitments, and write the result into `docs/DESIGN.md`. Existing projects read the real repository and docs first; fresh projects ask the agent to recommend the stack from current evidence instead of hardcoding a framework.
 
 See [docs/doc-index.md](docs/doc-index.md) for the full doc routing map.
 

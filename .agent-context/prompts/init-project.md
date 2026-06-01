@@ -26,7 +26,7 @@ If the user describes a project or feature, the agent must:
 If the user asks to create, complete, fix, or review project docs, documentation, dokumen, `docs/*`, architecture docs, flow docs, API docs, or "lengkapkan docs", treat the request as documentation-first.
 
 The agent must:
-1. Materialize or refine required project docs before implementation: root `README.md` for every fresh or existing project; `docs/doc-index.md` whenever `docs/` exists; `docs/project-brief.md`; `docs/architecture-decision-record.md`; `docs/flow-overview.md`; `docs/api-contract.md` when APIs, firmware endpoints, CLI commands, or web application flows exist; `docs/database-schema.md` when persistent data exists; and `docs/DESIGN.md` plus `docs/design-intent.json` for UI scope.
+1. Materialize or refine required project docs before implementation: root `README.md` for every fresh or existing project; `docs/doc-index.md` whenever `docs/` exists; `docs/project-brief.md`; `docs/architecture-decision-record.md`; `docs/flow-overview.md`; `docs/api-contract.md` when APIs, firmware endpoints, CLI commands, or web application flows exist; `docs/database-schema.md` when persistent data exists; and `docs/DESIGN.md` for UI scope.
 2. Write formal project docs in English by default unless the user explicitly asks for another documentation language.
 3. Keep `docs/doc-index.md` short. Use it as the read-routing map with document path, purpose, reads-when triggers, status, and last-updated date. Do not duplicate the docs it points to.
 4. Keep `README.md` public and developer friendly even for private projects: explain what the project is, who it is for, how to set it up, how to run the core workflow, how to configure it, and where deeper docs live. Do not put internal agent notes, private reasoning, secrets, or governance policy in the README.
@@ -58,5 +58,5 @@ See [.agent-context/state/onboarding-report.json](../state/onboarding-report.jso
 
 ## UI/UX Bootstrap
 
-When a user requests frontend or UI/UX design, the agent must automatically execute the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize a dynamic design contract (`docs/DESIGN.md` + `docs/design-intent.json`).
+When a user requests frontend or UI/UX design, the agent must automatically execute the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize a dynamic markdown design contract (`docs/DESIGN.md`).
 Keep UI-only requests context-isolated: load [bootstrap-design.md](./bootstrap-design.md) and [frontend-architecture.md](../rules/frontend-architecture.md) first, and do not eagerly load backend-only rules unless the task explicitly crosses backend boundaries.

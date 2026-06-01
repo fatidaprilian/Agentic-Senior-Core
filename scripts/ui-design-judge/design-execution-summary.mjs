@@ -169,7 +169,7 @@ export function summarizeDesignExecutionPolicy(designIntentContent) {
 
   const notes = [];
   if (!policyPresent) {
-    notes.push('designExecutionPolicy is missing from docs/design-intent.json.');
+    notes.push('designExecutionPolicy is missing from optional structured design context.');
   }
   if (representationStrategy !== 'surface-plan-v1') {
     notes.push('Structured design execution should declare representationStrategy "surface-plan-v1".');

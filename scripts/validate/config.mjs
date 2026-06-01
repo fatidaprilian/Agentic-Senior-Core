@@ -193,7 +193,7 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
       'Coding flow is blocked if `docs/flow-overview.md` is missing',
       'Coding flow is blocked if `docs/database-schema.md` is missing while the project uses persistent data',
       'Coding flow is blocked if `docs/api-contract.md` is missing while the project exposes API or web application flows',
-      'UI implementation flow is blocked if `docs/DESIGN.md` or `docs/design-intent.json` is missing',
+      'UI implementation flow is blocked if `docs/DESIGN.md` is missing',
     ],
   },
   {
@@ -308,7 +308,7 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'Name Your Defaults',
       'Choose an Anchor',
       'Creative Commitments',
-      'anti-repeat ledger',
+      'Previous Directions',
       'Named Defaults to Avoid',
       'Post-Implementation Check',
       'Redesign Protocol',

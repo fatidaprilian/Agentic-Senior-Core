@@ -94,12 +94,12 @@ async function main() {
   const designIntentContent = loadDesignIntent();
   const designGuideContent = loadDesignGuide();
 
-  if (!designIntentContent) {
+  if (!designGuideContent.trim()) {
     emitMachineReadableReport(buildReport({
       skipped: true,
-      skipReason: 'Design contract is missing or unreadable. Skipping UI design judge.',
+      skipReason: 'Design guide is missing or unreadable. Skipping UI design judge.',
       contractPresent: false,
-      notes: ['docs/design-intent.json is required for contract-aware UI judging.'],
+      notes: ['docs/DESIGN.md is required for contract-aware UI judging.'],
     }));
     return;
   }
@@ -115,14 +115,15 @@ async function main() {
         driftCount: 0,
         blockingCandidateCount: 0,
         designExecutionSignalCount: 0,
+        genericityStatus: 'unclear',
       },
       notes: ['UI design judge only evaluates changed UI surfaces.'],
     }));
     return;
   }
 
-  const designExecutionSummary = summarizeDesignExecutionPolicy(designIntentContent);
-  const reviewRubricSummary = summarizeReviewRubric(designIntentContent);
+  const designExecutionSummary = summarizeDesignExecutionPolicy(designIntentContent || {});
+  const reviewRubricSummary = summarizeReviewRubric(designIntentContent || {});
 
   const systemPrompt = buildSystemPrompt();
   const userMessage = buildUserMessage(

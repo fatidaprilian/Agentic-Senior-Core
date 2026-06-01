@@ -29,7 +29,7 @@ Move completed detail to `CHANGELOG.md`, Git history, or validation output.
 - Init/upgrade copy the compact instruction surface and refresh onboarding state.
 - Rule loading is scope-resolved. Narrow tasks must not load broad unrelated rules.
 - Documentation-first requests must create/refine docs before implementation.
-- UI work must create/refine `docs/DESIGN.md` and `docs/design-intent.json` before UI code.
+- UI work must create/refine `docs/DESIGN.md` before UI code.
 - UI governance rejects AI-safe UI, palette autopilot, decorative wallpaper, and scale-only responsive behavior.
 - Motion, 3D, canvas, WebGL, and animation libraries are allowed when they serve the product.
 - Palette choices must be visually exploratory, product-derived, contrast-safe, and status-clear.
@@ -69,7 +69,7 @@ Status: `[x]`
 Done:
 - Token taxonomy: primitive, semantic, component.
 - Token-path rules, reserved syntax, and alias resolution.
-- `docs/design-intent.json` as token truth.
+- `docs/DESIGN.md` as the design direction source of truth.
 - Validation for token structure and bad fallback patterns.
 
 ### Phase 2 - Design Evidence Extraction

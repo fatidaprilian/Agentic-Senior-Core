@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.7 - 2026-06-01
+### Changed
+- Removed remaining active `design-intent.json` requirements from UI bootstrap, review, refactor, and PR checklist guidance.
+- Updated design direction docs to use `docs/DESIGN.md` as the single UI design contract under the compact Context Ops flow.
+
 ## 4.3.6 - 2026-06-01
 ### Changed
 - Synchronized npm release metadata for the 4.3.6 package version.
