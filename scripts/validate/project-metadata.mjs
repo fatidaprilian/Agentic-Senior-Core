@@ -1,0 +1,166 @@
+import { join } from 'node:path';
+import { ALLOWED_SEVERITIES } from './config.mjs';
+
+export async function validatePackageMetadata(context) {
+  const { PACKAGE_JSON_PATH, BUN_LOCK_PATH, readTextFile, fileExists, pass, fail, warn } = context;
+  console.log('\nChecking package metadata...');
+
+  const packageJson = JSON.parse(await readTextFile(PACKAGE_JSON_PATH));
+  const versionPattern = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+
+  if (typeof packageJson.version !== 'string' || !versionPattern.test(packageJson.version)) {
+    fail('package.json version must be a semantic version string');
+  } else {
+    pass(`package.json version ${packageJson.version}`);
+  }
+
+  if (packageJson.scripts?.validate === 'node ./scripts/validate.mjs') {
+    pass('package.json validate script is Node-first');
+  } else {
+    fail('package.json validate script must use node ./scripts/validate.mjs');
+  }
+
+  if (packageJson.scripts?.test) {
+    pass('package.json test script exists');
+  } else {
+    fail('package.json test script is missing');
+  }
+
+  if (packageJson.devDependencies && Object.keys(packageJson.devDependencies).length > 0) {
+    warn('package.json still has devDependencies; review whether they are necessary');
+  } else {
+    pass('package.json has no unnecessary devDependencies');
+  }
+
+  if (Array.isArray(packageJson.files) && packageJson.files.includes('AGENTS.md')) {
+    pass('package.json publishes canonical AGENTS.md');
+  } else {
+    fail('package.json must publish AGENTS.md so init and upgrade can copy the canonical root instructions file');
+  }
+
+  if (await fileExists(BUN_LOCK_PATH)) {
+    fail('bun.lock must not be tracked while npm is the package manager source of truth');
+  } else {
+    pass('No bun.lock drift file present');
+  }
+}
+
+export async function validatePolicyFile(context) {
+  const { POLICY_FILE_PATH, readTextFile, pass, fail } = context;
+  console.log('\nChecking LLM Judge policy...');
+
+  const policyContent = await readTextFile(POLICY_FILE_PATH);
+  const parsedPolicy = JSON.parse(policyContent);
+  const selectedProfileName = parsedPolicy.selectedProfile;
+  const profileThresholds = parsedPolicy.profileThresholds;
+
+  if (typeof selectedProfileName !== 'string') {
+    fail('Policy file must define selectedProfile as a string');
+  } else {
+    pass(`LLM Judge selected profile: ${selectedProfileName}`);
+  }
+
+  if (!profileThresholds || typeof profileThresholds !== 'object') {
+    fail('Policy file must define profileThresholds');
+    return;
+  }
+
+  for (const [profileName, profileSettings] of Object.entries(profileThresholds)) {
+    if (!Array.isArray(profileSettings.blockingSeverities)) {
+      fail(`Policy profile ${profileName} must define blockingSeverities`);
+      continue;
+    }
+
+    const invalidSeverity = profileSettings.blockingSeverities.find((severity) => !ALLOWED_SEVERITIES.has(severity));
+    if (invalidSeverity) {
+      fail(`Policy profile ${profileName} uses unsupported severity: ${invalidSeverity}`);
+      continue;
+    }
+
+    pass(`Policy profile ${profileName} blocking severities are valid`);
+  }
+
+  if (typeof profileThresholds[selectedProfileName] === 'object') {
+    pass('Policy selectedProfile points to a valid profile');
+  } else {
+    fail('Policy selectedProfile must match one of the configured profileThresholds');
+  }
+}
+
+export async function validateVersionConsistency(context) {
+  const { ROOT_DIR, PACKAGE_JSON_PATH, CHANGELOG_PATH, PACKAGE_LOCK_PATH, GENERATED_RULE_FILES, readTextFile, fileExists, pass, fail } = context;
+  console.log('\nChecking release version consistency...');
+
+  const packageJson = JSON.parse(await readTextFile(PACKAGE_JSON_PATH));
+  const packageVersion = packageJson.version;
+  const changelogContent = await readTextFile(CHANGELOG_PATH);
+
+  if (changelogContent.includes(`## ${packageVersion}`)) {
+    pass(`CHANGELOG.md contains release entry for ${packageVersion}`);
+  } else {
+    fail(`CHANGELOG.md is missing a ## ${packageVersion} heading`);
+  }
+
+  if (await fileExists(PACKAGE_LOCK_PATH)) {
+    const packageLock = JSON.parse(await readTextFile(PACKAGE_LOCK_PATH));
+    const rootLockVersion = packageLock.packages?.['']?.version;
+    if (packageLock.version === packageVersion && rootLockVersion === packageVersion) {
+      pass(`package-lock.json matches package version ${packageVersion}`);
+    } else {
+      fail(`package-lock.json version drift: expected ${packageVersion}, found ${packageLock.version || 'missing'} / ${rootLockVersion || 'missing'}`);
+    }
+  } else {
+    fail('package-lock.json is required for npm release consistency');
+  }
+
+  for (const generatedRuleFileName of GENERATED_RULE_FILES) {
+    const generatedRuleContent = await readTextFile(join(ROOT_DIR, generatedRuleFileName));
+
+    if (generatedRuleContent.includes(`Generated by Agentic-Senior-Core CLI v${packageVersion}`)) {
+      pass(`${generatedRuleFileName} matches package version ${packageVersion}`);
+    } else {
+      fail(`${generatedRuleFileName} does not match package version ${packageVersion}`);
+    }
+  }
+}
+
+export async function validateMcpConfiguration(context) {
+  const { ROOT_DIR, readTextFile, pass, fail } = context;
+  console.log('\nChecking MCP configuration...');
+
+  const mcpConfiguration = JSON.parse(await readTextFile(join(ROOT_DIR, 'mcp.json')));
+  const workspaceMcpConfiguration = JSON.parse(await readTextFile(join(ROOT_DIR, '.vscode', 'mcp.json')));
+  const workspaceServerConfig = workspaceMcpConfiguration.servers?.['agentic-senior-core'];
+
+  if (mcpConfiguration.knowledgeLayers?.enabled === true) {
+    pass('Root MCP config has knowledgeLayers enabled');
+  } else {
+    fail('Root MCP config must have knowledgeLayers.enabled: true');
+  }
+
+  if (typeof workspaceMcpConfiguration.$schema === 'undefined') {
+    pass('Workspace MCP config omits $schema (supported by current VS Code MCP schema inference)');
+  } else if (workspaceMcpConfiguration.$schema === 'vscode://schemas/mcp') {
+    pass('Workspace MCP config uses trusted VS Code schema');
+  } else {
+    fail('Workspace MCP config $schema must be omitted or set to vscode://schemas/mcp');
+  }
+
+  if (workspaceServerConfig?.command === 'node') {
+    pass('Workspace MCP server command uses Node');
+  } else {
+    fail('Workspace MCP server command must use Node');
+  }
+
+  if (workspaceServerConfig?.cwd === '${workspaceFolder}') {
+    pass('Workspace MCP server cwd uses ${workspaceFolder}');
+  } else {
+    fail('Workspace MCP server cwd must be ${workspaceFolder}');
+  }
+
+  if (Array.isArray(workspaceServerConfig?.args) && workspaceServerConfig.args.includes('./scripts/mcp-server.mjs')) {
+    pass('Workspace MCP server points to scripts/mcp-server.mjs');
+  } else {
+    fail('Workspace MCP server must include ./scripts/mcp-server.mjs argument');
+  }
+}

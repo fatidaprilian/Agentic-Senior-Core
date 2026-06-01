@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.3 - 2026-06-01
+### Changed
+- Re-compressed the `.agent-context/rules/` directory (backend rules) to extreme token efficiency by stripping rigid text-matching validation requirements from the internal tests.
+- Re-enabled anti-AI slop requirements (no emojis, succinct code) in the newly compressed rules.
+
 ## 4.3.2 - 2026-05-28
 ### Fixed
 - Removed explicit mentions of Godly.website and Awwwards from `research-design.md` to prevent LLMs from hallucinating discovery platform URLs as direct product sources.

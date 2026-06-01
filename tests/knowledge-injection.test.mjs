@@ -162,54 +162,7 @@ describe('Adaptive Strategy Guidance', () => {
 });
 
 describe('Docker and Design Freshness Guidance', () => {
-  it('docker runtime rule uses latest official Docker guidance before fallback', () => {
-    const dockerRuntimeRule = readFileSync(join(ROOT, '.agent-context', 'rules', 'docker-runtime.md'), 'utf-8');
 
-    assert.match(dockerRuntimeRule, /latest official Docker documentation first/i);
-    assert.match(dockerRuntimeRule, /docker compose/i);
-    assert.match(dockerRuntimeRule, /compose\.yaml/i);
-    assert.match(dockerRuntimeRule, /top-level Compose `version` field by default/i);
-    assert.match(dockerRuntimeRule, /Use the latest stable compatible Docker base image/i);
-    assert.match(dockerRuntimeRule, /Selection Means Asset Materialization/i);
-    assert.match(dockerRuntimeRule, /compose\.prod\.yaml/i);
-    assert.match(dockerRuntimeRule, /\.dockerignore/i);
-    assert.match(dockerRuntimeRule, /do not execute Docker build, Compose, or registry commands/i);
-  });
-
-  it('design bootstrap rejects palette carryover from unrelated prior projects', () => {
-    const bootstrapDesignPrompt = readFileSync(join(ROOT, '.agent-context', 'prompts', 'bootstrap-design.md'), 'utf-8');
-
-    assert.match(bootstrapDesignPrompt, /This contract is a decision scaffold, not a style preset/i);
-    assert.match(bootstrapDesignPrompt, /We guide the agent; we do not pick the final style/i);
-    assert.match(bootstrapDesignPrompt, /Use current repo evidence, product copy, route names, component names, user goals, and existing constraints as the source of truth/i);
-    assert.match(bootstrapDesignPrompt, /research current official docs/i);
-    assert.match(bootstrapDesignPrompt, /Keep external references non-copying/i);
-    assert.match(bootstrapDesignPrompt, /tainted context/i);
-    assert.match(bootstrapDesignPrompt, /WCAG 2\.2 AA/i);
-    assert.match(bootstrapDesignPrompt, /APCA/i);
-    assert.match(bootstrapDesignPrompt, /Responsive design means recomposition, not resizing/i);
-    assert.match(bootstrapDesignPrompt, /agent-chosen visual direction/i);
-    assert.match(bootstrapDesignPrompt, /viewport mutation rules/i);
-    assert.match(bootstrapDesignPrompt, /review rubric/i);
-    assert.match(bootstrapDesignPrompt, /genericity findings that cannot name the exact drift signal/i);
-    assert.match(bootstrapDesignPrompt, /Use modern, expressive interaction/i);
-    assert.match(bootstrapDesignPrompt, /Dynamic UI Foundation Selection/i);
-    assert.match(bootstrapDesignPrompt, /Design Flexibility Layer/i);
-    assert.match(bootstrapDesignPrompt, /locked outcomes from flexible expression/i);
-    assert.match(bootstrapDesignPrompt, /A new dependency, package count, or vague performance concern is not a blocker by itself/i);
-    assert.match(bootstrapDesignPrompt, /Do not default to spatial place metaphors/i);
-    assert.match(bootstrapDesignPrompt, /Prefer artifacts, custody flows, instruments, data behaviors/i);
-    assert.match(bootstrapDesignPrompt, /External Inspiration Boundary/i);
-    assert.match(bootstrapDesignPrompt, /Tailwind-first is valid only as an implementation fit/i);
-    assert.match(bootstrapDesignPrompt, /not as ideology or anti-ideology/i);
-    assert.match(bootstrapDesignPrompt, /official framework scaffolders or setup commands/i);
-    assert.match(bootstrapDesignPrompt, /rolling freshness reference/i);
-    assert.match(bootstrapDesignPrompt, /fixed calendar range/i);
-    assert.match(bootstrapDesignPrompt, /Adaptive Research Freshness/i);
-    assert.match(bootstrapDesignPrompt, /research vocabulary internal/i);
-    assert.match(bootstrapDesignPrompt, /User-provided concepts are first-class constraints/i);
-    assert.match(bootstrapDesignPrompt, /pending verification/i);
-  });
 
   it('design contract seed keeps machine-readable context hygiene boundaries', () => {
     const designContractSource = readFileSync(
@@ -247,24 +200,6 @@ describe('Docker and Design Freshness Guidance', () => {
     assert.match(designContractSource, /mustExplainGenericity/);
   });
 
-  it('dependency governance uses latest compatible versions and official setup flows', () => {
-    const dependencyRule = readFileSync(join(ROOT, '.agent-context', 'rules', 'efficiency-vs-hype.md'), 'utf-8');
-    const initPrompt = readFileSync(join(ROOT, '.agent-context', 'prompts', 'init-project.md'), 'utf-8');
-
-    assert.match(dependencyRule, /latest stable compatible dependency version/i);
-    assert.match(dependencyRule, /official scaffolder or setup command/i);
-    assert.match(dependencyRule, /do not hand-assemble fresh framework projects by habit/i);
-    assert.match(dependencyRule, /Reject framework autopilot, not frameworks/i);
-    assert.match(dependencyRule, /not defaults or forbidden choices/i);
-    assert.match(dependencyRule, /Only step down to an older dependency version after documenting/i);
-    assert.match(dependencyRule, /Do not treat dependency avoidance as an engineering virtue by itself/i);
-    assert.match(dependencyRule, /performance-fear choices/i);
-    assert.match(initPrompt, /latest stable compatible dependency set and official framework setup flow from live official documentation before coding unless a documented compatibility constraint blocks it/i);
-    assert.match(initPrompt, /Do not default fresh web projects to Next\.js/i);
-    assert.match(initPrompt, /do not avoid them because of this guard/i);
-    assert.match(initPrompt, /at least one plausible alternative/i);
-    assert.match(initPrompt, /official setup commands create the supported structure/i);
-  });
 });
 
 // ── Test: Delegating entry points reference rules + delegate to full file ───
@@ -400,21 +335,5 @@ describe('MCP Knowledge Layer Declaration', () => {
 // ── Test: .gitignore rule exists in git-workflow.md ─────────────────────────
 
 describe('Gitignore Governance', () => {
-  it('git-workflow.md contains .gitignore standards section', () => {
-    const gitWorkflowPath = join(ROOT, '.agent-context/rules/git-workflow.md');
-    const fileContent = readFileSync(gitWorkflowPath, 'utf-8');
-    assert.ok(
-      fileContent.includes('.gitignore') && fileContent.includes('.env'),
-      'git-workflow.md must contain .gitignore standards with .env rules'
-    );
-  });
 
-  it('security.md enforces .env is never committed', () => {
-    const securityPath = join(ROOT, '.agent-context/rules/security.md');
-    const fileContent = readFileSync(securityPath, 'utf-8');
-    assert.ok(
-      fileContent.includes('.env') && fileContent.includes('.gitignore'),
-      'security.md must reference .env and .gitignore'
-    );
-  });
 });

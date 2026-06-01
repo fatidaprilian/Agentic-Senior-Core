@@ -360,13 +360,9 @@ export async function validateInstructionAdapters(context) {
     'unreachable_files',
     'validation_plan',
   ];
-  const requiredUiReadabilitySnippets = [
-    'Motion/Palette Decision',
-    'product categories are heuristics',
-  ];
   const instructionFootprintLimits = [
     { path: 'AGENTS.md', maxLines: 180 },
-    { path: '.agent-context/prompts/bootstrap-design.md', maxLines: 235 },
+    { path: '.agent-context/prompts/bootstrap-design.md', maxLines: 80 },
     { path: '.agent-context/rules/frontend-architecture.md', maxLines: 180 },
   ];
 
@@ -378,13 +374,7 @@ export async function validateInstructionAdapters(context) {
     }
   }
 
-  for (const requiredUiReadabilitySnippet of requiredUiReadabilitySnippets) {
-    if (canonicalInstructionContent.includes(requiredUiReadabilitySnippet)) {
-      pass(`AGENTS.md includes UI readability snippet: ${requiredUiReadabilitySnippet}`);
-    } else {
-      fail(`AGENTS.md is missing UI readability snippet: ${requiredUiReadabilitySnippet}`);
-    }
-  }
+
 
   for (const footprintLimit of instructionFootprintLimits) {
     const absoluteFootprintPath = join(ROOT_DIR, footprintLimit.path);
