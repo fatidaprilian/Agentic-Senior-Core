@@ -15,10 +15,6 @@ import {
   VERSION_PATTERN,
 } from './constants.mjs';
 import { pushResult, readText } from './runtime.mjs';
-import {
-  buildDesignIntentSeedFromSignals,
-  validateDesignContractCompleteness,
-} from '../../lib/cli/project-scaffolder.mjs';
 
 export function runStaticReleaseChecks(results, diagnostics) {
   const packageJsonPath = 'package.json';
@@ -70,38 +66,6 @@ export function runStaticReleaseChecks(results, diagnostics) {
     pushResult(results, true, 'history-v18', 'Project history includes V1.8 release track');
   }
 
-  try {
-    const designIntentSeed = JSON.parse(buildDesignIntentSeedFromSignals({
-      projectName: 'Release Gate UI Contract',
-      projectDescription: 'Validates deterministic UI design contract completeness before release',
-      primaryDomain: 'Web application',
-      initContext: {
-        stackFileName: 'agent-decision-runtime.md',
-        blueprintFileName: 'agent-decision-architecture.md',
-      },
-      // Seed status so `tokenContinuityClassification: pending-research`
-      // is a valid placeholder. This probe asserts seed-shape completeness,
-      // not active-contract behavior; an agent or user fills the contract
-      // with anchor-derived / continuity-retained / newly-introduced once
-      // the dossier is filled.
-      status: 'seed-needs-design-synthesis',
-    }));
-    const designContractIssues = validateDesignContractCompleteness(designIntentSeed);
-
-    if (designContractIssues.length === 0) {
-      pushResult(results, true, 'ui-design-contract-completeness', 'Design intent seed includes deterministic token derivation and library verification gates');
-    } else {
-      pushResult(
-        results,
-        false,
-        'ui-design-contract-completeness',
-        `Design intent seed completeness issues: ${designContractIssues.join('; ')}`
-      );
-    }
-  } catch (designContractError) {
-    const designContractMessage = designContractError instanceof Error ? designContractError.message : 'Unknown design contract error';
-    pushResult(results, false, 'ui-design-contract-completeness', `Cannot validate design intent seed: ${designContractMessage}`);
-  }
 
   const requiredOperationsFiles = [
     '.agent-context/review-checklists/architecture-review.md',

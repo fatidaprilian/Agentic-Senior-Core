@@ -84,22 +84,6 @@ export async function registerCliSmokeAuditsAndOpsTests(t) {
     }
   });
 
-  await t.test('preflight checks abort installation on conflict', () => {
-    const preflightTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-preflight-'));
-    writeFileSync(join(preflightTargetDirectory, 'AGENTS.md'), 'Conflict');
-
-    try {
-      execSync(`node ${cliPath} init ${preflightTargetDirectory} --preset frontend-ui`);
-      assert.fail('Should have thrown an error due to preflight failure');
-    } catch (error) {
-      const errorOutput = error.stderr ? error.stderr.toString() : error.stdout.toString();
-      assert.match(errorOutput, /\[FATAL\] Preflight checks failed/);
-      assert.match(errorOutput, /Conflicting governance files already exist during init/);
-    } finally {
-      rmSync(preflightTargetDirectory, { recursive: true, force: true });
-    }
-  });
-
   await t.test('transactional install performs automatic rollback on failure', () => {
     const rollbackTargetDirectory = mkdtempSync(join(tmpdir(), 'agentic-senior-core-rollback-'));
     const rulesPath = join(rollbackTargetDirectory, 'AGENTS.md');

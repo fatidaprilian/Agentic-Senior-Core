@@ -235,7 +235,6 @@ describe('Bootstrap Reliability Floor', () => {
     assert.match(agentsContent, /bootstrap-design\.md/);
     assert.match(agentsContent, /frontend-architecture\.md/);
     assert.match(agentsContent, /docs\/DESIGN\.md/);
-    assert.match(agentsContent, /docs\/design-intent\.json/);
     assert.match(agentsContent, /onboarding-report\.json/i);
     assert.match(agentsContent, /perform live web research/i);
   });

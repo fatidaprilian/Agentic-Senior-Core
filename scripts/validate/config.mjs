@@ -267,16 +267,7 @@ export const REQUIRED_UPGRADE_UI_CONTRACT_WARNING_SNIPPETS = [
     path: 'lib/cli/commands/upgrade.mjs',
     snippets: [
       'UI/frontend scope was detected, but the dynamic design contract is incomplete:',
-      'docs/design-intent.json',
-      'Planned seed on apply: docs/design-intent.json',
-      'Upgrade synchronizes governance assets and can seed docs/design-intent.json, but it does not author project-specific docs/DESIGN.md automatically.',
       'detectUiScopeSignals',
-    ],
-  },
-  {
-    path: 'lib/cli/commands/upgrade/design-intent-seed.mjs',
-    snippets: [
-      'seed-generated-during-upgrade',
     ],
   },
 ];
@@ -288,7 +279,6 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
       'bootstrap-design.md',
       'frontend-architecture.md',
       'docs/DESIGN.md',
-      'docs/design-intent.json',
       'Documentation-First Mode',
       'English by default',
       'do not write application, firmware, or UI code',

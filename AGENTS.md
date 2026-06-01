@@ -137,8 +137,8 @@ Load `pr-checklist.md` and `architecture-review.md`, then report defects, risks,
 Trigger: ui, ux, layout, screen, tailwind, frontend, redesign.
 
 1. Read `bootstrap-design.md` and `frontend-architecture.md`. Read UI-relevant repo evidence from state, current UI code, and `docs/*`.
-2. Follow the three-step direction process in `bootstrap-design.md`: name defaults, choose anchor, commit to creative direction. If `docs/design-intent.json` has an anti-repeat ledger, load previous directions as blocklist.
-3. Generate or refine `docs/DESIGN.md` and `docs/design-intent.json` before UI implementation. Keep context isolated; do not eagerly load unrelated backend-only rules.
+2. Follow the three-step direction process in `bootstrap-design.md`: name defaults, choose anchor, commit to creative direction. If `docs/DESIGN.md` has an anti-repeat ledger, load previous directions as blocklist.
+3. Generate or refine `docs/DESIGN.md` before UI implementation. Keep context isolated; do not eagerly load unrelated backend-only rules.
 4. External websites are evidence for constraints and mechanics only. Do not copy layout rhythm, palette, component skin, or brand posture without explicit user approval.
 
 ## Bounded Reflection
@@ -156,7 +156,7 @@ Use valid rule IDs only; do not quote full rule prose, expose hidden chain-of-th
 Never claim done without:
 1. Relevant rules applied.
 2. PR and architecture checklists considered.
-3. Universal SOP gates satisfied: public and developer root `README.md`; `docs/doc-index.md` when `docs/` exists; `docs/project-brief.md`; `docs/architecture-decision-record.md`; `docs/flow-overview.md`; `docs/database-schema.md` when persistent data exists; `docs/api-contract.md` when API or web application flows exist; plus `docs/DESIGN.md` and `docs/design-intent.json` for UI scope.
+3. Universal SOP gates satisfied: public and developer root `README.md`; `docs/doc-index.md` when `docs/` exists; `docs/project-brief.md`; `docs/architecture-decision-record.md`; `docs/flow-overview.md`; `docs/database-schema.md` when persistent data exists; `docs/api-contract.md` when API or web application flows exist; plus `docs/DESIGN.md` for UI scope.
 4. If `.agent-context/state/active-memory.json` exists and material project progress happened, refresh it while preserving privacy rules and user-owned entries.
 5. Project validation passed through `npm run validate`.
 

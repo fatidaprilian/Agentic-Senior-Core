@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.5 - 2026-06-01
+### Changed
+- Removed conflicting files check from `init` command so that it overwrites `CLAUDE.md`, `GEMINI.md`, and other bridge adapters instead of throwing an error when re-initializing.
+- Purged final traces of `design-intent.json` from `AGENTS.md` universal SOP gates.
+
 ## 4.3.4 - 2026-06-01
 ### Changed
 - Adopted 2026 Context Ops Paradigm for UI design: `bootstrap-design.md` is now a compact Tier 1 aesthetics prompt (~400 tokens), removing JSON compliance theater.
 - Restructured `frontend-architecture.md` into Tier 2 engineering invariants only, completely removing `FE-001` to `FE-008` gates.
 - Dropped strict `design-intent.json` generation requirements from CI validation scripts.
+- Deprecated `audit:design-anti-repeat` command and completely purged `design-intent.json` generation from CLI init and upgrade flows.
 
 ## 4.3.3 - 2026-06-01
 ### Changed
