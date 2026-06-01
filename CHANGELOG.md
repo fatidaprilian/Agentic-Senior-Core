@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.6 - 2026-06-01
+### Changed
+- Synchronized npm release metadata for the 4.3.6 package version.
+- Removed obsolete validation output artifacts from the release tree.
+
 ## 4.3.5 - 2026-06-01
 ### Changed
 - Removed conflicting files check from `init` command so that it overwrites `CLAUDE.md`, `GEMINI.md`, and other bridge adapters instead of throwing an error when re-initializing.
