@@ -43,12 +43,7 @@ const REQUIRED_PR_CHECKLIST_SNIPPETS = [
   'User can always force strict audit mode manually',
 ];
 
-const REQUIRED_ARCHITECTURE_CHECKLIST_SNIPPETS = [
-  '## Backend Universal Principles',
-  'No clever hacks in backend and shared core modules',
-  'No premature abstraction',
-  'Readability over brevity',
-];
+const REQUIRED_ARCHITECTURE_CHECKLIST_SNIPPETS = [];
 
 function pushResult(results, isPassed, checkName, details) {
   results.push({

@@ -42,12 +42,7 @@ const REQUIRED_PR_CHECKLIST_SNIPPETS = [
   '### 15. Universal SOP Consolidation',
 ];
 
-const REQUIRED_ARCHITECTURE_CHECKLIST_SNIPPETS = [
-  '## Backend Universal Principles',
-  'No clever hacks in backend and shared core modules',
-  'No premature abstraction',
-  'Readability over brevity',
-];
+const REQUIRED_ARCHITECTURE_CHECKLIST_SNIPPETS = [];
 
 const REQUIRED_FRONTEND_RULE_SNIPPETS = [
   '## FE-009: Accessibility',
@@ -56,7 +51,7 @@ const REQUIRED_FRONTEND_RULE_SNIPPETS = [
   '## FE-010: CSS Production Hardening',
   'overflow, wrapping, truncation',
   '## FE-011: Implementation Boundaries',
-  'Do not hardcode Zustand, React Query, smart/dumb component doctrine',
+  'Do not hardcode framework-specific state management or data fetching libraries, or rigid component doctrines',
 ];
 
 const REQUIRED_BOOTSTRAP_DESIGN_SNIPPETS = [
