@@ -167,13 +167,10 @@ Per file, the `id_prefix` value in YAML frontmatter and the section ID prefix.
 | `architecture.md` | `ARCH` | architecture |
 | `database-design.md` | `DATA` | database-design |
 | `docker-runtime.md` | `DOCK` | docker-runtime |
-| `efficiency-vs-hype.md` | `DEP` | efficiency-vs-hype |
 | `error-handling.md` | `ERR` | error-handling |
 | `event-driven.md` | `EVT` | event-driven |
 | `frontend-architecture.md` | `FE` | frontend-architecture |
-| `git-workflow.md` | `GIT` | git-workflow |
 | `microservices.md` | `SVC` | microservices |
-| `naming-conv.md` | `NAME` | naming-conv |
 | `performance.md` | `PERF` | performance |
 | `realtime.md` | `RT` | realtime |
 | `security.md` | `SEC` | security |
@@ -181,7 +178,6 @@ Per file, the `id_prefix` value in YAML frontmatter and the section ID prefix.
 
 Notes on prefix choices:
 
-- `DEP` for `efficiency-vs-hype.md` reflects the actual content (Dependency and Tooling Boundary), not the filename slug. The filename will rename in a follow-up cleanup; for now, `id_prefix: DEP` and `domain: efficiency-vs-hype` until the rename is approved separately.
 - `SVC` for `microservices.md` because the rule is about service boundaries broadly, not a literal microservice prescription.
 - `RT` is intentionally short; realtime rule has few sections.
 
@@ -290,7 +286,6 @@ Tiny rule files below 600 original OpenAI tokens use the same v4 format, but the
 - **Reflection block format inside prompts.** That is Phase 3 anti-halu work. This spec covers rule files only.
 - **Caching layer breakpoints.** That is Phase 2.
 - **Retrieval index structure.** That is Phase 4.
-- **Filename rename for `efficiency-vs-hype.md`.** Follow-up cleanup, not Phase 1 scope.
 - **YAML frontmatter for `prompts/` and `review-checklists/`.** Phase 1 scope is rule files only. Other files keep current format.
 
 ## 8. Acceptance for GATE A

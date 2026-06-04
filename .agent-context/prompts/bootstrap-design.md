@@ -7,56 +7,46 @@ Use this prompt for UI, UX, frontend layout, screen, or redesign work. Create or
 - Use current repo evidence, project docs, and `.agent-context/` as style context.
 - Do not copy layout rhythm, palette, component skin, or brand posture from external references without explicit user approval.
 - WCAG 2.2 AA is the hard compliance floor.
-- Before choosing a new UI library, research current official docs. Do not default to any component kit or styling tool by habit, and do not avoid them when they fit.
+- Before choosing a new UI library, research current official docs.
 
-## Step 1: Name Your Defaults
+## Design Direction Process
 
-Before any visual choice, name three design directions you are most tempted to use for this project. For each:
-1. Name the specific visual pattern (layout, palette, density, motion, typography).
-2. Argue against it: why would it flatten what is specific about THIS product's core purpose and data shape?
-3. Derive your search direction from the rejection argument.
-
-## Step 2: Choose an Anchor
-
-Pick one concrete, googleable real-world reference whose interaction mechanics (not surface styling) translate to this UI. The anchor must be specific enough that renaming the product to a different category breaks coherence.
-
-Hard constraints:
-- Reject generic quality words as anchors: "modern", "clean", "premium", "minimal", "bold" are not anchors.
-- Do not default to spatial place metaphors (room, studio, lab, cockpit, command center). Prefer artifacts, workflows, instruments, data behaviors, or interaction mechanisms.
-- Record what mechanic is borrowed and what is explicitly NOT borrowed (palette, component skin, layout rhythm).
-
-## Step 3: Creative Commitments
-
-Record before coding:
-1. **Typography**: Choose distinctive fonts with meaningful role contrast. Avoid Inter, Roboto, Arial, Space Grotesk, system fonts.
-2. **Color and palette**: Dominant colors with sharp accents. Name what product evidence makes the palette fit. Name one color behavior that would not transfer to another category.
-3. **Motion and interaction**: Define one signature motion behavior more specific than "smooth." One well-orchestrated page load with staggered reveals creates more delight than scattered micro-interactions.
-4. **Composition**: One composition choice that avoids interchangeable card stacks. Create atmosphere and depth rather than solid backgrounds.
-
-## Previous Directions (do not repeat)
-
-If `docs/DESIGN.md` contains a list of previous directions, treat every entry as a blocklist. The chosen anchor must differ from every blocklisted entry on conceptual family, hierarchy, and motion. Restating an existing direction with new wording is not a new direction.
-
-## Named Defaults to Avoid
-
-- `dev-tool default`: condensed tabular numerics, monospace on dark slate, monochrome status dots, minimal chrome
-- `AI-startup landing default`: purple-to-pink gradient hero, floating glass cards, three-up feature grid, vague hero copy
-- `SaaS admin default`: left-side icon-only nav, top utility bar, three-card KPI row above data table, neutral grey
-- `marketing site default`: hero image with headline, three feature tiles, pricing tiers, testimonial carousel
-
-Avoid: purple gradients on white, predictable centered-everything composition, solid-color backgrounds without depth, cookie-cutter component patterns. Never converge on common choices across generations.
-
-## Post-Implementation Check
-
-After generating UI code, answer:
-1. If the product name were removed, would a designer identify what specific product this was built for? If no, revise the concept.
-2. Does the primary viewport avoid the centered-everything default? If no, name the product reason or revise.
-3. Name the one default you were most tempted to use. Confirm it was rejected with a product-specific reason.
+1. **Name Your Defaults**: Name three temptations (e.g. SaaS admin default, AI-startup landing) and why they flatten this product. Derive your search direction by rejecting them.
+2. **Choose an Anchor**: Pick a specific real-world reference whose mechanics translate here. Do not use generic quality words ("clean", "modern").
+3. **Creative Commitments**: Choose distinctive typography, dominant colors with sharp accents, and one signature motion behavior. Create depth rather than flat card stacks.
+4. **Previous Directions**: If `docs/DESIGN.md` contains previous directions, treat them as a blocklist. The new anchor must differ in conceptual family, hierarchy, and motion.
 
 ## Redesign Protocol
 
-When the user says "redesign from zero" or equivalent: treat existing UI as behavioral evidence only. Rewrite design docs. Change primary composition, hierarchy, interaction model, and responsive architecture. Do not ship a palette swap or same hero with new colors.
+When the user says "redesign from zero": treat existing UI as behavioral evidence only. Rewrite design docs. Change primary composition, hierarchy, interaction model, and responsive architecture. Do not ship a palette swap.
 
-## Required Docs
+## Output Format
 
-Generate or refine `docs/DESIGN.md` before UI implementation. Keep design rationale, creative commitments, and any anti-repeat notes in the markdown contract instead of a separate machine-readable JSON file.
+`docs/DESIGN.md` must be a compact token file under 400 tokens. Rationale stays in working memory.
+
+Required sections (in this order, no additions):
+
+### Anchor
+One sentence: the interaction anchor and what mechanic is borrowed.
+
+### Tokens
+- **Typography**: font families (display, body, mono), scale base and ratio, scale method
+- **Colors**: OKLCH primitives with semantic role mapping (primary, secondary, surface, error, success)
+- **Spacing**: base unit, scale
+- **Radius**: small, medium, large values
+- **Shadow**: elevation levels
+- **Motion**: duration, easing, reduced-motion fallback
+
+### Constraints
+- WCAG 2.2 AA floor
+- Up to 3 product-specific anti-patterns
+
+### Previous Directions
+Anchors used in prior iterations (blocklist for redesign). Start empty for fresh projects.
+
+## Required Validation Gates
+
+Only three gates. Do not add more:
+1. Anchor exists and is specific.
+2. Token values are derived from the anchor.
+3. WCAG 2.2 AA compliance floor is met.

@@ -1,17 +1,19 @@
-# DESIGN.md (Dynamic Contract Guide)
+# DESIGN.md (Compact Token File Standard)
 
-This repository ships governance assets, not a finished application UI. In target projects, `docs/DESIGN.md` is the human-readable half of a dynamic design contract.
+This repository ships governance assets, not a finished application UI. In target projects, `docs/DESIGN.md` is a compact design token file that agents read every session for visual consistency.
 
-When `agentic-senior-core init` detects UI scope, the target project should synthesize `docs/DESIGN.md` for design direction, rationale, implementation guidance, and anti-generic constraints.
+## Token File Role
 
-The contract should be generated using:
-- `.agent-context/prompts/bootstrap-design.md`
-- `.agent-context/rules/frontend-architecture.md`
+When `agentic-senior-core init` detects UI scope, the target project should synthesize `docs/DESIGN.md` as a compact token file using:
+- `.agent-context/prompts/bootstrap-design.md` (three-step direction process)
+- `.agent-context/rules/frontend-architecture.md` (engineering constraints)
 
-`docs/DESIGN.md` should stay structural and project-specific:
-- define design intent, visual direction, component language, accessibility, responsiveness, and anti-patterns
-- define perceptual color logic, typographic math, and cross-viewport adaptation rules instead of vague style adjectives
-- explain why the system fits the product and users
-- avoid turning reference styles into fixed templates
+## Required Format
 
-The markdown contract should carry enough specific rationale for future UI tasks to stay dynamic without drifting into generic output.
+`docs/DESIGN.md` must contain these sections only:
+1. **Anchor**: one sentence naming the interaction anchor and borrowed mechanic
+2. **Tokens**: typography, colors (OKLCH), spacing, radius, shadow, motion values
+3. **Constraints**: WCAG 2.2 AA floor plus up to 3 product-specific anti-patterns
+4. **Previous Directions**: anchors used in prior iterations (blocklist for redesign)
+
+Target size: under 400 tokens. Rationale, derivation logic, and research evidence stay in agent working memory during the session but do not persist to the token file.

@@ -33,12 +33,13 @@ Always prefix noisy shell commands: `ascx git status`, `ascx git diff`, `ascx np
 Always read and apply `.agent-context/prompts/compact-natural-mode.md` for every final user-facing reply. Never repeat full command output; reference tee file paths when truncated.
 
 ## Layer Index
-### Layer 1: Rules (21 Files) [SCOPE-RESOLVED]
+### Layer 1: Rules (18 Files) [SCOPE-RESOLVED]
 Location: `.agent-context/rules/`.
 
 Load only relevant rule files. Do not read the entire rule directory by default.
 
-Available rules: `naming-conv.md` (`NAME-*`, v4), `architecture.md` (`ARCH-*`, v4), `security.md` (`SEC-*`, v4), `performance.md` (`PERF-*`, v4), `error-handling.md` (`ERR-*`, v4), `testing.md` (`TEST-*`, v4), `git-workflow.md` (`GIT-*`, v4), `efficiency-vs-hype.md` (`DEP-*`, v4), `api-docs.md` (`API-*`, v4), `microservices.md` (`SVC-*`, v4), `event-driven.md` (`EVT-*`, v4), `database-design.md` (`DATA-*`, v4), `realtime.md` (`RT-*`, v4), `frontend-architecture.md` (`FE-*`, v4), `docker-runtime.md` (`DOCK-*`, v4), `observability.md` (`OBS-*`, v4), `resilience.md` (`RES-*`, v4), `migrations.md` (`MIG-*`, v4), `background-jobs.md` (`JOB-*`, v4), `config-and-flags.md` (`CFG-*`, v4), `api-versioning.md` (`VER-*`, v4).
+Available rules: `architecture.md` (`ARCH-*`, v4), `security.md` (`SEC-*`, v4), `performance.md` (`PERF-*`, v4), `error-handling.md` (`ERR-*`, v4), `testing.md` (`TEST-*`, v4), `api-docs.md` (`API-*`, v4), `microservices.md` (`SVC-*`, v4), `event-driven.md` (`EVT-*`, v4), `database-design.md` (`DATA-*`, v4), `realtime.md` (`RT-*`, v4), `frontend-architecture.md` (`FE-*`, v4), `docker-runtime.md` (`DOCK-*`, v4), `observability.md` (`OBS-*`, v4), `resilience.md` (`RES-*`, v4), `migrations.md` (`MIG-*`, v4), `background-jobs.md` (`JOB-*`, v4), `config-and-flags.md` (`CFG-*`, v4), `api-versioning.md` (`VER-*`, v4).
+
 
 For Docker or Compose work, load `docker-runtime.md` and verify the latest official Docker docs before authoring container assets. Also perform live web research for Docker and framework/package setup claims. For framework or package setup work, use the latest stable compatible dependency set and official setup flow unless a documented compatibility constraint blocks it; prefer official framework scaffolders when they create the supported project shape. New dependencies are allowed when they improve efficiency, delivery time, correctness, accessibility, UX, or maintainability. Do not treat dependency avoidance or vague performance fear as a default reason to skip a modern maintained library.
 

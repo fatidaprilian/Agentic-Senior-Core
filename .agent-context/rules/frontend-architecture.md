@@ -22,7 +22,7 @@ Load this rule for UI-facing engineering work. This file contains strict enginee
 
 ## FE-011: Implementation Boundaries
 1. Follow the shipped project stack and current repo patterns.
-2. Do not hardcode Zustand, React Query, smart/dumb component doctrine.
+2. Do not hardcode framework-specific state management or data fetching libraries, or rigid component doctrines.
 
 ## FE-012: Data State Surface
 1. Explicitly handle empty, loading, error, and offline states.

@@ -44,10 +44,8 @@ If the user specifies a framework, runtime, or architecture constraint, the agen
 4. Scaffold the initial project structure only after runtime and architecture decisions are explicit:
    - Create only the directories and files justified by the approved structure.
    - Set up configuration, validation, error handling, observability, health checks, and persistence only when they fit the approved runtime and project scope.
-   - Every file must follow [naming conventions](../rules/naming-conv.md).
    - Every module must follow [architecture.md](../rules/architecture.md).
    - New code must pass the natural implementation pass in [architecture.md](../rules/architecture.md): start with the simplest correct flow, add complexity only when the requirement or repo evidence needs it, and do not add files or layers for small tasks.
-   - Every dependency must be justified per [efficiency-vs-hype.md](../rules/efficiency-vs-hype.md).
    - Use official framework setup commands or canonical starter flows when they produce newer, better-supported dependency defaults than manual package assembly.
    - Do not assemble a framework project from scratch by habit when official setup commands create the supported structure. Manual assembly is allowed only for tiny prototypes, educational demos, unusual repo constraints, or a documented architecture reason.
    - If containerization is selected, Docker assets must follow [docker-runtime.md](../rules/docker-runtime.md) and the latest official Docker docs instead of stale blog-era patterns. Selected Docker lanes require files and runbooks, not docs-only acknowledgment.

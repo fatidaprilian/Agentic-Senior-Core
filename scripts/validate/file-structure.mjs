@@ -86,14 +86,11 @@ export async function validateRuleFiles(context) {
   console.log('\nChecking rule, checklist, prompt, and state files...');
 
   const expectedPaths = [
-    'rules/naming-conv.md',
     'rules/architecture.md',
     'rules/security.md',
     'rules/performance.md',
     'rules/error-handling.md',
     'rules/testing.md',
-    'rules/git-workflow.md',
-    'rules/efficiency-vs-hype.md',
     'rules/api-docs.md',
     'rules/microservices.md',
     'rules/event-driven.md',

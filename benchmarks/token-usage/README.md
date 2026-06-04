@@ -25,7 +25,7 @@ token-usage/
 
 10 fixtures covering 19 distinct rules, prompts, and checklists. Distribution per `phase-0-baseline.md`: 3 scaffolding, 2 design-ui, 2 backend, 1 security, 1 refactor, 1 review.
 
-Rules covered: `testing`, `architecture`, `error-handling`, `database-design`, `api-docs`, `performance`, `security`, `frontend-architecture`, `naming-conv`, `init-project`, `bootstrap-design`, `efficiency-vs-hype`, `microservices`, `docker-runtime`, `event-driven`, `refactor`, `review-code`, `pr-checklist`, `architecture-review`.
+Rules covered: `testing`, `architecture`, `error-handling`, `database-design`, `api-docs`, `performance`, `security`, `frontend-architecture`, `init-project`, `bootstrap-design`, `microservices`, `docker-runtime`, `event-driven`, `refactor`, `review-code`, `pr-checklist`, `architecture-review`.
 
 Known gap: the `realtime` rule has no fixture in the Phase 0 set. Add one in Phase 3 if evaluation needs that signal. Phase 0 baseline does not block on this.
 

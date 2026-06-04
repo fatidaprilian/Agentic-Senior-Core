@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.8 - 2026-06-04
+### Changed
+- Removed deprecated backend rules `naming-conv.md`, `git-workflow.md`, and `efficiency-vs-hype.md` for better token optimization.
+- Condensed `architecture.md` to remove redundancy (ARCH-008).
+- Generalized frontend and backend rules to be truly framework-agnostic.
+- Cleaned up rule fixtures and rule triggers to maintain validation correctness.
+
 ## 4.3.7 - 2026-06-01
 ### Changed
 - Removed remaining active `design-intent.json` requirements from UI bootstrap, review, refactor, and PR checklist guidance.

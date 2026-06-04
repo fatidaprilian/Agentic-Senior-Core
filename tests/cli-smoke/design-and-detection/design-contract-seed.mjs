@@ -12,7 +12,6 @@ import {
   tmpdir,
   writeFileSync,
 } from '../shared.mjs';
-import { validateDesignIntentContract } from '../../../lib/cli/project-scaffolder.mjs';
 import { detectProjectContext, detectUiScopeSignals } from '../../../lib/cli/detector.mjs';
 
 export async function registerDesignContractSeedSmokeTests(t) {

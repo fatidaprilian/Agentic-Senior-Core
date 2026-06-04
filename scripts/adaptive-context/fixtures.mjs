@@ -38,8 +38,8 @@ export const ADAPTIVE_CONTEXT_FIXTURES = [
   {
     id: 'indonesian-readable-service',
     requestText: 'Rapihin service ini biar namingnya enak dibaca.',
-    requiredLabels: ['ARCH', 'NAME'],
-    allowedLabels: ['ARCH', 'NAME'],
+    requiredLabels: ['ARCH'],
+    allowedLabels: ['ARCH'],
   },
   {
     id: 'natural-cron-silent',
@@ -86,8 +86,8 @@ export const ADAPTIVE_CONTEXT_FIXTURES = [
   {
     id: 'checkout-helper-naming',
     requestText: 'Rapihin nama variabel di checkout helper, jangan bikin abstraction baru.',
-    requiredLabels: ['ARCH', 'NAME'],
-    allowedLabels: ['ARCH', 'NAME'],
+    requiredLabels: ['ARCH'],
+    allowedLabels: ['ARCH'],
   },
   {
     id: 'mobile-button-cut-off',
@@ -125,12 +125,7 @@ export const ADAPTIVE_CONTEXT_FIXTURES = [
     requiredLabels: ['DATA', 'PERF', 'RES'],
     allowedLabels: ['DATA', 'PERF', 'RES'],
   },
-  {
-    id: 'dependency-update-check',
-    requestText: 'Cek dependency package ini outdated atau perlu update.',
-    requiredLabels: ['DEP'],
-    allowedLabels: ['DEP'],
-  },
+
   {
     id: 'frontend-redesign',
     requestText: 'Redesign this frontend screen from zero with responsive layout, motion, and UI design docs.',
@@ -158,8 +153,8 @@ export const ADAPTIVE_CONTEXT_FIXTURES = [
   {
     id: 'service-refactor-clean-code',
     requestText: 'Refactor this service module. Clean up helper names, avoid over-engineering, and keep tests readable.',
-    requiredLabels: ['ARCH', 'NAME', 'TEST'],
-    allowedLabels: ['ARCH', 'NAME', 'TEST'],
+    requiredLabels: ['ARCH', 'TEST'],
+    allowedLabels: ['ARCH', 'TEST'],
   },
   {
     id: 'versioned-api-endpoint',

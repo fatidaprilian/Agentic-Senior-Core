@@ -30,8 +30,4 @@ keywords: [architecture, arch, boundary, system]
 2. Load global domain rules lazily based on touched scope.
 3. Do not create or load stack-specific governance adapters as the baseline.
 
-## ARCH-008: Backend Universal Principles
-1. No clever hacks.
-2. No premature abstraction.
-3. Readability over brevity.
-4. Keep backend and shared core modules clean.
+

@@ -5,7 +5,6 @@
   "user_message": "Create a new Go CLI tool called 'syncr' that uses cobra. It should have subcommands: 'push <local> <remote>', 'pull <remote> <local>', and 'status'. Use go modules, set up golangci-lint, and structure the project so commands are unit-testable.",
   "expected_rules_triggered": [
     "architecture",
-    "naming-conv",
     "testing",
     "error-handling",
     "init-project"

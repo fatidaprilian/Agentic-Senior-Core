@@ -14,14 +14,11 @@ const LAYERS = [
   {
     name: 'Layer 1: Rules',
     requiredPaths: [
-      '.agent-context/rules/naming-conv.md',
       '.agent-context/rules/architecture.md',
       '.agent-context/rules/security.md',
       '.agent-context/rules/performance.md',
       '.agent-context/rules/error-handling.md',
       '.agent-context/rules/testing.md',
-      '.agent-context/rules/git-workflow.md',
-      '.agent-context/rules/efficiency-vs-hype.md',
       '.agent-context/rules/api-docs.md',
       '.agent-context/rules/microservices.md',
       '.agent-context/rules/event-driven.md',
@@ -30,7 +27,7 @@ const LAYERS = [
       '.agent-context/rules/frontend-architecture.md',
       '.agent-context/rules/docker-runtime.md',
     ],
-    injectionKeywords: ['.agent-context/rules/', 'naming-conv', 'architecture', 'security', 'docker-runtime'],
+    injectionKeywords: ['.agent-context/rules/', 'architecture', 'security', 'docker-runtime'],
   },
   {
     name: 'Layer 2: Runtime Decision Signals',
@@ -159,47 +156,6 @@ describe('Adaptive Strategy Guidance', () => {
     assert.match(instructionsContent, /Do not silently choose frameworks or architecture from offline heuristics/i);
     assert.match(instructionsContent, /WAIT for user approval/i);
   });
-});
-
-describe('Docker and Design Freshness Guidance', () => {
-
-
-  it('design contract seed keeps machine-readable context hygiene boundaries', () => {
-    const designContractSource = readFileSync(
-      join(ROOT, 'lib', 'cli', 'project-scaffolder', 'design-contract.mjs'),
-      'utf-8'
-    );
-
-    assert.match(designContractSource, /contextHygiene/);
-    assert.match(designContractSource, /repoEvidenceOverridesMemory/);
-    assert.match(designContractSource, /requireExplicitContinuityApproval/);
-    assert.match(designContractSource, /forbidCarryoverWhenUnapproved/);
-    assert.match(designContractSource, /approvedExternalConstraintUsage/);
-    assert.match(designContractSource, /accessibilityPolicy/);
-    assert.match(designContractSource, /designFlexibilityPolicy/);
-    assert.match(designContractSource, /locked-outcomes-flexible-expression/);
-    assert.match(designContractSource, /literalTranslationPolicy/);
-    assert.match(designContractSource, /spatialAutopilotPolicy/);
-    assert.match(designContractSource, /spatialMetaphorPolicy/);
-    assert.match(designContractSource, /externalWebsiteReferencePolicy/);
-    assert.match(designContractSource, /frameworkNeutralityPolicy/);
-    assert.match(designContractSource, /manual-framework-scaffold-used-when-official-setup-fits/);
-    assert.match(designContractSource, /hardComplianceFloor/);
-    assert.match(designContractSource, /advisoryContrastModel/);
-    assert.match(designContractSource, /designExecutionPolicy/);
-    assert.match(designContractSource, /separateRequiredOutcomesFromCandidateMoves/);
-    assert.match(designContractSource, /reviewRubric/);
-    assert.match(designContractSource, /representationStrategy/);
-    assert.match(designContractSource, /requireSurfacePlan/);
-    assert.match(designContractSource, /forbidScreenshotDependency/);
-    assert.match(designContractSource, /requireViewportMutationPlan/);
-    assert.match(designContractSource, /requireInteractionStateMatrix/);
-    assert.match(designContractSource, /semanticReviewFocus/);
-    assert.match(designContractSource, /genericitySignals/);
-    assert.match(designContractSource, /validBoldSignals/);
-    assert.match(designContractSource, /mustExplainGenericity/);
-  });
-
 });
 
 // ── Test: Delegating entry points reference rules + delegate to full file ───
@@ -331,8 +287,3 @@ describe('MCP Knowledge Layer Declaration', () => {
   });
 });
 
-// ── Test: .gitignore rule exists in git-workflow.md ─────────────────────────
-
-describe('Gitignore Governance', () => {
-
-});

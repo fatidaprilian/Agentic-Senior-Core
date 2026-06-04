@@ -5,9 +5,7 @@
   "user_message": "Initialize a new React project with TypeScript and Tailwind CSS. Set up the standard folder layout, ESLint, Prettier, and Vitest. Use the latest stable versions and the official Vite scaffolder.",
   "expected_rules_triggered": [
     "frontend-architecture",
-    "naming-conv",
     "testing",
-    "efficiency-vs-hype",
     "init-project"
   ],
   "context_size_target": "small",
