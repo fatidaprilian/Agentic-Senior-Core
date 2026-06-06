@@ -38,7 +38,7 @@ When the user says "redesign from zero": treat existing UI as behavioral evidenc
 
 ## Output Format
 
-`docs/DESIGN.md` must be a compact token file under 400 tokens (exception: if using a fetched brand reference from `getdesign`, you may preserve its rich details up to 2500 tokens). Rationale stays in working memory.
+`docs/DESIGN.md` must be a compact token file under 400 tokens. Rationale stays in working memory.
 
 Required sections (in this order, no additions):
 
