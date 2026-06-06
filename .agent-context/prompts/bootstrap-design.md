@@ -13,13 +13,14 @@ Use this prompt for UI, UX, frontend layout, screen, or redesign work. Create or
 ## Design Reference Retrieval
 
 Before generating tokens from scratch, check if a proven brand reference matches
-the product aesthetic. Run `npx getdesign list` to see all available references.
+the product aesthetic. Run `npx -y getdesign list` to see all available references.
 Pick by spatial mechanics and typographic character, not by color.
 
-Fetch: `npx getdesign add <slug> --out docs/DESIGN.md`
+Fetch: `npx -y getdesign add <slug> --out docs/DESIGN.md --force`
 
 Customize: replace brand colors with product OKLCH equivalents, replace brand name
 with product name, remove brand iconography, keep spatial rhythm and density logic.
+Do not aggressively compress fetched design files; keep them under 2500 tokens.
 
 If no brand matches or terminal is unavailable, skip and generate from scratch below.
 
@@ -38,7 +39,7 @@ When the user says "redesign from zero": treat existing UI as behavioral evidenc
 
 ## Output Format
 
-`docs/DESIGN.md` must be a compact token file under 400 tokens. Rationale stays in working memory.
+`docs/DESIGN.md` must be a compact token file under 2500 tokens. Rationale stays in working memory.
 
 Required sections (in this order, no additions):
 
