@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.10 - 2026-06-06
+### Changed
+- Added `-y` and `--force` flags to `npx getdesign` commands in `bootstrap-design.md` to prevent interactive shell prompts from blocking agent execution.
+- Added an exception to the 400-token design limit in `bootstrap-design.md`: agents may now preserve up to 2500 tokens of rich design details when fetching from an external brand reference via `getdesign`, avoiding destructive compression of proven design systems.
+
 ## 4.3.9 - 2026-06-06
 ### Added
 - Added Design Reference Retrieval pre-step to `bootstrap-design.md`. Agents now run `npx getdesign list` to discover the live catalog of brand-inspired design systems from awesome-design-md, pick the best spatial match, fetch via `npx getdesign add`, and customize tokens for the product. Falls back to scratch generation when no match exists or terminal access is unavailable.

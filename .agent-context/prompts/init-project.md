@@ -58,5 +58,3 @@ See [.agent-context/state/onboarding-report.json](../state/onboarding-report.jso
 
 When a user requests frontend or UI/UX design, the agent must automatically execute the [bootstrap-design.md](./bootstrap-design.md) prompt to synthesize a dynamic markdown design contract (`docs/DESIGN.md`).
 Keep UI-only requests context-isolated: load [bootstrap-design.md](./bootstrap-design.md) and [frontend-architecture.md](../rules/frontend-architecture.md) first, and do not eagerly load backend-only rules unless the task explicitly crosses backend boundaries.
-
-Before generating design tokens from scratch, run `npx getdesign list` to discover all available brand-inspired design systems. Pick the brand whose spatial mechanics and typographic character best match the product, then run `npx getdesign add <slug> --out docs/DESIGN.md` to fetch it as a token foundation. Customize colors, names, and iconography for the product. If no brand matches or terminal is unavailable, generate from scratch per bootstrap-design.md.
