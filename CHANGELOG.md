@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.9 - 2026-06-06
+### Added
+- Added Design Reference Retrieval pre-step to `bootstrap-design.md`. Agents now run `npx getdesign list` to discover the live catalog of brand-inspired design systems from awesome-design-md, pick the best spatial match, fetch via `npx getdesign add`, and customize tokens for the product. Falls back to scratch generation when no match exists or terminal access is unavailable.
+
 ## 4.3.8 - 2026-06-04
 ### Changed
 - Removed deprecated backend rules `naming-conv.md`, `git-workflow.md`, and `efficiency-vs-hype.md` for better token optimization.
