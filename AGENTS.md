@@ -19,7 +19,7 @@ Write instructions as imperative gates:
 
 ## Bootstrap Receipt
 For non-trivial work, run `agentic-senior-core context "<task_description>"` (or `npx @ryuenn3123/agentic-senior-core context "<task_description>"`) and emit a concise Bootstrap Receipt before implementation output or file edits:
-- `loaded_files`: files actually read
+- `loaded_files`: files actually read (exact paths from selectedRules/selectedPrompts only; zero hallucination)
 - `selected_rules`: files selected for this scope and why
 - `skipped_rules`: out-of-scope categories left unloaded
 - `unreachable_files`: required files that could not be read

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.11 - 2026-06-06
+### Changed
+- Tightened `AGENTS.md` Bootstrap Receipt instructions to explicitly force agents to use the exact `selectedRules` and `selectedPrompts` provided by the Adaptive Context CLI output. This prevents LLM hallucination of non-existent files (e.g. `bootstrap-project-context.md`) and ensures correct prompt routing for frontend UI design tasks.
+
 ## 4.3.10 - 2026-06-06
 ### Changed
 - Added `-y` and `--force` flags to `npx getdesign` commands in `bootstrap-design.md` to prevent interactive shell prompts from blocking agent execution.
