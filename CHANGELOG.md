@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.14 - 2026-06-07
+### Changed
+- Strengthened the Context Activation instruction in `AGENTS.md` by replacing the `Bootstrap Receipt` and `Default Activation` sections with a single, aggressive `MANDATORY FIRST STEP` block. This acts as a hard stop to prevent agent laziness and forces explicit `agentic-senior-core context` resolution before generating code or plans.
+
 ## 4.3.13 - 2026-06-07
 ### Changed
 - Replaced the design reference retrieval logic in `bootstrap-design.md` with a single-read temporary fetch (`npx getdesign add`) that derives token values and discards the reference, avoiding permanent context window overhead while keeping the output under 400 tokens.

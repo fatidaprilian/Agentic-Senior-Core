@@ -17,18 +17,19 @@ Write instructions as imperative gates:
 - Move detailed policy into `.agent-context/`.
 - Add validation when a rule can drift.
 
-## Bootstrap Receipt
-For non-trivial work, run `agentic-senior-core context "<task_description>"` (or `npx @ryuenn3123/agentic-senior-core context "<task_description>"`) and emit a concise Bootstrap Receipt before implementation output or file edits:
+## MANDATORY FIRST STEP: Context Activation
+STOP. Before generating ANY plan, code, or design for a non-trivial task, you MUST run `agentic-senior-core context "<task_description>"` (or `npx @ryuenn3123/agentic-senior-core context "<task_description>"`) to resolve scopes. Do not guess or hallucinate context.
+
+Immediately emit a concise Bootstrap Receipt:
 - `loaded_files`: files actually read (exact paths from selectedRules/selectedPrompts only; zero hallucination)
 - `selected_rules`: files selected for this scope and why
 - `skipped_rules`: out-of-scope categories left unloaded
 - `unreachable_files`: required files that could not be read
 - `validation_plan`: expected checks before completion
 
-Keep it short. Do not load every rule just to fill it out.
+Skip this step ONLY for trivial tasks (version bumps, typo fixes).
 
-## Default Activation And Command Economy
-Before any non-trivial task, run `agentic-senior-core context "<task_description>"` and emit the Bootstrap Receipt. Skip only for trivial tasks: version bumps, typo fixes, single-line commits.
+## Command Economy
 Always prefix noisy shell commands: `ascx git status`, `ascx git diff`, `ascx npm test`, `ascx npm install`, `ascx npm run build`, `ascx tsc`, `ascx rg` searches. Use raw commands only for pipes, redirects, or commands not supported by ascx.
 Always read and apply `.agent-context/prompts/compact-natural-mode.md` for every final user-facing reply. Never repeat full command output; reference tee file paths when truncated.
 
