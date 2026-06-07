@@ -29,6 +29,7 @@ Refactor rules:
 - Prefer the shorter implementation only when it keeps the same guarantees.
 - Run a final simplification pass before completion.
 - Update tests and docs whenever behavior contracts, public APIs, data shape, or UI contracts change.
+- When fixing a bug: append one sentence to the nearest relevant doc (`docs/flow-overview.md` or `docs/architecture-decision-record.md`) naming the root cause and how to prevent recurrence.
 
 For every meaningful change, explain:
 - what risk or friction existed

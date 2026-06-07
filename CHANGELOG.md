@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.15 - 2026-06-07
+### Added
+- Added compact Git Workflow and Do Not Modify gates to `AGENTS.md`, covering branch, commit, PR, validation, and protected local/generated path expectations.
+- Added bug-fix root-cause and prevention documentation guidance to `.agent-context/prompts/refactor.md`.
+
+### Changed
+- Refined `.agent-context/prompts/init-project.md` so thin or ambiguous briefs trigger the smallest useful clarifying questions before docs are drafted.
+
 ## 4.3.14 - 2026-06-07
 ### Changed
 - Strengthened the Context Activation instruction in `AGENTS.md` by replacing the `Bootstrap Receipt` and `Default Activation` sections with a single, aggressive `MANDATORY FIRST STEP` block. This acts as a hard stop to prevent agent laziness and forces explicit `agentic-senior-core context` resolution before generating code or plans.

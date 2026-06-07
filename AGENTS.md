@@ -30,9 +30,7 @@ Immediately emit a concise Bootstrap Receipt:
 Skip this step ONLY for trivial tasks (version bumps, typo fixes).
 
 ## Command Economy
-Always prefix noisy shell commands: `ascx git status`, `ascx git diff`, `ascx npm test`, `ascx npm install`, `ascx npm run build`, `ascx tsc`, `ascx rg` searches. Use raw commands only for pipes, redirects, or commands not supported by ascx.
-Always read and apply `.agent-context/prompts/compact-natural-mode.md` for every final user-facing reply. Never repeat full command output; reference tee file paths when truncated.
-
+Use noisy command forms: `ascx git status`, `ascx git diff`, `ascx npm test`, `ascx npm install`, `ascx npm run build`, `ascx tsc`, `ascx rg`. Use raw commands only for pipes/redirects or unsupported commands. Apply `.agent-context/prompts/compact-natural-mode.md` for every final reply; never repeat full output; reference tee paths when truncated.
 ## Layer Index
 ### Layer 1: Rules (18 Files) [SCOPE-RESOLVED]
 Location: `.agent-context/rules/`.
@@ -40,7 +38,6 @@ Location: `.agent-context/rules/`.
 Load only relevant rule files. Do not read the entire rule directory by default.
 
 Available rules: `architecture.md` (`ARCH-*`, v4), `security.md` (`SEC-*`, v4), `performance.md` (`PERF-*`, v4), `error-handling.md` (`ERR-*`, v4), `testing.md` (`TEST-*`, v4), `api-docs.md` (`API-*`, v4), `microservices.md` (`SVC-*`, v4), `event-driven.md` (`EVT-*`, v4), `database-design.md` (`DATA-*`, v4), `realtime.md` (`RT-*`, v4), `frontend-architecture.md` (`FE-*`, v4), `docker-runtime.md` (`DOCK-*`, v4), `observability.md` (`OBS-*`, v4), `resilience.md` (`RES-*`, v4), `migrations.md` (`MIG-*`, v4), `background-jobs.md` (`JOB-*`, v4), `config-and-flags.md` (`CFG-*`, v4), `api-versioning.md` (`VER-*`, v4).
-
 
 For Docker or Compose work, load `docker-runtime.md` and verify the latest official Docker docs before authoring container assets. Also perform live web research for Docker and framework/package setup claims. For framework or package setup work, use the latest stable compatible dependency set and official setup flow unless a documented compatibility constraint blocks it; prefer official framework scaffolders when they create the supported project shape. New dependencies are allowed when they improve efficiency, delivery time, correctness, accessibility, UX, or maintainability. Do not treat dependency avoidance or vague performance fear as a default reason to skip a modern maintained library.
 
@@ -173,3 +170,10 @@ Verify reachability of relevant files in Layer 1 to Layer 9 before generating im
 - Before deploy: check policy thresholds.
 - Before major refactor: read `architecture-map.md`.
 - Before UI implementation: confirm valid style context, design contract, and required docs.
+
+## Git Workflow
+Branch from main with `feat/`, `fix/`, `docs/`, or `chore/`; no direct commits to main. Use Conventional Commits: `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, `test:`.
+PRs use squash merge only, clean Markdown summaries, a Testing section, and `npm run validate` before opening. Bug fixes add one root-cause/prevention sentence to the nearest relevant doc.
+
+## Do Not Modify
+Never touch `.agentic-backup/`. Update `package-lock.json` only via `ascx npm install`. Preserve user entries in `.agent-context/state/active-memory.json`. Regenerate `benchmarks/results/` via npm scripts only.

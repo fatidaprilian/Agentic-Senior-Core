@@ -15,7 +15,7 @@ When a new project is created or initialized, the agent must automatically:
 ## Required Planning Mode
 
 If the user describes a project or feature, the agent must:
-1. Clarify the delivery goals, runtime assumptions, constraints, and must-have capabilities before choosing implementation shape.
+1. Before drafting docs from a thin or ambiguous brief, ask the smallest useful set of clarifying questions needed to make delivery goals, edge cases, constraints, must-have capabilities, and non-goals explicit. If the user wants a draft anyway, document assumptions and wait for approval before coding.
 2. If the user already named a stack or framework, treat it as an explicit constraint. If not, produce a short evidence-backed recommendation from the brief, repo evidence, and live official documentation before coding. Include at least one plausible alternative when the default-looking option is Next.js, Tailwind-only styling, shadcn/ui, or another familiar web stack.
 3. For existing projects, inspect real files first. Do not derive product name, description, runtime, architecture, or design direction from the folder name alone.
 4. Draft a high-level structure plan plus the docs/bootstrap artifacts that must exist before coding.
