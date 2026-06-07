@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.13 - 2026-06-07
+### Changed
+- Replaced the design reference retrieval logic in `bootstrap-design.md` with a single-read temporary fetch (`npx getdesign add`) that derives token values and discards the reference, avoiding permanent context window overhead while keeping the output under 400 tokens.
+- Removed the separate `## Design Reference Retrieval` section to keep the prompt compact.
+
 ## 4.3.12 - 2026-06-06
 ### Added
 - 
@@ -24,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 4.3.10 - 2026-06-06
 ### Changed
 - Added `-y` and `--force` flags to `npx getdesign` commands in `bootstrap-design.md` to prevent interactive shell prompts from blocking agent execution.
+- Added an exception to the 400-token design limit in `bootstrap-design.md`: agents may now preserve up to 2500 tokens of rich design details when fetching from an external brand reference via `getdesign`, avoiding destructive compression of proven design systems.
 
 ## 4.3.9 - 2026-06-06
 ### Added

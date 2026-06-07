@@ -10,25 +10,10 @@ Use this prompt for UI, UX, frontend layout, screen, or redesign work. Create or
 - When generating any UI component that renders or accepts user data, explicitly state in the prompt: "ensure all user-supplied input is sanitized, all status indicators have non-color alternatives, and all interactive elements have visible focus states."
 - Before choosing a new UI library, research current official docs.
 
-## Design Reference Retrieval
-
-Before generating tokens from scratch, check if a proven brand reference matches
-the product aesthetic. Run `npx -y getdesign list` to see all available references.
-Pick by spatial mechanics and typographic character, not by color.
-
-Fetch: `npx -y getdesign add <slug> --out docs/DESIGN.md --force`
-
-Customize: replace brand colors with product OKLCH equivalents, replace brand name
-with product name, remove brand iconography, keep spatial rhythm and density logic.
-
-If no brand matches or terminal is unavailable, skip and generate from scratch below.
-
-Source: https://github.com/VoltAgent/awesome-design-md
-
 ## Design Direction Process
 
 1. **Name Your Defaults**: Name three temptations (e.g. SaaS admin default, AI-startup landing) and why they flatten this product. Derive your search direction by rejecting them.
-2. **Choose an Anchor**: Pick a specific real-world reference whose mechanics translate here. Do not use generic quality words ("clean", "modern").
+2. **Choose an Anchor**: Run `npx -y getdesign@latest list` to browse proven brand references. Pick one whose spatial rhythm fits this product. Run `npx -y getdesign@latest add <brand>` to read the full reference — use it to derive token values, then discard it. Output DESIGN.md stays under 400 tokens. Do not use generic quality words ("clean", "modern").
 3. **Creative Commitments**: Choose distinctive typography, dominant colors with sharp accents, and one signature motion behavior. Create depth rather than flat card stacks.
 4. **Previous Directions**: If `docs/DESIGN.md` contains previous directions, treat them as a blocklist. The new anchor must differ in conceptual family, hierarchy, and motion.
 
