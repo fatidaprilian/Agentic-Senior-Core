@@ -16,7 +16,7 @@ import { runOptimizeCommand, parseOptimizeArguments } from '../lib/cli/commands/
 import { runInitCommand, parseInitArguments } from '../lib/cli/commands/init.mjs';
 import { runUpgradeCommand, parseUpgradeArguments } from '../lib/cli/commands/upgrade.mjs';
 import { runContextCommand } from '../lib/cli/commands/context.mjs';
-import { runDesignAntiRepeatAuditCommand } from '../lib/cli/commands/audit-design-anti-repeat.mjs';
+
 
 async function main() {
   const commandArgument = process.argv[2];
@@ -70,10 +70,7 @@ async function main() {
     return;
   }
 
-  if (commandArgument === 'audit:design-anti-repeat') {
-    const auditExitCode = await runDesignAntiRepeatAuditCommand(commandArguments);
-    exit(auditExitCode);
-  }
+
 
   console.error(`Unknown command: ${commandArgument}`);
   printUsage();

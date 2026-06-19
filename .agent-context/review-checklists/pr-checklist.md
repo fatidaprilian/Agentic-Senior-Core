@@ -20,7 +20,6 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 
 ## 3. Architecture
 
-### 2. Architecture (→ rules/architecture.md)
 
 - [ ] Layer and module boundaries are clear for the project’s chosen structure.
 - [ ] No clever hacks in backend and shared core modules
@@ -58,7 +57,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 
 ## 6. Docs And Contracts
 
-### 10. Documentation
+### 6.1 Documentation
 
 - [ ] Scope applied: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations
 - [ ] Style scope review is advisory and does not block merge when API docs are synced in the same commit and contract details are correct
@@ -102,7 +101,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 
 ## 9. State And Governance
 
-### 11. Context-Triggered Audit Mode
+### 9.1 Context-Triggered Audit Mode
 
 - [ ] Strict audit mode activates automatically on review and PR-intent workflows
 - [ ] Small edits avoid heavy checks by default unless strict mode is explicitly requested

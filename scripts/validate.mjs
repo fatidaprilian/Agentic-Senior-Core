@@ -18,13 +18,13 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ALLOWED_SEVERITIES } from './validate/config.mjs';
-import { runCacheLayerContractAudit } from './audit-cache-layer-contract.mjs';
-import { runCachingScopeHygieneAudit } from './audit-caching-scope-hygiene.mjs';
-import { runTypographyPaletteAntiRepeatAudit } from '../lib/cli/audits/typography-palette-anti-repeat-audit.mjs';
-import { runAuditFileSize } from './audit-file-size.mjs';
-import { runReflectionCitationAudit } from './audit-reflection-citations.mjs';
-import { runReleaseBundleAudit } from './audit-release-bundle.mjs';
-import { runRuleIdUniquenessAudit } from './audit-rule-id-uniqueness.mjs';
+import { runCacheLayerContractAudit } from './validate/audits/cache-layer-contract.mjs';
+import { runCachingScopeHygieneAudit } from './validate/audits/caching-scope-hygiene.mjs';
+
+import { runAuditFileSize } from './validate/audits/file-size.mjs';
+import { runReflectionCitationAudit } from './validate/audits/reflection-citations.mjs';
+import { runReleaseBundleAudit } from './validate/audits/release-bundle.mjs';
+import { runRuleIdUniquenessAudit } from './validate/audits/rule-id-uniqueness.mjs';
 import {
   validateDependencyFreshnessAutomationCoverage,
   validateDetectionTransparencyCoverage,
@@ -59,6 +59,7 @@ import {
   validateVersionConsistency,
   validateMcpConfiguration,
 } from './validate/project-metadata.mjs';
+import { fileExists, readTextFile, collectFiles, normalizeLineEndings } from './validate/utils.mjs';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
 const ROOT_DIR = resolve(dirname(SCRIPT_FILE_PATH), '..');
@@ -79,51 +80,7 @@ const validationResult = {
   warnings: [],
 };
 
-async function fileExists(filePath) {
-  try {
-    await stat(filePath);
-    return true;
-  } catch {
-    return false;
-  }
-}
 
-async function readTextFile(filePath) {
-  return readFile(filePath, 'utf8');
-}
-
-async function collectFiles(directoryPath, fileExtensionMatcher) {
-  const matchingFilePaths = [];
-
-  async function walk(currentDirectoryPath) {
-    const directoryEntries = await readdir(currentDirectoryPath, { withFileTypes: true });
-
-    for (const directoryEntry of directoryEntries) {
-      if (
-        directoryEntry.name === '.git'
-        || directoryEntry.name === 'node_modules'
-        || directoryEntry.name === '.agentic-backup'
-        || directoryEntry.name === '.benchmarks'
-      ) {
-        continue;
-      }
-
-      const entryPath = join(currentDirectoryPath, directoryEntry.name);
-
-      if (directoryEntry.isDirectory()) {
-        await walk(entryPath);
-        continue;
-      }
-
-      if (fileExtensionMatcher(directoryEntry.name)) {
-        matchingFilePaths.push(entryPath);
-      }
-    }
-  }
-
-  await walk(directoryPath);
-  return matchingFilePaths;
-}
 
 function pass(message) {
   validationResult.passed += 1;
@@ -141,9 +98,7 @@ function warn(message) {
   console.log(`  WARN ${message}`);
 }
 
-function normalizeLineEndings(content) {
-  return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-}
+
 
 
 async function validateFileSizeAudit() {
@@ -211,33 +166,7 @@ async function validateCachingScopeHygieneAudit() {
   }
 }
 
-async function validateTypographyPaletteAntiRepeatAudit() {
-  console.log('\nChecking typography and palette anti-repeat ledger (audit:typography-palette-anti-repeat)...');
-  const report = runTypographyPaletteAntiRepeatAudit({ repositoryRootPath: ROOT_DIR });
 
-  if (report.skipped) {
-    pass(`Typography/palette anti-repeat audit skipped: ${report.reason}`);
-    return;
-  }
-
-  if (report.passed) {
-    pass(`Typography/palette anti-repeat audit clean: ${report.filesScanned} CSS/token file(s) scanned, 0 blocking typography violation(s), ${report.paletteFindingCount} palette finding(s) (${report.paletteSeverity})`);
-    return;
-  }
-
-  for (const violation of report.typographyViolations) {
-    fail(`Typography ledger violation [${violation.kind}] in ${violation.file}:${violation.line}: ${violation.detail}`);
-  }
-  if (report.paletteSeverity === 'blocking') {
-    for (const finding of report.paletteFindings) {
-      fail(`Palette ledger violation [${finding.kind}] in ${finding.file}:${finding.line}: ${finding.detail}`);
-    }
-  } else {
-    for (const finding of report.paletteFindings) {
-      warn(`Palette ledger advisory [${finding.kind}] in ${finding.file}:${finding.line}: ${finding.detail}`);
-    }
-  }
-}
 
 async function validateReleaseBundleAudit() {
   console.log('\nChecking release benchmark bundle (audit:release-bundle)...');
@@ -311,7 +240,7 @@ async function main() {
   await validateCacheLayerContractAudit();
   await validateReflectionCitationAudit();
   await validateCachingScopeHygieneAudit();
-  await validateTypographyPaletteAntiRepeatAudit();
+
   await validateReleaseBundleAudit();
   await validateFileSizeAudit();
   await validateRuleIdUniquenessAudit();

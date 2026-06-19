@@ -37,7 +37,7 @@ const SUPPORTED_WORKFLOWS = new Set([
 ]);
 
 const REQUIRED_PR_CHECKLIST_SNIPPETS = [
-  '### 11. Context-Triggered Audit Mode',
+  '### 9.1 Context-Triggered Audit Mode',
   'Strict audit mode activates automatically on review and PR-intent workflows',
   'Small edits avoid heavy checks by default unless strict mode is explicitly requested',
   'User can always force strict audit mode manually',

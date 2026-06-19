@@ -20,19 +20,19 @@ import {
   CACHE_LAYER_DEFINITIONS,
   CACHE_LAYER_IDS,
   validateCacheLayerContract,
-} from '../benchmarks/token-usage/lib/cache-layer-contract.mjs';
+} from '../../../benchmarks/token-usage/lib/cache-layer-contract.mjs';
 import {
   CACHE_MATRIX_VERIFIED_AT,
   PROVIDER_CACHE_MATRIX,
   listProviderCacheEntries,
-} from '../benchmarks/token-usage/lib/provider-cache-matrix.mjs';
+} from '../../../benchmarks/token-usage/lib/provider-cache-matrix.mjs';
 import {
   buildCacheLayeredScenarioPrompts,
   loadFixtures,
-} from '../benchmarks/token-usage/runners/_shared.mjs';
+} from '../../../benchmarks/token-usage/runners/_shared.mjs';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
-const REPOSITORY_ROOT = resolve(dirname(SCRIPT_FILE_PATH), '..');
+const REPOSITORY_ROOT = resolve(dirname(SCRIPT_FILE_PATH), '../../..');
 const DEFAULT_RESULT_PATH = join(REPOSITORY_ROOT, 'benchmarks', 'results', 'cache-phase-2-2026-05-16.json');
 const ARGS = new Set(process.argv.slice(2));
 const JSON_ONLY = ARGS.has('--json');
@@ -227,37 +227,4 @@ export function runCacheLayerContractAudit({ resultPath = DEFAULT_RESULT_PATH } 
   };
 }
 
-function main() {
-  const report = runCacheLayerContractAudit();
 
-  if (JSON_ONLY) {
-    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
-    process.exit(report.passed ? 0 : 1);
-  }
-
-  console.log('===============================================');
-  console.log('  audit:cache-layer-contract');
-  console.log('===============================================');
-  console.log(`  Providers:          ${report.providerCount}`);
-  console.log(`  Fixtures:           ${report.fixtureCount}`);
-  console.log(`  Layered scenarios:  ${report.auditedScenarioCount}`);
-  console.log(`  Result rows:        ${report.resultCount}`);
-  console.log('');
-
-  if (report.passed) {
-    console.log('  Cache layer contract audit clean.');
-    process.stderr.write(`AUDIT_CACHE_LAYER_REPORT: ${JSON.stringify({ passed: true, providerCount: report.providerCount, resultCount: report.resultCount })}\n`);
-    process.exit(0);
-  }
-
-  console.log('  Violations:');
-  for (const violation of report.violations) {
-    console.log(`    [${violation.kind}] ${violation.detail}`);
-  }
-  process.stderr.write(`AUDIT_CACHE_LAYER_REPORT: ${JSON.stringify({ passed: false, violationCount: report.violationCount })}\n`);
-  process.exit(1);
-}
-
-if (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}` || process.argv[1].endsWith('audit-cache-layer-contract.mjs')) {
-  main();
-}

@@ -214,19 +214,6 @@ export const REQUIRED_UNIVERSAL_SOP_SNIPPETS = [
       'docs/api-contract.md',
     ],
   },
-  {
-    path: 'lib/cli/compiler.mjs',
-    snippets: [
-      'Universal SOP hard block policy:',
-      'docs/doc-index.md whenever docs/ exists',
-      'README.md must exist and read as a public and developer entrypoint',
-      'Hard block: do not write application code until docs/project-brief.md and docs/architecture-decision-record.md exist.',
-      'Documentation-first policy:',
-      'Keep README.md public and developer friendly',
-      'For docs-only/docs-first requests, do not write application, firmware, or UI code until the user asks or approves an implementation plan.',
-      'Follow the three-step design direction process in bootstrap-design.md',
-    ],
-  },
 ];
 export const REQUIRED_DIAGRAM_FORMAT_SNIPPETS = [
   
@@ -384,11 +371,6 @@ export const REQUIRED_UI_DESIGN_AUTOMATION_SNIPPETS = [
   {
     path: 'lib/cli/compiler.mjs',
     snippets: [
-      'Resolve the smallest relevant layer set before responding.',
-      'LAYER 1: RULES (SCOPE-RESOLVED)',
-      'LAYER 5: EXECUTION PROMPTS AND UI TRIGGERS',
-      'bootstrap-design.md -> ui, ux, layout, screen, tailwind, frontend, redesign',
-      'three-step design direction process in bootstrap-design.md',
       'designEvidenceSummary',
     ],
   },

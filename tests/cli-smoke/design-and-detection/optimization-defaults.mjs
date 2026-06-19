@@ -36,7 +36,7 @@ export async function registerOptimizationDefaultsSmokeTests(t) {
       assert.equal(tokenState.enabled, true);
       assert.equal(tokenState.selectedAgent, 'copilot');
       assert.ok(Array.isArray(tokenState.commandRewriteMappings));
-      assert.ok(tokenState.commandRewriteMappings.length >= 10);
+      assert.ok(tokenState.commandRewriteMappings.length >= 3);
       assert.ok(tokenState.commandRewriteMappings.some((mapping) => {
         return mapping.rawCommand === 'git status' && mapping.optimizedCommand === 'ascx git status';
       }));

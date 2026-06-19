@@ -8,7 +8,8 @@ import {
   validateActiveMemorySnapshot,
 } from '../lib/cli/memory-continuity.mjs';
 import { scoreAntiHaluFixtures } from '../benchmarks/anti-halu/lib/scorer.mjs';
-import { runReflectionCitationAudit } from '../scripts/audit-reflection-citations.mjs';
+import { runReflectionCitationAudit } from '../scripts/validate/audits/reflection-citations.mjs';
+import { runCacheLayerContractAudit } from '../scripts/validate/audits/cache-layer-contract.mjs';
 
 test('Operations Tests', async (t) => {
 
@@ -145,8 +146,7 @@ test('Operations Tests', async (t) => {
   });
 
   await t.test('cache layer contract audit outputs machine-readable report', () => {
-    const cacheLayerAuditOutput = execSync(`node ${join(process.cwd(), 'scripts', 'audit-cache-layer-contract.mjs')} --json`).toString();
-    const cacheLayerAuditReport = JSON.parse(cacheLayerAuditOutput);
+    const cacheLayerAuditReport = runCacheLayerContractAudit();
 
     assert.equal(cacheLayerAuditReport.auditName, 'audit-cache-layer-contract');
     assert.equal(cacheLayerAuditReport.passed, true);
@@ -157,8 +157,7 @@ test('Operations Tests', async (t) => {
   });
 
   await t.test('reflection citation audit outputs machine-readable report', () => {
-    const reflectionAuditOutput = execSync(`node ${join(process.cwd(), 'scripts', 'audit-reflection-citations.mjs')} --json`).toString();
-    const reflectionAuditReport = JSON.parse(reflectionAuditOutput);
+    const reflectionAuditReport = runReflectionCitationAudit();
 
     assert.equal(reflectionAuditReport.auditName, 'audit-reflection-citations');
     assert.equal(reflectionAuditReport.passed, true);

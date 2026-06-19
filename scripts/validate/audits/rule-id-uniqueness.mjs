@@ -36,7 +36,7 @@ import { fileURLToPath } from 'node:url';
 import { parse as parseYaml } from 'yaml';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
-const REPOSITORY_ROOT = resolve(dirname(SCRIPT_FILE_PATH), '..');
+const REPOSITORY_ROOT = resolve(dirname(SCRIPT_FILE_PATH), '../../..');
 const RULES_DIRECTORY = join(REPOSITORY_ROOT, '.agent-context', 'rules');
 const PROMPTS_DIRECTORY = join(REPOSITORY_ROOT, '.agent-context', 'prompts');
 const REVIEW_CHECKLISTS_DIRECTORY = join(REPOSITORY_ROOT, '.agent-context', 'review-checklists');
@@ -275,39 +275,4 @@ export function runRuleIdUniquenessAudit() {
   };
 }
 
-function main() {
-  const report = runRuleIdUniquenessAudit();
 
-  if (JSON_ONLY) {
-    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
-    process.exit(report.passed ? 0 : 1);
-  }
-
-  console.log('===============================================');
-  console.log('  audit:rule-id-uniqueness');
-  console.log('===============================================');
-  console.log(`  Migrated rule files: ${report.migratedFileCount} of ${report.migratedFileCount + report.skippedFileCount} scanned`);
-  console.log(`  Pre-migration files: ${report.skippedFileCount} (no YAML frontmatter, skipped)`);
-  console.log(`  Known section IDs:   ${report.knownSectionIdCount}`);
-  console.log(`  [REF:...] mentions:  ${report.refMentionCount}`);
-  console.log('');
-
-  if (report.violationCount === 0) {
-    console.log('  All migrated files clean. No prefix mismatches, duplicates, ambiguous prose references, or unresolved [REF:] / related: links.');
-    process.stderr.write(`AUDIT_RULE_ID_REPORT: ${JSON.stringify({ passed: true, ...{ migratedFileCount: report.migratedFileCount, knownSectionIdCount: report.knownSectionIdCount, refMentionCount: report.refMentionCount } })}\n`);
-    process.exit(0);
-  }
-
-  console.log('  Violations:');
-  for (const violation of report.violations) {
-    console.log(`    [${violation.kind}] ${violation.file}: ${violation.detail}`);
-  }
-  console.log('');
-  console.log(`  ${report.violationCount} violation(s) found. Phase 1 GATE B requires zero.`);
-  process.stderr.write(`AUDIT_RULE_ID_REPORT: ${JSON.stringify({ passed: false, violationCount: report.violationCount, kinds: [...new Set(report.violations.map((v) => v.kind))] })}\n`);
-  process.exit(1);
-}
-
-if (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}` || process.argv[1].endsWith('audit-rule-id-uniqueness.mjs')) {
-  main();
-}

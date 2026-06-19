@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { runRuleIdUniquenessAudit } from '../../../scripts/audit-rule-id-uniqueness.mjs';
+import { runRuleIdUniquenessAudit } from '../../../scripts/validate/audits/rule-id-uniqueness.mjs';
 
 const SCORER_FILE_PATH = fileURLToPath(import.meta.url);
 const SCORER_DIR = dirname(SCORER_FILE_PATH);

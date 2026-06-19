@@ -9,7 +9,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { runCachingScopeHygieneAudit } from '../scripts/audit-caching-scope-hygiene.mjs';
+import { runCachingScopeHygieneAudit } from '../scripts/validate/audits/caching-scope-hygiene.mjs';
 
 const SCOPED_BLURB = [
   '# Test surface',

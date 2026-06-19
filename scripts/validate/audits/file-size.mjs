@@ -30,7 +30,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
-const REPOSITORY_ROOT = resolve(dirname(SCRIPT_FILE_PATH), '..');
+const REPOSITORY_ROOT = resolve(dirname(SCRIPT_FILE_PATH), '../../..');
 
 export const DEFAULT_LOC_THRESHOLD = 500;
 const EXCEPTION_MARKER_PATTERN = /^\s*(?:\/\/|\*)\s*@file-size-exception:\s*(.+?)\s*(?:\*\/\s*)?$/;
@@ -155,65 +155,4 @@ export function runAuditFileSize({ threshold = DEFAULT_LOC_THRESHOLD } = {}) {
   };
 }
 
-function formatHumanLine(prefix, entry) {
-  return `  ${prefix} ${entry.filePath} (${entry.lineCount}/${entry.threshold ?? DEFAULT_LOC_THRESHOLD} LOC)`;
-}
 
-function main() {
-  const report = runAuditFileSize();
-
-  if (JSON_ONLY) {
-    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
-    process.exit(report.passed ? 0 : 1);
-  }
-
-  console.log('===============================================');
-  console.log('  audit:file-size — 500 LOC enforcement');
-  console.log('===============================================');
-  console.log(`  Threshold: ${report.threshold} LOC`);
-  console.log(`  Scanned: ${report.scannedFileCount} files`);
-  console.log('');
-
-  if (report.exemptedCount > 0) {
-    console.log('  Exempted (declared @file-size-exception):');
-    for (const entry of report.exemptedFiles) {
-      console.log(`    EXEMPT ${entry.filePath} (${entry.lineCount} LOC) — ${entry.reason}`);
-    }
-    console.log('');
-  }
-
-  if (report.violationCount === 0) {
-    console.log('  All files within budget.');
-    process.stderr.write(`AUDIT_FILE_SIZE_REPORT: ${JSON.stringify({
-      passed: true,
-      scannedFileCount: report.scannedFileCount,
-      violationCount: 0,
-      exemptedCount: report.exemptedCount,
-    })}\n`);
-    process.exit(0);
-  }
-
-  console.log('  Violations:');
-  for (const entry of report.violations) {
-    console.log(formatHumanLine('FAIL', { ...entry, threshold: report.threshold }));
-  }
-  console.log('');
-  console.log(`  ${report.violationCount} file(s) exceed the ${report.threshold} LOC threshold.`);
-  console.log('  Either split the file into focused submodules or, when justified,');
-  console.log('  declare an exception in the first 5 lines:');
-  console.log('    // @file-size-exception: <reason>');
-  console.log('');
-
-  process.stderr.write(`AUDIT_FILE_SIZE_REPORT: ${JSON.stringify({
-    passed: false,
-    scannedFileCount: report.scannedFileCount,
-    violationCount: report.violationCount,
-    exemptedCount: report.exemptedCount,
-    violations: report.violations,
-  })}\n`);
-  process.exit(1);
-}
-
-if (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}` || process.argv[1].endsWith('audit-file-size.mjs')) {
-  main();
-}

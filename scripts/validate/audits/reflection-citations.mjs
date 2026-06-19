@@ -4,10 +4,10 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { runRuleIdUniquenessAudit } from './audit-rule-id-uniqueness.mjs';
+import { runRuleIdUniquenessAudit } from './rule-id-uniqueness.mjs';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
-const REPOSITORY_ROOT = resolve(dirname(SCRIPT_FILE_PATH), '..');
+const REPOSITORY_ROOT = resolve(dirname(SCRIPT_FILE_PATH), '../../..');
 const ARGS = new Set(process.argv.slice(2));
 const JSON_ONLY = ARGS.has('--json');
 const RULE_ID_PATTERN = /\b[A-Z]+-\d{3,4}(?:-[A-Z])?\b/g;
@@ -127,37 +127,4 @@ export function runReflectionCitationAudit(options = {}) {
   };
 }
 
-function main() {
-  const report = runReflectionCitationAudit();
 
-  if (JSON_ONLY) {
-    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
-    process.exit(report.passed ? 0 : 1);
-  }
-
-  console.log('===============================================');
-  console.log('  audit:reflection-citations');
-  console.log('===============================================');
-  console.log(`  Reflection surfaces: ${report.surfaceCount}`);
-  console.log(`  Known rule IDs:      ${report.knownRuleIdCount}`);
-  console.log('');
-
-  if (report.passed) {
-    console.log('  Reflection citation surfaces are present and all cited rule IDs resolve.');
-    process.stderr.write(`AUDIT_REFLECTION_CITATIONS_REPORT: ${JSON.stringify({ passed: true, surfaceCount: report.surfaceCount, knownRuleIdCount: report.knownRuleIdCount })}\n`);
-    process.exit(0);
-  }
-
-  console.log('  Violations:');
-  for (const violation of report.violations) {
-    console.log(`    [${violation.kind}] ${violation.file}: ${violation.detail}`);
-  }
-  console.log('');
-  console.log(`  ${report.violationCount} violation(s) found.`);
-  process.stderr.write(`AUDIT_REFLECTION_CITATIONS_REPORT: ${JSON.stringify({ passed: false, violationCount: report.violationCount, kinds: [...new Set(report.violations.map((violation) => violation.kind))] })}\n`);
-  process.exit(1);
-}
-
-if (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}` || process.argv[1].endsWith('audit-reflection-citations.mjs')) {
-  main();
-}

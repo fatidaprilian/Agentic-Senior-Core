@@ -16,7 +16,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
-const REPOSITORY_ROOT = resolve(dirname(SCRIPT_FILE_PATH), '..');
+const REPOSITORY_ROOT = resolve(dirname(SCRIPT_FILE_PATH), '../../..');
 const ARGS = new Set(process.argv.slice(2));
 const JSON_ONLY = ARGS.has('--json');
 
@@ -132,39 +132,4 @@ function finalizeReport(violations, extras) {
   };
 }
 
-function main() {
-  const report = runReleaseBundleAudit();
 
-  if (JSON_ONLY) {
-    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
-    process.exit(report.passed ? 0 : 1);
-  }
-
-  console.log('===============================================');
-  console.log('  audit:release-bundle');
-  console.log('===============================================');
-  console.log(`  Bundle path:      ${report.bundlePath}`);
-  console.log(`  Artifact count:   ${report.artifactCount}`);
-  console.log(`  Release target:   ${report.releaseTarget || '(missing)'}`);
-  console.log(`  Release status:   ${report.releaseStatus || '(missing)'}`);
-  console.log('');
-
-  if (report.passed) {
-    console.log('  Release bundle is intact. All artifact hashes match.');
-    process.stderr.write(`AUDIT_RELEASE_BUNDLE_REPORT: ${JSON.stringify({ passed: true, artifactCount: report.artifactCount })}\n`);
-    process.exit(0);
-  }
-
-  console.log('  Violations:');
-  for (const violation of report.violations) {
-    console.log(`    [${violation.kind}] ${violation.detail}`);
-  }
-  console.log('');
-  console.log(`  ${report.violationCount} violation(s) found.`);
-  process.stderr.write(`AUDIT_RELEASE_BUNDLE_REPORT: ${JSON.stringify({ passed: false, violationCount: report.violationCount })}\n`);
-  process.exit(1);
-}
-
-if (process.argv[1] && (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}` || process.argv[1].endsWith('audit-release-bundle.mjs'))) {
-  main();
-}
