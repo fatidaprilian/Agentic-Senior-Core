@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "4.3.15",
+  "version": "4.4.0",
   "type": "module",
   "description": "Change your AI Agent to code like a Staff Engineer, not a Junior.",
   "bin": {
@@ -60,7 +60,6 @@
     "audit:rules-guardian": "node ./scripts/rules-guardian-audit.mjs",
     "audit:explain-on-demand": "node ./scripts/explain-on-demand-audit.mjs",
     "audit:single-source-lazy-loading": "node ./scripts/single-source-lazy-loading-audit.mjs",
-
     "build:release-bundle": "node ./scripts/build-release-benchmark-bundle.mjs",
     "sync:adapters": "node ./scripts/sync-thin-adapters.mjs",
     "check:adapters": "node ./scripts/sync-thin-adapters.mjs --check",
