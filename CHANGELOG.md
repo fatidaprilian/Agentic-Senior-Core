@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Compressed `AGENTS.md` instructions (from 180 to 133 lines) to minimize LLM cognitive overhead and strictly enforce the "Simplicity, modularity, elegance" AI-optimized coding style (ARCH-008).
 - Relocated CLI audits to `scripts/validate/audits/` and consolidated the main `validate.mjs` orchestrator to remove boilerplate logic.
 
+### Fixed
+- Restored `LAYER 2 POLICY` snippet in `lib/cli/compiler.mjs` and corrected `pr-checklist.md` headers to resolve `gate:release` validation failures.
+
 ## 4.3.15 - 2026-06-07
 ### Added
 - Added compact Git Workflow and Do Not Modify gates to `AGENTS.md`, covering branch, commit, PR, validation, and protected local/generated path expectations.

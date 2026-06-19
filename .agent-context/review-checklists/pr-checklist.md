@@ -19,8 +19,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 - [ ] Public contracts remain stable or are versioned and documented.
 
 ## 3. Architecture
-
-
+### 2. Architecture (→ rules/architecture.md)
 - [ ] Layer and module boundaries are clear for the project’s chosen structure.
 - [ ] No clever hacks in backend and shared core modules
 - [ ] No premature abstraction (base classes/util layers created only after repeated stable patterns)
@@ -57,7 +56,7 @@ Run this before declaring a task done. Apply only the sections relevant to the c
 
 ## 6. Docs And Contracts
 
-### 6.1 Documentation
+### 10. Documentation
 
 - [ ] Scope applied: This applies to documentation, release notes, onboarding text, review summaries, and agent-facing explanations
 - [ ] Style scope review is advisory and does not block merge when API docs are synced in the same commit and contract details are correct
