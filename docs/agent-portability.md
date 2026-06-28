@@ -16,7 +16,7 @@ Full plugin support: hooks inject rules on every session, skills and commands ar
 | Hermes | `plugin.yaml` | `__init__.py` (Python) | `skills/` | N/A |
 | OpenCode | `.opencode/plugins/` | JS module transform | N/A | N/A |
 | OpenClaw | `.openclaw/skills/` | N/A | `.openclaw/skills/` | N/A |
-| Antigravity | `.agents/` | N/A | N/A | N/A |
+| Antigravity | `.agents/plugins/agentic-senior-core/` | N/A | `.agents/plugins/.../skills/` | N/A |
 
 ## Instruction-tier hosts
 
@@ -38,6 +38,21 @@ Different hosts use different event names and casing:
 |-------|------------|-----------|-------------|
 | Session start | `SessionStart` | `SessionStart` | `sessionStart` |
 | Subagent start | `SubagentStart` | `SubagentStart` | `subagentStart` |
+
+## Antigravity rule format
+
+Antigravity rules are Markdown files with YAML frontmatter. The `trigger` field controls when the rule activates:
+
+| Trigger | Behavior |
+|---------|----------|
+| `always_on` | Loaded on every session (used by ASC) |
+| `manual` | Only when explicitly invoked |
+| `model_decision` | Agent decides based on `description` |
+| `glob` | Only for files matching `globs` pattern |
+
+ASC uses `trigger: always_on` for the universal rules file. Rules are limited to 12,000 characters per file.
+
+Antigravity plugin bundles live at `.agents/plugins/<name>/` (workspace) or `~/.gemini/config/plugins/<name>/` (global). Each bundle contains `plugin.json`, optional `rules/`, `skills/`, and `hooks.json`.
 
 ## Adding a new host
 

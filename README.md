@@ -119,9 +119,30 @@ Copies one file to `.kiro/steering/agentic-senior-core.md`. Repeat per project.
 </details>
 
 <details>
-<summary><b>Devin / Hermes / OpenCode / OpenClaw / Antigravity</b></summary>
+<summary><b>Google Antigravity</b> (IDE)</summary>
 
-Plugin manifests ship in the npm package at their standard paths (`.devin-plugin/`, `plugin.yaml`, `.opencode/plugins/`, `.openclaw/skills/`, `.agents/`). After global npm install, each host auto-discovers or manually register per host docs.
+**Option A -- workspace rules (per project):**
+
+Copy `.agents/rules/agentic-senior-core.md` into your project. Antigravity reads it automatically with `trigger: always_on`.
+
+**Option B -- global plugin (all projects):**
+
+```bash
+# Via Antigravity CLI
+agy plugin install https://github.com/fatidaprilian/Agentic-Senior-Core.git
+
+# Or manually copy the plugin bundle to:
+# ~/.gemini/config/plugins/agentic-senior-core/
+```
+
+The plugin bundle includes rules, skills (`/asc-review`, `/asc-audit`, `/asc-refactor`), and `plugin.json`.
+
+</details>
+
+<details>
+<summary><b>Devin / Hermes / OpenCode / OpenClaw</b></summary>
+
+Plugin manifests ship in the npm package at their standard paths (`.devin-plugin/`, `plugin.yaml`, `.opencode/plugins/`, `.openclaw/skills/`). After global npm install, each host auto-discovers or manually register per host docs.
 
 </details>
 
@@ -174,7 +195,7 @@ Input validation at trust boundaries, parameterized queries, auth checks, error 
 | Hermes | Terminal agent | Plugin registration | No |
 | OpenCode | Terminal agent | Auto-detected | No |
 | OpenClaw | Terminal agent | Auto-detected | No |
-| Antigravity | Terminal agent | Auto-detected | No |
+| Antigravity | IDE | `agy plugin install` or copy rules | No (plugin) / Yes (rules) |
 | Cursor | IDE | `asc adapter --cursor` | Yes (1 file) |
 | Windsurf | IDE | `asc adapter --windsurf` | Yes (1 file) |
 | Cline | VS Code ext | `asc adapter --cline` | Yes (1 file) |

@@ -169,7 +169,7 @@ describe('Host Adapters', () => {
       '.devin-plugin/plugin.json',
       '.github/plugin/plugin.json',
       '.github/plugin/marketplace.json',
-      '.agents/plugins/marketplace.json',
+      '.agents/plugins/agentic-senior-core/plugin.json',
       '.agents/rules/agentic-senior-core.md',
       'plugin.yaml',
       '__init__.py',
@@ -178,6 +178,21 @@ describe('Host Adapters', () => {
       const fullPath = path.join(repositoryRoot, manifestPath);
       const exists = await fs.access(fullPath).then(() => true).catch(() => false);
       assert.ok(exists, `Missing host manifest: ${manifestPath}`);
+    }
+  });
+
+  it('Antigravity rules have correct frontmatter', async () => {
+    const content = await fs.readFile(path.join(repositoryRoot, '.agents', 'rules', 'agentic-senior-core.md'), 'utf8');
+    assert.ok(content.includes('trigger: always_on'), 'Antigravity rule must have trigger: always_on');
+    assert.ok(content.includes('description:'), 'Antigravity rule must have description');
+  });
+
+  it('Antigravity plugin bundle has skills', async () => {
+    const pluginSkills = ['asc', 'asc-review', 'asc-audit', 'asc-refactor'];
+    for (const skill of pluginSkills) {
+      const skillPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'skills', skill, 'SKILL.md');
+      const exists = await fs.access(skillPath).then(() => true).catch(() => false);
+      assert.ok(exists, `Missing Antigravity plugin skill: ${skill}`);
     }
   });
 
