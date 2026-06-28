@@ -158,7 +158,17 @@ Generates adapter files for Cursor, Windsurf, Cline, Copilot, and Kiro in one go
 </details>
 
 **Terminal agents** (Claude Code, Codex, Gemini, Copilot CLI) = install once, always-on, zero per-project files.
-**IDE agents** (Cursor, Windsurf, Cline, Copilot VS Code, Kiro) = one file per project via `asc adapter`.
+**IDE agents** (Cursor, Windsurf, Cline, Copilot VS Code, Kiro, Antigravity) = one file per project via `asc adapter` or copy.
+
+### Updating
+
+Already installed? Just update the global package:
+
+```bash
+npm update -g @ryuenn3123/agentic-senior-core
+```
+
+Terminal agent plugins pick up the new version automatically on next session. For IDE adapters, re-run `asc adapter --all` in each project to refresh the adapter files.
 
 ---
 
