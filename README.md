@@ -119,23 +119,43 @@ Copies one file to `.kiro/steering/agentic-senior-core.md`. Repeat per project.
 </details>
 
 <details>
-<summary><b>Google Antigravity</b> (IDE)</summary>
+<summary><b>Google Antigravity IDE</b></summary>
 
 **Option A -- workspace rules (per project):**
 
-Copy `.agents/rules/agentic-senior-core.md` into your project. Antigravity reads it automatically with `trigger: always_on`.
+Copy the rules file into your project's `.agents/rules/` directory:
+
+```bash
+# From the npm package (after Step 1)
+cp "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/rules/agentic-senior-core.md" .agents/rules/
+```
+
+Antigravity IDE reads it automatically with `trigger: always_on`.
 
 **Option B -- global plugin (all projects):**
 
-```bash
-# Via Antigravity CLI
-agy plugin install https://github.com/fatidaprilian/Agentic-Senior-Core.git
+Copy the plugin bundle to Antigravity's global plugin directory:
 
-# Or manually copy the plugin bundle to:
-# ~/.gemini/config/plugins/agentic-senior-core/
+```bash
+# Windows
+xcopy /E /I "%APPDATA%\npm\node_modules\@ryuenn3123\agentic-senior-core\.agents\plugins\agentic-senior-core" "%USERPROFILE%\.gemini\config\plugins\agentic-senior-core"
+
+# macOS / Linux
+cp -r "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/plugins/agentic-senior-core" ~/.gemini/config/plugins/
 ```
 
 The plugin bundle includes rules, skills (`/asc-review`, `/asc-audit`, `/asc-refactor`), and `plugin.json`.
+
+</details>
+
+<details>
+<summary><b>Google Antigravity CLI</b></summary>
+
+Requires [Antigravity CLI](https://antigravity.google) (`agy`) installed separately.
+
+```bash
+agy plugin install https://github.com/fatidaprilian/Agentic-Senior-Core.git
+```
 
 </details>
 
@@ -205,7 +225,8 @@ Input validation at trust boundaries, parameterized queries, auth checks, error 
 | Hermes | Terminal agent | Plugin registration | No |
 | OpenCode | Terminal agent | Auto-detected | No |
 | OpenClaw | Terminal agent | Auto-detected | No |
-| Antigravity | IDE | `agy plugin install` or copy rules | No (plugin) / Yes (rules) |
+| Antigravity IDE | IDE | Copy rules or plugin bundle | No (global) / Yes (rules) |
+| Antigravity CLI | Terminal agent | `agy plugin install` | No |
 | Cursor | IDE | `asc adapter --cursor` | Yes (1 file) |
 | Windsurf | IDE | `asc adapter --windsurf` | Yes (1 file) |
 | Cline | VS Code ext | `asc adapter --cline` | Yes (1 file) |
