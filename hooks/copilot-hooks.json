@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "node \"${PLUGIN_ROOT}/hooks/session-start.js\"",
+        "powershell": "node \"${PLUGIN_ROOT}\\hooks\\session-start.js\"",
+        "timeoutSec": 5
+      }
+    ],
+    "subagentStart": [
+      {
+        "type": "command",
+        "bash": "node \"${PLUGIN_ROOT}/hooks/subagent-start.js\"",
+        "powershell": "node \"${PLUGIN_ROOT}\\hooks\\subagent-start.js\"",
+        "timeoutSec": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+description = "Structured refactoring workflow with pre-checks and validation"
+prompt = "Load and follow the asc-refactor skill. Read the target code, identify the smallest scope, apply refactor rules: improve clarity, boundaries, naming, validation, error handling, tests. Prioritize maintainability over compressed one-liners. No premature abstractions. Run a final simplification pass. For every change explain what risk existed, what changed, and why the new shape is safer."

@@ -1,93 +1,122 @@
 # Contributing to Agentic-Senior-Core
 
-Thanks for wanting to make AI agents write better code. Here's how to contribute.
+Thanks for wanting to make AI agents write better code.
 
 ---
 
 ## What You Can Contribute
 
-| Type | Where | Description |
-|------|-------|-------------|
-| New rule | `.agent-context/rules/` | Universal engineering standard |
-| Stack strategy update | `.agent-context/rules/`, `.agent-context/state/stack-research-snapshot.json` | Dynamic language/runtime guidance and evidence |
-| Structural planning guidance update | `.agent-context/prompts/`, `lib/cli/compiler.mjs` | Scope planning, docs bootstrap, and project-context guidance |
-| New checklist | `.agent-context/review-checklists/` | Self-audit guide |
-| State intelligence update | `.agent-context/state/` | Architecture boundaries and dependency map |
-| MCP workflow update | `mcp.json` | Self-healing automation flow |
+| Type | Where | Notes |
+|------|-------|-------|
+| Rule improvement | `AGENTS.md` | All rules live in one file |
+| New skill | `skills/<name>/SKILL.md` | Long-form workflow guidance |
+| New command | `commands/<name>.md` + `.toml` | Claude `.md`, Gemini `.toml` |
+| New host adapter | See adapter guide below | One file per host |
 | Bug fix | Any file | Typos, broken links, incorrect rules |
-| Improvement | Any file | Sharper wording, stricter boundaries |
 
 ---
 
 ## Content Quality Standard
 
-This is the single most important rule: **every file must be "galak" (strict/fierce).**
+Every rule must be opinionated, specific, and enforceable.
 
-Your contribution MUST be opinionated, specific, and enforceable. We reject generic advice, externally anchored rules, and borrowed-pattern guidance that can become accidental style anchors.
+### Litmus Test
 
-### The Litmus Test
 - Does your rule include concrete BANNED / REQUIRED boundaries?
-- Would an AI agent be able to enforce it without ambiguity?
+- Would an AI agent enforce it without ambiguity?
 - Does it teach the reader WHY, not just WHAT?
 
 If all three are "yes", it belongs here.
 
 ---
 
-## How to Add or Adjust Stack Strategy Signals (e.g., Python)
+## How to Edit Rules
 
-1. Update relevant universal guidance in `.agent-context/rules/` (typing, validation, architecture constraints).
-2. Add or adjust measurable stack evidence in `.agent-context/state/stack-research-snapshot.json`.
-3. Update stack-facing wording in prompts or CLI output when behavior changes.
-4. Run `npm run validate` to verify references and policy checks.
-5. Open a PR.
+All universal rules live in `AGENTS.md`. This is the single source of truth injected into every host via hooks.
 
----
+1. Edit `AGENTS.md`
+2. Run `npm test` to verify structure and size constraints
+3. Open a PR
 
-## How to Add or Adjust Structural Planning Guidance
-
-1. Update the planning guidance in `.agent-context/prompts/init-project.md` and related discovery guidance.
-2. Update compiler/init behavior if generated project-context guidance or bootstrap flow changes.
-3. Keep system boundaries, required docs, and validation boundaries explicit without silently recommending a framework from offline heuristics.
-4. Run `npm run validate` and `npm test`.
-5. Open a PR.
+Keep `AGENTS.md` under 8KB (~1,200 tokens). Every byte is injected on every session start across all hosts. Concise rules with high signal-to-noise ratio.
 
 ---
 
-## How to Add a New Rule
+## How to Add a Skill
 
-1. Create `.agent-context/rules/<rule-name>.md`
-2. Structure:
-   - Opening quote (sets the tone)
-   - Core principle (1-2 sentences)
-   - BANNED / REQUIRED sections with enforceable boundaries
-   - Decision tree or quick ruleset when it reduces ambiguity
-3. Update `AGENTS.md` or `.agent-context/` as the source, then verify thin adapters with `npm run check:adapters`
-4. Update `review-checklists/pr-checklist.md` when the rule is part of review scope
-5. Validate and PR
+Skills are long-form workflows that users invoke on demand (not always-on). They don't count against the always-on token budget.
+
+1. Create `skills/<name>/SKILL.md` with frontmatter:
+   ```yaml
+   ---
+   name: asc-<name>
+   description: One-line description
+   ---
+   ```
+2. Create matching command files:
+   - `commands/<name>.md` (Claude Code format)
+   - `commands/<name>.toml` (Gemini format: `description` + `prompt` fields)
+3. If the skill should be available in OpenClaw, copy `SKILL.md` to `.openclaw/skills/<name>/SKILL.md`
+4. Run `npm test`
+5. Open a PR
+
+---
+
+## How to Add a Host Adapter
+
+### Plugin-tier hosts (hooks + skills + commands)
+
+These hosts support full plugin systems. Create the host's manifest in its standard directory:
+
+| Host | Manifest path | Format |
+|------|--------------|--------|
+| Claude Code | `.claude-plugin/plugin.json` | JSON: name, version, skills, commands, hooks |
+| Codex CLI | `.codex-plugin/plugin.json` | JSON: name, skills, hooks, interface |
+| Copilot CLI | `.github/plugin/plugin.json` | JSON |
+| Devin | `.devin-plugin/plugin.json` | JSON minimal |
+| Hermes | `plugin.yaml` + `__init__.py` | YAML + Python |
+| OpenCode | `.opencode/plugins/agentic-senior-core.mjs` | JS module |
+
+### Instruction-tier hosts (single file copy)
+
+These hosts read a rules file from a standard path. The adapter file contains the full `AGENTS.md` content with host-specific frontmatter.
+
+| Host | Adapter path |
+|------|-------------|
+| Cursor | `.cursor/rules/agentic-senior-core.mdc` |
+| Windsurf | `.windsurf/rules/agentic-senior-core.md` |
+| Cline | `.clinerules/agentic-senior-core.md` |
+| Copilot (VS Code) | `.github/copilot-instructions.md` |
+| Kiro | `.kiro/steering/agentic-senior-core.md` |
+
+After adding a new adapter:
+1. Add the file path to `package.json` `files` array
+2. Add the adapter to `lib/cli/commands/adapter.mjs` if it's instruction-tier
+3. Add a test assertion in `tests/adapter.test.mjs`
+4. Update `README.md` supported hosts table
+
+### Keeping adapter content aligned
+
+All instruction-tier adapter files must contain the same rule content as `AGENTS.md`. When you update `AGENTS.md`, update all adapter files. The test suite validates that all adapter files exist.
 
 ---
 
 ## PR Process
 
 1. **Fork** the repository
-2. **Branch** from `main`: `feat/add-python-stack` or `docs/fix-security-typo`
-3. **Write** your content following the quality standard above
-4. **Validate**: `npm run validate` must pass
-5. **Commit** with Conventional Commits: `feat(stacks): add Python profile`
-6. **Open PR** with:
-   - What you added/changed
-   - Why it matters
-   - Which manifest files you updated
+2. **Branch** from `main`: `feat/add-hermes-adapter` or `fix/security-rule-typo`
+3. **Write** your content following the quality standard
+4. **Test**: `npm test` must pass
+5. **Commit** with Conventional Commits: `feat(adapters): add hermes plugin`
+6. **Open PR** with what you changed and why
 
 ---
 
 ## What We Don't Accept
 
-- Generic content that reads like it was auto-generated without thought
+- Generic content that reads like auto-generated filler
 - Rules without concrete enforcement boundaries
-- Stack profiles for languages the author doesn't actually use in production
-- PRs that don't update the relevant source files, docs, validators, and checklists
+- PRs that don't update tests for structural changes
 
 ---
 
@@ -95,30 +124,31 @@ If all three are "yes", it belongs here.
 
 The npm package is published under `@ryuenn3123`, while the GitHub repository is hosted under `fatidaprilian`.
 
-### Architecture Boundaries
+### Architecture (v5.x)
 
-When contributing code to the CLI or the maintenance tools, respect the boundary between `lib/` and `scripts/`:
-
-- **`lib/`**: Contains the core CLI application logic. These files are executed by the package binary but are **never** copied into target user workspaces.
-- **`scripts/`**: Contains standalone tools (like validators, audits, and benchmarks) AND the MCP server (`scripts/mcp-server.mjs`). Code here must not depend on `lib/` because some scripts (like the MCP server) are copied directly to target workspaces where `lib/` does not exist.
+```
+AGENTS.md                    <-- single source of truth for rules
+hooks/session-start.js       <-- injects AGENTS.md on session start (CommonJS)
+hooks/subagent-start.js      <-- injects AGENTS.md into subagents (CommonJS)
+skills/*/SKILL.md            <-- on-demand workflow guidance
+commands/*.md                <-- Claude Code commands
+commands/*.toml              <-- Gemini CLI commands
+.claude-plugin/              <-- Claude Code plugin manifest
+.codex-plugin/               <-- Codex CLI plugin manifest
+.cursor/rules/               <-- Cursor adapter (instruction-tier)
+.windsurf/rules/             <-- Windsurf adapter
+lib/cli/commands/adapter.mjs <-- CLI adapter generator
+tests/adapter.test.mjs       <-- structure validation tests
+```
 
 ```bash
-# Clone
 git clone https://github.com/fatidaprilian/Agentic-Senior-Core.git
 cd Agentic-Senior-Core
-
-# Validate
-npm run validate
-
-# Clean ignored local reports/backups when the workspace gets noisy
-npm run clean:local
-
-# Test interactive CLI
-node ./bin/agentic-senior-core.js init /tmp/test-project
+npm test
 ```
 
 ---
 
 ## Questions?
 
-Open an issue. Describe what you want to add and why. We'll help you shape it before you write 500 lines of documentation nobody asked for.
+Open an issue. Describe what you want to add and why.

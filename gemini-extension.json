@@ -1,0 +1,10 @@
+{
+  "name": "agentic-senior-core",
+  "version": "5.1.0",
+  "description": "Universal AI coding rules. Write code like a staff engineer.",
+  "author": "fatidaprilian",
+  "license": "MIT",
+  "contextFileName": "AGENTS.md",
+  "commands": ["commands/"],
+  "skills": ["skills/"]
+}
