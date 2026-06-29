@@ -119,6 +119,12 @@ describe('Skills', () => {
       assert.ok(exists, `Missing SKILL.md in skills/${dir}/`);
     }
   });
+
+  it('asc-adapter skill exists', async () => {
+    const skillPath = path.join(repositoryRoot, 'skills', 'asc-adapter', 'SKILL.md');
+    const exists = await fs.access(skillPath).then(() => true).catch(() => false);
+    assert.ok(exists, 'Missing skills/asc-adapter/SKILL.md');
+  });
 });
 
 describe('Commands', () => {
@@ -148,9 +154,16 @@ describe('Host Adapters', () => {
     const adapterPaths = [
       '.cursor/rules/agentic-senior-core.mdc',
       '.windsurf/rules/agentic-senior-core.md',
+      '.devin/rules/agentic-senior-core.md',
       '.clinerules/agentic-senior-core.md',
       '.github/copilot-instructions.md',
       '.kiro/steering/agentic-senior-core.md',
+      '.continue/rules/agentic-senior-core.md',
+      '.zed/rules/agentic-senior-core.md',
+      '.kilocode/rules/agentic-senior-core.md',
+      '.roo/rules/agentic-senior-core.md',
+      '.openhands/microagents/agentic-senior-core.md',
+      'CONVENTIONS.md',
     ];
     for (const adapterPath of adapterPaths) {
       const fullPath = path.join(repositoryRoot, adapterPath);
@@ -210,5 +223,33 @@ describe('Host Adapters', () => {
     const content = await fs.readFile(path.join(repositoryRoot, 'gemini-extension.json'), 'utf8');
     const extension = JSON.parse(content);
     assert.equal(extension.contextFileName, 'AGENTS.md');
+  });
+});
+
+describe('CLI Commands', () => {
+  it('uninstall command module exists', async () => {
+    const uninstallPath = path.join(repositoryRoot, 'lib', 'cli', 'commands', 'uninstall.mjs');
+    const exists = await fs.access(uninstallPath).then(() => true).catch(() => false);
+    assert.ok(exists, 'Missing lib/cli/commands/uninstall.mjs');
+  });
+
+  it('all version references are consistent', async () => {
+    const pkgContent = await fs.readFile(path.join(repositoryRoot, 'package.json'), 'utf8');
+    const pkg = JSON.parse(pkgContent);
+    const version = pkg.version;
+
+    const versionFiles = [
+      '.claude-plugin/plugin.json',
+      '.codex-plugin/plugin.json',
+      '.devin-plugin/plugin.json',
+      '.github/plugin/plugin.json',
+      'gemini-extension.json',
+    ];
+
+    for (const filePath of versionFiles) {
+      const content = await fs.readFile(path.join(repositoryRoot, filePath), 'utf8');
+      const json = JSON.parse(content);
+      assert.equal(json.version, version, `Version mismatch in ${filePath}: expected ${version}, got ${json.version}`);
+    }
   });
 });

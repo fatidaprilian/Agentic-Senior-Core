@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**Install once. Works across all projects. Supports 16+ AI coding agents.**
+**Install once. Works across all projects. Supports 23+ AI coding agents.**
 
 </div>
 
@@ -75,13 +75,21 @@ This copies one file to `.cursor/rules/agentic-senior-core.mdc`. Cursor reads it
 </details>
 
 <details>
-<summary><b>Windsurf</b> (IDE)</summary>
+<summary><b>Windsurf / Devin Desktop</b> (IDE)</summary>
+
+Windsurf was acquired by Cognition and renamed to Devin Desktop. Use `--devin` for the preferred path:
+
+```bash
+asc adapter --devin
+```
+
+This copies one file to `.devin/rules/agentic-senior-core.md`. For legacy Windsurf installations:
 
 ```bash
 asc adapter --windsurf
 ```
 
-Copies one file to `.windsurf/rules/agentic-senior-core.md`. Repeat per project.
+Repeat per project.
 
 </details>
 
@@ -115,6 +123,72 @@ asc adapter --kiro
 ```
 
 Copies one file to `.kiro/steering/agentic-senior-core.md`. Repeat per project.
+
+</details>
+
+<details>
+<summary><b>Continue</b> (VS Code extension)</summary>
+
+```bash
+asc adapter --continue
+```
+
+Copies one file to `.continue/rules/agentic-senior-core.md`. Repeat per project.
+
+</details>
+
+<details>
+<summary><b>Zed</b> (IDE)</summary>
+
+```bash
+asc adapter --zed
+```
+
+Copies one file to `.zed/rules/agentic-senior-core.md`. Zed also reads `AGENTS.md` natively, so this is optional if you already have AGENTS.md in your project. Repeat per project.
+
+</details>
+
+<details>
+<summary><b>Aider</b> (terminal agent)</summary>
+
+```bash
+asc adapter --aider
+```
+
+Copies one file to `CONVENTIONS.md` at project root. Aider reads this automatically. Repeat per project.
+
+</details>
+
+<details>
+<summary><b>Kilo Code</b> (VS Code extension)</summary>
+
+```bash
+asc adapter --kilocode
+```
+
+Copies one file to `.kilocode/rules/agentic-senior-core.md`. Repeat per project.
+
+</details>
+
+<details>
+<summary><b>Roo Code</b> (VS Code extension)</summary>
+
+```bash
+asc adapter --roo
+```
+
+Copies one file to `.roo/rules/agentic-senior-core.md`. Repeat per project.
+
+</details>
+
+<details>
+<summary><b>OpenHands</b></summary>
+
+```bash
+asc adapter --openhands
+```
+
+Copies one file to `.openhands/microagents/agentic-senior-core.md`. Repeat per project.
 
 </details>
 
@@ -173,12 +247,12 @@ Plugin manifests ship in the npm package at their standard paths (`.devin-plugin
 asc adapter --all
 ```
 
-Generates adapter files for Cursor, Windsurf, Cline, Copilot, and Kiro in one go.
+Generates adapter files for Cursor, Devin Desktop, Windsurf, Cline, Copilot, Kiro, Continue, Zed, Aider, Kilo Code, Roo Code, and OpenHands in one go.
 
 </details>
 
 **Terminal agents** (Claude Code, Codex, Gemini, Copilot CLI) = install once, always-on, zero per-project files.
-**IDE agents** (Cursor, Windsurf, Cline, Copilot VS Code, Kiro, Antigravity) = one file per project via `asc adapter` or copy.
+**IDE agents** (Cursor, Devin Desktop, Cline, Copilot VS Code, Kiro, Continue, Zed, Aider, Kilo Code, Roo Code, OpenHands, Antigravity) = one file per project via `asc adapter` or copy.
 
 ### Updating
 
@@ -228,10 +302,17 @@ Input validation at trust boundaries, parameterized queries, auth checks, error 
 | Antigravity IDE | IDE | Copy rules or plugin bundle | No (global) / Yes (rules) |
 | Antigravity CLI | Terminal agent | `agy plugin install` | No |
 | Cursor | IDE | `asc adapter --cursor` | Yes (1 file) |
-| Windsurf | IDE | `asc adapter --windsurf` | Yes (1 file) |
+| Devin Desktop | IDE | `asc adapter --devin` | Yes (1 file) |
+| Windsurf (legacy) | IDE | `asc adapter --windsurf` | Yes (1 file) |
 | Cline | VS Code ext | `asc adapter --cline` | Yes (1 file) |
 | GitHub Copilot | VS Code ext | `asc adapter --copilot` | Yes (1 file) |
 | Kiro | IDE | `asc adapter --kiro` | Yes (1 file) |
+| Continue | VS Code ext | `asc adapter --continue` | Yes (1 file) |
+| Zed | IDE | `asc adapter --zed` | Yes (1 file) |
+| Aider | Terminal agent | `asc adapter --aider` | Yes (1 file) |
+| Kilo Code | VS Code ext | `asc adapter --kilocode` | Yes (1 file) |
+| Roo Code | VS Code ext | `asc adapter --roo` | Yes (1 file) |
+| OpenHands | Agent | `asc adapter --openhands` | Yes (1 file) |
 
 ---
 
@@ -251,7 +332,8 @@ Available on plugin hosts (Claude Code, Codex, Gemini CLI):
 ## CLI
 
 ```bash
-asc adapter [--cursor|--windsurf|--cline|--copilot|--kiro|--all]
+asc adapter [--cursor|--devin|--windsurf|--cline|--copilot|--kiro|--continue|--zed|--aider|--kilocode|--roo|--openhands|--all]
+asc uninstall [--dry-run]
 asc clean [--dry-run]
 asc status
 asc mcp

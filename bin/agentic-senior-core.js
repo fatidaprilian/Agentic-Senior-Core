@@ -3,10 +3,11 @@
  * Agentic-Senior-Core CLI v5 -- Universal plugin system.
  *
  * Commands:
- *   adapter   Generate instruction-tier adapter files for IDEs without plugin support
- *   clean     Remove v4 per-project artifacts (.agent-context/, bridge files)
- *   status    Show detected IDEs and install hints
- *   mcp       Start MCP stdio server
+ *   adapter     Generate instruction-tier adapter files for IDEs without plugin support
+ *   uninstall   Remove ASC adapter files from the current project
+ *   clean       Remove v4 per-project artifacts (.agent-context/, bridge files)
+ *   status      Show detected IDEs and install hints
+ *   mcp         Start MCP stdio server
  */
 import { exit } from 'node:process';
 import { readFileSync } from 'node:fs';
@@ -25,9 +26,10 @@ function printUsage() {
   console.log('  Claude Code:  /plugin marketplace add fatidaprilian/Agentic-Senior-Core');
   console.log('  Codex CLI:    codex plugins install agentic-senior-core\n');
   console.log('Adapter install (one file per project):');
-  console.log('  asc adapter --cursor --windsurf --cline --copilot --kiro --all\n');
+  console.log('  asc adapter --cursor --devin --cline --copilot --kiro --continue --zed --aider --kilocode --roo --openhands --windsurf --all\n');
   console.log('Commands:');
   console.log('  adapter       Generate instruction-tier adapter files');
+  console.log('  uninstall     Remove ASC adapter files from this project');
   console.log('  clean         Remove v4 per-project artifacts');
   console.log('  status        Show detected IDEs and install hints');
   console.log('  mcp           Start MCP stdio server');
@@ -52,6 +54,12 @@ async function main() {
   if (commandArgument === 'adapter') {
     const { runAdapterCommand } = await import('../lib/cli/commands/adapter.mjs');
     await runAdapterCommand(commandArguments);
+    return;
+  }
+
+  if (commandArgument === 'uninstall') {
+    const { runUninstallCommand } = await import('../lib/cli/commands/uninstall.mjs');
+    await runUninstallCommand(commandArguments);
     return;
   }
 

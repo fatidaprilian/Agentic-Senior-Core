@@ -31,7 +31,8 @@ benchmarks/.cache/
 # Local generated artifacts
 .agent-instructions.md
 .clauderc
-.zed/
+.zed/*
+!.zed/rules/
 test_output.txt
 validate_output.txt
 release-gate-report.json

@@ -1,6 +1,6 @@
 # Agent Portability
 
-ASC supports 16+ AI coding hosts at two tiers.
+ASC supports 23+ AI coding hosts at two tiers.
 
 ## Plugin-tier hosts
 
@@ -25,10 +25,17 @@ Single file containing the full rule set. Must be copied into each project. Gene
 | Host | Adapter path | Format |
 |------|-------------|--------|
 | Cursor | `.cursor/rules/agentic-senior-core.mdc` | MDC with `alwaysApply: true` frontmatter |
-| Windsurf | `.windsurf/rules/agentic-senior-core.md` | Markdown |
+| Devin Desktop | `.devin/rules/agentic-senior-core.md` | Markdown (preferred over Windsurf) |
+| Windsurf (legacy) | `.windsurf/rules/agentic-senior-core.md` | Markdown |
 | Cline | `.clinerules/agentic-senior-core.md` | Markdown |
 | GitHub Copilot (VS Code) | `.github/copilot-instructions.md` | Markdown |
 | Kiro | `.kiro/steering/agentic-senior-core.md` | Markdown |
+| Continue | `.continue/rules/agentic-senior-core.md` | Markdown |
+| Zed | `.zed/rules/agentic-senior-core.md` | Markdown (also reads AGENTS.md natively) |
+| Aider | `CONVENTIONS.md` | Markdown |
+| Kilo Code | `.kilocode/rules/agentic-senior-core.md` | Markdown |
+| Roo Code | `.roo/rules/agentic-senior-core.md` | Markdown |
+| OpenHands | `.openhands/microagents/agentic-senior-core.md` | Markdown |
 
 ## Hook event mapping
 
