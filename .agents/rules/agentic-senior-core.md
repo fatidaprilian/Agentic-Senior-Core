@@ -21,10 +21,10 @@ Before writing any code, stop at the first step that holds:
 
 - Descriptive variable and function names. No cryptic abbreviations.
 - Early returns over deep nesting. Keep the main flow traceable.
-- No clever hacks, code golfing, deeply nested ternaries, or tricky functional chains.
-- No premature abstraction. Direct procedural flow over helper chains when no real duplication exists.
+- Three similar lines is better than a premature abstraction.
+- Don't add features, refactor, or introduce abstractions beyond what the task requires.
+- Don't design for hypothetical future requirements.
 - Delete code that carries no behavior, safety, or test value.
-- Plain English in documentation. No emoji in formal docs or review summaries.
 
 ## Architecture
 
@@ -33,7 +33,6 @@ Before writing any code, stop at the first step that holds:
 - Controllers handle protocol translation only. Business logic belongs in services.
 - Default to modular monolith unless scale evidence demands microservices.
 - Direction changes require explicit user confirmation.
-- Do not choose framework by habit. Match project evidence and needs.
 
 ## Security (never skip)
 
@@ -49,6 +48,7 @@ Before writing any code, stop at the first step that holds:
 ## Error Handling
 
 - Fail fast on invalid input.
+- Don't add error handling for scenarios that can't happen. Only validate at system boundaries.
 - Structured error responses with safe details only. Use standard error codes (RFC 9457 when applicable).
 - Distinguish client errors (4xx) from server errors (5xx).
 - No silent swallowing. Log operational errors with context.
@@ -69,8 +69,6 @@ Before writing any code, stop at the first step that holds:
 - Idempotent for side-effect mutations. Document retry behavior.
 - Backward-compatible by default. Version breaking changes explicitly.
 - Sync docs in the same commit when changing API, CLI, or schema.
-- Use OpenAPI 3.1 for HTTP APIs where applicable.
-- Document deprecation windows before sunsetting endpoints.
 
 ## Database
 
@@ -79,30 +77,21 @@ Before writing any code, stop at the first step that holds:
 - Multi-table mutations run inside transactions.
 - Monetary amounts: integer minor units or exact decimal. Never floats.
 - Timestamps in UTC. No naive timestamps.
-- Use optimistic concurrency tokens for shared mutable resources.
 - Schema changes require versioned, reversible migrations.
 - Never modify merged migrations. Create new ones.
-- Use concurrent index builds in production.
 
 ## Frontend
 
 - Semantic HTML before custom components.
-- WCAG 2.2 AA is the accessibility floor: focus visibility, target size, keyboard access, no color-only meaning.
-- Responsive by default. Recompose content for breakpoints, not just shrink.
-- Explicitly handle empty, loading, error, and offline states.
-- CSS logical properties for direction-sensitive layout.
-- Plan overflow, wrapping, truncation, and motion fallbacks.
+- WCAG 2.2 AA is the accessibility floor.
+- Responsive by default. Handle empty, loading, error, and offline states.
 - No placeholder, lorem, or TODO content in production UI.
-- Use component kits or headless primitives for behavior and accessibility when they fit.
 
 ## Infrastructure
 
 - Container configs: multi-stage builds, minimal base images, non-root users, no baked secrets.
-- Explicit healthchecks in production.
 - Configuration from environment, validated at startup. Fail fast if invalid.
-- Feature flags for incremental rollouts.
 - Structured logging with correlation IDs. No PII in logs.
-- Measure latency, traffic, errors, saturation.
 
 ## Resilience
 
@@ -111,21 +100,11 @@ Before writing any code, stop at the first step that holds:
 - Only retry idempotent operations.
 - Circuit breakers for unhealthy dependencies.
 - Graceful degradation on non-critical dependency failures.
-- Cross-service calls must have timeouts and retries. Independent services own their data.
-
-## Async and Events
-
-- Events are immutable. Consumers are idempotent.
-- Dead-letter queues for failed or poison messages.
-- Handle out-of-order events.
-- Background jobs: offload heavy processing (>500ms) to queues. Jobs have timeouts and retry limits.
-- SSE for one-way server-to-client. WebSockets only for true bidirectional.
-- Realtime connections degrade gracefully to polling.
 
 ## Response Style
 
 Write the smallest complete answer that lets the developer act correctly.
 
-Always remove: greetings, affirmations, narration about what you are about to do, padding paragraphs, generic closing offers.
+Never add: greetings, affirmations, narration about what you are about to do, trailing summaries of what you just did, padding paragraphs, generic closing offers, or emoji.
 
 Always preserve: exact commands, file paths, line numbers, error messages, exit codes, validation status, assumptions, blockers, risks, and next actions.

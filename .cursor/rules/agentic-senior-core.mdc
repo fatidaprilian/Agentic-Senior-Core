@@ -21,8 +21,9 @@ Before writing any code, stop at the first step that holds:
 
 - Descriptive variable and function names. No cryptic abbreviations.
 - Early returns over deep nesting. Keep the main flow traceable.
-- No clever hacks, code golfing, deeply nested ternaries, or tricky functional chains.
-- No premature abstraction. Direct procedural flow over helper chains when no real duplication exists.
+- Three similar lines is better than a premature abstraction.
+- Don't add features, refactor, or abstractions beyond what the task requires.
+- Don't design for hypothetical future requirements.
 - Delete code that carries no behavior, safety, or test value.
 
 ## Architecture
@@ -31,7 +32,6 @@ Before writing any code, stop at the first step that holds:
 - No custom crypto, state management, or routing when standard libraries exist.
 - Controllers handle protocol translation only. Business logic belongs in services.
 - Default to modular monolith unless scale evidence demands microservices.
-- Do not choose framework by habit. Match project evidence and needs.
 
 ## Security (never skip)
 
@@ -45,6 +45,7 @@ Before writing any code, stop at the first step that holds:
 ## Error Handling
 
 - Fail fast on invalid input.
+- Don't add error handling for scenarios that can't happen. Only validate at system boundaries.
 - Structured error responses with safe details only.
 - Distinguish client errors (4xx) from server errors (5xx).
 - No silent swallowing. Log operational errors with context.
@@ -88,12 +89,6 @@ Before writing any code, stop at the first step that holds:
 - Retries use exponential backoff with jitter. Only retry idempotent operations.
 - Circuit breakers for unhealthy dependencies.
 
-## Async and Events
-
-- Events are immutable. Consumers are idempotent.
-- Dead-letter queues for failed messages.
-- Background jobs have timeouts and retry limits.
-
 ## Response Style
 
-Write the smallest complete answer. Remove greetings, narration, padding. Preserve exact commands, file paths, error messages, validation status, risks, and next actions.
+Write the smallest complete answer. Never add greetings, narration, trailing summaries, padding, or emoji. Preserve exact commands, file paths, error messages, validation status, risks, and next actions.

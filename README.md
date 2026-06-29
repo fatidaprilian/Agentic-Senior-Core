@@ -200,8 +200,17 @@ Copies one file to `.openhands/microagents/agentic-senior-core.md`. Repeat per p
 Copy the rules file into your project's `.agents/rules/` directory:
 
 ```bash
+# Create the directory first, then copy
+mkdir -p .agents/rules
+
 # From the npm package (after Step 1)
 cp "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/rules/agentic-senior-core.md" .agents/rules/
+```
+
+PowerShell (Windows):
+```powershell
+mkdir .agents\rules -Force
+cp "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/rules/agentic-senior-core.md" .agents\rules\
 ```
 
 Antigravity IDE reads it automatically with `trigger: always_on`.
@@ -210,10 +219,12 @@ Antigravity IDE reads it automatically with `trigger: always_on`.
 
 Copy the plugin bundle to Antigravity's global plugin directory:
 
-```bash
+```powershell
 # Windows
 xcopy /E /I "%APPDATA%\npm\node_modules\@ryuenn3123\agentic-senior-core\.agents\plugins\agentic-senior-core" "%USERPROFILE%\.gemini\config\plugins\agentic-senior-core"
+```
 
+```bash
 # macOS / Linux
 cp -r "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/plugins/agentic-senior-core" ~/.gemini/config/plugins/
 ```
