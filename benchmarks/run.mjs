@@ -37,7 +37,7 @@ function parseArgs(argv) {
   return args;
 }
 
-function spawnAsync(cmd, cmdArgs, options) {
+function spawnAsync(cmd, cmdArgs, options, stdinInput) {
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, cmdArgs, options);
     let stdout = '';
@@ -46,6 +46,10 @@ function spawnAsync(cmd, cmdArgs, options) {
     child.stderr.on('data', (d) => { stderr += d.toString(); });
     child.on('error', reject);
     child.on('close', (code) => resolve({ code, stdout, stderr }));
+    if (stdinInput !== undefined) {
+      child.stdin.write(stdinInput);
+      child.stdin.end();
+    }
   });
 }
 
@@ -113,14 +117,17 @@ async function runSingleBenchmark(taskDir, prompt, model, withAsc) {
 
     ensureBaselineCommit(workDir);
 
+    // Prompt goes via stdin: it avoids shell-quoting issues, and Windows needs
+    // shell:true to resolve the npm .cmd shim that `claude` installs as.
     const claudeCmd = process.env.CLAUDE_CMD || 'claude';
-    const claudeArgs = ['-p', prompt, '--model', model, '--output-format', 'json', '--max-turns', String(MAX_TURNS)];
+    const claudeArgs = ['-p', '--model', model, '--output-format', 'json', '--max-turns', String(MAX_TURNS)];
 
     const startTime = Date.now();
     const session = await spawnAsync(claudeCmd, claudeArgs, {
       cwd: workDir,
       timeout: SESSION_TIMEOUT_MS,
-    });
+      shell: process.platform === 'win32',
+    }, prompt);
     const endTime = Date.now();
 
     const sessionData = parseSessionOutput(session.stdout);
