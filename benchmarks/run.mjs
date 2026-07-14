@@ -53,11 +53,10 @@ function spawnAsync(cmd, cmdArgs, options, stdinInput) {
   });
 }
 
-function measureGitDiff(repoDir) {
+function measureGitDiff(repoDir, baselineRef) {
   try {
-    // Register untracked files (intent-to-add) so new files count in the diff.
-    execSync('git add -A -N', { cwd: repoDir, stdio: 'pipe' });
-    const stat = execSync('git diff --stat HEAD', { cwd: repoDir, encoding: 'utf8', stdio: 'pipe' });
+    execSync('git add -A', { cwd: repoDir, stdio: 'pipe' });
+    const stat = execSync(`git diff --stat ${baselineRef}`, { cwd: repoDir, encoding: 'utf8', stdio: 'pipe' });
     const lines = stat.trim().split('\n');
     const summary = lines[lines.length - 1] || '';
     const insertions = parseInt((summary.match(/(\d+) insertion/) || ['', '0'])[1], 10);
@@ -76,13 +75,23 @@ function measureGitDiff(repoDir) {
 function parseSessionOutput(stdout) {
   try {
     const parsed = JSON.parse(stdout);
+    // Claude CLI JSON output uses modelUsage.<model>.inputTokens/outputTokens/costUSD
+    let input = 0, output = 0, cost = 0;
+    if (parsed.modelUsage) {
+      for (const m of Object.values(parsed.modelUsage)) {
+        input += m.inputTokens || 0;
+        output += m.outputTokens || 0;
+        cost += m.costUSD || 0;
+      }
+    }
+    // Also check top-level fields as fallback
+    cost = cost || parsed.total_cost_usd || parsed.cost_usd || 0;
+    input = input || parsed.usage?.input_tokens || 0;
+    output = output || parsed.usage?.output_tokens || 0;
+
     return {
-      tokens: {
-        input: parsed.usage?.input_tokens || 0,
-        output: parsed.usage?.output_tokens || 0,
-        total: (parsed.usage?.input_tokens || 0) + (parsed.usage?.output_tokens || 0),
-      },
-      cost: parsed.cost_usd || parsed.total_cost_usd || 0,
+      tokens: { input, output, total: input + output },
+      cost,
       turns: parsed.num_turns || 0,
       isError: parsed.is_error || false,
     };
@@ -97,12 +106,13 @@ function ensureBaselineCommit(dir) {
   } catch {
     execSync('git init', { cwd: dir, stdio: 'pipe' });
   }
+  execSync('git add -A', { cwd: dir, stdio: 'pipe' });
   try {
-    execSync('git add -A', { cwd: dir, stdio: 'pipe' });
     execSync('git commit -m "benchmark-baseline" --allow-empty', { cwd: dir, stdio: 'pipe' });
   } catch {
     // already clean
   }
+  return execSync('git rev-parse HEAD', { cwd: dir, encoding: 'utf8', stdio: 'pipe' }).trim();
 }
 
 async function runSingleBenchmark(taskDir, prompt, model, withAsc) {
@@ -117,7 +127,7 @@ async function runSingleBenchmark(taskDir, prompt, model, withAsc) {
       await fs.writeFile(path.join(workDir, 'AGENTS.md'), agentsMd);
     }
 
-    ensureBaselineCommit(workDir);
+    const baselineRef = ensureBaselineCommit(workDir);
 
     // Prompt goes via stdin: it avoids shell-quoting issues, and Windows needs
     // shell:true to resolve the npm .cmd shim that `claude` installs as.
@@ -133,7 +143,7 @@ async function runSingleBenchmark(taskDir, prompt, model, withAsc) {
     const endTime = Date.now();
 
     const sessionData = parseSessionOutput(session.stdout);
-    const diff = measureGitDiff(workDir);
+    const diff = measureGitDiff(workDir, baselineRef);
 
     return { durationMs: endTime - startTime, diff, ...sessionData };
   } finally {
