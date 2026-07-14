@@ -64,8 +64,9 @@ AGENTS.md                        Universal rules (single source of truth)
 
 | Component | Tokens | When loaded |
 |-----------|--------|------------|
-| `AGENTS.md` | ~1,200 | Every session + every subagent |
-| Each skill | ~500-800 | On user invocation only |
+| `AGENTS.md` | ~800 | Every session + every subagent |
+| `asc-reference` skill | ~400 | On-demand (domain-specific rules) |
+| Other skills | ~500-800 | On user invocation only |
 | Commands | 0 (metadata only) | On user invocation only |
 
-Total always-on cost: ~1,200 tokens per session.
+Total always-on cost: ~800 tokens per session (~34% reduction from v5.4).

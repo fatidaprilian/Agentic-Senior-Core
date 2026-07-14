@@ -37,14 +37,38 @@ Single file containing the full rule set. Must be copied into each project. Gene
 | Roo Code | `.roo/rules/agentic-senior-core.md` | Markdown |
 | OpenHands | `.openhands/microagents/agentic-senior-core.md` | Markdown |
 
-## Hook event mapping
+## Host capability matrix
 
-Different hosts use different event names and casing:
+Which ASC features work on which host tier:
+
+| Capability | Plugin-tier (hook-capable) | Instruction-tier |
+|------------|---------------------------|------------------|
+| Always-on rules | Hook injection | Static file in project |
+| On-demand skills | `skills/` directory | Not available |
+| Slash commands | `commands/` directory | Not available |
+| PostToolUse enforcement | Claude Code, Codex CLI, Copilot CLI | Not available |
+| Progressive skill loading | Claude Code, Codex CLI, Copilot CLI, Gemini CLI | Not available |
+| Subagent rule injection | Claude Code, Codex CLI, Copilot CLI | Not available |
+
+### Hook event support by host
 
 | Event | Claude Code | Codex CLI | Copilot CLI |
 |-------|------------|-----------|-------------|
 | Session start | `SessionStart` | `SessionStart` | `sessionStart` |
 | Subagent start | `SubagentStart` | `SubagentStart` | `subagentStart` |
+| Pre tool use | `PreToolUse` | `PreToolUse` | `preToolUse` |
+| Post tool use | `PostToolUse` | `PostToolUse` | `postToolUse` |
+| File changed | `FileChanged` | N/A | N/A |
+| Stop | `Stop` | `Stop` | N/A |
+
+### ASC fix applicability
+
+| Fix | Hook-capable hosts | Instruction-only hosts |
+|-----|-------------------|----------------------|
+| Enforcement hook (1.1) | Yes — PostToolUse | Not possible |
+| Style reframe (1.2) | Applied | Applied |
+| Progressive disclosure (1.3) | Yes — skill loading | Partial — always-on only |
+| Behavioral anchor (1.6) | Applied | Applied |
 
 ## Antigravity rule format
 

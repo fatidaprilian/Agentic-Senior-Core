@@ -28,8 +28,18 @@ npm install -g @ryuenn3123/agentic-senior-core
 
 Rules load automatically via plugin hooks. No per-project files needed.
 
+From inside Claude Code, add the marketplace then install:
+
+```
+/plugin marketplace add fatidaprilian/Agentic-Senior-Core
+/plugin install agentic-senior-core@agentic-senior-core
+```
+
+Or from your terminal shell:
+
 ```bash
-claude plugin add fatidaprilian/Agentic-Senior-Core
+claude plugin marketplace add fatidaprilian/Agentic-Senior-Core
+claude plugin install agentic-senior-core@agentic-senior-core
 ```
 
 After install, every Claude Code session injects the rules on startup -- including subagents.
@@ -229,7 +239,7 @@ xcopy /E /I "%APPDATA%\npm\node_modules\@ryuenn3123\agentic-senior-core\.agents\
 cp -r "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/plugins/agentic-senior-core" ~/.gemini/config/plugins/
 ```
 
-The plugin bundle includes rules, skills (`/asc-review`, `/asc-audit`, `/asc-refactor`), and `plugin.json`.
+The plugin bundle includes rules, skills (`/asc-review`, `/asc-audit`, `/asc-refactor`, `/asc-reference`, `/asc-debt`), and `plugin.json`.
 
 </details>
 
@@ -302,7 +312,7 @@ Input validation at trust boundaries, parameterized queries, auth checks, error 
 
 | Host | Type | Install | Per-project files? |
 |------|------|---------|-------------------|
-| Claude Code | Terminal agent | `claude plugin add` | No |
+| Claude Code | Terminal agent | `/plugin install` | No |
 | Codex CLI | Terminal agent | `codex plugins install` | No |
 | Gemini CLI | Terminal agent | Auto-detected | No |
 | Copilot CLI | Terminal agent | Plugin registration | No |
@@ -336,6 +346,8 @@ Available on plugin hosts (Claude Code, Codex, Gemini CLI):
 | `/asc-refactor` | Structured refactoring workflow |
 | `/asc-review` | Production-risk code review with severity-ordered findings |
 | `/asc-audit` | Security and architecture audit |
+| `/asc-reference` | Domain-specific rules (testing, API, database, frontend, infra, resilience) |
+| `/asc-debt` | Track deferred enforcement violations (add, list, resolve, summary) |
 | `/asc-help` | Show available commands |
 
 ---

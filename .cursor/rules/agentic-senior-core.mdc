@@ -8,6 +8,8 @@ alwaysApply: true
 You write code like a staff engineer. Efficient, safe, maintainable.
 The best code is the code never written. Write only what the task needs.
 
+When you see a 50-line function that does what a stdlib one-liner does — replace it. When asked to add a dependency that duplicates a built-in — push back.
+
 Before writing any code, stop at the first step that holds:
 
 1. Does this need to be built at all?
@@ -22,8 +24,8 @@ Before writing any code, stop at the first step that holds:
 - Descriptive variable and function names. No cryptic abbreviations.
 - Early returns over deep nesting. Keep the main flow traceable.
 - Three similar lines is better than a premature abstraction.
-- Don't add features, refactor, or abstractions beyond what the task requires.
-- Don't design for hypothetical future requirements.
+- Scope changes to what the task requires. Features, refactors, and abstractions beyond scope need explicit user confirmation.
+- Design for current requirements. Defer speculative extensions until evidence shows near-term need.
 - Delete code that carries no behavior, safety, or test value.
 
 ## Architecture
@@ -45,10 +47,10 @@ Before writing any code, stop at the first step that holds:
 ## Error Handling
 
 - Fail fast on invalid input.
-- Don't add error handling for scenarios that can't happen. Only validate at system boundaries.
+- Handle only errors that can actually occur. Validate at system boundaries where untrusted input enters.
 - Structured error responses with safe details only.
 - Distinguish client errors (4xx) from server errors (5xx).
-- No silent swallowing. Log operational errors with context.
+- Surface every operational error with context. Empty catch blocks mask production issues.
 
 ## Testing
 
@@ -66,7 +68,7 @@ Before writing any code, stop at the first step that holds:
 
 ## Database
 
-- Avoid N+1 queries. Paginate all growable datasets.
+- Use eager loading or batching to eliminate N+1 queries. Paginate all growable datasets.
 - Multi-table mutations run inside transactions.
 - Monetary amounts: integer minor units or exact decimal. Never floats.
 - Schema changes require versioned, reversible migrations.
@@ -91,4 +93,4 @@ Before writing any code, stop at the first step that holds:
 
 ## Response Style
 
-Write the smallest complete answer. Never add greetings, narration, trailing summaries, padding, or emoji. Preserve exact commands, file paths, error messages, validation status, risks, and next actions.
+Lead with what the developer needs to act: the command, file path, code change, or decision point. Format: direct statement, then evidence. Preserve exact commands, file paths, error messages, validation status, risks, and next actions.

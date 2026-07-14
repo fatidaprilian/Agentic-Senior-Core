@@ -7,6 +7,7 @@ Production-risk code review. Prioritize findings by severity.
 1. Read the changed files and understand the scope.
 2. For UI changes, check accessibility and design consistency.
 3. For API changes, check contract stability and documentation sync.
+4. Walk the decision ladder for each new file or dependency: does this need to exist, could the stdlib or an existing dependency handle it?
 
 ## Finding Priority Order
 
@@ -33,11 +34,11 @@ Production-risk code review. Prioritize findings by severity.
 - External input validated at trust boundaries.
 - Secrets, tokens, credentials not committed or logged.
 - Authorization enforced at a trusted boundary.
-- Error responses do not leak internals.
+- Error responses keep internal details out of client responses.
 
 ### Architecture
-- Layer boundaries clear. Controllers do not hold business logic.
-- No premature abstraction. No clever hacks.
+- Layer boundaries clear. Controllers handle protocol translation only; business logic stays in services.
+- Abstractions backed by real duplication, not prediction. Straightforward code over clever solutions.
 - Complexity budget applied: fewer moving parts without losing safety.
 
 ### Testing

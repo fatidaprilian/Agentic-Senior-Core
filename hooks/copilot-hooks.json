@@ -16,6 +16,15 @@
         "powershell": "node \"${PLUGIN_ROOT}\\hooks\\subagent-start.js\"",
         "timeoutSec": 5
       }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "matcher": "Edit|Write",
+        "bash": "node \"${PLUGIN_ROOT}/hooks/post-edit-enforce.js\"",
+        "powershell": "node \"${PLUGIN_ROOT}\\hooks\\post-edit-enforce.js\"",
+        "timeoutSec": 5
+      }
     ]
   }
 }

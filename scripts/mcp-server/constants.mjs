@@ -37,17 +37,10 @@ function resolvePackageVersion() {
 export const PACKAGE_VERSION = resolvePackageVersion();
 
 export const TEST_SUITE_ARGS = {
-  full: ['--test', './tests/cli-smoke.test.mjs', './tests/mcp-server.test.mjs', './tests/llm-judge.test.mjs', './tests/operations.test.mjs'],
-  cli: ['--test', './tests/cli-smoke.test.mjs'],
-  operations: ['--test', './tests/operations.test.mjs'],
-  'llm-judge': ['--test', './tests/llm-judge.test.mjs'],
+  adapter: ['--test', './tests/adapter.test.mjs'],
 };
 
-export const INTERNAL_SCRIPT_PATHS = {
-  validate: resolve(REPOSITORY_ROOT, 'scripts', 'validate.mjs'),
-  release_gate: resolve(REPOSITORY_ROOT, 'scripts', 'release-gate.mjs'),
-  forbidden_content_check: resolve(REPOSITORY_ROOT, 'scripts', 'forbidden-content-check.mjs'),
-};
+export const INTERNAL_SCRIPT_PATHS = {};
 
 function getAvailableTestSuites() {
   return Object.entries(TEST_SUITE_ARGS)

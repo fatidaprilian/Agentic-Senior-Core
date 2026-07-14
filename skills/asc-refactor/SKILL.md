@@ -14,7 +14,7 @@ Structured refactoring workflow. Preserves existing behavior while improving str
 - Improve clarity, boundaries, naming, validation, error handling, and tests.
 - Prioritize maintainability over compressed one-liners.
 - Keep the main flow traceable. Use early returns where they reduce nesting.
-- Do not introduce abstractions before the repeated pattern is real.
+- Introduce abstractions only when the repeated pattern is real and visible.
 - Split large files when the split makes the flow easier to understand.
 - Remove code that does not carry behavior, safety, clarity, maintainability, or test value.
 - Prefer the shorter implementation only when it keeps the same guarantees.

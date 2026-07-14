@@ -17,22 +17,21 @@ describe('Universal Plugin Structure', () => {
 
   it('AGENTS.md contains required sections', async () => {
     const content = await fs.readFile(path.join(repositoryRoot, 'AGENTS.md'), 'utf8');
-    const requiredSections = [
+    const inlineSections = [
       'Code Quality',
       'Architecture',
       'Security',
       'Error Handling',
-      'Testing',
-      'API Design',
-      'Database',
-      'Frontend',
-      'Infrastructure',
-      'Resilience',
       'Response Style',
     ];
-    for (const section of requiredSections) {
-      assert.ok(content.includes(section), `AGENTS.md missing section: ${section}`);
+    for (const section of inlineSections) {
+      assert.ok(content.includes(`## ${section}`), `AGENTS.md missing inline section: ${section}`);
     }
+    const referencedSections = ['Testing', 'API Design', 'Database', 'Frontend', 'Infrastructure', 'Resilience'];
+    for (const section of referencedSections) {
+      assert.ok(content.includes(section), `AGENTS.md must reference domain section: ${section}`);
+    }
+    assert.ok(content.includes('/asc-reference'), 'AGENTS.md must point to asc-reference skill');
   });
 
   it('AGENTS.md has explicit security carveouts', async () => {
@@ -106,6 +105,32 @@ describe('Hooks', () => {
     const subagentStart = await fs.readFile(path.join(repositoryRoot, 'hooks', 'subagent-start.js'), 'utf8');
     assert.ok(sessionStart.includes("require('fs')") || sessionStart.includes("require('node:fs')"), 'session-start.js must use require');
     assert.ok(subagentStart.includes("require('fs')") || subagentStart.includes("require('node:fs')"), 'subagent-start.js must use require');
+  });
+
+  it('post-edit-enforce.js exists and uses CommonJS', async () => {
+    const hookPath = path.join(repositoryRoot, 'hooks', 'post-edit-enforce.js');
+    const content = await fs.readFile(hookPath, 'utf8');
+    assert.ok(content.includes("require('path')") || content.includes("require('node:path')"), 'post-edit-enforce.js must use require');
+    assert.ok(content.includes('PostToolUse'), 'Must reference PostToolUse event');
+    assert.ok(content.includes('additionalContext'), 'Must output additionalContext');
+  });
+
+  it('hooks.json registers PostToolUse event', async () => {
+    const hooksPath = path.join(repositoryRoot, 'hooks', 'hooks.json');
+    const content = await fs.readFile(hooksPath, 'utf8');
+    const hooks = JSON.parse(content);
+    assert.ok(hooks.hooks.PostToolUse, 'Must have PostToolUse event');
+    assert.ok(Array.isArray(hooks.hooks.PostToolUse), 'PostToolUse must be an array');
+    const postHook = hooks.hooks.PostToolUse[0];
+    assert.equal(postHook.matcher, 'Edit|Write', 'PostToolUse must match Edit|Write');
+  });
+
+  it('copilot-hooks.json registers postToolUse event', async () => {
+    const hooksPath = path.join(repositoryRoot, 'hooks', 'copilot-hooks.json');
+    const content = await fs.readFile(hooksPath, 'utf8');
+    const hooks = JSON.parse(content);
+    assert.ok(hooks.hooks.postToolUse, 'Must have camelCase postToolUse');
+    assert.ok(Array.isArray(hooks.hooks.postToolUse), 'postToolUse must be an array');
   });
 });
 
