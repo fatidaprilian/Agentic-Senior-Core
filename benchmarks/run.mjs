@@ -144,7 +144,7 @@ async function runSingleBenchmark(taskDir, prompt, model, withAsc) {
     const promptFile = path.join(workDir, '.bench-prompt.txt');
     await fs.writeFile(promptFile, prompt);
 
-    const flags = `--model ${model} --output-format json --max-turns ${MAX_TURNS} --permission-mode acceptEdits`;
+    const flags = `--model ${model} --output-format json --max-turns ${MAX_TURNS} --allow-dangerously-skip-permissions --dangerously-skip-permissions`;
     const cmd = isWin
       ? `${claudeCmd} -p ${flags} < "${promptFile}"`
       : `${claudeCmd} -p ${flags} < '${promptFile}'`;
