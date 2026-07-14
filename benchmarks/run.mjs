@@ -13,7 +13,7 @@
 //
 // Results are written to benchmarks/.cache/result-<timestamp>.json
 
-import { spawn, execSync } from 'node:child_process';
+import { spawn, execSync, exec } from 'node:child_process';
 import { cpSync, rmSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -50,6 +50,14 @@ function spawnAsync(cmd, cmdArgs, options, stdinInput) {
       child.stdin.write(stdinInput);
       child.stdin.end();
     }
+  });
+}
+
+function execAsync(cmd, options) {
+  return new Promise((resolve) => {
+    exec(cmd, { ...options, maxBuffer: 10 * 1024 * 1024 }, (err, stdout, stderr) => {
+      resolve({ code: err ? err.code || 1 : 0, stdout: stdout || '', stderr: stderr || '' });
+    });
   });
 }
 
@@ -129,12 +137,20 @@ async function runSingleBenchmark(taskDir, prompt, model, withAsc) {
 
     const baselineRef = ensureBaselineCommit(workDir);
 
-    // On Windows, resolve the .cmd shim directly to avoid shell:true complications.
-    const claudeCmd = process.env.CLAUDE_CMD || (process.platform === 'win32' ? 'claude.cmd' : 'claude');
-    const claudeArgs = ['-p', prompt, '--model', model, '--output-format', 'json', '--max-turns', String(MAX_TURNS), '--permission-mode', 'acceptEdits'];
+    // Write prompt to a temp file; pipe it via shell redirection to avoid
+    // Windows argument-length and newline limitations.
+    const isWin = process.platform === 'win32';
+    const claudeCmd = process.env.CLAUDE_CMD || 'claude';
+    const promptFile = path.join(workDir, '.bench-prompt.txt');
+    await fs.writeFile(promptFile, prompt);
+
+    const flags = `--model ${model} --output-format json --max-turns ${MAX_TURNS} --permission-mode acceptEdits`;
+    const cmd = isWin
+      ? `${claudeCmd} -p ${flags} < "${promptFile}"`
+      : `${claudeCmd} -p ${flags} < '${promptFile}'`;
 
     const startTime = Date.now();
-    const session = await spawnAsync(claudeCmd, claudeArgs, {
+    const session = await execAsync(cmd, {
       cwd: workDir,
       timeout: SESSION_TIMEOUT_MS,
     });
