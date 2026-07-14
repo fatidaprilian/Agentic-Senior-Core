@@ -55,6 +55,8 @@ function spawnAsync(cmd, cmdArgs, options, stdinInput) {
 
 function measureGitDiff(repoDir) {
   try {
+    // Register untracked files (intent-to-add) so new files count in the diff.
+    execSync('git add -A -N', { cwd: repoDir, stdio: 'pipe' });
     const stat = execSync('git diff --stat HEAD', { cwd: repoDir, encoding: 'utf8', stdio: 'pipe' });
     const lines = stat.trim().split('\n');
     const summary = lines[lines.length - 1] || '';
@@ -120,7 +122,7 @@ async function runSingleBenchmark(taskDir, prompt, model, withAsc) {
     // Prompt goes via stdin: it avoids shell-quoting issues, and Windows needs
     // shell:true to resolve the npm .cmd shim that `claude` installs as.
     const claudeCmd = process.env.CLAUDE_CMD || 'claude';
-    const claudeArgs = ['-p', '--model', model, '--output-format', 'json', '--max-turns', String(MAX_TURNS)];
+    const claudeArgs = ['-p', '--model', model, '--output-format', 'json', '--max-turns', String(MAX_TURNS), '--permission-mode', 'acceptEdits'];
 
     const startTime = Date.now();
     const session = await spawnAsync(claudeCmd, claudeArgs, {
