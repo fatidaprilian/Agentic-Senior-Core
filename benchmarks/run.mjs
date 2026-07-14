@@ -13,11 +13,12 @@
 //
 // Results are written to benchmarks/.cache/result-<timestamp>.json
 
-import { spawn, execSync, exec } from 'node:child_process';
+import { execSync, exec } from 'node:child_process';
 import { cpSync, rmSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const CACHE_DIR = path.join(SCRIPT_DIR, '.cache');
@@ -26,7 +27,7 @@ const SESSION_TIMEOUT_MS = 300_000;
 const MAX_TURNS = 10;
 
 function parseArgs(argv) {
-  const args = { task: null, withAsc: false, model: 'claude-sonnet-4-6', runs: 1 };
+  const args = { task: null, withAsc: false, model: 'claude-opus-4-6', runs: 1 };
   for (let i = 2; i < argv.length; i++) {
     if (argv[i] === '--task' && argv[i + 1]) args.task = argv[++i];
     else if (argv[i] === '--with-asc') args.withAsc = true;
@@ -37,26 +38,14 @@ function parseArgs(argv) {
   return args;
 }
 
-function spawnAsync(cmd, cmdArgs, options, stdinInput) {
-  return new Promise((resolve, reject) => {
-    const child = spawn(cmd, cmdArgs, options);
-    let stdout = '';
-    let stderr = '';
-    child.stdout.on('data', (d) => { stdout += d.toString(); });
-    child.stderr.on('data', (d) => { stderr += d.toString(); });
-    child.on('error', reject);
-    child.on('close', (code) => resolve({ code, stdout, stderr }));
-    if (stdinInput !== undefined) {
-      child.stdin.write(stdinInput);
-      child.stdin.end();
-    }
-  });
-}
-
 function execAsync(cmd, options) {
   return new Promise((resolve) => {
-    exec(cmd, { ...options, maxBuffer: 10 * 1024 * 1024 }, (err, stdout, stderr) => {
-      resolve({ code: err ? err.code || 1 : 0, stdout: stdout || '', stderr: stderr || '' });
+    exec(cmd, { ...options, maxBuffer: 50 * 1024 * 1024 }, (err, stdout, stderr) => {
+      // Node exec passes stdout/stderr even when exit code is non-zero.
+      // Some versions put them on err instead — check both.
+      const out = stdout || err?.stdout || '';
+      const errOut = stderr || err?.stderr || '';
+      resolve({ code: err ? (err.killed ? 'TIMEOUT' : err.code || 1) : 0, stdout: out, stderr: errOut });
     });
   });
 }
@@ -124,7 +113,7 @@ function ensureBaselineCommit(dir) {
 }
 
 async function runSingleBenchmark(taskDir, prompt, model, withAsc) {
-  const workDir = path.join(CACHE_DIR, `workdir-${Date.now()}`);
+  const workDir = path.join(tmpdir(), `asc-bench-${Date.now()}`);
   const taskRepo = path.join(taskDir, 'repo');
 
   try {
