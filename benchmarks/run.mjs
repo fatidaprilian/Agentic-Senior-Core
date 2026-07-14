@@ -129,17 +129,15 @@ async function runSingleBenchmark(taskDir, prompt, model, withAsc) {
 
     const baselineRef = ensureBaselineCommit(workDir);
 
-    // Prompt goes via stdin: it avoids shell-quoting issues, and Windows needs
-    // shell:true to resolve the npm .cmd shim that `claude` installs as.
-    const claudeCmd = process.env.CLAUDE_CMD || 'claude';
-    const claudeArgs = ['-p', '--model', model, '--output-format', 'json', '--max-turns', String(MAX_TURNS), '--permission-mode', 'acceptEdits'];
+    // On Windows, resolve the .cmd shim directly to avoid shell:true complications.
+    const claudeCmd = process.env.CLAUDE_CMD || (process.platform === 'win32' ? 'claude.cmd' : 'claude');
+    const claudeArgs = ['-p', prompt, '--model', model, '--output-format', 'json', '--max-turns', String(MAX_TURNS), '--permission-mode', 'acceptEdits'];
 
     const startTime = Date.now();
     const session = await spawnAsync(claudeCmd, claudeArgs, {
       cwd: workDir,
       timeout: SESSION_TIMEOUT_MS,
-      shell: process.platform === 'win32',
-    }, prompt);
+    });
     const endTime = Date.now();
 
     const sessionData = parseSessionOutput(session.stdout);
