@@ -230,8 +230,13 @@ Antigravity IDE reads it automatically with `trigger: always_on`.
 Copy the plugin bundle to Antigravity's global plugin directory:
 
 ```powershell
-# Windows
-xcopy /E /I "%APPDATA%\npm\node_modules\@ryuenn3123\agentic-senior-core\.agents\plugins\agentic-senior-core" "%USERPROFILE%\.gemini\config\plugins\agentic-senior-core"
+# Windows (PowerShell)
+Copy-Item -Recurse -Force "$env:APPDATA\npm\node_modules\@ryuenn3123\agentic-senior-core\.agents\plugins\agentic-senior-core" "$env:USERPROFILE\.gemini\config\plugins\agentic-senior-core"
+```
+
+```cmd
+:: Windows (cmd.exe)
+xcopy /E /I /Y "%APPDATA%\npm\node_modules\@ryuenn3123\agentic-senior-core\.agents\plugins\agentic-senior-core" "%USERPROFILE%\.gemini\config\plugins\agentic-senior-core"
 ```
 
 ```bash
@@ -240,6 +245,8 @@ cp -r "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/plugins/agentic-se
 ```
 
 The plugin bundle includes rules, skills (`/asc-review`, `/asc-audit`, `/asc-refactor`, `/asc-reference`, `/asc-debt`), and `plugin.json`.
+
+> Note: `npm update -g` refreshes the npm package only. The global plugin copy does not auto-update -- re-run the copy command above after each update.
 
 </details>
 

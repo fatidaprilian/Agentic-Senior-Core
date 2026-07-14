@@ -1,0 +1,1 @@
+Add a GET /api/health endpoint to this Express app that returns JSON with status "ok", the current server timestamp in ISO-8601, and the Node.js version. Keep it simple.
