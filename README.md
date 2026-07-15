@@ -390,16 +390,19 @@ Use them together. No conflicts.
 
 Measured on `claude-opus-4-6` using headless Claude Code sessions against real tasks.
 
-| Task type | LOC | Tokens | Duration | Safety |
-|-----------|-----|--------|----------|--------|
-| Simple (health endpoint, utils refactor) | 0% | -3% to -8% | -2% to -13% | 100% |
-| Complex (auth system, insecure CRUD fix) | **-18%** | **-30%** | **-18%** | 100% |
+| | LOC | Tokens | Cost | Duration | Safety |
+|---|---|---|---|---|---|
+| **Simple tasks** | 0% | -3% to -8% | -1% | -2% to -13% | 100% |
+| **Complex tasks** | **-18%** | **-30%** | **-42%** | **-18%** | 100% |
 
-On complex, ambiguous tasks — where over-engineering and verbosity typically occur — ASC produces 18% less code using 30% fewer tokens, 18% faster. On trivial tasks the model is already concise, so gains are marginal.
+On complex, ambiguous tasks (auth systems, insecure CRUD refactors) — where over-engineering typically occurs — ASC produces **18% less code**, uses **30% fewer tokens**, costs **42% less**, and finishes **18% faster**.
 
-Full methodology and raw data: [`benchmarks/`](benchmarks/)
+On trivial tasks the model is already concise, so gains are marginal.
 
-> Conditions: `claude-opus-4-6`, n=1-2 per task, baseline = Claude without rules (not zero-prompt). Opus is inherently disciplined; gains on more verbose models (sonnet, haiku) would likely be larger.
+Full methodology and raw data: [`benchmarks/RESULTS.md`](benchmarks/RESULTS.md)
+
+> Model: `claude-opus-4-6` · n=1-2 per task · Baseline = Claude without rules (not zero-prompt).
+> Opus is inherently disciplined — gains on more verbose models would likely be larger.
 
 ---
 
