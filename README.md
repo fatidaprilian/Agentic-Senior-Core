@@ -386,6 +386,23 @@ Use them together. No conflicts.
 
 ---
 
+## Benchmarks
+
+Measured on `claude-opus-4-6` using headless Claude Code sessions against real tasks.
+
+| Task type | LOC | Tokens | Duration | Safety |
+|-----------|-----|--------|----------|--------|
+| Simple (health endpoint, utils refactor) | 0% | -3% to -8% | -2% to -13% | 100% |
+| Complex (auth system, insecure CRUD fix) | **-18%** | **-30%** | **-18%** | 100% |
+
+On complex, ambiguous tasks — where over-engineering and verbosity typically occur — ASC produces 18% less code using 30% fewer tokens, 18% faster. On trivial tasks the model is already concise, so gains are marginal.
+
+Full methodology and raw data: [`benchmarks/`](benchmarks/)
+
+> Conditions: `claude-opus-4-6`, n=1-2 per task, baseline = Claude without rules (not zero-prompt). Opus is inherently disciplined; gains on more verbose models (sonnet, haiku) would likely be larger.
+
+---
+
 ## Migration from v4.x
 
 v5.0 is a breaking change. The per-project system (`.agent-context/`, bridge files, project scaffolding) is replaced by the universal plugin system.
