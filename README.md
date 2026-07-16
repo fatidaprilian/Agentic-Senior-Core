@@ -99,7 +99,7 @@ This copies one file to `.devin/rules/agentic-senior-core.md`. For legacy Windsu
 asc adapter --windsurf
 ```
 
-Repeat per project.
+Repeat per project — or install once globally with `asc global --windsurf` (writes `~/.codeium/windsurf/memories/global_rules.md`, applies to all workspaces; skipped if you already have your own global rules file).
 
 </details>
 
@@ -110,7 +110,7 @@ Repeat per project.
 asc adapter --cline
 ```
 
-Copies one file to `.clinerules/agentic-senior-core.md`. Repeat per project.
+Copies one file to `.clinerules/agentic-senior-core.md`. Repeat per project — or install once globally with `asc global --cline` (rules land in `~/Documents/Cline/Rules/`, apply to all projects).
 
 </details>
 
@@ -121,7 +121,7 @@ Copies one file to `.clinerules/agentic-senior-core.md`. Repeat per project.
 asc adapter --copilot
 ```
 
-Copies one file to `.github/copilot-instructions.md`. Repeat per project.
+Copies one file to `.github/copilot-instructions.md`. Repeat per project — or install once globally with `asc global --copilot` (user-level instructions file in your VS Code profile, applies to all workspaces).
 
 </details>
 
@@ -132,7 +132,7 @@ Copies one file to `.github/copilot-instructions.md`. Repeat per project.
 asc adapter --kiro
 ```
 
-Copies one file to `.kiro/steering/agentic-senior-core.md`. Repeat per project.
+Copies one file to `.kiro/steering/agentic-senior-core.md`. Repeat per project. A global option exists (`asc global --kiro` → `~/.kiro/steering/`), but some Kiro builds have known bugs loading global steering — prefer the per-project adapter if rules are not picked up.
 
 </details>
 
@@ -165,7 +165,7 @@ Copies one file to `.zed/rules/agentic-senior-core.md`. Zed also reads `AGENTS.m
 asc adapter --aider
 ```
 
-Copies one file to `CONVENTIONS.md` at project root. Aider reads this automatically. Repeat per project.
+Copies one file to `CONVENTIONS.md` at project root. Aider reads this automatically. Repeat per project — or set it once globally in `~/.aider.conf.yml` with an absolute path into the npm package (`read: <npm root -g>/@ryuenn3123/agentic-senior-core/CONVENTIONS.md`). That pointer auto-updates with `npm update -g`.
 
 </details>
 
@@ -176,7 +176,7 @@ Copies one file to `CONVENTIONS.md` at project root. Aider reads this automatica
 asc adapter --kilocode
 ```
 
-Copies one file to `.kilocode/rules/agentic-senior-core.md`. Repeat per project.
+Copies one file to `.kilocode/rules/agentic-senior-core.md`. Repeat per project — or install once globally with `asc global --kilocode`. On Kilo v7+, the zero-maintenance option is pointing the `instructions:` array in `~/.config/kilo/kilo.jsonc` at the rules file inside the npm package (auto-updates with `npm update -g`).
 
 </details>
 
@@ -187,7 +187,7 @@ Copies one file to `.kilocode/rules/agentic-senior-core.md`. Repeat per project.
 asc adapter --roo
 ```
 
-Copies one file to `.roo/rules/agentic-senior-core.md`. Repeat per project.
+Copies one file to `.roo/rules/agentic-senior-core.md`. Repeat per project — or install once globally with `asc global --roo` (`~/.roo/rules/`). Note: Roo Code was discontinued in May 2026; support is kept for existing installs.
 
 </details>
 
@@ -198,7 +198,7 @@ Copies one file to `.roo/rules/agentic-senior-core.md`. Repeat per project.
 asc adapter --openhands
 ```
 
-Copies one file to `.openhands/microagents/agentic-senior-core.md`. Repeat per project.
+Copies one file to `.openhands/microagents/agentic-senior-core.md`. Repeat per project — or install once globally with `asc global --openhands` (`~/.openhands/microagents/`, loaded in all conversations for CLI/headless/dev modes; Docker runs need the directory mounted).
 
 </details>
 
@@ -227,7 +227,13 @@ Antigravity IDE reads it automatically with `trigger: always_on`.
 
 **Option B -- global plugin (all projects):**
 
-Copy the plugin bundle to Antigravity's global plugin directory:
+One command (works on all platforms):
+
+```bash
+asc global --antigravity
+```
+
+Or copy the plugin bundle manually to Antigravity's global plugin directory:
 
 ```powershell
 # Windows (PowerShell)
@@ -246,7 +252,7 @@ cp -r "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/plugins/agentic-se
 
 The plugin bundle includes rules, skills (`/asc-review`, `/asc-audit`, `/asc-refactor`, `/asc-reference`, `/asc-debt`), and `plugin.json`.
 
-> Note: `npm update -g` refreshes the npm package only. The global plugin copy does not auto-update -- re-run the copy command above after each update.
+> Note: `npm update -g` refreshes the npm package only. The global plugin copy does not auto-update -- re-run `asc global --antigravity` after each update.
 
 </details>
 
@@ -280,7 +286,35 @@ Generates adapter files for Cursor, Devin Desktop, Windsurf, Cline, Copilot, Kir
 </details>
 
 **Terminal agents** (Claude Code, Codex, Gemini, Copilot CLI) = install once, always-on, zero per-project files.
-**IDE agents** (Cursor, Devin Desktop, Cline, Copilot VS Code, Kiro, Continue, Zed, Aider, Kilo Code, Roo Code, OpenHands, Antigravity) = one file per project via `asc adapter` or copy.
+**IDE agents** = one file per project via `asc adapter`, or install once globally via `asc global` (below).
+
+### Global install (all projects, zero project files)
+
+Most IDE tools also support user-level rules that apply to **every project** — no files in any repo root. One command installs them all:
+
+```bash
+asc global --all
+```
+
+| Tool | Global location | Notes |
+|------|----------------|-------|
+| Google Antigravity IDE | `~/.gemini/config/plugins/agentic-senior-core/` | Full plugin bundle: rules + skills, always-on |
+| Cline | `~/Documents/Cline/Rules/` | Toggleable in the Cline rules panel |
+| Kilo Code | `~/.kilocode/rules/` | Or point `instructions:` in `~/.config/kilo/kilo.jsonc` at the npm package path — that variant auto-updates |
+| Kiro | `~/.kiro/steering/` | Some builds have global-steering loading bugs; fall back to `asc adapter --kiro` |
+| OpenHands | `~/.openhands/microagents/` | CLI/headless/dev modes; Docker runs need the mount |
+| Windsurf / Devin Desktop | `~/.codeium/windsurf/memories/global_rules.md` | 6,000-char global limit (ASC rules fit); skipped if you already have your own file |
+| GitHub Copilot (VS Code) | VS Code profile `prompts/` folder | Installed as a user `*.instructions.md` with `applyTo: '**'` |
+| Roo Code | `~/.roo/rules/` | Roo Code was discontinued May 2026; kept for existing installs |
+
+Tools without a global rules **file** (manual one-time setup instead):
+
+- **Cursor** — Settings → Rules → User Rules: paste the contents of `AGENTS.md` (plain text field; a global rules directory is still a Cursor feature request).
+- **Zed** — Rules Library in the Agent Panel: create a rule from `AGENTS.md` and mark it as default (paper clip icon).
+- **Continue** — add a rules block to the global `config.yaml`.
+- **Aider** — add `read: <absolute path to npm package>/CONVENTIONS.md` in `~/.aider.conf.yml`. This is a live pointer: it auto-updates with `npm update -g`, no re-copy ever.
+
+Global rules load first; per-project adapter files (if present) take precedence on conflicts in every tool that supports both.
 
 ### Updating
 
@@ -290,7 +324,7 @@ Already installed? Just update the global package:
 npm update -g @ryuenn3123/agentic-senior-core
 ```
 
-Terminal agent plugins pick up the new version automatically on next session. For IDE adapters, re-run `asc adapter --all` in each project to refresh the adapter files.
+Terminal agent plugins pick up the new version automatically on next session. Global installs and IDE adapter files are static copies — after updating, re-run `asc global --all` once and `asc adapter --all` in each project that uses per-project files. (Aider's `read:` pointer and Kilo's `kilo.jsonc` path variant auto-update — nothing to re-run.)
 
 ---
 
@@ -327,20 +361,20 @@ Input validation at trust boundaries, parameterized queries, auth checks, error 
 | Hermes | Terminal agent | Plugin registration | No |
 | OpenCode | Terminal agent | Auto-detected | No |
 | OpenClaw | Terminal agent | Auto-detected | No |
-| Antigravity IDE | IDE | Copy rules or plugin bundle | No (global) / Yes (rules) |
+| Antigravity IDE | IDE | `asc global --antigravity` | No (global) |
 | Antigravity CLI | Terminal agent | `agy plugin install` | No |
-| Cursor | IDE | `asc adapter --cursor` | Yes (1 file) |
+| Cursor | IDE | `asc adapter --cursor` | Yes (1 file) — or paste User Rules once |
 | Devin Desktop | IDE | `asc adapter --devin` | Yes (1 file) |
-| Windsurf (legacy) | IDE | `asc adapter --windsurf` | Yes (1 file) |
-| Cline | VS Code ext | `asc adapter --cline` | Yes (1 file) |
-| GitHub Copilot | VS Code ext | `asc adapter --copilot` | Yes (1 file) |
-| Kiro | IDE | `asc adapter --kiro` | Yes (1 file) |
-| Continue | VS Code ext | `asc adapter --continue` | Yes (1 file) |
-| Zed | IDE | `asc adapter --zed` | Yes (1 file) |
-| Aider | Terminal agent | `asc adapter --aider` | Yes (1 file) |
-| Kilo Code | VS Code ext | `asc adapter --kilocode` | Yes (1 file) |
-| Roo Code | VS Code ext | `asc adapter --roo` | Yes (1 file) |
-| OpenHands | Agent | `asc adapter --openhands` | Yes (1 file) |
+| Windsurf (legacy) | IDE | `asc global --windsurf` | No (global) — or `asc adapter --windsurf` |
+| Cline | VS Code ext | `asc global --cline` | No (global) — or `asc adapter --cline` |
+| GitHub Copilot | VS Code ext | `asc global --copilot` | No (global) — or `asc adapter --copilot` |
+| Kiro | IDE | `asc adapter --kiro` | Yes (1 file) — global via `asc global --kiro` (buggy in some builds) |
+| Continue | VS Code ext | `asc adapter --continue` | Yes (1 file) — or global config.yaml rules |
+| Zed | IDE | `asc adapter --zed` | Yes (1 file) — or default rule in Rules Library |
+| Aider | Terminal agent | `asc adapter --aider` | Yes (1 file) — or `read:` pointer in `~/.aider.conf.yml` |
+| Kilo Code | VS Code ext | `asc global --kilocode` | No (global) — or `asc adapter --kilocode` |
+| Roo Code | VS Code ext | `asc global --roo` | No (global) — discontinued May 2026 |
+| OpenHands | Agent | `asc global --openhands` | No (global) — or `asc adapter --openhands` |
 
 ---
 
@@ -363,6 +397,7 @@ Available on plugin hosts (Claude Code, Codex, Gemini CLI):
 
 ```bash
 asc adapter [--cursor|--devin|--windsurf|--cline|--copilot|--kiro|--continue|--zed|--aider|--kilocode|--roo|--openhands|--all]
+asc global [--antigravity|--cline|--kilocode|--kiro|--openhands|--windsurf|--copilot|--roo|--all]
 asc uninstall [--dry-run]
 asc clean [--dry-run]
 asc status

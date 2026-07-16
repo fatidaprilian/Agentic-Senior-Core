@@ -4,6 +4,7 @@
  *
  * Commands:
  *   adapter     Generate instruction-tier adapter files for IDEs without plugin support
+ *   global      Install rules to user-level (global) locations, applies to all projects
  *   uninstall   Remove ASC adapter files from the current project
  *   clean       Remove v4 per-project artifacts (.agent-context/, bridge files)
  *   status      Show detected IDEs and install hints
@@ -25,10 +26,13 @@ function printUsage() {
   console.log('Plugin install (always-on, no per-project files):');
   console.log('  Claude Code:  /plugin marketplace add fatidaprilian/Agentic-Senior-Core');
   console.log('  Codex CLI:    codex plugins install agentic-senior-core\n');
+  console.log('Global install (all projects, zero project files):');
+  console.log('  asc global --antigravity --cline --kilocode --kiro --openhands --windsurf --copilot --all\n');
   console.log('Adapter install (one file per project):');
   console.log('  asc adapter --cursor --devin --cline --copilot --kiro --continue --zed --aider --kilocode --roo --openhands --windsurf --all\n');
   console.log('Commands:');
   console.log('  adapter       Generate instruction-tier adapter files');
+  console.log('  global        Install rules to user-level (global) locations');
   console.log('  uninstall     Remove ASC adapter files from this project');
   console.log('  clean         Remove v4 per-project artifacts');
   console.log('  status        Show detected IDEs and install hints');
@@ -54,6 +58,12 @@ async function main() {
   if (commandArgument === 'adapter') {
     const { runAdapterCommand } = await import('../lib/cli/commands/adapter.mjs');
     await runAdapterCommand(commandArguments);
+    return;
+  }
+
+  if (commandArgument === 'global') {
+    const { runGlobalCommand } = await import('../lib/cli/commands/global.mjs');
+    await runGlobalCommand(commandArguments);
     return;
   }
 
