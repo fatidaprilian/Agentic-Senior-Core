@@ -2,12 +2,33 @@
 
 Structured refactoring workflow. Preserves existing behavior while improving structure.
 
+Grounded in: Fowler's Refactoring (read-understand-smallest scope-preserve behavior), Rule of Three (abstraction threshold), YAGNI principle (XP/Kent Beck). Empirical evidence: agents dominate low-level refactors (rename, extract, type changes) but struggle with multi-file architectural changes (arXiv, 15k+ instance study).
+
+## YAGNI Scan (Before Any Restructuring)
+
+Before changing structure, scan for speculative code to remove:
+- "Just in case" logic, unused feature flags, dead branches behind config toggles.
+- Abstractions wrapping a single implementation with no second consumer.
+- Premature extension points (plugin hooks, strategy patterns) with one concrete path.
+
+Removing speculative code is the highest-value, lowest-risk refactor type.
+
+## Classify Before Proceeding
+
+After reading the target code, classify the refactor:
+
+- **Low-level** (rename, extract method, type safety, dead code removal): proceed after explaining the change. No approval gate needed.
+- **High-level** (move module, change architecture, redesign abstractions, multi-file structural changes): output a plan with specific files and rationale, then **stop and wait for user approval** before implementing.
+
+**Known limitation:** The high-level refactor gate is a skill-text instruction — the agent self-classifies and self-stops. Unlike `/asc-add-feature` and `/asc-new-project`, this gate is not backed by the PostToolUse hook or workflow-gate.json. If the agent bypasses the gate, there is no automated nudge.
+
 ## Before Editing
 
 1. Read the target code and understand existing patterns.
 2. Identify the smallest relevant scope for the refactor.
-3. If the change touches UI, check accessibility and responsive behavior.
-4. If the change touches dependencies, verify current official docs.
+3. Classify the refactor (see above). If high-level, stop and present a plan.
+4. If the change touches UI, check accessibility and responsive behavior.
+5. If the change touches dependencies, verify current official docs.
 
 ## Refactor Rules
 

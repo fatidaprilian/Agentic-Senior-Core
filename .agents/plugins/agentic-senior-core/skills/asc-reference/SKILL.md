@@ -2,6 +2,8 @@
 
 Domain-specific coding rules for testing, API design, database queries, frontend components, infrastructure configs, and service resilience. Load this skill when working on any of these domains.
 
+Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types), Nygard's Release It! (resilience patterns), AWS Well-Architected Reliability Pillar (backoff/circuit breakers), OWASP Secure Coding Practices (input validation, logging).
+
 ## Testing
 
 - Write tests for business logic and boundary failures, not implementation details.

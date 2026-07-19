@@ -1,2 +1,12 @@
 description = "Show available Agentic Senior Core commands"
-prompt = "Show the Agentic Senior Core command reference: /asc-refactor (structured refactoring workflow), /asc-review (production-risk code review with severity-ordered findings), /asc-audit (security and architecture audit), /asc-help (this help). ASC loads universal engineering rules covering code quality, architecture, security, error handling, testing, API design, database, frontend, infrastructure, resilience, and async patterns."
+prompt = '''
+Show available Agentic Senior Core commands and skills.
+
+Available commands:
+- /asc-new-project -- Greenfield workflow (Define -> Spec -> Implement -> Validate)
+- /asc-add-feature -- Brownfield workflow (Research -> Plan -> Implement)
+- /asc-refactor -- Structured refactoring workflow
+- /asc-review -- Production-risk code review
+- /asc-audit -- Security and architecture audit
+- /asc-help -- This help. ASC loads universal engineering rules covering code quality, architecture, security, error handling, testing, API design, database, frontend, infrastructure, resilience, and async patterns.
+'''

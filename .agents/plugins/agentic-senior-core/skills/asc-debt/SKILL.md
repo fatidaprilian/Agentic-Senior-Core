@@ -2,6 +2,8 @@
 
 Track deferred enforcement violations. When an ASC ladder nudge fires and the shortcut is accepted rather than fixed, log it here for later resolution.
 
+Grounded in: Cunningham's technical debt metaphor (1992). Entry format (ladder step + violation + status lifecycle) is an ASC-specific implementation.
+
 ## Storage
 
 Entries persist in `.agent-context/state/debt-ledger.json` via MCP `state_read`/`state_write`. The ledger is a JSON array of entry objects.

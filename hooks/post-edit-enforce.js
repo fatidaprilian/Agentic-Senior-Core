@@ -3,6 +3,7 @@
 // Fires after Edit/Write. Checks for ladder violations and injects a nudge.
 // Supports Claude Code, Codex CLI, and GitHub Copilot CLI.
 
+const fs = require('fs');
 const path = require('path');
 
 const STDLIB_DUPLICATES = new Set([
@@ -48,6 +49,10 @@ process.stdin.on('end', function () {
       } else if (toolName === 'Write') {
         checkNewFileSize(toolInput, filePath, findings);
       }
+    }
+
+    if (ext !== 'md') {
+      checkWorkflowGate(toolName, filePath, ext, findings);
     }
 
     if (findings.length === 0) return;
@@ -112,6 +117,35 @@ function checkNewFileSize(toolInput, filePath, findings) {
       'New file ' + path.basename(filePath) + ' created with ' + lines + ' lines. '
       + 'Ladder step 1-2: does this need to be built? Does the codebase already have this?'
     );
+  }
+}
+
+function checkWorkflowGate(toolName, filePath, ext, findings) {
+  try {
+    var pathUtil = require('./path-util.cjs');
+    var gatePath = pathUtil.getWorkflowGatePath(process.cwd());
+    if (!fs.existsSync(gatePath)) return;
+    
+    var gateStr = fs.readFileSync(gatePath, 'utf8');
+    var gate = JSON.parse(gateStr);
+    
+    if (gate.updatedAt) {
+      var ageHours = (Date.now() - new Date(gate.updatedAt).getTime()) / (1000 * 60 * 60);
+      if (ageHours > 4) {
+        fs.unlinkSync(gatePath);
+        findings.push('Cleared stale workflow gate (' + gate.workflow + ').');
+        return;
+      }
+    }
+    
+    if (gate.phase === 'research' || gate.phase === 'plan') {
+      findings.push(
+        'Workflow gate bypass: ' + gate.workflow + ' is in ' + gate.phase + ' phase but source code was edited. '
+        + 'Stop and wait for phase approval. If you must proceed, log this bypass to the debt ledger.'
+      );
+    }
+  } catch (_) {
+    // Silent fail
   }
 }
 

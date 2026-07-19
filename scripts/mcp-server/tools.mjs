@@ -5,6 +5,9 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import { dirname, resolve, sep } from 'node:path';
+import { createRequire } from 'node:module';
+const requireCJS = createRequire(import.meta.url);
+const pathUtil = requireCJS('../../hooks/path-util.cjs');
 import {
   AVAILABLE_TEST_SUITES,
   DEFAULT_FETCH_MAX_CHARS,
@@ -375,6 +378,13 @@ function resolveStatePath(relativeStatePath) {
   const normalizedRelativePath = String(relativeStatePath || '').replace(/\\/g, '/').replace(/^\/+/, '').trim();
   if (!normalizedRelativePath) {
     throw new Error('path is required and must be relative to .agent-context/state');
+  }
+
+  if (normalizedRelativePath === 'workflow-gate.json') {
+    return {
+      normalizedRelativePath,
+      resolvedStatePath: pathUtil.getWorkflowGatePath(REPOSITORY_ROOT),
+    };
   }
 
   const resolvedStatePath = resolve(STATE_DIRECTORY, normalizedRelativePath);

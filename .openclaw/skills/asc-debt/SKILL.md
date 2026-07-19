@@ -1,13 +1,8 @@
----
-name: asc-debt
-description: "Track deferred enforcement violations. Log, list, resolve, and summarize shortcuts deferred during ASC ladder enforcement."
-homepage: https://github.com/fatidaprilian/Agentic-Senior-Core
-license: MIT
----
-
 # Debt Ledger
 
 Track deferred enforcement violations. When an ASC ladder nudge fires and the shortcut is accepted rather than fixed, log it here for later resolution.
+
+Grounded in: Cunningham's technical debt metaphor (1992). Entry format (ladder step + violation + status lifecycle) is an ASC-specific implementation.
 
 ## Storage
 

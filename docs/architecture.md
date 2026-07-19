@@ -24,6 +24,18 @@ Claude Code's SessionStart hook context does not propagate to subagents. This is
 
 Hook scripts use CommonJS (`require`) for maximum compatibility across Node.js versions and host environments.
 
+### Workflow gate enforcement
+
+The PostToolUse hook (`post-edit-enforce.js`) also checks for active workflow gates. When a workflow skill (`asc-new-project`, `asc-add-feature`) sets a gate via MCP `state_write` to `.agent-context/state/workflow-gate.json`, the hook reads it on every Edit/Write and nudges the agent if source or config files are edited during research or plan phases. `.md` files are exempt (research/plan outputs are markdown).
+
+Gate state auto-clears after 4 hours (staleness fallback for abandoned sessions). Workflows clear the gate explicitly on completion.
+
+All enforcement is advisory — nudges injected as `additionalContext`, not hard blocks. Bypasses are logged to the debt ledger (self-reported by the agent; the hook has no MCP access).
+
+### Scaffolding specs (workflow design decision)
+
+Workflow skills use specs as scaffolding: they guide the build, then the code is the source of truth. Specs are not maintained as living documents. This is an opinionated choice — living-doc maintenance tax grows with complexity (observed in SDD/SpecKit adoption) and conflicts with ASC's "minimum viable process" philosophy.
+
 ### Host detection
 
 Hook scripts detect the current host via environment variables:
@@ -54,6 +66,7 @@ hooks/hooks.json                 Claude hook definitions
 hooks/copilot-hooks.json         Copilot hook definitions
 hooks/session-start.js           SessionStart hook (CommonJS)
 hooks/subagent-start.js          SubagentStart hook (CommonJS)
+hooks/post-edit-enforce.js       PostToolUse hook — ladder + workflow gate checks
 skills/*/SKILL.md                On-demand skill definitions
 commands/*.md                    Claude Code commands
 commands/*.toml                  Gemini CLI commands

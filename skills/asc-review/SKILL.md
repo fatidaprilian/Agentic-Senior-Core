@@ -2,6 +2,8 @@
 
 Production-risk code review. Prioritize findings by severity.
 
+Grounded in: OWASP Risk Rating Methodology, Google Engineering Practices (code review guide), Clean Architecture (transport vs business layer separation).
+
 ## Before Reviewing
 
 1. Read the changed files and understand the scope.

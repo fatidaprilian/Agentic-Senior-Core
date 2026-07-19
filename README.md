@@ -7,6 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
+**Minimalism plugins cut the code. This plugin makes sure what remains is production-safe.**
+
 **Install once. Works across all projects. Supports 23+ AI coding agents.**
 
 </div>
@@ -330,7 +332,9 @@ Terminal agent plugins pick up the new version automatically on next session. Gl
 
 ## What It Does
 
-AI coding agents over-build by default. Ask for a date picker, the agent installs a library, writes a wrapper component, adds a stylesheet, and opens a timezone discussion.
+AI coding agents over-build by default. Ask for a date picker, the agent installs a library, writes a wrapper component, adds a stylesheet, and opens a timezone discussion. Worse — they silently skip input validation, concatenate SQL strings, commit secrets, and return stack traces to clients.
+
+Code reduction plugins solve the first problem. ASC solves both.
 
 This plugin loads universal engineering rules on every session. Before writing any code, the agent runs a decision ladder:
 
@@ -342,6 +346,56 @@ This plugin loads universal engineering rules on every session. Before writing a
 6. Only then: write the minimum code that works.
 
 The rules also cover security, architecture, testing, error handling, API design, database safety, frontend accessibility, infrastructure, resilience, and async patterns. All universal invariants -- no project-specific configuration needed.
+
+### Before / After
+
+<details>
+<summary><b>Without ASC</b> — AI-generated endpoint (common output)</summary>
+
+```javascript
+app.post('/users', (req, res) => {
+  const { name, email, password } = req.body;
+  // No input validation
+  // SQL injection via string concatenation
+  const query = `INSERT INTO users (name, email, password)
+                 VALUES ('${name}', '${email}', '${password}')`;
+  db.run(query, (err) => {
+    if (err) {
+      // Stack trace leaked to client
+      res.status(500).json({ error: err.message, stack: err.stack });
+    } else {
+      // Password returned in response
+      res.json({ name, email, password, message: 'User created' });
+    }
+  });
+});
+```
+
+Issues: no input validation, SQL injection, plaintext password stored and returned, internal error details leaked, no auth check.
+
+</details>
+
+<details>
+<summary><b>With ASC</b> — same prompt, rules active</summary>
+
+```javascript
+app.post('/users', authenticate, async (req, res) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+  const hash = await bcrypt.hash(password, 12);
+  const stmt = db.prepare(
+    'INSERT INTO users (name, email, password) VALUES (?, ?, ?)'
+  );
+  stmt.run(name, email, hash);
+  res.status(201).json({ name, email });
+});
+```
+
+Validated input, parameterized query, hashed password, safe error response, auth middleware, no sensitive data in response.
+
+</details>
 
 ### Not lazy about
 
@@ -384,6 +438,8 @@ Available on plugin hosts (Claude Code, Codex, Gemini CLI):
 
 | Command | Purpose |
 |---------|---------|
+| `/asc-new-project` | Greenfield workflow (Define -> Spec -> Implement -> Validate) |
+| `/asc-add-feature` | Brownfield workflow (Research -> Plan -> Implement) |
 | `/asc-refactor` | Structured refactoring workflow |
 | `/asc-review` | Production-risk code review with severity-ordered findings |
 | `/asc-audit` | Security and architecture audit |
@@ -412,12 +468,9 @@ asc --help
 
 ## Works With Other Plugins
 
-ASC covers universal engineering standards (security, architecture, testing, API design, database safety). It is complementary to:
+ASC covers security, architecture, testing, API design, database safety, accessibility, infrastructure, and resilience — domains that code-reduction and minimalism plugins explicitly leave out of scope. They reduce volume; ASC enforces safety on what remains.
 
-- **ponytail** -- YAGNI minimalism and code reduction
-- **awesome-cursorrules** -- Framework-specific context and stack declarations
-
-Use them together. No conflicts.
+Use them together. No conflicts — ASC is designed to be complementary.
 
 ---
 
@@ -467,3 +520,24 @@ This removes `.agent-context/`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and other
 | Commands | 0 | Metadata only |
 
 Total always-on cost: ~1,200 tokens per session.
+
+---
+
+## Grounded In
+
+Every rule and skill workflow is derived from established engineering standards, not invented conventions.
+
+| Domain | Standards |
+|--------|-----------|
+| Security & audit | OWASP Top 10, OWASP ASVS v4, CWE classification, CVSS report structure |
+| Code review | OWASP Risk Rating Methodology, Google Engineering Practices |
+| Architecture | Clean Architecture, Hexagonal Architecture |
+| Workflows | RPI & QRSPI (Dex Horthy/HumanLayer), SDD (GitHub Spec Kit) |
+| Refactoring | Fowler's Refactoring, Rule of Three, YAGNI (XP/Kent Beck) |
+| Database | Fowler's Money Pattern, UTC timestamp convention, migration versioning |
+| Accessibility | WCAG 2.2 AA |
+| Resilience | Nygard's Release It!, AWS Well-Architected Reliability Pillar |
+| Technical debt | Cunningham's debt metaphor (1992) |
+| Instruction design | Low instruction density for higher LLM compliance — supported by IFScale (arXiv:2507.11538) and RECAST (arXiv:2505.19030) |
+
+The decision ladder (check before building) and debt ledger format are ASC-specific implementations grounded in these principles.

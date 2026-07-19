@@ -2,6 +2,8 @@
 
 Security and architecture audit. Deeper than review, focused on finding vulnerabilities and structural anti-patterns.
 
+Grounded in: OWASP Top 10 (2021), OWASP ASVS v4, CVSS vulnerability report structure, CWE classification.
+
 ## Audit Scope
 
 1. **Trust boundaries**: Every point where external input enters the system. Validate that inputs are sanitized, normalized, and rejected when invalid.
