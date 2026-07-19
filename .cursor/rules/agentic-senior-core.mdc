@@ -91,6 +91,13 @@ Before writing any code, stop at the first step that holds:
 - Retries use exponential backoff with jitter. Only retry idempotent operations.
 - Circuit breakers for unhealthy dependencies.
 
+## Workflow
+
+Starting a project from scratch, or adding a non-trivial feature to an
+existing codebase? Mention `/asc-new-project` or `/asc-add-feature` —
+they set up a research/plan gate before implementation. Let the user
+decide whether to invoke it. Skip this for trivial edits.
+
 ## Response Style
 
 Lead with what the developer needs to act: the command, file path, code change, or decision point. Format: direct statement, then evidence. Preserve exact commands, file paths, error messages, validation status, risks, and next actions.

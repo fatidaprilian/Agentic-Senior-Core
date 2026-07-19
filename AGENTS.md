@@ -52,6 +52,13 @@ Before writing any code, stop at the first step that holds:
 
 For domain-specific rules (Testing, API Design, Database, Frontend, Infrastructure, Resilience), use `/asc-reference`.
 
+## Workflow
+
+Starting a project from scratch, or adding a non-trivial feature to an
+existing codebase? Mention `/asc-new-project` or `/asc-add-feature` —
+they set up a research/plan gate before implementation. Let the user
+decide whether to invoke it. Skip this for trivial edits.
+
 ## Response Style
 
 Lead with what the developer needs to act: the command, file path, code change, or decision point. Follow with context only when the action depends on it.

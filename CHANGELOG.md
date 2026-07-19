@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.8.1
+
+### Changed
+- Added a soft-suggestion `## Workflow` section to `AGENTS.md` (and all adapter variants) to explicitly offer `/asc-new-project` or `/asc-add-feature` workflows when starting a project or adding a non-trivial feature. This ensures the agent knows these gates exist and can suggest them to the user without enforcing a hard block on trivial edits.
+
 ## 5.8.0
 
 ### Added
