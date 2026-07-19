@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.8.2
+
+### Changed
+- Refined the `## Workflow` section in `AGENTS.md` to properly include `/asc-refactor` as a high-level classification gate.
+- Fixed the phase descriptions to accurately reflect the design (e.g. `define/spec gate` for new projects, rather than generic research/plan).
+- Integrated the `/asc-reference` suggestion into a cleaner bulleted list.
+
 ## 5.8.1
 
 ### Changed

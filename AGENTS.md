@@ -50,14 +50,15 @@ Before writing any code, stop at the first step that holds:
 - Distinguish client errors (4xx) from server errors (5xx).
 - Surface every operational error with context. Empty catch blocks mask production issues.
 
-For domain-specific rules (Testing, API Design, Database, Frontend, Infrastructure, Resilience), use `/asc-reference`.
-
 ## Workflow
 
-Starting a project from scratch, or adding a non-trivial feature to an
-existing codebase? Mention `/asc-new-project` or `/asc-add-feature` —
-they set up a research/plan gate before implementation. Let the user
-decide whether to invoke it. Skip this for trivial edits.
+Recognize the scenario and offer the matching command — user decides
+whether to invoke it. Skip this for trivial edits.
+
+- Domain-specific rules (Testing, API Design, Database, Frontend, Infrastructure, Resilience) → `/asc-reference`
+- New project from scratch → `/asc-new-project` (define/spec gate before implementation)
+- Non-trivial feature in an existing codebase → `/asc-add-feature` (research/plan gate before implementation)
+- Refactor spanning multiple files or changing architecture → `/asc-refactor` (classifies scope, gates on high-level changes)
 
 ## Response Style
 
