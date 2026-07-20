@@ -236,10 +236,10 @@ asc global --antigravity
 ```
 
 This installs:
-- **Plugin bundle** (skills: `/asc-review`, `/asc-audit`, `/asc-refactor`, `/asc-reference`, `/asc-debt`, etc.) → `~/.gemini/antigravity-ide/plugins/agentic-senior-core/`
+- **Plugin bundle** (skills: `/asc-review`, `/asc-audit`, `/asc-refactor`, `/asc-reference`, `/asc-debt`, etc.) → `~/.gemini/config/plugins/agentic-senior-core/`
 - **Rules** → `~/.gemini/GEMINI.md` (appended if you already have content; ASC section is replaced on re-runs)
 
-If you previously installed to `~/.gemini/config/plugins/agentic-senior-core/` or `~/.gemini/config/skills/` (v5.8.3 or earlier), the old paths are cleaned up automatically.
+If you previously installed to `~/.gemini/antigravity-ide/plugins/agentic-senior-core/` or `~/.gemini/config/skills/` (v5.8.4 or earlier), the old paths are cleaned up automatically.
 
 > Note: `npm update -g` refreshes the npm package only. The global copy does not auto-update -- re-run `asc global --antigravity` after each update.
 
@@ -289,7 +289,7 @@ asc global --all
 
 | Tool | Global location | Notes |
 |------|----------------|-------|
-| Google Antigravity IDE | `~/.gemini/antigravity-ide/plugins/agentic-senior-core/` + `~/.gemini/GEMINI.md` | Plugin bundle (rules + skills) + global rules |
+| Google Antigravity IDE | `~/.gemini/config/plugins/agentic-senior-core/` + `~/.gemini/GEMINI.md` | Plugin bundle (rules + skills) + global rules |
 | Cline | `~/Documents/Cline/Rules/` | Toggleable in the Cline rules panel |
 | Kilo Code | `~/.kilocode/rules/` | Or point `instructions:` in `~/.config/kilo/kilo.jsonc` at the npm package path — that variant auto-updates |
 | Kiro | `~/.kiro/steering/` | Some builds have global-steering loading bugs; fall back to `asc adapter --kiro` |

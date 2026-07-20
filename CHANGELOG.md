@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.8.6
+
+### Fixed
+- **Reverted Antigravity IDE plugin path to `config/plugins`**: The IDE's official path for user-installed plugins is indeed `~/.gemini/config/plugins/<name>/`. The `antigravity-ide/plugins/` path is exclusively for Google's bundled first-party plugins (like SecureCoder). The installation script has been corrected to use `config/plugins/` again.
+- Auto-cleanup of the mistaken `antigravity-ide/plugins/agentic-senior-core` path from v5.8.4.
+
 ## 5.8.5
 
 ### Fixed
@@ -7,10 +13,8 @@
 
 ## 5.8.4
 
-### Fixed
-- **Antigravity IDE plugin path corrected (again)**: v5.8.3 moved skills to `~/.gemini/config/skills/` which was also wrong. Empirical testing (inspecting Google's own SecureCoder plugin location) confirmed the actual IDE plugin directory is `~/.gemini/antigravity-ide/plugins/<name>/`. Plugin bundle (plugin.json + skills/ + rules/) now installs there — same structure and location as first-party plugins.
-- Old paths from both v5.8.2 (`config/plugins/`) and v5.8.3 (`config/skills/`) are cleaned up automatically.
-- Rules remain also appended to `~/.gemini/GEMINI.md` as a fallback.
+### Changed (Reverted in 5.8.6)
+- **Antigravity IDE plugin path**: Temporarily moved to `~/.gemini/antigravity-ide/plugins/<name>/` based on SecureCoder's location, but this is incorrect for user plugins. Reverted in 5.8.6.
 
 ## 5.8.3
 
