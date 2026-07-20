@@ -1,3 +1,9 @@
+---
+name: asc-debt
+description: >
+  Track deferred enforcement violations. When an ASC ladder nudge fires and the shortcut is accepted rather than fixed, log it here for later resolution.
+---
+
 # Debt Ledger
 
 Track deferred enforcement violations. When an ASC ladder nudge fires and the shortcut is accepted rather than fixed, log it here for later resolution.

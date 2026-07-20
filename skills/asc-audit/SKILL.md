@@ -1,3 +1,9 @@
+---
+name: asc-audit
+description: >
+  Security and architecture audit. Deeper than review, focused on finding vulnerabilities and structural anti-patterns.
+---
+
 # Audit Skill
 
 Security and architecture audit. Deeper than review, focused on finding vulnerabilities and structural anti-patterns.

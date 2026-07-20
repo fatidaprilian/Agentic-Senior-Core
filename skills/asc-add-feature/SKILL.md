@@ -1,3 +1,9 @@
+---
+name: asc-add-feature
+description: >
+  Structured brownfield workflow. Adapted from QRSPI to prevent context rot and ensure alignment before building.
+---
+
 # Add Feature Workflow
 
 Structured brownfield workflow. Adapted from QRSPI to prevent context rot and ensure alignment before building.

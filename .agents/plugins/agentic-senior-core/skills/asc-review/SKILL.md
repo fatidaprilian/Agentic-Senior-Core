@@ -1,3 +1,9 @@
+---
+name: asc-review
+description: >
+  Production-risk code review. Prioritize findings by severity.
+---
+
 # Review Skill
 
 Production-risk code review. Prioritize findings by severity.

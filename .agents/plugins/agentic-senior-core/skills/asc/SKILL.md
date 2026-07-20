@@ -1,3 +1,9 @@
+---
+name: asc
+description: >
+  Universal AI coding rules. Write code like a staff engineer.
+---
+
 # Agentic Senior Core
 
 Universal AI coding rules. Write code like a staff engineer.

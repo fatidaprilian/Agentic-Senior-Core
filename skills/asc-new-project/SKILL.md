@@ -1,3 +1,9 @@
+---
+name: asc-new-project
+description: >
+  Structured greenfield workflow. Prevents building before alignment on what to build.
+---
+
 # New Project Workflow
 
 Structured greenfield workflow. Prevents building before alignment on what to build.

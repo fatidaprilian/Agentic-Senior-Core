@@ -1,3 +1,9 @@
+---
+name: asc-adapter
+description: >
+  Detect installed AI coding hosts and generate adapter files for the current project.
+---
+
 # ASC Adapter
 
 Detect installed AI coding hosts and generate adapter files for the current project.

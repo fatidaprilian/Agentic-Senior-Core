@@ -1,3 +1,9 @@
+---
+name: asc-reference
+description: >
+  Domain-specific coding rules for testing, API design, database queries, frontend components, infrastructure configs, and service resilience. Load this skill when working on any of these domains.
+---
+
 # ASC Domain Reference
 
 Domain-specific coding rules for testing, API design, database queries, frontend components, infrastructure configs, and service resilience. Load this skill when working on any of these domains.

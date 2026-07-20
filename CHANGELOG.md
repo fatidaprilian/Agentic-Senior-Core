@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.8.5
+
+### Fixed
+- **Skills not appearing in Antigravity IDE mentions**: Added standard YAML frontmatter (`name`, `description`) to all `SKILL.md` files. Without this frontmatter, Antigravity IDE cannot discover and register the skills for slash commands (e.g. `/asc-refactor`).
+
 ## 5.8.4
 
 ### Fixed

@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "5.8.4",
+  "version": "5.8.5",
   "type": "module",
   "description": "Universal AI coding rules. Write code like a staff engineer, not a junior.",
   "bin": {

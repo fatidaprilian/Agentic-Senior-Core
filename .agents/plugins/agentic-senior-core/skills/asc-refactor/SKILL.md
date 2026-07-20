@@ -1,3 +1,9 @@
+---
+name: asc-refactor
+description: >
+  Structured refactoring workflow. Preserves existing behavior while improving structure.
+---
+
 # Refactor Skill
 
 Structured refactoring workflow. Preserves existing behavior while improving structure.
