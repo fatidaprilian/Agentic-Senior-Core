@@ -236,8 +236,7 @@ asc global --antigravity
 ```
 
 This installs:
-- **Plugin bundle** (skills: `/asc-review`, `/asc-audit`, `/asc-refactor`, `/asc-reference`, `/asc-debt`, etc.) → `~/.gemini/config/plugins/agentic-senior-core/`
-- **Rules** → `~/.gemini/GEMINI.md` (appended if you already have content; ASC section is replaced on re-runs)
+- **Plugin bundle** (skills: `/asc-review`, `/asc-audit`, etc. and **rules**) → `~/.gemini/config/plugins/agentic-senior-core/`
 
 If you previously installed to `~/.gemini/antigravity-ide/plugins/agentic-senior-core/` or `~/.gemini/config/skills/` (v5.8.4 or earlier), the old paths are cleaned up automatically.
 
@@ -289,7 +288,7 @@ asc global --all
 
 | Tool | Global location | Notes |
 |------|----------------|-------|
-| Google Antigravity IDE | `~/.gemini/config/plugins/agentic-senior-core/` + `~/.gemini/GEMINI.md` | Plugin bundle (rules + skills) + global rules |
+| Google Antigravity IDE | `~/.gemini/config/plugins/agentic-senior-core/` | Plugin bundle (skills) + internal rules |
 | Cline | `~/Documents/Cline/Rules/` | Toggleable in the Cline rules panel |
 | Kilo Code | `~/.kilocode/rules/` | Or point `instructions:` in `~/.config/kilo/kilo.jsonc` at the npm package path — that variant auto-updates |
 | Kiro | `~/.kiro/steering/` | Some builds have global-steering loading bugs; fall back to `asc adapter --kiro` |

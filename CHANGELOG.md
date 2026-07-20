@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.8.7
+
+### Fixed
+- **Double Rules in Antigravity IDE**: Prevented `asc global` from injecting rules into `~/.gemini/GEMINI.md`. Since the plugin is now correctly installed in `config/plugins/agentic-senior-core/`, Antigravity IDE natively auto-loads the `rules/agentic-senior-core.md` from inside the plugin bundle. Injecting into `GEMINI.md` caused the rules to be loaded twice, doubling the context token usage from 1,250 to 2,500. `asc global` will now clean up the old injected rules from `GEMINI.md` if they exist.
+
 ## 5.8.6
 
 ### Fixed
