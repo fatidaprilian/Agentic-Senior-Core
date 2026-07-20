@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.8.3
+
+### Fixed
+- **Antigravity IDE global skills not loading**: `asc global --antigravity` was writing skills to `~/.gemini/config/plugins/agentic-senior-core/skills/` — a path that Antigravity IDE never scans. Skills now install flat to `~/.gemini/config/skills/<skill-name>/`, the verified global skills path for Antigravity IDE (confirmed by Google docs, Google Cloud Community, and independent empirical testing).
+- **Antigravity IDE global rules**: rules now also append to `~/.gemini/GEMINI.md` (guarded — appends if you have existing content, replaces the ASC section on re-runs).
+- Old `~/.gemini/config/plugins/agentic-senior-core/` is automatically cleaned up on re-install.
+- Added WSL / dual-environment note to README (install separately in each terminal if using both Windows and WSL).
+
 ## 5.8.2
 
 ### Changed
