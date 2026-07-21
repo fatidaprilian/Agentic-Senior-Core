@@ -20,8 +20,9 @@
 ### Step 1: Install the package
 
 ```bash
-npm install -g @ryuenn3123/agentic-senior-core
+npm install -g @ryuenn3123/agentic-senior-core@latest
 ```
+*(To update an existing installation, run the same `npm install ... @latest` command to bypass NPM's SemVer caching).*
 
 ### Step 2: Set up for your AI tool
 
