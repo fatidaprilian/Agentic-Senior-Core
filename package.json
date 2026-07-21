@@ -1,8 +1,8 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "5.8.7",
+  "version": "5.8.8",
   "type": "module",
-  "description": "Universal AI coding rules. Write code like a staff engineer, not a junior.",
+  "description": "Agentic Senior Core: Universal AI coding rules and workflows. Write code like a staff engineer, not a junior.",
   "bin": {
     "asc": "bin/agentic-senior-core.js",
     "agentic-senior-core": "bin/agentic-senior-core.js",
