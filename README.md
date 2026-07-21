@@ -13,16 +13,27 @@
 
 </div>
 
+## How Skills Work (Plugins)
+
+The plugin comes bundled with specialized skills (like security audits, refactoring, etc.).
+
+- **Automatic Triggering**: Agents attempt to detect and load these skills if your prompt matches the skill's description (e.g., asking "perform a security audit" will likely load the `asc-audit` skill). However, because AI relies on semantic probability, this is **never 100% guaranteed**.
+- **Manual Triggering (Highly Recommended)**: For maximum reliability and zero guesswork, explicitly call the skill using pseudo-commands like `/asc-refactor` or `/asc-new-project`. This forces the agent to enter the exact workflow immediately.
+
 ---
 
 ## Install
 
-### Step 1: Install the package
+### Step 1: Install / Update the package
+
+To install or forcefully update to the absolute latest version:
 
 ```bash
 npm install -g @ryuenn3123/agentic-senior-core@latest
 ```
-*(To update an existing installation, run the same `npm install ... @latest` command to bypass NPM's SemVer caching).*
+
+> [!TIP]
+> **Why not `npm update -g`?** npm's update command aggressively respects SemVer restrictions and local cache, which can trap you on older patch versions. Always use `@latest` to forcefully pull the absolute newest build.
 
 ### Step 2: Set up for your AI tool
 

@@ -1,7 +1,7 @@
 ---
 name: asc-new-project
 description: >
-  Structured greenfield workflow. Prevents building before alignment on what to build.
+  Structured greenfield workflow. Prevents building before alignment on what to build. Use this skill for greenfield projects, scaffolding new repositories, bootstrapping apps, starting from scratch, planning new system architectures, or creating a new project.
 ---
 
 # New Project Workflow

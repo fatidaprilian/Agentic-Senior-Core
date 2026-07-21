@@ -1,7 +1,7 @@
 ---
 name: asc-review
 description: >
-  Production-risk code review. Prioritize findings by severity.
+  Production-risk code review. Prioritize findings by severity. Use this skill when user asks to review a pull request, perform code review, check for production risks, critique code, analyze recent changes, or provide feedback on code quality.
 ---
 
 # Review Skill
