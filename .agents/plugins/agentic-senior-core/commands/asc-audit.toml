@@ -1,0 +1,2 @@
+description = "Security and architecture audit"
+prompt = "Load and follow the asc-audit skill. Audit trust boundaries, auth/authz, data handling, architecture boundaries, dependency health, and error exposure. For every finding report severity (critical/high/medium/low), vulnerability class, location, impact, evidence, remediation, and validation steps. Findings ordered by severity."

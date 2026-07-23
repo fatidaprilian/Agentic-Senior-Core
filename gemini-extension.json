@@ -8,5 +8,5 @@
   "rules": [".agents/plugins/agentic-senior-core/rules/"],
   "commands": [".agents/plugins/agentic-senior-core/commands/"],
   "skills": [".agents/plugins/agentic-senior-core/skills/"],
-  "hooks": ".agents/plugins/agentic-senior-core/hooks/hooks.json"
+  "hooks": ".agents/plugins/agentic-senior-core/hooks.json"
 }

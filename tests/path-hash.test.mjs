@@ -5,7 +5,7 @@ import os from 'node:os';
 import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 const requireCJS = createRequire(import.meta.url);
-const pathUtil = requireCJS('../hooks/path-util.cjs');
+const pathUtil = requireCJS('../.agents/plugins/agentic-senior-core/hooks/path-util.cjs');
 
 test('Path Hash Normalization', async (t) => {
   await t.test('computes identical hashes despite casing and slash differences on Windows', () => {

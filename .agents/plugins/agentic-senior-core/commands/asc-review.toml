@@ -1,0 +1,2 @@
+description = "Production-risk code review with severity-ordered findings"
+prompt = "Load and follow the asc-review skill. Review changed files for production risks. Priority order: correctness/data-loss/security, public contract drift, missing tests, architecture boundary drift, performance/accessibility with concrete impact. For every finding include file/line reference, real risk, and smallest safe fix. Report findings ordered by severity."
