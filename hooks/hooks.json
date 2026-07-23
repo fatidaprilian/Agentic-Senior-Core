@@ -6,8 +6,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.js\"; exit 0",
-            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\session-start.js\" }",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT:-$HOME/.gemini/config/plugins/agentic-senior-core}/hooks/session-start.js\"; exit 0",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" }; node \"$root\\hooks\\session-start.js\" }",
             "timeout": 5,
             "statusMessage": "Loading ASC rules..."
           }
@@ -19,8 +19,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/subagent-start.js\"; exit 0",
-            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\subagent-start.js\" }",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT:-$HOME/.gemini/config/plugins/agentic-senior-core}/hooks/subagent-start.js\"; exit 0",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" }; node \"$root\\hooks\\subagent-start.js\" }",
             "timeout": 5,
             "statusMessage": "Loading ASC rules..."
           }
@@ -34,16 +34,16 @@
           {
             "type": "command",
             "if": "Edit(**/package.json)",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-dependency-gate.js\"; exit 0",
-            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\pre-tool-dependency-gate.js\" }",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT:-$HOME/.gemini/config/plugins/agentic-senior-core}/hooks/pre-tool-dependency-gate.js\"; exit 0",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" }; node \"$root\\hooks\\pre-tool-dependency-gate.js\" }",
             "timeout": 5,
             "statusMessage": "ASC Pre-tool dependency check (Edit)..."
           },
           {
             "type": "command",
             "if": "Write(**/package.json)",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-dependency-gate.js\"; exit 0",
-            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\pre-tool-dependency-gate.js\" }",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT:-$HOME/.gemini/config/plugins/agentic-senior-core}/hooks/pre-tool-dependency-gate.js\"; exit 0",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" }; node \"$root\\hooks\\pre-tool-dependency-gate.js\" }",
             "timeout": 5,
             "statusMessage": "ASC Pre-tool dependency check (Write)..."
           }
@@ -54,8 +54,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-dependency-gate.js\"; exit 0",
-            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\pre-tool-dependency-gate.js\" }",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT:-$HOME/.gemini/config/plugins/agentic-senior-core}/hooks/pre-tool-dependency-gate.js\"; exit 0",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" }; node \"$root\\hooks\\pre-tool-dependency-gate.js\" }",
             "timeout": 5,
             "statusMessage": "ASC Pre-tool dependency check (Terminal)..."
           }
@@ -68,8 +68,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/post-edit-enforce.js\"; exit 0",
-            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\post-edit-enforce.js\" }",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT:-$HOME/.gemini/config/plugins/agentic-senior-core}/hooks/post-edit-enforce.js\"; exit 0",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" }; node \"$root\\hooks\\post-edit-enforce.js\" }",
             "timeout": 5,
             "statusMessage": "ASC ladder & spec gate check..."
           },
