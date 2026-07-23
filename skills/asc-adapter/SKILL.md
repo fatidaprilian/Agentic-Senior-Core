@@ -1,7 +1,7 @@
 ---
 name: asc-adapter
 description: >
-  Detect installed AI coding hosts and generate adapter files for the current project.
+  Detect installed AI coding hosts and generate adapter files for the current project. Use this skill when user asks to install, configure, setup, or initialize Agentic Senior Core rules, adapter files, or plugins for their IDE (Cursor, Windsurf, Devin, Copilot, Roo, Cline, Aider, Kiro).
 ---
 
 # ASC Adapter

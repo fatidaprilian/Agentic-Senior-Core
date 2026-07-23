@@ -14,6 +14,14 @@ Before writing any code, stop at the first step that holds:
 5. Can this be one straightforward function? Write it.
 6. Only then: write the minimum code that works.
 
+## Marking Simplification
+
+When you pick the minimal option at step 5 or 6, and it isn't obviously trivial:
+- Leave a one-line comment noting why, and the upgrade trigger if there is a ceiling.
+  Example: `// minimal: single global lock — split per-account if throughput becomes an issue`
+- Leave one runnable check (assertion, small test, or `__main__` demo) proving it works.
+  Skip only for genuinely trivial one-liners.
+
 ## Code Quality
 
 - Descriptive variable and function names. No cryptic abbreviations.

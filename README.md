@@ -352,6 +352,14 @@ This plugin loads universal engineering rules on every session. Before writing a
 5. Can this be one straightforward function?
 6. Only then: write the minimum code that works.
 
+## Marking Simplification
+
+When you pick the minimal option at step 5 or 6, and it isn't obviously trivial:
+- Leave a one-line comment noting why, and the upgrade trigger if there is a ceiling.
+  Example: `// minimal: single global lock — split per-account if throughput becomes an issue`
+- Leave one runnable check (assertion, small test, or `__main__` demo) proving it works.
+  Skip only for genuinely trivial one-liners.
+
 The rules also cover security, architecture, testing, error handling, API design, database safety, frontend accessibility, infrastructure, resilience, and async patterns. All universal invariants -- no project-specific configuration needed.
 
 ### Before / After

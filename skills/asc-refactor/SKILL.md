@@ -1,7 +1,7 @@
 ---
 name: asc-refactor
 description: >
-  Structured refactoring workflow. Preserves existing behavior while improving structure.
+  Structured refactoring workflow. Preserves existing behavior while improving structure. Use this skill when user asks to refactor code, clean up code, improve code structure, rewrite legacy code, extract components, reduce technical debt, apply SOLID/DRY principles, or migrate codebases.
 ---
 
 # Refactor Skill

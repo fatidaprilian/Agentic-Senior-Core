@@ -1,3 +1,9 @@
+---
+name: asc
+description: >
+  Universal AI coding rules. Write code like a staff engineer. Use this skill when user asks for general coding guidelines, best practices, standard rules, code quality standards, or when acting as a senior/staff software engineer.
+---
+
 # Agentic Senior Core
 
 Universal AI coding rules. Write code like a staff engineer.

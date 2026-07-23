@@ -1,7 +1,7 @@
 ---
 name: asc-audit
 description: >
-  Security and architecture audit. Deeper than review, focused on finding vulnerabilities and structural anti-patterns.
+  Security and architecture audit. Deeper than review, focused on finding vulnerabilities and structural anti-patterns. Use this skill for deep security audits, architecture reviews, vulnerability scanning, threat modeling, finding OWASP risks (XSS, SQLi), penetration testing, or identifying structural anti-patterns.
 ---
 
 # Audit Skill
