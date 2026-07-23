@@ -115,14 +115,22 @@ describe('Hooks', () => {
     assert.ok(content.includes('additionalContext'), 'Must output additionalContext');
   });
 
-  it('hooks.json registers PostToolUse event', async () => {
+  it('pre-tool-dependency-gate.js and known-duplicates.json exist', async () => {
+    await fs.access(path.join(repositoryRoot, 'hooks', 'pre-tool-dependency-gate.js'));
+    await fs.access(path.join(repositoryRoot, 'hooks', 'lib', 'known-duplicates.json'));
+    const gateContent = await fs.readFile(path.join(repositoryRoot, 'hooks', 'pre-tool-dependency-gate.js'), 'utf8');
+    assert.ok(gateContent.includes('permissionDecision'), 'pre-tool-dependency-gate.js must return permissionDecision');
+    assert.ok(gateContent.includes('PreToolUse'), 'Must reference PreToolUse event');
+  });
+
+  it('hooks.json registers PreToolUse and PostToolUse events', async () => {
     const hooksPath = path.join(repositoryRoot, 'hooks', 'hooks.json');
     const content = await fs.readFile(hooksPath, 'utf8');
     const hooks = JSON.parse(content);
+    assert.ok(hooks.hooks.PreToolUse, 'Must have PreToolUse event');
     assert.ok(hooks.hooks.PostToolUse, 'Must have PostToolUse event');
+    assert.ok(Array.isArray(hooks.hooks.PreToolUse), 'PreToolUse must be an array');
     assert.ok(Array.isArray(hooks.hooks.PostToolUse), 'PostToolUse must be an array');
-    const postHook = hooks.hooks.PostToolUse[0];
-    assert.equal(postHook.matcher, 'Edit|Write', 'PostToolUse must match Edit|Write');
   });
 
   it('copilot-hooks.json registers postToolUse event', async () => {

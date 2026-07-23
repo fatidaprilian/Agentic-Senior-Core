@@ -27,6 +27,29 @@
         ]
       }
     ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Edit(**/package.json)",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-dependency-gate.js\"; exit 0",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\pre-tool-dependency-gate.js\" }",
+            "timeout": 5,
+            "statusMessage": "ASC Pre-tool dependency check (Edit)..."
+          },
+          {
+            "type": "command",
+            "if": "Write(**/package.json)",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-dependency-gate.js\"; exit 0",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\pre-tool-dependency-gate.js\" }",
+            "timeout": 5,
+            "statusMessage": "ASC Pre-tool dependency check (Write)..."
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
@@ -36,7 +59,13 @@
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/post-edit-enforce.js\"; exit 0",
             "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\post-edit-enforce.js\" }",
             "timeout": 5,
-            "statusMessage": "ASC ladder check..."
+            "statusMessage": "ASC ladder & spec gate check..."
+          },
+          {
+            "type": "prompt",
+            "if": "Edit(**/package.json)",
+            "prompt": "A new dependency '$ARGUMENTS' was added to package.json. Does it duplicate Node.js standard library or platform features? If yes, return JSON: {\"hookSpecificOutput\": {\"hookEventName\": \"PostToolUse\", \"additionalContext\": \"[ASC Advisory] The newly added dependency appears to duplicate stdlib or platform features. Consider native alternatives.\"}}. If no, return {}.",
+            "timeout": 30
           }
         ]
       }

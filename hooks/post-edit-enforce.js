@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const STDLIB_DUPLICATES = new Set([
+let STDLIB_DUPLICATES = new Set([
   'lodash', 'lodash-es', 'underscore',
   'moment', 'dayjs',
   'uuid', 'nanoid',
@@ -18,6 +18,16 @@ const STDLIB_DUPLICATES = new Set([
   'is-odd', 'is-even', 'is-number', 'is-string',
   'path-exists', 'fs-extra',
 ]);
+
+try {
+  const knownPath = path.join(__dirname, 'lib', 'known-duplicates.json');
+  if (fs.existsSync(knownPath)) {
+    const raw = JSON.parse(fs.readFileSync(knownPath, 'utf8'));
+    if (Array.isArray(raw.duplicates)) {
+      STDLIB_DUPLICATES = new Set(raw.duplicates);
+    }
+  }
+} catch (_) {}
 
 const SOURCE_EXTENSIONS = new Set([
   'js', 'ts', 'mjs', 'cjs', 'jsx', 'tsx',
@@ -38,7 +48,7 @@ process.stdin.on('end', function () {
     const filePath = toolInput.file_path || '';
     const findings = [];
 
-    if (filePath.endsWith('package.json') || filePath.endsWith('package.json5')) {
+    if (filePath.endsWith('package.json')) {
       checkDependencyAddition(toolName, toolInput, findings);
     }
 
@@ -50,6 +60,8 @@ process.stdin.on('end', function () {
         checkNewFileSize(toolInput, filePath, findings);
       }
     }
+
+    checkLivingDocNudge(filePath, findings);
 
     if (ext !== 'md') {
       checkWorkflowGate(toolName, filePath, ext, findings);
@@ -120,6 +132,16 @@ function checkNewFileSize(toolInput, filePath, findings) {
   }
 }
 
+function checkLivingDocNudge(filePath, findings) {
+  var lower = filePath.toLowerCase();
+  if (lower.includes('schema') || lower.includes('migration') || lower.includes('model') || lower.includes('prisma')) {
+    findings.push(
+      '[ASC Living Doc] Data contract/model modified in ' + path.basename(filePath) + '. '
+      + 'Ensure docs/Schema.md and docs/Architecture.md are kept in sync to prevent spec drift.'
+    );
+  }
+}
+
 function checkWorkflowGate(toolName, filePath, ext, findings) {
   try {
     var pathUtil = require('./path-util.cjs');
@@ -143,10 +165,54 @@ function checkWorkflowGate(toolName, filePath, ext, findings) {
         'Workflow gate bypass: ' + gate.workflow + ' is in ' + gate.phase + ' phase but source code was edited. '
         + 'Stop and wait for phase approval. If you must proceed, log this bypass to the debt ledger.'
       );
+    } else if (gate.phase === 'implement') {
+      validateDocSpecs(gate.workflow, findings);
     }
   } catch (_) {
     // Silent fail
   }
+}
+
+function validateDocSpecs(workflow, findings) {
+  try {
+    var cwd = process.cwd();
+    var docsDir = path.join(cwd, 'docs');
+    
+    // Anti-typo check for common doc typos (e.g. Architectyre.md)
+    var searchDirs = [cwd, docsDir];
+    var typoFound = false;
+    searchDirs.forEach(function (d) {
+      if (fs.existsSync(d)) {
+        var files = fs.readdirSync(d);
+        files.forEach(function (f) {
+          if (f.toLowerCase() !== f && /architect[y|u]re/i.test(f) && f !== 'Architecture.md') {
+            findings.push('[ASC Spec Typo Alert] Typo detected in doc filename "' + f + '". Rename to "Architecture.md".');
+            typoFound = true;
+          }
+        });
+      }
+    });
+
+    if (workflow === 'asc-new-project') {
+      var requiredDocs = ['PRD.md', 'Architecture.md', 'Design.md', 'Schema.md'];
+      var missing = requiredDocs.filter(function (doc) {
+        return !fs.existsSync(path.join(cwd, doc)) && !fs.existsSync(path.join(docsDir, doc));
+      });
+      if (missing.length > 0) {
+        findings.push(
+          '[ASC 5-Doc SDD Gate] Greenfield project missing spec document(s): ' + missing.join(', ') + '. '
+          + 'Create them in docs/ to align requirements before continuing implementation.'
+        );
+      }
+    } else if (workflow === 'asc-add-feature') {
+      var hasPrd = fs.existsSync(path.join(cwd, 'PRD.md')) || fs.existsSync(path.join(docsDir, 'PRD.md'));
+      if (!hasPrd) {
+        findings.push(
+          '[ASC SDD Gate] Feature addition missing docs/PRD.md. Define goals and non-goals before coding.'
+        );
+      }
+    }
+  } catch (_) {}
 }
 
 function emit(nudge) {
