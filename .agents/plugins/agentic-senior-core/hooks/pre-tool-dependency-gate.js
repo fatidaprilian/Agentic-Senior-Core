@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Agentic Senior Core — PreToolUse dependency gate hook
-// Hard-blocks edits/writes to package.json if new dependencies duplicate stdlib/platform features.
+// Hard-blocks edits/writes to package.json AND shell commands (npm install/yarn add) 
+// if new dependencies duplicate stdlib/platform features.
 // Supports Claude Code hookSpecificOutput permissionDecision deny response format.
 
 const fs = require('fs');
@@ -28,21 +29,27 @@ process.stdin.on('end', function () {
     const data = JSON.parse(inputBuffer);
     const toolName = data.tool_name || '';
     const toolInput = data.tool_input || {};
-    const filePath = toolInput.file_path || '';
+    let added = [];
 
-    if (!filePath.endsWith('package.json')) {
-      process.exit(0);
-      return;
+    if (toolName === 'Bash') {
+      const command = toolInput.command || '';
+      added = extractCommandDeps(command);
+    } else if (toolName === 'Edit' || toolName === 'Write') {
+      const filePath = toolInput.file_path || '';
+      if (!filePath.endsWith('package.json')) {
+        process.exit(0);
+        return;
+      }
+      const target = toolName === 'Edit' ? (toolInput.new_string || '') : (toolInput.content || '');
+      const baseline = toolName === 'Edit' ? (toolInput.old_string || '') : '';
+
+      const depPattern = /"([^"]+)"\s*:\s*"[~^>=<*]?\d/g;
+      const newDeps = extractDeps(target, depPattern);
+      const oldDeps = extractDeps(baseline, depPattern);
+
+      added = newDeps.filter(function (d) { return oldDeps.indexOf(d) === -1; });
     }
 
-    const target = toolName === 'Edit' ? (toolInput.new_string || '') : (toolInput.content || '');
-    const baseline = toolName === 'Edit' ? (toolInput.old_string || '') : '';
-
-    const depPattern = /"([^"]+)"\s*:\s*"[~^>=<*]?\d/g;
-    const newDeps = extractDeps(target, depPattern);
-    const oldDeps = extractDeps(baseline, depPattern);
-
-    const added = newDeps.filter(function (d) { return oldDeps.indexOf(d) === -1; });
     if (added.length === 0) {
       process.exit(0);
       return;
@@ -82,6 +89,37 @@ function extractDeps(text, pattern) {
     matches.push(match[1]);
   }
   return matches;
+}
+
+function extractCommandDeps(command) {
+  const installRegex = /(?:npm|yarn|pnpm|bun|ascx)\s+(?:install|i|add)(?:\s+[^\s]+)*/i;
+  if (!installRegex.test(command)) return [];
+
+  const parts = command.split(/\s+/);
+  const pkgIndex = parts.findIndex(p => ['install', 'i', 'add'].includes(p.toLowerCase()));
+  if (pkgIndex === -1 || pkgIndex >= parts.length - 1) return [];
+
+  const rawArgs = parts.slice(pkgIndex + 1);
+  const deps = [];
+  for (let arg of rawArgs) {
+    if (arg.startsWith('-')) continue; // Skip flags like -D, --save-dev
+    if (arg.startsWith('http://') || arg.startsWith('https://') || arg.startsWith('git+')) continue;
+    
+    // Remove scope/version if any, e.g. lodash@^4.17 -> lodash, @types/node@18 -> @types/node
+    let name = arg;
+    if (name.startsWith('@')) {
+      const slashIndex = name.indexOf('/');
+      if (slashIndex !== -1) {
+        const atIndex = name.indexOf('@', slashIndex);
+        if (atIndex !== -1) name = name.substring(0, atIndex);
+      }
+    } else {
+      const atIndex = name.indexOf('@');
+      if (atIndex !== -1) name = name.substring(0, atIndex);
+    }
+    if (name) deps.push(name);
+  }
+  return deps;
 }
 
 function loadAllowlist() {
