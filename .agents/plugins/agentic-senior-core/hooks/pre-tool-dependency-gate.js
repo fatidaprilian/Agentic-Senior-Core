@@ -73,14 +73,16 @@ process.stdin.on('end', function () {
         + 'Ladder step 3: use stdlib/native features instead, or add to .asc/dependency-allowlist.json to override.';
       
       const output = {
+        allow_tool: false,
+        deny_reason: reason,
         hookSpecificOutput: {
           hookEventName: 'PreToolUse',
           permissionDecision: 'deny',
           permissionDecisionReason: reason
         }
       };
-      process.stdout.write(JSON.stringify(output));
-      process.exit(0);
+      process.stdout.write(JSON.stringify(output) + '\n');
+      process.exit(2);
       return;
     }
   } catch (_) {
