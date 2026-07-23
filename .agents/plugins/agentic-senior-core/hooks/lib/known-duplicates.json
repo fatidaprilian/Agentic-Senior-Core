@@ -1,0 +1,32 @@
+{
+  "description": "Single source of truth for packages that duplicate standard library or native platform features.",
+  "duplicates": [
+    "lodash",
+    "lodash-es",
+    "underscore",
+    "moment",
+    "dayjs",
+    "uuid",
+    "nanoid",
+    "chalk",
+    "kleur",
+    "colorette",
+    "axios",
+    "got",
+    "node-fetch",
+    "superagent",
+    "mkdirp",
+    "rimraf",
+    "del",
+    "glob",
+    "globby",
+    "left-pad",
+    "pad-left",
+    "is-odd",
+    "is-even",
+    "is-number",
+    "is-string",
+    "path-exists",
+    "fs-extra"
+  ]
+}
