@@ -8,17 +8,16 @@ description: >
 
 Structured greenfield workflow. Prevents building before alignment on what to build.
 
-Grounded in: Spec-Driven Development (SDD) with scaffolding-spec approach. Core spec documents guide greenfield implementation (`PRD.md`, `Architecture.md`, `Design.md`, `Schema.md`). Once implemented, the code becomes the primary ground truth, while docs are updated on structural changes.
+Grounded in: Spec-Driven Development (SDD) with scaffolding-spec approach. Core spec documents guide greenfield implementation (`PRD.md`, `Architecture.md`, `Schema.md`). Once implemented, the code becomes the primary ground truth, while docs are updated on structural changes.
 
-## Gate Mechanism & 4 Spec Document Requirement
+## Gate Mechanism & 3 Spec Document Requirement
 
 This workflow nudges the agent to stop at each phase boundary, same enforcement tier as the existing decision ladder — not a hard block. Bypasses are logged to the debt ledger.
 
-For greenfield projects (`asc-new-project`), Phase 2 requires creating the **4 Core SDD Documents** in `docs/` or project root:
+For greenfield projects (`asc-new-project`), Phase 2 requires creating the **3 Core SDD Documents** in `docs/` or project root:
 1. `PRD.md` — Product intent, goals, non-goals, and user problems.
 2. `Architecture.md` — System structure, module boundaries, and tech stack choices.
-3. `Design.md` — UX / UI layout, component hierarchy, interaction rules.
-4. `Schema.md` — Data contracts, database entities, API endpoints.
+3. `Schema.md` — Data contracts, database entities, API endpoints.
 
 *Note on Rules:* Coding conventions and project constraints are automatically loaded from global plugin rules (`agentic-senior-core.md`) or workspace `AGENTS.md`. No duplicate `docs/Rules.md` file is required.
 
@@ -43,7 +42,7 @@ Format:
 ## Phase 2: Spec (No Implementation Code)
 
 1. On approval of Phase 1, update `workflow-gate.json` phase to `plan`.
-2. Generate the 4 core SDD documents from templates (`docs/PRD.md`, `docs/Architecture.md`, `docs/Design.md`, `docs/Schema.md`).
+2. Generate the 3 core SDD documents from templates (`docs/PRD.md`, `docs/Architecture.md`, `docs/Schema.md`).
 3. Verify exact file naming — check for typos like `Architectyre.md`.
 4. Output specs for review.
 5. **STOP and wait for user approval.** Do not implement code.

@@ -1,1 +1,0 @@
-Run the security and architecture audit from skills/asc-audit/SKILL.md. Examine trust boundaries, auth, data handling, architecture boundaries, dependency health, and error exposure. Report findings with severity, evidence, and remediation.

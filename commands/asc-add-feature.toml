@@ -1,6 +1,0 @@
-name = "asc-add-feature"
-description = "Structured brownfield workflow. Research -> Plan -> Implement with human gates."
-
-[[instructions]]
-type = "context"
-content = "Run the brownfield feature workflow from skills/asc-add-feature/SKILL.md. Stop and wait for user approval at the end of each phase (Research, Plan) before proceeding. Update the gate state as instructed."

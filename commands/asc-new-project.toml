@@ -1,6 +1,0 @@
-name = "asc-new-project"
-description = "Structured greenfield workflow. Define -> Spec -> Implement -> Validate with human gates."
-
-[[instructions]]
-type = "context"
-content = "Run the greenfield project workflow from skills/asc-new-project/SKILL.md. Stop and wait for user approval at the end of each phase (Define, Spec) before proceeding. Update the gate state as instructed."

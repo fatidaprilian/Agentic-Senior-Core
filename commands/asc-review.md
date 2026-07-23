@@ -1,1 +1,0 @@
-Run the code review workflow from skills/asc-review/SKILL.md on the current diff or specified files. Prioritize findings by severity: correctness and security first, then contracts, tests, architecture, and performance.
