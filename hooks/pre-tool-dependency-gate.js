@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Agentic Senior Core — PreToolUse dependency gate hook
-// Hard-blocks edits/writes to package.json AND shell commands (npm install/yarn add) 
+// Hard-blocks edits/writes to package.json AND shell commands (npm install/yarn add/ascx)
 // if new dependencies duplicate stdlib/platform features.
-// Supports Claude Code hookSpecificOutput permissionDecision deny response format.
+// Supports Claude Code, Antigravity IDE (run_command), and Copilot CLI hook response formats.
 
 const fs = require('fs');
 const path = require('path');
@@ -27,21 +27,28 @@ process.stdin.on('data', function (chunk) { inputBuffer += chunk; });
 process.stdin.on('end', function () {
   try {
     const data = JSON.parse(inputBuffer);
-    const toolName = data.tool_name || '';
-    const toolInput = data.tool_input || {};
+    const toolName = data.tool_name || data.toolName || '';
+    const toolInput = data.tool_input || data.toolInput || {};
     let added = [];
 
-    if (toolName === 'Bash') {
-      const command = toolInput.command || '';
+    const isTerminal = ['Bash', 'run_command', 'run_shell_command', 'terminal', 'execute_command'].includes(toolName);
+    const isFileEdit = ['Edit', 'Write', 'replace_file_content', 'write_to_file', 'write_file', 'multi_replace_file_content'].includes(toolName);
+
+    if (isTerminal) {
+      const command = toolInput.command || toolInput.CommandLine || toolInput.cmd || toolInput.commandLine || '';
       added = extractCommandDeps(command);
-    } else if (toolName === 'Edit' || toolName === 'Write') {
-      const filePath = toolInput.file_path || '';
+    } else if (isFileEdit) {
+      const filePath = toolInput.file_path || toolInput.TargetFile || toolInput.path || toolInput.target_file || '';
       if (!filePath.endsWith('package.json')) {
         process.exit(0);
         return;
       }
-      const target = toolName === 'Edit' ? (toolInput.new_string || '') : (toolInput.content || '');
-      const baseline = toolName === 'Edit' ? (toolInput.old_string || '') : '';
+      const target = (toolName === 'Edit' || toolName === 'replace_file_content')
+        ? (toolInput.new_string || toolInput.ReplacementContent || toolInput.content || '')
+        : (toolInput.content || toolInput.CodeContent || '');
+      const baseline = (toolName === 'Edit' || toolName === 'replace_file_content')
+        ? (toolInput.old_string || toolInput.TargetContent || '')
+        : '';
 
       const depPattern = /"([^"]+)"\s*:\s*"[~^>=<*]?\d/g;
       const newDeps = extractDeps(target, depPattern);

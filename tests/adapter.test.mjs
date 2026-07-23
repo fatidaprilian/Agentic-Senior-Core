@@ -252,10 +252,10 @@ describe('Host Adapters', () => {
     await fs.access(path.join(repositoryRoot, '.openclaw', 'skills', 'asc-audit', 'SKILL.md'));
   });
 
-  it('gemini-extension.json references AGENTS.md', async () => {
+  it('gemini-extension.json references rules/agentic-senior-core.md', async () => {
     const content = await fs.readFile(path.join(repositoryRoot, 'gemini-extension.json'), 'utf8');
     const extension = JSON.parse(content);
-    assert.equal(extension.contextFileName, 'AGENTS.md');
+    assert.equal(extension.contextFileName, 'rules/agentic-senior-core.md');
   });
 });
 
