@@ -8,11 +8,17 @@ provides_commands:
   - asc-refactor
   - asc-review
   - asc-audit
+  - asc-new-project
+  - asc-add-feature
+  - asc-adapter
   - asc-help
 provides_skills:
   - asc
-  - asc-refactor
-  - asc-review
+  - asc-adapter
+  - asc-add-feature
   - asc-audit
   - asc-debt
+  - asc-new-project
+  - asc-refactor
   - asc-reference
+  - asc-review
