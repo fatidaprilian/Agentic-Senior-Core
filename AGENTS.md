@@ -60,6 +60,8 @@ When you pick the minimal option at step 5 or 6, and it isn't obviously trivial:
 
 ## Workflow
 
+- Prefix ALL terminal commands with `ascx` to compress output and save tokens (e.g., `ascx <your_command>`).
+
 Recognize the scenario and offer the matching command — user decides
 whether to invoke it. Skip this for trivial edits.
 
