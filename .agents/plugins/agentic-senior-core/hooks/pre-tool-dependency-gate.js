@@ -27,8 +27,9 @@ process.stdin.on('data', function (chunk) { inputBuffer += chunk; });
 process.stdin.on('end', function () {
   try {
     const data = JSON.parse(inputBuffer);
-    const toolName = data.tool_name || data.toolName || '';
-    const toolInput = data.tool_input || data.toolInput || {};
+    const isAntigravity = !!data.toolCall;
+    const toolName = isAntigravity ? data.toolCall.name : (data.tool_name || data.toolName || '');
+    const toolInput = isAntigravity ? data.toolCall.args : (data.tool_input || data.toolInput || {});
     let added = [];
 
     const isTerminal = ['Bash', 'run_command', 'run_shell_command', 'terminal', 'execute_command'].includes(toolName);
@@ -72,15 +73,23 @@ process.stdin.on('end', function () {
         + ' duplicates standard library or native platform features. '
         + 'Ladder step 3: use stdlib/native features instead, or add to .asc/dependency-allowlist.json to override.';
       
-      const output = {
-        allow_tool: false,
-        deny_reason: reason,
-        hookSpecificOutput: {
-          hookEventName: 'PreToolUse',
-          permissionDecision: 'deny',
-          permissionDecisionReason: reason
-        }
-      };
+      let output;
+      if (isAntigravity) {
+        output = {
+          decision: "deny",
+          reason: reason
+        };
+      } else {
+        output = {
+          allow_tool: false,
+          deny_reason: reason,
+          hookSpecificOutput: {
+            hookEventName: 'PreToolUse',
+            permissionDecision: 'deny',
+            permissionDecisionReason: reason
+          }
+        };
+      }
       process.stdout.write(JSON.stringify(output) + '\n');
       process.exit(2);
       return;

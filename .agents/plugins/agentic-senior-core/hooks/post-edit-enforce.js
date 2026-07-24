@@ -43,38 +43,116 @@ process.stdin.on('data', function (chunk) { inputBuffer += chunk; });
 process.stdin.on('end', function () {
   try {
     const data = JSON.parse(inputBuffer);
+    
+    if (data.invocationNum !== undefined && data.transcriptPath) {
+      handleAntigravityPostInvocation(data);
+      return;
+    }
+
     const toolName = data.tool_name || '';
     const toolInput = data.tool_input || {};
-    const filePath = toolInput.file_path || '';
-    const findings = [];
-
-    if (filePath.endsWith('package.json')) {
-      checkDependencyAddition(toolName, toolInput, findings);
-    }
-
-    const ext = path.extname(filePath).slice(1);
-    if (SOURCE_EXTENSIONS.has(ext)) {
-      if (toolName === 'Edit') {
-        checkLocDelta(toolInput, filePath, findings);
-      } else if (toolName === 'Write') {
-        checkNewFileSize(toolInput, filePath, findings);
-      }
-    }
-
-    checkLivingDocNudge(filePath, findings);
-
-    if (ext !== 'md') {
-      checkWorkflowGate(toolName, filePath, ext, findings);
-    }
-
-    if (findings.length === 0) return;
-
-    const nudge = '[ASC enforcement] ' + findings.join(' ') + ' Review the decision ladder before continuing.';
-    emit(nudge);
+    processSingleEdit(toolName, toolInput, function(nudge) {
+      emitClaude(nudge);
+    });
   } catch (_) {
-    // Silent fail — enforcement must not break the session
+    // Silent fail
   }
 });
+
+function handleAntigravityPostInvocation(data) {
+  try {
+    if (!fs.existsSync(data.transcriptPath)) return;
+    const lines = fs.readFileSync(data.transcriptPath, 'utf8').split('\n').filter(Boolean);
+    const findings = [];
+    
+    for (let i = 0; i < lines.length; i++) {
+      const step = JSON.parse(lines[i]);
+      if (step.step_index >= data.initialNumSteps && step.type === 'PLANNER_RESPONSE' && step.tool_calls) {
+        for (let j = 0; j < step.tool_calls.length; j++) {
+          const tc = step.tool_calls[j];
+          let toolName = '';
+          let toolInput = {};
+          
+          if (tc.name === 'replace_file_content' || tc.name === 'multi_replace_file_content') {
+            toolName = 'Edit';
+            toolInput = {
+              file_path: tc.args.TargetFile || '',
+              new_string: tc.args.ReplacementContent || '',
+              old_string: tc.args.TargetContent || ''
+            };
+          } else if (tc.name === 'write_to_file') {
+            toolName = 'Write';
+            toolInput = {
+              file_path: tc.args.TargetFile || '',
+              content: tc.args.CodeContent || ''
+            };
+          }
+          
+          if (toolName) {
+            processSingleEdit(toolName, toolInput, function(nudge) {
+              findings.push(nudge);
+            }, true);
+          }
+        }
+      }
+    }
+    
+    if (findings.length > 0) {
+      const injectSteps = findings.map(function(f) { return { ephemeralMessage: f }; });
+      process.stdout.write(JSON.stringify({ injectSteps: injectSteps }) + '\n');
+    } else {
+      process.stdout.write(JSON.stringify({}) + '\n');
+    }
+  } catch (e) {
+    process.stdout.write(JSON.stringify({}) + '\n');
+  }
+}
+
+function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
+  const filePath = toolInput.file_path || '';
+  if (!filePath) return;
+  const findings = [];
+
+  if (filePath.endsWith('package.json')) {
+    checkDependencyAddition(toolName, toolInput, findings);
+  }
+
+  const ext = path.extname(filePath).slice(1);
+  if (SOURCE_EXTENSIONS.has(ext)) {
+    if (toolName === 'Edit') {
+      checkLocDelta(toolInput, filePath, findings);
+    } else if (toolName === 'Write') {
+      checkNewFileSize(toolInput, filePath, findings);
+    }
+  }
+
+  checkLivingDocNudge(filePath, findings);
+
+  if (ext !== 'md') {
+    checkWorkflowGate(toolName, filePath, ext, findings);
+  }
+
+  if (findings.length === 0) return;
+
+  const nudge = '[ASC enforcement] ' + findings.join(' ') + ' Review the decision ladder before continuing.';
+  emitFn(nudge);
+}
+
+function emitClaude(nudge) {
+  try {
+    const isCopilot = Boolean(process.env.COPILOT_PLUGIN_DATA);
+    let output = {
+      hookSpecificOutput: {
+        hookEventName: 'PostToolUse',
+        additionalContext: nudge,
+      },
+    };
+    if (isCopilot) {
+      output = { additionalContext: nudge };
+    }
+    process.stdout.write(JSON.stringify(output) + '\n');
+  } catch (_) {}
+}
 
 function checkDependencyAddition(toolName, toolInput, findings) {
   var target = toolName === 'Edit' ? (toolInput.new_string || '') : (toolInput.content || '');
@@ -215,20 +293,4 @@ function validateDocSpecs(workflow, findings) {
   } catch (_) {}
 }
 
-function emit(nudge) {
-  try {
-    var isCopilot = Boolean(process.env.COPILOT_PLUGIN_DATA);
-    var output = {
-      hookSpecificOutput: {
-        hookEventName: 'PostToolUse',
-        additionalContext: nudge,
-      },
-    };
-    if (isCopilot) {
-      output = { additionalContext: nudge };
-    }
-    process.stdout.write(JSON.stringify(output));
-  } catch (_) {
-    // EPIPE — silent
-  }
-}
+

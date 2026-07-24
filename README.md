@@ -224,9 +224,9 @@ Copies one file to `.openhands/microagents/agentic-senior-core.md`. Repeat per p
 </details>
 
 <details>
-<summary><b>Google Antigravity IDE</b></summary>
+<summary><b>Google Antigravity (2.0, IDE, and CLI)</b></summary>
 
-**Option A -- workspace rules (per project):**
+**Option A -- workspace rules (per project for 2.0 and IDE only):**
 
 Copy the rules file into your project's `.agents/rules/` directory:
 
@@ -244,9 +244,9 @@ mkdir .agents\rules -Force
 cp "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/rules/agentic-senior-core.md" .agents\rules\
 ```
 
-Antigravity IDE reads it automatically with `trigger: always_on`.
+Antigravity IDE and 2.0 read it automatically with `trigger: always_on`. *(Note: Antigravity CLI does not support workspace plugins, use Option B for CLI).*
 
-**Option B -- global install (all projects):**
+**Option B -- global install (all projects and ALL clients):**
 
 One command (works on all platforms):
 
@@ -254,25 +254,15 @@ One command (works on all platforms):
 asc global --antigravity
 ```
 
-This installs:
-- **Plugin bundle** (skills: `/asc-review`, `/asc-audit`, etc. and **rules**) → `~/.gemini/config/plugins/agentic-senior-core/`
+This automatically stages the plugin bundle (skills, rules, hooks, and MCP servers) for:
+- **Antigravity 2.0 & IDE** (`~/.gemini/config/plugins/agentic-senior-core/`)
+- **Antigravity CLI** (`~/.gemini/antigravity-cli/plugins/agentic-senior-core/`)
 
-If you previously installed to `~/.gemini/antigravity-ide/plugins/agentic-senior-core/` or `~/.gemini/config/skills/` (v5.8.4 or earlier), the old paths are cleaned up automatically.
+If you previously installed to legacy locations (v5.8.4 or earlier), the old paths are cleaned up automatically.
 
 > Note: `npm update -g` refreshes the npm package only. The global copy does not auto-update -- re-run `asc global --antigravity` after each update.
 
-> **WSL / dual-environment:** `asc global --antigravity` writes to the HOME directory of the current environment. If you use both Windows native and WSL, run it separately in each terminal. The same applies to `agy plugin install` for Antigravity CLI.
-
-</details>
-
-<details>
-<summary><b>Google Antigravity CLI</b></summary>
-
-Requires [Antigravity CLI](https://antigravity.google) (`agy`) installed separately.
-
-```bash
-agy plugin install https://github.com/fatidaprilian/Agentic-Senior-Core.git
-```
+> **WSL / dual-environment:** `asc global --antigravity` writes to the HOME directory of the current environment. If you use both Windows native and WSL, run it separately in each terminal.
 
 </details>
 
@@ -307,7 +297,7 @@ asc global --all
 
 | Tool | Global location | Notes |
 |------|----------------|-------|
-| Google Antigravity IDE | `~/.gemini/config/plugins/agentic-senior-core/` | Plugin bundle (skills) + internal rules |
+| Google Antigravity (2.0, IDE, CLI) | `~/.gemini/config/plugins/...` and `~/.gemini/antigravity-cli/plugins/...` | Plugin bundle (skills, hooks, rules) |
 | Cline | `~/Documents/Cline/Rules/` | Toggleable in the Cline rules panel |
 | Kilo Code | `~/.kilocode/rules/` | Or point `instructions:` in `~/.config/kilo/kilo.jsonc` at the npm package path — that variant auto-updates |
 | Kiro | `~/.kiro/steering/` | Some builds have global-steering loading bugs; fall back to `asc adapter --kiro` |
