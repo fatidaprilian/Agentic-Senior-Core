@@ -1,12 +1,18 @@
 {
   "name": "agentic-senior-core",
-  "version": "5.8.22",
+  "version": "5.8.23",
   "description": "Universal AI coding rules. Write code like a staff engineer.",
   "author": "fatidaprilian",
   "license": "MIT",
   "contextFileName": ".agents/plugins/agentic-senior-core/rules/agentic-senior-core.md",
-  "rules": [".agents/plugins/agentic-senior-core/rules/"],
-  "commands": [".agents/plugins/agentic-senior-core/commands/"],
-  "skills": [".agents/plugins/agentic-senior-core/skills/"],
+  "rules": [
+    ".agents/plugins/agentic-senior-core/rules/"
+  ],
+  "commands": [
+    ".agents/plugins/agentic-senior-core/commands/"
+  ],
+  "skills": [
+    ".agents/plugins/agentic-senior-core/skills/"
+  ],
   "hooks": ".agents/plugins/agentic-senior-core/hooks.json"
 }

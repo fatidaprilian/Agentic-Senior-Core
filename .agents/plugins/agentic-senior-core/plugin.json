@@ -1,10 +1,16 @@
 {
   "name": "agentic-senior-core",
-  "version": "5.8.22",
+  "version": "5.8.23",
   "description": "Universal AI coding rules. Write code like a staff engineer.",
   "contextFileName": "rules/agentic-senior-core.md",
-  "rules": ["rules/"],
-  "commands": ["commands/"],
-  "skills": ["skills/"],
+  "rules": [
+    "rules/"
+  ],
+  "commands": [
+    "commands/"
+  ],
+  "skills": [
+    "skills/"
+  ],
   "hooks": "hooks.json"
 }
