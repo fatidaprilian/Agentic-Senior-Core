@@ -25,6 +25,7 @@ When you pick the minimal option at step 5 or 6, and it isn't obviously trivial:
 ## Code Quality
 
 - Descriptive variable and function names. No cryptic abbreviations.
+- All identifiers (variables, functions, classes, file names, database columns) must be in English.
 - Early returns over deep nesting. Keep the main flow traceable.
 - Three similar lines is better than a premature abstraction.
 - Scope changes to what the task requires. Features, refactors, and abstractions beyond scope need explicit user confirmation.

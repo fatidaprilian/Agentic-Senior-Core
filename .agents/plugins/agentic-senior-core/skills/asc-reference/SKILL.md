@@ -57,3 +57,11 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 - Only retry idempotent operations.
 - Circuit breakers for unhealthy dependencies.
 - Graceful degradation on non-critical dependency failure.
+
+## Naming
+
+- Variables and properties are nouns: `userList`, `pageCount`, not `getUser`.
+- Functions and methods are verbs: `calculateTotal`, `fetchUsers`, not `total`.
+- Booleans prefixed with `is`/`has`/`can`: `isValid`, `hasPermission`.
+- Constants in UPPER_SNAKE_CASE: `MAX_RETRIES`, `API_BASE_URL`.
+- Follow the casing convention of the language and existing codebase. When starting fresh, use the community default for that language.
