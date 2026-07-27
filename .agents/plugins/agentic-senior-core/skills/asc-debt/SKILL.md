@@ -1,7 +1,7 @@
 ---
 name: asc-debt
 description: >
-  Track deferred enforcement violations. When an ASC ladder nudge fires and the shortcut is accepted rather than fixed, log it here for later resolution. Use this skill when user wants to log technical debt, track skipped rules, defer a fix, note a code smell for later, or manage deferred violations.
+  Trigger this skill when the user says: "log this debt", "skip this for now", "defer this fix", "note this smell", "track this violation", "add to debt ledger", "we'll fix this later", "accept the shortcut". Also trigger when an ASC ladder nudge fires and the user accepts the shortcut rather than fixing it — log the deferred violation for later resolution.
 ---
 
 # Debt Ledger

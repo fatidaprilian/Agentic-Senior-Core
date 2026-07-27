@@ -37,6 +37,29 @@ process.stdin.on('end', function () {
 
     if (isTerminal) {
       const command = toolInput.command || toolInput.CommandLine || toolInput.cmd || toolInput.commandLine || '';
+      
+      // Hard-block git commit/push unless explicitly allowed
+      if (isGitCommitOrPush(command)) {
+        const reason = '[ASC Hard-Block] git commit/push detected. Never run git commit, git push, or git push --force unless the user explicitly requests it this turn.';
+        let output;
+        if (isAntigravity) {
+          output = { decision: "deny", reason: reason };
+        } else {
+          output = {
+            allow_tool: false,
+            deny_reason: reason,
+            hookSpecificOutput: {
+              hookEventName: 'PreToolUse',
+              permissionDecision: 'deny',
+              permissionDecisionReason: reason
+            }
+          };
+        }
+        process.stdout.write(JSON.stringify(output) + '\n');
+        process.exit(2);
+        return;
+      }
+      
       added = extractCommandDeps(command);
     } else if (isFileEdit) {
       const filePath = toolInput.file_path || toolInput.TargetFile || toolInput.path || toolInput.target_file || '';
@@ -99,6 +122,12 @@ process.stdin.on('end', function () {
   }
   process.exit(0);
 });
+
+function isGitCommitOrPush(command) {
+  // Match: git commit, git push, git push --force, git push -f
+  // Also match chained commands: git add . ; git commit, etc.
+  return /\bgit\s+(commit|push)\b/i.test(command);
+}
 
 function extractDeps(text, pattern) {
   const matches = [];

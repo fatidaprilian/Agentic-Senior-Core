@@ -1,7 +1,7 @@
 ---
 name: asc-reference
 description: >
-  Domain-specific coding rules for testing, API design, database queries, frontend components, infrastructure configs, and service resilience. Load this skill when working on any of these domains. Use this skill for guidance on writing unit tests, designing REST/GraphQL APIs, optimizing SQL queries, writing React/frontend components, setting up Docker/CI/CD infrastructure, or improving backend service resilience.
+  Trigger this skill when the user is working on: unit tests, integration tests, REST APIs, GraphQL APIs, SQL queries, database migrations, React components, frontend layouts, Docker configs, CI/CD pipelines, Kubernetes manifests, or service resilience (retries, circuit breakers, rate limiting). Also trigger when the user says: "how should I test this", "design this API", "optimize this query", "set up Docker", "add retry logic".
 ---
 
 # ASC Domain Reference

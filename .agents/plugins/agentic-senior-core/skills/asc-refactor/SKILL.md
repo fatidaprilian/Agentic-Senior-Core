@@ -1,7 +1,7 @@
 ---
 name: asc-refactor
 description: >
-  Structured refactoring workflow. Preserves existing behavior while improving structure. Use this skill when user asks to refactor code, clean up code, improve code structure, rewrite legacy code, extract components, reduce technical debt, apply SOLID/DRY principles, or migrate codebases.
+  Trigger this skill when the user says: "refactor this", "clean up this code", "improve this structure", "rewrite this", "extract this into", "reduce duplication", "apply DRY", "apply SOLID", "migrate this", "simplify this module", "split this file", "decompose this". Also trigger for any request to restructure, modernize, or improve code organization without changing behavior.
 ---
 
 # Refactor Skill

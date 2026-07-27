@@ -11,60 +11,30 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+// Full-version rule files that must be identical (ignoring frontmatter)
 const FULL_VERSION_FILES = [
   'AGENTS.md',
   '.agents/rules/agentic-senior-core.md',
   '.agents/plugins/agentic-senior-core/rules/agentic-senior-core.md',
 ];
 
-const CONDENSED_ADAPTER_FILES = [
-  '.cursor/rules/agentic-senior-core.mdc',
-  '.windsurf/rules/agentic-senior-core.md',
-  '.devin/rules/agentic-senior-core.md',
-  '.clinerules/agentic-senior-core.md',
-  '.github/copilot-instructions.md',
-  '.kiro/steering/agentic-senior-core.md',
-  '.continue/rules/agentic-senior-core.md',
-  '.zed/rules/agentic-senior-core.md',
-  'CONVENTIONS.md',
-  '.kilocode/rules/agentic-senior-core.md',
-  '.roo/rules/agentic-senior-core.md',
-  '.openhands/microagents/agentic-senior-core.md',
-];
+// Condensed adapter files are generated on-demand by `asc adapter` into user
+// projects — they do NOT ship in the ASC repo itself. Removed from checks.
 
+// Skill copies within the plugin directory
 const SKILL_COPIES = [
-  { base: 'skills/asc-reference/SKILL.md', copies: [
-    '.agents/plugins/agentic-senior-core/skills/asc-reference/SKILL.md',
-    '.openclaw/skills/asc-reference/SKILL.md',
-  ]},
-  { base: 'skills/asc/SKILL.md', copies: [
-    '.agents/plugins/agentic-senior-core/skills/asc/SKILL.md',
-    '.openclaw/skills/asc/SKILL.md',
-  ]},
-  { base: 'skills/asc-review/SKILL.md', copies: [
-    '.agents/plugins/agentic-senior-core/skills/asc-review/SKILL.md',
-    '.openclaw/skills/asc-review/SKILL.md',
-  ]},
-  { base: 'skills/asc-audit/SKILL.md', copies: [
-    '.agents/plugins/agentic-senior-core/skills/asc-audit/SKILL.md',
-    '.openclaw/skills/asc-audit/SKILL.md',
-  ]},
-  { base: 'skills/asc-refactor/SKILL.md', copies: [
-    '.agents/plugins/agentic-senior-core/skills/asc-refactor/SKILL.md',
-  ]},
-  { base: 'skills/asc-debt/SKILL.md', copies: [
-    '.agents/plugins/agentic-senior-core/skills/asc-debt/SKILL.md',
-  ]},
+  { base: '.agents/plugins/agentic-senior-core/skills/asc/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-reference/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-review/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-audit/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-refactor/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-debt/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-add-feature/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-new-project/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-adapter/SKILL.md', copies: [] },
 ];
 
 const REQUIRED_MARKERS = [
-  { label: 'behavioral anchor', pattern: 'stdlib one-liner' },
-  { label: 'decision ladder step 1', pattern: 'Does this need to be built' },
-  { label: 'security carveout', pattern: 'never skip' },
-  { label: 'response style', pattern: 'Response Style' },
-];
-
-const CONDENSED_MARKERS = [
   { label: 'behavioral anchor', pattern: 'stdlib one-liner' },
   { label: 'decision ladder step 1', pattern: 'Does this need to be built' },
   { label: 'security carveout', pattern: 'never skip' },
@@ -113,49 +83,15 @@ async function run() {
     }
   }
 
-  // 2. Check condensed adapters have required markers
-  console.log('\n--- Condensed adapter files ---');
-  for (const filePath of CONDENSED_ADAPTER_FILES) {
-    const raw = await readFile(filePath);
-    if (!raw) {
-      issues.push(`MISSING: ${filePath}`);
-      continue;
-    }
-    const missing = CONDENSED_MARKERS.filter((m) => !raw.includes(m.pattern));
-    if (missing.length > 0) {
-      issues.push(`MARKER: ${filePath} missing: ${missing.map((m) => m.label).join(', ')}`);
-    } else {
-      console.log(`  OK  ${filePath}`);
-    }
-  }
-
-  // 3. Check condensed adapters are consistent with each other
-  console.log('\n--- Condensed adapter consistency ---');
-  const condensedBodies = [];
-  for (const filePath of CONDENSED_ADAPTER_FILES) {
-    const raw = await readFile(filePath);
-    if (raw) condensedBodies.push({ path: filePath, body: stripFrontmatter(raw) });
-  }
-  if (condensedBodies.length > 1) {
-    const reference = condensedBodies[0].body;
-    for (const entry of condensedBodies.slice(1)) {
-      if (entry.body !== reference) {
-        issues.push(`DRIFT: ${entry.path} differs from ${condensedBodies[0].path} (ignoring frontmatter)`);
-      }
-    }
-    if (condensedBodies.slice(1).every((e) => e.body === reference)) {
-      console.log(`  OK  All ${condensedBodies.length} condensed adapters are identical`);
-    }
-  }
-
-  // 4. Check skill copies match their base
-  console.log('\n--- Skill copies ---');
+  // 2. Check skill base files exist
+  console.log('\n--- Skill files ---');
   for (const group of SKILL_COPIES) {
     const baseRaw = await readFile(group.base);
     if (!baseRaw) {
       issues.push(`MISSING: ${group.base}`);
       continue;
     }
+    console.log(`  OK  ${group.base}`);
     const baseBody = stripFrontmatter(baseRaw);
     for (const copyPath of group.copies) {
       const copyRaw = await readFile(copyPath);
@@ -172,14 +108,11 @@ async function run() {
     }
   }
 
-  // 5. Check version consistency
+  // 3. Check version consistency
   console.log('\n--- Version consistency ---');
   const versionFiles = [
     'package.json',
-    '.claude-plugin/plugin.json',
-    '.codex-plugin/plugin.json',
-    '.devin-plugin/plugin.json',
-    '.github/plugin/plugin.json',
+    '.agents/plugins/agentic-senior-core/plugin.json',
     'gemini-extension.json',
     'plugin.yaml',
   ];
@@ -212,7 +145,7 @@ async function run() {
     exitCode = 1;
     console.log(`${issues.length} issue(s) found:\n`);
     for (const issue of issues) {
-      console.log(`  ✗ ${issue}`);
+      console.log(`  x ${issue}`);
     }
   }
 

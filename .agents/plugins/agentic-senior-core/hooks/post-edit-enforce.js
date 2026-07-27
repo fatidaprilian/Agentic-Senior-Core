@@ -36,6 +36,10 @@ const SOURCE_EXTENSIONS = new Set([
 
 const LOC_DELTA_THRESHOLD = 30;
 const NEW_FILE_LINE_THRESHOLD = 50;
+const SESSION_DRIFT_THRESHOLD = 4;
+
+// Module-level counter for Claude Code path (resets per process spawn)
+let sourceEditCount = 0;
 
 let inputBuffer = '';
 process.stdin.setEncoding('utf8');
@@ -65,6 +69,8 @@ function handleAntigravityPostInvocation(data) {
     const lines = fs.readFileSync(data.transcriptPath, 'utf8').split('\n').filter(Boolean);
     const findings = [];
     
+    // Session drift check: count source file edits since initialNumSteps
+    let sourceEditsSinceStart = 0;
     for (let i = 0; i < lines.length; i++) {
       const step = JSON.parse(lines[i]);
       if (step.step_index >= data.initialNumSteps && step.type === 'PLANNER_RESPONSE' && step.tool_calls) {
@@ -89,12 +95,23 @@ function handleAntigravityPostInvocation(data) {
           }
           
           if (toolName) {
+            const fp = toolInput.file_path || '';
+            const ext = path.extname(fp).slice(1);
+            if (SOURCE_EXTENSIONS.has(ext)) sourceEditsSinceStart++;
+            
             processSingleEdit(toolName, toolInput, function(nudge) {
               findings.push(nudge);
             }, true);
           }
         }
       }
+    }
+    
+    // Inject drift nudge if 4+ source files modified this invocation
+    if (sourceEditsSinceStart >= SESSION_DRIFT_THRESHOLD) {
+      findings.push('[ASC Session Drift] ' + sourceEditsSinceStart + ' source file edits this invocation. '
+        + 'Re-read the decision ladder before continuing: (1) Does this need to be built? '
+        + '(2) Does the codebase already have this? (3) Stdlib/native? (4) Existing dependency?');
     }
     
     if (findings.length > 0) {
@@ -112,6 +129,17 @@ function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
   const filePath = toolInput.file_path || '';
   if (!filePath) return;
   const findings = [];
+
+  // Increment per-process counter for Claude Code drift detection
+  const ext = path.extname(filePath).slice(1);
+  if (SOURCE_EXTENSIONS.has(ext)) {
+    sourceEditCount++;
+    if (sourceEditCount === SESSION_DRIFT_THRESHOLD) {
+      findings.push('[ASC Session Drift] ' + SESSION_DRIFT_THRESHOLD + '+ source file edits this session. '
+        + 'Re-read the decision ladder before continuing: (1) Does this need to be built? '
+        + '(2) Does the codebase already have this? (3) Stdlib/native? (4) Existing dependency?');
+    }
+  }
 
   if (filePath.endsWith('package.json')) {
     checkDependencyAddition(toolName, toolInput, findings);

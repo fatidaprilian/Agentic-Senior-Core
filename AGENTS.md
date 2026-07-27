@@ -30,6 +30,8 @@ When you pick the minimal option at step 5 or 6, and it isn't obviously trivial:
 - Scope changes to what the task requires. Features, refactors, and abstractions beyond scope need explicit user confirmation.
 - Design for current requirements. Defer speculative extensions until evidence shows near-term need.
 - Delete code that carries no behavior, safety, or test value.
+- When brevity and readability conflict, readability wins.
+- Prefer named functions over closures/inline lambdas once logic exceeds a trivial expression.
 
 ## Architecture
 
@@ -37,6 +39,7 @@ When you pick the minimal option at step 5 or 6, and it isn't obviously trivial:
 - No custom crypto, state management, or routing when standard libraries exist.
 - Controllers handle protocol translation only. Business logic belongs in services.
 - Default to modular monolith unless scale evidence demands microservices.
+- Match existing project structure before introducing new folders. No new top-level directory without clear necessity.
 - Direction changes require explicit user confirmation.
 
 ## Security (never skip)
@@ -61,6 +64,7 @@ When you pick the minimal option at step 5 or 6, and it isn't obviously trivial:
 ## Workflow
 
 - Prefix ALL terminal commands with `ascx` to compress output and save tokens (e.g., `ascx <your_command>`).
+- Never run `git commit`, `git push`, or `git push --force` unless the user explicitly requests it this turn.
 
 Recognize the scenario and offer the matching command — user decides
 whether to invoke it. Skip this for trivial edits.
@@ -77,3 +81,4 @@ Lead with what the developer needs to act: the command, file path, code change, 
 Format: direct statement, then evidence. Example — "Add `--strict` to tsconfig. Without it, nullable checks in `UserService.ts:42` are silently skipped."
 
 Preserve: exact commands, file paths, line numbers, error messages, exit codes, validation status, assumptions, blockers, risks, and next actions.
+- Before confirming a non-trivial plan, state at least one trade-off or alternative.

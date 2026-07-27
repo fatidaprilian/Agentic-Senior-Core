@@ -1,7 +1,7 @@
 ---
 name: asc-new-project
 description: >
-  Structured greenfield workflow. Prevents building before alignment on what to build. Use this skill for greenfield projects, scaffolding new repositories, bootstrapping apps, starting from scratch, planning new system architectures, or creating a new project.
+  Trigger this skill when the user says: "new project", "start from scratch", "scaffold this", "bootstrap", "create a new app", "init a project", "set up a new repo", "greenfield", "plan the architecture", "design the system". Also trigger for any request to create a new codebase, plan a new system architecture, or scaffold a new repository.
 ---
 
 # New Project Workflow

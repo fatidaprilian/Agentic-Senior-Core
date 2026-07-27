@@ -1,7 +1,7 @@
 ---
 name: asc
 description: >
-  Universal AI coding rules. Write code like a staff engineer. Use this skill when user asks for general coding guidelines, best practices, standard rules, code quality standards, or when acting as a senior/staff software engineer.
+  Trigger this skill when the user says: "what are the rules", "coding guidelines", "best practices", "code quality standards", "how should I write this", "staff engineer approach", "senior developer rules", "what does ASC say about". Also trigger for any general request about coding standards, quality guidelines, or when the user asks the agent to follow senior/staff engineering practices.
 ---
 
 # Agentic Senior Core

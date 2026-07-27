@@ -1,7 +1,7 @@
 ---
 name: asc-add-feature
 description: >
-  Structured brownfield workflow. Adapted from QRSPI to prevent context rot and ensure alignment before building. Use this skill when user asks to add new features, build new endpoints, extend existing functionality, implement new UI components, modify an existing codebase, or work on brownfield development.
+  Trigger this skill when the user says: "add a feature", "build this endpoint", "implement this", "add this component", "extend this", "integrate this", "wire up", "add support for", "create a new route", "add a new page". Also trigger for any non-trivial addition to an existing codebase — new endpoints, UI components, services, or integrations.
 ---
 
 # Add Feature Workflow

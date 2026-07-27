@@ -13,6 +13,15 @@
 
 </div>
 
+## Project Status
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Rules & Skills (Instructional Layer) | Stable | Universal across 23+ AI tools |
+| Hooks (Enforcement Layer) | Stable | Claude Code, Antigravity IDE, Copilot CLI, Cursor |
+| `ascx` (Output Compression) | Beta | 7 adapters (git, npm, tsc, rg); unsupported commands pass through safely |
+| CLI (`asc adapter`, `asc global`) | Stable | Install adapters for any supported host |
+
 ## How Skills & Hooks Work (Multi-Tier Architecture)
 
 Agentic Senior Core operates on a two-tier architecture:
