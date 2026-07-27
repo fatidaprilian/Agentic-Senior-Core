@@ -1,7 +1,7 @@
 ---
 name: asc-refactor
 description: >
-  Trigger this skill when the user says: "refactor this", "clean up this code", "improve this structure", "rewrite this", "extract this into", "reduce duplication", "apply DRY", "apply SOLID", "migrate this", "simplify this module", "split this file", "decompose this". Also trigger for any request to restructure, modernize, or improve code organization without changing behavior.
+  Trigger this skill when the user says: "refactor this", "clean up this code", "improve this structure", "rewrite this", "extract this into", "reduce duplication", "apply DRY", "apply SOLID", "migrate this", "simplify this module", "split this file", "decompose this", "this is messy", "make this cleaner", "too much coupling", "move this logic". Also trigger for any request to restructure, modernize, or improve code organization without changing behavior.
 ---
 
 # Refactor Skill

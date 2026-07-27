@@ -1,7 +1,7 @@
 ---
 name: asc-review
 description: >
-  Trigger this skill when the user says: "review this code", "check this PR", "what's wrong with this", "look at my changes", "critique this", "is this production-ready", "review my pull request", "find bugs", "check for issues". Also trigger for any request to evaluate code quality, analyze recent commits, or assess production risks in existing code.
+  Trigger this skill when the user says: "review this code", "check this PR", "what's wrong with this", "look at my changes", "critique this", "is this production-ready", "review my pull request", "find bugs", "check for issues", "any problems here", "does this look right", "sanity check this". Also trigger for any request to evaluate code quality, analyze recent commits, or assess production risks in existing code. Also trigger when editing or viewing diff output, PR descriptions, or code review comments.
 ---
 
 # Review Skill

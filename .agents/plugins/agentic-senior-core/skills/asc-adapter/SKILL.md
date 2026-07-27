@@ -1,7 +1,7 @@
 ---
 name: asc-adapter
 description: >
-  Trigger this skill when the user says: "install ASC", "set up rules", "configure for Cursor", "add to Windsurf", "set up Copilot", "initialize plugin", "generate adapter", "install for my IDE", "set up Antigravity", "add to Kiro", "configure Roo". Also trigger for any request to install, configure, or initialize Agentic Senior Core rules or adapter files for an AI coding tool.
+  Trigger this skill when the user says: "install ASC", "set up rules", "configure for Cursor", "add to Windsurf", "set up Copilot", "initialize plugin", "generate adapter", "install for my IDE", "set up Antigravity", "add to Kiro", "configure Roo", "set up for my editor", "install rules for this project", "add ASC to this repo". Also trigger for any request to install, configure, or initialize Agentic Senior Core rules or adapter files for an AI coding tool.
 ---
 
 # ASC Adapter
