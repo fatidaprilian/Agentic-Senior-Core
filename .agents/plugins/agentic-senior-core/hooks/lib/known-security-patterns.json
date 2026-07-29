@@ -1,0 +1,26 @@
+{
+  "description": "Regex patterns for recurring security anti-patterns",
+  "patterns": [
+    {
+      "id": "insecure-redirect",
+      "regex": "location\\.href\\s*=\\s*(?!['\"`])([^;\\n]+)",
+      "message": "Unvalidated redirect target assigned to location.href. Ensure the variable is sanitized or use a safe routing method."
+    },
+    {
+      "id": "timing-unsafe-compare",
+      "regex": "(password|secret|token|key)\\s*(===|!==|==|!=)",
+      "message": "Non-timing-safe string comparison on a secret variable. Use crypto.timingSafeEqual instead."
+    },
+    {
+      "id": "user-input-http",
+      "regex": "(axios|fetch|got|superagent)\\s*\\(\\s*.*?(req\\.(query|body|params)|process\\.env)",
+      "message": "Potentially unsafe input passed directly into an HTTP client. Validate and sanitize URL parameters first."
+    }
+  ],
+  "fileSpecific": {
+    "Dockerfile": {
+      "require": "^(?=.*\\nUSER\\s).*$",
+      "message": "Missing USER instruction in Dockerfile. The container will run as root by default."
+    }
+  }
+}

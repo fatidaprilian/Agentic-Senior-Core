@@ -29,6 +29,14 @@ try {
   }
 } catch (_) {}
 
+let SECURITY_PATTERNS = { patterns: [], fileSpecific: {} };
+try {
+  const secPath = path.join(__dirname, 'lib', 'known-security-patterns.json');
+  if (fs.existsSync(secPath)) {
+    SECURITY_PATTERNS = JSON.parse(fs.readFileSync(secPath, 'utf8'));
+  }
+} catch (_) {}
+
 const SOURCE_EXTENSIONS = new Set([
   'js', 'ts', 'mjs', 'cjs', 'jsx', 'tsx',
   'py', 'rb', 'go', 'rs', 'java', 'kt', 'swift', 'cs',
@@ -145,13 +153,17 @@ function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
     checkDependencyAddition(toolName, toolInput, findings);
   }
 
-  const ext = path.extname(filePath).slice(1);
   if (SOURCE_EXTENSIONS.has(ext)) {
     if (toolName === 'Edit') {
       checkLocDelta(toolInput, filePath, findings);
     } else if (toolName === 'Write') {
       checkNewFileSize(toolInput, filePath, findings);
     }
+  }
+
+  checkSecurityPatterns(toolName, toolInput, filePath, findings);
+  if (ext === 'js' || ext === 'ts' || ext === 'jsx' || ext === 'tsx' || ext === 'mjs' || ext === 'cjs') {
+    checkLinter(filePath, findings);
   }
 
   checkLivingDocNudge(filePath, findings);
@@ -235,6 +247,58 @@ function checkNewFileSize(toolInput, filePath, findings) {
       'New file ' + path.basename(filePath) + ' created with ' + lines + ' lines. '
       + 'Ladder step 1-2: does this need to be built? Does the codebase already have this?'
     );
+  }
+}
+
+function checkSecurityPatterns(toolName, toolInput, filePath, findings) {
+  var target = toolName === 'Edit' ? (toolInput.new_string || '') : (toolInput.content || '');
+  if (!target) return;
+  
+  if (SECURITY_PATTERNS.patterns) {
+    SECURITY_PATTERNS.patterns.forEach(function (p) {
+      try {
+        var regex = new RegExp(p.regex, 'ig');
+        if (regex.test(target)) {
+          findings.push('[ASC Security] ' + p.message);
+        }
+      } catch (_) {}
+    });
+  }
+
+  var basename = path.basename(filePath);
+  if (SECURITY_PATTERNS.fileSpecific && SECURITY_PATTERNS.fileSpecific[basename]) {
+    var spec = SECURITY_PATTERNS.fileSpecific[basename];
+    try {
+      var regex = new RegExp(spec.require, 'g');
+      if (target.trim().length > 0 && !regex.test(target)) {
+        findings.push('[ASC Security] ' + spec.message);
+      }
+    } catch (_) {}
+  }
+}
+
+function checkLinter(filePath, findings) {
+  try {
+    var cwd = process.cwd();
+    var hasEslint = fs.existsSync(path.join(cwd, '.eslintrc.json')) || 
+                    fs.existsSync(path.join(cwd, '.eslintrc.js')) || 
+                    fs.existsSync(path.join(cwd, 'eslint.config.js')) ||
+                    (fs.existsSync(path.join(cwd, 'package.json')) && fs.readFileSync(path.join(cwd, 'package.json'), 'utf8').includes('eslintConfig'));
+    
+    if (hasEslint) {
+      var execSync = require('child_process').execSync;
+      execSync('npx eslint "' + filePath + '" --format json', { cwd: cwd, stdio: 'pipe' });
+    }
+  } catch (error) {
+    if (error.stdout) {
+      try {
+        var out = JSON.parse(error.stdout.toString());
+        if (Array.isArray(out) && out.length > 0 && out[0].messages && out[0].messages.length > 0) {
+          var firstErr = out[0].messages[0];
+          findings.push('[ASC Linter] ' + firstErr.message + ' at line ' + firstErr.line + '.');
+        }
+      } catch (_) {}
+    }
   }
 }
 
