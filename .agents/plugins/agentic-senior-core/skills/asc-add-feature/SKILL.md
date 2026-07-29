@@ -38,11 +38,12 @@ Format:
 
 1. On approval of Phase 1, update `workflow-gate.json` phase to `plan`.
 2. Ensure `docs/PRD.md` or feature brief exists.
-3. Create a numbered, step-by-step implementation plan with specific files, functions, and line references.
-4. Include a "Don't Build" list from the research phase.
-5. **Callout: Plan-Reading Illusion.** Ask the user to explicitly verify the plan against the codebase, not just skim it.
-6. Output the plan.
-7. **STOP and wait for user approval.** Do not implement.
+3. Check if `.github/workflows/asc-quality-gate.yml` exists. If not, include scaffolding it in your plan (must run linter, type-check, and audit) and remind the user to enable Branch Protection.
+4. Create a numbered, step-by-step implementation plan with specific files, functions, and line references.
+5. Include a "Don't Build" list from the research phase.
+6. **Callout: Plan-Reading Illusion.** Ask the user to explicitly verify the plan against the codebase, not just skim it.
+7. Output the plan.
+8. **STOP and wait for user approval.** Do not implement.
 
 ## Phase 3: Implement
 

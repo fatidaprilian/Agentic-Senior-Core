@@ -53,6 +53,7 @@ Format:
 2. Run Anti Context-Blindness check: verify entities/tables mentioned in `Schema.md` or `Architecture.md` align with proposed code targets.
 3. Build against the approved specs. Apply the ASC decision ladder on every file.
 4. Run the decision ladder: does this need to exist? Does stdlib cover it? One function or full module?
+5. Generate a `.github/workflows/asc-quality-gate.yml` file that runs linter, type-check, and dependency audit on `push` and `pull_request`. Remind the user to enable Branch Protection in GitHub (require status checks to pass) to enforce this gate globally.
 
 ## Phase 4: Validate
 
