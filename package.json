@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "5.9.0",
+  "version": "6.0.0",
   "type": "module",
   "description": "Agentic Senior Core: Universal AI coding rules and workflows. Write code like a staff engineer, not a junior.",
   "bin": {
@@ -9,6 +9,7 @@
     "ascx": "bin/ascx.js"
   },
   "files": [
+    ".asc/",
     "bin/",
     "lib/cli/commands/adapter.mjs",
     "lib/cli/commands/global.mjs",

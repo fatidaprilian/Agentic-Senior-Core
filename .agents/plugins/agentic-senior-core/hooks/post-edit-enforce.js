@@ -37,22 +37,21 @@ try {
   }
 } catch (_) {}
 
-const SOURCE_EXTENSIONS = new Set([
-  'js', 'ts', 'mjs', 'cjs', 'jsx', 'tsx',
-  'py', 'rb', 'go', 'rs', 'java', 'kt', 'swift', 'cs',
-]);
-
-const LOC_DELTA_THRESHOLD = 30;
-const NEW_FILE_LINE_THRESHOLD = 50;
-const SESSION_DRIFT_THRESHOLD = 4;
+const {
+  SOURCE_EXTENSIONS,
+  LOC_DELTA_THRESHOLD,
+  NEW_FILE_LINE_THRESHOLD,
+  SESSION_DRIFT_THRESHOLD,
+  LADDER_PULSE_INTERVAL,
+} = require('./constants.cjs');
 
 // Module-level counter for Claude Code path (resets per process spawn)
 let sourceEditCount = 0;
 
 let inputBuffer = '';
 process.stdin.setEncoding('utf8');
-process.stdin.on('data', function (chunk) { inputBuffer += chunk; });
-process.stdin.on('end', function () {
+process.stdin.on('data', chunk => {
+  inputBuffer += chunk;
   try {
     const data = JSON.parse(inputBuffer);
     
@@ -66,8 +65,9 @@ process.stdin.on('end', function () {
     processSingleEdit(toolName, toolInput, function(nudge) {
       emitClaude(nudge);
     });
-  } catch (_) {
-    // Silent fail
+    process.exit(0);
+  } catch (e) {
+    // incomplete json, wait for more chunks
   }
 });
 
@@ -146,6 +146,9 @@ function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
       findings.push('[ASC Session Drift] ' + SESSION_DRIFT_THRESHOLD + '+ source file edits this session. '
         + 'Re-read the decision ladder before continuing: (1) Does this need to be built? '
         + '(2) Does the codebase already have this? (3) Stdlib/native? (4) Existing dependency?');
+    } else if (sourceEditCount > 0 && sourceEditCount % LADDER_PULSE_INTERVAL === 0) {
+      findings.push('[ASC] Ladder check: (1) needed? (2) exists already \u2014 reuse? '
+        + '(3) stdlib/native? (4) existing dep? (5) one function? Then minimal code.');
     }
   }
 
@@ -243,9 +246,11 @@ function checkLocDelta(toolInput, filePath, findings) {
 function checkNewFileSize(toolInput, filePath, findings) {
   var lines = (toolInput.content || '').split('\n').length;
   if (lines > NEW_FILE_LINE_THRESHOLD) {
+    // Step 1-2 coverage ("does this already exist?") moved to dedup-gate.js
+    // which provides concrete file-name + overlap-percentage feedback.
     findings.push(
       'New file ' + path.basename(filePath) + ' created with ' + lines + ' lines. '
-      + 'Ladder step 1-2: does this need to be built? Does the codebase already have this?'
+      + 'Ladder step 5: can this be one straightforward function?'
     );
   }
 }

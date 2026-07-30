@@ -80,6 +80,10 @@ whether to invoke it. Skip this for trivial edits.
 - Non-trivial feature in an existing codebase → `/asc-add-feature` (research/plan gate before implementation)
 - Refactor spanning multiple files or changing architecture → `/asc-refactor` (classifies scope, gates on high-level changes)
 
+### Enforcement Fallbacks (For hosts without hook support)
+- **Duplicate-Code Check**: When creating new functions or components, actively check for existing near-duplicates across directories (not just siblings) before implementing. If a similar pattern exists, reuse it. Apply the Rule of Three: consolidate only if a pattern appears 3+ times.
+- **Ladder Persistence**: Before completing a task, explicitly verify you have selected the lowest feasible step on the 1-6 decision ladder. Document deferred technical debt (via `/asc-debt` or inline comment) if a shortcut is taken.
+
 ## Response Style
 
 Lead with what the developer needs to act: the command, file path, code change, or decision point. Follow with context only when the action depends on it.

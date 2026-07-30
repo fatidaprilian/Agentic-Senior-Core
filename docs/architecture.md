@@ -1,85 +1,53 @@
-# Plugin Architecture
+# Architecture & Philosophy
 
-## Design Decisions
+## How Skills & Hooks Work (Multi-Tier Architecture)
 
-### Evidence base
+Agentic Senior Core operates on a two-tier architecture:
 
-Architecture decisions are grounded in two research tracks:
+1. **Instructional Layer (Universal — Works in 23+ AI Tools)**:
+   - **Rules (`AGENTS.md` / `agentic-senior-core.md`) & Skills (`SKILL.md`)** are cross-compatible across **Google Antigravity IDE, Claude Code, Cursor, Windsurf, Copilot, Codex, Kiro, Roo, OpenCode, Zed, Aider, etc.**.
+   - **Automatic Skill Triggering**: Agents attempt to detect and load skills if your prompt matches the skill's description (e.g., asking "perform a security audit" loads `asc-audit`).
+   - **Manual Skill Triggering (Highly Recommended)**: Explicitly call skills using commands like `/asc-refactor` or `/asc-new-project` for guaranteed execution.
 
-1. **Academic (Consensus)**: Structured task-relevant instructions improve LLM code generation by +25.4% Pass@1. Diminishing returns on length. No evidence that consolidated vs modular format matters. Style guide evidence is weak (2 studies only).
+2. **Active Enforcement Layer (Hooks — Host-Specific Hard Guardrails)**:
+   - **Hard-Block Guardrails**: For tools supporting active hook execution engines (Claude Code, GitHub Copilot CLI, Google Antigravity IDE, Cursor), ASC automatically intercepts tool calls:
+     - **PreToolUse Hard Block**: Immediately rejects edits adding stdlib-duplicating dependencies (e.g., `lodash`, `moment`, `uuid`) before execution (`permissionDecision: "deny"`). Escape hatch available via `.asc/dependency-allowlist.json`.
+     - **PostToolUse Advisory**: Soft nudges for LOC deltas, duplicate code blocks (jscpd), spec drift, and workflow gate bypasses.
 
-2. **Technical (official docs)**: Claude Code, Codex CLI, Copilot CLI, Gemini CLI, Devin, Hermes, OpenCode, and OpenClaw each define their own plugin manifest format, hook event naming, and command schema.
+---
 
-### Layered delivery
+## Grounded In
 
-Based on the research, ASC uses a two-layer approach:
+Every rule and skill workflow is derived from established engineering standards, not invented conventions.
 
-- **Always-on policy** (`AGENTS.md`, ~1,200 tokens): Injected via hooks on every session start. Short, high-signal, universal invariants. This is the layer where prompt caching matters (10% cost per cache hit, break-even after 1 read).
+| Domain | Standards |
+|--------|-----------|
+| Security & audit | OWASP Top 10, OWASP ASVS v4, CWE classification, CVSS report structure |
+| Code review | OWASP Risk Rating Methodology, Google Engineering Practices |
+| Architecture | Clean Architecture, Hexagonal Architecture |
+| Workflows | RPI & QRSPI (Dex Horthy/HumanLayer), SDD (GitHub Spec Kit) |
+| Refactoring | Fowler's Refactoring, Rule of Three, YAGNI (XP/Kent Beck) |
+| Database | Fowler's Money Pattern, UTC timestamp convention, migration versioning |
+| Accessibility | WCAG 2.2 AA |
+| Resilience | Nygard's Release It!, AWS Well-Architected Reliability Pillar |
+| Technical debt | Cunningham's debt metaphor (1992) |
+| Instruction design | Low instruction density for higher LLM compliance — supported by IFScale (arXiv:2507.11538) and RECAST (arXiv:2505.19030) |
 
-- **On-demand skills** (`skills/*/SKILL.md`): Long-form workflow guidance invoked by the user. Not always-on, so length has no cost unless invoked. This is where detailed procedures live (refactoring workflow, review checklist, audit methodology).
+The decision ladder (check before building) and debt ledger format are ASC-specific implementations grounded in these principles.
 
-### Hook architecture
+---
 
-Claude Code's SessionStart hook context does not propagate to subagents. This is a known limitation (ponytail issue #252). ASC addresses this with a separate SubagentStart hook that re-injects `AGENTS.md`.
+## Migration from v4.x
 
-Hook scripts use CommonJS (`require`) for maximum compatibility across Node.js versions and host environments.
+v5.0 was a breaking change. The per-project system (`.agent-context/`, bridge files, project scaffolding) is replaced by the universal plugin system.
 
-### Workflow gate enforcement
+Clean up v4 artifacts from any project:
+```bash
+# Preview what will be removed
+asc clean --dry-run
 
-The PostToolUse hook (`post-edit-enforce.js`) also checks for active workflow gates. When a workflow skill (`asc-new-project`, `asc-add-feature`) sets a gate via MCP `state_write` to `.agent-context/state/workflow-gate.json`, the hook reads it on every Edit/Write and nudges the agent if source or config files are edited during research or plan phases. `.md` files are exempt (research/plan outputs are markdown).
-
-Gate state auto-clears after 4 hours (staleness fallback for abandoned sessions). Workflows clear the gate explicitly on completion.
-
-All enforcement is advisory — nudges injected as `additionalContext`, not hard blocks. Bypasses are logged to the debt ledger (self-reported by the agent; the hook has no MCP access).
-
-### Scaffolding specs (workflow design decision)
-
-Workflow skills use specs as scaffolding: they guide the build, then the code is the source of truth. Specs are not maintained as living documents. This is an opinionated choice — living-doc maintenance tax grows with complexity (observed in SDD/SpecKit adoption) and conflicts with ASC's "minimum viable process" philosophy.
-
-### Host detection
-
-Hook scripts detect the current host via environment variables:
-
-| Variable | Host |
-|----------|------|
-| `CLAUDE_PLUGIN_ROOT` | Claude Code |
-| `COPILOT_PLUGIN_DATA` | Copilot CLI |
-| `PLUGIN_DATA` | Codex CLI |
-| _(none)_ | Fallback: raw stdout |
-
-Output format varies by host: Copilot expects `{additionalContext}`, Codex expects `{systemMessage, hookSpecificOutput}`, Claude reads raw stdout.
-
-## File structure
-
-```
-.claude-plugin/plugin.json       Plugin manifest (Claude Code)
-.claude-plugin/marketplace.json  Marketplace catalog
-.codex-plugin/plugin.json        Plugin manifest (Codex CLI)
-.devin-plugin/plugin.json        Plugin manifest (Devin)
-.github/plugin/                  Plugin manifest (Copilot CLI)
-.agents/                         Plugin manifest (Antigravity/Gemini)
-.opencode/plugins/               Plugin module (OpenCode)
-.openclaw/skills/                Skill copies (OpenClaw)
-plugin.yaml + __init__.py        Plugin manifest (Hermes)
-gemini-extension.json            Extension config (Gemini CLI)
-hooks/hooks.json                 Claude hook definitions
-hooks/copilot-hooks.json         Copilot hook definitions
-hooks/session-start.js           SessionStart hook (CommonJS)
-hooks/subagent-start.js          SubagentStart hook (CommonJS)
-hooks/post-edit-enforce.js       PostToolUse hook — ladder + workflow gate checks
-skills/*/SKILL.md                On-demand skill definitions
-commands/*.md                    Claude Code commands
-commands/*.toml                  Gemini CLI commands
-AGENTS.md                        Universal rules (single source of truth)
+# Remove v4 files (.agent-context/, AGENTS.md, CLAUDE.md, GEMINI.md, etc.)
+asc clean
 ```
 
-## Token budget
-
-| Component | Tokens | When loaded |
-|-----------|--------|------------|
-| `AGENTS.md` | ~800 | Every session + every subagent |
-| `asc-reference` skill | ~400 | On-demand (domain-specific rules) |
-| Other skills | ~500-800 | On user invocation only |
-| Commands | 0 (metadata only) | On user invocation only |
-
-Total always-on cost: ~800 tokens per session (~34% reduction from v5.4).
+This removes `.agent-context/`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and other v4 bridge files from the current project directory. The global plugin replaces all of them.

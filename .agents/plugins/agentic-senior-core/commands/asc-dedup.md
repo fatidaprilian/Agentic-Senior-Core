@@ -1,0 +1,1 @@
+Run the duplicate code audit from skills/asc-dedup/SKILL.md. Scan the specified scope (directory, package, or full repo) for near-duplicate code blocks using jscpd token-level clone detection. Report clusters ranked by duplicated lines, and suggest consolidation only for patterns appearing 3+ times (Rule of Three).

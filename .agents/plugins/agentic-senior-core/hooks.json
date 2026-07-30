@@ -74,12 +74,29 @@
             "statusMessage": "ASC ladder & spec gate check..."
           },
           {
-            "type": "prompt",
-            "if": "Edit(**/package.json)",
-            "prompt": "A new dependency '$ARGUMENTS' was added to package.json. Does it duplicate Node.js standard library or platform features? If yes, return JSON: {\"hookSpecificOutput\": {\"hookEventName\": \"PostToolUse\", \"additionalContext\": \"[ASC Advisory] The newly added dependency appears to duplicate stdlib or platform features. Consider native alternatives.\"}}. If no, return {}.",
-            "timeout": 30
+            "type": "command",
+            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','dedup-gate.js');const global=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','dedup-gate.js');require(fs.existsSync(local)?local:global);\"",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" }; node \"$root\\hooks\\dedup-gate.js\" }",
+            "timeout": 15,
+            "statusMessage": "ASC duplicate-code scan..."
           }
         ]
+      }
+    ],
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','session-pulse.js');const global=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','session-pulse.js');require(fs.existsSync(local)?local:global);\"",
+        "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" }; node \"$root\\hooks\\session-pulse.js\" }",
+        "timeout": 5,
+        "statusMessage": "Loading ASC rules..."
+      },
+      {
+        "type": "command",
+        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','ladder-pulse.js');const global=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','ladder-pulse.js');require(fs.existsSync(local)?local:global);\"",
+        "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" }; node \"$root\\hooks\\ladder-pulse.js\" }",
+        "timeout": 5,
+        "statusMessage": "ASC ladder pulse..."
       }
     ],
     "PostInvocation": [

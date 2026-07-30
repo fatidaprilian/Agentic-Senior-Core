@@ -1,0 +1,35 @@
+name: asc-quality-gate
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Run tests
+        run: npm test
+
+      - name: Read ignore dirs from config
+        id: dedup-config
+        run: |
+          if [ -f ".asc/dedup-config.json" ]; then
+            IGNORE_DIRS=$(node -e "const c=JSON.parse(require('fs').readFileSync('.asc/dedup-config.json','utf8'));console.log((c.ignoreDirs||[]).join(','))")
+          else
+            IGNORE_DIRS="tests,migrations,generated,node_modules"
+          fi
+          echo "ignore_dirs=$IGNORE_DIRS" >> "$GITHUB_OUTPUT"
+
+      - name: ASC duplicate-code gate
+        run: npx jscpd@5 . --threshold 5 --reporters console,json --output ./report/ --ignore "${{ steps.dedup-config.outputs.ignore_dirs }}"

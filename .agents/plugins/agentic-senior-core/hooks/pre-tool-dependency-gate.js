@@ -23,8 +23,8 @@ try {
 
 let inputBuffer = '';
 process.stdin.setEncoding('utf8');
-process.stdin.on('data', function (chunk) { inputBuffer += chunk; });
-process.stdin.on('end', function () {
+process.stdin.on('data', chunk => {
+  inputBuffer += chunk;
   try {
     const data = JSON.parse(inputBuffer);
     const isAntigravity = !!data.toolCall;
@@ -117,10 +117,10 @@ process.stdin.on('end', function () {
       process.exit(2);
       return;
     }
-  } catch (_) {
-    // Silent fail to ensure session stability
+    process.exit(0);
+  } catch (e) {
+    // incomplete json, wait for more chunks
   }
-  process.exit(0);
 });
 
 function isGitCommitOrPush(command) {

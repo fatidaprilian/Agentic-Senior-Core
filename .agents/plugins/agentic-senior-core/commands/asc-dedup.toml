@@ -1,0 +1,2 @@
+description = "On-demand duplicate code audit using token-level clone detection"
+prompt = "Load and follow the asc-dedup skill. Scan the current project (or specified scope) for near-duplicate code blocks using jscpd. Report clusters ranked by duplicated lines. Suggest consolidation only for patterns appearing 3+ times per the Rule of Three."
