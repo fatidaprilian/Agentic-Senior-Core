@@ -39,6 +39,7 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 
 ## Frontend
 
+- Match the project's existing styling paradigm (Tailwind, CSS Modules, Vanilla CSS, styled-components, etc.). Do not introduce a new CSS framework or build tool without explicit user confirmation.
 - Semantic HTML before custom components.
 - WCAG 2.2 AA is the accessibility floor.
 - Responsive by default. Handle empty, loading, error, and offline states.

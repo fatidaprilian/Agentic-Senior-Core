@@ -1,0 +1,34 @@
+{
+  "patterns": [
+    {
+      "id": "ui-gradient-purple-blue",
+      "regex": "from-purple-[0-9]+\\s+to-blue-[0-9]+|from-indigo-[0-9]+\\s+to-purple-[0-9]+|from-teal-[0-9]+\\s+to-indigo-[0-9]+",
+      "message": "note: 'purple-to-blue gradient' (AI generic style) was flagged, consider continuing with brand-specific colors instead."
+    },
+    {
+      "id": "ui-generic-card-shadcn",
+      "regex": "shadow-lg\\s+rounded-2xl\\s+p-6|shadow-md\\s+rounded-xl\\s+p-4|border\\s+border-gray-200\\s+rounded-xl\\s+shadow-sm",
+      "message": "note: 'generic boilerplate card' (AI default) was flagged, consider continuing with project's existing card component instead."
+    },
+    {
+      "id": "ui-inter-font-unpaired",
+      "regex": "font-family:\\s*['\"]?Inter['\"]?\\s*(?:!important)?;(?!.*sans-serif)|className=[\"'][^\"']*font-sans[^\"']*[\"'](?=.*Inter)",
+      "message": "note: 'unpaired Inter font' (AI default typography) was flagged, consider continuing with the project's design system typography instead."
+    },
+    {
+      "id": "ui-colored-left-border",
+      "regex": "border-l-4\\s+border-(?:blue|purple|indigo)-[0-9]+|border-l-\\[(?:3px|4px)\\]\\s+border-(?:blue|purple|indigo)-[0-9]+",
+      "message": "note: 'colored left-border strip' (AI default alert/card) was flagged, consider continuing with native UI patterns instead."
+    },
+    {
+      "id": "ui-glassmorphism",
+      "regex": "backdrop-blur-(?:md|lg|xl)\\s+bg-white/10|backdrop-filter:\\s*blur\\(|bg-opacity-20\\s+backdrop-blur",
+      "message": "note: 'generic glassmorphism' (AI trend default) was flagged, consider continuing with solid semantic surfaces instead."
+    },
+    {
+      "id": "ui-pill-badge-generic",
+      "regex": "rounded-full\\s+px-4\\s+py-1\\s+text-sm\\s+font-medium\\s+bg-(?:blue|purple|indigo)-100\\s+text-(?:blue|purple|indigo)-800",
+      "message": "note: 'generic pill badge' (AI default tag) was flagged, consider continuing with the project's existing badge component instead."
+    }
+  ]
+}

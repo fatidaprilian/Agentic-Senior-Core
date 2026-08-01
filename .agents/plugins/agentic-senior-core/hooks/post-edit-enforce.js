@@ -37,6 +37,14 @@ try {
   }
 } catch (_) {}
 
+let UI_SLOP_PATTERNS = { patterns: [] };
+try {
+  const slopPath = path.join(__dirname, 'lib', 'known-ui-slop-patterns.json');
+  if (fs.existsSync(slopPath)) {
+    UI_SLOP_PATTERNS = JSON.parse(fs.readFileSync(slopPath, 'utf8'));
+  }
+} catch (_) {}
+
 const {
   SOURCE_EXTENSIONS,
   LOC_DELTA_THRESHOLD,
@@ -165,6 +173,11 @@ function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
   }
 
   checkSecurityPatterns(toolName, toolInput, filePath, findings);
+  
+  if (ext === 'html' || ext === 'css' || ext === 'jsx' || ext === 'tsx' || ext === 'vue' || ext === 'svelte') {
+    checkUiSlopPatterns(toolName, toolInput, filePath, findings);
+  }
+
   if (ext === 'js' || ext === 'ts' || ext === 'jsx' || ext === 'tsx' || ext === 'mjs' || ext === 'cjs') {
     checkLinter(filePath, findings);
   }
@@ -255,6 +268,13 @@ function checkNewFileSize(toolInput, filePath, findings) {
   }
 }
 
+function logPatternCheck(checkType, patternId, isMatch) {
+  try {
+    var result = isMatch ? 'match' : 'no-match';
+    process.stderr.write('[pattern-check] ' + patternId + ': ' + result + '\n');
+  } catch (_) {}
+}
+
 function checkSecurityPatterns(toolName, toolInput, filePath, findings) {
   var target = toolName === 'Edit' ? (toolInput.new_string || '') : (toolInput.content || '');
   if (!target) return;
@@ -263,7 +283,9 @@ function checkSecurityPatterns(toolName, toolInput, filePath, findings) {
     SECURITY_PATTERNS.patterns.forEach(function (p) {
       try {
         var regex = new RegExp(p.regex, 'ig');
-        if (regex.test(target)) {
+        var isMatch = regex.test(target);
+        logPatternCheck('security', p.id || 'sec-pattern', isMatch);
+        if (isMatch) {
           findings.push('[ASC Security] ' + p.message);
         }
       } catch (_) {}
@@ -275,10 +297,32 @@ function checkSecurityPatterns(toolName, toolInput, filePath, findings) {
     var spec = SECURITY_PATTERNS.fileSpecific[basename];
     try {
       var regex = new RegExp(spec.require, 'g');
-      if (target.trim().length > 0 && !regex.test(target)) {
-        findings.push('[ASC Security] ' + spec.message);
+      if (target.trim().length > 0) {
+        var isMatch = !regex.test(target);
+        logPatternCheck('security', spec.id || 'sec-file-specific', isMatch);
+        if (isMatch) {
+          findings.push('[ASC Security] ' + spec.message);
+        }
       }
     } catch (_) {}
+  }
+}
+
+function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
+  var target = toolName === 'Edit' ? (toolInput.new_string || '') : (toolInput.content || '');
+  if (!target) return;
+  
+  if (UI_SLOP_PATTERNS.patterns) {
+    UI_SLOP_PATTERNS.patterns.forEach(function (p) {
+      try {
+        var regex = new RegExp(p.regex, 'ig');
+        var isMatch = regex.test(target);
+        logPatternCheck('ui-slop', p.id || 'ui-pattern', isMatch);
+        if (isMatch) {
+          findings.push('[ASC UI Note] ' + p.message);
+        }
+      } catch (_) {}
+    });
   }
 }
 

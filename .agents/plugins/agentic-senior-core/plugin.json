@@ -1,6 +1,6 @@
 {
   "name": "agentic-senior-core",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "Universal AI coding rules. Because your AI writes code like it gets paid by the line.",
   "contextFileName": "rules/agentic-senior-core.md",
   "rules": [
