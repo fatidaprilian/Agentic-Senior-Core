@@ -61,6 +61,11 @@ asc global --codex
 
 Rules and hooks load automatically on every session with zero per-project files.
 
+> [!IMPORTANT]
+> **OpenAI Codex Hook Trust Review Note:**
+> OpenAI Codex enforces a cryptographic SHA-256 trust model for all plugin hooks to prevent unauthorized script execution. Upon initial installation, Codex UI/TUI will prompt you to review and **Trust** the lifecycle hooks (`SessionStart`, `SubagentStart`, `PreToolUse`, `PostToolUse`).
+> Once trusted, Codex records the SHA-256 hash in `~/.codex/config.toml` under `[hooks.state]` and will run seamlessly without prompting again.
+
 </details>
 
 <details>
