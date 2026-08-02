@@ -1,0 +1,20 @@
+{
+  "name": "agentic-senior-core-marketplace",
+  "interface": {
+    "displayName": "Agentic Senior Core Plugins"
+  },
+  "plugins": [
+    {
+      "name": "agentic-senior-core",
+      "source": {
+        "source": "local",
+        "path": "./agentic-senior-core"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -44,13 +44,22 @@ After install, every Claude Code session injects the rules on startup -- includi
 </details>
 
 <details>
-<summary><b>Codex CLI</b> (terminal agent)</summary>
+<summary><b>Codex CLI & Extension</b> (terminal & IDE agent)</summary>
+
+Install via Codex plugin command:
 
 ```bash
-codex plugins install agentic-senior-core
+codex plugin marketplace add fatidaprilian/Agentic-Senior-Core
+codex plugin install agentic-senior-core
 ```
 
-Rules load automatically via plugin hooks on every session.
+Or install global rules and plugin marketplace catalog via ASC CLI:
+
+```bash
+asc global --codex
+```
+
+Rules and hooks load automatically on every session with zero per-project files.
 
 </details>
 
@@ -302,6 +311,7 @@ asc global --all
 | Tool | Global location | Notes |
 |------|----------------|-------|
 | Google Antigravity (2.0, IDE, CLI) | `~/.gemini/config/plugins/...` and `~/.gemini/antigravity-cli/plugins/...` | Plugin bundle (skills, hooks, rules) |
+| Codex CLI & Extension | `~/.codex/AGENTS.md` and `~/.agents/plugins/` | Global rules and plugin marketplace catalog |
 | Cline | `~/Documents/Cline/Rules/` | Toggleable in the Cline rules panel |
 | Kilo Code | `~/.kilocode/rules/` | Or point `instructions:` in `~/.config/kilo/kilo.jsonc` at the npm package path — that variant auto-updates |
 | Kiro | `~/.kiro/steering/` | Some builds have global-steering loading bugs; fall back to `asc adapter --kiro` |

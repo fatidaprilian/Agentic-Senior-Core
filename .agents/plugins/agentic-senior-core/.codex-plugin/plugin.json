@@ -1,0 +1,14 @@
+{
+  "name": "agentic-senior-core",
+  "version": "6.2.2",
+  "description": "Universal AI coding rules. Write code like a staff engineer.",
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "interface": {
+    "displayName": "Agentic Senior Core",
+    "shortDescription": "Universal AI coding rules and workflows",
+    "longDescription": "Write code like a staff engineer, not a junior. Universal rules, decision ladder, and deterministic quality gates.",
+    "developerName": "fatidaprilian",
+    "category": "Productivity"
+  }
+}

@@ -6,6 +6,11 @@ Desktop.ini
 # IDE
 .idea/
 .vscode/settings.json
+.cursor/
+.windsurf/
+.kilo/
+.claude/
+scratch/
 *.swp
 *.swo
 
