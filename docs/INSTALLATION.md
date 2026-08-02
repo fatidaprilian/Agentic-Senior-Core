@@ -77,7 +77,7 @@ Run from your project root:
 asc adapter --cursor
 ```
 
-This copies one file to `.cursor/rules/agentic-senior-core.mdc`. Cursor reads it automatically on every session. Repeat per project.
+This copies one file to `.cursor/rules/agentic-senior-core.mdc` with official YAML frontmatter (`alwaysApply: true`). Cursor reads it automatically on every session. Repeat per project.
 
 </details>
 
@@ -90,13 +90,13 @@ Windsurf was acquired by Cognition and renamed to Devin Desktop. Use `--devin` f
 asc adapter --devin
 ```
 
-This copies one file to `.devin/rules/agentic-senior-core.md`. For legacy Windsurf installations:
+This copies one file to `.devin/rules/agentic-senior-core.md` with `trigger: always_on` frontmatter. For legacy Windsurf installations:
 
 ```bash
 asc adapter --windsurf
 ```
 
-Repeat per project — or install once globally with `asc global --windsurf` (writes `~/.codeium/windsurf/memories/global_rules.md`, applies to all workspaces; skipped if you already have your own global rules file).
+Repeat per project — or install once globally with `asc global --windsurf` (writes to modern `~/.windsurf/rules/agentic-senior-core.md` and legacy `~/.codeium/windsurf/memories/global_rules.md`, applying to all workspaces).
 
 </details>
 
@@ -118,7 +118,7 @@ Copies one file to `.clinerules/agentic-senior-core.md`. Repeat per project — 
 asc adapter --copilot
 ```
 
-Copies one file to `.github/copilot-instructions.md`. Repeat per project — or install once globally with `asc global --copilot` (user-level instructions file in your VS Code profile, applies to all workspaces).
+Copies one file to `.github/copilot-instructions.md` with `applyTo: '**'` frontmatter. Repeat per project — or install once globally with `asc global --copilot` (user-level instructions file in your VS Code profile, applies to all workspaces).
 
 </details>
 
@@ -129,7 +129,7 @@ Copies one file to `.github/copilot-instructions.md`. Repeat per project — or 
 asc adapter --kiro
 ```
 
-Copies one file to `.kiro/steering/agentic-senior-core.md`. Repeat per project. A global option exists (`asc global --kiro` → `~/.kiro/steering/`), but some Kiro builds have known bugs loading global steering — prefer the per-project adapter if rules are not picked up.
+Copies one file to `.kiro/steering/agentic-senior-core.md` with official `inclusion: always` frontmatter. Repeat per project. A global option exists (`asc global --kiro` → `~/.kiro/steering/`).
 
 </details>
 
