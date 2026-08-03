@@ -1,5 +1,18 @@
 # Changelog
 
+## 6.4.0
+
+### Added
+- **Native Git Pre-Commit Hook (`asc install-git-hook`)**: Layer 3 deterministic defense for non-hook hosts (Cursor, Windsurf, Copilot, Antigravity chat, etc.). Runs via Git's native hook system, supporting `.husky/` and standard `.git/hooks/`.
+- **Automatic Git Hook Integration in CLI**: `asc global --all` automatically configures global Git pre-commit hooks via `git config --global core.hooksPath`. `asc adapter` automatically installs pre-commit hooks into the target repository.
+- **Configurable Agent Hook Thresholds**: `NEW_FILE_LINE_THRESHOLD` and `LOC_DELTA_THRESHOLD` are now overridable in `.asc/dedup-config.json`.
+- **Hardened Transcript Parsing**: `extractToolCallFromTranscript()` now parses JSON Lines line-by-line with graceful recovery and `ASC_DEBUG=1` diagnostic logging.
+- **ESLint TS Auto-Fix Step**: Git pre-commit runner automatically executes `eslint --fix` on staged JS/TS files in projects with TypeScript + ESLint configurations before performing duplicate scanning.
+- **Arrow Shorthand Void-Expression Rule**: Added strict rule against returning void expressions from arrow function shorthands to prevent `@typescript-eslint/no-confusing-void-expression` lint breaks.
+
+### Changed
+- CLI `files` list in `package.json` simplified to include `lib/` directory, ensuring all current and future CLI commands are packed into NPM releases cleanly.
+
 ## 6.3.0
 
 ### Added

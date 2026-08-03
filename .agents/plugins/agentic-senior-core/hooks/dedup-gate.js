@@ -56,9 +56,9 @@ process.stdin.on('data', chunk => {
     const ext = path.extname(filePath).slice(1);
     if (!SOURCE_EXTENSIONS.has(ext)) { process.exit(0); return; }
 
-    if (!isQualifyingEdit(toolName, toolInput)) { process.exit(0); return; }
-
     const config = loadDedupConfig();
+    if (!isQualifyingEdit(toolName, toolInput, config)) { process.exit(0); return; }
+
     const scanDir = resolveScanDir(filePath, config);
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'asc-dedup-'));
 
@@ -101,50 +101,67 @@ function extractToolCallFromTranscript(transcriptPath, stepIdx) {
 
     // Find the step with matching step_index that contains tool_calls
     for (var i = lines.length - 1; i >= 0; i--) {
-      var step = JSON.parse(lines[i]);
-      if (step.step_index !== stepIdx || !step.tool_calls) continue;
+      try {
+        var step = JSON.parse(lines[i]);
+        if (step.step_index !== stepIdx || !step.tool_calls) continue;
 
-      for (var j = 0; j < step.tool_calls.length; j++) {
-        var tc = step.tool_calls[j];
-        if (tc.name === 'replace_file_content' || tc.name === 'multi_replace_file_content') {
-          return {
-            toolName: 'Edit',
-            toolInput: {
-              file_path: tc.args.TargetFile || '',
-              new_string: tc.args.ReplacementContent || '',
-              old_string: tc.args.TargetContent || '',
-            },
-          };
-        } else if (tc.name === 'write_to_file') {
-          return {
-            toolName: 'Write',
-            toolInput: {
-              file_path: tc.args.TargetFile || '',
-              content: tc.args.CodeContent || '',
-            },
-          };
+        for (var j = 0; j < step.tool_calls.length; j++) {
+          var tc = step.tool_calls[j];
+          if (tc.name === 'replace_file_content' || tc.name === 'multi_replace_file_content') {
+            return {
+              toolName: 'Edit',
+              toolInput: {
+                file_path: tc.args.TargetFile || '',
+                new_string: tc.args.ReplacementContent || '',
+                old_string: tc.args.TargetContent || '',
+              },
+            };
+          } else if (tc.name === 'write_to_file') {
+            return {
+              toolName: 'Write',
+              toolInput: {
+                file_path: tc.args.TargetFile || '',
+                content: tc.args.CodeContent || '',
+              },
+            };
+          }
         }
+      } catch (lineErr) {
+        if (process.env.ASC_DEBUG) {
+          console.error('[ASC Debug] Transcript line parse failed line ' + i + ':', lineErr.message);
+        }
+        // Skip malformed line and keep scanning
       }
     }
     return null;
-  } catch (_) {
+  } catch (err) {
+    if (process.env.ASC_DEBUG) {
+      console.error('[ASC Debug] extractToolCallFromTranscript failed:', err.message);
+    }
     return null;
   }
 }
 
-function isQualifyingEdit(toolName, toolInput) {
+function isQualifyingEdit(toolName, toolInput, config) {
   var isWrite = ['Write', 'write_to_file', 'write_file'].indexOf(toolName) !== -1;
   var isEdit = ['Edit', 'replace_file_content', 'multi_replace_file_content'].indexOf(toolName) !== -1;
 
+  var newFileThreshold = (config && typeof config.NEW_FILE_LINE_THRESHOLD === 'number')
+    ? config.NEW_FILE_LINE_THRESHOLD
+    : NEW_FILE_LINE_THRESHOLD;
+  var locDeltaThreshold = (config && typeof config.LOC_DELTA_THRESHOLD === 'number')
+    ? config.LOC_DELTA_THRESHOLD
+    : LOC_DELTA_THRESHOLD;
+
   if (isWrite) {
     var content = toolInput.content || toolInput.CodeContent || '';
-    return content.split('\n').length > NEW_FILE_LINE_THRESHOLD;
+    return content.split('\n').length > newFileThreshold;
   }
   if (isEdit) {
     var newStr = toolInput.new_string || toolInput.ReplacementContent || toolInput.content || '';
     var oldStr = toolInput.old_string || toolInput.TargetContent || '';
     var delta = newStr.split('\n').length - oldStr.split('\n').length;
-    return delta > LOC_DELTA_THRESHOLD;
+    return delta > locDeltaThreshold;
   }
   return false;
 }

@@ -56,6 +56,6 @@ describe('Rule Compiler & Git Hook Generator Module', () => {
     assert.ok(fs.existsSync(res.hookPath));
 
     const hookContent = fs.readFileSync(res.hookPath, 'utf8');
-    assert.ok(hookContent.includes('.asc/hooks/pre-commit-validator.cjs'));
+    assert.ok(hookContent.includes('.asc/hooks/pre-commit-runner.cjs') || hookContent.includes('.asc/hooks/pre-commit-validator.cjs'));
   });
 });

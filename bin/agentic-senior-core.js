@@ -31,14 +31,15 @@ function printUsage() {
   console.log('Adapter install (one file per project):');
   console.log('  asc adapter --cursor --devin --cline --copilot --kiro --continue --zed --aider --kilocode --roo --openhands --windsurf --all\n');
   console.log('Commands:');
-  console.log('  adapter       Generate instruction-tier adapter files');
-  console.log('  global        Install rules to user-level (global) locations');
-  console.log('  uninstall     Remove ASC adapter files from this project');
-  console.log('  clean         Remove v4 per-project artifacts');
-  console.log('  status        Show detected IDEs and install hints');
-  console.log('  mcp           Start MCP stdio server');
-  console.log('  --version     Show version');
-  console.log('  --help        Show this help');
+  console.log('  adapter           Generate instruction-tier adapter files');
+  console.log('  global            Install rules to user-level (global) locations');
+  console.log('  install-git-hook  Install Git pre-commit hook for duplicate code enforcement');
+  console.log('  uninstall         Remove ASC adapter files and git hooks from this project');
+  console.log('  clean             Remove v4 per-project artifacts');
+  console.log('  status            Show detected IDEs and install hints');
+  console.log('  mcp               Start MCP stdio server');
+  console.log('  --version         Show version');
+  console.log('  --help            Show this help');
 }
 
 async function main() {
@@ -52,6 +53,12 @@ async function main() {
 
   if (commandArgument === '--version' || commandArgument === '-v') {
     console.log(CLI_VERSION);
+    return;
+  }
+
+  if (commandArgument === 'install-git-hook' || commandArgument === 'git-hook') {
+    const { runGitHookCommand } = await import('../lib/cli/commands/git-hook.mjs');
+    await runGitHookCommand(commandArguments);
     return;
   }
 

@@ -33,6 +33,7 @@ When you pick the minimal option at step 5 or 6, and it isn't obviously trivial:
 - Delete code that carries no behavior, safety, or test value.
 - When brevity and readability conflict, readability wins.
 - Prefer named functions over closures/inline lambdas once logic exceeds a trivial expression.
+- Arrow function shorthand (no braces, implicit return) must not return a void-typed expression — e.g. `onClick={() => setCount(count + 1)}` or `arr.forEach(item => sideEffect(item))`. This trips `@typescript-eslint/no-confusing-void-expression` under strict TS lint configs. Not JSX-specific — applies to any callback assignment in `.js`/`.ts`/`.jsx`/`.tsx` where the shorthand body calls a void-returning function. Use braces instead: `onClick={() => { setCount(count + 1); }}`.
 
 ## Architecture
 
