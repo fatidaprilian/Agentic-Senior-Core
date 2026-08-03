@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.4.4
+
+### Fixed
+- **Antigravity CLI Binary Resolution (`findAgyBinaryPath`)**: Fixed silent `spawn agy ENOENT` failure during `asc global` when `agy` binary is not in default Node.js subprocess `PATH`. Automatically resolves `%LOCALAPPDATA%\agy\bin\agy.exe` (Windows) and `~/.local/share/agy/bin/agy` (Linux/WSL) to execute `agy plugin install` successfully and register components into `agy plugin list`.
+
 ## 6.4.3
 
 ### Fixed
