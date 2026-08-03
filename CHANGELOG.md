@@ -1,5 +1,12 @@
 # Changelog
 
+## 6.4.2
+
+### Fixed
+- **Antigravity CLI hooks not firing (WSL/Linux)**: Two root causes identified and fixed:
+  1. **`plugin.json` schema rejection**: CLI enforces `additionalProperties: false` — only `name`, `description`, `$schema` are valid. Our manifest had 6 extra fields (`version`, `contextFileName`, `rules`, `commands`, `skills`, `hooks`) causing silent plugin rejection. Fix: `asc global --antigravity` now writes a minimal CLI-compatible manifest to the CLI plugin path while keeping the full one for IDE.
+  2. **`hooks.json` format mismatch**: CLI uses named-hook keys (`{ "hook-name": { "PreToolUse": [...] } }`), not the IDE wrapper format (`{ "hooks": { "PreToolUse": [...] } }`). Fix: `asc global --antigravity` now converts hooks.json to CLI format during install, including patching the `require()` fallback chain to include `~/.gemini/antigravity-cli/plugins/` path.
+
 ## 6.4.1
 
 ### Fixed
