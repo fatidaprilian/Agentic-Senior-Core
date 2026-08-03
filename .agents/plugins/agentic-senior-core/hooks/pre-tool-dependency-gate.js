@@ -63,7 +63,9 @@ process.stdin.on('data', chunk => {
       added = extractCommandDeps(command);
     } else if (isFileEdit) {
       const filePath = toolInput.file_path || toolInput.TargetFile || toolInput.path || toolInput.target_file || '';
-      if (!filePath.endsWith('package.json')) {
+      const manifestFiles = ['package.json', 'requirements.txt', 'pyproject.toml', 'go.mod', 'Cargo.toml', 'Gemfile'];
+      const isManifest = manifestFiles.some(function(m) { return filePath.endsWith(m); });
+      if (!isManifest) {
         process.exit(0);
         return;
       }
@@ -139,7 +141,12 @@ function extractDeps(text, pattern) {
 }
 
 function extractCommandDeps(command) {
-  const installRegex = /(?:npm|yarn|pnpm|bun|ascx)\s+(?:install|i|add)(?:\s+[^\s]+)*/i;
+  // JS: npm/yarn/pnpm/bun/ascx install/add
+  // Python: pip/pip3/uv install, poetry add
+  // Go: go get
+  // Rust: cargo add
+  // Ruby: gem install, bundle add
+  const installRegex = /(?:npm|yarn|pnpm|bun|ascx|pip3?|uv|poetry|cargo|gem|bundle)\s+(?:install|i|add|get)(?:\s+[^\s]+)*/i;
   if (!installRegex.test(command)) return [];
 
   const parts = command.split(/\s+/);

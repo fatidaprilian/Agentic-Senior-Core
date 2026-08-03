@@ -276,12 +276,19 @@ function logPatternCheck(checkType, patternId, isMatch) {
 }
 
 function checkSecurityPatterns(toolName, toolInput, filePath, findings) {
-  var target = toolName === 'Edit' ? (toolInput.new_string || '') : (toolInput.content || '');
+  var target = toolName === 'Edit' ? (toolInput.new_string || toolInput.ReplacementContent || '') : (toolInput.content || toolInput.CodeContent || '');
   if (!target) return;
-  
+
+  var ext = path.extname(filePath).slice(1);
+
   if (SECURITY_PATTERNS.patterns) {
     SECURITY_PATTERNS.patterns.forEach(function (p) {
       try {
+        // Language-aware filtering: skip patterns that don't apply to this file type
+        var langs = p.languages || [];
+        var isUniversal = langs.length === 0 || langs.indexOf('universal') !== -1;
+        if (!isUniversal && langs.indexOf(ext) === -1) return;
+
         var regex = new RegExp(p.regex, 'ig');
         var isMatch = regex.test(target);
         logPatternCheck('security', p.id || 'sec-pattern', isMatch);

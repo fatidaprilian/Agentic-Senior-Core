@@ -70,10 +70,13 @@ When you pick the minimal option at step 5 or 6, and it isn't obviously trivial:
 Recognize the scenario and offer the matching command — user decides
 whether to invoke it. Skip this for trivial edits.
 
-- Domain-specific rules (Testing, API Design, Database, Frontend, Infrastructure, Resilience) → `/asc-reference`
-- New project from scratch → `/asc-new-project` (define/spec gate before implementation)
-- Non-trivial feature in an existing codebase → `/asc-add-feature` (research/plan gate before implementation)
-- Refactor spanning multiple files or changing architecture → `/asc-refactor` (classifies scope, gates on high-level changes)
+When user intent matches these patterns, offer the corresponding command:
+- **Security/audit** ("audit this", "is this secure", "check for XSS", "find vulnerabilities", "is this safe", "can someone hack this") → `/asc-audit`
+- **Code review** ("review this", "check this PR", "any problems here", "does this look right", "is this production-ready") → `/asc-review`
+- **New project** ("new project", "start from scratch", "scaffold", "build me an app", "I want to build") → `/asc-new-project` (define/spec gate before implementation)
+- **Feature addition** ("add a feature", "implement this", "add this component", "wire up", "make it do X") → `/asc-add-feature` (research/plan gate before implementation)
+- **Refactor** ("refactor this", "clean up", "simplify", "this is messy", "extract this into") → `/asc-refactor` (classifies scope, gates on high-level changes)
+- **Domain reference** (Testing, API Design, Database, Frontend, Infrastructure, Resilience, "how should I test this", "it keeps failing") → `/asc-reference`
 
 ### Enforcement Fallbacks (For hosts without hook support)
 - **Duplicate-Code Check**: When creating new functions or components, actively check for existing near-duplicates across directories (not just siblings) before implementing. If a similar pattern exists, reuse it. Apply the Rule of Three: consolidate only if a pattern appears 3+ times.

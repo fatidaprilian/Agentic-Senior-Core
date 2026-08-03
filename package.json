@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "6.2.4",
+  "version": "6.3.0",
   "type": "module",
   "description": "Agentic Senior Core: Universal AI coding rules and workflows. Write code like a staff engineer, not a junior.",
   "bin": {
@@ -69,6 +69,6 @@
     "agentic"
   ],
   "scripts": {
-    "test": "node --test ./tests/adapter.test.mjs ./tests/path-hash.test.mjs"
+    "test": "node --test ./tests/*.test.mjs"
   }
 }

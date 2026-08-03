@@ -12,6 +12,13 @@ const { LADDER_PULSE_INTERVAL } = require('./constants.cjs');
 const LADDER_REMINDER = '[ASC] Ladder check: (1) needed? (2) exists already \u2014 reuse? '
   + '(3) stdlib/native? (4) existing dep? (5) one function? Then minimal code.';
 
+// Security constraints are negation-type ("never do X") — most vulnerable to context rot
+// per arXiv:2604.20911. Reinject verbatim alongside ladder pulse.
+const SECURITY_REMINDER = '[ASC SECURITY PIN — verbatim, do not paraphrase] '
+  + 'NEVER: interpolate input into SQL/shell · commit secrets/tokens/credentials '
+  + '· store plaintext passwords · leak stack traces/internals/PII in responses. '
+  + 'ALWAYS: parameterize queries · enforce resource-level authz · rate-limit public endpoints.';
+
 let inputBuffer = '';
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => {
@@ -28,7 +35,7 @@ process.stdin.on('data', chunk => {
         if (shouldInject) {
             process.stdout.write(JSON.stringify({
                 injectSteps: [{
-                    ephemeralMessage: `**ASC LADDER PULSE**: You have completed several steps. Remember to review the 1-6 decision ladder. Document deferred debt if you take shortcuts.`
+                    ephemeralMessage: `**ASC LADDER PULSE**: You have completed several steps. Remember to review the 1-6 decision ladder. Document deferred debt if you take shortcuts.\n\n${SECURITY_REMINDER}`
                 }]
             }) + '\n');
         } else {

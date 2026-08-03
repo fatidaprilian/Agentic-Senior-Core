@@ -22,7 +22,7 @@ Every rule and skill workflow is derived from established engineering standards,
 
 | Domain | Standards |
 |--------|-----------|
-| Security & audit | OWASP Top 10, OWASP ASVS v4, CWE classification, CVSS report structure |
+| Security & audit | OWASP Top 10 (2025), OWASP ASVS v5.0, CWE classification, CVSS report structure |
 | Code review | OWASP Risk Rating Methodology, Google Engineering Practices |
 | Architecture | Clean Architecture, Hexagonal Architecture |
 | Workflows | RPI & QRSPI (Dex Horthy/HumanLayer), SDD (GitHub Spec Kit) |
@@ -31,7 +31,7 @@ Every rule and skill workflow is derived from established engineering standards,
 | Accessibility | WCAG 2.2 AA |
 | Resilience | Nygard's Release It!, AWS Well-Architected Reliability Pillar |
 | Technical debt | Cunningham's debt metaphor (1992) |
-| Instruction design | Low instruction density for higher LLM compliance — supported by IFScale (arXiv:2507.11538) and RECAST (arXiv:2505.19030) |
+| Instruction design | Low instruction density for higher LLM compliance — supported by IFScale (arXiv:2507.11538). Scaffold-rule compliance gaps measured by OctoBench (arXiv:2601.10343, ACL 2026) |
 
 The decision ladder (check before building) and debt ledger format are ASC-specific implementations grounded in these principles.
 

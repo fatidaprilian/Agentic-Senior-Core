@@ -33,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Edit(**/package.json)",
+            "if": "Edit(**/package.json)|Edit(**/requirements.txt)|Edit(**/pyproject.toml)|Edit(**/go.mod)|Edit(**/Cargo.toml)|Edit(**/Gemfile)",
             "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
             "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\pre-tool-dependency-gate.js\" }",
             "timeout": 5,
@@ -41,7 +41,7 @@
           },
           {
             "type": "command",
-            "if": "Write(**/package.json)",
+            "if": "Write(**/package.json)|Write(**/requirements.txt)|Write(**/pyproject.toml)|Write(**/go.mod)|Write(**/Cargo.toml)|Write(**/Gemfile)",
             "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
             "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\pre-tool-dependency-gate.js\" }",
             "timeout": 5,
@@ -104,6 +104,15 @@
         "type": "command",
         "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','post-edit-enforce.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
         "timeout": 15
+      }
+    ],
+    "PreCompact": [
+      {
+        "type": "command",
+        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-compact-pin.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-compact-pin.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-compact-pin.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+        "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\pre-compact-pin.js\" }",
+        "timeout": 5,
+        "statusMessage": "ASC constraint pinning..."
       }
     ]
   }

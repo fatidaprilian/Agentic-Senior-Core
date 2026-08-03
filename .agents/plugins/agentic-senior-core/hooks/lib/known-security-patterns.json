@@ -1,20 +1,83 @@
 {
-  "description": "Regex patterns for recurring security anti-patterns",
+  "description": "Regex patterns for recurring security anti-patterns, grouped by language. Universal patterns run on all files; language-specific patterns run only when the file extension matches.",
   "patterns": [
     {
       "id": "insecure-redirect",
       "regex": "location\\.href\\s*=\\s*(?!['\"`])([^;\\n]+)",
-      "message": "Unvalidated redirect target assigned to location.href. Ensure the variable is sanitized or use a safe routing method."
+      "message": "Unvalidated redirect target assigned to location.href. Ensure the variable is sanitized or use a safe routing method.",
+      "languages": ["js", "ts", "jsx", "tsx", "mjs", "cjs"]
     },
     {
       "id": "timing-unsafe-compare",
       "regex": "(password|secret|token|key)\\s*(===|!==|==|!=)",
-      "message": "Non-timing-safe string comparison on a secret variable. Use crypto.timingSafeEqual instead."
+      "message": "Non-timing-safe string comparison on a secret variable. Use crypto.timingSafeEqual instead.",
+      "languages": ["js", "ts", "jsx", "tsx", "mjs", "cjs"]
     },
     {
       "id": "user-input-http",
       "regex": "(axios|fetch|got|superagent)\\s*\\(\\s*.*?(req\\.(query|body|params)|process\\.env)",
-      "message": "Potentially unsafe input passed directly into an HTTP client. Validate and sanitize URL parameters first."
+      "message": "Potentially unsafe input passed directly into an HTTP client. Validate and sanitize URL parameters first.",
+      "languages": ["js", "ts", "jsx", "tsx", "mjs", "cjs"]
+    },
+    {
+      "id": "py-eval",
+      "regex": "\\beval\\s*\\(",
+      "message": "eval() on untrusted input enables arbitrary code execution. Use ast.literal_eval() for data parsing or eliminate eval entirely.",
+      "languages": ["py"]
+    },
+    {
+      "id": "py-shell-injection",
+      "regex": "subprocess.*shell\\s*=\\s*True",
+      "message": "subprocess with shell=True is vulnerable to shell injection. Use shell=False with a list of arguments instead.",
+      "languages": ["py"]
+    },
+    {
+      "id": "py-unsafe-pickle",
+      "regex": "pickle\\.loads?\\s*\\(",
+      "message": "pickle.load/loads on untrusted data enables arbitrary code execution. Use a safe format (JSON, msgpack) or validate the source.",
+      "languages": ["py"]
+    },
+    {
+      "id": "py-unsafe-yaml",
+      "regex": "yaml\\.load\\s*\\((?!.*Loader)",
+      "message": "yaml.load without SafeLoader/FullLoader enables arbitrary code execution. Use yaml.safe_load() or specify Loader=yaml.SafeLoader.",
+      "languages": ["py"]
+    },
+    {
+      "id": "go-sql-interpolation",
+      "regex": "fmt\\.Sprintf\\s*\\(.*(?:SELECT|INSERT|UPDATE|DELETE)",
+      "message": "SQL query built with fmt.Sprintf is vulnerable to SQL injection. Use parameterized queries with database/sql placeholders.",
+      "languages": ["go"]
+    },
+    {
+      "id": "go-exec-interpolation",
+      "regex": "exec\\.Command\\s*\\(.*\\+",
+      "message": "exec.Command with string concatenation is vulnerable to command injection. Use separate arguments instead of building a command string.",
+      "languages": ["go"]
+    },
+    {
+      "id": "rust-unsafe-no-comment",
+      "regex": "unsafe\\s*\\{",
+      "message": "unsafe block detected. Document the safety invariant with a // SAFETY: comment explaining why this is sound.",
+      "languages": ["rs"]
+    },
+    {
+      "id": "hardcoded-aws-key",
+      "regex": "AKIA[0-9A-Z]{16}",
+      "message": "Hardcoded AWS access key detected. Remove and inject via environment variable or secrets manager.",
+      "languages": ["universal"]
+    },
+    {
+      "id": "hardcoded-private-key",
+      "regex": "-----BEGIN.*PRIVATE KEY-----",
+      "message": "Private key material in source code. Remove immediately and load from a secure secrets store.",
+      "languages": ["universal"]
+    },
+    {
+      "id": "hardcoded-credential",
+      "regex": "(password|secret|api_key|token|apikey|api_secret)\\s*=\\s*['\"][^'\"]{8,}['\"]",
+      "message": "Possible hardcoded credential. Inject via environment variable or secrets manager instead.",
+      "languages": ["universal"]
     }
   ],
   "fileSpecific": {

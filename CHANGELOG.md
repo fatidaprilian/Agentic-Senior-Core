@@ -1,5 +1,37 @@
 # Changelog
 
+## 6.3.0
+
+### Added
+- **PreCompact constraint pinning hook**: Reinjects critical security constraints verbatim before context compaction, preventing governance decay. Based on arXiv:2606.22528 Constraint Pinning pattern. Registered as `PreCompact` event in `hooks.json`.
+- **Security digest in ladder pulse**: Security constraints (negation-type, most vulnerable to context rot per arXiv:2604.20911) now reinject alongside decision ladder every 3 invocations for hosts without PreCompact support.
+- **Polyglot security patterns**: `known-security-patterns.json` expanded from JS-only to Python (`eval`, `subprocess shell=True`, `pickle.loads`, `yaml.load`), Go (SQL/exec interpolation), Rust (`unsafe` without safety comment), and universal patterns (AWS keys, private keys, hardcoded credentials). Language-aware filtering in `checkSecurityPatterns()` prevents cross-language false positives.
+- **Polyglot dependency gate**: `pre-tool-dependency-gate.js` now detects `pip`/`uv`/`poetry`/`cargo`/`go get`/`gem`/`bundle` install commands and watches `requirements.txt`/`pyproject.toml`/`go.mod`/`Cargo.toml`/`Gemfile` edits alongside `package.json`.
+- **OWASP Agentic Top 10 (ASI01-ASI10)**: `asc-audit` skill now includes Agentic Risk Scope section for auditing AI agent systems, MCP servers, and plugins. Self-referential threat acknowledged: ASC's own state files are potential ASI06 targets.
+- **Skill trigger casual coverage**: Added natural-language trigger phrases to 5 skills (`asc-reference`, `asc-audit`, `asc-dedup`, `asc-bootstrap`, `asc`) for better triggering by non-technical users.
+- **Keyword-to-command mapping in rules**: `## Workflow` section now includes explicit trigger phrases per command, addressing Vercel eval finding that skills without reinforcement have 53% baseline invocation rate.
+
+### Changed
+- **OWASP citations updated**: ASVS v4 → v5.0, Top 10 → 2025 edition across `architecture.md` and `asc-audit/SKILL.md`.
+- **RECAST citation corrected**: Removed from `architecture.md` (paper is about training data synthesis, not inference-time instruction density). Replaced with OctoBench (arXiv:2601.10343, ACL 2026) which directly measures scaffold-rule compliance gaps.
+
+### Grounding
+- Governance Decay / Constraint Pinning (arXiv:2606.22528, June 2026)
+- Security-Recall Divergence (arXiv:2604.20911, April 2026)
+- OctoBench (arXiv:2601.10343, ACL 2026)
+- OWASP Top 10 for Agentic Applications v2.01 (June 2026)
+- Vercel AGENTS.md vs Skills eval (February 2026)
+
+## 5.8.8 – 6.2.4 (Summary)
+
+Versions 5.8.8 through 6.2.4 were released between late 2025 and August 2026. Detailed per-version changelog entries were not maintained during this period. Key changes reconstructed from git history:
+
+- **5.8.8–5.8.12**: Cross-platform fixes (WSL NTFS-ext4 `fs.cp` failure, `copyDirRecursive`, cleanup of destructive OLD_PATHS removal).
+- **5.8.13–5.8.20**: Hook system maturation (terminal install command interception, dual-mode exit code 2 blocking for Antigravity IDE, cross-platform path fallback for `hooks.json`).
+- **5.8.21–5.8.26**: Rules consolidation to single source of truth, `ascx` wrapper enforcement, English identifier rule, linter/security regex enforcement, CI scaffolding, drift nudging.
+- **6.0.0–6.2.0**: Major: duplicate-code detection (jscpd gate), UI slop gate, dual-track adaptive preferences (TRACE compiler), plugin.json configuration.
+- **6.2.1–6.2.4**: Codex plugin manifest, marketplace catalog, Antigravity plugin bundle isolation, `config.toml` auto-registration.
+
 ## 5.8.7
 
 ### Fixed

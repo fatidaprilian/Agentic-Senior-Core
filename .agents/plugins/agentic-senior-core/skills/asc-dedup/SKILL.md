@@ -4,7 +4,10 @@ description: >
   Trigger this skill when the user says: "find duplicate code", "check
   for clones", "audit for duplication", "is this repeated elsewhere",
   "scan for copy-paste", "run jscpd", "dedup report", "consolidate
-  duplicate logic". Use for whole-repo or whole-directory duplication
+  duplicate logic", "this looks the same as the other file",
+  "we already have this somewhere", "why is this code repeated",
+  "isn't this a copy of", "cari kode duplikat", "ini kok sama kayak yang itu",
+  "ini udah ada kan". Use for whole-repo or whole-directory duplication
   audits on demand — this is a deep, on-demand scan, distinct from the
   continuous per-edit check already enforced by the dedup-gate hook.
 ---

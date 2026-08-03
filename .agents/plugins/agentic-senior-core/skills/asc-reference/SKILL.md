@@ -1,7 +1,7 @@
 ---
 name: asc-reference
 description: >
-  Trigger this skill when the user is working on: unit tests, integration tests, REST APIs, GraphQL APIs, SQL queries, database migrations, React components, frontend layouts, Docker configs, CI/CD pipelines, Kubernetes manifests, or service resilience (retries, circuit breakers, rate limiting). Also trigger when the user says: "how should I test this", "design this API", "optimize this query", "set up Docker", "add retry logic", "write a test", "add pagination", "handle errors", "add loading state", "set up CI". Also trigger when editing files matching: `*.test.*`, `*.spec.*`, `Dockerfile`, `docker-compose.*`, `.github/workflows/*`, `*.sql`, or migration files.
+  Trigger this skill when the user is working on: unit tests, integration tests, REST APIs, GraphQL APIs, SQL queries, database migrations, React components, frontend layouts, Docker configs, CI/CD pipelines, Kubernetes manifests, or service resilience (retries, circuit breakers, rate limiting). Also trigger when the user says: "how should I test this", "design this API", "optimize this query", "set up Docker", "add retry logic", "write a test", "add pagination", "handle errors", "add loading state", "set up CI", "it keeps failing", "make it try again if it fails", "it's too slow with lots of data", "looks broken on mobile", "how do I deploy this", "will this break anything", "bagaimana cara ngetes ini", "bikin tes", "kok lambat banget", "tampilan di hp rusak", "cara deploy ini". Also trigger when editing files matching: `*.test.*`, `*.spec.*`, `Dockerfile`, `docker-compose.*`, `.github/workflows/*`, `*.sql`, or migration files.
 ---
 
 # ASC Domain Reference
