@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.4.3
+
+### Fixed
+- **Antigravity CLI automatic plugin registration**: `asc global --antigravity` now automatically executes `agy plugin install` to register the plugin in Antigravity CLI's active plugin registry on Linux/WSL/Windows.
+- **Antigravity CLI path resolution**: Updated master `hooks.json` require() fallback chain (`g3`) to include `~/.gemini/antigravity-cli/plugins/agentic-senior-core/hooks/` so hooks resolve properly across external workspaces.
+
 ## 6.4.2
 
 ### Fixed
