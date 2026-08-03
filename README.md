@@ -111,6 +111,20 @@ If you need to override these defaults (e.g., to whitelist a specific dependency
 ASC provides powerful commands to steer your agents (e.g. `/asc-refactor`, `/asc-audit`). 
 It also provides a CLI to manage your local setup (e.g. `asc adapter --all`, `asc global --all`).
 
+### Git Pre-Commit Hook
+
+ASC automatically installs a native Git pre-commit hook when you run `asc adapter`. This hook runs via Git's own hook system — independent of any AI host's plugin runtime — so it works on **every** host, including adapter-only hosts (Cursor, Cline, Copilot IDE extension, etc.) and hosts where agent lifecycle hooks are unreliable.
+
+The hook:
+- Runs `jscpd` on directories containing staged files, using policy from `.asc/dedup-config.json`
+- Auto-fixes ESLint issues (including `no-confusing-void-expression`) and re-stages, if the target project has a typed ESLint config
+- Blocks the commit if a staged file duplicates existing code, with a clear message citing the match
+- Bypass with `git commit --no-verify` when duplication is intentional
+
+Supports both `.husky/` (appends without overwriting) and `.git/hooks/` (direct install). Remove with `asc uninstall`. To install the hook standalone without generating adapter files: `asc install-git-hook`.
+
+> **Known limitation — Antigravity IDE hooks**: Agent lifecycle hooks (`hooks.json`) are documented but do not execute on Antigravity IDE's chat surface as of August 2026. The git pre-commit hook is the recommended primary enforcement mechanism for Antigravity users.
+
 **[See all available CLI Options and Agent Commands](docs/INSTALLATION.md#commands--cli)**
 
 ---

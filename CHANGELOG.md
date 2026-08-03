@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.4.1
+
+### Fixed
+- **SOURCE_EXTENSIONS single source of truth**: Git pre-commit runner script now imports the extension list from `hooks/constants.cjs` at generation time instead of hardcoding a duplicate. Regenerating the hook after changing `constants.cjs` propagates updates automatically.
+- **README documentation**: Added Git Pre-Commit Hook section documenting auto-install via `asc adapter`, standalone `asc install-git-hook` command, and Antigravity IDE hooks known limitation.
+
+### Added
+- **Integration tests for git pre-commit hook**: 3 end-to-end tests creating real git repos with staged files — verifies duplicate blocking (exit 1 with `[ASC Dedup]` message), clean commit pass-through (exit 0), and silent ESLint skip when no config exists. Tests skip gracefully if `jscpd` is unavailable.
+
 ## 6.4.0
 
 ### Added
