@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.4.5
+
+### Fixed
+- **Global `hooks.json` copy for Antigravity CLI & IDE**: `asc global` now copies master `hooks.json` directly to global root hook locations (`~/.gemini/antigravity-cli/hooks.json`, `~/.gemini/config/hooks.json`, `~/.gemini/hooks.json`). This ensures Antigravity CLI on Linux/WSL detects user hooks natively when running outside of local `.agents` workspace directories.
+
 ## 6.4.4
 
 ### Fixed
