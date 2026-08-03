@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.4.7
+
+### Fixed
+- **Safe Group Key Merge for `~/.gemini/config/hooks.json`**: Updated `asc global` to safely merge `"agentic-senior-core": { ... }` into `~/.gemini/config/hooks.json` (and `~/.gemini/antigravity-cli/hooks.json`) across both Windows and Linux/WSL environments. Preserves any existing custom user hook groups (e.g. `"well"`) while ensuring full synchronization for Antigravity CLI and IDE.
+
 ## 6.4.6
 
 ### Fixed
