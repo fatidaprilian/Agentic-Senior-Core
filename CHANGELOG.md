@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.4.6
+
+### Fixed
+- **Single-Bundle `hooks.json` Unwrapping for Antigravity CLI**: Unwrapped outer `"hooks": { ... }` key in the CLI copy of `hooks.json` so event keys (`SessionStart`, `PreToolUse`, `PostToolUse`, etc.) sit directly at top level. This enables `agy plugin install` to process all 7 hook categories natively from inside the single plugin bundle without requiring external root copies.
+
 ## 6.4.5
 
 ### Fixed
