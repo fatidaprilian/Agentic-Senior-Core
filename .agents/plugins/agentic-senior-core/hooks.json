@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','session-start.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','session-start.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','session-start.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','session-start.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','session-start.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','session-start.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','session-start.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
             "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\session-start.js\" }",
             "timeout": 5,
             "statusMessage": "Loading ASC rules..."
@@ -19,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','subagent-start.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','subagent-start.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','subagent-start.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','subagent-start.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','subagent-start.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','subagent-start.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','subagent-start.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
             "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\subagent-start.js\" }",
             "timeout": 5,
             "statusMessage": "Loading ASC rules..."
@@ -34,7 +34,7 @@
           {
             "type": "command",
             "if": "Edit(**/package.json)|Edit(**/requirements.txt)|Edit(**/pyproject.toml)|Edit(**/go.mod)|Edit(**/Cargo.toml)|Edit(**/Gemfile)",
-            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
             "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\pre-tool-dependency-gate.js\" }",
             "timeout": 5,
             "statusMessage": "ASC Pre-tool dependency check (Edit)..."
@@ -42,7 +42,7 @@
           {
             "type": "command",
             "if": "Write(**/package.json)|Write(**/requirements.txt)|Write(**/pyproject.toml)|Write(**/go.mod)|Write(**/Cargo.toml)|Write(**/Gemfile)",
-            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
             "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\pre-tool-dependency-gate.js\" }",
             "timeout": 5,
             "statusMessage": "ASC Pre-tool dependency check (Write)..."
@@ -54,7 +54,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','pre-tool-dependency-gate.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
             "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\pre-tool-dependency-gate.js\" }",
             "timeout": 5,
             "statusMessage": "ASC Pre-tool dependency check (Terminal)..."
@@ -68,14 +68,14 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','post-edit-enforce.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','post-edit-enforce.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
             "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\post-edit-enforce.js\" }",
             "timeout": 5,
             "statusMessage": "ASC ladder & spec gate check..."
           },
           {
             "type": "command",
-            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','dedup-gate.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','dedup-gate.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','dedup-gate.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+            "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','dedup-gate.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','dedup-gate.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','dedup-gate.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','dedup-gate.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
             "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\dedup-gate.js\" }",
             "timeout": 15,
             "statusMessage": "ASC duplicate-code scan..."
@@ -86,14 +86,14 @@
     "PreInvocation": [
       {
         "type": "command",
-        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','session-pulse.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','session-pulse.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','session-pulse.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','session-pulse.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','session-pulse.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','session-pulse.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','session-pulse.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
         "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\session-pulse.js\" }",
         "timeout": 5,
         "statusMessage": "Loading ASC rules..."
       },
       {
         "type": "command",
-        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','ladder-pulse.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','ladder-pulse.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','ladder-pulse.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','ladder-pulse.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','ladder-pulse.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','ladder-pulse.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','ladder-pulse.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
         "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\ladder-pulse.js\" }",
         "timeout": 5,
         "statusMessage": "ASC ladder pulse..."
@@ -102,14 +102,14 @@
     "PostInvocation": [
       {
         "type": "command",
-        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','post-edit-enforce.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','post-edit-enforce.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','post-edit-enforce.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
         "timeout": 15
       }
     ],
     "PreCompact": [
       {
         "type": "command",
-        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-compact-pin.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-compact-pin.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-compact-pin.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:g2));\"",
+        "command": "node -e \"const p=require('path'),fs=require('fs'),os=require('os');const local=p.join(process.cwd(),'.agents','plugins','agentic-senior-core','hooks','pre-compact-pin.js');const g1=p.join(os.homedir(),'.agents','plugins','agentic-senior-core','hooks','pre-compact-pin.js');const g2=p.join(os.homedir(),'.gemini','config','plugins','agentic-senior-core','hooks','pre-compact-pin.js');const g3=p.join(os.homedir(),'.gemini','antigravity-cli','plugins','agentic-senior-core','hooks','pre-compact-pin.js');require(fs.existsSync(local)?local:(fs.existsSync(g1)?g1:(fs.existsSync(g2)?g2:g3)));\"",
         "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { $root = if ($env:PLUGIN_ROOT) { $env:PLUGIN_ROOT } else { if ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { if (Test-Path \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\") { \"$env:USERPROFILE\\.agents\\plugins\\agentic-senior-core\" } else { \"$env:USERPROFILE\\.gemini\\config\\plugins\\agentic-senior-core\" } } }; node \"$root\\hooks\\pre-compact-pin.js\" }",
         "timeout": 5,
         "statusMessage": "ASC constraint pinning..."
