@@ -1,0 +1,2 @@
+description = "Read-only repository convention mapping with evidence"
+prompt = "Load and follow the asc-fingerprint skill. Map the target repository's real conventions from code and recent Git history. Separate facts from recommendations, cite file or commit evidence, and stop for approval before writing CONVENTIONS.md."

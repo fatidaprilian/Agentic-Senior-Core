@@ -30,8 +30,9 @@ process.stdin.on('data', chunk => {
         try {
             content = fs.readFileSync(agentsPath, 'utf8');
         } catch (_) {
-            // Fallback to AGENTS.md at plugin root
-            content = fs.readFileSync(path.join(pluginRoot, 'AGENTS.md'), 'utf8');
+            process.stdout.write(JSON.stringify({}) + '\n');
+            process.exit(0);
+            return;
         }
 
         process.stdout.write(JSON.stringify({

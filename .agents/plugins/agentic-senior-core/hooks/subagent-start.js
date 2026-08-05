@@ -12,7 +12,7 @@ const isCodex = !isCopilot && Boolean(process.env.PLUGIN_DATA);
 
 let content;
 try {
-  content = fs.readFileSync(path.join(pluginRoot, 'AGENTS.md'), 'utf8');
+  content = fs.readFileSync(path.join(pluginRoot, 'rules', 'agentic-senior-core.md'), 'utf8');
 } catch (e) {
   process.exit(0);
 }

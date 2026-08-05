@@ -8,15 +8,16 @@ const currentFilePath = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(currentFilePath), '..');
 
 describe('Universal Plugin Structure', () => {
-  it('AGENTS.md exists and is under 2000 tokens (~8KB)', async () => {
-    const agentsPath = path.join(repositoryRoot, 'AGENTS.md');
-    const content = await fs.readFile(agentsPath, 'utf8');
-    assert.ok(content.length > 100, 'AGENTS.md should have meaningful content');
-    assert.ok(content.length < 8000, `AGENTS.md too large: ${content.length} bytes (target <8000)`);
+  const canonicalRulePath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'rules', 'agentic-senior-core.md');
+
+  it('canonical plugin rule exists and is under 2000 tokens (~8KB)', async () => {
+    const content = await fs.readFile(canonicalRulePath, 'utf8');
+    assert.ok(content.length > 100, 'Canonical plugin rule should have meaningful content');
+    assert.ok(content.length < 8000, `Canonical plugin rule too large: ${content.length} bytes (target <8000)`);
   });
 
-  it('AGENTS.md contains required sections', async () => {
-    const content = await fs.readFile(path.join(repositoryRoot, 'AGENTS.md'), 'utf8');
+  it('canonical plugin rule contains required sections', async () => {
+    const content = await fs.readFile(canonicalRulePath, 'utf8');
     const inlineSections = [
       'Code Quality',
       'Architecture',
@@ -25,20 +26,21 @@ describe('Universal Plugin Structure', () => {
       'Response Style',
     ];
     for (const section of inlineSections) {
-      assert.ok(content.includes(`## ${section}`), `AGENTS.md missing inline section: ${section}`);
+      assert.ok(content.includes(`## ${section}`), `Canonical rule missing inline section: ${section}`);
     }
     const referencedSections = ['Testing', 'API Design', 'Database', 'Frontend', 'Infrastructure', 'Resilience'];
     for (const section of referencedSections) {
-      assert.ok(content.includes(section), `AGENTS.md must reference domain section: ${section}`);
+      assert.ok(content.includes(section), `Canonical rule must reference domain section: ${section}`);
     }
-    assert.ok(content.includes('/asc-reference'), 'AGENTS.md must point to asc-reference skill');
+    assert.ok(content.includes('/asc-reference'), 'Canonical rule must point to asc-reference skill');
   });
 
-  it('AGENTS.md has explicit security carveouts', async () => {
-    const content = await fs.readFile(path.join(repositoryRoot, 'AGENTS.md'), 'utf8');
+  it('canonical plugin rule has explicit security carveouts', async () => {
+    const content = await fs.readFile(canonicalRulePath, 'utf8');
     assert.ok(content.includes('never skip'), 'Security section must have "never skip" carveout');
     assert.ok(content.includes('trust boundar'), 'Must mention trust boundaries');
     assert.ok(content.includes('Parameterize'), 'Must mention parameterized queries');
+    assert.ok(content.includes('untrusted data'), 'Must distinguish untrusted content from instructions');
   });
 });
 
@@ -64,6 +66,7 @@ describe('Hooks', () => {
     const sessionStart = await fs.readFile(path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'hooks', 'session-start.js'), 'utf8');
     const subagentStart = await fs.readFile(path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'hooks', 'subagent-start.js'), 'utf8');
     assert.ok(sessionStart.includes("require('fs')") || sessionStart.includes("require('node:fs')"), 'session-start.js must use require');
+    assert.ok(sessionStart.includes("rules', 'agentic-senior-core.md"), 'session-start.js must load the canonical plugin rule');
     assert.ok(subagentStart.includes("require('fs')") || subagentStart.includes("require('node:fs')"), 'subagent-start.js must use require');
   });
 
@@ -110,12 +113,19 @@ describe('Skills', () => {
     const exists = await fs.access(skillPath).then(() => true).catch(() => false);
     assert.ok(exists, 'Missing skills/asc-adapter/SKILL.md');
   });
+
+  it('asc-fingerprint is an evidence-backed, approval-gated skill', async () => {
+    const skillPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'skills', 'asc-fingerprint', 'SKILL.md');
+    const content = await fs.readFile(skillPath, 'utf8');
+    assert.ok(content.includes('evidence-backed'), 'Fingerprint skill must require evidence');
+    assert.ok(content.includes('STOP and wait for approval'), 'Fingerprint skill must stop before writing conventions');
+  });
 });
 
 describe('Commands', () => {
   it('all .md command files exist', async () => {
     const commandsDir = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'commands');
-    const expectedMd = ['asc-refactor.md', 'asc-review.md', 'asc-audit.md', 'asc-help.md'];
+    const expectedMd = ['asc-refactor.md', 'asc-review.md', 'asc-audit.md', 'asc-fingerprint.md', 'asc-help.md'];
     for (const cmd of expectedMd) {
       const cmdPath = path.join(commandsDir, cmd);
       const exists = await fs.access(cmdPath).then(() => true).catch(() => false);
@@ -125,7 +135,7 @@ describe('Commands', () => {
 
   it('all .toml command files exist (Gemini)', async () => {
     const commandsDir = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'commands');
-    const expectedToml = ['asc-refactor.toml', 'asc-review.toml', 'asc-audit.toml', 'asc-help.toml'];
+    const expectedToml = ['asc-refactor.toml', 'asc-review.toml', 'asc-audit.toml', 'asc-fingerprint.toml', 'asc-help.toml'];
     for (const cmd of expectedToml) {
       const cmdPath = path.join(commandsDir, cmd);
       const exists = await fs.access(cmdPath).then(() => true).catch(() => false);

@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.5.0
+
+### Added
+- **`asc-fingerprint` Skill & Command**: Added on-demand repository fingerprinting (`asc-fingerprint`) to extract unwritten architectural patterns, error handling conventions, and Git commit trends into `CONVENTIONS.md`.
+- **Single Source of Truth Enforcement**: Canonical rules consolidated into `.agents/plugins/agentic-senior-core/rules/agentic-senior-core.md`. Removed stale root rule duplicates (`AGENTS.md`, `CLAUDE.md`, `CONVENTIONS.md`).
+- **Universal Guardrails**: Mandatory search for analogous modules, explicit justification for architectural deviations, factual mapping in feature research, and untrusted data warnings for README/issues/web content.
+- **Supply-Chain & Preflight Audit**: Added Step 0 preflight check to `asc-adapter` for detecting untrusted `.claude/settings.json` and `.vscode/tasks.json` hooks. Updated CI workflows to run with `--ignore-scripts`.
+- **Security Check Extensions**: Added high-confidence SSRF and log injection detection to `post-edit-enforce.js` hook and security rules.
+
 ## 6.4.7
 
 ### Fixed

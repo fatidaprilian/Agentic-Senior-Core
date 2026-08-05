@@ -26,5 +26,9 @@ describe('Polyglot Security Patterns', () => {
         assert.ok(expectedLangs.includes(lang) || ['ts', 'jsx', 'tsx', 'mjs', 'cjs'].includes(lang), `Pattern ${p.id} has valid language: ${lang}`);
       }
     }
+
+    const patternIds = new Set(data.patterns.map(pattern => pattern.id));
+    assert.ok(patternIds.has('potential-ssrf'), 'must detect user-controlled outbound requests');
+    assert.ok(patternIds.has('potential-log-injection'), 'must detect direct user-controlled log values');
   });
 });

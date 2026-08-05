@@ -29,9 +29,9 @@ Format:
 ## Phase 1: Research (No Code Changes)
 
 1. Write `workflow-gate.json` with phase `research`.
-2. Map existing code: patterns, utilities, dependencies already in use.
+2. Map existing code: patterns, utilities, dependencies already in use. Locate at least one analogous feature/module and record its file paths.
 3. Identify what must NOT be rebuilt (e.g., existing validation helpers).
-4. Output a factual research summary.
+4. Output a factual research summary that separates what exists from what is proposed, with file paths for the two or three claims that drive the plan.
 5. **STOP and wait for user approval.** Do not plan or implement.
 
 ## Phase 2: Plan
@@ -41,14 +41,14 @@ Format:
 3. Check if `.github/workflows/asc-quality-gate.yml` exists. If not, include scaffolding it in your plan (must run linter, type-check, and audit) and remind the user to enable Branch Protection.
 4. Create a numbered, step-by-step implementation plan with specific files, functions, and line references.
 5. Include a "Don't Build" list from the research phase.
-6. **Callout: Plan-Reading Illusion.** Ask the user to explicitly verify the plan against the codebase, not just skim it.
+6. **Callout: Plan-Reading Illusion.** Ask the user to explicitly verify the two or three critical plan claims against the referenced files, not just skim it.
 7. Output the plan.
 8. **STOP and wait for user approval.** Do not implement.
 
 ## Phase 3: Implement
 
 1. On approval of Phase 2, update `workflow-gate.json` phase to `implement`.
-2. Recommend a fresh context (intentional compaction) if the context window is getting full.
+2. Recommend a fresh context (intentional compaction) at the phase boundary or after roughly 20-30 tool calls. Do not wait until degradation is subjectively noticeable.
 3. Execute the approved plan.
 4. Validate: tests pass, no duplicate code introduced, plan items checked off.
-5. On completion, clear the state in `workflow-gate.json` by overwriting it with `{}`.
+5. On completion, give a short comprehension summary of what changed and why, then clear the state in `workflow-gate.json` by overwriting it with `{}`.

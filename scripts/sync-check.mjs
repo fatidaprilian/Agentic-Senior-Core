@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // ASC Sync Checker — validates consistency across rule copies.
 // Checks that the behavioral anchor, decision ladder, and section structure
-// are consistent between AGENTS.md (source of truth) and all adapter copies.
+// stay present in the canonical plugin rule used by installers and adapters.
 //
 // Usage: node scripts/sync-check.mjs [--fix]
 
@@ -11,12 +11,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-// Full-version rule files that must be identical (ignoring frontmatter)
-const FULL_VERSION_FILES = [
-  'AGENTS.md',
-  '.agents/rules/agentic-senior-core.md',
-  '.agents/plugins/agentic-senior-core/rules/agentic-senior-core.md',
-];
+const CANONICAL_RULE_FILE = '.agents/plugins/agentic-senior-core/rules/agentic-senior-core.md';
 
 // Condensed adapter files are generated on-demand by `asc adapter` into user
 // projects — they do NOT ship in the ASC repo itself. Removed from checks.
@@ -30,6 +25,7 @@ const SKILL_COPIES = [
   { base: '.agents/plugins/agentic-senior-core/skills/asc-refactor/SKILL.md', copies: [] },
   { base: '.agents/plugins/agentic-senior-core/skills/asc-debt/SKILL.md', copies: [] },
   { base: '.agents/plugins/agentic-senior-core/skills/asc-add-feature/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-fingerprint/SKILL.md', copies: [] },
   { base: '.agents/plugins/agentic-senior-core/skills/asc-new-project/SKILL.md', copies: [] },
   { base: '.agents/plugins/agentic-senior-core/skills/asc-adapter/SKILL.md', copies: [] },
 ];
@@ -65,21 +61,17 @@ async function run() {
 
   console.log('ASC Sync Checker\n');
 
-  // 1. Check full-version files are identical (ignoring frontmatter)
-  console.log('--- Full-version rule files ---');
-  const sourceContent = stripFrontmatter(await readFile(FULL_VERSION_FILES[0]) || '');
-
-  for (const filePath of FULL_VERSION_FILES.slice(1)) {
-    const raw = await readFile(filePath);
-    if (!raw) {
-      issues.push(`MISSING: ${filePath}`);
-      continue;
-    }
-    const stripped = stripFrontmatter(raw);
-    if (stripped !== sourceContent) {
-      issues.push(`DRIFT: ${filePath} differs from AGENTS.md (ignoring frontmatter)`);
-    } else {
-      console.log(`  OK  ${filePath}`);
+  // 1. Check canonical rule exists and retains the required behavioral anchors.
+  console.log('--- Canonical rule ---');
+  const canonicalRule = stripFrontmatter(await readFile(CANONICAL_RULE_FILE) || '');
+  if (!canonicalRule) {
+    issues.push(`MISSING: ${CANONICAL_RULE_FILE}`);
+  } else {
+    console.log(`  OK  ${CANONICAL_RULE_FILE}`);
+    for (const marker of REQUIRED_MARKERS) {
+      if (!canonicalRule.includes(marker.pattern)) {
+        issues.push(`RULE: ${CANONICAL_RULE_FILE} is missing ${marker.label}`);
+      }
     }
   }
 
@@ -113,6 +105,7 @@ async function run() {
   const versionFiles = [
     'package.json',
     '.agents/plugins/agentic-senior-core/plugin.json',
+    '.agents/plugins/agentic-senior-core/.codex-plugin/plugin.json',
     'gemini-extension.json',
     'plugin.yaml',
   ];

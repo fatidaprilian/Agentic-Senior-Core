@@ -1,0 +1,1 @@
+Run the repository fingerprint workflow from skills/asc-fingerprint/SKILL.md. Build a read-only, evidence-backed map of the target repository before proposing conventions. Stop for approval before writing CONVENTIONS.md.

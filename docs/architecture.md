@@ -5,7 +5,7 @@
 Agentic Senior Core operates on a two-tier architecture:
 
 1. **Instructional Layer (Universal — Works in 23+ AI Tools)**:
-   - **Rules (`AGENTS.md` / `agentic-senior-core.md`) & Skills (`SKILL.md`)** are cross-compatible across **Google Antigravity IDE, Claude Code, Cursor, Windsurf, Copilot, Codex, Kiro, Roo, OpenCode, Zed, Aider, etc.**.
+   - **Rules, skills, and hooks in `.agents/plugins/agentic-senior-core/`** are the canonical bundle and work across **Google Antigravity IDE, Claude Code, Cursor, Windsurf, Copilot, Codex, Kiro, Roo, OpenCode, Zed, Aider, etc.**.
    - **Automatic Skill Triggering**: Agents attempt to detect and load skills if your prompt matches the skill's description (e.g., asking "perform a security audit" loads `asc-audit`).
    - **Manual Skill Triggering (Highly Recommended)**: Explicitly call skills using commands like `/asc-refactor` or `/asc-new-project` for guaranteed execution.
 

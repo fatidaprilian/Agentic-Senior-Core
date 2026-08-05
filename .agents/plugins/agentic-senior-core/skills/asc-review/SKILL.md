@@ -43,11 +43,14 @@ Grounded in: OWASP Risk Rating Methodology, Google Engineering Practices (code r
 - Secrets, tokens, credentials not committed or logged.
 - Authorization enforced at a trusted boundary.
 - Error responses keep internal details out of client responses.
+- User-derived URLs are protected against SSRF and user-controlled log values cannot forge or corrupt log entries.
+- New dependencies have verified identity and provenance; plausible package names are not evidence.
 
 ### Architecture
 - Layer boundaries clear. Controllers handle protocol translation only; business logic stays in services.
 - Abstractions backed by real duplication, not prediction. Straightforward code over clever solutions.
 - Complexity budget applied: fewer moving parts without losing safety.
+- New code follows a named analogous module in this codebase. Any deviation is explicitly justified.
 
 ### Testing
 - Changed behavior has appropriate tests.

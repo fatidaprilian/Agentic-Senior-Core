@@ -6,6 +6,7 @@ Available commands:
 - /asc-refactor -- Structured refactoring workflow
 - /asc-review -- Production-risk code review
 - /asc-audit -- Security and architecture audit
+- /asc-fingerprint -- Read-only repository convention mapping
 - /asc-help -- This help
 
-The universal coding rules from AGENTS.md are always active. Skills provide deeper, on-demand workflows.
+The canonical plugin rule is always active. Skills provide deeper, on-demand workflows.

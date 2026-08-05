@@ -14,9 +14,15 @@
       "languages": ["js", "ts", "jsx", "tsx", "mjs", "cjs"]
     },
     {
-      "id": "user-input-http",
+      "id": "potential-ssrf",
       "regex": "(axios|fetch|got|superagent)\\s*\\(\\s*.*?(req\\.(query|body|params)|process\\.env)",
-      "message": "Potentially unsafe input passed directly into an HTTP client. Validate and sanitize URL parameters first.",
+      "message": "Potential SSRF: user-controlled input reaches an HTTP client. Parse and allowlist the destination before fetching.",
+      "languages": ["js", "ts", "jsx", "tsx", "mjs", "cjs"]
+    },
+    {
+      "id": "potential-log-injection",
+      "regex": "(?:console\\.(?:log|info|warn|error)|logger\\.\\w+)\\s*\\(\\s*(?:req\\.(?:body|query|params|headers)|user(?:Input|Id)?|error\\.message)",
+      "message": "Potential log injection: user-controlled data is written directly to a log sink. Use structured logging and normalize line breaks/control characters.",
       "languages": ["js", "ts", "jsx", "tsx", "mjs", "cjs"]
     },
     {

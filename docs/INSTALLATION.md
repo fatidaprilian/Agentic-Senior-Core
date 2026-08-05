@@ -71,7 +71,7 @@ Rules and hooks load automatically on every session with zero per-project files.
 <details>
 <summary><b>Gemini CLI</b> (terminal agent)</summary>
 
-Auto-detected. Gemini CLI reads `gemini-extension.json` from the installed package and loads `AGENTS.md` as context. Commands available as `.toml` format (`/asc-refactor`, `/asc-review`, `/asc-audit`).
+Auto-detected. Gemini CLI reads `gemini-extension.json` from the installed package and loads the canonical plugin rule. Commands are available as `.toml` format (`/asc-refactor`, `/asc-review`, `/asc-audit`, `/asc-fingerprint`).
 
 </details>
 
@@ -154,7 +154,7 @@ Copies one file to `.kiro/steering/agentic-senior-core.md` with official `inclus
 asc adapter --continue
 ```
 
-Copies one file to `.continue/rules/agentic-senior-core.md`. Repeat per project.
+Copies one file to `.cursor/rules/agentic-senior-core.mdc`. Repeat per project.
 
 </details>
 
@@ -176,7 +176,7 @@ Copies one file to `.zed/rules/agentic-senior-core.md`. Zed also reads `AGENTS.m
 asc adapter --aider
 ```
 
-Copies one file to `CONVENTIONS.md` at project root. Aider reads this automatically. Repeat per project — or set it once globally in `~/.aider.conf.yml` with an absolute path into the npm package (`read: <npm root -g>/@ryuenn3123/agentic-senior-core/CONVENTIONS.md`). That pointer auto-updates with `npm update -g`.
+Copies one file to `CONVENTIONS.md` at project root. Aider reads this automatically. Repeat per project — or set it once globally in `~/.aider.conf.yml` with an absolute path into the npm package (`read: <npm root -g>/@ryuenn3123/agentic-senior-core/.agents/plugins/agentic-senior-core/rules/agentic-senior-core.md`). That pointer auto-updates with `npm update -g`.
 
 </details>
 
@@ -218,23 +218,23 @@ Copies one file to `.openhands/microagents/agentic-senior-core.md`. Repeat per p
 
 **Option A -- workspace rules (per project for 2.0 and IDE only):**
 
-Copy the rules file into your project's `.agents/rules/` directory:
+Copy the bundled plugin into your project's `.agents/plugins/` directory:
 
 ```bash
-# Create the directory first, then copy
-mkdir -p .agents/rules
+# Create the directory first, then copy the canonical bundle
+mkdir -p .agents/plugins
 
 # From the npm package (after Step 1)
-cp "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/rules/agentic-senior-core.md" .agents/rules/
+cp -R "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/plugins/agentic-senior-core" .agents/plugins/
 ```
 
 PowerShell (Windows):
 ```powershell
-mkdir .agents\rules -Force
-cp "$(npm root -g)/@ryuenn3123/agentic-senior-core/.agents/rules/agentic-senior-core.md" .agents\rules\
+New-Item -ItemType Directory -Force .agents\plugins
+Copy-Item -Recurse "$(npm root -g)\@ryuenn3123\agentic-senior-core\.agents\plugins\agentic-senior-core" .agents\plugins\
 ```
 
-Antigravity IDE and 2.0 read it automatically with `trigger: always_on`. *(Note: Antigravity CLI does not support workspace plugins, use Option B for CLI).*
+Antigravity IDE and 2.0 read the bundled rule automatically with `trigger: always_on`. *(Note: Antigravity CLI does not support workspace plugins, use Option B for CLI).*
 
 **Option B -- global install (all projects and ALL clients):**
 
@@ -327,10 +327,10 @@ asc global --all
 
 Tools without a global rules **file** (manual one-time setup instead):
 
-- **Cursor** — Settings → Rules → User Rules: paste the contents of `AGENTS.md` (plain text field; a global rules directory is still a Cursor feature request).
-- **Zed** — Rules Library in the Agent Panel: create a rule from `AGENTS.md` and mark it as default (paper clip icon).
+- **Cursor** — Settings → Rules → User Rules: paste the contents of `.agents/plugins/agentic-senior-core/rules/agentic-senior-core.md` (plain text field; a global rules directory is still a Cursor feature request).
+- **Zed** — Rules Library in the Agent Panel: create a rule from `.agents/plugins/agentic-senior-core/rules/agentic-senior-core.md` and mark it as default (paper clip icon).
 - **Continue** — add a rules block to the global `config.yaml`.
-- **Aider** — add `read: <absolute path to npm package>/CONVENTIONS.md` in `~/.aider.conf.yml`. This is a live pointer: it auto-updates with `npm update -g`, no re-copy ever.
+- **Aider** — add `read: <absolute path to npm package>/.agents/plugins/agentic-senior-core/rules/agentic-senior-core.md` in `~/.aider.conf.yml`. This is a live pointer: it auto-updates with `npm update -g`, no re-copy ever.
 
 Global rules load first; per-project adapter files (if present) take precedence on conflicts in every tool that supports both.
 
