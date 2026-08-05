@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.5.1
+
+### Fixed
+- **Dedup-Gate False Positives on Framework-Conventional Filenames**: Fixed `dedup-gate` hook incorrectly flagging files with identical names across different directories as duplicates when those names are mandated by the framework (e.g. Next.js `page.tsx`, `layout.tsx`; Remix `root.tsx`, `entry.server.tsx`; Expo Router `_layout.tsx`; Angular `*.component.ts`; SvelteKit `+page.svelte`; Storybook `*.stories.tsx`; test/spec files).
+- **Dedup Nudge Now Shows Relative Paths**: Changed nudge messages from bare basename (`page.tsx looks similar to page.tsx`) to relative path (`page.tsx looks similar to app/guest/quotation/page.tsx`).
+- **Raised Default `minTokens` from 30 to 50**: Filters out import-only boilerplate matches that are too short to be meaningful duplication.
+- **Expanded Default `ignoreDirs`**: Added `test`, `__tests__`, `dist`, `build`, `.next`, `.nuxt`, `.expo`, `coverage`, `.storybook`, `prisma/migrations`, `android`, `ios` to default scan exclusions.
+
 ## 6.5.0
 
 ### Added

@@ -1,6 +1,10 @@
 {
   "mode": "advisory",
-  "minTokens": 30,
+  "minTokens": 50,
   "scanRoot": null,
-  "ignoreDirs": ["tests", "migrations", "generated", "node_modules"]
+  "ignoreDirs": [
+    "tests", "test", "__tests__", "migrations", "generated", "node_modules",
+    "dist", "build", ".next", ".nuxt", ".expo", "coverage", ".storybook",
+    "prisma/migrations", "android", "ios"
+  ]
 }

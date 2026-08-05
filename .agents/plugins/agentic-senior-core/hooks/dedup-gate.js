@@ -20,6 +20,63 @@ const JSCPD_TIMEOUT_MS = 10000;
 // Recognized source root directories — scan scope walks up to the first match
 const SOURCE_ROOTS = ['src', 'lib', 'app'];
 
+// Framework-conventional filenames that MUST be identical across directories by design.
+// Matches where both files share one of these basenames in different dirs are not duplication.
+const FRAMEWORK_CONVENTIONAL_BASENAMES = new Set([
+  // Next.js App Router
+  'page.tsx', 'page.jsx', 'page.ts', 'page.js',
+  'layout.tsx', 'layout.jsx', 'layout.ts', 'layout.js',
+  'loading.tsx', 'loading.jsx', 'loading.ts', 'loading.js',
+  'error.tsx', 'error.jsx', 'error.ts', 'error.js',
+  'not-found.tsx', 'not-found.jsx', 'not-found.ts', 'not-found.js',
+  'template.tsx', 'template.jsx', 'template.ts', 'template.js',
+  'route.tsx', 'route.ts', 'route.js',
+  'default.tsx', 'default.jsx', 'default.ts', 'default.js',
+  // Remix
+  'root.tsx', 'root.jsx', 'root.ts', 'root.js',
+  'entry.server.tsx', 'entry.server.ts', 'entry.client.tsx', 'entry.client.ts',
+  // Expo Router
+  '_layout.tsx', '_layout.jsx', '_layout.ts', '_layout.js',
+  // Nuxt
+  'index.vue', 'app.vue',
+  // SvelteKit
+  '+page.svelte', '+layout.svelte', '+page.server.ts', '+page.server.js',
+  '+error.svelte', '+layout.server.ts', '+layout.server.js',
+  // Common convention / barrel files
+  'index.ts', 'index.js', 'index.tsx', 'index.jsx',
+  'types.ts', 'types.d.ts',
+  // Config files (declarative, structurally similar across projects)
+  'tailwind.config.ts', 'tailwind.config.js', 'tailwind.config.mjs',
+  'postcss.config.js', 'postcss.config.mjs', 'postcss.config.cjs',
+  'next.config.ts', 'next.config.js', 'next.config.mjs',
+  'vite.config.ts', 'vite.config.js', 'vite.config.mjs',
+  'tsconfig.json', 'jest.config.ts', 'jest.config.js', 'vitest.config.ts',
+]);
+
+// Suffix patterns for frameworks that mandate a naming convention (e.g. Angular).
+// Files matching the same suffix in different dirs are structural, not copy-paste.
+const FRAMEWORK_CONVENTIONAL_SUFFIXES = [
+  // Angular (*.component.ts, *.module.ts, *.service.ts, *.pipe.ts, *.directive.ts)
+  '.component.ts', '.component.js', '.module.ts', '.service.ts',
+  '.pipe.ts', '.directive.ts', '.guard.ts', '.resolver.ts',
+  // Storybook
+  '.stories.tsx', '.stories.jsx', '.stories.ts', '.stories.js',
+  // Test / spec (structurally similar boilerplate across suites)
+  '.spec.ts', '.spec.tsx', '.spec.js', '.spec.jsx',
+  '.test.ts', '.test.tsx', '.test.js', '.test.jsx',
+];
+
+function hasConventionalSuffix(basename) {
+  for (var i = 0; i < FRAMEWORK_CONVENTIONAL_SUFFIXES.length; i++) {
+    if (basename.endsWith(FRAMEWORK_CONVENTIONAL_SUFFIXES[i])) return true;
+  }
+  return false;
+}
+
+function isFrameworkConventional(basename) {
+  return FRAMEWORK_CONVENTIONAL_BASENAMES.has(basename) || hasConventionalSuffix(basename);
+}
+
 let inputBuffer = '';
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => {
@@ -63,7 +120,7 @@ process.stdin.on('data', chunk => {
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'asc-dedup-'));
 
     const ignoreFlags = (config.ignoreDirs || []).map(function (d) { return '--ignore "' + d + '"'; }).join(' ');
-    const minTokens = config.minTokens || 30;
+    const minTokens = config.minTokens || 50;
     const scanCmd = ' "' + scanDir + '" --min-tokens ' + minTokens
       + ' --reporters json --silent --output "' + tmpDir + '" ' + ignoreFlags;
 
@@ -201,7 +258,15 @@ function loadDedupConfig() {
       }
     } catch (_) {}
   }
-  return { mode: 'advisory', minTokens: 30, ignoreDirs: ['tests', 'migrations', 'generated', 'node_modules'] };
+  return {
+    mode: 'advisory',
+    minTokens: 50,
+    ignoreDirs: [
+      'tests', 'test', '__tests__', 'migrations', 'generated', 'node_modules',
+      'dist', 'build', '.next', '.nuxt', '.expo', 'coverage', '.storybook',
+      'prisma/migrations', 'android', 'ios',
+    ],
+  };
 }
 
 // minimal: attempt-then-fallback — try scan directly, fall back on failure.
@@ -238,6 +303,7 @@ function checkForDuplicates(report, filePath) {
   if (duplicates.length === 0) return null;
 
   var normalizedTarget = path.resolve(filePath).replace(/\\/g, '/').toLowerCase();
+  var targetBasename = path.basename(filePath);
 
   for (var i = 0; i < duplicates.length; i++) {
     var dup = duplicates[i];
@@ -245,9 +311,21 @@ function checkForDuplicates(report, filePath) {
     var secondName = path.resolve(dup.secondFile.name).replace(/\\/g, '/').toLowerCase();
 
     if (firstName === normalizedTarget || secondName === normalizedTarget) {
-      var matchedFile = firstName === normalizedTarget
-        ? path.basename(dup.secondFile.name)
-        : path.basename(dup.firstFile.name);
+      var otherRaw = firstName === normalizedTarget ? dup.secondFile.name : dup.firstFile.name;
+      var otherBasename = path.basename(otherRaw);
+
+      // Skip framework-conventional filenames in different directories — identical names
+      // are mandated by the framework (e.g. Next.js page.tsx, Angular *.component.ts),
+      // not copy-paste duplication.
+      if (isFrameworkConventional(targetBasename)
+          && isFrameworkConventional(otherBasename)
+          && path.dirname(path.resolve(filePath)) !== path.dirname(path.resolve(otherRaw))) {
+        continue;
+      }
+
+      // Show relative path instead of bare basename so the developer knows WHICH file.
+      var cwd = process.cwd();
+      var matchedFile = path.relative(cwd, path.resolve(otherRaw)).replace(/\\/g, '/');
       var lines = dup.lines || 0;
       // jscpd v5 reports fragments; estimate overlap percentage from line count
       var totalLines = (report.statistics && report.statistics.total && report.statistics.total.lines) || 1;
