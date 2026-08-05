@@ -120,7 +120,7 @@ process.stdin.on('data', chunk => {
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'asc-dedup-'));
 
     const ignoreFlags = (config.ignoreDirs || []).map(function (d) { return '--ignore "' + d + '"'; }).join(' ');
-    const minTokens = config.minTokens || 50;
+    const minTokens = config.minTokens || 30;
     const scanCmd = ' "' + scanDir + '" --min-tokens ' + minTokens
       + ' --reporters json --silent --output "' + tmpDir + '" ' + ignoreFlags;
 
@@ -260,7 +260,7 @@ function loadDedupConfig() {
   }
   return {
     mode: 'advisory',
-    minTokens: 50,
+    minTokens: 30,
     ignoreDirs: [
       'tests', 'test', '__tests__', 'migrations', 'generated', 'node_modules',
       'dist', 'build', '.next', '.nuxt', '.expo', 'coverage', '.storybook',
@@ -327,9 +327,19 @@ function checkForDuplicates(report, filePath) {
       var cwd = process.cwd();
       var matchedFile = path.relative(cwd, path.resolve(otherRaw)).replace(/\\/g, '/');
       var lines = dup.lines || 0;
-      // jscpd v5 reports fragments; estimate overlap percentage from line count
-      var totalLines = (report.statistics && report.statistics.total && report.statistics.total.lines) || 1;
-      var percent = Math.round((lines / totalLines) * 100);
+      var totalFileLines = 1;
+      try {
+        totalFileLines = fs.readFileSync(path.resolve(filePath), 'utf8').split('\n').length || 1;
+      } catch (_) {
+        totalFileLines = dup.firstFile.lines || dup.secondFile.lines || lines || 1;
+      }
+      var percent = Math.round((lines / totalFileLines) * 100);
+
+      // Skip trivial matches (import boilerplate, small overlaps)
+      if (lines < 10 && percent < 10) {
+        continue;
+      }
+
       return { matchedFile: matchedFile, lines: lines, percent: percent };
     }
   }

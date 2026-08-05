@@ -1,6 +1,6 @@
 {
   "mode": "advisory",
-  "minTokens": 50,
+  "minTokens": 30,
   "scanRoot": null,
   "ignoreDirs": [
     "tests", "test", "__tests__", "migrations", "generated", "node_modules",

@@ -3,7 +3,10 @@
 ## 6.5.1
 
 ### Fixed
-- **Dedup-Gate False Positives on Framework-Conventional Filenames**: Fixed `dedup-gate` hook incorrectly flagging files with identical names across different directories as duplicates when those names are mandated by the framework (e.g. Next.js `page.tsx`, `layout.tsx`; Remix `root.tsx`, `entry.server.tsx`; Expo Router `_layout.tsx`; Angular `*.component.ts`; SvelteKit `+page.svelte`; Storybook `*.stories.tsx`; test/spec files).
+- **Accurate Overlap Percentage Calculation**: Fixed `dedup-gate.js` and git pre-commit runner (`git-hook-generator.mjs`) calculating overlap percentage against total repository line count (`report.statistics.total.lines`), which caused small files to always report `0% overlap`. Now calculates percentage relative to the actual target file's line count.
+- **Minimum Match Threshold**: Added guardrail in `dedup-gate.js` and git pre-commit runner to ignore trivial matches (`lines < 10 && percent < 10`) so minor import boilerplate does not trigger advisories or block commits.
+- **Git Pre-Commit Runner Synchronization**: Synchronized generated `.asc/hooks/pre-commit-runner.cjs` template with all framework-conventional filename exclusions (Next.js, Remix, Expo Router, Angular, SvelteKit, etc.) and relative path reporting.
+- **Dedup-Gate False Positives on Framework-Conventional Filenames**: Fixed `dedup-gate` hook incorrectly flagging files with identical names across different directories as duplicates when those names are mandated by the framework.
 - **Dedup Nudge Now Shows Relative Paths**: Changed nudge messages from bare basename (`page.tsx looks similar to page.tsx`) to relative path (`page.tsx looks similar to app/guest/quotation/page.tsx`).
 - **Raised Default `minTokens` from 30 to 50**: Filters out import-only boilerplate matches that are too short to be meaningful duplication.
 - **Expanded Default `ignoreDirs`**: Added `test`, `__tests__`, `dist`, `build`, `.next`, `.nuxt`, `.expo`, `coverage`, `.storybook`, `prisma/migrations`, `android`, `ios` to default scan exclusions.
