@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.5.2
+
+### Fixed
+- **Pre-Commit Runner & Dedup-Gate Threshold & Percentage Calculation**: Fixed `percent` calculation relative to individual target file size instead of repository-wide total lines, added `lines < 10 && percent < 10` minimum match threshold, and synchronized framework-conventional filename exclusions.
+
 ## 6.5.1
 
 ### Fixed
