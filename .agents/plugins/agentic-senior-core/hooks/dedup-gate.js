@@ -116,6 +116,8 @@ process.stdin.on('data', chunk => {
     const config = loadDedupConfig();
     if (!isQualifyingEdit(toolName, toolInput, config)) { process.exit(0); return; }
 
+    if (hasValidInlineIgnore(filePath)) { process.exit(0); return; }
+
     const scanDir = resolveScanDir(filePath, config);
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'asc-dedup-'));
 
@@ -127,7 +129,7 @@ process.stdin.on('data', chunk => {
     const report = runJscpdScan(scanCmd, tmpDir);
     if (!report) { cleanup(tmpDir); process.exit(0); return; }
 
-    const finding = checkForDuplicates(report, filePath);
+    const finding = checkForDuplicates(report, filePath, config);
     if (!finding) { cleanup(tmpDir); process.exit(0); return; }
 
     const nudge = '[ASC Dedup] ' + path.basename(filePath) + ' looks similar to '
@@ -298,10 +300,44 @@ function loadReport(tmpDir) {
   }
 }
 
-function checkForDuplicates(report, filePath) {
+function hasValidInlineIgnore(filePath) {
+  try {
+    if (!fs.existsSync(filePath)) return false;
+    var content = fs.readFileSync(filePath, 'utf8');
+    if (content.indexOf('jscpd:ignore-start') !== -1) return true;
+    var match = content.match(/asc-dedup:ignore\s*--\s*(.+)/i);
+    return Boolean(match && match[1] && match[1].trim().length > 0);
+  } catch (_) {
+    return false;
+  }
+}
+
+function isAllowedDuplicate(fileA, fileB, allowedDuplicates) {
+  if (!Array.isArray(allowedDuplicates) || allowedDuplicates.length === 0) return false;
+  var normA = path.resolve(fileA).replace(/\\/g, '/').toLowerCase();
+  var normB = path.resolve(fileB).replace(/\\/g, '/').toLowerCase();
+  var baseA = path.basename(fileA).toLowerCase();
+  var baseB = path.basename(fileB).toLowerCase();
+
+  for (var i = 0; i < allowedDuplicates.length; i++) {
+    var pair = allowedDuplicates[i];
+    if (!Array.isArray(pair) || pair.length < 2) continue;
+    var p0Norm = path.resolve(pair[0]).replace(/\\/g, '/').toLowerCase();
+    var p1Norm = path.resolve(pair[1]).replace(/\\/g, '/').toLowerCase();
+    var p0Base = path.basename(pair[0]).toLowerCase();
+    var p1Base = path.basename(pair[1]).toLowerCase();
+
+    if ((normA === p0Norm && normB === p1Norm) || (normA === p1Norm && normB === p0Norm)) return true;
+    if ((baseA === p0Base && baseB === p1Base) || (baseA === p1Base && baseB === p0Base)) return true;
+  }
+  return false;
+}
+
+function checkForDuplicates(report, filePath, config) {
   var duplicates = report.duplicates || [];
   if (duplicates.length === 0) return null;
 
+  var allowedDuplicates = config && config.allowedDuplicates;
   var normalizedTarget = path.resolve(filePath).replace(/\\/g, '/').toLowerCase();
   var targetBasename = path.basename(filePath);
 
@@ -313,6 +349,10 @@ function checkForDuplicates(report, filePath) {
     if (firstName === normalizedTarget || secondName === normalizedTarget) {
       var otherRaw = firstName === normalizedTarget ? dup.secondFile.name : dup.firstFile.name;
       var otherBasename = path.basename(otherRaw);
+
+      if (isAllowedDuplicate(filePath, otherRaw, allowedDuplicates)) {
+        continue;
+      }
 
       // Skip framework-conventional filenames in different directories — identical names
       // are mandated by the framework (e.g. Next.js page.tsx, Angular *.component.ts),

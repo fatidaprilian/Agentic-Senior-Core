@@ -2,6 +2,7 @@
   "mode": "advisory",
   "minTokens": 30,
   "scanRoot": null,
+  "allowedDuplicates": [],
   "ignoreDirs": [
     "tests", "test", "__tests__", "migrations", "generated", "node_modules",
     "dist", "build", ".next", ".nuxt", ".expo", "coverage", ".storybook",

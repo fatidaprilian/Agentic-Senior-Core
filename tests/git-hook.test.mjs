@@ -225,4 +225,67 @@ module.exports = { calculateTax };`;
       await fs.rm(tmpDir, { recursive: true, force: true });
     }
   });
+
+  it('allows commit when file contains valid inline ignore comment with reason', async () => {
+    const tmpDir = await createGitRepo();
+
+    try {
+      await fs.writeFile(path.join(tmpDir, 'original.js'), DUPLICATE_BLOCK, 'utf8');
+      execSync('git add original.js && git commit -m "add original"', { cwd: tmpDir, stdio: 'pipe' });
+
+      installGitPreCommitHook({ cwd: tmpDir });
+
+      // Create duplicate file but add valid inline ignore comment with reason
+      const duplicateContent = '// asc-dedup:ignore -- Intentional domain separation for pdf generator\n'
+        + DUPLICATE_BLOCK.replace('processUserData', 'processUserData2');
+      await fs.writeFile(path.join(tmpDir, 'duplicate.js'), duplicateContent, 'utf8');
+      execSync('git add duplicate.js', { cwd: tmpDir, stdio: 'pipe' });
+
+      let exitCode = 0;
+      try {
+        execSync('node .asc/hooks/pre-commit-runner.cjs', { cwd: tmpDir, stdio: 'pipe', timeout: 30000 });
+      } catch (err) {
+        exitCode = err.status;
+      }
+
+      assert.strictEqual(exitCode, 0, 'Runner should exit 0 when inline ignore with reason is present');
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('allows commit when duplicate pair is whitelisted in allowedDuplicates config', async () => {
+    const tmpDir = await createGitRepo();
+
+    try {
+      await fs.writeFile(path.join(tmpDir, 'original.js'), DUPLICATE_BLOCK, 'utf8');
+      execSync('git add original.js && git commit -m "add original"', { cwd: tmpDir, stdio: 'pipe' });
+
+      installGitPreCommitHook({ cwd: tmpDir });
+
+      // Add allowedDuplicates config
+      const ascDir = path.join(tmpDir, '.asc');
+      await fs.mkdir(ascDir, { recursive: true });
+      await fs.writeFile(
+        path.join(ascDir, 'dedup-config.json'),
+        JSON.stringify({ allowedDuplicates: [['original.js', 'duplicate.js']] }),
+        'utf8'
+      );
+
+      const duplicateContent = DUPLICATE_BLOCK.replace('processUserData', 'processUserData2');
+      await fs.writeFile(path.join(tmpDir, 'duplicate.js'), duplicateContent, 'utf8');
+      execSync('git add duplicate.js', { cwd: tmpDir, stdio: 'pipe' });
+
+      let exitCode = 0;
+      try {
+        execSync('node .asc/hooks/pre-commit-runner.cjs', { cwd: tmpDir, stdio: 'pipe', timeout: 30000 });
+      } catch (err) {
+        exitCode = err.status;
+      }
+
+      assert.strictEqual(exitCode, 0, 'Runner should exit 0 when duplicate pair is in allowedDuplicates whitelist');
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
+  });
 });

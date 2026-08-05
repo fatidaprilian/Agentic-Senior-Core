@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.5.3
+
+### Added & Fixed
+- **Clean-as-You-Code Legacy Protection**: Ensures pre-commit runner and IDE hooks only evaluate newly staged/modified files against the codebase, leaving unstaged legacy code completely unblocked.
+- **Audit-Grade Project Whitelisting**: Added `allowedDuplicates` configuration array in `.asc/dedup-config.json` for intentional domain pair whitelisting tracked via Git PRs.
+- **Mandatory-Reason Inline Comment Suppression**: Added support for `// asc-dedup:ignore -- <reason>` inline comments. Bare comments without a reason tag are ignored to prevent AI shortcut abuse.
+- **Calibrated Pre-Commit Blocking Gate**: Set pre-commit blocking thresholds to `MIN_BLOCKING_LINES = 15` AND `MIN_BLOCKING_PERCENT = 25%` to prevent premature abstraction while blocking major copy-paste duplication.
+
 ## 6.5.2
 
 ### Fixed
