@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.6.1
+
+### Fixed
+- **Automated Kilo Skills Installation**: Updated `asc global --kilocode` and `asc adapter --kilocode` to automatically deploy all 13 ASC Agent Skills into `~/.kilo/skills/` (global) and `.kilo/skills/` (workspace) so Kilo Code auto-discovers them in the UI.
+
 ## 6.6.0
 
 ### Added
