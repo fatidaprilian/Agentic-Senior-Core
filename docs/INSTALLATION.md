@@ -184,10 +184,12 @@ Copies one file to `CONVENTIONS.md` at project root. Aider reads this automatica
 <summary><b>Kilo Code</b> (VS Code extension)</summary>
 
 ```bash
-asc adapter --kilocode
+asc global --kilocode
 ```
 
-Copies one file to `.kilocode/rules/agentic-senior-core.md`. Repeat per project — or install once globally with `asc global --kilocode`. On Kilo v7+, the zero-maintenance option is pointing the `instructions:` array in `~/.config/kilo/kilo.jsonc` at the rules file inside the npm package (auto-updates with `npm update -g`).
+**Recommended (Global)**: Installs native plugin to `~/.config/kilo/plugin/agentic-senior-core.js` and rules to `~/.config/kilo/rules/agentic-senior-core.md` (and Windows `%APPDATA%\kilo\`). Kilo Code loads global plugins automatically across all workspaces with zero per-project maintenance.
+
+*Optional per-project setup:* `asc adapter --kilocode` generates local `.kilo/plugin/agentic-senior-core.js` and `.kilo/rules/agentic-senior-core.md` in the current workspace.
 
 </details>
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 6.6.0
+
+### Added
+- **Native Kilo Code / OpenCode Plugin Integration**: Added native ES module plugin (`agentic-senior-core.js`) hooking into `experimental.chat.system.transform` for dynamic system prompt injection, `experimental.session.compacting` for context compaction persistence, and `shell.env` for environment variable injection.
+- **Cross-Platform Global & Local Installation**: Updated `asc global --kilocode` as recommended zero-maintenance global setup (`~/.config/kilo/plugin/` and `~/.config/kilo/rules/` or Windows `%APPDATA%\kilo\`), and `asc adapter --kilocode` for local project setup (`.kilo/plugin/` and `.kilo/rules/`).
+- **Strict Adapter Isolation**: Ensured non-Kilo target adapters (`codex`, `antigravity`, `cursor`, `windsurf`, `cline`, `roo`, `kiro`, `openhands`, `copilot`) strictly isolate target files without injecting Kilo plugin dependencies.
+
 ## 6.5.3
 
 ### Added & Fixed

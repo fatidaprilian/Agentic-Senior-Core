@@ -33,7 +33,7 @@ Single file containing the full rule set. Must be copied into each project. Gene
 | Continue | `.continue/rules/agentic-senior-core.md` | Markdown |
 | Zed | `.zed/rules/agentic-senior-core.md` | Markdown (also reads AGENTS.md natively) |
 | Aider | `CONVENTIONS.md` | Markdown |
-| Kilo Code | `.kilocode/rules/agentic-senior-core.md` | Markdown |
+| Kilo Code | `.kilo/rules/agentic-senior-core.md`, `.kilo/plugin/agentic-senior-core.js` | JS Plugin & Markdown |
 | Roo Code | `.roo/rules/agentic-senior-core.md` | Markdown |
 | OpenHands | `.openhands/microagents/agentic-senior-core.md` | Markdown |
 
