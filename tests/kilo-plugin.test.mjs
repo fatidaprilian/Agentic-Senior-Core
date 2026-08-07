@@ -11,12 +11,16 @@ const repositoryRoot = path.resolve(path.dirname(currentFilePath), '..');
 
 describe('Kilo Code Native Plugin & Adapter Integration', () => {
   it('canonical kilo-plugin ES module exists and has valid export structure', async () => {
-    const pluginPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'kilo-plugin', 'agentic-senior-core.js');
+    const pluginPath = path.join(repositoryRoot, 'lib', 'kilo-plugin', 'agentic-senior-core.js');
     const content = await fs.readFile(pluginPath, 'utf8');
     assert.ok(content.includes('export default'), 'Plugin must default export module');
     assert.ok(content.includes('id: "agentic-senior-core"'), 'Plugin must declare id');
     assert.ok(content.includes('experimental.chat.system.transform'), 'Plugin must register system prompt transform hook');
     assert.ok(content.includes('experimental.session.compacting'), 'Plugin must register compaction hook');
+
+    const universalPluginKiloFolder = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'kilo-plugin');
+    const universalHasKiloFolder = await fs.access(universalPluginKiloFolder).then(() => true).catch(() => false);
+    assert.equal(universalHasKiloFolder, false, '.agents/plugins/agentic-senior-core must NOT contain kilo-plugin folder');
   });
 
   it('asc adapter --kilocode creates modern .kilo/ rules and plugin files', async () => {

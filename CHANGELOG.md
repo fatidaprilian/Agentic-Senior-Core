@@ -1,8 +1,9 @@
 # Changelog
 
-## 6.6.1
+## 6.6.2
 
 ### Fixed
+- **Strict Kilo Plugin Target Isolation**: Isolated `kilo-plugin` source to `lib/kilo-plugin/agentic-senior-core.js` and added explicit ignore filters in `installAntigravityIde` and `installCodexGlobal` so Antigravity 2.0, Codex, and Claude remain 100% clean of Kilo plugin files.
 - **Automated Kilo Skills Installation**: Updated `asc global --kilocode` and `asc adapter --kilocode` to automatically deploy all 13 ASC Agent Skills into `~/.kilo/skills/` (global) and `.kilo/skills/` (workspace) so Kilo Code auto-discovers them in the UI.
 
 ## 6.6.0
