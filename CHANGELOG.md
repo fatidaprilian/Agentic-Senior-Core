@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.7.0
+
+### Added & Fixed (Audit v2 Alignment)
+- **Hardened Git Commit/Push Gate**: PreToolUse dependency gate now uses a token-based CLI parser to block `git commit` and `git push` even when options exist between `git` and the subcommand (e.g. `git -C /path commit`, `git --git-dir=.git push`, `git -c user.name=foo commit`).
+- **Fake Success & Empirical Verification Guardrails**: Added explicit core rules preventing simulated success/stubbed values, and requiring empirical execution output before marking tasks complete.
+- **HalluSquatting Mitigation**: Extended dependency and skill verification rules across core rules, `asc-adapter`, and `asc-review` to verify `git clone` targets and plugin/skill install paths against trusted sources before execution.
+- **Lint Leakage Fix**: Removed language-specific `@typescript-eslint` arrow function rule from universal core rules, deferring style enforcement to repo-level linters/formatters.
+- **Observability & Concurrency**: Added structured key-value logging guidelines, request correlation ID propagation, and mandatory transaction wrapping for multi-step atomic writes.
+- **Domain Skill Alignment**: Synchronized testing baselines and anti over-mocking rules across `agentic-senior-core.md`, `asc-reference/SKILL.md`, `asc-review/SKILL.md`, and `asc-add-feature/SKILL.md`.
+
 ## 6.6.2
 
 ### Fixed

@@ -44,7 +44,7 @@ Grounded in: OWASP Risk Rating Methodology, Google Engineering Practices (code r
 - Authorization enforced at a trusted boundary.
 - Error responses keep internal details out of client responses.
 - User-derived URLs are protected against SSRF and user-controlled log values cannot forge or corrupt log entries.
-- New dependencies have verified identity and provenance; plausible package names are not evidence.
+- New dependencies have verified identity and provenance; plausible package names are not evidence. Confirm git clone targets and plugin/skill install paths against trusted sources (mitigate HalluSquatting).
 
 ### Architecture
 - Layer boundaries clear. Controllers handle protocol translation only; business logic stays in services.
@@ -53,7 +53,8 @@ Grounded in: OWASP Risk Rating Methodology, Google Engineering Practices (code r
 - New code follows a named analogous module in this codebase. Any deviation is explicitly justified.
 
 ### Testing
-- Changed behavior has appropriate tests.
+- Changed behavior has appropriate tests (baseline: happy path + failure mode).
+- Never mock the unit under test — mock only external boundaries and dependencies.
 - Tests assert behavior and contracts, not implementation trivia.
 - Critical flows include failure-path coverage.
 

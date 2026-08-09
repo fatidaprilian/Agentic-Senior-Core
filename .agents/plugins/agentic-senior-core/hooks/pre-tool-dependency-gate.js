@@ -126,9 +126,54 @@ process.stdin.on('data', chunk => {
 });
 
 function isGitCommitOrPush(command) {
-  // Match: git commit, git push, git push --force, git push -f
-  // Also match chained commands: git add . ; git commit, etc.
-  return /\bgit\s+(commit|push)\b/i.test(command);
+  if (!command || typeof command !== 'string') return false;
+
+  // Split multi-command strings (chained by &&, ||, ;, \n, |)
+  const subcommands = command.split(/[\r\n;&|]+/);
+
+  for (let i = 0; i < subcommands.length; i++) {
+    const sub = subcommands[i].trim();
+    if (!sub || !/\b(?:git|git\.exe)\b/i.test(sub)) continue;
+
+    // Tokenize sub-command handling quotes
+    const tokens = sub.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) || [];
+    let gitIdx = -1;
+
+    for (let j = 0; j < tokens.length; j++) {
+      const clean = tokens[j].replace(/^['"]|['"]$/g, '').toLowerCase();
+      if (clean === 'git' || clean === 'git.exe') {
+        gitIdx = j;
+        break;
+      }
+    }
+
+    if (gitIdx === -1) continue;
+
+    // Parse tokens after 'git' to find the git subcommand
+    for (let k = gitIdx + 1; k < tokens.length; k++) {
+      let tok = tokens[k].replace(/^['"]|['"]$/g, '');
+      if (!tok) continue;
+
+      // If token is a flag (-C, --git-dir, -c, --no-pager, etc.)
+      if (tok.startsWith('-')) {
+        // Skip standalone argument for options expecting a value after whitespace
+        if (['-C', '-c', '--git-dir', '--work-tree', '--namespace', '--exec-path'].includes(tok)) {
+          k++;
+        }
+        continue;
+      }
+
+      // First non-flag token after git global options is the git subcommand
+      const gitSub = tok.toLowerCase();
+      if (gitSub === 'commit' || gitSub === 'push' || gitSub === 'commit-tree') {
+        return true;
+      }
+
+      break;
+    }
+  }
+
+  return false;
 }
 
 function extractDeps(text, pattern) {

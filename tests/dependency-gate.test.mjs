@@ -34,4 +34,42 @@ describe('Polyglot Dependency Gate', () => {
     });
     assert.equal(res.status, 0, 'Should exit code 0 on safe commands');
   });
+
+  it('hard-blocks standard git commit and push commands', () => {
+    const commands = ['git commit -m "feat"', 'git push origin main', 'git push --force'];
+    for (const command of commands) {
+      const payload = {
+        tool_name: 'run_command',
+        tool_input: { command }
+      };
+      const res = spawnSync('node', [gateScript], {
+        input: JSON.stringify(payload),
+        encoding: 'utf8'
+      });
+      assert.equal(res.status, 2, `Should exit code 2 on hard block for "${command}"`);
+      assert.ok(res.stdout.includes('[ASC Hard-Block] git commit/push detected'));
+    }
+  });
+
+  it('hard-blocks git commit/push with flags before subcommand (git -C, git --git-dir, git -c)', () => {
+    const commands = [
+      'git -C /tmp commit -m "bypass attempt"',
+      'git --git-dir=.git push origin main',
+      'git -c user.name=foo commit -m "msg"',
+      'git --no-pager commit -m "msg"'
+    ];
+    for (const command of commands) {
+      const payload = {
+        tool_name: 'run_command',
+        tool_input: { command }
+      };
+      const res = spawnSync('node', [gateScript], {
+        input: JSON.stringify(payload),
+        encoding: 'utf8'
+      });
+      assert.equal(res.status, 2, `Should exit code 2 on hard block for "${command}"`);
+      assert.ok(res.stdout.includes('[ASC Hard-Block] git commit/push detected'));
+    }
+  });
 });
+

@@ -50,5 +50,5 @@ Format:
 1. On approval of Phase 2, update `workflow-gate.json` phase to `implement`.
 2. Recommend a fresh context (intentional compaction) at the phase boundary or after roughly 20-30 tool calls. Do not wait until degradation is subjectively noticeable.
 3. Execute the approved plan.
-4. Validate: tests pass, no duplicate code introduced, plan items checked off.
+4. Validate: tests pass with empirical execution logs outputted, no duplicate code introduced, plan items checked off.
 5. On completion, give a short comprehension summary of what changed and why, then clear the state in `workflow-gate.json` by overwriting it with `{}`.

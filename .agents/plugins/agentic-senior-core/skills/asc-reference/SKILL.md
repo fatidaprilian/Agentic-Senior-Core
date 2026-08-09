@@ -12,11 +12,11 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 
 ## Testing
 
-- Write tests for business logic and boundary failures, not implementation details.
+- New business logic requires at least one happy path test and one primary failure mode test.
+- Never mock the unit under test — mock only external dependencies and boundaries.
+- Tests assert behavior and contracts, not implementation details. Must be fast, isolated, deterministic.
 - Cover happy path, error paths, edge cases, and empty states.
-- Tests must be fast, isolated, deterministic.
-- Integration tests for critical data paths.
-- Sensitive mutations need idempotency or duplicate-submit coverage.
+- Integration tests for critical data paths. Sensitive mutations need idempotency or duplicate-submit coverage.
 - CI pipelines block on test failures.
 
 ## API Design
