@@ -23,7 +23,10 @@ describe('Git Hook Generator & Hardening', () => {
 
     const runnerContent = await fs.readFile(res.runnerPath, 'utf8');
     assert.ok(runnerContent.includes('runPreCommitGate'), 'Runner script contains entry point');
-    assert.ok(runnerContent.includes('runEslintAutoFix'), 'Runner script contains ESLint auto-fix step');
+    assert.ok(runnerContent.includes('checkSecrets'), 'Runner script contains secret detection');
+    assert.ok(runnerContent.includes('checkMergeConflictMarkers'), 'Runner script contains merge conflict check');
+    assert.ok(runnerContent.includes('checkLargeFiles'), 'Runner script contains large file check');
+    assert.ok(!runnerContent.includes('runEslintAutoFix'), 'Runner script does NOT contain ESLint auto-fix');
 
     await fs.rm(tmpDir, { recursive: true, force: true });
   });
@@ -197,18 +200,16 @@ module.exports = { calculateTax };`;
     }
   });
 
-  it('skips ESLint auto-fix silently when no ESLint config exists', async () => {
+  it('blocks commit when staged file contains a private key pattern', async () => {
     const tmpDir = await createGitRepo();
 
     try {
       installGitPreCommitHook({ cwd: tmpDir });
 
-      // Stage a file with void arrow shorthand — no tsconfig/eslint, so lint step should skip
-      const content = 'const handler = () => setState(42);\nmodule.exports = { handler };\n';
-      await fs.writeFile(path.join(tmpDir, 'handler.js'), content, 'utf8');
-      execSync('git add handler.js', { cwd: tmpDir, stdio: 'pipe' });
+      const secretContent = '-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA0Z\n-----END RSA PRIVATE KEY-----\n';
+      await fs.writeFile(path.join(tmpDir, 'secrets.txt'), secretContent, 'utf8');
+      execSync('git add secrets.txt', { cwd: tmpDir, stdio: 'pipe' });
 
-      // Should not throw — lint step skips, dedup finds nothing
       let exitCode = 0;
       try {
         execSync('node .asc/hooks/pre-commit-runner.cjs', {
@@ -220,7 +221,61 @@ module.exports = { calculateTax };`;
         exitCode = err.status;
       }
 
-      assert.strictEqual(exitCode, 0, 'Runner should exit 0 — no ESLint config, no duplicates');
+      assert.strictEqual(exitCode, 1, 'Runner should exit 1 when private key is detected');
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('blocks commit when staged file contains merge conflict markers', async () => {
+    const tmpDir = await createGitRepo();
+
+    try {
+      installGitPreCommitHook({ cwd: tmpDir });
+
+      const conflictContent = 'function hello() {\n<<<<<<< HEAD\n  return 1;\n=======\n  return 2;\n>>>>>>> branch\n}\n';
+      await fs.writeFile(path.join(tmpDir, 'conflict.js'), conflictContent, 'utf8');
+      execSync('git add conflict.js', { cwd: tmpDir, stdio: 'pipe' });
+
+      let exitCode = 0;
+      try {
+        execSync('node .asc/hooks/pre-commit-runner.cjs', {
+          cwd: tmpDir,
+          stdio: 'pipe',
+          timeout: 30000,
+        });
+      } catch (err) {
+        exitCode = err.status;
+      }
+
+      assert.strictEqual(exitCode, 1, 'Runner should exit 1 when merge conflict markers are detected');
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('allows commit when no secrets, conflicts, or large files detected', async () => {
+    const tmpDir = await createGitRepo();
+
+    try {
+      installGitPreCommitHook({ cwd: tmpDir });
+
+      const content = 'const handler = () => setState(42);\nmodule.exports = { handler };\n';
+      await fs.writeFile(path.join(tmpDir, 'handler.js'), content, 'utf8');
+      execSync('git add handler.js', { cwd: tmpDir, stdio: 'pipe' });
+
+      let exitCode = 0;
+      try {
+        execSync('node .asc/hooks/pre-commit-runner.cjs', {
+          cwd: tmpDir,
+          stdio: 'pipe',
+          timeout: 30000,
+        });
+      } catch (err) {
+        exitCode = err.status;
+      }
+
+      assert.strictEqual(exitCode, 0, 'Runner should exit 0 — clean file, no violations');
     } finally {
       await fs.rm(tmpDir, { recursive: true, force: true });
     }

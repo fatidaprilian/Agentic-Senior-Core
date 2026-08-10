@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.7.3
+
+### Added & Fixed
+- **Universal Pre-Commit Security & Hygiene Checks**: Replaced language-specific ESLint auto-fix with 3 industry-standard, language-agnostic pre-commit checks:
+  - **Secret Detection**: Blocks commits containing private keys, AWS access keys, GitHub tokens, and generic API key patterns.
+  - **Merge Conflict Markers**: Blocks commits with leftover `<<<<<<<` / `=======` / `>>>>>>>` markers.
+  - **Large File Prevention**: Blocks commits with files exceeding 500KB (configurable via `maxFileSizeKB` in `.asc/dedup-config.json`).
+- **Removed ESLint Auto-Fix from Pre-Commit Runner**: ESLint/Biome/Prettier are language-specific tools that should be configured per-project via `lint-staged`, not globally by ASC. Global hooks now follow the industry best practice of "detect & block only, never auto-fix."
+
 ## 6.7.2
 
 ### Added & Fixed
