@@ -300,6 +300,8 @@ module.exports = { calculateTax };`;
     assert.ok(content.includes('.husky/pre-commit'), 'Global dispatcher checks .husky/pre-commit');
     assert.ok(content.includes('.git/hooks/pre-commit.local'), 'Global dispatcher checks local hook fallback');
     assert.ok(content.includes('.asc/hooks/pre-commit-runner.cjs'), 'Global dispatcher checks ASC runner');
+    assert.ok(content.includes('git rev-parse --show-toplevel'), 'Global dispatcher resolves Git Root via rev-parse');
+    assert.ok(content.includes('"$GIT_ROOT"/apps/*'), 'Global dispatcher performs monorepo subfolder scan');
 
     await fs.rm(tmpHome, { recursive: true, force: true });
   });

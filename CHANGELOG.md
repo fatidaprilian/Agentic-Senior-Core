@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.7.2
+
+### Added & Fixed
+- **Monorepo & Subfolder Husky Hook Auto-Detection**: Enhanced Smart Global Git Pre-Commit Dispatcher script (`~/.asc/global-hooks/pre-commit`) to resolve `git rev-parse --show-toplevel` and perform multi-level scans for local Husky hooks across Git Root and monorepo subfolders (`web/`, `api/`, `apps/*`, `services/*`, `packages/*`).
+
 ## 6.7.1
 
 ### Added & Fixed
