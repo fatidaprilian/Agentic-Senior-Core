@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { execSync } from 'node:child_process';
-import { installGitPreCommitHook } from '../lib/cli/commands/git-hook-generator.mjs';
+import { installGitPreCommitHook, installGlobalGitPreCommitHook } from '../lib/cli/commands/git-hook-generator.mjs';
 import { runUninstallCommand } from '../lib/cli/commands/uninstall.mjs';
 import { getThresholds } from '../.agents/plugins/agentic-senior-core/hooks/constants.cjs';
 
@@ -287,5 +287,20 @@ module.exports = { calculateTax };`;
     } finally {
       await fs.rm(tmpDir, { recursive: true, force: true });
     }
+  });
+
+  it('installs global pre-commit hook dispatcher correctly', async () => {
+    const tmpHome = await fs.mkdtemp(path.join(os.tmpdir(), 'asc-global-hook-test-'));
+    const res = installGlobalGitPreCommitHook({ homeDir: tmpHome });
+    assert.strictEqual(res.installed, true);
+    assert.strictEqual(res.global, true);
+    assert.strictEqual(res.hookPath, path.join(tmpHome, '.asc', 'global-hooks', 'pre-commit'));
+
+    const content = await fs.readFile(res.hookPath, 'utf8');
+    assert.ok(content.includes('.husky/pre-commit'), 'Global dispatcher checks .husky/pre-commit');
+    assert.ok(content.includes('.git/hooks/pre-commit.local'), 'Global dispatcher checks local hook fallback');
+    assert.ok(content.includes('.asc/hooks/pre-commit-runner.cjs'), 'Global dispatcher checks ASC runner');
+
+    await fs.rm(tmpHome, { recursive: true, force: true });
   });
 });

@@ -31,9 +31,10 @@ Adapter hosts (one file per project): Cursor, Devin Desktop, Cline, GitHub Copil
 
 ```bash
 asc status                # Show detected hosts
-asc adapter --all         # Generate all adapters
-asc adapter --cursor      # Generate for specific host
-asc install-git-hook      # Install native Git pre-commit hook (recommended for all hosts)
+asc global --all          # Install global rules and Smart Global Git Hook dispatcher (~/.asc/global-hooks)
+asc adapter --all         # Generate workspace adapter files for all supported hosts
+asc adapter --cursor      # Generate workspace adapter for specific host
+asc install-git-hook      # Install per-repository native Git pre-commit hook (for independent projects)
 asc uninstall             # Remove all ASC adapter files and git hooks
 asc uninstall --dry-run   # Preview what would be removed
 ```
@@ -44,4 +45,4 @@ asc uninstall --dry-run   # Preview what would be removed
 - Cursor uses `.mdc` format with `alwaysApply: true` frontmatter.
 - Windsurf is now Devin Desktop. Use `--devin` for the preferred path, `--windsurf` for legacy.
 - Zed also reads `AGENTS.md` natively, so the adapter is optional.
-- **Git Pre-Commit Hook (`asc install-git-hook`)**: Host plugin runtimes vary — adapter hosts and certain chat surfaces (e.g., Antigravity IDE / Antigravity 2.0 chat interface) do not run agent lifecycle hooks. Installing the native Git pre-commit hook ensures 100% deterministic duplicate code blocking and ESLint auto-fixing directly via Git on all hosts.
+- **Git Pre-Commit Hooks**: `asc global --all` configures a Smart Global Git Pre-Commit Hook (`~/.asc/global-hooks`) that protects all projects on your machine without modifying team `.git/hooks` directories. For independent projects where explicit per-repository enforcement is desired, use `asc install-git-hook`.

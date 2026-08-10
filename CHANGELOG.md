@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.7.1
+
+### Added & Fixed
+- **Smart Global Git Hook Dispatcher (`asc global --all`)**: Integrated global git hook setup directly into `asc global` and `asc global --all`. Installs a smart global dispatcher (`~/.asc/global-hooks/pre-commit`) that prioritizes project-level team hooks (`.husky/pre-commit` or `.git/hooks/pre-commit.local`) before running ASC quality checks.
+- **Zero-Pollution Workspace Adapter**: Updated `asc adapter` to focus strictly on generating workspace IDE rule files without auto-installing `.git/hooks` in shared team repositories.
+- **Explicit CLI Flag Support**: Added `asc install-git-hook --global` flag for explicit global hook dispatcher installation on developer workstations.
+- **Documentation & Skill Alignment**: Updated `README.md`, `docs/INSTALLATION.md`, and `skills/asc-adapter/SKILL.md` to reflect smart global dispatcher capabilities and per-repo guidance.
+
 ## 6.7.0
 
 ### Added & Fixed (Audit v2 Alignment)

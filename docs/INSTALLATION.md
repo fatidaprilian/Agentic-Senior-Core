@@ -309,7 +309,7 @@ Generates adapter files for Cursor, Devin Desktop, Windsurf, Cline, Copilot, Kir
 
 ### Global install (all projects, zero project files)
 
-Most IDE tools also support user-level rules that apply to **every project** — no files in any repo root. One command installs them all:
+Most IDE tools also support user-level rules that apply to **every project** — no files in any repo root. One command installs them all and configures a **Smart Global Git Pre-Commit Hook** (`~/.asc/global-hooks/pre-commit` via `git config --global core.hooksPath`) that protects your machine across all repositories without polluting team `.git/hooks` directories:
 
 ```bash
 asc global --all
