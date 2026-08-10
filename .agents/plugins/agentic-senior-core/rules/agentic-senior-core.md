@@ -74,7 +74,7 @@ When picking step 5 or 6 (if non-trivial):
 
 ## Workflow
 
-- Prefix terminal commands with `ascx` to compress output.
+- Prefix ALL terminal commands with `ascx` to compress output and save tokens (e.g., `ascx <your_command>`).
 - Never run `git commit`, `git push`, or `git push --force` unless explicitly requested this turn.
 - Testing baseline: New business logic receives at least one happy path test and one primary failure mode test, unless waived by user.
 - Test quality: Never mock the unit under test — mock only external boundaries/dependencies.
