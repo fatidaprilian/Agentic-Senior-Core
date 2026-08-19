@@ -1,6 +1,20 @@
 # Installation & Supported Hosts
 
-Agentic Senior Core supports 23+ AI coding agents.
+Agentic Senior Core supports 23+ AI coding agents across two enforcement layers:
+1. **Instructional Layer**: Universal staff-engineer rules & on-demand skills loaded directly into the AI context.
+2. **Mechanical Enforcement Layer**: Deterministic gates that prevent security and quality violations (such as duplicate dependencies, unauthorized git commits/pushes, and unverified git clones) from executing.
+
+## Host Enforcement Matrix
+
+| Host / AI Coding Tool | PreToolUse Real-Time Hard-Block | PostToolUse Advisory Nudge | Git Pre-Commit Deterministic Gate | Prompt-Level Rules |
+|---|:---:|:---:|:---:|:---:|
+| **Claude Code** | Active | Active | Active | Always-on |
+| **Google Antigravity IDE** | Active (`decision: deny`) | Active | Active | Always-on |
+| **GitHub Copilot CLI** | Active | Active | Active | Always-on |
+| **Cursor** | Active (PreToolUse) | Advisory (post-edit) | Active | Always-on |
+| **Windsurf, Codex, Kiro, Cline, Zed, Roo, Continue, etc. (19+ Hosts)** | None (Host API limitation) | None | Active (Universal Git Hook) | Always-on (Adapter) |
+
+---
 
 ### Step 1: Install / Update the package
 

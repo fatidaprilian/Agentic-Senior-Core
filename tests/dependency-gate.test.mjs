@@ -71,5 +71,38 @@ describe('Polyglot Dependency Gate', () => {
       assert.ok(res.stdout.includes('[ASC Hard-Block] git commit/push detected'));
     }
   });
+
+  it('hard-blocks insecure git clone protocols (git:// or http://)', () => {
+    const commands = [
+      'git clone git://github.com/malicious/repo.git',
+      'git clone http://insecure.example.com/repo.git'
+    ];
+    for (const command of commands) {
+      const payload = {
+        tool_name: 'run_command',
+        tool_input: { command }
+      };
+      const res = spawnSync('node', [gateScript], {
+        input: JSON.stringify(payload),
+        encoding: 'utf8'
+      });
+      assert.equal(res.status, 2, `Should exit code 2 on insecure protocol for "${command}"`);
+      assert.ok(res.stdout.includes('[ASC Hard-Block] Insecure git clone protocol detected'));
+    }
+  });
+
+  it('hard-blocks unverified git clone targets to mitigate HalluSquatting', () => {
+    const payload = {
+      tool_name: 'run_command',
+      tool_input: { command: 'git clone https://github.com/hallucinated-user/fake-package-repo.git' }
+    };
+    const res = spawnSync('node', [gateScript], {
+      input: JSON.stringify(payload),
+      encoding: 'utf8'
+    });
+    assert.equal(res.status, 2, 'Should exit code 2 on unverified repo target');
+    assert.ok(res.stdout.includes('[ASC Hard-Block] Unverified git clone target'));
+    assert.ok(res.stdout.includes('HalluSquatting'));
+  });
 });
 

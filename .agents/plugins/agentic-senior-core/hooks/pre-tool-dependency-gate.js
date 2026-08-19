@@ -60,6 +60,31 @@ process.stdin.on('data', chunk => {
         return;
       }
       
+      const allowlist = loadAllowlist();
+
+      // Hard-block unverified git clone targets (HalluSquatting mitigation)
+      const cloneCheck = checkGitClone(command, allowlist);
+      if (cloneCheck && cloneCheck.blocked) {
+        const reason = cloneCheck.reason;
+        let output;
+        if (isAntigravity) {
+          output = { decision: "deny", reason: reason };
+        } else {
+          output = {
+            allow_tool: false,
+            deny_reason: reason,
+            hookSpecificOutput: {
+              hookEventName: 'PreToolUse',
+              permissionDecision: 'deny',
+              permissionDecisionReason: reason
+            }
+          };
+        }
+        process.stdout.write(JSON.stringify(output) + '\n');
+        process.exit(2);
+        return;
+      }
+
       added = extractCommandDeps(command);
     } else if (isFileEdit) {
       const filePath = toolInput.file_path || toolInput.TargetFile || toolInput.path || toolInput.target_file || '';
@@ -176,6 +201,110 @@ function isGitCommitOrPush(command) {
   return false;
 }
 
+function checkGitClone(command, allowlist) {
+  if (!command || typeof command !== 'string') return null;
+
+  // Split multi-command strings (chained by &&, ||, ;, \n, |)
+  const subcommands = command.split(/[\r\n;&|]+/);
+
+  for (let i = 0; i < subcommands.length; i++) {
+    const sub = subcommands[i].trim();
+    if (!sub || !/\b(?:git|git\.exe)\b/i.test(sub)) continue;
+
+    // Tokenize sub-command handling quotes
+    const tokens = sub.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) || [];
+    let gitIdx = -1;
+
+    for (let j = 0; j < tokens.length; j++) {
+      const clean = tokens[j].replace(/^['"]|['"]$/g, '').toLowerCase();
+      if (clean === 'git' || clean === 'git.exe') {
+        gitIdx = j;
+        break;
+      }
+    }
+
+    if (gitIdx === -1) continue;
+
+    // Parse tokens after 'git' to find the git subcommand
+    let isClone = false;
+    let nextIdx = gitIdx + 1;
+    for (; nextIdx < tokens.length; nextIdx++) {
+      let tok = tokens[nextIdx].replace(/^['"]|['"]$/g, '');
+      if (!tok) continue;
+
+      if (tok.startsWith('-')) {
+        if (['-C', '-c', '--git-dir', '--work-tree', '--namespace', '--exec-path'].includes(tok)) {
+          nextIdx++;
+        }
+        continue;
+      }
+
+      if (tok.toLowerCase() === 'clone') {
+        isClone = true;
+        nextIdx++;
+      }
+      break;
+    }
+
+    if (!isClone) continue;
+
+    // Find the target repository token (skip clone options like --depth, -b, --branch, etc.)
+    let repoArg = '';
+    for (let k = nextIdx; k < tokens.length; k++) {
+      let tok = tokens[k].replace(/^['"]|['"]$/g, '');
+      if (!tok) continue;
+
+      if (tok.startsWith('-')) {
+        // Flags that take an argument after whitespace
+        if (['-b', '--branch', '--depth', '--origin', '-o', '--reference', '--filter', '-u', '--upload-pack', '--template'].includes(tok)) {
+          k++;
+        }
+        continue;
+      }
+
+      repoArg = tok;
+      break;
+    }
+
+    if (!repoArg) continue;
+
+    // 1. Block insecure protocols (git://, http://)
+    if (repoArg.startsWith('git://') || repoArg.startsWith('http://')) {
+      return {
+        blocked: true,
+        reason: '[ASC Hard-Block] Insecure git clone protocol detected (' + repoArg + '). '
+          + 'Use secure HTTPS or SSH (git@) with verified TLS.'
+      };
+    }
+
+    // 2. Allow checking against allowlist (exact URL, owner/repo, or repo name)
+    const normalized = repoArg.toLowerCase().replace(/\.git$/, '');
+    
+    // Extract owner/repo if possible (e.g. from https://github.com/owner/repo or git@github.com:owner/repo)
+    let ownerRepo = '';
+    const ghMatch = repoArg.match(/(?:github\.com|gitlab\.com|bitbucket\.org)[:\/]([^\/\s]+\/[^\/\s#?]+)/i);
+    if (ghMatch) {
+      ownerRepo = ghMatch[1].toLowerCase().replace(/\.git$/, '');
+    }
+
+    const isAllowed = allowlist && (
+      (allowlist.has && (allowlist.has(repoArg) || allowlist.has(normalized) || (ownerRepo && allowlist.has(ownerRepo)))) ||
+      (allowlist.repositories && (allowlist.repositories.has(repoArg.toLowerCase()) || allowlist.repositories.has(normalized) || (ownerRepo && allowlist.repositories.has(ownerRepo))))
+    );
+
+    if (!isAllowed) {
+      return {
+        blocked: true,
+        reason: '[ASC Hard-Block] Unverified git clone target: \'' + repoArg + '\'. '
+          + 'Verify repository provenance against trusted sources (mitigate HalluSquatting) '
+          + 'or add to allowedRepositories in .asc/dependency-allowlist.json to allow.'
+      };
+    }
+  }
+
+  return null;
+}
+
 function extractDeps(text, pattern) {
   const matches = [];
   let match;
@@ -223,6 +352,7 @@ function extractCommandDeps(command) {
 
 function loadAllowlist() {
   const allowed = new Set();
+  allowed.repositories = new Set();
   const candidates = [
     path.join(process.cwd(), '.asc', 'dependency-allowlist.json'),
     path.join(process.cwd(), '.agents', 'dependency-allowlist.json')
@@ -237,6 +367,15 @@ function loadAllowlist() {
           deps.forEach(function (d) { allowed.add(d); });
         } else if (typeof deps === 'object') {
           Object.keys(deps).forEach(function (d) { allowed.add(d); });
+        }
+
+        const repos = content.allowedRepositories || content.allowedRepos || [];
+        if (Array.isArray(repos)) {
+          repos.forEach(function (r) {
+            allowed.add(r);
+            allowed.repositories.add(r.toLowerCase());
+            allowed.repositories.add(r.toLowerCase().replace(/\.git$/, ''));
+          });
         }
       }
     } catch (_) {}

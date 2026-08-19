@@ -1,5 +1,16 @@
 # Changelog
 
+## 6.8.0
+
+### Added & Hardened
+- **PreToolUse Git Clone & HalluSquatting Gate**: Added deterministic mechanical gate (`pre-tool-dependency-gate.js`) to intercept `git clone` commands, block insecure protocols (`git://`, `http://`), and block unverified repository targets unless explicitly allowlisted in `allowedRepositories` (`.asc/dependency-allowlist.json`).
+- **Expanded Pre-Commit Secret Scanning**: Broadened secret regex detection in `git-hook-generator.mjs` to include Slack tokens, NPM access tokens, GCP Service Account JSON keys, database connection URLs containing credentials, and JSON Web Tokens (JWT), alongside automated blocking of unstaged/unignored `.env` files.
+- **Rule Attention & Position Bias Optimization**: Reordered canonical rules (`rules/agentic-senior-core.md`) to place `## Security (never skip)` directly after the Decision Ladder, mitigating *lost-in-the-middle* instruction compliance degradation (IFScale / Gloaguen ETH Zurich 2026).
+- **Skill Trigger Boundary Disambiguation**: Eliminated ambiguous single keywords (e.g. `"bootstrap"`) across skills (`asc-new-project`, `asc-bootstrap`, `asc-audit`, `asc-review`) and added explicit negative boundary notes to prevent *Skill Shadowing* distractor selection (Song & Wei / Databricks 2026).
+- **Explicit Anti-Emoji & Anti-Slop Directives**: Codified clear constraints banning emojis in code, comments, identifiers, commit messages, and agent response style to eliminate visual clutter and encoding failures.
+- **Adaptive Preferences Track B Governance**: Added a 15-rule soft budget and semantic compaction instructions for subjective taste rules in `asc-learn` to avoid context bloat in `AGENTS.md`.
+- **Host Enforcement Matrix Documentation**: Added clean, transparent host capability matrix in `docs/INSTALLATION.md` and SAST tooling integration guidance in `docs/CONFIGURATION.md`.
+
 ## 6.7.3
 
 ### Added & Fixed

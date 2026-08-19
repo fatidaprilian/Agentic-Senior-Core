@@ -20,8 +20,11 @@ Grounded in: **TRACE (arXiv:2606.13174)** correction mining & **Supermemory** du
    - **User Scope (`~/.gemini/config/`)**: Global personal preferences that follow the developer across all repositories.
    - **Project Scope (`.agents/`)**: Repository-specific conventions.
 4. **Execute Dual-Track Routing**:
-   - For **Track A**: Pass rule to `addRule()` in `adaptive-preferences.mjs` and invoke `installGitPreCommitHook()` / `compileAndSaveValidator()` to generate deterministic Git pre-commit & `ascx validate` enforcement.
+   - For **Track A**: Pass rule to `addRule()` in `adaptive-preferences.mjs` and invoke `installGitPreCommitHook()` / `compileAndSaveValidator()` to generate deterministic Git pre-commit & `ascx validate` enforcement (capped at `DEFAULT_RULE_CAP = 25`).
    - For **Track B**: Append the structured, deduped atomic rule to `AGENTS.md` / `SCRUTABLE_RULES.md` under `## Adaptive Preferences`.
+5. **Track B Governance & Budgeting (Anti-Bloat)**:
+   - Cap active taste rules at a maximum of **15 rules** per repository to prevent instruction density degradation (Gloaguen ETH Zurich 2026).
+   - When exceeding 15 rules, perform semantic compaction: merge overlapping guidelines (e.g. typography rules) and prune superseded preferences.
 
 ## Atomic Rule Format
 

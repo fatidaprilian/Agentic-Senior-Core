@@ -31,9 +31,9 @@ Create `.asc/dedup-config.json`:
 
 ### `dependency-allowlist.json`
 
-This file provides an escape hatch for the Dependency Gate. By default, ASC will hard-block agents from installing dependencies that unnecessarily duplicate standard library or platform features (e.g., `lodash`, `moment`, `uuid`).
-
-If your project genuinely requires one of these dependencies, you can explicitly whitelist it.
+This file provides an escape hatch for the Dependency Gate and Git Clone Gate:
+1. **Dependencies**: By default, ASC hard-blocks agents from installing dependencies that unnecessarily duplicate standard library or platform features (e.g., `lodash`, `moment`, `uuid`).
+2. **Repositories (HalluSquatting Mitigation)**: ASC hard-blocks `git clone` to unverified repositories. Whitelist trusted repositories here.
 
 Create `.asc/dependency-allowlist.json`:
 ```json
@@ -41,8 +41,22 @@ Create `.asc/dependency-allowlist.json`:
   "allowedDependencies": [
     "lodash",
     "uuid"
+  ],
+  "allowedRepositories": [
+    "https://github.com/my-org/my-private-lib",
+    "trusted-org/common-utils"
   ]
 }
 ```
 
-Any dependency listed here will bypass the hard-block and install successfully.
+Any dependency or repository listed here will bypass the hard-block and proceed successfully.
+
+---
+
+## Static Analysis & SAST Recommendations (P7)
+
+While ASC provides zero-dependency real-time security pattern detection (scanning for unvalidated SSRF destinations, direct log injection, and hardcoded credentials), for deep repository-wide SAST scanning we recommend integrating:
+
+- **Semgrep (OWASP Top 10 ruleset)**: Add `semgrep --config p/owasp-top-ten` to your CI pipeline or local git pre-commit hooks for comprehensive taint tracking.
+- **`eslint-plugin-security` (Node/TypeScript)**: Catch prototype pollution, unsafe regular expressions, and non-literal fs/child_process calls at lint time.
+- **Bandit (Python)**: Static analysis for Python AST security vulnerabilities.

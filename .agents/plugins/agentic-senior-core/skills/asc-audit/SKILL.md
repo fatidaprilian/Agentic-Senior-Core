@@ -1,7 +1,7 @@
 ---
 name: asc-audit
 description: >
-  Trigger this skill when the user says: "audit this", "security check", "find vulnerabilities", "is this secure", "check for XSS", "check for SQL injection", "threat model", "penetration test", "OWASP check", "architecture review", "is this safe", "check auth", "check permissions", "find security holes", "can someone hack this", "is my data safe", "can users see each other's data", "is the login secure", "audit ini", "cek keamanan", "cari celah keamanan", "apakah ini aman", "bisa di-hack ga". Also trigger for any deep security audit, vulnerability scanning, or request to find structural anti-patterns in existing code. Also trigger when reviewing authentication, authorization, input validation, or encryption-related code.
+  Trigger this skill when the user says: "audit this", "security check", "find vulnerabilities", "is this secure", "check for XSS", "check for SQL injection", "threat model", "penetration test", "OWASP check", "security architecture assessment", "is this safe", "check auth", "check permissions", "find security holes", "can someone hack this", "is my data safe", "can users see each other's data", "is the login secure", "audit ini", "cek keamanan", "cari celah keamanan", "apakah ini aman", "bisa di-hack ga". Also trigger for any deep security audit, vulnerability scanning, or request to find structural anti-patterns in existing code. Also trigger when reviewing authentication, authorization, input validation, or encryption-related code. Do NOT trigger for standard PR code review without security/vulnerability focus (use asc-review instead).
 ---
 
 # Audit Skill

@@ -227,6 +227,61 @@ module.exports = { calculateTax };`;
     }
   });
 
+  it('blocks commit when staged file contains Slack/NPM tokens or DB connection string', async () => {
+    const tmpDir = await createGitRepo();
+
+    try {
+      installGitPreCommitHook({ cwd: tmpDir });
+
+      const dummySlack = ['xoxb', '1234567890', '1234567890', 'abcdefghijklmnopqrstuvwx'].join('-');
+      const dummyDb = ['postgres:', '', 'admin:SuperSecretPass123@db.example.com', 'mydb'].join('/');
+      const secretPayload = `const slack = "${dummySlack}";\nconst db = "${dummyDb}";\n`;
+      await fs.writeFile(path.join(tmpDir, 'config.js'), secretPayload, 'utf8');
+      execSync('git add config.js', { cwd: tmpDir, stdio: 'pipe' });
+
+      let exitCode = 0;
+      try {
+        execSync('node .asc/hooks/pre-commit-runner.cjs', {
+          cwd: tmpDir,
+          stdio: 'pipe',
+          timeout: 30000,
+        });
+      } catch (err) {
+        exitCode = err.status;
+      }
+
+      assert.strictEqual(exitCode, 1, 'Runner should exit 1 when Slack/DB secret is detected');
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('blocks commit when .env file is staged without ignore', async () => {
+    const tmpDir = await createGitRepo();
+
+    try {
+      installGitPreCommitHook({ cwd: tmpDir });
+
+      await fs.writeFile(path.join(tmpDir, '.env'), 'DATABASE_PASSWORD=secret\n', 'utf8');
+      execSync('git add .env', { cwd: tmpDir, stdio: 'pipe' });
+
+      let exitCode = 0;
+      try {
+        execSync('node .asc/hooks/pre-commit-runner.cjs', {
+          cwd: tmpDir,
+          stdio: 'pipe',
+          timeout: 30000,
+        });
+      } catch (err) {
+        exitCode = err.status;
+      }
+
+      assert.strictEqual(exitCode, 1, 'Runner should exit 1 when staged .env file is detected');
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('blocks commit when staged file contains merge conflict markers', async () => {
     const tmpDir = await createGitRepo();
 
