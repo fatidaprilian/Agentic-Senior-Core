@@ -27,7 +27,7 @@ function printUsage() {
   console.log('  Claude Code:  /plugin marketplace add fatidaprilian/Agentic-Senior-Core');
   console.log('  Codex CLI:    codex plugins install agentic-senior-core\n');
   console.log('Global install (all projects, zero project files):');
-  console.log('  asc global --antigravity --cline --kilocode --kiro --openhands --windsurf --copilot --all\n');
+  console.log('  asc global --antigravity --codex --cline --roo --kilocode --kiro --openhands --windsurf --copilot --all\n');
   console.log('Adapter install (one file per project):');
   console.log('  asc adapter --cursor --devin --cline --copilot --kiro --continue --zed --aider --kilocode --roo --openhands --windsurf --all\n');
   console.log('Commands:');

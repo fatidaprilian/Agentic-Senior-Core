@@ -34,7 +34,7 @@ Single file containing the full rule set. Must be copied into each project. Gene
 | Zed | `.zed/rules/agentic-senior-core.md` | Markdown (also reads AGENTS.md natively) |
 | Aider | `CONVENTIONS.md` | Markdown |
 | Kilo Code | `.kilo/rules/agentic-senior-core.md`, `.kilo/plugin/agentic-senior-core.js` | JS Plugin & Markdown |
-| Roo Code | `.roo/rules/agentic-senior-core.md` | Markdown |
+| Roo Code | `.roo/rules/agentic-senior-core.md`, `.roo/skills/` | Markdown & Skills |
 | OpenHands | `.openhands/microagents/agentic-senior-core.md` | Markdown |
 
 ## Host capability matrix

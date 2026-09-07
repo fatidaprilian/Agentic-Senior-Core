@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.9.0
+
+### Added & Refined
+- **Full Roo Code Skills & Global Distribution**: Added native progressive disclosure Agent Skills distribution for Roo Code across workspace (`.roo/skills/`) and global (`~/.roo/skills/`) scopes via `asc adapter --roo` and `asc global --roo`.
+- **Roo Code Workspace Uninstallation**: Added directory cleanup logic in `asc uninstall` for `.roo/skills/` (and `.kilo/skills/`) based on ASC marker detection.
+- **Automated Roo Code Test Suite**: Added dedicated integration test suite (`tests/roo-code.test.mjs`) covering workspace adapter generation, global installation, uninstallation, and Agent Skills frontmatter validation across all 13 skills.
+- **Ousterhout Deep Module Guidance**: Integrated John Ousterhout's *Philosophy of Software Design* principles into canonical core rules (`agentic-senior-core.md`), mandating deep modules (simple interfaces hiding complex logic) and explicitly banning shallow micro-files/classes ("classitis").
+- **Contrastive Micro-Snippets & Readability**: Added actionable contrastive guard clause patterns to *Early returns* and rationale examples to *Comments* to boost LLM adherence across model architectures while keeping canonical rule size strictly under 8KB (~2,000 tokens).
+- **Domain Testing & API Hardening (`asc-reference`)**: Updated testing rules to mandate real in-process test doubles (`node:sqlite`, MSW network interceptors, in-memory repositories) over brittle behavioral mock spies, and added Stripe-style `Idempotency-Key` headers for mutating operations alongside RFC 9110 (HTTP Semantics) and RFC 9457 (Problem Details).
+
 ## 6.8.0
 
 ### Added & Hardened

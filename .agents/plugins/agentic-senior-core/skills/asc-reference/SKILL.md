@@ -13,7 +13,7 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 ## Testing
 
 - New business logic requires at least one happy path test and one primary failure mode test.
-- Never mock the unit under test — mock only external dependencies and boundaries.
+- Never mock the unit under test — mock only external dependencies and boundaries. Prefer real in-process doubles (e.g. `node:sqlite`, in-memory repositories, or MSW network interceptors) over fragile behavioral mock spies.
 - Tests assert behavior and contracts, not implementation details. Must be fast, isolated, deterministic.
 - Cover happy path, error paths, edge cases, and empty states.
 - Integration tests for critical data paths. Sensitive mutations need idempotency or duplicate-submit coverage.
@@ -21,9 +21,9 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 
 ## API Design
 
-- Consistent resource naming and HTTP semantics.
+- Consistent resource naming and HTTP semantics (follow RFC 9110; RFC 9457 for problem details).
 - Bounded list reads: always paginate or set explicit limits.
-- Idempotent for side-effect mutations. Document retry behavior.
+- Idempotent for side-effect mutations (support `Idempotency-Key` headers for safe retries). Document retry behavior.
 - Backward-compatible by default. Version breaking changes explicitly.
 - Sync docs in the same commit when changing API, CLI, or schema.
 

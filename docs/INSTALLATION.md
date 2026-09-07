@@ -214,7 +214,7 @@ asc global --kilocode
 asc adapter --roo
 ```
 
-Copies one file to `.roo/rules/agentic-senior-core.md`. Repeat per project — or install once globally with `asc global --roo` (`~/.roo/rules/`). Note: Roo Code was discontinued in May 2026; support is kept for existing installs.
+Generates `.roo/rules/agentic-senior-core.md` and installs all 13 on-demand skills into `.roo/skills/`. Repeat per project — or install once globally with `asc global --roo` (`~/.roo/rules/` and `~/.roo/skills/`).
 
 </details>
 
@@ -316,7 +316,7 @@ Generates adapter files for Cursor, Devin Desktop, Windsurf, Cline, Copilot, Kir
 | Zed | IDE | `asc adapter --zed` | Yes (1 file) — or default rule in Rules Library |
 | Aider | Terminal agent | `asc adapter --aider` | Yes (1 file) — or `read:` pointer in `~/.aider.conf.yml` |
 | Kilo Code | VS Code ext | `asc global --kilocode` | No (global) — or `asc adapter --kilocode` |
-| Roo Code | VS Code ext | `asc global --roo` | No (global) — discontinued May 2026 |
+| Roo Code | VS Code ext | `asc global --roo` | No (global) — or `asc adapter --roo` |
 | OpenHands | Agent | `asc global --openhands` | No (global) — or `asc adapter --openhands` |
 
 ---
@@ -339,7 +339,7 @@ asc global --all
 | OpenHands | `~/.openhands/microagents/` | CLI/headless/dev modes; Docker runs need the mount |
 | Windsurf / Devin Desktop | `~/.codeium/windsurf/memories/global_rules.md` | 6,000-char global limit (ASC rules fit); skipped if you already have your own file |
 | GitHub Copilot (VS Code) | VS Code profile `prompts/` folder | Installed as a user `*.instructions.md` with `applyTo: '**'` |
-| Roo Code | `~/.roo/rules/` | Roo Code was discontinued May 2026; kept for existing installs |
+| Roo Code | `~/.roo/rules/` & `~/.roo/skills/` | Global rules and 13 on-demand skills |
 
 Tools without a global rules **file** (manual one-time setup instead):
 
