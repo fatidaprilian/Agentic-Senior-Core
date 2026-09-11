@@ -1,7 +1,7 @@
 ---
 name: asc-bootstrap
 description: >
-  Trigger this skill when the user says: "bootstrap preferences", "set up my preferences", "ui slop wizard", "seed my rules", "init design rules", "run preference onboarding", "onboard slop rules", "start cold start wizard", "set up my style preferences", "customize design rules", "configure how my UI should look", "atur preferensi desain", "konfigurasi gaya ui". Do NOT trigger for new project/codebase scaffolding (use asc-new-project instead).
+  Trigger this skill when the user says: "bootstrap preferences", "set up my preferences", "ui slop wizard", "seed my rules", "init design rules", "run preference onboarding", "onboard slop rules", "start cold start wizard", "set up my style preferences", "customize design rules", "configure how my UI should look", "atur preferensi desain", "konfigurasi gaya ui". Do NOT trigger for new project/codebase scaffolding (use asc-new-project instead), or for incremental user preference corrections during regular coding (use asc-learn instead).
 ---
 
 # Preference Bootstrap Wizard (`asc-bootstrap`)

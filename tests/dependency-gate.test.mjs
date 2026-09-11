@@ -10,7 +10,20 @@ const repositoryRoot = path.resolve(path.dirname(currentFilePath), '..');
 describe('Polyglot Dependency Gate', () => {
   const gateScript = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'hooks', 'pre-tool-dependency-gate.js');
 
-  it('hard-blocks npm install lodash command', () => {
+  it('hard-blocks npm install of always-redundant packages (block tier)', () => {
+    const payload = {
+      tool_name: 'run_command',
+      tool_input: { command: 'npm install is-odd left-pad' }
+    };
+    const res = spawnSync('node', [gateScript], {
+      input: JSON.stringify(payload),
+      encoding: 'utf8'
+    });
+    assert.equal(res.status, 2, 'Should exit code 2 on hard block');
+    assert.ok(res.stdout.includes('[ASC Hard-Block]'), 'Output must contain ASC Hard-Block message');
+  });
+
+  it('review-tier packages (lodash) deny with reason and allowlist guidance, not blanket hard-block', () => {
     const payload = {
       tool_name: 'run_command',
       tool_input: { command: 'npm install lodash' }
@@ -19,8 +32,10 @@ describe('Polyglot Dependency Gate', () => {
       input: JSON.stringify(payload),
       encoding: 'utf8'
     });
-    assert.equal(res.status, 2, 'Should exit code 2 on hard block');
-    assert.ok(res.stdout.includes('[ASC Hard-Block]'), 'Output must contain ASC Hard-Block message');
+    assert.equal(res.status, 2, 'Should exit code 2 on review-tier deny');
+    assert.ok(res.stdout.includes('[ASC Review]'), 'Output must contain ASC Review message');
+    assert.ok(res.stdout.includes('dependency-allowlist.json'), 'Must point to the allowlist escape hatch');
+    assert.ok(!res.stdout.includes('[ASC Hard-Block] Dependency'), 'Review tier must not use the hard-block message');
   });
 
   it('allows safe terminal commands', () => {

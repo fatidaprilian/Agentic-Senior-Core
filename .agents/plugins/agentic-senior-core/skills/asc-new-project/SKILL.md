@@ -1,7 +1,7 @@
 ---
 name: asc-new-project
 description: >
-  Trigger this skill when the user says: "new project", "start from scratch", "scaffold this", "bootstrap project", "bootstrap repository", "bootstrap new app", "create a new app", "init a project", "set up a new repo", "greenfield", "plan the architecture", "design the system", "build me an app", "start a new codebase", "I want to build", "let's create". Also trigger for any request to create a new codebase, plan a new system architecture, or scaffold a new repository from zero. Do NOT trigger for UI style preference onboarding (use asc-bootstrap instead).
+  Trigger this skill when the user says: "new project", "start from scratch", "scaffold this", "bootstrap project", "bootstrap repository", "bootstrap new app", "create a new app", "init a project", "set up a new repo", "greenfield", "plan the architecture", "design the system", "build me an app", "start a new codebase", "I want to build", "let's create", "bikin project baru", "buat aplikasi baru", "scaffold repo baru", "mulai dari awal". Also trigger for any request to create a new codebase, plan a new system architecture, or scaffold a new repository from zero. Do NOT trigger for adding features, routes, or components to an existing codebase (use asc-add-feature instead), or for UI style preference onboarding (use asc-bootstrap instead).
 ---
 
 # New Project Workflow

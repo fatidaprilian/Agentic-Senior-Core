@@ -2,9 +2,10 @@
 name: asc-fingerprint
 description: >
   Trigger this skill when the user says: "map this codebase", "what are our conventions",
-  "document our patterns", "onboard to this repo", "fingerprint this repository", or
-  "learn this repository structure". Use it before substantial work in an unfamiliar
-  repository or when feature research repeatedly rediscovers the same conventions.
+  "document our patterns", "onboard to this repo", "fingerprint this repository",
+  "learn this repository structure", "petakan codebase", "pelajari struktur repo",
+  "apa aturan arsitektur di sini", "kebiasaan coding repo ini apa". Use it before substantial work in an unfamiliar
+  repository or when feature research repeatedly rediscovers the same conventions. Do NOT trigger for simple file finding or code searches within single files.
 ---
 
 # Repository Fingerprinting

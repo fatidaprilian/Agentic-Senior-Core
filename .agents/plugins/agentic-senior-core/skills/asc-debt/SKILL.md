@@ -1,7 +1,7 @@
 ---
 name: asc-debt
 description: >
-  Trigger this skill when the user says: "log this debt", "skip this for now", "defer this fix", "note this smell", "track this violation", "add to debt ledger", "we'll fix this later", "accept the shortcut", "I know this is bad but", "just do it for now", "TODO later". Also trigger when an ASC ladder nudge fires and the user accepts the shortcut rather than fixing it — log the deferred violation for later resolution.
+  Trigger this skill when the user says: "log this debt", "skip this for now", "defer this fix", "note this smell", "track this violation", "add to debt ledger", "we'll fix this later", "accept the shortcut", "I know this is bad but", "just do it for now", "TODO later", "catat debt", "skip dulu", "nanti aja benerinnya", "tunda perbaikan", "catat ini buat nanti". Also trigger when an ASC ladder nudge fires and the user accepts the shortcut rather than fixing it — log the deferred violation for later resolution. Do NOT trigger for actively resolving or refactoring existing debt items (use asc-refactor instead).
 ---
 
 # Debt Ledger

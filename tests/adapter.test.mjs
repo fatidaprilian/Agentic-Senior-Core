@@ -193,15 +193,22 @@ describe('CLI Commands', () => {
     const pkg = JSON.parse(pkgContent);
     const version = pkg.version;
 
-    const versionFiles = [
+    const jsonVersionFiles = [
       'gemini-extension.json',
-      '.agents/plugins/agentic-senior-core/plugin.json'
+      'package-lock.json',
+      '.agents/plugins/agentic-senior-core/plugin.json',
+      '.agents/plugins/agentic-senior-core/.codex-plugin/plugin.json'
     ];
 
-    for (const filePath of versionFiles) {
+    for (const filePath of jsonVersionFiles) {
       const content = await fs.readFile(path.join(repositoryRoot, filePath), 'utf8');
       const json = JSON.parse(content);
       assert.equal(json.version, version, `Version mismatch in ${filePath}: expected ${version}, got ${json.version}`);
     }
+
+    const yamlContent = await fs.readFile(path.join(repositoryRoot, 'plugin.yaml'), 'utf8');
+    const yamlMatch = yamlContent.match(/^version:\s*([^\s]+)/m);
+    assert.ok(yamlMatch, 'plugin.yaml must contain version');
+    assert.equal(yamlMatch[1], version, `Version mismatch in plugin.yaml: expected ${version}, got ${yamlMatch[1]}`);
   });
 });

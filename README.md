@@ -134,7 +134,8 @@ Supports both `.husky/` (appends without overwriting) and `.git/hooks/` (direct 
 - **[Installation & Supported Hosts](docs/INSTALLATION.md)** - Setup instructions for Claude Code, Copilot, Antigravity, Cursor, Windsurf, Zed, Aider, and more.
 - **[Configuration Overrides](docs/CONFIGURATION.md)** - How to use `.asc/dedup-config.json` and `.asc/dependency-allowlist.json`.
 - **[Architecture & Philosophy](docs/ARCHITECTURE.md)** - How the hooks work, our engineering principles, and Migration guide from v4.x.
-- **[Benchmarks](benchmarks/RESULTS.md)** - ASC produces **18% less code**, uses **30% fewer tokens**, costs **42% less**, and finishes **18% faster**.
+- **[Benchmarks](benchmarks/RESULTS.md)** - Directional results (n=1-2 per task, single model): on complex tasks ASC trended toward **~18% less code** and **~12-30% fewer tokens**. Indicative, not statistically conclusive — see the methodology for the planned n>=5 validation.
+- **[Grounding](docs/GROUNDING.md)** - Full verified citations behind every rule.
 
 ---
 

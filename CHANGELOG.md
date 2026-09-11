@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.10.0
+
+### Added & Optimized
+- **4-Tier Progressive Disclosure Architecture**: Compressed canonical core rules (`rules/agentic-senior-core.md`) from 110 to 80 lines (~27% token reduction) to eliminate rules tax and lost-in-the-middle context degradation while strictly retaining all 10 core staff engineering guardrails (anti-vibe-coding step 5/6 checks, resource authz, public endpoint rate limiting, output encoding for XSS, English identifiers, linter config adherence, structural parity, scope confirmation, anti-swallow error handling, and debugging accuracy).
+- **Anthropic SOTA Skill Trigger Optimization**: Standardized and hardened frontmatter descriptions across all 13 skills with front-loaded action verbs, symmetric negative boundaries (preventing false-positive trigger crossfires between greenfield/brownfield, refactor/dedup, and audit/review), and complete bilingual (English + Indonesian) query phrases.
+- **Tiered Multi-Target Adapter Output**: Clarified adapter generation architecture separating skill-capable hosts (Claude Code, Antigravity, Cursor, Roo, Kilo Code) which receive lean core rules with on-demand skill delegation, from standalone hosts (Aider, Zed, OpenHands).
+- **Plugin Manifest Harmonization**: Synchronized `plugin.yaml` to include all 13 skills (`asc-bootstrap`, `asc-learn`) and registered commands (`asc-dedup`).
+- **Comprehensive Version Consistency Guards**: Extended test suite validation across all plugin and extension manifests (`package.json`, `package-lock.json`, `plugin.yaml`, `gemini-extension.json`, and Codex/Antigravity plugin descriptors).
+
 ## 6.9.0
 
 ### Added & Refined

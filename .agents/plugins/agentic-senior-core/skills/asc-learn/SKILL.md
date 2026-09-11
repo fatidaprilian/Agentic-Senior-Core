@@ -1,7 +1,7 @@
 ---
 name: asc-learn
 description: >
-  Trigger this skill when the user says: "learn this preference", "don't do this again", "remember my preference", "log this rule", "add to my design rules", "never use X", "always use Y for UI", "save this preference", "remember this style". Also trigger when mining explicit user corrections from conversation history to update adaptive preferences.
+  Trigger this skill when the user says: "learn this preference", "don't do this again", "remember my preference", "log this rule", "add to my design rules", "never use X", "always use Y for UI", "save this preference", "remember this style", "ingat preferensi ini", "jangan lakuin ini lagi", "catat aturan ini", "simpan gaya ini". Also trigger when mining explicit user corrections from conversation history to update adaptive preferences. Do NOT trigger for initial day-one design rule bootstrapping or cold start wizard (use asc-bootstrap instead).
 ---
 
 # Adaptive Preference Miner (`asc-learn`)

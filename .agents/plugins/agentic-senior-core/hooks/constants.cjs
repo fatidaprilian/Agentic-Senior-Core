@@ -21,20 +21,19 @@ function loadDedupConfig(cwd = process.cwd()) {
       if (fs.existsSync(candidates[i])) {
         return JSON.parse(fs.readFileSync(candidates[i], 'utf8'));
       }
-    } catch (_) {}
+    } catch (_) { }
   }
   return {};
 }
 
 function getThresholds(cwd = process.cwd()) {
   const config = loadDedupConfig(cwd);
+  const num = (value, fallback) => (typeof value === 'number' ? value : fallback);
   return {
-    NEW_FILE_LINE_THRESHOLD: typeof config.NEW_FILE_LINE_THRESHOLD === 'number'
-      ? config.NEW_FILE_LINE_THRESHOLD
-      : NEW_FILE_LINE_THRESHOLD,
-    LOC_DELTA_THRESHOLD: typeof config.LOC_DELTA_THRESHOLD === 'number'
-      ? config.LOC_DELTA_THRESHOLD
-      : LOC_DELTA_THRESHOLD,
+    NEW_FILE_LINE_THRESHOLD: num(config.NEW_FILE_LINE_THRESHOLD, NEW_FILE_LINE_THRESHOLD),
+    LOC_DELTA_THRESHOLD: num(config.LOC_DELTA_THRESHOLD, LOC_DELTA_THRESHOLD),
+    SESSION_DRIFT_THRESHOLD: num(config.SESSION_DRIFT_THRESHOLD, SESSION_DRIFT_THRESHOLD),
+    LADDER_PULSE_INTERVAL: num(config.LADDER_PULSE_INTERVAL, LADDER_PULSE_INTERVAL),
   };
 }
 

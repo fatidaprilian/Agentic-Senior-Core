@@ -1,7 +1,7 @@
 ---
 name: asc-add-feature
 description: >
-  Trigger this skill when the user says: "add a feature", "build this endpoint", "implement this", "add this component", "extend this", "integrate this", "wire up", "add support for", "create a new route", "add a new page", "hook this up", "connect this to", "make it do X", "add a button for". Also trigger for any non-trivial addition to an existing codebase — new endpoints, UI components, services, or integrations. Also trigger when the user describes new functionality to add to a working project.
+  Trigger this skill when the user says: "add a feature", "build this endpoint", "implement this", "add this component", "extend this", "integrate this", "wire up", "add support for", "create a new route", "add a new page", "hook this up", "connect this to", "make it do X", "add a button for", "tambah fitur", "bikin endpoint", "buat halaman baru", "implementasikan ini", "sambungkan ke". Also trigger for any non-trivial addition to an existing codebase — new endpoints, UI components, services, or integrations. Also trigger when the user describes new functionality to add to a working project. Do NOT trigger for creating new projects/codebases from scratch (use asc-new-project instead), or restructuring existing code without behavior changes (use asc-refactor instead).
 ---
 
 # Add Feature Workflow

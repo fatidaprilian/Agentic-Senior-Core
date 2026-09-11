@@ -8,17 +8,25 @@ const fs = require('fs');
 const path = require('path');
 
 let knownDuplicates = new Set();
+let reviewDuplicates = new Set();
+let reviewReasons = {};
 try {
   const knownPath = path.join(__dirname, 'lib', 'known-duplicates.json');
   if (fs.existsSync(knownPath)) {
     const raw = JSON.parse(fs.readFileSync(knownPath, 'utf8'));
-    if (Array.isArray(raw.duplicates)) {
-      knownDuplicates = new Set(raw.duplicates);
+    // Tiered structure (v5): 'block' = always redundant, 'review' = context-dependent.
+    // Legacy flat 'duplicates' arrays are treated as review-tier for backward compatibility.
+    if (Array.isArray(raw.block) || Array.isArray(raw.review)) {
+      knownDuplicates = new Set(raw.block || []);
+      reviewDuplicates = new Set(raw.review || []);
+      reviewReasons = raw.reviewReasons || {};
+    } else if (Array.isArray(raw.duplicates)) {
+      reviewDuplicates = new Set(raw.duplicates);
     }
   }
 } catch (_) {
-  // Fallback set if JSON loading fails
-  knownDuplicates = new Set(['lodash', 'underscore', 'moment', 'dayjs', 'uuid', 'axios', 'rimraf']);
+  // Fallback if JSON loading fails: block only the always-redundant set
+  knownDuplicates = new Set(['left-pad', 'is-odd', 'mkdirp', 'rimraf', 'node-fetch', 'underscore']);
 }
 
 let inputBuffer = '';
@@ -37,7 +45,7 @@ process.stdin.on('data', chunk => {
 
     if (isTerminal) {
       const command = toolInput.command || toolInput.CommandLine || toolInput.cmd || toolInput.commandLine || '';
-      
+
       // Hard-block git commit/push unless explicitly allowed
       if (isGitCommitOrPush(command)) {
         const reason = '[ASC Hard-Block] git commit/push detected. Never run git commit, git push, or git push --force unless the user explicitly requests it this turn.';
@@ -59,7 +67,7 @@ process.stdin.on('data', chunk => {
         process.exit(2);
         return;
       }
-      
+
       const allowlist = loadAllowlist();
 
       // Hard-block unverified git clone targets (HalluSquatting mitigation)
@@ -89,7 +97,7 @@ process.stdin.on('data', chunk => {
     } else if (isFileEdit) {
       const filePath = toolInput.file_path || toolInput.TargetFile || toolInput.path || toolInput.target_file || '';
       const manifestFiles = ['package.json', 'requirements.txt', 'pyproject.toml', 'go.mod', 'Cargo.toml', 'Gemfile'];
-      const isManifest = manifestFiles.some(function(m) { return filePath.endsWith(m); });
+      const isManifest = manifestFiles.some(function (m) { return filePath.endsWith(m); });
       if (!isManifest) {
         process.exit(0);
         return;
@@ -114,15 +122,58 @@ process.stdin.on('data', chunk => {
     }
 
     const allowlist = loadAllowlist();
-    const forbidden = added.filter(function (dep) {
-      return knownDuplicates.has(dep) && !allowlist.has(dep);
+    const notAllowed = added.filter(function (dep) {
+      return !allowlist.has(dep);
+    });
+    const forbidden = notAllowed.filter(function (dep) {
+      return knownDuplicates.has(dep) || reviewDuplicates.has(dep);
     });
 
-    if (forbidden.length > 0) {
-      const reason = '[ASC Hard-Block] Dependency ' + forbidden.map(function(d){ return "'" + d + "'"; }).join(', ') 
+    const blocked = forbidden.filter(function (dep) {
+      return knownDuplicates.has(dep);
+    });
+    const reviewOnly = forbidden.filter(function (dep) {
+      return !knownDuplicates.has(dep) && reviewDuplicates.has(dep);
+    });
+
+    if (blocked.length > 0) {
+      const reason = '[ASC Hard-Block] Dependency ' + blocked.map(function (d) { return "'" + d + "'"; }).join(', ')
         + ' duplicates standard library or native platform features. '
         + 'Ladder step 3: use stdlib/native features instead, or add to .asc/dependency-allowlist.json to override.';
-      
+
+      let output;
+      if (isAntigravity) {
+        output = {
+          decision: "deny",
+          reason: reason
+        };
+      } else {
+        output = {
+          allow_tool: false,
+          deny_reason: reason,
+          hookSpecificOutput: {
+            hookEventName: 'PreToolUse',
+            permissionDecision: 'deny',
+            permissionDecisionReason: reason
+          }
+        };
+      }
+      process.stdout.write(JSON.stringify(output) + '\n');
+      process.exit(2);
+      return;
+    }
+
+    if (reviewOnly.length > 0) {
+      // Context-dependent packages: nudge with the specific reason instead of blocking.
+      // A PreToolUse deny is the only injection channel on some hosts, so deny with a
+      // clear "allowed after review" message pointing at the allowlist escape hatch.
+      const reasons = reviewOnly.map(function (dep) {
+        return "'" + dep + "': " + (reviewReasons[dep] || 'native alternative exists; confirm the package-specific need');
+      }).join(' ');
+      const reason = '[ASC Review] Dependency ' + reviewOnly.join(', ')
+        + ' may duplicate stdlib/native features. ' + reasons
+        + ' If the need is real, add it to .asc/dependency-allowlist.json and retry.';
+
       let output;
       if (isAntigravity) {
         output = {
@@ -279,7 +330,7 @@ function checkGitClone(command, allowlist) {
 
     // 2. Allow checking against allowlist (exact URL, owner/repo, or repo name)
     const normalized = repoArg.toLowerCase().replace(/\.git$/, '');
-    
+
     // Extract owner/repo if possible (e.g. from https://github.com/owner/repo or git@github.com:owner/repo)
     let ownerRepo = '';
     const ghMatch = repoArg.match(/(?:github\.com|gitlab\.com|bitbucket\.org)[:\/]([^\/\s]+\/[^\/\s#?]+)/i);
@@ -332,7 +383,7 @@ function extractCommandDeps(command) {
   for (let arg of rawArgs) {
     if (arg.startsWith('-')) continue; // Skip flags like -D, --save-dev
     if (arg.startsWith('http://') || arg.startsWith('https://') || arg.startsWith('git+')) continue;
-    
+
     // Remove scope/version if any, e.g. lodash@^4.17 -> lodash, @types/node@18 -> @types/node
     let name = arg;
     if (name.startsWith('@')) {
@@ -378,7 +429,7 @@ function loadAllowlist() {
           });
         }
       }
-    } catch (_) {}
+    } catch (_) { }
   }
   return allowed;
 }

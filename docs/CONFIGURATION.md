@@ -51,6 +51,22 @@ Create `.asc/dependency-allowlist.json`:
 
 Any dependency or repository listed here will bypass the hard-block and proceed successfully.
 
+## Environment Variables
+
+### `ASC_CACHE_SAFE=1` — cache-safe ascx mode
+
+PointFive (arXiv:2607.12161; 2,908 paired runs) found that aggressive output compression can *raise* total billed cost by breaking prompt-cache locality — cache traffic dominates API cost, and rewritten output invalidates it. Only minimal compression was cost-neutral.
+
+With `ASC_CACHE_SAFE=1`, `ascx` switches to near-passthrough mode: raw command output is emitted unchanged, with only the `[ascx]` cost-audit footer appended. Use it to compare the billed cost of ascx-on vs ascx-off without uninstalling anything (see `benchmarks/METHODOLOGY.md`).
+
+```bash
+# PowerShell
+$env:ASC_CACHE_SAFE = "1"
+
+# cmd
+set ASC_CACHE_SAFE=1
+```
+
 ---
 
 ## Static Analysis & SAST Recommendations (P7)

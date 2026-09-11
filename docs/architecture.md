@@ -13,6 +13,7 @@ Agentic Senior Core operates on a two-tier architecture:
    - **Hard-Block Guardrails**: For tools supporting active hook execution engines (Claude Code, GitHub Copilot CLI, Google Antigravity IDE, Cursor), ASC automatically intercepts tool calls:
      - **PreToolUse Hard Block**: Immediately rejects edits adding stdlib-duplicating dependencies (e.g., `lodash`, `moment`, `uuid`) before execution (`permissionDecision: "deny"`). Escape hatch available via `.asc/dependency-allowlist.json`.
      - **PostToolUse Advisory**: Soft nudges for LOC deltas, duplicate code blocks (jscpd), spec drift, and workflow gate bypasses.
+  - **Cache-Safety Invariant (why hooks never rewrite conversation history)**: Prompt-cache traffic dominates API cost (PointFive, arXiv:2607.12161), and any mutation of earlier conversation bytes invalidates the cache. Every ASC injection point is therefore append-only and deterministic (no timestamps, request IDs, or run-varying values injected into context): the rules file is injected verbatim at session start, reminders are appended late in context, and `ascx` appends its footer after command output. If a future feature ever needs to compress or rewrite context, it must follow the live-zone-only pattern (never touch the frozen prefix; see docs/GROUNDING.md, Headroom CacheAligner note). An opt-out A/B condition exists via `ASC_CACHE_SAFE=1` (see docs/CONFIGURATION.md).
 
 ---
 

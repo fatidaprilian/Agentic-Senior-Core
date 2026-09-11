@@ -1,7 +1,7 @@
 ---
 name: asc-adapter
 description: >
-  Trigger this skill when the user says: "install ASC", "set up rules", "configure for Cursor", "add to Windsurf", "set up Copilot", "initialize plugin", "generate adapter", "install for my IDE", "set up Antigravity", "add to Kiro", "configure Roo", "set up for my editor", "install rules for this project", "add ASC to this repo". Also trigger for any request to install, configure, or initialize Agentic Senior Core rules or adapter files for an AI coding tool.
+  Trigger this skill when the user says: "install ASC", "set up rules", "configure for Cursor", "add to Windsurf", "set up Copilot", "initialize plugin", "generate adapter", "install for my IDE", "set up Antigravity", "add to Kiro", "configure Roo", "set up for my editor", "install rules for this project", "add ASC to this repo", "pasang asc", "setup rules untuk cursor", "konfigurasi adapter", "install adapter untuk ide". Also trigger for any request to install, configure, or initialize Agentic Senior Core rules or adapter files for an AI coding tool. Do NOT trigger for application project dependency installation or framework package setup.
 ---
 
 # ASC Adapter
@@ -41,8 +41,9 @@ asc uninstall --dry-run   # Preview what would be removed
 
 ## Notes
 
-- Adapter files contain the ASC universal coding rules, compressed to fit within each host's size limits.
+- **Tiered output**: Hosts with native skill/plugin support (Claude Code, Antigravity, Cursor, Roo, Kilo Code) receive the Lean Core rules only (~80 lines). Domain-specific guidance (testing, security, architecture) is loaded on-demand via their native skill engines, saving ~40% token overhead on routine tasks. Hosts without skill support (Aider, Zed, OpenHands) receive a full standalone file combining Core + Domain Reference for completeness.
 - Cursor uses `.mdc` format with `alwaysApply: true` frontmatter.
 - Windsurf is now Devin Desktop. Use `--devin` for the preferred path, `--windsurf` for legacy.
 - Zed also reads `AGENTS.md` natively, so the adapter is optional.
 - **Git Pre-Commit Hooks**: `asc global --all` configures a Smart Global Git Pre-Commit Hook (`~/.asc/global-hooks`) that protects all projects on your machine without modifying team `.git/hooks` directories. For independent projects where explicit per-repository enforcement is desired, use `asc install-git-hook`.
+

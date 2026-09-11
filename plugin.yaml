@@ -1,5 +1,5 @@
 name: agentic-senior-core
-version: 6.9.0
+version: 6.10.0
 description: Universal AI coding rules. Write code like a staff engineer.
 author: fatidaprilian
 provides_hooks:
@@ -12,15 +12,18 @@ provides_commands:
   - asc-new-project
   - asc-add-feature
   - asc-adapter
+  - asc-dedup
   - asc-help
 provides_skills:
   - asc
   - asc-adapter
   - asc-add-feature
   - asc-audit
+  - asc-bootstrap
   - asc-debt
   - asc-dedup
   - asc-fingerprint
+  - asc-learn
   - asc-new-project
   - asc-refactor
   - asc-reference

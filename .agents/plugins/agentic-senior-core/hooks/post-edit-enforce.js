@@ -6,28 +6,23 @@
 const fs = require('fs');
 const path = require('path');
 
-let STDLIB_DUPLICATES = new Set([
-  'lodash', 'lodash-es', 'underscore',
-  'moment', 'dayjs',
-  'uuid', 'nanoid',
-  'chalk', 'kleur', 'colorette',
-  'axios', 'got', 'node-fetch', 'superagent',
-  'mkdirp', 'rimraf', 'del',
-  'glob', 'globby',
-  'left-pad', 'pad-left',
-  'is-odd', 'is-even', 'is-number', 'is-string',
-  'path-exists', 'fs-extra',
-]);
+let STDLIB_DUPLICATES = new Set();
+let REVIEW_DUPLICATES = new Set();
 
 try {
   const knownPath = path.join(__dirname, 'lib', 'known-duplicates.json');
   if (fs.existsSync(knownPath)) {
     const raw = JSON.parse(fs.readFileSync(knownPath, 'utf8'));
-    if (Array.isArray(raw.duplicates)) {
-      STDLIB_DUPLICATES = new Set(raw.duplicates);
+    // Tiered structure (v5): 'block' + 'review'. This hook is advisory, so both
+    // tiers land here; the pre-tool gate is what distinguishes them.
+    if (Array.isArray(raw.block) || Array.isArray(raw.review)) {
+      STDLIB_DUPLICATES = new Set(raw.block || []);
+      REVIEW_DUPLICATES = new Set(raw.review || []);
+    } else if (Array.isArray(raw.duplicates)) {
+      REVIEW_DUPLICATES = new Set(raw.duplicates);
     }
   }
-} catch (_) {}
+} catch (_) { }
 
 let SECURITY_PATTERNS = { patterns: [], fileSpecific: {} };
 try {
@@ -35,7 +30,7 @@ try {
   if (fs.existsSync(secPath)) {
     SECURITY_PATTERNS = JSON.parse(fs.readFileSync(secPath, 'utf8'));
   }
-} catch (_) {}
+} catch (_) { }
 
 let UI_SLOP_PATTERNS = { patterns: [] };
 try {
@@ -43,7 +38,7 @@ try {
   if (fs.existsSync(slopPath)) {
     UI_SLOP_PATTERNS = JSON.parse(fs.readFileSync(slopPath, 'utf8'));
   }
-} catch (_) {}
+} catch (_) { }
 
 const {
   SOURCE_EXTENSIONS,
@@ -62,7 +57,7 @@ process.stdin.on('data', chunk => {
   inputBuffer += chunk;
   try {
     const data = JSON.parse(inputBuffer);
-    
+
     if (data.invocationNum !== undefined && data.transcriptPath) {
       handleAntigravityPostInvocation(data);
       return;
@@ -70,7 +65,7 @@ process.stdin.on('data', chunk => {
 
     const toolName = data.tool_name || '';
     const toolInput = data.tool_input || {};
-    processSingleEdit(toolName, toolInput, function(nudge) {
+    processSingleEdit(toolName, toolInput, function (nudge) {
       emitClaude(nudge);
     });
     process.exit(0);
@@ -84,7 +79,7 @@ function handleAntigravityPostInvocation(data) {
     if (!fs.existsSync(data.transcriptPath)) return;
     const lines = fs.readFileSync(data.transcriptPath, 'utf8').split('\n').filter(Boolean);
     const findings = [];
-    
+
     // Session drift check: count source file edits since initialNumSteps
     let sourceEditsSinceStart = 0;
     for (let i = 0; i < lines.length; i++) {
@@ -94,7 +89,7 @@ function handleAntigravityPostInvocation(data) {
           const tc = step.tool_calls[j];
           let toolName = '';
           let toolInput = {};
-          
+
           if (tc.name === 'replace_file_content' || tc.name === 'multi_replace_file_content') {
             toolName = 'Edit';
             toolInput = {
@@ -109,29 +104,29 @@ function handleAntigravityPostInvocation(data) {
               content: tc.args.CodeContent || ''
             };
           }
-          
+
           if (toolName) {
             const fp = toolInput.file_path || '';
             const ext = path.extname(fp).slice(1);
             if (SOURCE_EXTENSIONS.has(ext)) sourceEditsSinceStart++;
-            
-            processSingleEdit(toolName, toolInput, function(nudge) {
+
+            processSingleEdit(toolName, toolInput, function (nudge) {
               findings.push(nudge);
             }, true);
           }
         }
       }
     }
-    
+
     // Inject drift nudge if 4+ source files modified this invocation
     if (sourceEditsSinceStart >= SESSION_DRIFT_THRESHOLD) {
       findings.push('[ASC Session Drift] ' + sourceEditsSinceStart + ' source file edits this invocation. '
         + 'Re-read the decision ladder before continuing: (1) Does this need to be built? '
         + '(2) Does the codebase already have this? (3) Stdlib/native? (4) Existing dependency?');
     }
-    
+
     if (findings.length > 0) {
-      const injectSteps = findings.map(function(f) { return { ephemeralMessage: f }; });
+      const injectSteps = findings.map(function (f) { return { ephemeralMessage: f }; });
       process.stdout.write(JSON.stringify({ injectSteps: injectSteps }) + '\n');
     } else {
       process.stdout.write(JSON.stringify({}) + '\n');
@@ -173,7 +168,7 @@ function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
   }
 
   checkSecurityPatterns(toolName, toolInput, filePath, findings);
-  
+
   if (ext === 'html' || ext === 'css' || ext === 'jsx' || ext === 'tsx' || ext === 'vue' || ext === 'svelte') {
     checkUiSlopPatterns(toolName, toolInput, filePath, findings);
   }
@@ -207,7 +202,7 @@ function emitClaude(nudge) {
       output = { additionalContext: nudge };
     }
     process.stdout.write(JSON.stringify(output) + '\n');
-  } catch (_) {}
+  } catch (_) { }
 }
 
 function checkDependencyAddition(toolName, toolInput, findings) {
@@ -222,12 +217,20 @@ function checkDependencyAddition(toolName, toolInput, findings) {
   if (added.length === 0) return;
 
   var stdlibDupes = added.filter(function (d) { return STDLIB_DUPLICATES.has(d); });
+  var reviewDupes = added.filter(function (d) { return REVIEW_DUPLICATES.has(d); });
   if (stdlibDupes.length > 0) {
     findings.push(
-      'Dependency ' + stdlibDupes.join(', ') + ' may duplicate stdlib/platform features. '
-      + 'Ladder step 3: does the standard library cover this?'
+      'Dependency ' + stdlibDupes.join(', ') + ' duplicates stdlib/platform features. '
+      + 'Ladder step 3: use the standard library instead.'
     );
-  } else {
+  }
+  if (reviewDupes.length > 0) {
+    findings.push(
+      'Dependency ' + reviewDupes.join(', ') + ' may duplicate stdlib/native features (context-dependent). '
+      + 'Ladder step 3: confirm the package-specific need, or use the native equivalent.'
+    );
+  }
+  if (stdlibDupes.length === 0 && reviewDupes.length === 0) {
     findings.push(
       'New dependency added: ' + added.join(', ') + '. '
       + 'Ladder step 3-4: stdlib or already-installed alternative?'
@@ -272,7 +275,7 @@ function logPatternCheck(checkType, patternId, isMatch) {
   try {
     var result = isMatch ? 'match' : 'no-match';
     process.stderr.write('[pattern-check] ' + patternId + ': ' + result + '\n');
-  } catch (_) {}
+  } catch (_) { }
 }
 
 function checkSecurityPatterns(toolName, toolInput, filePath, findings) {
@@ -295,7 +298,7 @@ function checkSecurityPatterns(toolName, toolInput, filePath, findings) {
         if (isMatch) {
           findings.push('[ASC Security] ' + p.message);
         }
-      } catch (_) {}
+      } catch (_) { }
     });
   }
 
@@ -311,14 +314,14 @@ function checkSecurityPatterns(toolName, toolInput, filePath, findings) {
           findings.push('[ASC Security] ' + spec.message);
         }
       }
-    } catch (_) {}
+    } catch (_) { }
   }
 }
 
 function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
   var target = toolName === 'Edit' ? (toolInput.new_string || '') : (toolInput.content || '');
   if (!target) return;
-  
+
   if (UI_SLOP_PATTERNS.patterns) {
     UI_SLOP_PATTERNS.patterns.forEach(function (p) {
       try {
@@ -328,7 +331,7 @@ function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
         if (isMatch) {
           findings.push('[ASC UI Note] ' + p.message);
         }
-      } catch (_) {}
+      } catch (_) { }
     });
   }
 }
@@ -336,11 +339,11 @@ function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
 function checkLinter(filePath, findings) {
   try {
     var cwd = process.cwd();
-    var hasEslint = fs.existsSync(path.join(cwd, '.eslintrc.json')) || 
-                    fs.existsSync(path.join(cwd, '.eslintrc.js')) || 
-                    fs.existsSync(path.join(cwd, 'eslint.config.js')) ||
-                    (fs.existsSync(path.join(cwd, 'package.json')) && fs.readFileSync(path.join(cwd, 'package.json'), 'utf8').includes('eslintConfig'));
-    
+    var hasEslint = fs.existsSync(path.join(cwd, '.eslintrc.json')) ||
+      fs.existsSync(path.join(cwd, '.eslintrc.js')) ||
+      fs.existsSync(path.join(cwd, 'eslint.config.js')) ||
+      (fs.existsSync(path.join(cwd, 'package.json')) && fs.readFileSync(path.join(cwd, 'package.json'), 'utf8').includes('eslintConfig'));
+
     if (hasEslint) {
       var execSync = require('child_process').execSync;
       execSync('npx eslint "' + filePath + '" --format json', { cwd: cwd, stdio: 'pipe' });
@@ -353,7 +356,7 @@ function checkLinter(filePath, findings) {
           var firstErr = out[0].messages[0];
           findings.push('[ASC Linter] ' + firstErr.message + ' at line ' + firstErr.line + '.');
         }
-      } catch (_) {}
+      } catch (_) { }
     }
   }
 }
@@ -373,10 +376,10 @@ function checkWorkflowGate(toolName, filePath, ext, findings) {
     var pathUtil = require('./path-util.cjs');
     var gatePath = pathUtil.getWorkflowGatePath(process.cwd());
     if (!fs.existsSync(gatePath)) return;
-    
+
     var gateStr = fs.readFileSync(gatePath, 'utf8');
     var gate = JSON.parse(gateStr);
-    
+
     if (gate.updatedAt) {
       var ageHours = (Date.now() - new Date(gate.updatedAt).getTime()) / (1000 * 60 * 60);
       if (ageHours > 4) {
@@ -385,7 +388,7 @@ function checkWorkflowGate(toolName, filePath, ext, findings) {
         return;
       }
     }
-    
+
     if (gate.phase === 'research' || gate.phase === 'plan') {
       findings.push(
         'Workflow gate bypass: ' + gate.workflow + ' is in ' + gate.phase + ' phase but source code was edited. '
@@ -403,7 +406,7 @@ function validateDocSpecs(workflow, findings) {
   try {
     var cwd = process.cwd();
     var docsDir = path.join(cwd, 'docs');
-    
+
     // Anti-typo check for common doc typos (e.g. Architectyre.md)
     var searchDirs = [cwd, docsDir];
     var typoFound = false;
@@ -438,7 +441,7 @@ function validateDocSpecs(workflow, findings) {
         );
       }
     }
-  } catch (_) {}
+  } catch (_) { }
 }
 
 

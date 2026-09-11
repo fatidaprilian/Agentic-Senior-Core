@@ -1,7 +1,7 @@
 ---
 name: asc
 description: >
-  Trigger this skill when the user says: "what are the rules", "coding guidelines", "best practices", "code quality standards", "how should I write this", "staff engineer approach", "senior developer rules", "what does ASC say about", "how do I write this properly", "what's the right way", "any guidelines for this", "apa aturannya", "panduan koding", "cara tulis yang bener". Also trigger for any general request about coding standards, quality guidelines, or when the user asks the agent to follow senior/staff engineering practices.
+  Trigger this skill when the user says: "what are the rules", "coding guidelines", "best practices", "code quality standards", "how should I write this", "staff engineer approach", "senior developer rules", "what does ASC say about", "how do I write this properly", "what's the right way", "any guidelines for this", "apa aturannya", "panduan koding", "cara tulis yang bener". Also trigger for any general request about coding standards, quality guidelines, or when the user asks the agent to follow senior/staff engineering practices. Do NOT trigger for implementing features, refactoring code, running audits, or writing specific project code directly (use the respective domain skills like asc-add-feature, asc-refactor, or asc-audit instead).
 ---
 
 # Agentic Senior Core

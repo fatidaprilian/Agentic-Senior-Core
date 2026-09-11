@@ -9,7 +9,8 @@ description: >
   "isn't this a copy of", "cari kode duplikat", "ini kok sama kayak yang itu",
   "ini udah ada kan". Use for whole-repo or whole-directory duplication
   audits on demand — this is a deep, on-demand scan, distinct from the
-  continuous per-edit check already enforced by the dedup-gate hook.
+  continuous per-edit check already enforced by the dedup-gate hook. Do NOT
+  trigger for general code restructuring or refactoring without duplication/clone audit focus (use asc-refactor instead).
 ---
 
 # Duplicate Code Audit

@@ -1,9 +1,23 @@
 {
-  "description": "Single source of truth for packages that duplicate standard library or native platform features.",
-  "duplicates": [
+  "description": "Packages that duplicate standard library or native platform features. Tiered per 2026 evidence: 'block' packages are always redundant; 'review' packages have legitimate remaining use cases and only trigger a nudge, not a hard block.",
+  "block": [
+    "left-pad",
+    "pad-left",
+    "is-odd",
+    "is-even",
+    "is-number",
+    "is-string",
+    "path-exists",
+    "mkdirp",
+    "rimraf",
+    "del",
+    "node-fetch",
+    "superagent",
+    "underscore"
+  ],
+  "review": [
     "lodash",
     "lodash-es",
-    "underscore",
     "moment",
     "dayjs",
     "uuid",
@@ -13,20 +27,16 @@
     "colorette",
     "axios",
     "got",
-    "node-fetch",
-    "superagent",
-    "mkdirp",
-    "rimraf",
-    "del",
     "glob",
     "globby",
-    "left-pad",
-    "pad-left",
-    "is-odd",
-    "is-even",
-    "is-number",
-    "is-string",
-    "path-exists",
     "fs-extra"
-  ]
+  ],
+  "reviewReasons": {
+    "uuid": "crypto.randomUUID() covers v4 (Node 14.17+); uuid package still needed for v5/v7 (sortable DB keys) and validation",
+    "axios": "prefer native fetch (stable since Node 18; axios supply-chain compromise March 2026); axios still justified for interceptors and uniform non-2xx error throwing",
+    "chalk": "maintainer notes npm dedup means it is likely already in the tree; legitimate when cross-platform color-support detection is needed",
+    "lodash": "native Array/Object methods cover most uses; justify per-method need",
+    "moment": "prefer native Intl/Temporal or dayjs; moment is legacy and in maintenance mode",
+    "glob": "Node 22+ fs.glob covers common cases; justify if complex patterns are needed"
+  }
 }
