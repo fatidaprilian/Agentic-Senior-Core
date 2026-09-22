@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.11.1
+
+### Fixed & Cleaned
+- **Windows cmd.exe Hook Compatibility**: Eliminated fatal shell error (`node was unexpected at this time`) on Windows when Antigravity executes `hooks.json` via `cmd /c` by replacing PowerShell syntax in `commandWindows` with native portable Node commands (`node hooks/<script>.js`).
+- **Hook Deduplication & Unification**: Consolidated `hooks.json` to eliminate redundant duplicate blocks while maintaining 100% compliance across Antigravity IDE, Claude Code, GitHub Copilot CLI, and Codex CLI.
+- **Hook Logger Auto-Rotation**: Implemented bounded 100 KB log capping with 50 KB tail retention in `%USERPROFILE%\.asc\hooks.log` to prevent unbounded disk growth.
+- **Dead Code Cleanup (Legacy MCP Server)**: Removed unused legacy MCP stdio server scripts (`scripts/mcp-server.mjs`, `scripts/mcp-server/`, `lib/cli/commands/mcp.mjs`, and `asc mcp` CLI command) in alignment with the core ASC mandate to eliminate dead code carrying no behavior, safety, or test value.
+
 ## 6.11.0
 
 ### Added & Hardened

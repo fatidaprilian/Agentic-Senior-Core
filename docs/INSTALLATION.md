@@ -260,7 +260,7 @@ One command (works on all platforms):
 asc global --antigravity
 ```
 
-This automatically stages the plugin bundle (skills, rules, hooks, and MCP servers) for:
+This automatically stages the plugin bundle (skills, rules, and hooks) for:
 - **Antigravity 2.0 & IDE** (`~/.gemini/config/plugins/agentic-senior-core/`)
 - **Antigravity CLI** (`~/.gemini/antigravity-cli/plugins/agentic-senior-core/`)
 

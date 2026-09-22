@@ -57,16 +57,50 @@ const {
 } = require('./constants.cjs');
 
 // Module-level counter for Claude Code path (resets per process spawn)
-let sourceEditCount = 0;
+function logHook(event, msg) {
+  try {
+    const os = require('os');
+    const logDir = path.join(os.homedir(), '.asc');
+    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+    const logFile = path.join(logDir, 'hooks.log');
+    try {
+      if (fs.existsSync(logFile)) {
+        const stats = fs.statSync(logFile);
+        if (stats.size > 100 * 1024) {
+          const content = fs.readFileSync(logFile, 'utf8');
+          const trimmed = content.slice(-50 * 1024);
+          const firstNewline = trimmed.indexOf('\n');
+          fs.writeFileSync(logFile, firstNewline >= 0 ? trimmed.slice(firstNewline + 1) : trimmed, 'utf8');
+        }
+      }
+    } catch (_) {}
+    fs.appendFileSync(logFile, `[${new Date().toISOString()}] [post-edit-enforce] [${event}] ${msg}\n`, 'utf8');
+  } catch (_) {}
+}
+
+logHook('ScriptStart', `pid=${process.pid} cwd=${process.cwd()}`);
+
+if (process.stdin.isTTY) {
+  logHook('StdinTTY', 'Exiting because stdin is a TTY');
+  process.exit(0);
+}
+
+const stdinTimeout = setTimeout(() => {
+  logHook('StdinTimeout', `No input after 3s, exiting bufferLen=${inputBuffer.length}`);
+  process.exit(0);
+}, 3000);
 
 let inputBuffer = '';
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => {
   inputBuffer += chunk;
+  logHook('DataChunk', `len=${chunk.length} preview=${chunk.slice(0, 100).replace(/[\r\n]+/g, ' ')}`);
   try {
     const data = JSON.parse(inputBuffer);
+    clearTimeout(stdinTimeout);
+    logHook('StdinData', 'keys=' + Object.keys(data).join(','));
 
-    if (data.invocationNum !== undefined && data.transcriptPath) {
+    if (data.transcriptPath) {
       handleAntigravityPostInvocation(data);
       return;
     }
@@ -79,6 +113,32 @@ process.stdin.on('data', chunk => {
     process.exit(0);
   } catch (e) {
     // incomplete json, wait for more chunks
+  }
+});
+
+process.stdin.on('end', () => {
+  clearTimeout(stdinTimeout);
+  logHook('StdinEnd', `bufferLen=${inputBuffer.length}`);
+  if (inputBuffer.trim()) {
+    try {
+      const data = JSON.parse(inputBuffer);
+      logHook('ParsedInputOnEnd', 'keys=' + Object.keys(data).join(','));
+      if (data.transcriptPath) {
+        handleAntigravityPostInvocation(data);
+        return;
+      }
+      const toolName = data.tool_name || '';
+      const toolInput = data.tool_input || {};
+      processSingleEdit(toolName, toolInput, function (nudge) {
+        emitClaude(nudge);
+      });
+      process.exit(0);
+    } catch (e) {
+      logHook('JsonParseErrorOnEnd', e.message);
+      process.exit(0);
+    }
+  } else {
+    process.exit(0);
   }
 });
 
@@ -133,21 +193,31 @@ function handleAntigravityPostInvocation(data) {
         + '(2) Does the codebase already have this? (3) Stdlib/native? (4) Existing dependency?');
     }
 
-    if (findings.length > 0) {
+    const isPostToolUse = data.stepIdx !== undefined;
+    logHook('AntigravityResult', `sourceEdits=${sourceEditsSinceStart}, findings=${findings.length}, isPostToolUse=${isPostToolUse}`);
+
+    if (isPostToolUse) {
+      process.stdout.write(JSON.stringify({}) + '\n');
+    } else if (findings.length > 0) {
       const injectSteps = findings.map(function (f) { return { ephemeralMessage: f }; });
       process.stdout.write(JSON.stringify({ injectSteps: injectSteps }) + '\n');
     } else {
       process.stdout.write(JSON.stringify({}) + '\n');
     }
   } catch (e) {
+    logHook('AntigravityError', e.message);
     process.stdout.write(JSON.stringify({}) + '\n');
   }
+  process.exit(0);
 }
 
 function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
-  const filePath = toolInput.file_path || '';
+  const filePath = toolInput.file_path || toolInput.TargetFile || toolInput.filePath || '';
   if (!filePath) return;
   const findings = [];
+
+  const isEdit = toolName === 'Edit' || toolName === 'replace_file_content' || toolName === 'multi_replace_file_content';
+  const isWrite = toolName === 'Write' || toolName === 'write_to_file';
 
   // Increment per-process counter for Claude Code drift detection
   const ext = path.extname(filePath).slice(1);
@@ -168,9 +238,9 @@ function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
   }
 
   if (SOURCE_EXTENSIONS.has(ext)) {
-    if (toolName === 'Edit') {
+    if (isEdit) {
       checkLocDelta(toolInput, filePath, findings);
-    } else if (toolName === 'Write') {
+    } else if (isWrite) {
       checkNewFileSize(toolInput, filePath, findings);
     }
   }
@@ -190,6 +260,8 @@ function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
   if (ext !== 'md') {
     checkWorkflowGate(toolName, filePath, ext, findings);
   }
+
+  logHook('ProcessSingleEdit', 'tool=' + toolName + ', file=' + filePath + ', findings=' + findings.length);
 
   if (findings.length === 0) return;
 
@@ -256,8 +328,8 @@ function extractDeps(text, pattern) {
 }
 
 function checkLocDelta(toolInput, filePath, findings) {
-  var newLines = (toolInput.new_string || '').split('\n').length;
-  var oldLines = (toolInput.old_string || '').split('\n').length;
+  var newLines = (toolInput.new_string || toolInput.ReplacementContent || '').split('\n').length;
+  var oldLines = (toolInput.old_string || toolInput.TargetContent || '').split('\n').length;
   var delta = newLines - oldLines;
   if (delta > LOC_DELTA_THRESHOLD) {
     findings.push(
@@ -268,7 +340,7 @@ function checkLocDelta(toolInput, filePath, findings) {
 }
 
 function checkNewFileSize(toolInput, filePath, findings) {
-  var lines = (toolInput.content || '').split('\n').length;
+  var lines = (toolInput.content || toolInput.CodeContent || '').split('\n').length;
   if (lines > NEW_FILE_LINE_THRESHOLD) {
     // Step 1-2 coverage ("does this already exist?") moved to dedup-gate.js
     // which provides concrete file-name + overlap-percentage feedback.
@@ -327,7 +399,7 @@ function checkSecurityPatterns(toolName, toolInput, filePath, findings) {
 }
 
 function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
-  var target = toolName === 'Edit' ? (toolInput.new_string || '') : (toolInput.content || '');
+  var target = toolName === 'Edit' ? (toolInput.new_string || toolInput.ReplacementContent || '') : (toolInput.content || toolInput.CodeContent || '');
   if (!target) return;
 
   if (UI_SLOP_PATTERNS.patterns) {

@@ -8,7 +8,6 @@
  *   uninstall   Remove ASC adapter files from the current project
  *   clean       Remove v4 per-project artifacts (.agent-context/, bridge files)
  *   status      Show detected IDEs and install hints
- *   mcp         Start MCP stdio server
  */
 import { exit } from 'node:process';
 import { readFileSync } from 'node:fs';
@@ -37,7 +36,6 @@ function printUsage() {
   console.log('  uninstall         Remove ASC adapter files and git hooks from this project');
   console.log('  clean             Remove v4 per-project artifacts');
   console.log('  status            Show detected IDEs and install hints');
-  console.log('  mcp               Start MCP stdio server');
   console.log('  --version         Show version');
   console.log('  --help            Show this help');
 }
@@ -89,12 +87,6 @@ async function main() {
   if (commandArgument === 'status') {
     const { runStatusCommand } = await import('../lib/cli/commands/status.mjs');
     await runStatusCommand();
-    return;
-  }
-
-  if (commandArgument === 'mcp') {
-    const { runMcpServerCommand } = await import('../lib/cli/commands/mcp.mjs');
-    await runMcpServerCommand();
     return;
   }
 

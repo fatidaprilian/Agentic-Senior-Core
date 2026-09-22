@@ -431,6 +431,10 @@ module.exports = { calculateTax };`;
     assert.strictEqual(res.installed, true);
     assert.strictEqual(res.global, true);
     assert.strictEqual(res.hookPath, path.join(tmpHome, '.asc', 'global-hooks', 'pre-commit'));
+    assert.strictEqual(res.runnerPath, path.join(tmpHome, '.asc', 'global-hooks', 'pre-commit-runner.cjs'));
+
+    const runnerExists = await fs.access(res.runnerPath).then(() => true).catch(() => false);
+    assert.ok(runnerExists, 'Global pre-commit-runner.cjs must be generated as fallback');
 
     const content = await fs.readFile(res.hookPath, 'utf8');
     assert.ok(content.includes('.husky/pre-commit'), 'Global dispatcher checks .husky/pre-commit');

@@ -1,6 +1,6 @@
 {
   "name": "@ryuenn3123/agentic-senior-core",
-  "version": "6.11.0",
+  "version": "6.11.1",
   "type": "module",
   "description": "Agentic Senior Core: Universal AI coding rules and workflows. Write code like a staff engineer, not a junior.",
   "bin": {
@@ -16,8 +16,6 @@
     "gemini-extension.json",
     "plugin.yaml",
     "__init__.py",
-    "scripts/mcp-server.mjs",
-    "scripts/mcp-server/",
     "scripts/uninstall.js",
     "README.md",
     "LICENSE",
