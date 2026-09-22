@@ -29,6 +29,21 @@
       "id": "ui-pill-badge-generic",
       "regex": "rounded-full\\s+px-4\\s+py-1\\s+text-sm\\s+font-medium\\s+bg-(?:blue|purple|indigo)-100\\s+text-(?:blue|purple|indigo)-800",
       "message": "note: 'generic pill badge' (AI default tag) was flagged, consider continuing with the project's existing badge component instead."
+    },
+    {
+      "id": "ui-gradient-text-cliche",
+      "regex": "bg-clip-text\\s+text-transparent|text-transparent\\s+bg-clip-text",
+      "message": "note: 'gradient text (bg-clip-text text-transparent)' is an overused AI landing page trope. Prefer solid semantic typography with strong hierarchy."
+    },
+    {
+      "id": "ui-transition-all-layout-cost",
+      "regex": "\\btransition-all(?:\\s+duration-[0-9]+)?\\b|transition:\\s*all\\b",
+      "message": "note: 'transition-all' triggers layout repaints on all properties. Transition specific GPU-accelerated properties (transform, opacity) instead."
+    },
+    {
+      "id": "ui-stripped-focus-ring",
+      "regex": "(?:\\boutline-none\\b|\\bfocus:outline-none\\b)(?!.*(?:focus-visible:ring|focus:ring|focus-visible:outline))",
+      "message": "warning: 'outline-none' without a focus-visible ring breaks keyboard navigation (WCAG 2.4.7 violation). Pair with focus-visible:ring-2."
     }
   ]
 }

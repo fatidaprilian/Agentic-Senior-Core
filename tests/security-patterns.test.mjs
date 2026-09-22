@@ -31,4 +31,26 @@ describe('Polyglot Security Patterns', () => {
     assert.ok(patternIds.has('potential-ssrf'), 'must detect user-controlled outbound requests');
     assert.ok(patternIds.has('potential-log-injection'), 'must detect direct user-controlled log values');
   });
+
+  it('loads known-stub-patterns.json with valid schema and regexes', async () => {
+    const filePath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'hooks', 'lib', 'known-stub-patterns.json');
+    const raw = await fs.readFile(filePath, 'utf8');
+    const data = JSON.parse(raw);
+
+    assert.ok(Array.isArray(data.patterns), 'patterns must be an array');
+    assert.ok(data.patterns.length >= 3, 'must have at least 3 stub patterns');
+
+    for (const p of data.patterns) {
+      assert.ok(p.id, 'Pattern must have id');
+      assert.ok(p.regex, 'Pattern must have regex');
+      assert.ok(p.message, 'Pattern must have message');
+      assert.ok(Array.isArray(p.languages), `Pattern ${p.id} must have languages array`);
+      // Test regex validity
+      assert.doesNotThrow(() => new RegExp(p.regex, 'im'), `Pattern ${p.id} has valid regex`);
+    }
+
+    const stubPattern = new RegExp(data.patterns.find(p => p.id === 'asc-stub-untracked').regex, 'im');
+    assert.ok(stubPattern.test('// ASC-STUB: incomplete code'));
+    assert.strictEqual(stubPattern.test('// ASC-STUB: incomplete code [ASC-DEBT-001]'), false);
+  });
 });

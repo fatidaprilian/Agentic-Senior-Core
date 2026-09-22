@@ -10,12 +10,13 @@ Production-risk code review. Prioritize findings by severity.
 
 Grounded in: OWASP Risk Rating Methodology, Google Engineering Practices (code review guide), Clean Architecture (transport vs business layer separation).
 
-## Before Reviewing
+## Review Procedure (Empirical First)
 
-1. Read the changed files and understand the scope.
-2. For UI changes, check accessibility and design consistency.
-3. For API changes, check contract stability and documentation sync.
-4. Walk the decision ladder for each new file or dependency: does this need to exist, could the stdlib or an existing dependency handle it?
+1. **Establish Scope**: Run `git diff --stat` (or `git status`) to inspect the exact set of changed files and line deltas.
+2. **Test-Change Correlation**: For every modified application source file, check if a corresponding test file was updated. If application logic changed without test updates, flag as Severity 3 ("Missing tests for changed behavior").
+3. **Run Deterministic Checks**: Run the project linter and test suite (`ascx test` / `npm test`). Do not evaluate architectural quality on a failing test suite.
+4. **Security & Invariants Scan**: Check for unverified `ASC-STUB:`, hardcoded credentials, or empty catch blocks in the diff.
+5. **Contract & Hierarchy**: Walk the decision ladder for each new file or dependency: does this need to exist, could the stdlib or an existing dependency handle it?
 
 ## Finding Priority Order
 

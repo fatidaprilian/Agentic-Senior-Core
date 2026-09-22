@@ -10,6 +10,12 @@ Security and architecture audit. Deeper than review, focused on finding vulnerab
 
 Grounded in: OWASP Top 10 (2025), OWASP ASVS v5.0, OWASP Top 10 for Agentic Applications (ASI01-ASI10, v2.01), CVSS vulnerability report structure, CWE classification.
 
+## Audit Procedure (Empirical First)
+
+1. **Dependency Vulnerability Scan**: Run the project's native security auditor (`npm audit`, `cargo audit`, or `pip-audit`). Report known CVEs immediately.
+2. **Lexical Sink & Secret Scan**: Search for hardcoded credentials, unvalidated redirects (`location.href`), dangerous functions (`eval`, `pickle.load`, `shell=True`), and unverified stubs (`// ASC-STUB:`).
+3. **Trust Boundary Mapping**: Trace all points where untrusted external input (HTTP body/query, CLI args, environment, external files) enters the system.
+
 ## Audit Scope
 
 1. **Trust boundaries**: Every point where external input enters the system. Validate that inputs are sanitized, normalized, and rejected when invalid.

@@ -24,17 +24,16 @@ Removing speculative code is the highest-value, lowest-risk refactor type.
 After reading the target code, classify the refactor:
 
 - **Low-level** (rename, extract method, type safety, dead code removal): proceed after explaining the change. No approval gate needed.
-- **High-level** (move module, change architecture, redesign abstractions, multi-file structural changes): output a plan with specific files and rationale, then **stop and wait for user approval** before implementing.
-
-**Known limitation:** The high-level refactor gate is a skill-text instruction — the agent self-classifies and self-stops. Unlike `/asc-add-feature` and `/asc-new-project`, this gate is not backed by the PostToolUse hook or workflow-gate.json. If the agent bypasses the gate, there is no automated nudge.
+- **High-level** (move module, change architecture, redesign abstractions, multi-file structural changes): write `workflow-gate.json` with `{"workflow": "asc-refactor", "phase": "plan"}`, output a plan with specific files and rationale, then **stop and wait for user approval** before implementing.
 
 ## Before Editing
 
-1. Read the target code and understand existing patterns.
-2. Identify the smallest relevant scope for the refactor.
-3. Classify the refactor (see above). If high-level, stop and present a plan.
-4. If the change touches UI, check accessibility and responsive behavior.
-5. If the change touches dependencies, verify current official docs.
+1. **Verify Baseline**: Run project test runner (`ascx test`, `npm test`, or equivalent). Do not refactor on failing tests.
+2. Read the target code and understand existing patterns.
+3. Identify the smallest relevant scope for the refactor.
+4. Classify the refactor (see above). For high-level refactors, update `workflow-gate.json` to phase `implement` only after user approval.
+5. If the change touches UI, check accessibility and responsive behavior.
+6. If the change touches dependencies, verify current official docs.
 
 ## Refactor Rules
 

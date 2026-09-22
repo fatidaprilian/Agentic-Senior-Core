@@ -12,13 +12,23 @@ Grounded in: Cunningham's technical debt metaphor (1992). Entry format (ladder s
 
 ## Storage
 
-Entries persist in `.agent-context/state/debt-ledger.json` via MCP `state_read`/`state_write`. The ledger is a JSON array of entry objects.
+Entries persist in `.agent-context/state/debt-ledger.json` (or `.asc/debt-ledger.json`) via standard file read/write operations. The ledger is a JSON array of entry objects.
+
+## Stub Convention
+
+When introducing a temporary stub during development, mark it explicitly:
+```typescript
+// ASC-STUB: [reason for temporary code] [ASC-DEBT-001]
+```
+(or `# ASC-STUB: [reason] [ASC-DEBT-001]` in Python/Ruby).
+
+Every stub marker in source code MUST reference an open debt ID. Unregistered stubs will be blocked by the Git pre-commit runner.
 
 ## Entry Format
 
 ```json
 {
-  "id": "sequential integer",
+  "id": "sequential integer (or ASC-DEBT-xxx)",
   "file": "path/to/file.ts",
   "ladderStep": "3",
   "violation": "Added axios — stdlib fetch covers this",
@@ -34,14 +44,14 @@ Entries persist in `.agent-context/state/debt-ledger.json` via MCP `state_read`/
 
 When an enforcement nudge fires and the violation is deferred:
 
-1. Read the current ledger via `state_read` (path: `debt-ledger.json`). If missing, start with `[]`.
+1. Read the current ledger from `.agent-context/state/debt-ledger.json`. If missing, start with `[]`.
 2. Append a new entry with the next sequential `id`, the file path, ladder step, and a one-line violation summary.
-3. Write the updated ledger via `state_write` (path: `debt-ledger.json`, mode: `overwrite`).
+3. Write the updated ledger back to disk.
 4. Confirm: "Logged to debt ledger: [violation summary]"
 
 ### List Open Debt
 
-1. Read the ledger via `state_read`.
+1. Read the ledger.
 2. Filter to entries where `status` is `"open"`.
 3. Display as a table: ID, file, ladder step, violation, age.
 4. If no open entries, say so explicitly.

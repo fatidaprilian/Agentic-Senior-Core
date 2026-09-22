@@ -19,6 +19,9 @@ Grounded in: Cold-start preference elicitation literature (Deezer/Netflix) & Khr
    - `ui-colored-left-border` (Colored left-border strip alert/card)
    - `ui-glassmorphism` (Generic glassmorphism backdrop blur)
    - `ui-pill-badge-generic` (Generic rounded pill tag badge)
+   - `ui-gradient-text-cliche` (Overused gradient headline text)
+   - `ui-transition-all-layout-cost` (Overused transition-all layout repaint cost)
+   - `ui-stripped-focus-ring` (Stripped focus ring WCAG 2.4.7 violation)
 2. Prompt user to select which slop patterns to ban for their brand/repo.
 3. Call `bootstrapPreferences()` in `lib/core/bootstrap-wizard.mjs` to seed selected rules into project preferences.
 4. Auto-compile Track A rules into `.git/hooks/pre-commit` and `ascx validate`.

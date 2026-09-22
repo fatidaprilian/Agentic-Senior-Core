@@ -31,7 +31,7 @@ const SKILL_COPIES = [
 ];
 
 const REQUIRED_MARKERS = [
-  { label: 'behavioral anchor', pattern: 'stdlib one-liner' },
+  { label: 'behavioral anchor', pattern: 'native platform' },
   { label: 'decision ladder step 1', pattern: 'Does this need to be built' },
   { label: 'security carveout', pattern: 'never skip' },
   { label: 'response style', pattern: 'Response Style' },

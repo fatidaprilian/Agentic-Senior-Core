@@ -18,7 +18,7 @@ Before writing code, stop at the lowest step that holds:
 When picking step 5 or 6 (unless trivial):
 - One-line comment noting rationale and upgrade trigger if there is a ceiling.
 - One runnable check (assertion, test, or demo) proving it works.
-- Never simulate success or return hardcoded values mimicking live integrations.
+- Never simulate success or return hardcoded values mimicking live integrations. Temporary stubs must be marked with `// ASC-STUB: [reason] [ASC-DEBT-xxx]` and tracked in the debt ledger.
 
 ## Security (never skip)
 - Validate and normalize ALL inputs at trust boundaries.
@@ -35,6 +35,7 @@ When picking step 5 or 6 (unless trivial):
 - All identifiers (variables, functions, classes, file names) must be in English. No emojis in code or commit messages.
 - Early returns over deep nesting (keep happy path flat).
 - Three similar lines is better than a premature abstraction (duplication over wrong abstraction).
+- Single design source of truth: UI styling must reuse defined design tokens, theme variables, or existing page patterns. No ad-hoc palette, radius, or font deviations between pages.
 - Delete code that carries no behavior, safety, or test value. Readability wins over brevity.
 - Detect and respect project linter/formatter configs. Do not restate style rules enforced by tooling.
 
@@ -46,10 +47,12 @@ When picking step 5 or 6 (unless trivial):
 - Scope and direction changes require explicit user confirmation before modifying abstractions or altering system contracts.
 - Before implementing a feature, locate an analogous module and follow its layer split, naming, and error-handling.
 - Atomic writes must be wrapped in transactions. Flag shared mutable state under concurrent requests.
+- UI component reuse: Component re-invention across pages is forbidden. Before declaring markup or styling, check existing components in `components/` or `ui/`. Compose or extend existing components via props/variants. Do not introduce single-page clones or ad-hoc styling that diverges from established pages.
 
 ## Error Handling & Observability
 - Fail fast on invalid input at trust boundaries. Handle only errors that can actually occur.
 - Structured error responses with safe details (RFC 9457). Distinguish client (4xx) from server (5xx) errors.
+- Frontend data-fetching components must explicitly handle loading, error (toast/notification with retry), and data states.
 - Surface every operational error with context. Empty catch blocks mask production issues.
 - Structured key-value logging for significant events. Never leak stack traces or credentials in production logs.
 
@@ -58,6 +61,7 @@ When picking step 5 or 6 (unless trivial):
 - Never run `git commit`, `git push`, or `git push --force` unless explicitly requested this turn.
 - Testing baseline: new business logic gets one happy-path test and one failure-mode test, unless waived by user.
 - Test quality: Never mock the unit under test — mock only external boundaries/dependencies.
+- Test integrity: Never weaken or delete test assertions to simulate a passing run. Fix the underlying logic.
 - Sycophancy mitigation: State technical objections and trade-offs plainly before implementing. Answer direct questions honestly.
 - Preserve findings and decisions outside chat context. Recommend a fresh context at phase boundaries or after 20-30 tool calls.
 

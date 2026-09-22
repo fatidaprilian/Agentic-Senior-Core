@@ -1,0 +1,29 @@
+{
+  "description": "Regex patterns for temporary stubs, untracked debt, and fake completions across all languages.",
+  "patterns": [
+    {
+      "id": "asc-stub-untracked",
+      "regex": "(?:\\/\\/|#|\\/\\*)\\s*ASC-STUB:(?!.*\\b(ASC-DEBT|#\\d+|[A-Z]+-\\d+)\\b)",
+      "message": "ASC-STUB marker detected without tracked debt reference. Add tracking ID (e.g. // ASC-STUB: [reason] [ASC-DEBT-001]) and record in debt ledger.",
+      "languages": ["universal"]
+    },
+    {
+      "id": "untracked-todo",
+      "regex": "(?:\\/\\/|#|\\/\\*)\\s*TODO(?!.*\\b(ASC-DEBT|#\\d+|[A-Z]+-\\d+)\\b)",
+      "message": "TODO without tracked debt or issue reference. Track via /asc-debt or resolve before completing task.",
+      "languages": ["universal"]
+    },
+    {
+      "id": "fake-success-mock",
+      "regex": "(?:return\\s*\\{\\s*success:\\s*true\\s*\\}|return\\s*True|return\\s*true|return\\s*nil)\\s*;?\\s*(?:\\/\\/|#).*?(mock|fake|stub|placeholder|todo)",
+      "message": "Hardcoded success return near mock/stub marker detected. Never simulate success to mimic real integration.",
+      "languages": ["universal"]
+    },
+    {
+      "id": "hardcoded-endpoint-stub",
+      "regex": "(?:baseURL|apiUrl|endpoint|api_url)\\s*[:=]\\s*['\"]https?:\\/\\/(?!localhost|127\\.0\\.0\\.1)",
+      "message": "Hardcoded external endpoint detected outside config/env. Store endpoints in environment variables.",
+      "languages": ["js", "ts", "jsx", "tsx", "py", "go", "rs"]
+    }
+  ]
+}

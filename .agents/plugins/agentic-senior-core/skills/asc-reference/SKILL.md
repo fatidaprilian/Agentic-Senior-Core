@@ -40,9 +40,10 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 ## Frontend
 
 - Match the project's existing styling paradigm (Tailwind, CSS Modules, Vanilla CSS, styled-components, etc.). Do not introduce a new CSS framework or build tool without explicit user confirmation.
-- Semantic HTML before custom components.
-- WCAG 2.2 AA is the accessibility floor.
-- Responsive by default. Handle empty, loading, error, and offline states.
+- UI Component Reusability: Primitive UI elements (buttons, inputs, cards, dialogs, badges) must have a single source of truth in the shared component directory (`components/` or `ui/`). Never recreate ad-hoc variants or duplicate JSX structures across individual pages. Extend existing components with props or variants instead of cloning.
+- Design Consistency: Consume shared design tokens, CSS variables, or theme configuration for colors, spacing, and border-radius. Do not hardcode arbitrary raw color hexes or inconsistent spacing that causes visual design drift between pages.
+- Data-fetching components must explicitly handle 3 states: loading, error (with user-facing toast/notification and retry option), and data. Never leave an unhandled error state.
+- WCAG 2.2 AA accessibility floor. Responsive by default.
 - No placeholder, lorem, or TODO content in production UI.
 
 ## Infrastructure
@@ -59,10 +60,3 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 - Circuit breakers for unhealthy dependencies.
 - Graceful degradation on non-critical dependency failure.
 
-## Naming
-
-- Variables and properties are nouns: `userList`, `pageCount`, not `getUser`.
-- Functions and methods are verbs: `calculateTotal`, `fetchUsers`, not `total`.
-- Booleans prefixed with `is`/`has`/`can`: `isValid`, `hasPermission`.
-- Constants in UPPER_SNAKE_CASE: `MAX_RETRIES`, `API_BASE_URL`.
-- Follow the casing convention of the language and existing codebase. When starting fresh, use the community default for that language.

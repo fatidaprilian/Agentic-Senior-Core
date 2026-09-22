@@ -40,6 +40,14 @@ try {
   }
 } catch (_) { }
 
+let STUB_PATTERNS = { patterns: [] };
+try {
+  const stubPath = path.join(__dirname, 'lib', 'known-stub-patterns.json');
+  if (fs.existsSync(stubPath)) {
+    STUB_PATTERNS = JSON.parse(fs.readFileSync(stubPath, 'utf8'));
+  }
+} catch (_) { }
+
 const {
   SOURCE_EXTENSIONS,
   LOC_DELTA_THRESHOLD,
@@ -168,16 +176,16 @@ function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
   }
 
   checkSecurityPatterns(toolName, toolInput, filePath, findings);
+  checkStubPatterns(toolName, toolInput, filePath, findings);
 
   if (ext === 'html' || ext === 'css' || ext === 'jsx' || ext === 'tsx' || ext === 'vue' || ext === 'svelte') {
     checkUiSlopPatterns(toolName, toolInput, filePath, findings);
   }
 
-  if (ext === 'js' || ext === 'ts' || ext === 'jsx' || ext === 'tsx' || ext === 'mjs' || ext === 'cjs') {
-    checkLinter(filePath, findings);
-  }
+  checkUniversalLinter(filePath, ext, findings);
 
   checkLivingDocNudge(filePath, findings);
+  checkTestTampering(filePath, findings);
 
   if (ext !== 'md') {
     checkWorkflowGate(toolName, filePath, ext, findings);
@@ -336,27 +344,95 @@ function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
   }
 }
 
-function checkLinter(filePath, findings) {
-  try {
-    var cwd = process.cwd();
-    var hasEslint = fs.existsSync(path.join(cwd, '.eslintrc.json')) ||
-      fs.existsSync(path.join(cwd, '.eslintrc.js')) ||
-      fs.existsSync(path.join(cwd, 'eslint.config.js')) ||
-      (fs.existsSync(path.join(cwd, 'package.json')) && fs.readFileSync(path.join(cwd, 'package.json'), 'utf8').includes('eslintConfig'));
+function checkStubPatterns(toolName, toolInput, filePath, findings) {
+  var target = toolName === 'Edit' ? (toolInput.new_string || toolInput.ReplacementContent || '') : (toolInput.content || toolInput.CodeContent || '');
+  if (!target) return;
 
-    if (hasEslint) {
-      var execSync = require('child_process').execSync;
-      execSync('npx eslint "' + filePath + '" --format json', { cwd: cwd, stdio: 'pipe' });
-    }
-  } catch (error) {
-    if (error.stdout) {
+  var ext = path.extname(filePath).slice(1);
+  if (STUB_PATTERNS.patterns) {
+    STUB_PATTERNS.patterns.forEach(function (p) {
       try {
-        var out = JSON.parse(error.stdout.toString());
-        if (Array.isArray(out) && out.length > 0 && out[0].messages && out[0].messages.length > 0) {
-          var firstErr = out[0].messages[0];
-          findings.push('[ASC Linter] ' + firstErr.message + ' at line ' + firstErr.line + '.');
+        var langs = p.languages || [];
+        var isUniversal = langs.length === 0 || langs.indexOf('universal') !== -1;
+        if (!isUniversal && langs.indexOf(ext) === -1) return;
+
+        var regex = new RegExp(p.regex, 'im');
+        var isMatch = regex.test(target);
+        logPatternCheck('stub', p.id || 'stub-pattern', isMatch);
+        if (isMatch) {
+          findings.push('[ASC Stub/Fake-Done Alert] ' + p.message);
         }
       } catch (_) { }
+    });
+  }
+}
+
+function checkUniversalLinter(filePath, ext, findings) {
+  var execSync = require('child_process').execSync;
+  var cwd = process.cwd();
+
+  if (ext === 'js' || ext === 'ts' || ext === 'jsx' || ext === 'tsx' || ext === 'mjs' || ext === 'cjs') {
+    try {
+      var hasBiome = fs.existsSync(path.join(cwd, 'biome.json')) || fs.existsSync(path.join(cwd, 'biome.jsonc'));
+      if (hasBiome) {
+        execSync('npx @biomejs/biome lint "' + filePath + '"', { cwd: cwd, stdio: 'pipe', timeout: 3000 });
+        return;
+      }
+      var hasEslint = fs.existsSync(path.join(cwd, '.eslintrc.json')) ||
+        fs.existsSync(path.join(cwd, '.eslintrc.js')) ||
+        fs.existsSync(path.join(cwd, 'eslint.config.js')) ||
+        fs.existsSync(path.join(cwd, 'eslint.config.mjs')) ||
+        (fs.existsSync(path.join(cwd, 'package.json')) && fs.readFileSync(path.join(cwd, 'package.json'), 'utf8').includes('eslintConfig'));
+
+      if (hasEslint) {
+        execSync('npx eslint "' + filePath + '" --format json', { cwd: cwd, stdio: 'pipe', timeout: 4000 });
+      }
+    } catch (error) {
+      if (error.stdout) {
+        try {
+          var out = JSON.parse(error.stdout.toString());
+          if (Array.isArray(out) && out.length > 0 && out[0].messages && out[0].messages.length > 0) {
+            var firstErr = out[0].messages[0];
+            findings.push('[ASC Linter] ' + firstErr.message + ' at line ' + firstErr.line + '.');
+          }
+        } catch (_) {
+          var msg = error.stdout.toString().split('\n')[0];
+          if (msg) findings.push('[ASC Linter] ' + msg);
+        }
+      }
+    }
+  } else if (ext === 'py') {
+    try {
+      if (fs.existsSync(path.join(cwd, 'pyproject.toml')) || fs.existsSync(path.join(cwd, 'ruff.toml'))) {
+        execSync('ruff check --quiet "' + filePath + '"', { cwd: cwd, stdio: 'pipe', timeout: 3000 });
+      }
+    } catch (error) {
+      if (error.stdout) {
+        var first = error.stdout.toString().split('\n')[0];
+        if (first) findings.push('[ASC Python Linter] ' + first);
+      }
+    }
+  } else if (ext === 'go') {
+    try {
+      if (fs.existsSync(path.join(cwd, 'go.mod'))) {
+        execSync('go vet "' + filePath + '"', { cwd: cwd, stdio: 'pipe', timeout: 4000 });
+      }
+    } catch (error) {
+      if (error.stderr) {
+        var first = error.stderr.toString().split('\n')[0];
+        if (first) findings.push('[ASC Go Vet] ' + first);
+      }
+    }
+  } else if (ext === 'rs') {
+    try {
+      if (fs.existsSync(path.join(cwd, 'Cargo.toml'))) {
+        execSync('cargo clippy --quiet --message-format=short', { cwd: cwd, stdio: 'pipe', timeout: 5000 });
+      }
+    } catch (error) {
+      if (error.stderr) {
+        var first = error.stderr.toString().split('\n')[0];
+        if (first) findings.push('[ASC Clippy] ' + first);
+      }
     }
   }
 }
@@ -371,10 +447,31 @@ function checkLivingDocNudge(filePath, findings) {
   }
 }
 
+function checkTestTampering(filePath, findings) {
+  var isTest = /(?:\.test\.|\.spec\.|_test\.|__tests__[\/\\]|tests?[\/\\]).*\.(?:js|ts|jsx|tsx|py|go|rs|rb)$/i.test(filePath);
+  if (!isTest) return;
+
+  try {
+    var pathUtil = require('./path-util.cjs');
+    var localGate = path.join(process.cwd(), 'workflow-gate.json');
+    var gatePath = fs.existsSync(localGate) ? localGate : pathUtil.getWorkflowGatePath(process.cwd());
+    if (!fs.existsSync(gatePath)) return;
+
+    var gate = JSON.parse(fs.readFileSync(gatePath, 'utf8'));
+    if (gate.phase === 'implement' || gate.phase === 'bugfix') {
+      findings.push(
+        '[ASC Test Integrity Alert] Test file modified (' + path.basename(filePath) + ') during ' + gate.phase + ' phase. '
+        + 'Ensure assertions were NOT weakened to force a pass; fix the underlying business logic instead.'
+      );
+    }
+  } catch (_) { }
+}
+
 function checkWorkflowGate(toolName, filePath, ext, findings) {
   try {
     var pathUtil = require('./path-util.cjs');
-    var gatePath = pathUtil.getWorkflowGatePath(process.cwd());
+    var localGate = path.join(process.cwd(), 'workflow-gate.json');
+    var gatePath = fs.existsSync(localGate) ? localGate : pathUtil.getWorkflowGatePath(process.cwd());
     if (!fs.existsSync(gatePath)) return;
 
     var gateStr = fs.readFileSync(gatePath, 'utf8');

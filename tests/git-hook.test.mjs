@@ -399,6 +399,32 @@ module.exports = { calculateTax };`;
     }
   });
 
+  it('blocks commit when staged file contains unverified ASC-STUB or fake success return', async () => {
+    const tmpDir = await createGitRepo();
+
+    try {
+      installGitPreCommitHook({ cwd: tmpDir });
+
+      // Staged file with unverified stub
+      await fs.writeFile(path.join(tmpDir, 'feature.js'), 'function doWork() {\n  // ASC-STUB: unfinished mock\n  return { success: true };\n}\n', 'utf8');
+      execSync('git add feature.js', { cwd: tmpDir, stdio: 'pipe' });
+
+      let exitCode = 0;
+      let stderrOutput = '';
+      try {
+        execSync('node .asc/hooks/pre-commit-runner.cjs', { cwd: tmpDir, stdio: 'pipe', timeout: 30000 });
+      } catch (err) {
+        exitCode = err.status;
+        stderrOutput = err.stderr ? err.stderr.toString() : '';
+      }
+
+      assert.strictEqual(exitCode, 1, 'Runner should exit 1 when unverified stub is staged');
+      assert.ok(stderrOutput.includes('[ASC Stub Gate]'), 'Output should contain ASC Stub Gate message');
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('installs global pre-commit hook dispatcher correctly', async () => {
     const tmpHome = await fs.mkdtemp(path.join(os.tmpdir(), 'asc-global-hook-test-'));
     const res = installGlobalGitPreCommitHook({ homeDir: tmpHome });

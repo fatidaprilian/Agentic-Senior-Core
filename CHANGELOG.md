@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.11.0
+
+### Added & Hardened
+- **UI Component Reuse & Anti-Design-Drift Governance**: Hardened canonical core rules (`rules/agentic-senior-core.md`), feature addition workflow (`skills/asc-add-feature/SKILL.md`), and domain reference (`skills/asc-reference/SKILL.md`) to mandate UI component and design token inventory scanning before declaring markup, eliminating AI component proliferation and visual drift across pages.
+- **Universal Stub & Fake-Done Sentinel**: Added `hooks/lib/known-stub-patterns.json` and integrated native pre-commit verification in `git-hook-generator.mjs` to block unverified `// ASC-STUB:` markers, untracked TODOs, and simulated mock success returns at the Git VCS level.
+- **Curated Modern UI Slop Detection**: Expanded `hooks/lib/known-ui-slop-patterns.json` with 2026 AI design tropes (`ui-gradient-text-cliche`, `ui-transition-all-layout-cost`, and `ui-stripped-focus-ring` WCAG 2.4.7 violation).
+- **Dual-Schema Hook Engine**: Restructured `hooks.json` to support both Antigravity IDE named hooks and Claude Code / Copilot format.
+- **Executable Skills & Anti-Fake-Done Testing**: Replaced unverified MCP tool dependencies with standard filesystem operations on `workflow-gate.json`, requiring mandatory exit-code 0 test suite execution before completing features.
+
 ## 6.10.0
 
 ### Added & Optimized
