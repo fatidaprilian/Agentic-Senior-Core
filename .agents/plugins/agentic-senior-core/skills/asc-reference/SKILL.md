@@ -42,7 +42,11 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 - Match the project's existing styling paradigm (Tailwind, CSS Modules, Vanilla CSS, styled-components, etc.). Do not introduce a new CSS framework or build tool without explicit user confirmation.
 - UI Component Reusability: Primitive UI elements (buttons, inputs, cards, dialogs, badges) must have a single source of truth in the shared component directory (`components/` or `ui/`). Never recreate ad-hoc variants or duplicate JSX structures across individual pages. Extend existing components with props or variants instead of cloning.
 - Design Consistency: Consume shared design tokens, CSS variables, or theme configuration for colors, spacing, and border-radius. Do not hardcode arbitrary raw color hexes or inconsistent spacing that causes visual design drift between pages.
-- Data-fetching components must explicitly handle 3 states: loading, error (with user-facing toast/notification and retry option), and data. Never leave an unhandled error state.
+- Action Feedback & Mutations: Any user-initiated mutation (form submit, delete, upload, toggle) must provide immediate pending feedback (disabled button, inline spinner) and a visible completion notification (toast or alert banner with retry). Never silently swallow mutation errors.
+- Form Validation: Render field errors inline directly next to the affected input with `aria-describedby` and `aria-invalid="true"`. Never use floating toasts for individual form input validation.
+- Data-Fetching State Quad: Data components must explicitly handle 4 states — loading skeleton/spinner, empty state (friendly message + call to action), error fallback (clear message + retry button), and populated data.
+- Component Error Boundaries: Wrap major widgets, dashboards, and routes in localized Error Boundaries with fallback UI cards to prevent a single rendering crash from taking down the entire page.
+- Accessible Notifications: Toast and status messages must use ARIA live regions (`role="status"`, `aria-live="polite"` for non-urgent feedback; `role="alert"` for critical errors). Never steal keyboard focus for toasts.
 - WCAG 2.2 AA accessibility floor. Responsive by default.
 - No placeholder, lorem, or TODO content in production UI.
 
@@ -54,9 +58,15 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 
 ## Resilience
 
-- Every outbound network call has a strict timeout.
+- Every outbound network call has a strict timeout (client and server).
 - Retries use exponential backoff with jitter and max attempt limits.
-- Only retry idempotent operations.
-- Circuit breakers for unhealthy dependencies.
-- Graceful degradation on non-critical dependency failure.
+- Only retry idempotent operations (GET, PUT, DELETE, or requests with `Idempotency-Key`).
+- Dependency Fallback Strategy (Hard vs Soft):
+  - Hard dependencies (core workflow blocks without them): Fail fast, roll back transactions, return structured RFC 9457 error with actionable explanation.
+  - Soft dependencies (non-critical enhancements): Provide graceful fallbacks:
+    - *Static Fallback*: Return safe default values, static placeholders, or empty collections alih-alih melempar exception.
+    - *Stale Cache Fallback*: Serve last-known-good cached state (`stale-while-revalidate`) with an offline/stale indicator.
+    - *Degraded Mode*: Isolate and disable the failing peripheral widget while preserving core user journeys.
+- Circuit breakers for unhealthy dependencies to fail fast and prevent thread/resource exhaustion.
+- Offline Detection: Detect offline network status and notify users before initiating network requests that are guaranteed to fail.
 

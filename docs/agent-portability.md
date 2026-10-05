@@ -16,7 +16,7 @@ Full plugin support: hooks inject rules on every session, skills and commands ar
 | Hermes | `plugin.yaml` | `__init__.py` (Python) | `skills/` | N/A |
 | OpenCode | `.opencode/plugins/` | JS module transform | N/A | N/A |
 | OpenClaw | `.openclaw/skills/` | N/A | `.openclaw/skills/` | N/A |
-| Antigravity | `.agents/plugins/agentic-senior-core/` | N/A | `.agents/plugins/.../skills/` | N/A |
+| Antigravity | `.agents/plugins/agentic-senior-core/` | `hooks.json` | `.agents/plugins/.../skills/` | `commands/*.md` & `*.toml` |
 
 ## Instruction-tier hosts
 
@@ -46,9 +46,9 @@ Which ASC features work on which host tier:
 | Always-on rules | Hook injection | Static file in project |
 | On-demand skills | `skills/` directory | Not available |
 | Slash commands | `commands/` directory | Not available |
-| PostToolUse enforcement | Claude Code, Codex CLI, Copilot CLI | Not available |
-| Progressive skill loading | Claude Code, Codex CLI, Copilot CLI, Gemini CLI | Not available |
-| Subagent rule injection | Claude Code, Codex CLI, Copilot CLI | Not available |
+| PostToolUse enforcement | Claude Code, Codex CLI, Copilot CLI, Antigravity | Not available |
+| Progressive skill loading | Claude Code, Codex CLI, Copilot CLI, Gemini CLI, Antigravity | Not available |
+| Subagent rule injection | Claude Code, Codex CLI, Copilot CLI, Antigravity | Not available |
 
 ### Hook event support by host
 

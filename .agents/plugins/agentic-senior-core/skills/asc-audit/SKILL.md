@@ -24,21 +24,22 @@ Grounded in: OWASP Top 10 (2025), OWASP ASVS v5.0, OWASP Top 10 for Agentic Appl
 4. **Architecture boundaries**: Business logic in transport layer, shared databases between services, circular dependencies, internal model leakage through public APIs.
 5. **Dependency health**: Known vulnerabilities, unmaintained packages, excessive dependency surface.
 6. **Error exposure**: Stack traces, internal paths, or implementation details exposed to clients.
+7. **Reliability & Fault-Tolerance**: Unhandled async promises, unbounded network timeouts, empty catch blocks, missing fallbacks on non-critical dependencies, and silent mutation failures without user notifications.
 
 ## Agentic Risk Scope (OWASP Top 10 for Agentic Applications)
 
 When the target is an AI agent system, MCP server, or plugin:
 
-7. **Agent Goal Hijack (ASI01)**: Content read by the agent that could override instructions.
-8. **Tool Misuse (ASI02)**: Tools callable without adequate validation of parameters.
-9. **Identity & Privilege Abuse (ASI03)**: Agent running with broader permissions than needed.
-10. **Agentic Supply Chain (ASI04)**: Untrusted plugins, MCP servers, or dependencies.
-11. **Unexpected Code Execution (ASI05)**: Agent-generated code running without sandbox.
-12. **Memory & Context Poisoning (ASI06)**: State files or persistent memory injectable by untrusted sources. Note: ASC's own `debt-ledger.json` and `workflow-gate.json` are potential targets — treat as untrusted input at load time.
-13. **Inter-Agent Communication (ASI07)**: Agent-to-agent messages without integrity checks.
-14. **Cascading Failures (ASI08)**: Multi-agent chains where one failure propagates.
-15. **Human-Agent Trust Exploitation (ASI09)**: UI/UX that misleads user about agent actions.
-16. **Rogue Agents (ASI10)**: Agent behavior diverging from intended purpose.
+8. **Agent Goal Hijack (ASI01)**: Content read by the agent that could override instructions.
+9. **Tool Misuse (ASI02)**: Tools callable without adequate validation of parameters.
+10. **Identity & Privilege Abuse (ASI03)**: Agent running with broader permissions than needed.
+11. **Agentic Supply Chain (ASI04)**: Untrusted plugins, MCP servers, or dependencies.
+12. **Unexpected Code Execution (ASI05)**: Agent-generated code running without sandbox.
+13. **Memory & Context Poisoning (ASI06)**: State files or persistent memory injectable by untrusted sources. Note: ASC's own `debt-ledger.json` and `workflow-gate.json` are potential targets — treat as untrusted input at load time.
+14. **Inter-Agent Communication (ASI07)**: Agent-to-agent messages without integrity checks.
+15. **Cascading Failures (ASI08)**: Multi-agent chains where one failure propagates.
+16. **Human-Agent Trust Exploitation (ASI09)**: UI/UX that misleads user about agent actions.
+17. **Rogue Agents (ASI10)**: Agent behavior diverging from intended purpose.
 
 ## For Every Finding
 

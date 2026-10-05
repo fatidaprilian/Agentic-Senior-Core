@@ -15,8 +15,8 @@ Grounded in: Spec-Driven Development (SDD) with scaffolding-spec approach. Core 
 This workflow nudges the agent to stop at each phase boundary, same enforcement tier as the existing decision ladder — not a hard block. Bypasses are logged to the debt ledger.
 
 For greenfield projects (`asc-new-project`), Phase 2 requires creating the **3 Core SDD Documents** in `docs/` or project root:
-1. `PRD.md` — Product intent, goals, non-goals, and user problems.
-2. `Architecture.md` — System structure, module boundaries, and tech stack choices.
+1. `PRD.md` — Product intent, goals, non-goals, user problems, and user feedback expectations.
+2. `Architecture.md` — System structure, module boundaries, tech stack choices, and global error handling, fallback, and notification strategy.
 3. `Schema.md` — Data contracts, database entities, API endpoints.
 
 *Note on Rules:* Coding conventions and project constraints are automatically loaded from global plugin rules (`agentic-senior-core.md`) or workspace `AGENTS.md`. No duplicate `docs/Rules.md` file is required.

@@ -30,8 +30,8 @@ Format:
 
 1. Write `workflow-gate.json` with phase `research`.
 2. Map existing code: patterns, utilities, dependencies already in use. Locate at least one analogous feature/module and record its file paths.
-3. **UI Component & Design Token Inventory**: For any UI or frontend work, scan existing shared components (e.g. `components/`, `ui/`) and existing page patterns. Explicitly identify what must NOT be rebuilt (buttons, cards, modals, inputs, tables, layout wrappers, validation helpers).
-4. Output a factual research summary that separates what exists from what is proposed, including an explicit `[REUSED COMPONENTS & HELPERS]` list, with file paths for the two or three claims that drive the plan.
+3. **UI Component, Notification & Error Pattern Inventory**: Scan existing shared components (`components/`, `ui/`), page patterns, active toast/notification providers (e.g., Sonner, react-hot-toast, custom alert banners), and existing fallback/error boundary conventions. Explicitly identify what must NOT be rebuilt.
+4. Output a factual research summary that separates what exists from what is proposed, including explicit `[REUSED COMPONENTS & HELPERS]` and `[NOTIFICATION & ERROR CONVENTIONS]` lists, with file paths for the two or three claims that drive the plan.
 5. **STOP and wait for user approval.** Do not plan or implement.
 
 ## Phase 2: Plan
@@ -41,14 +41,20 @@ Format:
 3. Check if `.github/workflows/asc-quality-gate.yml` exists. If not, include scaffolding it in your plan (must run linter, type-check, and audit) and remind the user to enable Branch Protection.
 4. Create a numbered, step-by-step implementation plan with specific files, functions, and line references.
 5. Include a "Don't Build" list and a "Reused Components" list from the research phase. For any proposed new UI component, justify why existing components cannot be reused or extended via props/variants.
-6. **Callout: Plan-Reading Illusion.** Ask the user to explicitly verify the two or three critical plan claims against the referenced files, not just skim it.
-7. Output the plan.
-8. **STOP and wait for user approval.** Do not implement.
+6. **Mandatory Failure Modes, Fallbacks & User Feedback Matrix**: Define concrete behavior for every failure scenario:
+   - What happens on network/API failure or timeout? (Specify exact fallback data or state).
+   - What feedback does the user see? (Specify pending spinner, field error, or toast/banner message).
+   - How can the user recover? (Retry button, offline warning, or fallback form).
+7. **Callout: Plan-Reading Illusion.** Ask the user to explicitly verify the critical plan claims against the referenced files, not just skim it.
+8. Output the plan.
+9. **STOP and wait for user approval.** Do not implement.
 
 ## Phase 3: Implement
 
 1. On approval of Phase 2, update `workflow-gate.json` phase to `implement`.
 2. Recommend a fresh context (intentional compaction) at the phase boundary or after roughly 20-30 tool calls. Do not wait until degradation is subjectively noticeable.
 3. Execute the approved plan.
-4. **Mandatory Verification**: Execute the project test suite (`ascx test`, `npm test`, `pytest`, `go test ./...`, or `cargo test`). The test runner MUST exit with code 0. Do NOT declare completion or weaken test assertions if tests fail.
+4. **Mandatory Verification**:
+   - Execute the project test suite (`ascx test`, `npm test`, `pytest`, `go test ./...`, or `cargo test`). The test runner MUST exit with code 0. Do NOT declare completion or weaken test assertions if tests fail.
+   - Verify failure and edge-case behavior: ensure pending indicators resolve, mutation errors show user-facing notifications with retry, and non-critical dependency failures trigger defined fallbacks instead of white-screens or unhandled rejections.
 5. On verified pass, give a short comprehension summary of what changed and why, then clear the state in `workflow-gate.json` by overwriting it with `{}`.

@@ -1,5 +1,16 @@
 # Changelog
 
+## 6.12.0
+
+### Added & Hardened
+- **Action Feedback & Resilience Invariants**: Anchored mandatory non-negotiable invariants directly at the top of canonical rules (`rules/agentic-senior-core.md`) under the Decision Ladder, ensuring all models across all 23+ AI hosts provide visible pending state and completion notifications (toasts/banners with retry) on every mutation, define graceful fallbacks for soft dependencies, and contain crashes within localized Error Boundaries.
+- **Universal Production Fallback Taxonomy (`asc-reference`)**: Grounded in AWS Well-Architected Reliability Pillar (REL05-BP01) and Google SRE system design, codified explicit fallback tiers (Static Response, Stale-while-revalidate Cache, and Degraded Mode) with mandatory client and server timeouts.
+- **User Notification & Feedback Hierarchy (`asc-reference`)**: Grounded in Nielsen Norman Group UX heuristics and W3C WAI-ARIA 1.2 / APG, established universal standards separating action mutation toasts (`role="status"`, `aria-live="polite"`), accessible inline form validation (`aria-describedby`), and the 4-state data-fetching quad (loading skeleton, empty state, error retry, populated data).
+- **Failure Mode & Feedback Matrix (`asc-add-feature`)**: Enforced toast provider and fallback pattern inventory in Phase 1 (Research), mandatory `[FAILURE MODES, FALLBACKS & USER FEEDBACK]` matrix in Phase 2 (Plan), and error/notification verification in Phase 3 (Implement).
+- **Review Priority Elevation (`asc-review`)**: Elevated action feedback & resilience (silent mutation failures, missing toasts, hanging spinners, missing fallbacks) to Finding Priority Order #2.
+- **Refactoring & Pattern Discovery Hardening**: Added Action Feedback & Fallbacks preservation rule to `asc-refactor`, extended `asc-fingerprint` to discover repository notification/toast providers and error boundaries, and expanded `asc-audit` with Reliability & Fault-Tolerance audit scope.
+- **Documentation Synchronization**: Synchronized `docs/agent-portability.md` to reflect Google Antigravity hooks and command support, updated `docs/architecture.md` and `docs/GROUNDING.md` with verified citations, and enhanced `docs/templates/` (`Architecture.md` and `PRD.md`) with error handling, fallback, and user feedback sections.
+
 ## 6.11.1
 
 ### Fixed & Cleaned

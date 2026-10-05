@@ -38,6 +38,7 @@ After reading the target code, classify the refactor:
 ## Refactor Rules
 
 - Improve clarity, boundaries, naming, validation, error handling, and tests.
+- Action Feedback & Fallbacks: Preserve all user feedback indicators, error toasts, and dependency fallbacks. Refactoring must never silently drop error-handling branches.
 - Prioritize maintainability over compressed one-liners.
 - Keep the main flow traceable. Use early returns where they reduce nesting.
 - Introduce abstractions only when the repeated pattern is real and visible.

@@ -19,6 +19,8 @@ When picking step 5 or 6 (unless trivial):
 - One-line comment noting rationale and upgrade trigger if there is a ceiling.
 - One runnable check (assertion, test, or demo) proving it works.
 - Never simulate success or return hardcoded values mimicking live integrations. Temporary stubs must be marked with `// ASC-STUB: [reason] [ASC-DEBT-xxx]` and tracked in the debt ledger.
+- Action Feedback Invariant: Every mutation/user action (submit, delete, update) MUST have a pending state (disabled button/spinner) and visible completion feedback (toast or banner with actionable retry). Never silently swallow errors.
+- Resilience Invariant: Soft dependencies must have defined fallbacks (static safe default, stale cache, or degraded mode). Protect UI sections with localized error boundaries.
 
 ## Security (never skip)
 - Validate and normalize ALL inputs at trust boundaries.
@@ -50,9 +52,11 @@ When picking step 5 or 6 (unless trivial):
 - UI component reuse: Component re-invention across pages is forbidden. Before declaring markup or styling, check existing components in `components/` or `ui/`. Compose or extend existing components via props/variants. Do not introduce single-page clones or ad-hoc styling that diverges from established pages.
 
 ## Error Handling & Observability
-- Fail fast on invalid input at trust boundaries. Handle only errors that can actually occur.
+- Fail fast on invalid input at trust boundaries; fail safe with graceful fallback for external runtime dependencies.
 - Structured error responses with safe details (RFC 9457). Distinguish client (4xx) from server (5xx) errors.
-- Frontend data-fetching components must explicitly handle loading, error (toast/notification with retry), and data states.
+- Action feedback: mutations (create, update, delete, submit) must provide immediate pending state (disable button/spinner) and clear success/error notification (toast or banner with retry). Never silently swallow mutation errors.
+- UI data states: handle the state quad — loading skeleton/spinner, empty state, error state with retry, and populated data. Wrap critical UI widgets in localized error boundaries.
+- External dependency resilience: classify dependencies as hard (fail fast + actionable error) or soft (fallback to static safe default, stale cache, or degraded mode).
 - Surface every operational error with context. Empty catch blocks mask production issues.
 - Structured key-value logging for significant events. Never leak stack traces or credentials in production logs.
 

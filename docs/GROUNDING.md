@@ -20,6 +20,13 @@ Every claim in the ASC ruleset traces to a source below. All entries were verifi
 - **[confirmed]** Horthy, D. (2024). "No Vibes Allowed: Solving Hard Problems in Complex Codebases." AI Engineer World's Fair — origin of RPI (Research-Plan-Implement).
 - **[confirmed]** Horthy, D. (2026). "Everything We Got Wrong About Research-Plan-Implement." Coding Agents Conference, Computer History Museum, March 2026 — QRSPI 8-stage revision after production failure modes. ASC adapts stages 2/5/7 and skips 1/3/4/6/8 as too heavyweight for individual-developer workflows.
 
+## Resilience, Fallbacks & User Feedback
+
+- **[confirmed]** AWS Well-Architected Framework: Reliability Pillar (REL05-BP01) — transforming hard dependencies into soft dependencies via graceful degradation, static responses, and stale cache fallbacks. Basis for ASC's dependency fallback rules.
+- **[confirmed]** Nielsen Norman Group (2024). "Visibility of System Status" (Heuristic #1) and "Error Message Design" (Heuristic #9) — user feedback must be visible, proportionate, constructive, and contextual (inline validation for forms; toasts/banners with actionable retries for mutations).
+- **[confirmed]** W3C WAI-ARIA 1.2 / Authoring Practices Guide (APG) — accessibility standards for alerts (`role="alert"`) and status notifications (`role="status"`, `aria-live="polite"`), prohibiting keyboard focus-stealing on transient toasts.
+- **[confirmed]** Google Site Reliability Engineering (SRE) & Engineering Practices — fail-fast for system invariants and invalid arguments; fail-safe with graceful degradation for external runtime services.
+
 ## Benchmark methodology
 
 - Ouyang, S., Zhang, J., Harman, M., Wang, M. (2023). "An Empirical Study of the Non-Determinism of ChatGPT in Code Generation." *ACM TOSEM*. https://doi.org/10.1145/3697010 — 47-76% of identical code-generation requests produced different outputs across runs; only 21% of surveyed papers considered this threat. Basis for the n>=5 repeat requirement in benchmarks/METHODOLOGY.md.

@@ -18,7 +18,8 @@ generic architecture score.
 
 1. Read local instructions and list the active runtime, test, and deployment surfaces.
 2. Find two or more analogous modules. Record their layer split, naming, validation,
-   error handling, tests, and documentation conventions with file paths.
+   error handling, user notification/toast provider, fallback patterns, tests, and
+   documentation conventions with file paths.
 3. Inspect recent Git history (up to 200 commits, or since the last fingerprint) for
    repeated review corrections, reverts, and release conventions.
 4. Read a debt ledger only when it exists. Treat repeated entries as a possible

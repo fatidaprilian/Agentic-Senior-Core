@@ -14,9 +14,13 @@ Universal AI coding rules. Write code like a staff engineer.
 - `/asc-add-feature` -- Brownfield workflow (Research -> Plan -> Implement)
 - `/asc-refactor` -- Structured refactoring workflow with pre-checks and validation
 - `/asc-review` -- Production-risk code review with severity-ordered findings
-- `/asc-audit` -- Security and architecture audit
+- `/asc-audit` -- Security, architecture, and resilience audit
 - `/asc-reference` -- Domain-specific rules (testing, API, database, frontend, infra, resilience)
+- `/asc-fingerprint` -- Map repository conventions, notification providers, and error patterns
+- `/asc-dedup` -- Token-level clone and duplicate code audit via jscpd
 - `/asc-debt` -- Track deferred enforcement violations (add, list, resolve, summary)
+- `/asc-learn` -- Mine adaptive user preferences from session history
+- `/asc-bootstrap` -- Seed baseline UI and notification preferences
 - `/asc-help` -- Show this help
 
 ## Enforcement

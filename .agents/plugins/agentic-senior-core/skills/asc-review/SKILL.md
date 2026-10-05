@@ -21,10 +21,11 @@ Grounded in: OWASP Risk Rating Methodology, Google Engineering Practices (code r
 ## Finding Priority Order
 
 1. Correctness, data loss, security, privacy, auth, and permission risks.
-2. Public contract drift: APIs, events, CLI behavior, data model, UI contract, docs.
-3. Missing tests for changed behavior.
-4. Architecture boundary drift and maintainability risk.
-5. Performance and accessibility issues with concrete impact.
+2. Action feedback & resilience: silent mutation failures, missing toasts/banners, hanging spinners, missing fallbacks on remote calls, or missing error boundaries.
+3. Public contract drift: APIs, events, CLI behavior, data model, UI contract, docs.
+4. Missing tests for changed behavior.
+5. Architecture boundary drift and maintainability risk.
+6. Performance and accessibility issues with concrete impact.
 
 ## For Every Finding
 
@@ -37,7 +38,9 @@ Grounded in: OWASP Risk Rating Methodology, Google Engineering Practices (code r
 ### Correctness
 - Changed behavior matches the user request.
 - Existing behavior preserved unless user approved a change.
-- Edge cases, empty states, error paths handled.
+- Edge cases, empty states, error paths, and fallbacks handled.
+- Action feedback: mutations (forms, buttons, mutations) have visible pending indicators and clear completion notifications (toast or banner with retry). No silent failures or hanging spinners.
+- Dependency resilience: remote calls have strict timeouts and soft dependencies have graceful fallbacks (static default, stale cache, or degraded mode). Component crashes are contained by error boundaries.
 
 ### Security
 - External input validated at trust boundaries.

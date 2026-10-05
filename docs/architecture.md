@@ -23,15 +23,17 @@ Every rule and skill workflow is derived from established engineering standards,
 
 | Domain | Standards |
 |--------|-----------|
-| Security & audit | OWASP Top 10 (2025), OWASP ASVS v5.0, CWE classification, CVSS report structure |
-| Code review | OWASP Risk Rating Methodology, Google Engineering Practices |
-| Architecture | Clean Architecture, Hexagonal Architecture |
+| Security & audit | OWASP Top 10 (2025), OWASP ASVS v5.0, CWE classification, CVSS report structure, OWASP Agentic Top 10 (ASI01-ASI10) |
+| Code review | OWASP Risk Rating Methodology, Google Engineering Practices (Code Review Guide) |
+| Architecture | Clean Architecture, Hexagonal Architecture, Google SRE System Design (Fail-fast invariants, fail-safe dependencies) |
 | Workflows | RPI & QRSPI (Dex Horthy/HumanLayer), SDD (GitHub Spec Kit) |
 | Refactoring | Fowler's Refactoring, Rule of Three, YAGNI (XP/Kent Beck) |
 | Database | Fowler's Money Pattern, UTC timestamp convention, migration versioning |
-| Accessibility | WCAG 2.2 AA |
-| Resilience | Nygard's Release It!, AWS Well-Architected Reliability Pillar |
-| Technical debt | Cunningham's debt metaphor (1992) |
+| Accessibility & UI Feedback | WCAG 2.2 AA, W3C WAI-ARIA 1.2 / APG (Status & Alert live regions), Nielsen Norman Group UX Heuristics (#1 Visibility, #9 Error Recovery) |
+| Resilience & Fallbacks | AWS Well-Architected Reliability Pillar (REL05-BP01 Hard/Soft dependencies & static fallbacks), Nygard's Release It!, Martin Fowler Circuit Breaker |
+| Technical debt | Cunningham's debt metaphor (1992), Martin Fowler Technical Debt Taxonomy |
+| Clone & Dedup | GitClear 2024 analysis (211M LOC), token-level clone detection via jscpd |
+| Adaptive Preferences | TRACE (arXiv:2606.13174) correction mining, Khroma/Deezer cold-start preference elicitation |
 | Instruction design | Low instruction density for higher LLM compliance — supported by IFScale (arXiv:2507.11538). Scaffold-rule compliance gaps measured by OctoBench (arXiv:2601.10343, ACL 2026) |
 
 The decision ladder (check before building) and debt ledger format are ASC-specific implementations grounded in these principles.
