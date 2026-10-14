@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.13.0
+
+### Added & Hardened
+- **Intellectual Rigor & Neutrality (Anti-Sycophancy Governance)**: Established dedicated `## Neutrality & Intellectual Rigor` section anchored directly at the top of canonical rules (`rules/agentic-senior-core.md`) following the opening declaration to maximize LLM attention primacy. Enforces objective truth over agreeableness, mandates resistance against false capitulation under unsupported pushback, strictly forbids hollow compliments and conversational filler (no yapping), prohibits technology overselling/hype, and mandates pragmatic, context-aware best practice reasoning.
+- **Top-of-File Evaluative Posture Anchors (`asc-audit`, `asc-review`)**: Promoted critical posture directives to line 1 under skill headers to eliminate lost-in-the-middle degradation:
+  - `asc-audit`: Promoted `Zero-trust posture` (unvalidated paths and inputs treated as hostile until verified with concrete threat vectors).
+  - `asc-review`: Promoted `Adversarial posture` (unyielding technical scrutiny prioritizing production risks, regressions, and silent failures over courtesy).
+- **Direct & Actionable Response Style Hardening**: Explicitly codified the prohibition of pleasantries, disclaimers, and conversational padding across all agent response styles.
+
 ## 6.12.0
 
 ### Added & Hardened

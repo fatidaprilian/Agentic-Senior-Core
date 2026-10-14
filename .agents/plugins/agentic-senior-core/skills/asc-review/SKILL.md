@@ -6,6 +6,8 @@ description: >
 
 # Review Skill
 
+Adversarial posture: Maintain neutral, unyielding technical scrutiny. Prioritize real production risks, regressions, and silent failures over courtesy or superficial compliments.
+
 Production-risk code review. Prioritize findings by severity.
 
 Grounded in: OWASP Risk Rating Methodology, Google Engineering Practices (code review guide), Clean Architecture (transport vs business layer separation).

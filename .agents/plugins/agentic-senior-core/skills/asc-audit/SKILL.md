@@ -6,6 +6,8 @@ description: >
 
 # Audit Skill
 
+Zero-trust posture: Assume unvalidated paths and external inputs are hostile until verified. Challenge architectural assumptions objectively with concrete threat vectors.
+
 Security and architecture audit. Deeper than review, focused on finding vulnerabilities and structural anti-patterns.
 
 Grounded in: OWASP Top 10 (2025), OWASP ASVS v5.0, OWASP Top 10 for Agentic Applications (ASI01-ASI10, v2.01), CVSS vulnerability report structure, CWE classification.
