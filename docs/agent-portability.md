@@ -14,7 +14,7 @@ Full plugin support: hooks inject rules on every session, skills and commands ar
 | Gemini CLI | `gemini-extension.json` | N/A (reads context file) | `skills/` | `commands/*.toml` |
 | Devin | `.devin-plugin/` | `hooks/hooks.json` | `skills/` | N/A |
 | Hermes | `plugin.yaml` | `__init__.py` (Python) | `skills/` | N/A |
-| OpenCode | `.opencode/plugins/` | JS module transform | N/A | N/A |
+| OpenCode | `.opencode/plugins/` | Session hooks (V2 context/compaction & V1 transform) | `.opencode/skills/` | N/A |
 | OpenClaw | `.openclaw/skills/` | N/A | `.openclaw/skills/` | N/A |
 | Antigravity | `.agents/plugins/agentic-senior-core/` | `hooks.json` | `.agents/plugins/.../skills/` | `commands/*.md` & `*.toml` |
 
@@ -34,8 +34,10 @@ Single file containing the full rule set. Must be copied into each project. Gene
 | Zed | `.zed/rules/agentic-senior-core.md` | Markdown (also reads AGENTS.md natively) |
 | Aider | `CONVENTIONS.md` | Markdown |
 | Kilo Code | `.kilo/rules/agentic-senior-core.md`, `.kilo/plugin/agentic-senior-core.js` | JS Plugin & Markdown |
+| OpenCode | `AGENTS.md`, `.opencode/plugins/agentic-senior-core.js`, `.opencode/skills/` | Markdown, JS Plugin & Skills |
 | Roo Code | `.roo/rules/agentic-senior-core.md`, `.roo/skills/` | Markdown & Skills |
 | OpenHands | `.openhands/microagents/agentic-senior-core.md` | Markdown |
+
 
 ## Host capability matrix
 

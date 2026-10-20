@@ -25,7 +25,7 @@ Run this when setting up a new project or when a developer wants ASC rules activ
 
 Plugin hosts (always-on, no adapter needed): Claude Code, Codex CLI, Gemini CLI, Antigravity CLI, Copilot CLI, Devin CLI, Hermes, OpenCode, OpenClaw.
 
-Adapter hosts (one file per project): Cursor, Devin Desktop, Cline, GitHub Copilot, Kiro, Continue, Zed, Aider, Kilo Code, Roo Code, OpenHands.
+Adapter hosts (one file per project): Cursor, Devin Desktop, Cline, GitHub Copilot, Kiro, Continue, Zed, Aider, Kilo Code, OpenCode, Roo Code, OpenHands.
 
 ## Commands
 
@@ -41,7 +41,7 @@ asc uninstall --dry-run   # Preview what would be removed
 
 ## Notes
 
-- **Tiered output**: Hosts with native skill/plugin support (Claude Code, Antigravity, Cursor, Roo, Kilo Code) receive the Lean Core rules only (~80 lines). Domain-specific guidance (testing, security, architecture) is loaded on-demand via their native skill engines, saving ~40% token overhead on routine tasks. Hosts without skill support (Aider, Zed, OpenHands) receive a full standalone file combining Core + Domain Reference for completeness.
+- **Tiered output**: Hosts with native skill/plugin support (Claude Code, Antigravity, Cursor, Roo, Kilo Code, OpenCode) receive the Lean Core rules only (~80 lines). Domain-specific guidance (testing, security, architecture) is loaded on-demand via their native skill engines, saving ~40% token overhead on routine tasks. Hosts without skill support (Aider, Zed, OpenHands) receive a full standalone file combining Core + Domain Reference for completeness.
 - Cursor uses `.mdc` format with `alwaysApply: true` frontmatter.
 - Windsurf is now Devin Desktop. Use `--devin` for the preferred path, `--windsurf` for legacy.
 - Zed also reads `AGENTS.md` natively, so the adapter is optional.

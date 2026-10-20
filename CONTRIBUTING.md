@@ -75,7 +75,7 @@ These hosts support full plugin systems. Create the host's manifest in its stand
 | Copilot CLI | `.github/plugin/plugin.json` | JSON |
 | Devin | `.devin-plugin/plugin.json` | JSON minimal |
 | Hermes | `plugin.yaml` + `__init__.py` | YAML + Python |
-| OpenCode | `.opencode/plugins/agentic-senior-core.mjs` | JS module |
+| OpenCode | `.opencode/plugins/agentic-senior-core.js` | JS module (V2 setup + V1 server) |
 
 ### Instruction-tier hosts (single file copy)
 

@@ -273,9 +273,30 @@ If you previously installed to legacy locations (v5.8.4 or earlier), the old pat
 </details>
 
 <details>
-<summary><b>Devin / Hermes / OpenCode / OpenClaw</b></summary>
+<summary><b>OpenCode</b></summary>
 
-Plugin manifests ship in the npm package at their standard paths (`.devin-plugin/`, `plugin.yaml`, `.opencode/plugins/`, `.openclaw/skills/`). After global npm install, each host auto-discovers or manually register per host docs.
+Install globally for OpenCode across all repositories:
+
+```bash
+asc global --opencode
+```
+
+This installs global rules to `~/.config/opencode/AGENTS.md`, the native plugin to `~/.config/opencode/plugins/agentic-senior-core.js`, and all skills to `~/.config/opencode/skills/`.
+
+For a specific repository only:
+
+```bash
+asc adapter --opencode
+```
+
+This writes `AGENTS.md` at the project root, `.opencode/plugins/agentic-senior-core.js`, and `.opencode/skills/`.
+
+</details>
+
+<details>
+<summary><b>Devin / Hermes / OpenClaw</b></summary>
+
+Plugin manifests ship in the npm package at their standard paths (`.devin-plugin/`, `plugin.yaml`, `.openclaw/skills/`). After global npm install, each host auto-discovers or manually register per host docs.
 
 </details>
 
@@ -286,7 +307,7 @@ Plugin manifests ship in the npm package at their standard paths (`.devin-plugin
 asc adapter --all
 ```
 
-Generates adapter files for Cursor, Devin Desktop, Windsurf, Cline, Copilot, Kiro, Continue, Zed, Aider, Kilo Code, Roo Code, and OpenHands in one go.
+Generates adapter files for Cursor, Devin Desktop, Windsurf, Cline, Copilot, Kiro, Continue, Zed, Aider, Kilo Code, OpenCode, Roo Code, and OpenHands in one go.
 
 </details>
 
@@ -302,8 +323,9 @@ Generates adapter files for Cursor, Devin Desktop, Windsurf, Cline, Copilot, Kir
 | Copilot CLI | Terminal agent | Plugin registration | No |
 | Devin | Terminal agent | Auto-detected | No |
 | Hermes | Terminal agent | Plugin registration | No |
-| OpenCode | Terminal agent | Auto-detected | No |
+| OpenCode | Terminal agent | `asc global --opencode` / `asc adapter --opencode` | No (global) / Yes (local) |
 | OpenClaw | Terminal agent | Auto-detected | No |
+
 | Antigravity IDE | IDE | `asc global --antigravity` | No (global) |
 | Antigravity CLI | Terminal agent | `agy plugin install` | No |
 | Cursor | IDE | `asc adapter --cursor` | Yes (1 file) — or paste User Rules once |

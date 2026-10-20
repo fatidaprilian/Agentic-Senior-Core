@@ -1,5 +1,17 @@
 # Changelog
 
+## 6.14.0
+
+### Added & Hardened
+- **OpenCode Host & Plugin Support**: Full native support for OpenCode (including OpenCode V2 plugin architecture at `lib/opencode-plugin/agentic-senior-core.js`):
+  - Dual V2 (`setup(ctx)` with `ctx.session.hook("context")`, `ctx.session.hook("compaction")`, and `ctx.shell.hook("create.before")`) and V1 (`server()` fallback) plugin implementation.
+  - Workspace adapter generation (`asc adapter --opencode`): writes `AGENTS.md`, `.opencode/plugins/agentic-senior-core.js`, and replicates all 13 core skills to `.opencode/skills/`.
+  - Global configuration installation (`asc global --opencode`): seeds `~/.config/opencode/AGENTS.md`, plugins, and skills for seamless zero-config OpenCode TUI usage.
+  - Clean uninstallation support (`asc uninstall --opencode`) and CLI environment detection in `asc status`.
+  - Comprehensive test coverage (`tests/opencode.test.mjs`) verifying plugin lifecycle hooks, workspace generation, uninstallation, and global installation.
+- **Kilo Code Plugin Modernization**: Upgraded `lib/kilo-plugin/agentic-senior-core.js` to dual V2/V1 lifecycle methods (`setup` alongside legacy `prePrompt`/`preCommand`/`compaction`) for forward compatibility with unified OpenCode plugin runtimes.
+- **Documentation Synchronization**: Updated `docs/agent-portability.md`, `docs/INSTALLATION.md`, `CONTRIBUTING.md`, and `skills/asc-adapter/SKILL.md` with OpenCode documentation and operational guides.
+
 ## 6.13.0
 
 ### Added & Hardened
