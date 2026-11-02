@@ -66,20 +66,67 @@ AI frequently creates "localization slop" by mixing languages, fabricating awkwa
 
 ---
 
-## 3. Visual Layout & Anti-Cookie-Cutter Design
+## 3. Visual Craft & Generative Layout Engineering
 
-AI tools default to an easily recognizable, generic layout template ("The AI Starter Pack"). Avoid these homogenized visual tropes:
+AI default interfaces suffer from **Distributional Convergence** (regression to the statistical average of training data). Without disciplined direction, models default to either the *AI Starter Pack* (purple gradients, 3 identical cards, floating drop shadows) or the *Sterile Default* (flat, depressing white wireframes with zero character).
 
-### The Banned AI Visual Starter Pack
-- **No Purple-to-Cyan/Indigo Gradients:** Avoid cliché violet/teal neon glows on dark backgrounds unless explicitly mandated by existing brand tokens. Use solid, high-contrast semantic surfaces.
-- **No Cardocalypse (Identical 3-Card Feature Grids):** Do not default every page or dashboard to 3 identical rounded cards, each sporting an abstract Lucide/Heroicon icon and 2 lines of generic gray text. Vary layout structure based on data type (tables, summary metrics, compact lists, detail panels).
-- **No Gratuitous Glassmorphism:** Never slap `backdrop-blur-md bg-white/10` onto functional surfaces where it degrades contrast, creates readability issues on scroll, or wastes rendering performance.
-- **No Bouncy/Distracting Hover Animations:** Interactive elements should provide snappy, predictable feedback (`transition-colors duration-150`, subtle border shifts). Avoid unprompted bounce, scale expansions (`hover:scale-105`), or floating wiggles on utilitarian buttons.
+Follow these design engineering heuristics to construct purposeful, high-craft digital interfaces:
 
-### Information Density & Scannability (Refactoring UI)
-- **Scannable Hierarchy:** Use font weight (`font-semibold`) and color contrast (`text-foreground` vs `text-muted-foreground`) to establish visual hierarchy before increasing font size.
-- **Compact Utilitarian Density:** Avoid excessive whitespace bloat (`p-12`, giant empty margins) on functional productivity tools. Deliver compact, legible data tables with sticky headers, clear row borders, and inline status badges.
-- **Single Design Source of Truth:** Reuse existing design tokens, CSS variables, and spacing scales (`spacing`, `radius`, `palette`). Do not invent ad-hoc hex codes (`#6366f1`, `#3b82f6`) or arbitrary inline styles.
+### The Anti-Sterile & Anti-Template Rule
+- **Never Replace Slop with Sterile Voids:** Stripping all decoration does not equal good design. An interface must possess tactile depth, distinct typographic rhythm, and clear surface relationships.
+- **No Second-Order Template Clones:** Never force every screen into a trendy Bento Grid or dark-mode clone. Choose layout geometry derived strictly from the **data shape** and **user task**.
+
+### 1. Form Follows Data Shape (Layout Inference)
+Analyze the primary data model and user goal before declaring any container markup:
+- **Quantitative / Comparative Data (Metrics, ledgers, logs, transactions):**
+  - *Archetype:* **Dense Data Matrix**.
+  - *Pattern:* High-density tables or compact list rows with sticky headers, hairline borders (`border-b border-border/40`), zebra striping or hover highlights, and right-aligned metrics using `tabular-nums font-mono`.
+  - *Forbidden:* Packaging individual transaction records into giant cards with fluffy padding.
+- **Relational / Hierarchical Entities (Settings, file explorers, entity management):**
+  - *Archetype:* **Master-Detail Two-Pane Canvas**.
+  - *Pattern:* Contextual fixed-width left rail (navigation/entity list) paired with a fluid, high-density right canvas for inspection and action.
+- **Procedural / Single-Task Flows (Onboarding, checkouts, complex multi-step forms):**
+  - *Archetype:* **Focused Single-Task Stream**.
+  - *Pattern:* Centered single-column container (`max-w-xl` / `max-w-2xl`) with progressive disclosure, clear step indicators, and zero peripheral sidebar noise to prevent distraction.
+- **Temporal / Event-Driven Records (Audit logs, status updates, activity history):**
+  - *Archetype:* **Linear Timeline Ledger**.
+  - *Pattern:* Vertical line rail with timestamp anchors, compact status chips, and contextual user badges.
+- **High-Impact Narrative / Showcase (Landing pages, project overviews):**
+  - *Archetype:* **Asymmetric Visual Anchor**.
+  - *Pattern:* 7-column editorial narrative anchor (heavy typography + primary action) offset against a 5-column interactive preview or live metric widget.
+
+### 2. The Single Focal Anchor Principle (Anti-Cardocalypse)
+- **Eliminate Equal-Weight Monotony:** Never place 3 or 4 cards with identical dimensions, identical icons, and identical visual weight side by side.
+- **Establish One Primary Focal Point:** Every screen or section must possess exactly ONE visual hero that pulls the eye first (e.g., the primary telemetry chart, the key operational metric, or the main action trigger).
+- **Subordinate Supporting Elements:** All surrounding widgets must intentionally recede: use lower contrast text (`text-muted-foreground`), lighter borders, or muted background surfaces (`bg-muted/40`).
+
+### 3. Tactile Surface Craft & Stepped Tones (Beyond Drop Shadows)
+Avoid excessive fuzzy drop shadows (`shadow-lg`, `shadow-xl`) that make UI float disconnected from reality. Build physical depth via border-driven architecture and stepped surfaces:
+- **Stepped Surface Tones (3-Tier Depth):**
+  - *Base Canvas:* Neutral floor (`bg-slate-50` in light; `bg-zinc-950` / `bg-neutral-950` in dark).
+  - *Structural Containers / Cards:* Elevated surface (`bg-white` in light; `bg-zinc-900` / `bg-neutral-900` in dark).
+  - *Inset / Subdued Wells:* Recessed areas for search bars, code blocks, or secondary filters (`bg-slate-100/70` in light; `bg-zinc-800/40` in dark).
+- **Hairline Alpha Borders:** Separate structural surfaces with crisp 1px borders using opacity: `border-slate-200/80` (light) or `border-zinc-800` / `border-white/[0.08]` (dark).
+- **Physical Top-Edge Inset:** For dark surfaces, provide a crisp physical sheen using an inset highlight: `shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]` instead of exterior glows.
+
+### 4. Color Discipline & The 60-30-10 Rule
+- **Lock the Palette to 3-5 Tokens:** Never scatter disparate colors across cards.
+- **60% Dominant Neutral:** Canvas background and large negative space (tinted neutral like slate, zinc, or warm stone; never stark dead `#000000` or `#FFFFFF`).
+- **30% Structural Neutral:** Card surfaces, borders, navigation bars, and dividers.
+- **10% Purposeful Accent:** Dedicated brand accent color.
+- **Accent Exclusivity:** The accent hue is reserved strictly for interactive triggers (Primary CTA, active tab indicator, unread dot, selected checkbox). **NEVER** use the accent color as card wallpaper, gradient fills, or decorative borders.
+
+### 5. Micro-Typography & Scannability
+- **Weight Contrast Before Size Jumps:** Build visual hierarchy by combining font weight (`font-bold` vs `font-normal`) and tracking (`tracking-tight` on large headings; `tracking-normal` on body) before inflating font size to absurd dimensions.
+- **Tabular Numerals Everywhere:** Every metric, balance, percentage, timestamp, and count **MUST** use `tabular-nums` (and preferably `font-mono` where appropriate) to prevent optical horizontal jitter when values update.
+- **Eyebrow Micro-Labels:** Anchor section headers and data clusters with compact category tags: `text-[11px] font-semibold uppercase tracking-wider text-muted-foreground`.
+
+### 6. The Banned AI Visual Starter Pack
+Explicitly forbid these generic AI clichés:
+- **No Purple-to-Cyan/Indigo Gradients:** Ban unprompted glowing violet/teal hero washes.
+- **No Gratuitous Glassmorphism:** Never slap `backdrop-blur-md bg-white/10` across functional tables and forms where it ruins text contrast.
+- **No Bouncy/Distracting Hover Scales:** Avoid `hover:scale-105` or springy transforms on utilitarian buttons. Use snappy, mechanical micro-feedback (`transition-colors duration-150` or `active:scale-[0.98]`).
+- **No Meaningless Generic Badges:** Eliminate fake floating pills like "AI Powered" or generic "Beta" chips scattered for decoration.
 
 ---
 

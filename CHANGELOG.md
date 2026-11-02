@@ -1,5 +1,16 @@
 # Changelog
 
+## 6.15.1
+
+### Added & Hardened
+- **Generative Visual Craft & Layout Engineering (`asc-ui`)**:
+  - Overcame "Distributional Convergence" and the "Sterile Default Trap" by replacing negative-only prohibitions with concrete generative design engineering heuristics.
+  - **Form Follows Data Shape (Layout Inference)**: Codified 5 explicit data-to-layout archetypes (Dense Data Matrix for quantitative logs, Master-Detail Two-Pane for hierarchical entities, Focused Single-Task Stream for procedural flows, Linear Timeline Ledger for temporal events, and Asymmetric Visual Anchor for high-impact showcases) preventing second-order template cloning.
+  - **Single Focal Anchor Principle**: Eliminated equal-weight card monotony by mandating exactly one visually dominant hero element per screen, requiring supporting containers to intentionally recede (`bg-muted/40`, `text-muted-foreground`).
+  - **Tactile Surface Craft & Stepped Tones**: Replaced detached fuzzy drop shadows (`shadow-lg`/`shadow-xl`) with 3-tier stepped surface tones (Base Canvas -> Structural Container -> Inset Well), crisp 1px hairline alpha borders, and physical top-edge inset highlights (`shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]`).
+  - **60-30-10 Color Discipline**: Locked active palettes to 3–5 tokens (stepped neutrals + 1 purposeful accent), strictly confining accent hues to interactive triggers (Primary CTA, active tab, status dot) rather than decorative fills.
+  - **Micro-Typography & Scannability**: Enforced weight contrast over size inflation, mandatory `tabular-nums font-mono` across all metrics and numeric figures, and compact uppercase eyebrow micro-labels (`text-[11px]`).
+
 ## 6.15.0
 
 ### Added & Hardened
