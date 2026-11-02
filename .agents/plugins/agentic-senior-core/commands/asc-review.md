@@ -1,1 +1,1 @@
-Run the code review workflow from skills/asc-review/SKILL.md on the current diff or specified files. Prioritize findings by severity: correctness and security first, then contracts, tests, architecture, and performance.
+Run the quality and security assurance workflow from skills/asc-review/SKILL.md (Code Review, OWASP Security Audit, and Clone Duplication). Prioritize findings strictly by severity with concrete evidence and remediations.

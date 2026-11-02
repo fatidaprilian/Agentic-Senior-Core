@@ -44,6 +44,21 @@
       "id": "ui-stripped-focus-ring",
       "regex": "(?:\\boutline-none\\b|\\bfocus:outline-none\\b)(?!.*(?:focus-visible:ring|focus:ring|focus-visible:outline))",
       "message": "warning: 'outline-none' without a focus-visible ring breaks keyboard navigation (WCAG 2.4.7 violation). Pair with focus-visible:ring-2."
+    },
+    {
+      "id": "copy-marketing-buzzwords",
+      "regex": "\\b(seamlessly|effortlessly|empower your|revolutionize your|at your fingertips)\\b",
+      "message": "note: marketing buzzword detected in functional UI copy. Strip conversational filler and speak plainly."
+    },
+    {
+      "id": "code-decorative-banner",
+      "regex": "//\\s*={5,}|//\\s*-{5,}\\s*[A-Z]+",
+      "message": "note: decorative ASCII character banner detected. Keep comments concise, sentence-case, and focused on rationale."
+    },
+    {
+      "id": "code-step-narration",
+      "regex": "//\\s*Step\\s+[0-9]+:\\s*|//\\s*Initialize\\s+(?:the\\s+)?[a-zA-Z0-9_]+",
+      "message": "note: procedural line-by-line comment narration detected. Describe non-obvious intent and constraints instead of restating the obvious code flow."
     }
   ]
 }

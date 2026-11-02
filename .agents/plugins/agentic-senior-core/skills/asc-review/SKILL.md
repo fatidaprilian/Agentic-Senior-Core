@@ -1,73 +1,77 @@
 ---
 name: asc-review
 description: >
-  Trigger this skill when the user says: "review this code", "check this PR", "what's wrong with this", "look at my changes", "critique this", "is this production-ready", "review my pull request", "find bugs", "check for issues", "any problems here", "does this look right", "sanity check this", "review PR ini", "cek kodingan saya", "ada masalah ga di kode ini", "tolong review perubahan ini". Also trigger for any request to evaluate code quality, analyze recent commits, or assess production risks in existing code. Also trigger when editing or viewing diff output, PR descriptions, or code review comments. For deep penetration testing, threat modeling, or OWASP compliance audits, use asc-audit instead.
+  Trigger this skill when the user is: reviewing pull requests, checking recent changes, auditing security, scanning for vulnerabilities, threat modeling, or detecting duplicate code. Trigger when the user says: "review this code", "check this PR", "what's wrong with this", "look at my changes", "is this production-ready", "find bugs", "audit this", "security check", "find vulnerabilities", "check for XSS", "check for SQL injection", "OWASP check", "check auth", "find duplicate code", "check for clones", "audit for duplication", "review PR ini", "cek kodingan saya", "cari celah keamanan", "cari kode duplikat". Covers Code Review, Security Audit, and Duplicate Detection.
 ---
 
-# Review Skill
+# Quality & Security Assurance Playbook (`asc-review`)
 
-Adversarial posture: Maintain neutral, unyielding technical scrutiny. Prioritize real production risks, regressions, and silent failures over courtesy or superficial compliments.
+Unified assurance playbook for rigorous code review, deep vulnerability audits, and structural duplication detection. Operates with an adversarial, zero-trust posture: prioritizing production risks, data security, and maintainability over superficial compliments.
 
-Production-risk code review. Prioritize findings by severity.
+Grounded in: OWASP Top 10 (2025), OWASP ASVS v5.0, OWASP Agentic Applications (ASI01-ASI10), Google Engineering Practices, and Fowler's Rule of Three.
 
-Grounded in: OWASP Risk Rating Methodology, Google Engineering Practices (code review guide), Clean Architecture (transport vs business layer separation).
+---
 
-## Review Procedure (Empirical First)
+## Mode 1: Production Code Review
 
-1. **Establish Scope**: Run `git diff --stat` (or `git status`) to inspect the exact set of changed files and line deltas.
-2. **Test-Change Correlation**: For every modified application source file, check if a corresponding test file was updated. If application logic changed without test updates, flag as Severity 3 ("Missing tests for changed behavior").
-3. **Run Deterministic Checks**: Run the project linter and test suite (`ascx test` / `npm test`). Do not evaluate architectural quality on a failing test suite.
-4. **Security & Invariants Scan**: Check for unverified `ASC-STUB:`, hardcoded credentials, or empty catch blocks in the diff.
-5. **Contract & Hierarchy**: Walk the decision ladder for each new file or dependency: does this need to exist, could the stdlib or an existing dependency handle it?
+Use when reviewing PRs, diffs, commits, or newly written feature code.
 
-## Finding Priority Order
+### Review Procedure
+1. **Scope Inspection**: Run `git diff --stat` (or `git status`) to inspect modified files and line deltas.
+2. **Test-Change Correlation**: For every modified application logic file, verify that a corresponding test was updated. If logic changed without tests, report as a missing test finding.
+3. **Deterministic Verification**: Run project linter and test suite (`ascx test` / `npm test`).
+4. **Severity Priority Order**:
+   - **Severity 1 (Critical)**: Correctness, data corruption, auth/permission bypass, security sinks, PII leakage.
+   - **Severity 2 (High)**: Action feedback failures (hanging spinners, unhandled mutations, missing error boundaries), unhandled async rejections, missing remote timeouts.
+   - **Severity 3 (Medium)**: Public contract drift, missing failure-path tests, architectural boundary violations.
+   - **Severity 4 (Low)**: Maintainability debt, performance micro-optimizations, code comment noise.
 
-1. Correctness, data loss, security, privacy, auth, and permission risks.
-2. Action feedback & resilience: silent mutation failures, missing toasts/banners, hanging spinners, missing fallbacks on remote calls, or missing error boundaries.
-3. Public contract drift: APIs, events, CLI behavior, data model, UI contract, docs.
-4. Missing tests for changed behavior.
-5. Architecture boundary drift and maintainability risk.
-6. Performance and accessibility issues with concrete impact.
+---
 
-## For Every Finding
+## Mode 2: Security & Vulnerability Audit
 
-- Include file and line reference.
-- Explain the real risk.
-- Propose the smallest safe fix.
+Use when assessing trust boundaries, reviewing auth systems, running threat models, or auditing external dependencies.
 
-## Checklist
+### Security Audit Procedure
+1. **Dependency Audit**: Run native vulnerability scanners (`npm audit`, `cargo audit`, `pip-audit`).
+2. **Lexical Sink & Secret Scan**: Search for hardcoded secrets, dangerous functions (`eval`, `pickle.load`, `shell=True`), unvalidated redirects, and unhandled stubs (`// ASC-STUB:`).
+3. **Trust Boundary Mapping**: Trace all points where external, untrusted input enters the application. Validate that inputs are strictly sanitized, type-checked, and normalized.
 
-### Correctness
-- Changed behavior matches the user request.
-- Existing behavior preserved unless user approved a change.
-- Edge cases, empty states, error paths, and fallbacks handled.
-- Action feedback: mutations (forms, buttons, mutations) have visible pending indicators and clear completion notifications (toast or banner with retry). No silent failures or hanging spinners.
-- Dependency resilience: remote calls have strict timeouts and soft dependencies have graceful fallbacks (static default, stale cache, or degraded mode). Component crashes are contained by error boundaries.
+### Security Scope Checklist
+- **Authentication & Authorization**: Verify resource-level access control on every private endpoint, not just session presence.
+- **Injection & XSS**: Verify all database queries are strictly parameterized. Check HTML escaping for user-controlled strings.
+- **SSRF & Network**: Validate outbound URLs; verify service credentials follow least-privilege principles.
+- **Agentic Risk Scope (OWASP Top 10 for Agentic Applications)**:
+  - Agent Goal Hijack (ASI01), Tool Parameter Tampering (ASI02), Identity & Privilege Abuse (ASI03).
+  - Supply Chain & Untrusted Plugins (ASI04), Sandboxing & Execution (ASI05).
+  - Memory & Context Poisoning (ASI06): Treat persistent state as untrusted input.
 
-### Security
-- External input validated at trust boundaries.
-- Secrets, tokens, credentials not committed or logged.
-- Authorization enforced at a trusted boundary.
-- Error responses keep internal details out of client responses.
-- User-derived URLs are protected against SSRF and user-controlled log values cannot forge or corrupt log entries.
-- New dependencies have verified identity and provenance; plausible package names are not evidence. Confirm git clone targets and plugin/skill install paths against trusted sources (mitigate HalluSquatting).
+---
 
-### Architecture
-- Layer boundaries clear. Controllers handle protocol translation only; business logic stays in services.
-- Abstractions backed by real duplication, not prediction. Straightforward code over clever solutions.
-- Complexity budget applied: fewer moving parts without losing safety.
-- New code follows a named analogous module in this codebase. Any deviation is explicitly justified.
+## Mode 3: Clone & Code Duplication Audit
 
-### Testing
-- Changed behavior has appropriate tests (baseline: happy path + failure mode).
-- Never mock the unit under test — mock only external boundaries and dependencies.
-- Tests assert behavior and contracts, not implementation trivia.
-- Critical flows include failure-path coverage.
+Use when evaluating copy-paste repetition or consolidating duplicated logic across a repository.
 
-### Documentation
-- API, event, CLI, and data contract changes update docs in the same commit.
-- Root README exists and stays current.
+### Duplication Audit Procedure
+1. **Rule of Three Threshold**: Duplication is permitted up to 2 instances to avoid premature wrong abstractions. Three or more identical or near-identical logic blocks must be flagged for consolidation.
+2. **Scan Tools**: Execute token-level clone audit (e.g., `asc dedup` or `jscpd`) when available.
+3. **Consolidation Guidance**:
+   - Prefer extracting pure, stateless utility functions over creating complex abstract base classes.
+   - Ensure the consolidated helper resides in a shared module matching existing project conventions.
 
-## Output
+---
 
-Report findings ordered by severity with file/line references and concrete fixes. If no findings, say so explicitly and name any residual risk.
+## Output Format for Findings
+
+Report findings ordered strictly by severity with file and line references:
+
+```
+Severity: Critical | High | Medium | Low
+Category: Correctness | Security | Resilience | Duplication
+Location: path/to/file.ext:line
+Impact: Concrete operational risk or threat vector
+Evidence: Exact code excerpt or test failure
+Remediation: Smallest safe, actionable fix
+```
+
+If no issues are found, state so explicitly and summarize the audit coverage.

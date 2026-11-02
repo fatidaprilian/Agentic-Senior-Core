@@ -1,40 +1,75 @@
 ---
 name: asc
 description: >
-  Trigger this skill when the user says: "what are the rules", "coding guidelines", "best practices", "code quality standards", "how should I write this", "staff engineer approach", "senior developer rules", "what does ASC say about", "how do I write this properly", "what's the right way", "any guidelines for this", "apa aturannya", "panduan koding", "cara tulis yang bener". Also trigger for any general request about coding standards, quality guidelines, or when the user asks the agent to follow senior/staff engineering practices. Do NOT trigger for implementing features, refactoring code, running audits, or writing specific project code directly (use the respective domain skills like asc-add-feature, asc-refactor, or asc-audit instead).
+  Trigger this skill when the user asks: "what are the rules", "coding guidelines", "best practices", "how should I write this", "staff engineer approach", "map this codebase", "document our patterns", "fingerprint this repository", "learn my preferences", "bootstrap preferences", "log this debt", "add to debt ledger", "install ASC", "configure for Cursor", "set up adapter", "apa aturannya", "panduan koding", "petakan codebase", "pasang asc". Covers Core Overview, Codebase Fingerprinting, Adaptive Preferences, Debt Tracking, and IDE Adapters.
 ---
 
-# Agentic Senior Core
+# Agentic Senior Core: Architecture & Meta-Tools (`asc`)
 
-Universal AI coding rules. Write code like a staff engineer.
+Universal AI coding rules and meta-tooling playbook. Grounded in Google Engineering Practices, OWASP, and USENIX Security.
 
-## Available Commands
+---
 
-- `/asc-new-project` -- Greenfield workflow (Define -> Spec -> Implement -> Validate)
-- `/asc-add-feature` -- Brownfield workflow (Research -> Plan -> Implement)
-- `/asc-refactor` -- Structured refactoring workflow with pre-checks and validation
-- `/asc-review` -- Production-risk code review with severity-ordered findings
-- `/asc-audit` -- Security, architecture, and resilience audit
-- `/asc-reference` -- Domain-specific rules (testing, API, database, frontend, infra, resilience)
-- `/asc-fingerprint` -- Map repository conventions, notification providers, and error patterns
-- `/asc-dedup` -- Token-level clone and duplicate code audit via jscpd
-- `/asc-debt` -- Track deferred enforcement violations (add, list, resolve, summary)
-- `/asc-learn` -- Mine adaptive user preferences from session history
-- `/asc-bootstrap` -- Seed baseline UI and notification preferences
-- `/asc-help` -- Show this help
+## 1. The 5 Core Meta-Skills Architecture
 
-## Enforcement
+Agentic Senior Core organizes operational guidance into 5 high-density, non-overlapping playbooks:
 
-On plugin-tier hosts (Claude Code, Codex CLI, Copilot CLI), a PostToolUse hook fires after every Edit/Write and checks:
-- New dependencies against stdlib duplicates (decision ladder step 3)
-- LOC delta > 30 lines on edits (step 5)
-- New files > 50 lines (steps 1–2)
-- Workflow gate violations: source/config edits during research or plan phases
+1. **`/asc` (This Skill)**: Core engineering rules, codebase convention fingerprinting, adaptive preferences, debt tracking, and IDE adapter setup.
+2. **`/asc-develop`**: Engineering lifecycle for greenfield scaffolding, brownfield feature implementation, and structured refactoring.
+3. **`/asc-review`**: Quality and security assurance: production PR reviews, deep vulnerability audits (OWASP / ASI), and code clone deduplication.
+4. **`/asc-reference`**: Domain architecture reference for REST/GraphQL APIs, database queries/migrations, testing contracts, infrastructure, and resilience.
+5. **`/asc-ui`**: Human-interface engineering: UI visuals, UX microcopy hygiene, strict single-language localization, mobile reflow (`dvh`/`clamp`), and WCAG 2.2 AA accessibility.
 
-Violations inject a nudge referencing the specific ladder step or workflow phase. The hook is silent when no issues are found. All enforcement is advisory — nudges, not hard blocks.
+---
 
-## What It Does
+## 2. Repository Fingerprinting
 
-Loads universal engineering rules on every session: code quality, architecture, security, error handling, testing, API design, database, frontend, infrastructure, resilience, and async patterns.
+Extract this repository's architectural and procedural conventions before undertaking major changes. The goal is evidence-backed alignment with this codebase.
 
-Rules apply to any project, stack, language, or framework. No per-project configuration needed.
+### Procedure
+1. **Map Runtime & Stack**: Inspect package manifests, test runners, and deployment configs.
+2. **Analogous Modules**: Locate at least 2 existing modules. Record their layer splits, naming conventions, validation schemas, error handling, and notification patterns.
+3. **Evidence-Backed Conventions**: Report only falsifiable findings with file and line references. Separate observations from proposals.
+4. **Project Conventions File**: When approved by the user, record project-specific conventions in `CONVENTIONS.md` at the project root. Never overwrite universal ASC rules.
+
+---
+
+## 3. Adaptive Preferences & Baseline Onboarding
+
+Customize AI coding behavior and design preferences dynamically.
+
+### Workflow
+- **Elicit Baseline Preferences**: Use `asc bootstrap` to select design slop patterns to ban (e.g. generic gradients, unlinked Inter font, stripped focus rings).
+- **Learn from Corrections**: When a user corrects a styling or architectural choice (e.g. *"never use modals for multi-step flows"*, *"always use date-fns"*), log the rule into `.agents/adaptive_preferences.json` via `addRule()`.
+- **Enforcement**: Project preferences are automatically consulted during code generation and compiled into local git hooks.
+
+---
+
+## 4. Technical Debt Ledger
+
+Track deferred quality violations and temporary stubs systematically.
+
+### Ledger Standards
+- When an ASC nudge or quality violation is deferred with user consent, tag the stub in code:
+  `// ASC-STUB: [reason] [ASC-DEBT-xxx]`
+- Record the item in `.agents/debt-ledger.json` with timestamp, file location, severity, and planned remediation.
+- Never let temporary mocks or hardcoded values silently masquerade as completed production integrations.
+
+---
+
+## 5. Host Adapters & Setup
+
+Synchronize ASC rules and skills across all installed AI coding tools.
+
+### Supported Tools
+- **Native Plugin Hosts (Zero setup)**: Antigravity, Claude Code, Codex CLI, Copilot CLI, OpenCode, Kilo Code.
+- **Adapter Hosts (Single file in project)**: Cursor (`.cursor/rules/agentic-senior-core.mdc`), Windsurf/Devin (`.devin/rules/`), Cline, Continue, Zed, Aider.
+
+### CLI Utility Commands
+```bash
+asc status          # Detect installed AI coding tools
+asc global --all    # Install global rules and smart git hook dispatcher
+asc adapter --all   # Generate workspace adapters for all detected IDEs
+asc adapter --cursor # Generate adapter specifically for Cursor
+asc uninstall       # Clean up adapter files and hooks
+```

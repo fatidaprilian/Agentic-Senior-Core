@@ -49,6 +49,7 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 - Accessible Notifications: Toast and status messages must use ARIA live regions (`role="status"`, `aria-live="polite"` for non-urgent feedback; `role="alert"` for critical errors). Never steal keyboard focus for toasts.
 - WCAG 2.2 AA accessibility floor. Responsive by default.
 - No placeholder, lorem, or TODO content in production UI.
+- UI/UX Microcopy & Anti-Slop: For comprehensive UX writing, redundancy elimination, single-language localization hygiene, and layout de-sloppification, load the dedicated `/asc-ui` skill (`skills/asc-ui/SKILL.md`).
 
 ## Infrastructure
 
@@ -64,7 +65,7 @@ Grounded in: WCAG 2.2 AA (accessibility), Fowler's Money Pattern (monetary types
 - Dependency Fallback Strategy (Hard vs Soft):
   - Hard dependencies (core workflow blocks without them): Fail fast, roll back transactions, return structured RFC 9457 error with actionable explanation.
   - Soft dependencies (non-critical enhancements): Provide graceful fallbacks:
-    - *Static Fallback*: Return safe default values, static placeholders, or empty collections alih-alih melempar exception.
+    - *Static Fallback*: Return safe default values, static placeholders, or empty collections instead of throwing unhandled exceptions.
     - *Stale Cache Fallback*: Serve last-known-good cached state (`stale-while-revalidate`) with an offline/stale indicator.
     - *Degraded Mode*: Isolate and disable the failing peripheral widget while preserving core user journeys.
 - Circuit breakers for unhealthy dependencies to fail fast and prevent thread/resource exhaustion.

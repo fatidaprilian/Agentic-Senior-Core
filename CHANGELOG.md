@@ -1,5 +1,26 @@
 # Changelog
 
+## 6.15.0
+
+### Added & Hardened
+- **5 Orthogonal Meta-Skills & 1-to-1 Commands Architecture**:
+  - Streamlined all skills into 5 bounded, non-overlapping playbooks: `asc` (architecture, fingerprinting, preferences, debt, adapters), `asc-develop` (lifecycle, scaffolding, features, refactoring), `asc-review` (code review, OWASP/ASI security, clone audit), `asc-reference` (testing, API, database, infra, resilience contracts), and `asc-ui` (anti-slop UI/UX, microcopy, mobile reflow, accessibility).
+  - Mapped commands 1-to-1 to the 5 meta-skills (`/asc`, `/asc-develop`, `/asc-review`, `/asc-reference`, `/asc-ui`), eliminating agent routing ambiguity, command bloat, and prompt cache churn.
+- **Universal UI/UX Engineering & Anti-Slop System (`asc-ui`)**:
+  - Visual layout anti-slop: eliminated the generic "AI Starter Pack" (cliché violet/cyan neon glows, 3-card cardocalypse grids, gratuitous glassmorphism, distracting hover scales).
+  - UX microcopy hygiene: enforced the 50% word reduction rule, eliminated redundant subtitle echoes, mandated active verb+noun action labels, and banned marketing buzzwords (*seamless*, *empower*, *robust*).
+  - First-class language purity & localization discipline: prohibited mixed-language code-switching (anti gado-gado), banned hybrid neologisms (`meng-generate`, `di-submit`, `di-cancel`), enforced deterministic microcopy glossaries (`Batal`/`Hapus`/`Simpan`), and introduced dynamic text expansion budgets (+20% to +40%) to prevent fixed-pixel clipping on non-English locales.
+  - Mobile-first reflow & touch ergonomics: dynamic viewport height (`dvh`) adoption, fluid typography (`clamp`), minimum 44x44px touch targets with 8px clearance, and zero horizontal scroll leaks.
+  - WCAG 2.2 AA accessibility floor: mathematical contrast ratios, grey-on-grey contrast hallucination defense, keyboard focus ring restoration (`:focus-visible`), and modal escape hatch standards.
+- **Zero-Disk-Checkpoint Engineering Lifecycle (`asc-develop`)**:
+  - Eradicated disk checkpoint pollution (`workflow-gate.json`, `PRD.md`, `Schema.md`) from user project roots; all spec alignments, research inventories, and fallback matrices are handled in-memory and through ephemeral chat artifacts.
+  - Retained strict analogous module reuse, failure mode fallback matrices, and exit-code 0 test verification.
+- **Automated Pruning Engine on Install & Update**:
+  - Upgraded CLI synchronizer (`lib/cli/commands/adapter.mjs` and `lib/cli/commands/global.mjs`) with an automatic pruning engine in `copyDirRecursive`: automatically detects and removes stale/deleted skills, commands, and rules from target directories (`.roo/skills`, `.opencode/skills`, `~/.agents/plugins/agentic-senior-core`, etc.) during `asc global` and `asc adapter` executions.
+  - Ensures clean updates without orphaned ghost rules or dead code cluttering agent contexts.
+- **Rule Limit Uncapping**:
+  - Removed arbitrary 80-line and 8,000-byte test assertions, enabling comprehensive, authoritative rules across all adapters and environments.
+
 ## 6.14.0
 
 ### Added & Hardened

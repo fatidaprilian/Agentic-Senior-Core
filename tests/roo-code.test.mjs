@@ -13,22 +13,14 @@ const repositoryRoot = path.resolve(path.dirname(currentFilePath), '..');
 
 const EXPECTED_SKILLS = [
   'asc',
-  'asc-adapter',
-  'asc-add-feature',
-  'asc-audit',
-  'asc-bootstrap',
-  'asc-debt',
-  'asc-dedup',
-  'asc-fingerprint',
-  'asc-learn',
-  'asc-new-project',
-  'asc-refactor',
+  'asc-develop',
   'asc-reference',
   'asc-review',
+  'asc-ui',
 ];
 
 describe('Roo Code Rules and Skills Integration', () => {
-  it('asc adapter --roo creates .roo/rules and all 13 skills in .roo/skills', async () => {
+  it('asc adapter --roo creates .roo/rules and all 5 skills in .roo/skills', async () => {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'asc-roo-adapter-test-'));
     const originalCwd = process.cwd();
 

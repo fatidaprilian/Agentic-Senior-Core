@@ -6,8 +6,8 @@ Agentic Senior Core operates on a two-tier architecture:
 
 1. **Instructional Layer (Universal — Works in 23+ AI Tools)**:
    - **Rules, skills, and hooks in `.agents/plugins/agentic-senior-core/`** are the canonical bundle and work across **Google Antigravity IDE, Claude Code, Cursor, Windsurf, Copilot, Codex, Kiro, Roo, OpenCode, Zed, Aider, etc.**.
-   - **Automatic Skill Triggering**: Agents attempt to detect and load skills if your prompt matches the skill's description (e.g., asking "perform a security audit" loads `asc-audit`).
-   - **Manual Skill Triggering (Highly Recommended)**: Explicitly call skills using commands like `/asc-refactor` or `/asc-new-project` for guaranteed execution.
+   - **Automatic Skill Triggering**: Agents attempt to detect and load skills if your prompt matches the skill's description (e.g., asking "audit security" loads `asc-review`, "design this UI" loads `asc-ui`).
+   - **Manual Skill Triggering (Highly Recommended)**: Explicitly call skills using 1-to-1 slash commands like `/asc-develop`, `/asc-review`, `/asc-ui`, `/asc-reference`, or `/asc` for guaranteed execution.
 
 2. **Active Enforcement Layer (Hooks — Host-Specific Hard Guardrails)**:
    - **Hard-Block Guardrails**: For tools supporting active hook execution engines (Claude Code, GitHub Copilot CLI, Google Antigravity IDE, Cursor), ASC automatically intercepts tool calls:
@@ -30,6 +30,7 @@ Every rule and skill workflow is derived from established engineering standards,
 | Refactoring | Fowler's Refactoring, Rule of Three, YAGNI (XP/Kent Beck) |
 | Database | Fowler's Money Pattern, UTC timestamp convention, migration versioning |
 | Accessibility & UI Feedback | WCAG 2.2 AA, W3C WAI-ARIA 1.2 / APG (Status & Alert live regions), Nielsen Norman Group UX Heuristics (#1 Visibility, #9 Error Recovery) |
+| UI/UX Engineering & Anti-Slop | Nielsen Norman Group (Microcopy & Scannability), Refactoring UI (Hierarchy & Spacing), Apple HIG & Google Material 3 (Action Semantics), W3C I18n / Localization Best Practices |
 | Resilience & Fallbacks | AWS Well-Architected Reliability Pillar (REL05-BP01 Hard/Soft dependencies & static fallbacks), Nygard's Release It!, Martin Fowler Circuit Breaker |
 | Technical debt | Cunningham's debt metaphor (1992), Martin Fowler Technical Debt Taxonomy |
 | Clone & Dedup | GitClear 2024 analysis (211M LOC), token-level clone detection via jscpd |

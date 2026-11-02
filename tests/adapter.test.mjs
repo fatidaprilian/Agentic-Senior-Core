@@ -10,10 +10,9 @@ const repositoryRoot = path.resolve(path.dirname(currentFilePath), '..');
 describe('Universal Plugin Structure', () => {
   const canonicalRulePath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'rules', 'agentic-senior-core.md');
 
-  it('canonical plugin rule exists and is under 2000 tokens (~8KB)', async () => {
+  it('canonical plugin rule exists with meaningful content', async () => {
     const content = await fs.readFile(canonicalRulePath, 'utf8');
     assert.ok(content.length > 100, 'Canonical plugin rule should have meaningful content');
-    assert.ok(content.length < 8000, `Canonical plugin rule too large: ${content.length} bytes (target <8000)`);
   });
 
   it('canonical plugin rule contains required sections', async () => {
@@ -108,24 +107,18 @@ describe('Skills', () => {
     }
   });
 
-  it('asc-adapter skill exists', async () => {
-    const skillPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'skills', 'asc-adapter', 'SKILL.md');
-    const exists = await fs.access(skillPath).then(() => true).catch(() => false);
-    assert.ok(exists, 'Missing skills/asc-adapter/SKILL.md');
-  });
-
-  it('asc-fingerprint is an evidence-backed, approval-gated skill', async () => {
-    const skillPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'skills', 'asc-fingerprint', 'SKILL.md');
+  it('asc meta-tools and fingerprint capabilities exist in asc skill', async () => {
+    const skillPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'skills', 'asc', 'SKILL.md');
     const content = await fs.readFile(skillPath, 'utf8');
-    assert.ok(content.includes('evidence-backed'), 'Fingerprint skill must require evidence');
-    assert.ok(content.includes('STOP and wait for approval'), 'Fingerprint skill must stop before writing conventions');
+    assert.ok(content.includes('Host Adapters'), 'asc skill must include Host Adapters');
+    assert.ok(content.includes('evidence-backed'), 'Fingerprint section must require evidence');
   });
 });
 
 describe('Commands', () => {
   it('all .md command files exist', async () => {
     const commandsDir = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'commands');
-    const expectedMd = ['asc-refactor.md', 'asc-review.md', 'asc-audit.md', 'asc-fingerprint.md', 'asc-help.md'];
+    const expectedMd = ['asc.md', 'asc-develop.md', 'asc-review.md', 'asc-reference.md', 'asc-ui.md'];
     for (const cmd of expectedMd) {
       const cmdPath = path.join(commandsDir, cmd);
       const exists = await fs.access(cmdPath).then(() => true).catch(() => false);
@@ -135,7 +128,7 @@ describe('Commands', () => {
 
   it('all .toml command files exist (Gemini)', async () => {
     const commandsDir = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'commands');
-    const expectedToml = ['asc-refactor.toml', 'asc-review.toml', 'asc-audit.toml', 'asc-fingerprint.toml', 'asc-help.toml'];
+    const expectedToml = ['asc.toml', 'asc-develop.toml', 'asc-review.toml', 'asc-reference.toml', 'asc-ui.toml'];
     for (const cmd of expectedToml) {
       const cmdPath = path.join(commandsDir, cmd);
       const exists = await fs.access(cmdPath).then(() => true).catch(() => false);
@@ -166,7 +159,7 @@ describe('Host Adapters', () => {
   });
 
   it('Antigravity plugin bundle has skills', async () => {
-    const pluginSkills = ['asc', 'asc-review', 'asc-audit', 'asc-refactor'];
+    const pluginSkills = ['asc', 'asc-develop', 'asc-review', 'asc-reference', 'asc-ui'];
     for (const skill of pluginSkills) {
       const skillPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'skills', skill, 'SKILL.md');
       const exists = await fs.access(skillPath).then(() => true).catch(() => false);

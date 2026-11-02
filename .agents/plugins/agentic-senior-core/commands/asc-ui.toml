@@ -1,0 +1,3 @@
+description = "UI/UX engineering, microcopy hygiene, and anti-slop design"
+prompt = "Load and follow the asc-ui skill. Inspect the target UI components and layouts. Strip out AI slop: eliminate redundant subtitles repeating headers, cut verbose copy by 50%, remove marketing buzzwords in functional tools, enforce strict single-language consistency without unidiomatic foreign loanwords, replace generic 3-card templates with scannable information density, and ensure proper state quad (loading, empty, error, populated) handling."
+

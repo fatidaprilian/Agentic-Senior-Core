@@ -19,15 +19,10 @@ const CANONICAL_RULE_FILE = '.agents/plugins/agentic-senior-core/rules/agentic-s
 // Skill copies within the plugin directory
 const SKILL_COPIES = [
   { base: '.agents/plugins/agentic-senior-core/skills/asc/SKILL.md', copies: [] },
-  { base: '.agents/plugins/agentic-senior-core/skills/asc-reference/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-develop/SKILL.md', copies: [] },
   { base: '.agents/plugins/agentic-senior-core/skills/asc-review/SKILL.md', copies: [] },
-  { base: '.agents/plugins/agentic-senior-core/skills/asc-audit/SKILL.md', copies: [] },
-  { base: '.agents/plugins/agentic-senior-core/skills/asc-refactor/SKILL.md', copies: [] },
-  { base: '.agents/plugins/agentic-senior-core/skills/asc-debt/SKILL.md', copies: [] },
-  { base: '.agents/plugins/agentic-senior-core/skills/asc-add-feature/SKILL.md', copies: [] },
-  { base: '.agents/plugins/agentic-senior-core/skills/asc-fingerprint/SKILL.md', copies: [] },
-  { base: '.agents/plugins/agentic-senior-core/skills/asc-new-project/SKILL.md', copies: [] },
-  { base: '.agents/plugins/agentic-senior-core/skills/asc-adapter/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-reference/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-ui/SKILL.md', copies: [] },
 ];
 
 const REQUIRED_MARKERS = [

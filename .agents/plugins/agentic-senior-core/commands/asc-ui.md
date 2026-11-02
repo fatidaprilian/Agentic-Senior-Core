@@ -1,0 +1,1 @@
+Run the UI/UX engineering and anti-slop guidelines from skills/asc-ui/SKILL.md. Clean up verbose microcopy, eliminate redundant headings/subtitles, enforce single-language purity without awkward foreign loanwords, optimize information density, and implement reliable data states.

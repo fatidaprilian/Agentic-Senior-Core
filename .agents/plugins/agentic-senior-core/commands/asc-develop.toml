@@ -1,0 +1,3 @@
+description = "Engineering lifecycle for greenfield apps, brownfield features, and refactoring"
+prompt = "Load and follow the asc-develop skill. Research analogous modules, plan architecture and failure fallbacks, apply the decision ladder, and verify with tests without creating disk checkpoint files."
+

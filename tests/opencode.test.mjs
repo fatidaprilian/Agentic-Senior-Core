@@ -13,18 +13,10 @@ const repositoryRoot = path.resolve(path.dirname(currentFilePath), '..');
 
 const EXPECTED_SKILLS = [
   'asc',
-  'asc-adapter',
-  'asc-add-feature',
-  'asc-audit',
-  'asc-bootstrap',
-  'asc-debt',
-  'asc-dedup',
-  'asc-fingerprint',
-  'asc-learn',
-  'asc-new-project',
-  'asc-refactor',
+  'asc-develop',
   'asc-reference',
   'asc-review',
+  'asc-ui',
 ];
 
 describe('OpenCode Native Plugin, Rules & Skills Integration', () => {

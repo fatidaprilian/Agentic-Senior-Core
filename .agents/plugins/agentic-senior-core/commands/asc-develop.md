@@ -1,0 +1,1 @@
+Run the engineering lifecycle workflow from skills/asc-develop/SKILL.md (Greenfield scaffolding, Brownfield features, and Refactoring). Research analogous modules, plan architecture and fallbacks, apply the decision ladder, and verify with tests without creating disk checkpoint files.

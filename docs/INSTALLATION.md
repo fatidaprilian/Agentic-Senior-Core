@@ -85,7 +85,7 @@ Rules and hooks load automatically on every session with zero per-project files.
 <details>
 <summary><b>Gemini CLI</b> (terminal agent)</summary>
 
-Auto-detected. Gemini CLI reads `gemini-extension.json` from the installed package and loads the canonical plugin rule. Commands are available as `.toml` format (`/asc-refactor`, `/asc-review`, `/asc-audit`, `/asc-fingerprint`).
+Auto-detected. Gemini CLI reads `gemini-extension.json` from the installed package and loads the canonical plugin rule. Commands are available as `.toml` format (`/asc`, `/asc-develop`, `/asc-review`, `/asc-reference`, `/asc-ui`).
 
 </details>
 
@@ -214,7 +214,7 @@ asc global --kilocode
 asc adapter --roo
 ```
 
-Generates `.roo/rules/agentic-senior-core.md` and installs all 13 on-demand skills into `.roo/skills/`. Repeat per project — or install once globally with `asc global --roo` (`~/.roo/rules/` and `~/.roo/skills/`).
+Generates `.roo/rules/agentic-senior-core.md` and installs 5 core meta-skills into `.roo/skills/`. Repeat per project — or install once globally with `asc global --roo` (`~/.roo/rules/` and `~/.roo/skills/`).
 
 </details>
 
@@ -361,7 +361,7 @@ asc global --all
 | OpenHands | `~/.openhands/microagents/` | CLI/headless/dev modes; Docker runs need the mount |
 | Windsurf / Devin Desktop | `~/.codeium/windsurf/memories/global_rules.md` | 6,000-char global limit (ASC rules fit); skipped if you already have your own file |
 | GitHub Copilot (VS Code) | VS Code profile `prompts/` folder | Installed as a user `*.instructions.md` with `applyTo: '**'` |
-| Roo Code | `~/.roo/rules/` & `~/.roo/skills/` | Global rules and 13 on-demand skills |
+| Roo Code | `~/.roo/rules/` & `~/.roo/skills/` | Global rules and 5 core meta-skills |
 
 Tools without a global rules **file** (manual one-time setup instead):
 

@@ -1,1 +1,0 @@
-Run the refactoring workflow from skills/asc-refactor/SKILL.md on the current code changes or specified files. Preserve existing behavior while improving structure, naming, boundaries, and maintainability.

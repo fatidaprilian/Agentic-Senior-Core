@@ -25,8 +25,6 @@ When picking step 5 or 6 (unless trivial):
 - One-line comment noting rationale and upgrade trigger if there is a ceiling.
 - One runnable check (assertion, test, or demo) proving it works.
 - Never simulate success or return hardcoded values mimicking live integrations. Temporary stubs must be marked with `// ASC-STUB: [reason] [ASC-DEBT-xxx]` and tracked in the debt ledger.
-- Action Feedback Invariant: Every mutation/user action (submit, delete, update) MUST have a pending state (disabled button/spinner) and visible completion feedback (toast or banner with actionable retry). Never silently swallow errors.
-- Resilience Invariant: Soft dependencies must have defined fallbacks (static safe default, stale cache, or degraded mode). Protect UI sections with localized error boundaries.
 
 ## Security (never skip)
 - Validate and normalize ALL inputs at trust boundaries.
@@ -44,6 +42,8 @@ When picking step 5 or 6 (unless trivial):
 - Early returns over deep nesting (keep happy path flat).
 - Three similar lines is better than a premature abstraction (duplication over wrong abstraction).
 - Single design source of truth: UI styling must reuse defined design tokens, theme variables, or existing page patterns. No ad-hoc palette, radius, or font deviations between pages.
+- UI copy & microcopy hygiene: Functional UI is a tool, not a brochure. Zero conversational filler or marketing buzzwords ("seamless", "empower", "robust"). Never echo heading text in redundant subheadings. Enforce strict single-language consistency without unidiomatic foreign loanwords or hybrid transliterations.
+- Code comment hygiene: Zero decorative character banners (// =====), zero line-by-line narration (// Step 1: validate), zero empty category tags (// Main logic), and zero signature echoes in docstrings. Keep only comments that document non-obvious operational constraints, security boundaries, concurrency hazards, or protocol contracts.
 - Delete code that carries no behavior, safety, or test value. Readability wins over brevity.
 - Detect and respect project linter/formatter configs. Do not restate style rules enforced by tooling.
 
@@ -83,8 +83,7 @@ When picking step 5 or 6 (unless trivial):
 ## Domain References & Skills (On-Demand)
 Detailed domain guidelines are loaded on-demand via skills or scoped rules:
 - **Testing, API Design, Database, Frontend, Infrastructure, Resilience** → run `/asc-reference`
-- **Security & Vulnerability Audit** → run `/asc-audit`
-- **Code Review & Pull Requests** → run `/asc-review`
-- **Refactoring & Code Modernization** → run `/asc-refactor`
-- **Feature Implementation** → run `/asc-add-feature`
-- **New Project Scaffolding** → run `/asc-new-project`
+- **UI/UX Engineering & Anti-Slop Design** → run `/asc-ui`
+- **Engineering Lifecycle & Features** → run `/asc-develop`
+- **Quality, Security & Duplication Audit** → run `/asc-review`
+- **Repository Meta & Configuration** → run `/asc`

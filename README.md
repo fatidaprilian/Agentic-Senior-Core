@@ -108,7 +108,7 @@ If you need to override these defaults (e.g., to whitelist a specific dependency
 
 ## Commands & CLI
 
-ASC provides powerful commands to steer your agents (e.g. `/asc-refactor`, `/asc-audit`). 
+ASC provides 5 orthogonal meta-commands to steer your agents (`/asc`, `/asc-develop`, `/asc-review`, `/asc-reference`, `/asc-ui`). 
 It also provides a CLI to manage your local setup (e.g. `asc adapter --all`, `asc global --all`).
 
 ### Git Pre-Commit Hook
