@@ -1,5 +1,39 @@
 # Changelog
 
+## 6.16.0
+
+### Added & Hardened
+- **6th Core Meta-Skill Architecture (`/asc-test`)**:
+  - Established `/asc-test` as the dedicated engineering testing playbook, resolving the three-way split previously dispersed across `asc-reference`, `asc-develop`, and `asc-review`.
+  - **The Iron Law of TDD**: Mandates no production code shall be written without a failing test first (RED -> GREEN -> REFACTOR).
+  - **Verification Gate & Rationalization Prevention**: Enforces fresh execution evidence (identify exact command -> run fresh -> read raw exit code 0) before claiming any test or fix passes.
+  - **3-Step Bugfix Verification & Regression Proof**: Reproduction test fails before fix -> passes with fix -> temporarily reverted fix MUST fail the test -> reapplied fix passes full suite.
+  - **E2E Browser Testing & Playwright**: Reconnaissance-before-action (settle network -> inspect rendered DOM -> select resilient user-facing locators), server lifecycle management, and a strict ban on arbitrary `sleep` timeouts.
+  - **UAT & Given/When/Then Checklists**: Translates business requirements into executable user acceptance journeys verified in ephemeral chat artifacts without disk clutter.
+  - **Flaky Test Remediation**: Diagnostics for the 5 root causes (unawaited promises, shared mutable state, time leaks, unordered collections, port collisions) and the 50-run stress loop protocol.
+- **Lean Router + On-Demand References Architecture**:
+  - Re-architected all meta-skills (`asc-ui`, `asc-test`, `asc-reference`, `asc-develop`, `asc-review`, `asc`) into lean routers under 150 lines with deep operational guidance offloaded to on-demand `references/*.md` files, preserving prompt cache tokens and preventing cognitive degradation:
+    - `asc-ui`: 15 on-demand references across surface modes (`operate`, `persuade`, `read`, `experience`), craft (`typography`, `color-surfaces`, `motion`, `browser-surfaces`), waivable reflexes, copy/i18n, mobile reflow, accessibility, data states, divergence, and structured audits.
+    - `asc-test`: 6 on-demand references (`tdd-cycle`, `test-design`, `e2e-playwright`, `uat`, `regression-proof`, `flaky-tests`).
+    - `asc-reference`: 4 on-demand references (`api`, `database`, `infrastructure`, `resilience`).
+    - `asc`: Added `references/writing-skills.md` codifying skill authoring, trigger-only descriptions, and the 150-line router budget.
+- **UI De-sloppification & Phase 0 Alignment**:
+  - Pruned misaligned items from v6.15.1: strictly banned uppercase eyebrow micro-labels, removed mandatory `font-mono` on numbers (keeping `tabular-nums` for alignment), eliminated the "ghost card" (declaring elevation twice with border + prominent shadow), and replaced hardcoded palette defaults (`bg-slate-50`, `bg-zinc-950`) with token-first project variables.
+  - Introduced the **Single Focal Anchor Principle** and **Mirror Test** to eliminate second-order AI convergence and equal-weight card grids.
+- **Expanded UI Slop Detection Engine (28 Patterns)**:
+  - Expanded `known-ui-slop-patterns.json` from 12 to 28 deterministic regex detectors:
+    - Added Wave 2 patterns: `ui-eyebrow-tracked-caps`, `ui-hard-offset-shadow`, `ui-zero-offset-glow`, `ui-ghost-card`, `ui-viewport-100vh-mobile`, `ui-fixed-button-width`, `ui-empty-state-essay`, `ui-modal-by-default`, `ui-missing-reduced-motion`, `ui-hover-scale-bounce`, `copy-hybrid-neologism`, `ui-card-in-card-nesting`.
+    - Added Wave 3 (2025–2026 editorial clichés) patterns: `ui-terracotta-cream-cliche` (cream ground + terracotta accent monoculture), `ui-index-number-trope` (`01 / 02`, `(001)` on non-lists), `ui-broadsheet-cosplay` (dense hairline columns with zero radius), and `ui-agency-micro-meta` (geographic coordinates, fake version/scroll stamps).
+- **Substance Over Restraint & In-Memory Direction Dealer**:
+  - Grounded in empirical design synthesis: stripping ornaments is only half the job; an empty wireframe void is as harmful as slop. Codified the **Substance Invariant** (high typographic scale contrast, full-bleed color anchors, and working interactive HTML/CSS UI fragments).
+  - Introduced the **4 Structural Postures** in `modes/persuade.md` (Asymmetric Stage, Monolith Ledger, Product-Led Canvas, Kinetic Proof Stream) providing in-memory direction dealing directly in agent context with zero workspace disk clutter.
+- **Universal Skill-Relative Paths Packaging**:
+  - Normalized all reference markdown links inside `SKILL.md` routers (`asc-ui`, `asc-test`, `asc-reference`, `asc`) to clean skill-relative paths (`references/...`), eliminating machine-specific absolute path leaks and ensuring 100% portability across all operating systems.
+- **Trigger Disambiguation & Empirical Routing Evaluation**:
+  - Standardized all skill descriptions to strictly trigger-only conditions under 650 characters, stripping workflow summaries that cause LLM routing bypass.
+  - Removed all testing and UI overlaps from `asc-reference`, creating clean boundaries.
+  - Authored `eval/routing-eval.json` with 40 diverse prompts (English + Indonesian) and automated CI test (`tests/routing-eval.test.mjs`) verifying trigger integrity and routing separation.
+
 ## 6.15.1
 
 ### Added & Hardened

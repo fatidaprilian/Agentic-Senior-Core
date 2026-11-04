@@ -85,7 +85,7 @@ Rules and hooks load automatically on every session with zero per-project files.
 <details>
 <summary><b>Gemini CLI</b> (terminal agent)</summary>
 
-Auto-detected. Gemini CLI reads `gemini-extension.json` from the installed package and loads the canonical plugin rule. Commands are available as `.toml` format (`/asc`, `/asc-develop`, `/asc-review`, `/asc-reference`, `/asc-ui`).
+Auto-detected. Gemini CLI reads `gemini-extension.json` from the installed package and loads the canonical plugin rule. Commands are available as `.toml` format (`/asc`, `/asc-develop`, `/asc-review`, `/asc-test`, `/asc-reference`, `/asc-ui`).
 
 </details>
 

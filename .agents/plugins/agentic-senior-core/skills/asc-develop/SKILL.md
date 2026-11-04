@@ -1,7 +1,7 @@
 ---
 name: asc-develop
 description: >
-  Trigger this skill when the user is: building a new feature, creating an endpoint, adding components, scaffolding a new project, starting from scratch, or refactoring existing code. Trigger when the user says: "add a feature", "build this endpoint", "implement this", "extend this", "wire up", "create a new route", "add a new page", "tambah fitur", "bikin endpoint", "new project", "start from scratch", "scaffold this", "bootstrap app", "bikin project baru", "buat aplikasi baru", "refactor this", "clean up this code", "rewrite this", "extract this into", "simplify this module", "rapikan kode ini", "refactor ini". Handles Greenfield, Brownfield, and Refactoring workflows.
+  Trigger this skill when the user is: building a new feature, creating an endpoint, adding components, scaffolding a new project, starting from scratch, or refactoring existing code. Trigger when the user says: "add a feature", "build this endpoint", "implement this", "extend this", "wire up", "create a new route", "add a new page", "tambah fitur", "bikin endpoint", "new project", "start from scratch", "scaffold this", "bootstrap app", "bikin project baru", "buat aplikasi baru", "refactor this", "clean up this code", "rewrite this", "extract this into", "simplify this module", "rapikan kode ini", "refactor ini".
 ---
 
 # Engineering Lifecycle Playbook (`asc-develop`)
@@ -53,8 +53,8 @@ Use when adding endpoints, components, pages, or capabilities to an existing cod
    - How can the system recover? (Retry, cached fallback, degraded mode).
 3. If building UI, ensure compliance with `/asc-ui` (zero marketing fluff, single-language consistency, mobile reflow, WCAG AA contrast).
 
-### Step 3: Implement & Validate
-1. Implement the feature following the approved plan.
+### Step 3: Implement & Validate (TDD Integration)
+1. Follow the TDD cycle via `/asc-test`: write the failing test first (RED), write minimal code to pass (GREEN), then refactor.
 2. **Zero-Fake-Done Testing**: Run the project test suite (`ascx test`, `npm test`, `pytest`, `cargo test`). The test runner **MUST** exit with code 0.
 3. Never weaken or delete test assertions to simulate a passing run. Fix the underlying business logic.
 
@@ -82,4 +82,3 @@ Use when restructuring, simplifying, or modernizing code without changing extern
 ### Step 3: Verification
 1. Re-run tests to confirm that behavior, public contracts, and error handling remain identical.
 2. For every changed module, confirm that readability, maintainability, and safety have improved.
-

@@ -23,6 +23,7 @@ const SKILL_COPIES = [
   { base: '.agents/plugins/agentic-senior-core/skills/asc-review/SKILL.md', copies: [] },
   { base: '.agents/plugins/agentic-senior-core/skills/asc-reference/SKILL.md', copies: [] },
   { base: '.agents/plugins/agentic-senior-core/skills/asc-ui/SKILL.md', copies: [] },
+  { base: '.agents/plugins/agentic-senior-core/skills/asc-test/SKILL.md', copies: [] },
 ];
 
 const REQUIRED_MARKERS = [

@@ -82,8 +82,9 @@ When picking step 5 or 6 (unless trivial):
 
 ## Domain References & Skills (On-Demand)
 Detailed domain guidelines are loaded on-demand via skills or scoped rules:
-- **Testing, API Design, Database, Frontend, Infrastructure, Resilience** → run `/asc-reference`
-- **UI/UX Engineering & Anti-Slop Design** → run `/asc-ui`
+- **Testing, TDD, Verification, E2E & UAT** → run `/asc-test`
+- **API Design, Database, Infrastructure, Resilience** → run `/asc-reference`
+- **Frontend UI/UX Engineering & Anti-Slop Design** → run `/asc-ui`
 - **Engineering Lifecycle & Features** → run `/asc-develop`
 - **Quality, Security & Duplication Audit** → run `/asc-review`
 - **Repository Meta & Configuration** → run `/asc`

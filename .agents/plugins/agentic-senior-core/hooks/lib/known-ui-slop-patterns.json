@@ -59,6 +59,86 @@
       "id": "code-step-narration",
       "regex": "//\\s*Step\\s+[0-9]+:\\s*|//\\s*Initialize\\s+(?:the\\s+)?[a-zA-Z0-9_]+",
       "message": "note: procedural line-by-line comment narration detected. Describe non-obvious intent and constraints instead of restating the obvious code flow."
+    },
+    {
+      "id": "ui-eyebrow-tracked-caps",
+      "regex": "text-\\[(?:10|11|12)px\\][^\\n\"']*uppercase[^\\n\"']*tracking-(?:wider|widest)|uppercase[^\\n\"']*tracking-(?:wider|widest)[^\\n\"']*text-\\[(?:10|11|12)px\\]",
+      "message": "note: 'eyebrow micro-label' (tracked uppercase kicker above headings) is an AI template habit. Let headings carry their own weight."
+    },
+    {
+      "id": "ui-hard-offset-shadow",
+      "regex": "box-?shadow:\\s*['\"]?[1-9]px\\s+[1-9]px\\s+0\\b|shadow-\\[[1-9]px_[1-9]px_0",
+      "message": "note: 'hard offset shadow' (neo-brutalist block shadow) detected. Verify this matches project design language, or use subtle stepped elevation."
+    },
+    {
+      "id": "ui-zero-offset-glow",
+      "regex": "shadow-\\[0_0_[0-9]+px|box-shadow:\\s*0\\s+0\\s+[0-9]+px",
+      "message": "note: 'zero-offset glow' (neon ambient halo) is an AI aesthetic cliché. Prefer crisp 1px borders or directional elevation shadows."
+    },
+    {
+      "id": "ui-ghost-card",
+      "regex": "border\\s+border-[a-z0-9/-]+\\s+[^\\n\"']*shadow-(?:lg|xl|2xl)|shadow-(?:lg|xl|2xl)\\s+[^\\n\"']*border\\s+border-[a-z0-9/-]+",
+      "message": "note: 'ghost card' (declaring elevation twice with border + heavy shadow) detected. Choose one elevation model: a crisp 1px border OR an elevation shadow."
+    },
+    {
+      "id": "ui-viewport-100vh-mobile",
+      "regex": "(?:\\bh-screen\\b|height:\\s*100vh\\b)(?!.*dvh)",
+      "message": "warning: '100vh' / 'h-screen' causes content clipping under mobile browser address bars. Use '100dvh' or 'min-h-dvh' instead."
+    },
+    {
+      "id": "ui-fixed-button-width",
+      "regex": "<button[^>]*class(?:Name)?=[\"'][^\"']*\\bw-\\[[0-9]+px\\]|<button[^>]*style=[\"'][^\"']*width:\\s*[0-9]+px",
+      "message": "note: fixed-width button detected. Hardcoded widths cause text clipping in non-English locales (+20% to +40% expansion). Use padding and min-width."
+    },
+    {
+      "id": "ui-empty-state-essay",
+      "regex": "(?:looks like you haven't|blank canvas awaiting|getting started is easy and fun|your workspace is empty)",
+      "message": "note: flowery empty state copy detected. Keep empty states to 1 factual sentence plus a direct action button."
+    },
+    {
+      "id": "ui-modal-by-default",
+      "regex": "<(?:Dialog|Modal)[^>]*>(?=[\\s\\S]{0,500}<form)",
+      "message": "note: modal dialog enclosing simple form detected. Prefer inline progressive disclosure or dedicated route canvas over disruptive modals."
+    },
+    {
+      "id": "ui-missing-reduced-motion",
+      "regex": "@keyframes\\s+[a-zA-Z0-9_-]+(?![\\s\\S]{1,600}prefers-reduced-motion)",
+      "message": "note: CSS @keyframes animation without 'prefers-reduced-motion' query detected. Provide a static or reduced motion fallback."
+    },
+    {
+      "id": "ui-hover-scale-bounce",
+      "regex": "hover:scale-(?:105|110|125)",
+      "message": "note: 'hover:scale-105' bounce on buttons feels gimmicky in operational UI. Use snappy micro-feedback (transition-colors or active:scale-[0.98])."
+    },
+    {
+      "id": "copy-hybrid-neologism",
+      "regex": "\\b(meng-generate|di-submit|di-approve|di-cancel|meng-handle|di-delete|men-delete|me-restore|di-update|meng-update)\\b",
+      "message": "warning: hybrid neologism ('di-submit', 'meng-generate') detected. Maintain strict single-language purity (use native Indonesian terms or pure English)."
+    },
+    {
+      "id": "ui-card-in-card-nesting",
+      "regex": "class(?:Name)?=[\"'][^\"']*rounded-(?:xl|2xl)[^\"']*[\"'][^>]*>(?=[\\s\\S]{0,350}class(?:Name)?=[\"'][^\"']*rounded-(?:lg|xl|2xl))",
+      "message": "note: nested card containers ('card-in-card') detected. Use flat lists, hairline dividers, or recessed well surfaces instead of nesting cards."
+    },
+    {
+      "id": "ui-terracotta-cream-cliche",
+      "regex": "(?:bg-(?:amber|orange|yellow)-50|#fdfbf7)[\\s\\S]{0,250}(?:text-(?:amber|orange)-800|#c2410c)",
+      "message": "note: unprompted 'cream ground + terracotta accent' (Wave 3 AI editorial cliché) detected. Derive palette from project tokens or authentic material instead."
+    },
+    {
+      "id": "ui-index-number-trope",
+      "regex": "(?:\\b0[1-9]\\s*/\\s*0[1-9]\\b|\\(00[1-9]\\)|Step\\s+0[1-9])",
+      "message": "note: decorative index numbering ('01 / 02', '(001)') detected. Order sections by typography scale and content rather than performative index tags."
+    },
+    {
+      "id": "ui-broadsheet-cosplay",
+      "regex": "border-(?:t|b|l|r)\\s+border-border\\/[0-9]+\\s+rounded-none",
+      "message": "note: 'broadsheet cosplay' (dense hairline dividers with zero border-radius) detected. Structure layouts with spatial padding and tonal contrast."
+    },
+    {
+      "id": "ui-agency-micro-meta",
+      "regex": "(?:\\b\\d{1,2}\\.\\d+°\\s*[NSEW]\\b|©\\s*20\\d\\d\\s*—\\s*Scroll)",
+      "message": "note: performative agency metadata (geographic coordinates, fake version/scroll stamps) detected. Remove ornamental meta."
     }
   ]
 }

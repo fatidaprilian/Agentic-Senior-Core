@@ -1,204 +1,91 @@
 ---
 name: asc-ui
 description: >
-  Trigger this skill when the user is working on: user interfaces, UI components, UX design, frontend layouts, microcopy, typography, design systems, modals, forms, tables, dashboards, empty states, or error UI. Also trigger when the user says: "design this page", "clean up this UI", "write UI copy", "fix UI slop", "make it look professional", "too verbose", "improve the design", "bikin UI", "rapikan tampilan", "tulisan UI berlebihan", "terlalu kaku", "jangan kayak AI", "bahasanya aneh". Also trigger when creating or editing files matching: `*.tsx`, `*.jsx`, `*.vue`, `*.svelte`, `*.html`, `*.blade.php`, `*.css`, or UI component files.
+  Trigger this skill when working on: UI components, UX design, layouts, microcopy, typography, design systems, modals, forms, tables, dashboards, empty states, or error UI. Also trigger when the user says: "design this page", "clean up UI", "write UI copy", "fix UI slop", "make it look professional", "too verbose", "improve the design", "broken on mobile", "bikin UI", "rapikan tampilan", "tulisan UI berlebihan", "tampilan di hp rusak", "terlalu kaku", "jangan kayak AI". Also trigger when creating or editing files matching: `*.tsx`, `*.jsx`, `*.vue`, `*.svelte`, `*.html`, `*.blade.php`, `*.css`, or UI component files.
 ---
 
-# Universal UI/UX Engineering & Anti-Slop Guidelines
+# Universal UI/UX Engineering & Anti-Slop Router
 
-Universal engineering and microcopy standards for human-grade, scannable, and robust digital interfaces. Eliminates generic "AI Slop" — verbose text, redundant headings, corporate filler, awkward foreign loanwords, and cookie-cutter layouts.
-
-Grounded in: Nielsen Norman Group (Microcopy & Scannability), Refactoring UI (Hierarchy & Spacing), Apple HIG & Google Material Design 3 (Action Semantics & Tone), and W3C Internationalization / Localization Best Practices.
-
----
-
-## 1. UX Microcopy & Text De-sloppification
-
-LLMs naturally gravitate toward corporate marketing fluff and redundant explanations. In functional UI (dashboards, forms, settings, tables, dialogs), text is a tool for orientation and action, not a brochure.
-
-### The Redundancy Elimination Rule (Kill Useless Subtitles)
-- **Zero Echo Subtitles:** If a heading or label is self-explanatory (e.g., *"Payment Methods"*, *"Invoice History"*, *"Team Members"*), **NEVER** add an explanatory subtitle repeating the heading's words (e.g., *"Manage, view, and organize all your payment methods here"*).
-- **Subtitle Criterion:** A subtitle is permitted **ONLY** if it contains an essential technical constraint or irreversible risk:
-  - *Allowed:* *"API keys are shown once upon creation and cannot be retrieved later."*
-  - *Forbidden:* *"View and manage your API keys to authenticate requests."*
-- **Field Helper Text:** Only describe formatting constraints or privacy rules (e.g., `Max 10MB (PDF, PNG)`). Do not re-explain the field name (`Enter your email address here`).
-
-### The 50% Word Reduction Rule
-- Cut default AI-generated copy by at least 50%. Strip preamble, conversational filler, and passive voice.
-- **Before (AI Slop):** *"In order to successfully proceed with saving your profile changes, please make sure all required fields are accurately filled out."*
-- **After (Clean UI):** *"Fill out all required fields to save."*
-
-### Active, Imperative Action Labels (Buttons & Controls)
-- **Direct Verb + Noun:** Use concise, concrete verbs indicating the immediate outcome: `Save`, `Delete Project`, `Export CSV`, `Send Invite`, `Upgrade Plan`.
-- **Banned Action Phrases:** Never use `Click here to...`, `Press to...`, `Proceed`, or vague single words like `Submit` or `OK` when a descriptive verb exists.
-
-### Banned Marketing Buzzwords in Functional UI
-Never use hyperbolic adjectives in application interfaces:
-- **Forbidden:** `seamless`, `seamlessly`, `effortless`, `effortlessly`, `empower`, `robust`, `revolutionize`, `dynamic`, `all-in-one`, `supercharge`, `elevate`, `unlock the power of`, `at your fingertips`, `cutting-edge`.
-- Treat an admin dashboard or business tool with utilitarian dignity. Describe the system state neutrally.
+Staff-grade design engineering for resilient, scannable, human-grade interfaces. Enforces the visual floor and routes deep craft guidance on demand.
 
 ---
 
-## 2. Language Purity & Localization Discipline
+## 1. The Quality Floor (Non-Negotiable Bans)
 
-AI frequently creates "localization slop" by mixing languages, fabricating awkward hybrid loanwords, or inserting literal dictionary translations that sound unnatural to native speakers.
+Every UI edit must satisfy these 15 rules without exception:
 
-### Strict Single-Language Consistency
-- **Zero Hybrid Code-Switching:** The UI must maintain 100% language purity for its target locale. Never mix English tech slang into non-English interfaces unless it is an established international symbol (e.g., `ID`, `URL`, `API`).
-  - *Forbidden (Gado-gado/Jaksel):* *"Submit formulir Anda untuk meng-empower efisiensi dashboard."*
-  - *Correct (Indonesian):* *"Kirim formulir untuk memperbarui data ringkasan."*
-  - *Correct (English):* *"Submit the form to update dashboard data."*
-
-### No Artificial Hybrid Neologisms
-- Never create unidiomatic grammatical Frankenstein words by attaching native affixes to English stems:
-  - *Forbidden:* `meng-generate`, `di-submit`, `meng-approve`, `di-cancel`, `men-delete`.
-  - *Use established native terms:* `membuat / menghasilkan`, `kirim`, `setujui`, `dibatalkan`, `hapus`.
-
-### Deterministic Microcopy Glossary
-- Never exhibit "Thesaurus Syndrome" (swapping words across dialogs to avoid repetition). Control labels must remain mechanically deterministic across every screen:
-  - Cancellation must always be `Batal` (ID) or `Cancel` (EN) — never alternate with `Urungkan`, `Tutup`, or `Kembali` for identical actions.
-  - Deletion must always be `Hapus` (ID) or `Delete` (EN).
-  - Saving must always be `Simpan` (ID) or `Save` (EN).
-
-### Dynamic Text Expansion Budget
-- Non-English translations (Indonesian, German, French, Spanish) are typically 20% to 40% longer than English equivalents.
-- Containers, button labels, table headers, and badges must never have rigid fixed pixel widths (`w-[120px]`) that cause text clipping or awkward multi-line wrapping. Use flexible flex/grid layouts with sensible min-widths and text truncation (`truncate` with title tooltips) where appropriate.
+1. **Token discipline:** All colors, spacing, and typography must resolve through declared design tokens or CSS variables. Zero raw hex codes (`#6366f1`) or arbitrary inline pixel values.
+2. **Animation safety:** Never use `transition: all`. Never animate layout dimensions (`width`, `height`, `top`, `left`). Animate only GPU properties (`transform`, `opacity`).
+3. **Reduced motion:** Every CSS animation or transition must respect `@media (prefers-reduced-motion: reduce)`.
+4. **Focus visibility:** Never strip focus indicators (`outline-none`) without an immediate high-contrast `:focus-visible` replacement.
+5. **No hallucinated material:** Never invent metrics, testimonials, customer quotes, or fake partner logos.
+6. **No eyebrows or kicker tags:** Headings carry their own weight. Never place `text-[11px] uppercase tracking-wider` micro-labels above titles.
+7. **No AI cliché gradients:** Never use purple-to-blue/indigo gradients or text clipping (`bg-clip-text text-transparent`).
+8. **No card-in-card nesting:** Never nest rounded bordered cards inside other rounded cards.
+9. **Single elevation declaration:** Choose either a 1px border OR an elevation shadow, never both (ban the ghost card).
+10. **Mobile viewport unit:** Use `min-h-dvh` or `100dvh` for full-height containers, never `100vh` or `h-screen`.
+11. **Mobile containment:** Set `overflow-x: clip` on root shells. Never leak horizontal scrolling.
+12. **Touch targets:** Minimum 44×44px hit target with $\ge$ 8px clearance for all interactive touch controls.
+13. **Contrast floor:** Meet WCAG 2.2 AA (4.5:1 normal text, 3:1 large text and UI component boundaries).
+14. **Single-language purity:** Never mix languages on one surface; ban hybrid neologisms (`di-submit`, `meng-generate`).
+15. **Icon semantics:** Never use raw unicode or emojis as icons. Use dedicated SVG icons; mark decorative icons `aria-hidden="true"`.
+16. **Substance over restraint:** Stripping slop is only half the job. Replace removed ornaments with real substance: strong typographic scale contrast, full-field color anchors, and authentic interface fragments. Never leave an empty, sterile wireframe void.
 
 ---
 
-## 3. Visual Craft & Generative Layout Engineering
+## 2. Pre-Flight & Material Inventory
 
-AI default interfaces suffer from **Distributional Convergence** (regression to the statistical average of training data). Without disciplined direction, models default to either the *AI Starter Pack* (purple gradients, 3 identical cards, floating drop shadows) or the *Sterile Default* (flat, depressing white wireframes with zero character).
-
-Follow these design engineering heuristics to construct purposeful, high-craft digital interfaces:
-
-### The Anti-Sterile & Anti-Template Rule
-- **Never Replace Slop with Sterile Voids:** Stripping all decoration does not equal good design. An interface must possess tactile depth, distinct typographic rhythm, and clear surface relationships.
-- **No Second-Order Template Clones:** Never force every screen into a trendy Bento Grid or dark-mode clone. Choose layout geometry derived strictly from the **data shape** and **user task**.
-
-### 1. Form Follows Data Shape (Layout Inference)
-Analyze the primary data model and user goal before declaring any container markup:
-- **Quantitative / Comparative Data (Metrics, ledgers, logs, transactions):**
-  - *Archetype:* **Dense Data Matrix**.
-  - *Pattern:* High-density tables or compact list rows with sticky headers, hairline borders (`border-b border-border/40`), zebra striping or hover highlights, and right-aligned metrics using `tabular-nums font-mono`.
-  - *Forbidden:* Packaging individual transaction records into giant cards with fluffy padding.
-- **Relational / Hierarchical Entities (Settings, file explorers, entity management):**
-  - *Archetype:* **Master-Detail Two-Pane Canvas**.
-  - *Pattern:* Contextual fixed-width left rail (navigation/entity list) paired with a fluid, high-density right canvas for inspection and action.
-- **Procedural / Single-Task Flows (Onboarding, checkouts, complex multi-step forms):**
-  - *Archetype:* **Focused Single-Task Stream**.
-  - *Pattern:* Centered single-column container (`max-w-xl` / `max-w-2xl`) with progressive disclosure, clear step indicators, and zero peripheral sidebar noise to prevent distraction.
-- **Temporal / Event-Driven Records (Audit logs, status updates, activity history):**
-  - *Archetype:* **Linear Timeline Ledger**.
-  - *Pattern:* Vertical line rail with timestamp anchors, compact status chips, and contextual user badges.
-- **High-Impact Narrative / Showcase (Landing pages, project overviews):**
-  - *Archetype:* **Asymmetric Visual Anchor**.
-  - *Pattern:* 7-column editorial narrative anchor (heavy typography + primary action) offset against a 5-column interactive preview or live metric widget.
-
-### 2. The Single Focal Anchor Principle (Anti-Cardocalypse)
-- **Eliminate Equal-Weight Monotony:** Never place 3 or 4 cards with identical dimensions, identical icons, and identical visual weight side by side.
-- **Establish One Primary Focal Point:** Every screen or section must possess exactly ONE visual hero that pulls the eye first (e.g., the primary telemetry chart, the key operational metric, or the main action trigger).
-- **Subordinate Supporting Elements:** All surrounding widgets must intentionally recede: use lower contrast text (`text-muted-foreground`), lighter borders, or muted background surfaces (`bg-muted/40`).
-
-### 3. Tactile Surface Craft & Stepped Tones (Beyond Drop Shadows)
-Avoid excessive fuzzy drop shadows (`shadow-lg`, `shadow-xl`) that make UI float disconnected from reality. Build physical depth via border-driven architecture and stepped surfaces:
-- **Stepped Surface Tones (3-Tier Depth):**
-  - *Base Canvas:* Neutral floor (`bg-slate-50` in light; `bg-zinc-950` / `bg-neutral-950` in dark).
-  - *Structural Containers / Cards:* Elevated surface (`bg-white` in light; `bg-zinc-900` / `bg-neutral-900` in dark).
-  - *Inset / Subdued Wells:* Recessed areas for search bars, code blocks, or secondary filters (`bg-slate-100/70` in light; `bg-zinc-800/40` in dark).
-- **Hairline Alpha Borders:** Separate structural surfaces with crisp 1px borders using opacity: `border-slate-200/80` (light) or `border-zinc-800` / `border-white/[0.08]` (dark).
-- **Physical Top-Edge Inset:** For dark surfaces, provide a crisp physical sheen using an inset highlight: `shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]` instead of exterior glows.
-
-### 4. Color Discipline & The 60-30-10 Rule
-- **Lock the Palette to 3-5 Tokens:** Never scatter disparate colors across cards.
-- **60% Dominant Neutral:** Canvas background and large negative space (tinted neutral like slate, zinc, or warm stone; never stark dead `#000000` or `#FFFFFF`).
-- **30% Structural Neutral:** Card surfaces, borders, navigation bars, and dividers.
-- **10% Purposeful Accent:** Dedicated brand accent color.
-- **Accent Exclusivity:** The accent hue is reserved strictly for interactive triggers (Primary CTA, active tab indicator, unread dot, selected checkbox). **NEVER** use the accent color as card wallpaper, gradient fills, or decorative borders.
-
-### 5. Micro-Typography & Scannability
-- **Weight Contrast Before Size Jumps:** Build visual hierarchy by combining font weight (`font-bold` vs `font-normal`) and tracking (`tracking-tight` on large headings; `tracking-normal` on body) before inflating font size to absurd dimensions.
-- **Tabular Numerals Everywhere:** Every metric, balance, percentage, timestamp, and count **MUST** use `tabular-nums` (and preferably `font-mono` where appropriate) to prevent optical horizontal jitter when values update.
-- **Eyebrow Micro-Labels:** Anchor section headers and data clusters with compact category tags: `text-[11px] font-semibold uppercase tracking-wider text-muted-foreground`.
-
-### 6. The Banned AI Visual Starter Pack
-Explicitly forbid these generic AI clichés:
-- **No Purple-to-Cyan/Indigo Gradients:** Ban unprompted glowing violet/teal hero washes.
-- **No Gratuitous Glassmorphism:** Never slap `backdrop-blur-md bg-white/10` across functional tables and forms where it ruins text contrast.
-- **No Bouncy/Distracting Hover Scales:** Avoid `hover:scale-105` or springy transforms on utilitarian buttons. Use snappy, mechanical micro-feedback (`transition-colors duration-150` or `active:scale-[0.98]`).
-- **No Meaningless Generic Badges:** Eliminate fake floating pills like "AI Powered" or generic "Beta" chips scattered for decoration.
+Before declaring markup, inspect the workspace:
+1. **Design Tokens:** Read project CSS variables, Tailwind configuration, or existing components in `components/` or `ui/`. If `DESIGN.md` exists, read it (read-only). Never create or edit persistent checkpoint files.
+2. **Take the Material Inventory:**
+   - **Real:** Concrete numbers, existing endpoints, actual data attributes.
+   - **Pictures:** Actual screenshots and product visual assets.
+   - **Absent:** Missing quotes, missing logos, or unverified metrics—these are omitted entirely.
 
 ---
 
-## 4. State Quad & Feedback Architecture
+## 3. Surface Modes & Ambition Scaling
 
-Every asynchronous view or mutation must deterministically handle all states:
+Determine visual posture from the **surface**, not the product brand:
 
-### The Data State Quad
-1. **Loading State:** Render proportional skeleton screens matching the actual layout shape (never a single generic spinner in the middle of a blank canvas).
-2. **Empty State:**
-   - Maximum 1 direct sentence stating reality + 1 primary action button.
-   - *Good:* *"No active projects. [Create Project]"*
-   - *Forbidden:* Flowery essays (*"Your workspace is a blank canvas awaiting your creative brilliance..."*).
-3. **Error State:**
-   - Factual description of what failed + 1 clear recovery button (`[Retry]`).
-   - *Good:* *"Unable to load invoices. [Retry]"*
-   - *Forbidden:* Apologetic colloquialisms (*"Oopsie! Something went wrong on our end..."*).
-4. **Populated State:** High-density, cleanly structured data presentation.
-
-### Action Mutation Feedback
-- Every mutation button (submit, delete, update) **MUST** immediately reflect a pending state:
-  - Disable the button (`disabled`).
-  - Show an inline spinner or change text to ongoing action (`Saving...`).
-- Display clear, localized toast or banner confirmation upon completion with actionable retry on failure.
-- Never silently swallow mutation errors. Wrap critical route widgets in localized React/Vue Error Boundaries.
+- **Operate (`references/modes/operate.md`):** Dashboards, settings, data tables, developer tools. Prioritizes dense scannability, master-detail rails, `tabular-nums`, and inline progressive disclosure.
+- **Persuade (`references/modes/persuade.md`):** Landing pages, pricing tiers, conversion flows. 80-word viewport budget, asymmetric postures, single signature element, zero equal-weight 3-card grids.
+- **Read (`references/modes/read.md`):** Documentation, changelogs, knowledge bases. 65–75ch measure (`max-w-prose`), dual-rail navigation, syntax-highlighted code blocks.
+- **Experience (`references/modes/experience.md`):** Showcases, portfolios, interactive galleries. Receding interface chrome, full-bleed visual canvas, tactile exploration.
 
 ---
 
-## 5. Mobile-First Responsive Reflow & Touch Ergonomics
+## 4. Scope Classification: Refine vs. Redesign
 
-Mobile layout is a distinct, intentional reflow — not the desktop layout squeezed into a narrow viewport.
-
-### Intentional Reflow Over Shrunken Desktops
-- **Re-stack and Re-order:** When the viewport narrows, multi-column grids must collapse into a clean, single-column stack. Side-by-side card grids must never squeeze horizontally until text wraps into 2-letter lines.
-- **Content-Driven Breakpoints:** Place breakpoints where content begins to stress or break readability, never based on a rigid list of marketing device specs (e.g., iPhone 14 width). Test by dragging viewports smoothly across the full 320px–1024px range.
-- **Mobile Section Padding:** Desktop padding scales (96px, 128px) create absurd vertical wastelands on phones. Reduce section vertical padding to a mobile register (typically 32px–48px / `py-8` to `py-12`).
-
-### Responsive Units & Viewport Traps
-- **Dynamic Viewport Height (`dvh`):** Never use `100vh` for full-screen hero or drawer elements on mobile. Mobile browser chrome (address and navigation bars) dynamically expands and collapses, causing `100vh` to trigger involuntary page scrolling and button clipping. Use `min-h-dvh` or `h-dvh`.
-- **Fluid Typography:** Avoid rigid fixed-pixel headings (`font-size: 48px`). Use fluid typography (`clamp(1.5rem, 4vw + 1rem, 2.75rem)`) or explicit responsive font classes (`text-2xl sm:text-4xl lg:text-5xl`).
-
-### Touch Targets & Thumb-Zone Ergonomics
-- **44x44px Minimum Touch Target:** Every interactive element (buttons, icon links, checkbox toggles, chips) must have a touch target of at least 44x44px (`min-h-[44px] min-w-[44px]`). If an icon is small (16px), pad its container (`p-3`).
-- **Touch Clearance:** Maintain at least 8px spacing between adjacent touch targets to eliminate accidental mis-taps.
-- **Reachability:** Place primary mobile actions (submit, filters, navigation) within comfortable thumb reach (bottom sheets, sticky action bars) rather than marooning them at the extreme top corners.
-
-### Zero Horizontal Scroll Leaks
-- The entire mobile page must maintain zero horizontal overflow.
-- **Tables & Code Blocks:** Wrap wide tables and code blocks in dedicated horizontal scroll containers (`overflow-x-auto max-w-full`) with visible scroll indications, preventing them from blowing out the body width.
-- **Long Unbroken Strings:** Protect against email addresses, hashes, or URLs overflowing cards using `break-words` or `truncate`.
+- **Refinement:** Preserves layout structure, component APIs, DOM hierarchy, and color tokens. Polishes padding rhythm, contrast, microcopy, and state completeness.
+- **Redesign:** Replaces the visual hierarchy, typographic pairing, and surface mode while strictly preserving data bindings, event handlers, and business logic.
 
 ---
 
-## 6. Human Accessibility & Contrast Engine (WCAG 2.2 AA)
+## 5. On-Demand Reference Library
 
-An interface that excludes users with diverse vision, motor, or device constraints is structurally broken.
+Load these references only when working on that specific domain:
 
-### Mathematical Contrast Minimums
-Always meet WCAG 2.2 AA contrast ratios:
-- **Normal Body Text (< 18px or regular < 14px bold):** Minimum **4.5:1** contrast against adjacent background.
-- **Large Text (>= 18px or bold >= 14px):** Minimum **3.0:1** contrast.
-- **Non-Text Components & States:** Minimum **3.0:1** for input borders, focus indicators, status badges, and active icons against their background (WCAG 1.4.11).
+| Topic | Reference Path |
+|---|---|
+| Waivable defaults & waiver syntax | [references/reflexes.md](references/reflexes.md) |
+| Typography, line-height & tabular numbers | [references/craft/typography.md](references/craft/typography.md) |
+| Color tokens, 60-30-10 & elevation | [references/craft/color-surfaces.md](references/craft/color-surfaces.md) |
+| Micro-interactions & GPU motion | [references/craft/motion.md](references/craft/motion.md) |
+| Native surfaces (selection, caret, scrollbars) | [references/craft/browser-surfaces.md](references/craft/browser-surfaces.md) |
+| 50% reduction, active verbs & i18n | [references/copy-i18n.md](references/copy-i18n.md) |
+| Responsive reflow, dvh & touch targets | [references/mobile-responsive.md](references/mobile-responsive.md) |
+| WCAG 2.2 AA contrast & keyboard operability | [references/accessibility.md](references/accessibility.md) |
+| The Data State Quad & mutation feedback | [references/states-feedback.md](references/states-feedback.md) |
+| Anti-convergence, 3 Waves of Tells & Mirror Test | [references/divergence.md](references/divergence.md) |
+| Structured UI audit matrix | [references/redesign-audit.md](references/redesign-audit.md) |
 
-### The Grey-on-Grey Hallucination Trap
-Human eyes consistently overestimate contrast on subtle grey pairs:
-- `#777777` on pure white (`#FFFFFF`) produces **4.48:1** (FAILS normal text AA; minimum safe pure gray is `#767676` which achieves 4.54:1).
-- `#555555` on pure black (`#000000`) produces **2.82:1** (FAILS all text AA).
-- When placing text over gradient backgrounds or images, add a solid scrim or compute contrast at the lightest/darkest coordinate point, not just the center.
+---
 
-### Keyboard Operability & Focus Rings
-- **Zero Stripped Focus Rings:** Never write `outline: none` or `focus:outline-none` without an immediate high-contrast `:focus-visible` replacement (`focus-visible:ring-2 focus-visible:ring-offset-2`). Stripping focus breaks keyboard navigation completely.
-- **No Mouse-Only Patterns:** Never gate critical functionality behind hover (`:hover`) without an equivalent keyboard or touch focus trigger.
-- **Dialog Escape Hatch:** Every modal, drawer, or dropdown must close immediately upon pressing the `Escape` key and restore keyboard focus to the triggering element.
+## 6. Verification & Handoff Sweep
 
-
+Before completing any UI task, run this mechanical check:
+1. **State Quad:** Loading skeleton, empty state, error with retry, and populated data are all handled.
+2. **Pending Feedback:** Buttons disable and display feedback during ongoing mutations.
+3. **Contrast & Focus:** Verify keyboard tab flow and high-contrast `:focus-visible` styling.
+4. **Lint Check:** Verify changes against `hooks/lib/known-ui-slop-patterns.json`.

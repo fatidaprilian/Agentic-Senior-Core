@@ -1,7 +1,7 @@
 ---
 name: asc-review
 description: >
-  Trigger this skill when the user is: reviewing pull requests, checking recent changes, auditing security, scanning for vulnerabilities, threat modeling, or detecting duplicate code. Trigger when the user says: "review this code", "check this PR", "what's wrong with this", "look at my changes", "is this production-ready", "find bugs", "audit this", "security check", "find vulnerabilities", "check for XSS", "check for SQL injection", "OWASP check", "check auth", "find duplicate code", "check for clones", "audit for duplication", "review PR ini", "cek kodingan saya", "cari celah keamanan", "cari kode duplikat". Covers Code Review, Security Audit, and Duplicate Detection.
+  Trigger this skill when the user is: reviewing pull requests, checking recent changes, auditing security, scanning for vulnerabilities, threat modeling, or detecting duplicate code. Trigger when the user says: "review this code", "check this PR", "what's wrong with this", "look at my changes", "is this production-ready", "find bugs", "audit this", "security check", "find vulnerabilities", "check for XSS", "check for SQL injection", "OWASP check", "check auth", "find duplicate code", "check for clones", "audit for duplication", "review PR ini", "cek kodingan saya", "cari celah keamanan", "cari kode duplikat".
 ---
 
 # Quality & Security Assurance Playbook (`asc-review`)
@@ -12,14 +12,27 @@ Grounded in: OWASP Top 10 (2025), OWASP ASVS v5.0, OWASP Agentic Applications (A
 
 ---
 
-## Mode 1: Production Code Review
+## 1. Claim Verification Gate
+
+Never accept claims of correctness or test coverage without fresh execution evidence:
+
+| Claim | Requires (Sufficient Evidence) | NOT Sufficient (Invalid Evidence) |
+|---|---|---|
+| *"Code works / Bug fixed."* | A reproduction test failed before the fix, passes with it, and full test suite passes. | *"The code looks correct."*<br>*"It compiled without warnings."* |
+| *"All tests pass."* | Fresh test suite run in the current session with exit code 0 and 0 failures. | *"Tests passed in a previous turn."*<br>*"I only modified a comment."* |
+| *"Zero security vulnerabilities."* | Parameterized query checks, auth checks, and dependency audit tool output. | *"I used an ORM so it's safe."* |
+| *"No duplicate code."* | Lexical or token dedup scan with Rule of Three enforcement. | *"I don't recall copying this."* |
+
+---
+
+## 2. Mode 1: Production Code Review
 
 Use when reviewing PRs, diffs, commits, or newly written feature code.
 
 ### Review Procedure
 1. **Scope Inspection**: Run `git diff --stat` (or `git status`) to inspect modified files and line deltas.
-2. **Test-Change Correlation**: For every modified application logic file, verify that a corresponding test was updated. If logic changed without tests, report as a missing test finding.
-3. **Deterministic Verification**: Run project linter and test suite (`ascx test` / `npm test`).
+2. **Test-Change Correlation**: For every modified application logic file, verify that a corresponding test was updated. If logic changed without tests, flag as missing test coverage.
+3. **Deterministic Verification**: Run project linter and test suite (`ascx test` / `npm test`). Confirm exit code 0 fresh.
 4. **Severity Priority Order**:
    - **Severity 1 (Critical)**: Correctness, data corruption, auth/permission bypass, security sinks, PII leakage.
    - **Severity 2 (High)**: Action feedback failures (hanging spinners, unhandled mutations, missing error boundaries), unhandled async rejections, missing remote timeouts.
@@ -28,7 +41,7 @@ Use when reviewing PRs, diffs, commits, or newly written feature code.
 
 ---
 
-## Mode 2: Security & Vulnerability Audit
+## 3. Mode 2: Security & Vulnerability Audit
 
 Use when assessing trust boundaries, reviewing auth systems, running threat models, or auditing external dependencies.
 
@@ -48,7 +61,7 @@ Use when assessing trust boundaries, reviewing auth systems, running threat mode
 
 ---
 
-## Mode 3: Clone & Code Duplication Audit
+## 4. Mode 3: Clone & Code Duplication Audit
 
 Use when evaluating copy-paste repetition or consolidating duplicated logic across a repository.
 
@@ -61,7 +74,7 @@ Use when evaluating copy-paste repetition or consolidating duplicated logic acro
 
 ---
 
-## Output Format for Findings
+## 5. Output Format for Findings
 
 Report findings ordered strictly by severity with file and line references:
 

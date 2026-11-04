@@ -1,0 +1,211 @@
+{
+  "description": "Routing evaluation dataset: 40 diverse prompts (English + Indonesian) mapped to target Meta-Skills",
+  "cases": [
+    {
+      "id": "ui-01",
+      "prompt": "Clean up this dashboard UI, the copy is too verbose and sounds like marketing fluff.",
+      "expected_skill": "asc-ui"
+    },
+    {
+      "id": "ui-02",
+      "prompt": "Tampilan di HP rusak pas scroll, tombolnya juga terlalu mepet dan susah dipencet.",
+      "expected_skill": "asc-ui"
+    },
+    {
+      "id": "ui-03",
+      "prompt": "Fix this form component to meet WCAG 2.2 AA contrast floors and restore focus rings.",
+      "expected_skill": "asc-ui"
+    },
+    {
+      "id": "ui-04",
+      "prompt": "Hilangkan subtitle yang mengulang judul dan jangan pakai kata-kata kayak seamless atau empower.",
+      "expected_skill": "asc-ui"
+    },
+    {
+      "id": "ui-05",
+      "prompt": "Design a master-detail settings page with dense tables and tabular-nums for numeric values.",
+      "expected_skill": "asc-ui"
+    },
+    {
+      "id": "ui-06",
+      "prompt": "Bikin UI untuk halaman pricing, jangan pakai generic 3-card template yang membosankan.",
+      "expected_skill": "asc-ui"
+    },
+    {
+      "id": "ui-07",
+      "prompt": "Implement the Data State Quad (skeleton loading, empty state, error with retry) for this table.",
+      "expected_skill": "asc-ui"
+    },
+
+    {
+      "id": "test-01",
+      "prompt": "Write unit tests for this authentication service following TDD red-green cycle.",
+      "expected_skill": "asc-test"
+    },
+    {
+      "id": "test-02",
+      "prompt": "Tes ini gagal terus di CI tapi di lokal lolos, tolong trace flaky test ini.",
+      "expected_skill": "asc-test"
+    },
+    {
+      "id": "test-03",
+      "prompt": "Reproduce this bug with a test first, verify failure, then write the fix and prove regression.",
+      "expected_skill": "asc-test"
+    },
+    {
+      "id": "test-04",
+      "prompt": "Cara ngetes flow checkout pakai Playwright tanpa pasang hardcoded sleep gimana ya?",
+      "expected_skill": "asc-test"
+    },
+    {
+      "id": "test-05",
+      "prompt": "Create an automated UAT acceptance checklist with Given When Then criteria for this feature.",
+      "expected_skill": "asc-test"
+    },
+    {
+      "id": "test-06",
+      "prompt": "Bikin tes integrasi buat endpoint transfer saldo tanpa mock unit under test.",
+      "expected_skill": "asc-test"
+    },
+    {
+      "id": "test-07",
+      "prompt": "Add regression tests for the invoice calculation edge cases.",
+      "expected_skill": "asc-test"
+    },
+
+    {
+      "id": "ref-01",
+      "prompt": "Design this REST API according to RFC 9457 problem details and add cursor pagination.",
+      "expected_skill": "asc-reference"
+    },
+    {
+      "id": "ref-02",
+      "prompt": "Query ini lambat banget pas datanya jutaan, gimana cara pasang composite index yang bener?",
+      "expected_skill": "asc-reference"
+    },
+    {
+      "id": "ref-03",
+      "prompt": "Wrap these multi-table database mutations in an ACID transaction with pessimistic row locking.",
+      "expected_skill": "asc-reference"
+    },
+    {
+      "id": "ref-04",
+      "prompt": "Set up a multi-stage Dockerfile for this Node.js app running as non-root user.",
+      "expected_skill": "asc-reference"
+    },
+    {
+      "id": "ref-05",
+      "prompt": "Add exponential backoff with full jitter and a circuit breaker for this external payment API.",
+      "expected_skill": "asc-reference"
+    },
+    {
+      "id": "ref-06",
+      "prompt": "Migrasi database ini jangan bikin downtime, terapkan pola expand-and-contract.",
+      "expected_skill": "asc-reference"
+    },
+    {
+      "id": "ref-07",
+      "prompt": "Configure liveness and readiness health check probes in our Kubernetes manifests.",
+      "expected_skill": "asc-reference"
+    },
+
+    {
+      "id": "dev-01",
+      "prompt": "Scaffold a new Next.js project from scratch with our directory layout and standard library first.",
+      "expected_skill": "asc-develop"
+    },
+    {
+      "id": "dev-02",
+      "prompt": "Tambah fitur bookmark artikel di codebase ini, cari modul analog dulu buat patokan.",
+      "expected_skill": "asc-develop"
+    },
+    {
+      "id": "dev-03",
+      "prompt": "Build a new billing webhook endpoint and wire it up to our existing event bus.",
+      "expected_skill": "asc-develop"
+    },
+    {
+      "id": "dev-04",
+      "prompt": "Refactor module pembayaran ini, sederhanakan cabangnya dan hapus kode YAGNI yang ga kepake.",
+      "expected_skill": "asc-develop"
+    },
+    {
+      "id": "dev-05",
+      "prompt": "Extract this monolithic controller into smaller domain services following existing patterns.",
+      "expected_skill": "asc-develop"
+    },
+    {
+      "id": "dev-06",
+      "prompt": "Bikin endpoint baru untuk ekspor laporan keuangan tahunan.",
+      "expected_skill": "asc-develop"
+    },
+    {
+      "id": "dev-07",
+      "prompt": "Clean up this legacy module, flatten nested conditionals with early returns.",
+      "expected_skill": "asc-develop"
+    },
+
+    {
+      "id": "rev-01",
+      "prompt": "Review this pull request and check if any critical business logic lacks tests.",
+      "expected_skill": "asc-review"
+    },
+    {
+      "id": "rev-02",
+      "prompt": "Cek kodingan saya, ada celah SQL injection atau XSS gak?",
+      "expected_skill": "asc-review"
+    },
+    {
+      "id": "rev-03",
+      "prompt": "Audit this codebase against OWASP Top 10 and check authorization on all endpoints.",
+      "expected_skill": "asc-review"
+    },
+    {
+      "id": "rev-04",
+      "prompt": "Find duplicate code clones across these service handlers using the Rule of Three.",
+      "expected_skill": "asc-review"
+    },
+    {
+      "id": "rev-05",
+      "prompt": "Review PR ini sebelum dimerge ke main, pastikan siap produksi.",
+      "expected_skill": "asc-review"
+    },
+    {
+      "id": "rev-06",
+      "prompt": "Security scan: check for potential SSRF, log injection, or hardcoded secrets.",
+      "expected_skill": "asc-review"
+    },
+
+    {
+      "id": "meta-01",
+      "prompt": "What are the rules and coding guidelines of Agentic Senior Core?",
+      "expected_skill": "asc"
+    },
+    {
+      "id": "meta-02",
+      "prompt": "Petakan arsitektur dan konvensi repository ini ke CONVENTIONS.md.",
+      "expected_skill": "asc"
+    },
+    {
+      "id": "meta-03",
+      "prompt": "Set up the ASC adapter for Cursor and export our rules.",
+      "expected_skill": "asc"
+    },
+    {
+      "id": "meta-04",
+      "prompt": "Log this deferred refactoring into the technical debt ledger with an ASC-STUB tag.",
+      "expected_skill": "asc"
+    },
+    {
+      "id": "meta-05",
+      "prompt": "Bootstrap my project preferences and ban AI slop patterns.",
+      "expected_skill": "asc"
+    },
+    {
+      "id": "meta-06",
+      "prompt": "Apa saja aturan staff engineer di ASC dan cara kerjanya?",
+      "expected_skill": "asc"
+    }
+  ]
+}
+

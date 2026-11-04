@@ -17,10 +17,11 @@ const EXPECTED_SKILLS = [
   'asc-reference',
   'asc-review',
   'asc-ui',
+  'asc-test',
 ];
 
 describe('Roo Code Rules and Skills Integration', () => {
-  it('asc adapter --roo creates .roo/rules and all 5 skills in .roo/skills', async () => {
+  it('asc adapter --roo creates .roo/rules and all 6 skills in .roo/skills', async () => {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'asc-roo-adapter-test-'));
     const originalCwd = process.cwd();
 

@@ -1,7 +1,7 @@
 ---
 name: asc
 description: >
-  Trigger this skill when the user asks: "what are the rules", "coding guidelines", "best practices", "how should I write this", "staff engineer approach", "map this codebase", "document our patterns", "fingerprint this repository", "learn my preferences", "bootstrap preferences", "log this debt", "add to debt ledger", "install ASC", "configure for Cursor", "set up adapter", "apa aturannya", "panduan koding", "petakan codebase", "pasang asc". Covers Core Overview, Codebase Fingerprinting, Adaptive Preferences, Debt Tracking, and IDE Adapters.
+  Trigger this skill when the user asks: "what are the rules", "coding guidelines", "best practices", "how should I write this", "staff engineer approach", "map this codebase", "document our patterns", "fingerprint this repository", "learn my preferences", "bootstrap preferences", "log this debt", "add to debt ledger", "install ASC", "configure for Cursor", "set up adapter", "apa aturannya", "panduan koding", "petakan codebase", "pasang asc".
 ---
 
 # Agentic Senior Core: Architecture & Meta-Tools (`asc`)
@@ -10,15 +10,16 @@ Universal AI coding rules and meta-tooling playbook. Grounded in Google Engineer
 
 ---
 
-## 1. The 5 Core Meta-Skills Architecture
+## 1. The 6 Core Meta-Skills Architecture
 
-Agentic Senior Core organizes operational guidance into 5 high-density, non-overlapping playbooks:
+Agentic Senior Core organizes operational guidance into 6 high-density, non-overlapping playbooks:
 
-1. **`/asc` (This Skill)**: Core engineering rules, codebase convention fingerprinting, adaptive preferences, debt tracking, and IDE adapter setup.
+1. **`/asc` (This Skill)**: Core engineering rules, codebase convention fingerprinting, adaptive preferences, debt tracking, skill authoring, and IDE adapter setup.
 2. **`/asc-develop`**: Engineering lifecycle for greenfield scaffolding, brownfield feature implementation, and structured refactoring.
 3. **`/asc-review`**: Quality and security assurance: production PR reviews, deep vulnerability audits (OWASP / ASI), and code clone deduplication.
-4. **`/asc-reference`**: Domain architecture reference for REST/GraphQL APIs, database queries/migrations, testing contracts, infrastructure, and resilience.
-5. **`/asc-ui`**: Human-interface engineering: UI visuals, UX microcopy hygiene, strict single-language localization, mobile reflow (`dvh`/`clamp`), and WCAG 2.2 AA accessibility.
+4. **`/asc-test`**: Dedicated testing playbook: the Iron Law of TDD, verification gates, Playwright E2E, UAT acceptance checklists, regression proofs, and flaky test remediation.
+5. **`/asc-reference`**: Domain architecture reference for REST/GraphQL APIs, database indexing/transactions/migrations, infrastructure configs, and service resilience.
+6. **`/asc-ui`**: Human-interface engineering: surface modes (Operate, Persuade, Read, Experience), UX microcopy hygiene, single-language localization, mobile reflow (`dvh`/`clamp`), and WCAG 2.2 AA accessibility.
 
 ---
 
@@ -73,3 +74,11 @@ asc adapter --all   # Generate workspace adapters for all detected IDEs
 asc adapter --cursor # Generate adapter specifically for Cursor
 asc uninstall       # Clean up adapter files and hooks
 ```
+
+---
+
+## 6. On-Demand Reference Library
+
+| Topic | Reference Path |
+|---|---|
+| Authoring skills, trigger descriptions & 150-line routers | [references/writing-skills.md](references/writing-skills.md) |
