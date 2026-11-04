@@ -21,9 +21,25 @@ Every feature, bugfix, or refactor must follow the Red-Green-Refactor sequence:
 
 ---
 
-## 2. The Verification Gate
+## 2. The Verification Gate & Pre-Flight Ingestion (BLOCKING)
 
-Never make a claim regarding test status without fresh execution evidence:
+> [!IMPORTANT]
+> **Reference Path Resolution:**
+> Reference files do NOT reside in the user workspace root. They are located adjacent to this `SKILL.md` file:
+> `<skill_directory>/references/<file>.md`
+> Prepend this skill's directory path when calling `read_file`.
+
+Before writing tests, running suites, or claiming verification:
+1. **Mandatory Ingestion (BLOCKING GATE):** Call `read_file` on the tier reference matching your testing requirement BEFORE taking action:
+   - Writing unit tests / TDD cycle ➔ `references/tdd-cycle.md`
+   - Behavior testing, boundary isolation, mocks/fakes ➔ `references/test-design.md`
+   - Playwright browser tests, locators, page objects ➔ `references/e2e-playwright.md`
+   - Acceptance criteria, UAT checklists, edge case quads ➔ `references/uat.md`
+   - Bug reproduction, root-cause verification, regression proof ➔ `references/regression-proof.md`
+   - Flaky tests, timing race conditions, 50-run stress loop ➔ `references/flaky-tests.md`
+   *Do NOT write test assertions or declare claims until this reference is loaded.*
+
+2. **Never make a claim regarding test status without fresh execution evidence:**
 
 ```
 ┌──────────────────┐      ┌──────────────────┐      ┌──────────────────┐
@@ -81,24 +97,26 @@ Select the lowest testing tier that validates the requirement:
 
 ## 5. On-Demand Reference Library
 
-Load these references only when working on that specific domain:
+> [!IMPORTANT]
+> **Resolution Note:** All paths below are relative to this `SKILL.md` file's parent folder (`.../skills/asc-test/`). Prepend this skill's directory path when calling `read_file`.
 
-| Topic | Reference Path |
+| Testing Domain / Trigger | Mandatory Reference Path |
 |---|---|
-| Red-Green-Refactor mechanics & whole-suite checks | [references/tdd-cycle.md](references/tdd-cycle.md) |
-| Behavior testing, boundary isolation & mocking | [references/test-design.md](references/test-design.md) |
-| Playwright E2E, reconnaissance & locator hierarchy | [references/e2e-playwright.md](references/e2e-playwright.md) |
-| Given/When/Then acceptance criteria & edge case quad | [references/uat.md](references/uat.md) |
-| 3-step bugfix verification & regression proof | [references/regression-proof.md](references/regression-proof.md) |
-| Flakiness root causes & 50-run stress loop | [references/flaky-tests.md](references/flaky-tests.md) |
+| Red-Green-Refactor mechanics & whole-suite checks | `references/tdd-cycle.md` |
+| Behavior testing, boundary isolation & mocking | `references/test-design.md` |
+| Playwright E2E, reconnaissance & locator hierarchy | `references/e2e-playwright.md` |
+| Given/When/Then acceptance criteria & edge case quad | `references/uat.md` |
+| 3-step bugfix verification & regression proof | `references/regression-proof.md` |
+| Flakiness root causes & 50-run stress loop | `references/flaky-tests.md` |
 
 ---
 
 ## 6. Verification & Handoff Sweep
 
 Before declaring any coding or testing task complete:
-1. **Regression Proof:** For bugfixes, confirm the test failed without the fix and passes with it.
-2. **Whole-Suite Run:** Execute the full test suite (`ascx npm test` or project test runner); confirm exit code 0.
-3. **No Assertions Weakened:** Verify no existing test assertions were deleted or commented out to simulate success.
-4. **Hermetic State:** Ensure tests clean up temporary files, database records, and environment variables.
+1. **Reference Compliance:** Confirm constraints from the loaded `references/*.md` file were applied.
+2. **Regression Proof:** For bugfixes, confirm the test failed without the fix and passes with it.
+3. **Whole-Suite Run:** Execute the full test suite (`ascx npm test` or project test runner); confirm exit code 0.
+4. **No Assertions Weakened:** Verify no existing test assertions were deleted or commented out to simulate success.
+5. **Hermetic State:** Ensure tests clean up temporary files, database records, and environment variables.
 

@@ -28,16 +28,28 @@ Every backend and infrastructure change must satisfy these baseline invariants:
 
 ---
 
-## 2. On-Demand Reference Library
+## 2. Architecture Pre-Flight Gate & Reference Library (BLOCKING)
 
-Load these references only when working on that specific domain:
+> [!IMPORTANT]
+> **Reference Path Resolution:**
+> Reference files do NOT reside in the user workspace root. They are located adjacent to this `SKILL.md` file:
+> `<skill_directory>/references/<file>.md`
+> Prepend this skill's directory path when calling `read_file`.
 
-| Domain | Scope & Substance | Reference Path |
+Before modifying database schemas, writing API contracts, drafting Dockerfiles, or writing retry logic:
+1. **Mandatory Ingestion (BLOCKING GATE):** Call `read_file` on the matching domain reference BEFORE drafting plans or changing code:
+   - REST semantics, cursor pagination, RFC 9457, GraphQL ➔ `references/api.md`
+   - B-Tree indexing, N+1 queries, row locking, expand-and-contract migrations ➔ `references/database.md`
+   - Multi-stage Docker, non-root users, 12-factor env, health probes ➔ `references/infrastructure.md`
+   - Timeouts, jittered backoff, circuit breakers, hard vs. soft dependencies ➔ `references/resilience.md`
+   *Do NOT generate migrations, endpoint signatures, or network clients until this reference is loaded.*
+
+| Domain | Scope & Trigger | Mandatory Reference Path |
 |---|---|---|
-| **API Design** | REST semantics, cursor pagination, RFC 9457, GraphQL DataLoader, query complexity | [references/api.md](references/api.md) |
-| **Database** | B-Tree indexing, N+1 prevention, row locking (`FOR UPDATE`), expand-and-contract | [references/database.md](references/database.md) |
-| **Infrastructure** | Multi-stage Docker, non-root users, 12-factor env validation, liveness/readiness | [references/infrastructure.md](references/infrastructure.md) |
-| **Resilience** | Timeouts, full jitter backoff, circuit breakers, hard vs soft dependency fallbacks | [references/resilience.md](references/resilience.md) |
+| **API Design** | REST semantics, cursor pagination, RFC 9457 problem details, GraphQL DataLoader | `references/api.md` |
+| **Database** | B-Tree indexing, N+1 prevention, row locking (`FOR UPDATE`), expand-and-contract migrations | `references/database.md` |
+| **Infrastructure** | Multi-stage Docker, non-root users, 12-factor env validation, liveness/readiness probes | `references/infrastructure.md` |
+| **Resilience** | Outbound timeouts, full jitter backoff, circuit breakers, hard vs soft dependencies | `references/resilience.md` |
 
 ---
 
@@ -55,7 +67,8 @@ Before writing integration code, classify external services:
 ## 4. Verification & Handoff Sweep
 
 Before completing backend or infrastructure work:
-1. Verify query execution plan (`EXPLAIN ANALYZE`) for newly introduced SQL queries.
-2. Verify all outbound network calls have timeout parameters.
-3. Validate startup configuration fails fast on missing environment variables.
-4. Confirm migrations run cleanly in both `up` and `down` directions.
+1. Confirm constraints from the loaded `references/*.md` file were applied in contracts, schemas, and configurations.
+2. Verify query execution plan (`EXPLAIN ANALYZE`) for newly introduced SQL queries.
+3. Verify all outbound network calls have timeout parameters.
+4. Validate startup configuration fails fast on missing environment variables.
+5. Confirm migrations run cleanly in both `up` and `down` directions.

@@ -79,6 +79,14 @@ asc uninstall       # Clean up adapter files and hooks
 
 ## 6. On-Demand Reference Library
 
-| Topic | Reference Path |
+> [!IMPORTANT]
+> **Reference Path Resolution:**
+> Reference files do NOT reside in the user workspace root. They are located adjacent to this `SKILL.md` file:
+> `<skill_directory>/references/<file>.md`
+> Prepend this skill's directory path when calling `read_file`.
+
+When authoring, refactoring, or tailoring skills, you MUST call `read_file` on `references/writing-skills.md` before generating skill files:
+
+| Topic / Requirement | Mandatory Reference Path |
 |---|---|
-| Authoring skills, trigger descriptions & 150-line routers | [references/writing-skills.md](references/writing-skills.md) |
+| Authoring skills, trigger descriptions & 150-line routers | `references/writing-skills.md` |

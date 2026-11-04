@@ -1,5 +1,16 @@
 # Changelog
 
+## 6.16.1
+
+### Fixed & Hardened
+- **Deterministic Subfolder Reference Ingestion Protocol**:
+  - Resolved passive reading skips observed in live agent execution by introducing **Mandatory Blocking Pre-Flight Gates** across all meta-skills with subfolder references (`asc-ui`, `asc-test`, `asc-reference`, `asc`).
+  - **Procedural Enforcement**: Mandates executing `read_file` on target mode and domain reference files *before* inspecting workspace files, creating plans, or modifying code.
+  - **Skill-Relative Path Anchoring**: Explicitly guides tool invocations to resolve paths relative to each skill's `SKILL.md` directory instead of the user's workspace root (`cwd`), eliminating tool path probe failures when running inside external user repositories.
+  - **Anti-Spoiler Matrix**: Replaced detailed rule summaries in router tables with strict trigger-to-file mappings, preventing LLM attention mechanisms from treating summary snippets as sufficient context and skipping full reference files.
+  - **Reference Compliance Gate**: Integrated reference compliance verification into Section 6 (Verification & Handoff Sweep) across all routers.
+  - Verified all 6 meta-skill routers remain lean and strictly $\le$ 150 lines.
+
 ## 6.16.0
 
 ### Added & Hardened

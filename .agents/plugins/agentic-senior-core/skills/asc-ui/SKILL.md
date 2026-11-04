@@ -33,25 +33,44 @@ Every UI edit must satisfy these 15 rules without exception:
 
 ---
 
-## 2. Pre-Flight & Material Inventory
+## 2. Pre-Flight & Material Inventory (BLOCKING GATE)
 
-Before declaring markup, inspect the workspace:
-1. **Design Tokens:** Read project CSS variables, Tailwind configuration, or existing components in `components/` or `ui/`. If `DESIGN.md` exists, read it (read-only). Never create or edit persistent checkpoint files.
-2. **Take the Material Inventory:**
-   - **Real:** Concrete numbers, existing endpoints, actual data attributes.
-   - **Pictures:** Actual screenshots and product visual assets.
-   - **Absent:** Missing quotes, missing logos, or unverified metrics—these are omitted entirely.
+Before declaring markup, drafting redesign plans, or inspecting user code:
+
+1. **Locate Skill Directory & References (MANDATORY):**
+   Reference files do NOT reside in the user workspace root. They are located adjacent to this `SKILL.md` file:
+   `<skill_directory>/references/<category>/<file>.md`
+   Identify the path of this `SKILL.md` file (provided by host/tooling) and resolve all reference paths relative to it.
+
+2. **Step 1 — Surface Mode Ingestion (MANDATORY GATE):**
+   Classify the surface and execute `read_file` on the corresponding mode reference BEFORE inspecting files or writing code:
+   - Dashboards, settings, data tables, developer tools ➔ `references/modes/operate.md`
+   - Landing pages, pricing tiers, conversion flows ➔ `references/modes/persuade.md`
+   - Documentation, changelogs, knowledge bases ➔ `references/modes/read.md`
+   - Showcases, portfolios, interactive galleries ➔ `references/modes/experience.md`
+   *Do NOT proceed until you have read the mode reference into context.*
+
+3. **Step 2 — Secondary Craft Ingestion:**
+   Execute `read_file` on at least one relevant craft reference for your task from Section 5 (e.g. `references/craft/typography.md`, `references/craft/color-surfaces.md`, or `references/divergence.md`).
+
+4. **Step 3 — Workspace Material Inventory:**
+   Only AFTER loading the mode reference, inspect the workspace:
+   - **Design Tokens:** Read project CSS variables, Tailwind configuration, or existing components in `components/` or `ui/`. If `DESIGN.md` exists, read it (read-only). Never create or edit persistent checkpoint files.
+   - **Take Material Inventory:**
+     - **Real:** Concrete numbers, existing endpoints, actual data attributes.
+     - **Pictures:** Actual screenshots and product visual assets.
+     - **Absent:** Missing quotes, missing logos, or unverified metrics—these are omitted entirely.
 
 ---
 
 ## 3. Surface Modes & Ambition Scaling
 
-Determine visual posture from the **surface**, not the product brand:
+Visual posture is governed by the surface type, not product branding. Every surface maps to an enforced mode reference file:
 
-- **Operate (`references/modes/operate.md`):** Dashboards, settings, data tables, developer tools. Prioritizes dense scannability, master-detail rails, `tabular-nums`, and inline progressive disclosure.
-- **Persuade (`references/modes/persuade.md`):** Landing pages, pricing tiers, conversion flows. 80-word viewport budget, asymmetric postures, single signature element, zero equal-weight 3-card grids.
-- **Read (`references/modes/read.md`):** Documentation, changelogs, knowledge bases. 65–75ch measure (`max-w-prose`), dual-rail navigation, syntax-highlighted code blocks.
-- **Experience (`references/modes/experience.md`):** Showcases, portfolios, interactive galleries. Receding interface chrome, full-bleed visual canvas, tactile exploration.
+- **Operate (`references/modes/operate.md`):** Dense scannability, master-detail rails, `tabular-nums`, inline progressive disclosure.
+- **Persuade (`references/modes/persuade.md`):** 80-word viewport budget, asymmetric posture, single signature element, zero equal-weight 3-card grids.
+- **Read (`references/modes/read.md`):** 65–75ch measure (`max-w-prose`), dual-rail navigation, syntax-highlighted code blocks.
+- **Experience (`references/modes/experience.md`):** Receding interface chrome, full-bleed visual canvas, tactile exploration.
 
 ---
 
@@ -64,28 +83,30 @@ Determine visual posture from the **surface**, not the product brand:
 
 ## 5. On-Demand Reference Library
 
-Load these references only when working on that specific domain:
+> [!IMPORTANT]
+> **Resolution Note:** All paths below are relative to this `SKILL.md` file's parent folder (`.../skills/asc-ui/`). When calling `read_file`, prepend this skill's directory path.
 
-| Topic | Reference Path |
+| Target Domain / Task Requirement | Mandatory Reference Path |
 |---|---|
-| Waivable defaults & waiver syntax | [references/reflexes.md](references/reflexes.md) |
-| Typography, line-height & tabular numbers | [references/craft/typography.md](references/craft/typography.md) |
-| Color tokens, 60-30-10 & elevation | [references/craft/color-surfaces.md](references/craft/color-surfaces.md) |
-| Micro-interactions & GPU motion | [references/craft/motion.md](references/craft/motion.md) |
-| Native surfaces (selection, caret, scrollbars) | [references/craft/browser-surfaces.md](references/craft/browser-surfaces.md) |
-| 50% reduction, active verbs & i18n | [references/copy-i18n.md](references/copy-i18n.md) |
-| Responsive reflow, dvh & touch targets | [references/mobile-responsive.md](references/mobile-responsive.md) |
-| WCAG 2.2 AA contrast & keyboard operability | [references/accessibility.md](references/accessibility.md) |
-| The Data State Quad & mutation feedback | [references/states-feedback.md](references/states-feedback.md) |
-| Anti-convergence, 3 Waves of Tells & Mirror Test | [references/divergence.md](references/divergence.md) |
-| Structured UI audit matrix | [references/redesign-audit.md](references/redesign-audit.md) |
+| Waivable defaults & waiver syntax | `references/reflexes.md` |
+| Typography, line-height & tabular numbers | `references/craft/typography.md` |
+| Color tokens, 60-30-10 & elevation | `references/craft/color-surfaces.md` |
+| Micro-interactions & GPU motion | `references/craft/motion.md` |
+| Native surfaces (selection, caret, scrollbars) | `references/craft/browser-surfaces.md` |
+| 50% reduction, active verbs & i18n | `references/copy-i18n.md` |
+| Responsive reflow, dvh & touch targets | `references/mobile-responsive.md` |
+| WCAG 2.2 AA contrast & keyboard operability | `references/accessibility.md` |
+| The Data State Quad & mutation feedback | `references/states-feedback.md` |
+| Anti-convergence, 3 Waves of Tells & Mirror Test | `references/divergence.md` |
+| Structured UI audit matrix | `references/redesign-audit.md` |
 
 ---
 
 ## 6. Verification & Handoff Sweep
 
 Before completing any UI task, run this mechanical check:
-1. **State Quad:** Loading skeleton, empty state, error with retry, and populated data are all handled.
-2. **Pending Feedback:** Buttons disable and display feedback during ongoing mutations.
-3. **Contrast & Focus:** Verify keyboard tab flow and high-contrast `:focus-visible` styling.
-4. **Lint Check:** Verify changes against `hooks/lib/known-ui-slop-patterns.json`.
+1. **Reference Compliance:** Confirm constraints from the loaded `references/modes/<mode>.md` and craft references were strictly applied.
+2. **State Quad:** Loading skeleton, empty state, error with retry, and populated data are all handled.
+3. **Pending Feedback:** Buttons disable and display feedback during ongoing mutations.
+4. **Contrast & Focus:** Verify keyboard tab flow and high-contrast `:focus-visible` styling.
+5. **Lint Check:** Verify changes against `hooks/lib/known-ui-slop-patterns.json`.
