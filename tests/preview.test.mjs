@@ -11,11 +11,11 @@ describe('Zero-Dependency Multi-Browser Preview Engine', () => {
     assert.ok(Array.isArray(candidates), 'Candidates must be an array');
     assert.ok(candidates.length >= 4, 'Must define at least 4 browser candidates');
 
-    const names = candidates.map(c => c.name);
-    assert.ok(names.some(n => n.includes('Brave') || n.includes('brave')), 'Must include Brave');
-    assert.ok(names.some(n => n.includes('Edge') || n.includes('microsoft-edge')), 'Must include Edge');
-    assert.ok(names.some(n => n.includes('Chrome') || n.includes('chromium')), 'Must include Chrome/Chromium');
-    assert.ok(names.some(n => n.includes('Firefox') || n.includes('firefox')), 'Must include Firefox');
+    const names = candidates.map(c => c.name.toLowerCase());
+    assert.ok(names.some(n => n.includes('brave')), 'Must include Brave');
+    assert.ok(names.some(n => n.includes('edge')), 'Must include Edge');
+    assert.ok(names.some(n => n.includes('chrome') || n.includes('chromium')), 'Must include Chrome/Chromium');
+    assert.ok(names.some(n => n.includes('firefox')), 'Must include Firefox');
   });
 
   it('detects an installed browser if present on system', () => {
