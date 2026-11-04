@@ -76,8 +76,10 @@ Visual posture is governed by the surface type, not product branding. Every surf
 
 ## 4. Scope Classification: Refine vs. Redesign
 
-- **Refinement:** Preserves layout structure, component APIs, DOM hierarchy, and color tokens. Polishes padding rhythm, contrast, microcopy, and state completeness.
-- **Redesign:** Replaces the visual hierarchy, typographic pairing, and surface mode while strictly preserving data bindings, event handlers, and business logic.
+Never split the difference into cosmetic polish on a discarded look:
+- **Polish / Refinement:** Preserves layout structure, DOM hierarchy, and design tokens. Resolves contrast, missing state quad, microcopy, and lint issues.
+- **Restyle:** Preserves layout geometry. Replaces color tokens, typographic scales, corner radiuses, and elevation shadows.
+- **Full Redesign:** Replaces entire spatial geometry and posture. Mandatory decoupled protocol: extract data/contracts first, discard old DOM, author standalone preview (`asc preview <path>`), build fresh geometry, re-bind dynamic data.
 
 ---
 

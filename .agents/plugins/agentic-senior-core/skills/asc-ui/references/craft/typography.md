@@ -13,6 +13,11 @@ Grounded in: Refactoring UI, Bringhurst's The Elements of Typographic Style, and
 - **Weight Contrast Before Size Inflation:**
   - Build strong typographic hierarchy by varying font weights (`font-bold` vs `font-normal`) and contrast tokens (`text-foreground` vs `text-muted-foreground`) before jumping to oversized font sizes.
   - A clean 24px `font-bold` title paired with a 14px `text-muted-foreground` subtitle establishes clearer hierarchy than inflating the title to 48px with identical gray values.
+- **The Generative Scale Contrast Floor ($Display \ge 3.5\times Body$):**
+  - On landing, marketing, and hero surfaces (`Persuade`), the primary headline must establish an optical scale step over body text:
+    - Target: $Display \ge 3.5\times Body$ (e.g. `text-5xl` to `text-7xl` [48px–72px] display vs `text-base` [16px] or `text-sm` [14px] body).
+    - Heading leading must be tight: `leading-[1.05]` to `leading-tight`.
+    - An under-scaled heading ($< 2.5\times$ body, such as 24px H1) collapses optical gravity and makes marketing pages look like internal memo forms.
 
 ---
 

@@ -36,6 +36,7 @@ function printUsage() {
   console.log('  uninstall         Remove ASC adapter files and git hooks from this project');
   console.log('  clean             Remove v4 per-project artifacts');
   console.log('  status            Show detected IDEs and install hints');
+  console.log('  preview           Render zero-dependency multi-browser snapshot or preview');
   console.log('  --version         Show version');
   console.log('  --help            Show this help');
 }
@@ -87,6 +88,12 @@ async function main() {
   if (commandArgument === 'status') {
     const { runStatusCommand } = await import('../lib/cli/commands/status.mjs');
     await runStatusCommand();
+    return;
+  }
+
+  if (commandArgument === 'preview') {
+    const { runPreviewCommand } = await import('../lib/cli/commands/preview.mjs');
+    await runPreviewCommand(commandArguments);
     return;
   }
 

@@ -4,21 +4,44 @@ Modifying an existing interface requires clear intent. Audits must provide actio
 
 ---
 
-## 1. Refinement vs. Redesign Semantics
+## 1. Scope Classification: The 3 Redesign Depths
 
-Before touching code, explicitly classify the scope of work:
+Never split the difference into cosmetic polish on a discarded look. Before touching code, explicitly classify the depth of work:
 
-| Mode | Objective | What Stays Intact | What Changes |
+| Depth | Scope & Intent | What Stays Intact | What Changes |
 |---|---|---|---|
-| **Refinement** | Polish craft, fix accessibility, eliminate slop, align spacing. | Layout structure, component APIs, color tokens, DOM tree, established brand identity. | Padding rhythm, contrast ratios, missing hover/focus rings, microcopy concision, state quad completeness. |
-| **Redesign** | Overhaul visual hierarchy, modernize surface mode, eliminate fundamental architectural flaws. | Functional data bindings, event handlers, business rules, routing. | Visual posture, typography system, component composition, spatial elevation, color distribution. |
-
-> [!WARNING]
-> Never perform an unprompted redesign when asked to "fix", "clean up", or "refine" a component. Respect existing design tokens and architectural patterns unless the user explicitly mandates a redesign.
+| **`polish`** | Resolve bugs, contrast, microcopy, states. | Layout structure, DOM hierarchy, and design system tokens. | Padding rhythm, WCAG AA contrast, missing state quad (empty/error/loading), focus rings, microcopy brevity, lint fixes. |
+| **`restyle`** | Upgrade design system without breaking layout. | Layout grid, component hierarchy, and DOM structure. | Color palette (60-30-10), typographic scale, corner radiuses, elevation shadows, button and input styles. |
+| **`full`** | Total visual and structural overhaul. | Factual content, data bindings (`$variables`, loops), routes, form handlers. | **Spatial geometry, grid ratios, surface posture, and typography.** Treated as fresh build from subject truth. |
 
 ---
 
-## 2. Structured Audit Matrix
+## 2. The Decoupled Redesign Protocol (For Full Redesigns)
+
+When executing a **Full Redesign** on an existing template or page (`.blade.php`, `.tsx`, `.vue`, `.html`), editing in-place is forbidden because the AI's attention mechanism will anchor to the old DOM structure. Execute this 4-step decoupled sequence:
+
+1. **Step 1: Extract Data Contracts & Factual Inventory**
+   - Parse the incumbent file and extract all dynamic variables, loops, route helpers, form submission endpoints, and real text/assets into a clean data list.
+   - Separate product truth (names, prices, verified claims) from discarded markup.
+2. **Step 2: Isolate / Discard Old Markup**
+   - Treat the old layout as an anti-reference. Do not perform incremental class swapping on it.
+3. **Step 3: Author Standalone HTML Prototype & Preview**
+   - Create an ephemeral standalone prototype in the brain directory: `<appDataDir>/brain/<id>/preview.html`.
+   - Select 1 of the 4 Structural Postures (`references/modes/persuade.md` or `operate.md`).
+   - Use Tailwind via CDN and realistic sample data.
+   - Run zero-dependency visual capture:
+     ```bash
+     asc preview <path_to_preview.html>
+     ```
+     Inspect the captured image at `%TEMP%/asc-preview-active.png` (or pass `--open` to view in OS browser). Verify typographic scale ($Display \ge 3.5\times Body$) and full-field grounding.
+4. **Step 4: Re-inject Data Contracts into Production**
+   - Transfer the proven clean geometry into the project file (`welcome.blade.php`, `Page.tsx`).
+   - Re-bind the dynamic data loops, Blade/React variables, and event handlers.
+   - Confirm project test suite and linters pass cleanly.
+
+---
+
+## 3. Structured Audit Matrix
 
 When auditing an existing interface or PR, generate a structured findings table categorized by severity:
 
@@ -41,29 +64,29 @@ When auditing an existing interface or PR, generate a structured findings table 
 
 ---
 
-## 3. Systematic Audit Checklist
+## 4. Systematic Audit Checklist
 
 Audit screens systematically against four engineering vectors:
 
-### 3.1 Ergonomics & Responsiveness
+### 4.1 Ergonomics & Responsiveness
 - [ ] Render at `375px` width (mobile viewport) and `1280px` (desktop viewport).
 - [ ] Verify zero horizontal scrollbars on mobile (`overflow-x: clip`).
 - [ ] Confirm all touch targets meet minimum $44 \times 44\text{px}$ bounding box.
 - [ ] Verify mobile layout uses `dvh` instead of `vh` to prevent browser chrome clipping.
 
-### 3.2 Accessibility & Contrast (WCAG 2.2 AA)
+### 4.2 Accessibility & Contrast (WCAG 2.2 AA)
 - [ ] Check normal text against backgrounds ($\ge 4.5:1$).
 - [ ] Check input borders, active toggles, and large headings ($\ge 3:1$).
 - [ ] Cycle through entire screen using `Tab` and `Shift+Tab` with mouse disconnected.
 - [ ] Press `Escape` while dialog/modal is open; verify closure and focus restoration.
 
-### 3.3 State Quad Coverage
+### 4.3 State Quad Coverage
 - [ ] Inspect loading state: does it use proportional skeletons matching final dimensions?
 - [ ] Inspect empty state: is it actionable with a 1-sentence explanation?
 - [ ] Inspect error state: does it diagnose the issue and provide an inline retry button?
 - [ ] Inspect mutation triggers: do buttons lock and display spinners during network latency?
 
-### 3.4 Microcopy & Token Hygiene
+### 4.4 Microcopy & Token Hygiene
 - [ ] Run 50% word reduction sweep across headings and explanatory paragraphs.
 - [ ] Confirm all buttons follow `Verb + Noun` grammar.
 - [ ] Verify zero banned buzzwords (*seamless*, *empower*, *robust*).

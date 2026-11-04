@@ -43,6 +43,33 @@ When building or redesigning a Persuade surface, never let the LLM default to th
   - If technical documentation, whitepaper, or architectural manifesto $\to$ **Posture 2 (The Monolith Ledger)**.
   - If performance benchmarks, protocol comparisons, or telemetry proof $\to$ **Posture 4 (Kinetic Proof Stream)**.
 
+### Structural Blueprints (Enforced DOM Geometries)
+
+#### Posture 1: Asymmetric Stage (65/35 Split)
+- **Container:** `grid grid-cols-1 lg:grid-cols-12 gap-12 items-center`
+- **Left Lead (7 cols):** `lg:col-span-7 space-y-6 text-left`
+  - Display headline: `text-5xl lg:text-7xl font-bold tracking-tight leading-[1.05]`
+  - Subtitle: `text-lg text-muted-foreground max-w-xl`
+  - Actions: `flex flex-wrap items-center gap-4 pt-2`
+- **Right Artifact (5 cols):** `lg:col-span-5`
+  - Authentic artifact, interactive widget, or live ROI card: `rounded-2xl border border-border/80 bg-card p-6 shadow-sm`
+  - Zero equal-weight card grids below.
+
+#### Posture 2: The Monolith Ledger
+- **Container:** `max-w-4xl mx-auto px-6 py-16 divide-y divide-border/60`
+- **Tabular Rows:** Each entity or program is a horizontal row: `py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline`
+  - Category / Date: `md:col-span-3 text-xs font-semibold tracking-wider uppercase text-muted-foreground`
+  - Heading & Data: `md:col-span-5 text-xl font-bold text-foreground`
+  - Detail & Action: `md:col-span-4 text-sm text-muted-foreground`
+
+#### Posture 3: Product-Led Canvas
+- **Container:** `flex flex-col items-center text-center max-w-6xl mx-auto px-6 pt-16 pb-20`
+- **Compact Hero Frame:** `max-w-2xl space-y-4 mb-10`
+  - Headline: `text-4xl sm:text-6xl font-extrabold tracking-tight`
+  - 1-sentence value claim + 1 primary action.
+- **Hero Canvas (70% Viewport Lead):** `w-full rounded-2xl border border-border/80 bg-slate-950 p-2 shadow-2xl`
+  - Real interface fragment or live demo canvas dominating the first viewport.
+
 ---
 
 ## 3. Anti-Cardocalypse & Visual Pacing

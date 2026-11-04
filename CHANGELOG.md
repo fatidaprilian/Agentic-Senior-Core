@@ -1,5 +1,22 @@
 # Changelog
 
+## 6.16.2
+
+### Added & Hardened
+- **Zero-Dependency Multi-Browser Preview Engine (`asc preview`)**:
+  - Implemented multi-browser discovery engine detecting installed browsers across Windows, macOS, and Linux without downloading Puppeteer or Playwright:
+    - Supports **Brave**, **Microsoft Edge**, **Google Chrome**, **Mozilla Firefox**, **Vivaldi**, and **Arc**.
+    - Queries Windows Registry (`HKLM/HKCU\SOFTWARE\Clients\StartMenuInternet`) and standard platform install directories.
+  - **Single Reusable Slot Lifecycle**: Writes snapshots to `%TEMP%/asc-preview-active.png` (or `/tmp/`), overwriting automatically so disk space remains hardcapped at $\sim 100\text{KB}$ with zero buildup.
+  - **Graceful Fallback**: Automatically invokes default OS openers (`start`, `open`, `xdg-open`) when headless execution is unavailable.
+- **Decoupled Redesign Protocol (Anti-DOM Gravity)**:
+  - Formulated the **3-Depth Redesign Taxonomy** (`polish`, `restyle`, `full`) in `references/redesign-audit.md` and `asc-ui/SKILL.md`.
+  - For full redesigns on existing templates (`.blade.php`, `.tsx`, `.vue`), enforces the 4-step sequence: extract factual data & dynamic contracts $\to$ discard old DOM as anti-reference $\to$ author standalone preview via `asc preview` $\to$ compile proven geometry back to production files.
+- **Generative Substance & Posture Blueprints**:
+  - Added concrete Tailwind DOM structural blueprints to `references/modes/persuade.md` for *Asymmetric Stage (65/35)*, *Monolith Ledger*, and *Product-Led Canvas*.
+  - Enforced the Generative Scale Contrast Floor ($Display \ge 3.5\times Body$) with tight leading (`leading-[1.05]`) in `references/craft/typography.md`.
+  - Introduced Full-Field Color Grounding in `references/craft/color-surfaces.md` to eliminate the sterile wireframe void trap.
+
 ## 6.16.1
 
 ### Fixed & Hardened

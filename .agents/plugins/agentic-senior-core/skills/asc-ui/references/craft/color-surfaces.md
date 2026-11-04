@@ -25,6 +25,9 @@ Grounded in: Apple HIG, Google Material Design 3, and Refactoring UI Color Strat
   - The dedicated brand accent hue.
   - **Accent Exclusivity:** Accent color is reserved strictly for interactive affordances: Primary CTA button, active navigation indicator, unread dot, selected checkbox.
   - **Forbidden:** Never use the accent color as background wallpaper, card borders, or decorative section dividers.
+- **Full-Field Grounding (Anti-Sterile Surface):**
+  - To prevent the "sterile white void" trap, at least one major functional region (the Hero Stage, the Signature Canvas, or the Master Header) must own a deep, purposeful surface field (e.g. deep midnight grounding, rich brand tint, or dark canvas container).
+  - This establishes an optical center of gravity, preventing the page from looking like an unstyled wireframe.
 
 ---
 
