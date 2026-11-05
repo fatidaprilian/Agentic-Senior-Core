@@ -27,7 +27,7 @@ Use when creating a new application, service, or repository from zero.
    - Can standard library or native platform handle it?
    - Can this be one straightforward function?
 2. Build the core domain entities, data models, and services first before protocol/transport controllers.
-3. For frontend interfaces, follow the design standards in `/asc-ui`.
+3. For frontend interfaces, follow `/asc-ui`. For documentation and prose (READMEs, ADRs), enforce the Universal Prose Floor (zero AI throat-clearing, 50% word reduction, zero buzzwords).
 4. Generate a quality gate workflow (e.g., `.github/workflows/quality-gate.yml`) that runs linter, type-check, and tests.
 
 ### Step 3: Validation
@@ -51,7 +51,7 @@ Use when adding endpoints, components, pages, or capabilities to an existing cod
    - What happens on network/API failure or timeout?
    - What feedback does the user see? (Pending state, inline field error, toast/banner with retry).
    - How can the system recover? (Retry, cached fallback, degraded mode).
-3. If building UI, ensure compliance with `/asc-ui` (zero marketing fluff, single-language consistency, mobile reflow, WCAG AA contrast).
+3. If building UI or writing documentation, ensure compliance with the Universal Prose Floor and `/asc-ui` (zero marketing fluff, single-language consistency, mobile reflow, WCAG AA contrast).
 
 ### Step 3: Implement & Validate (TDD Integration)
 1. Follow the TDD cycle via `/asc-test`: write the failing test first (RED), write minimal code to pass (GREEN), then refactor.

@@ -57,13 +57,13 @@ describe('UI Engineering Structure & Quality Floor', () => {
     }
   });
 
-  it('validates 28 slop regexes in known-ui-slop-patterns.json with positive and negative cases', async () => {
+  it('validates 32 slop regexes in known-ui-slop-patterns.json with positive and negative cases', async () => {
     const slopPath = path.join(pluginDir, 'hooks', 'lib', 'known-ui-slop-patterns.json');
     const raw = await fs.readFile(slopPath, 'utf8');
     const catalog = JSON.parse(raw);
 
     assert.ok(Array.isArray(catalog.patterns), 'patterns must be an array');
-    assert.strictEqual(catalog.patterns.length, 28, 'must have exactly 28 slop patterns');
+    assert.strictEqual(catalog.patterns.length, 32, 'must have exactly 32 slop patterns');
 
     const testCases = {
       'ui-gradient-purple-blue': {
@@ -177,6 +177,22 @@ describe('UI Engineering Structure & Quality Floor', () => {
       'ui-agency-micro-meta': {
         pos: '<span className="text-muted-foreground">37.7749° N</span>',
         neg: '<span className="text-muted-foreground">San Francisco, CA</span>'
+      },
+      'copy-ai-buzzwords': {
+        pos: 'Our cutting-edge engine supercharges your development workflow.',
+        neg: 'The compiler processes requests in 45 milliseconds on standard hardware.'
+      },
+      'copy-cadence-tricolon': {
+        pos: 'Fast. Simple. Secure. Start deploying now.',
+        neg: 'Deploy your application with automated tests and safe rollbacks.'
+      },
+      'copy-cadence-rebuttal': {
+        pos: "Not just a tool, it's a workflow for engineering teams.",
+        neg: 'A deployment tool for engineering teams.'
+      },
+      'copy-filler-preamble': {
+        pos: "In today's fast-paced world, software must be reliable.",
+        neg: 'Real-time crash reporting with sub-second alert latency.'
       }
     };
 

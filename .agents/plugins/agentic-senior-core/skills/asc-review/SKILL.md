@@ -37,7 +37,7 @@ Use when reviewing PRs, diffs, commits, or newly written feature code.
    - **Severity 1 (Critical)**: Correctness, data corruption, auth/permission bypass, security sinks, PII leakage.
    - **Severity 2 (High)**: Action feedback failures (hanging spinners, unhandled mutations, missing error boundaries), unhandled async rejections, missing remote timeouts.
    - **Severity 3 (Medium)**: Public contract drift, missing failure-path tests, architectural boundary violations.
-   - **Severity 4 (Low)**: Maintainability debt, performance micro-optimizations, code comment noise.
+   - **Severity 4 (Low)**: Maintainability debt, performance micro-optimizations, narrative code comment noise, AI prose cadence or buzzwords in user-facing copy or documentation.
 
 ---
 

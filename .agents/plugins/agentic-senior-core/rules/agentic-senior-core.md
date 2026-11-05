@@ -42,7 +42,11 @@ When picking step 5 or 6 (unless trivial):
 - Early returns over deep nesting (keep happy path flat).
 - Three similar lines is better than a premature abstraction (duplication over wrong abstraction).
 - Single design source of truth: UI styling must reuse defined design tokens, theme variables, or existing page patterns. No ad-hoc palette, radius, or font deviations between pages.
-- UI copy & microcopy hygiene: Functional UI is a tool, not a brochure. Zero conversational filler or marketing buzzwords ("seamless", "empower", "robust"). Never echo heading text in redundant subheadings. Enforce strict single-language consistency without unidiomatic foreign loanwords or hybrid transliterations.
+- Human writing & prose hygiene: Functional communication is an operational tool, not marketing collateral. This applies to UI microcopy, READMEs, PR descriptions, and code comments alike:
+  - 50% reduction rule: Write the statement, then cut unnecessary words. Replace ornamental adjectives with measurable facts (not "a robust, blazing-fast parser", write "parses 50MB/s with zero heap allocations").
+  - Ban AI cadences: Never use the Tricolon ("Fast. Simple. Secure."), the Mad-Lib ("The AI-powered platform for modern teams"), the Rebuttal ("Not just a tool, it's a workflow"), or conversational throat-clearing ("In today's fast-paced landscape...").
+  - Buzzword blacklist: Never emit `seamless(ly)`, `robust`, `empower(ing)`, `supercharge`, `elevate`, `effortless(ly)`, `cutting-edge`, `delve`, `testament`, `pivotal`, `crucial`, `game-changing`, or `next-generation`.
+  - Strict single-language purity: Choose one language per document or surface. In Indonesian contexts, never prefix grammatical affixes to raw English stems (`di-submit`, `meng-generate`, `di-approve`, `me-restore`).
 - Code comment hygiene: Zero decorative character banners (// =====), zero line-by-line narration (// Step 1: validate), zero empty category tags (// Main logic), and zero signature echoes in docstrings. Keep only comments that document non-obvious operational constraints, security boundaries, concurrency hazards, or protocol contracts.
 - Delete code that carries no behavior, safety, or test value. Readability wins over brevity.
 - Detect and respect project linter/formatter configs. Do not restate style rules enforced by tooling.

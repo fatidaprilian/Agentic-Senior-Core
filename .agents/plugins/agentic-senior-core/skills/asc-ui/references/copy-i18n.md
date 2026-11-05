@@ -29,11 +29,44 @@ Exception: Standard multi-step navigation controls in fixed wizards (`Back`, `Ne
 
 ---
 
-## 3. Marketing Buzzword Blacklist
+## 3. Arithmetic Copy Budgets & The Argument-First Protocol
 
-The following words are banned in operational interfaces:
+### 3.1 Arithmetic Budgets
+Constraint is arithmetic; enforce before falling in love with a sentence:
+- **Hero Headline Budget:** Must fit in **two lines or fewer** across all viewports.
+  - Mobile (390px): $\le 32$ characters ($\sim 4$–$5$ words).
+  - Desktop (1280px): $\le 42$ characters ($\sim 5$–$6$ words).
+  - Use `text-wrap: balance` and intentional `<br>` tags to avoid single-word orphans.
+- **Supporting Line Budget:** Exactly **1 sentence**, at most **22 words**.
+  - Directly states concrete function and audience.
+  - Never repeats or paraphrases headline words.
+- **First-Viewport Word Budget:** Maximum **80 words** total across the first screen.
 
-`seamless`, `seamlessly`, `empower`, `empowering`, `robust`, `effortless`, `effortlessly`, `cutting-edge`, `game-changing`, `elevate`, `unlock`, `dive in`, `delightful`, `next-generation`, `supercharge`, `blazing-fast`.
+### 3.2 The Argument-First Protocol
+Before writing any HTML/JSX markup, outline the page as a sequence of claims with verifiable proofs:
+```text
+1. Claim: Three-legged oak stool, made to order.      → Proof: High-res macro photography of stool.
+2. Claim: Each seat cut from single solid board.      → Proof: 3 close-ups of continuous wood grain.
+3. Claim: Shipped in 6 weeks with tracking.           → Proof: Verifiable production stages schedule.
+4. Claim: Costs $240, delivered by the maker.         → Proof: Exact price figure + Order button.
+```
+*Rule:* Any section that lacks a factual claim or verifiable proof is filler—delete it immediately.
+
+---
+
+## 4. AI Cadences & Marketing Buzzword Blacklist
+
+### 4.1 Banned AI Cadence Formulas
+Language models fall into statistical average patterns; recognize and refuse them:
+1. **The Mad-Lib:** *"The [AI-powered/next-gen] platform for modern teams."*
+2. **The Tricolon:** *"Fast. Simple. Secure."* or *"Plan. Build. Ship."*
+3. **The Rebuttal:** *"It’s not just a tool, it’s a workflow."* / *"More than a framework."*
+4. **The Preamble Throat-Clearing:** *"In today’s fast-paced digital world..."* / *"Built for modern teams..."*
+5. **The Em-Dash Habit:** Using multiple em-dashes (`—`) in a single paragraph. Use a full stop.
+
+### 4.2 Banned Marketing Buzzwords
+The following adjectives and verbs are banned across all surfaces:
+`seamless`, `seamlessly`, `empower`, `empowering`, `robust`, `effortless`, `effortlessly`, `cutting-edge`, `game-changing`, `elevate`, `unlock`, `unleash`, `dive in`, `delightful`, `next-generation`, `supercharge`, `blazing-fast`.
 
 When tempted to write an adjective, state the measurable property instead:
 - Instead of: *"A robust, blazing-fast pipeline."*
@@ -41,16 +74,31 @@ When tempted to write an adjective, state the measurable property instead:
 
 ---
 
-## 4. Single-Language Purity & Anti-Gado-Gado
+## 5. Actionable Error Messages & Recovery
+
+An operational error message must never produce a dead end or display raw internal stack traces. Every error must answer three questions:
+1. **What failed:** Direct statement of the blocked action.
+2. **Why:** Factual cause (if actionable and known).
+3. **How to recover:** Concrete button or path to unblock the user.
+
+| Raw / Unhelpful Error | Actionable Engineering Copy | Recovery Path |
+|---|---|---|
+| "Error 413: Payload too large." | "File exceeds the 25MB limit." | "Choose a smaller file" CTA |
+| "Failed to connect to server." | "Unable to reach database. Changes saved locally." | "Retry connection" button |
+| "Invalid credentials." | "Incorrect password for user@example.com." | "Reset password →" link |
+
+---
+
+## 6. Single-Language Purity & Anti-Gado-Gado
 
 Interfaces must maintain strict language purity. Mixing two languages within the same surface causes cognitive friction and feels unpolished.
 
-### 4.1 Strict Monolingual Surface
+### 6.1 Strict Monolingual Surface
 Choose one language for the entire surface and enforce it across headings, labels, errors, and tooltips:
 - **English UI:** All copy, actions, and timestamps in English.
 - **Indonesian UI:** All copy, actions, and timestamps in standard Indonesian (KBBI/PUEBI).
 
-### 4.2 Ban Hybrid Neologisms (Indonesian Context)
+### 6.2 Ban Hybrid Neologisms (Indonesian Context)
 Never prefix Indonesian grammatical affixes (`di-`, `meng-`, `ter-`, `pe-`) onto raw English stems:
 
 | Hybrid Neologism (Banned) | Standard Indonesian | Pure English Alternative |
@@ -66,14 +114,14 @@ Never prefix Indonesian grammatical affixes (`di-`, `meng-`, `ter-`, `pe-`) onto
 
 ---
 
-## 5. Dynamic Text Expansion & Internationalization Layout
+## 7. Dynamic Text Expansion & Internationalization Layout
 
 Text length varies drastically between languages:
 - German and Dutch expand +20% to +35% compared to English.
 - Indonesian expands +15% to +30% for verb-rich phrases.
 - Japanese and Chinese are visually dense and vertically taller.
 
-### 5.1 Layout Rules for Expanding Strings
+### 7.1 Layout Rules for Expanding Strings
 1. **Never set fixed widths on action buttons:**
    ```html
    <!-- BANNED: clips or overflows in German/Indonesian -->

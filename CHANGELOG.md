@@ -1,5 +1,20 @@
 # Changelog
 
+## 6.16.3
+
+### Added & Hardened
+- **Universal Human Prose & Anti-AI Slop Architecture**:
+  - **Canonical Rule Floor**: Elevated UI-only copy hygiene into universal `Human writing & prose hygiene` (`rules/agentic-senior-core.md`), applying across microcopy, READMEs, ADRs, PR descriptions, and code comments.
+  - **50% Word Reduction & Plain Language**: Mandates cutting unnecessary words and replacing ornamental adjectives with measurable facts.
+  - **Arithmetic Copy Budgets**: Codified in `references/copy-i18n.md`: Hero headline $\le 32-42$ chars / $\le 2$ lines across all viewports, supporting copy $\le 22$ words, first viewport $\le 80$ words.
+  - **The Argument-First Protocol**: Codified Claim $\to$ Proof $\to$ Action chains to eliminate promotional throat-clearing.
+  - **Banned AI Cadences & Buzzword Blacklist**: Prohibited Tricolon ("Word. Word. Word."), Mad-Lib formulas, synthetic Rebuttals ("Not just a tool, it's a workflow"), and Preamble fillers ("In today's fast-paced...").
+  - **Actionable Error Message Triad**: Enforces What failed, Why, and direct recovery steps with zero dead-ends or exposed raw stack traces.
+  - **Lifecycle Skills Integration**: Enforced the prose floor in `asc-develop` (scaffolding and feature modes) and added Severity 4 review checks in `asc-review` for comment noise and AI prose cadences.
+  - **Mechanical Linter Expansion (32 Patterns)**: Expanded `known-ui-slop-patterns.json` from 28 to 32 deterministic regex detectors (`copy-ai-buzzwords`, `copy-cadence-tricolon`, `copy-cadence-rebuttal`, `copy-filler-preamble`).
+- **Preview Platform Hardening**:
+  - Added Linux Microsoft Edge browser candidate resolution (`microsoft-edge`) to headless browser discovery in `lib/cli/commands/preview.mjs`.
+
 ## 6.16.2
 
 ### Added & Hardened

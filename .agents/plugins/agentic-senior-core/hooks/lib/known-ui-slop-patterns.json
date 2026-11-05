@@ -139,6 +139,26 @@
       "id": "ui-agency-micro-meta",
       "regex": "(?:\\b\\d{1,2}\\.\\d+°\\s*[NSEW]\\b|©\\s*20\\d\\d\\s*—\\s*Scroll)",
       "message": "note: performative agency metadata (geographic coordinates, fake version/scroll stamps) detected. Remove ornamental meta."
+    },
+    {
+      "id": "copy-ai-buzzwords",
+      "regex": "\\b(seamlessly?|robust(?:ness)?|empowers?|supercharg(?:ed?|ing)|cutting-edge|next-generation|blazing-fast|effortlessly?)\\b",
+      "message": "note: generic AI buzzword detected ('seamless', 'robust', 'supercharge', 'cutting-edge'). Use plain operational verbs and concrete metrics."
+    },
+    {
+      "id": "copy-cadence-tricolon",
+      "regex": "\\b[A-Z][a-z]+\\.\\s+[A-Z][a-z]+\\.\\s+[A-Z][a-z]+\\.",
+      "message": "note: tricolon cadence detected ('Word. Word. Word.'). State the capability or outcome directly instead of using advertising triplets."
+    },
+    {
+      "id": "copy-cadence-rebuttal",
+      "regex": "\\b(Not (?:just )?a|More than a) \\w+[,.] (?:it's|a) \\w+\\b",
+      "message": "note: synthetic rebuttal cadence ('Not just a X, it\\'s a Y') detected. State what the system does directly without the false dichotomy."
+    },
+    {
+      "id": "copy-filler-preamble",
+      "regex": "\\b(In today's (?:fast-paced|digital)|Built for (?:the )?modern teams?|Welcome to the)\\b",
+      "message": "note: AI preamble/filler detected ('In today\\'s fast-paced...', 'Built for modern teams'). Delete the introductory throat-clearing and lead with action."
     }
   ]
 }
