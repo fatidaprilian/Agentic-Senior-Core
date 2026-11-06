@@ -101,6 +101,7 @@ async function run() {
   console.log('\n--- Version consistency ---');
   const versionFiles = [
     'package.json',
+    'package-lock.json',
     '.agents/plugins/agentic-senior-core/plugin.json',
     '.agents/plugins/agentic-senior-core/.codex-plugin/plugin.json',
     'gemini-extension.json',
@@ -117,7 +118,11 @@ async function run() {
         const match = raw.match(/^version:\s*(.+)$/m);
         version = match ? match[1].trim() : null;
       } else {
-        version = JSON.parse(raw).version;
+        const parsed = JSON.parse(raw);
+        version = parsed.version;
+        if (vf === 'package-lock.json' && parsed.packages?.['']?.version && parsed.packages[''].version !== pkgVersion) {
+          issues.push(`VERSION: ${vf} packages[""] has ${parsed.packages[''].version}, expected ${pkgVersion}`);
+        }
       }
       if (version !== pkgVersion) {
         issues.push(`VERSION: ${vf} has ${version}, expected ${pkgVersion}`);
