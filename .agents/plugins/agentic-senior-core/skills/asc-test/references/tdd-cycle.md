@@ -1,8 +1,8 @@
 # Test-Driven Development (TDD) Cycle
 
-TDD is an architectural discipline for writing deterministic, verifiable software. The Iron Law of TDD governs all development:
+TDD is an architectural discipline for writing deterministic, verifiable software. The core principle governs all development:
 
-> **THE IRON LAW:** No production code shall be written without a failing test first.
+> **Core Principle:** No production code shall be written without a failing test first.
 
 ---
 

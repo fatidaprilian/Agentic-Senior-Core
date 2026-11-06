@@ -1,10 +1,10 @@
-# The Data State Quad & Action Feedback Engine
+# Data States & Action Feedback
 
 Any view that consumes asynchronous data or triggers mutations must handle every possible state in the component lifecycle. Never design only for the populated happy path.
 
 ---
 
-## 1. The State Quad
+## 1. The Four Essential UI States
 
 Every data-driven interface exists in one of four states:
 

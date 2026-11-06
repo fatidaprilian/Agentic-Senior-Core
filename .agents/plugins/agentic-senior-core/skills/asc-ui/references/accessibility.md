@@ -4,7 +4,7 @@ Accessibility is not an afterthought or an optional overlay. It is the structura
 
 ---
 
-## 1. Contrast Ratios & The Grey-on-Grey Trap
+## 1. Contrast Ratios & WCAG Compliance
 
 All text and critical visual indicators must meet WCAG 2.2 Level AA mathematical contrast floors.
 
@@ -13,7 +13,7 @@ All text and critical visual indicators must meet WCAG 2.2 Level AA mathematical
 - **Large Text ($\ge$ 18pt / 24px regular, $\ge$ 14pt bold):** Minimum `3:1` contrast ratio.
 - **UI Components & Graphical Boundaries:** Active input borders, toggle switches, and focus indicators require minimum `3:1` against adjacent background colors.
 
-### 1.2 The Dark Mode Grey-on-Grey Trap
+### 1.2 Avoiding Low-Contrast Surfaces
 A frequent aesthetic failure is using low-contrast grey text for "subtle elegance":
 - **Failing example:** `text-zinc-500` (`#71717a`) on `bg-zinc-900` (`#18181b`) = **3.8:1** (Fails 4.5:1 AA for body copy).
 - **Compliant fix:** `text-zinc-400` (`#a1a1aa`) on `bg-zinc-900` = **6.2:1** (Passes AA).

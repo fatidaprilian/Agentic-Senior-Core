@@ -75,7 +75,7 @@ Audit screens systematically against four engineering vectors:
 - [ ] Cycle through entire screen using `Tab` and `Shift+Tab` with mouse disconnected.
 - [ ] Press `Escape` while dialog/modal is open; verify closure and focus restoration.
 
-### 4.3 State Quad Coverage
+### 4.3 State Coverage
 - [ ] Inspect loading state: does it use proportional skeletons matching final dimensions?
 - [ ] Inspect empty state: is it actionable with a 1-sentence explanation?
 - [ ] Inspect error state: does it diagnose the issue and provide an inline retry button?

@@ -13,6 +13,13 @@ Grounded in: Apple HIG, Google Material Design 3, and Refactoring UI Color Strat
     - Borders: `border-border`, `border-input`, `border-primary`.
   - **Zero Raw Hex Literals in Markup:** Never write inline hex values (`#6366f1`, `#3b82f6`) or arbitrary utility classes (`bg-blue-600`) outside the root token definition.
 
+- **The Single Neutral Family Law (Anti-Muddy Surfaces):**
+  - Never mix cool-tinted grays (e.g. Tailwind `slate-*`, with blue undertones) and warm-tinted grays (e.g. `stone-*`, with yellow/brown undertones) on the same screen. Combining `slate-900` text with `stone-50` backgrounds creates a dirty, mismatched optical surface.
+  - Choose one neutral temperature matching the project's primary brand:
+    - Warm brands (warm green, brown, amber, terracotta) $\to$ pair strictly with `stone` or neutral warm tones.
+    - Cool brands (navy, cobalt, cyan, indigo) $\to$ pair strictly with `slate` or cool zinc.
+    - Pure monochromatic / minimal brands $\to$ pair with neutral `zinc` or `gray`.
+
 ---
 
 ## 2. The 60-30-10 Distribution Rule
@@ -49,13 +56,13 @@ Grounded in: Apple HIG, Google Material Design 3, and Refactoring UI Color Strat
 
 ---
 
-## 4. Integrated Scorecards & Metric Blocks (Anti-Sticker Invariant)
+## 4. Metric Displays & Scorecards
 
-- **Ban The Sticker Box:** Never place an isolated white box with a thin border floating inside an already white or light header canvas. This creates an optical "detached sticker" artifact.
+- **Integrated Layout:** Never place an isolated white box with a thin border floating inside an already white or light header canvas.
 - **Anchor Into Layout Chrome:**
   - Integrate scorecards directly into the identity header rail or stage banner using a unified divider (`border-l border-border/80 pl-6`) or structural inset well (`bg-muted/40`).
 - **Semantic Tinting for Evaluation Scores:**
-  - When communicating aggregate grades (e.g. `84,20 / 100`, Predikat B):
+  - When communicating aggregate grades (e.g. `84.20 / 100`, Rank B):
     - Background: subtle semantic tint (`bg-emerald-500/10` or `bg-slate-500/10`).
     - Border: matching tinted hairline (`border border-emerald-500/20`).
     - Typography: tabular numbers (`font-mono tabular-nums`) with clear contrast ($Display \ge 3.5\times Body$).
@@ -63,10 +70,10 @@ Grounded in: Apple HIG, Google Material Design 3, and Refactoring UI Color Strat
 
 ---
 
-## 5. Contextual Inline Alerts & Callouts (The Callout Invariant)
+## 5. Inline Notifications & Status Banners
 
-- **Never Float Warning Text Adrift:** Warning notes, disclaimers, or temporary state alerts must NEVER be dumped as raw floating text between layout sections.
-- **The Callout Invariant:** Every alert must reside in a structured callout container:
+- **Structured Containers:** Warning notes, disclaimers, or temporary state alerts must reside in clear semantic containers, never dumped as raw floating text between layout sections.
+- **Notification Requirements:** Every alert must reside in a structured callout container:
   - Container: 1px hairline border with matching light background tint (e.g. `border border-amber-500/30 bg-amber-500/10 rounded-md p-3`).
   - Icon Anchor: Dedicated semantic SVG icon (alert circle, triangle) aligned with first line of text.
   - Placement: Positioned immediately above or inside the data table/form it modifies, establishing unmistakable contextual binding.

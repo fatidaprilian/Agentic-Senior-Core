@@ -159,6 +159,11 @@
       "id": "copy-filler-preamble",
       "regex": "\\b(In today's (?:fast-paced|digital)|Built for (?:the )?modern teams?|Welcome to the)\\b",
       "message": "note: AI preamble/filler detected ('In today\\'s fast-paced...', 'Built for modern teams'). Delete the introductory throat-clearing and lead with action."
+    },
+    {
+      "id": "copy-clumsy-indonesian-translations",
+      "regex": "\\b(laci sembul|jendela sembul|garis rambut|panggung asimetris)\\b",
+      "message": "warning: clumsy literal translation detected ('laci sembul', 'garis rambut'). Use natural Indonesian ('panel samping', 'garis tipis', 'area utama')."
     }
   ]
 }

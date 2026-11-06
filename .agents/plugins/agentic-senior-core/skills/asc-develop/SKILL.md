@@ -21,7 +21,7 @@ Use when creating a new application, service, or repository from zero.
 2. Propose the top-level directory layout and module boundaries following idiomatic conventions of the chosen stack.
 3. Present an architectural summary and wait for user alignment before writing files.
 
-### Step 2: Implementation & Decision Ladder
+### Step 2: Architecture & Implementation Hierarchy
 1. Apply the ASC Decision Ladder to every module:
    - Does this need to be built?
    - Can standard library or native platform handle it?
@@ -55,7 +55,7 @@ Use when adding endpoints, components, pages, or capabilities to an existing cod
 
 ### Step 3: Implement & Validate (TDD Integration)
 1. Follow the TDD cycle via `/asc-test`: write the failing test first (RED), write minimal code to pass (GREEN), then refactor.
-2. **Zero-Fake-Done Testing**: Run the project test suite (`ascx npm test`, `ascx pytest`, `ascx cargo test`). The test runner **MUST** exit with code 0.
+2. **Empirical Test Execution**: Run the project test suite (`ascx npm test`, `ascx pytest`, `ascx cargo test`). The test runner **MUST** exit with code 0.
 3. Never weaken or delete test assertions to simulate a passing run. Fix the underlying business logic.
 
 ---

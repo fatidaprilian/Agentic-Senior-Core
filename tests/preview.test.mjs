@@ -18,6 +18,22 @@ describe('Zero-Dependency Multi-Browser Preview Engine', () => {
     assert.ok(names.some(n => n.includes('firefox')), 'Must include Firefox');
   });
 
+  it('supports url parsing and mobile dimension flags', async () => {
+    // Fails safely on non-existent local file, but parses flags without throwing unexpected errors
+    const originalExit = process.exit;
+    let exitCode = null;
+    process.exit = (code) => { exitCode = code; throw new Error('EXIT'); };
+
+    try {
+      await runPreviewCommand(['--mobile']);
+    } catch {
+      // expected
+    } finally {
+      process.exit = originalExit;
+    }
+    assert.strictEqual(exitCode, 1, 'Must exit with 1 when target is missing');
+  });
+
   it('detects an installed browser if present on system', () => {
     const browser = findBrowserExecutable();
     // If a browser is installed, verify its schema

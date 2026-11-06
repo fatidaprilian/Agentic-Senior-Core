@@ -1,5 +1,34 @@
 # Changelog
 
+## 6.16.6
+
+### Added & Hardened
+- **Real-World Live Benchmark Engine (via REA & Zero-Synthetic Invariant)**:
+  - **Authentic Production Benchmarks**: Replaced synthetic AI-generated HTML prototypes with **13 real-world production websites** reverse-engineered directly from the live web using REA (`capture_browser_scenario`).
+  - **Dual-Modality Visual & DOM Grounding (`skills/asc-ui/references/visuals/`)**: Each benchmark includes a high-resolution viewport screenshot (`real-*.png`) for multimodal spatial/proportion calibration and the rendered DOM tree (`real-*-dom.json`) for exact CSS utility tokens and container hierarchies. Wired directly into `SKILL.md` Reference Library, `composition-patterns.md`, `genre-calibration.md`, and all four surface mode references (`operate.md`, `persuade.md`, `read.md`, `experience.md`).
+  - **13 Core Software Domains Covered**:
+    - Analytics & Telemetry Dashboard: **Dub.co** (`real-dub.*`)
+    - CRM & Relational Data Operations: **Attio** (`real-attio.*`)
+    - Technical Documentation & API Knowledge Base: **Mintlify** (`real-mintlify.*`)
+    - Storefront & Integration Marketplace: **GitHub Marketplace** (`real-marketplace.*`)
+    - Booking, Scheduling & Calendar Flow: **Cal.com** (`real-cal.*`)
+    - Collaborative Canvas & Infinite Studio: **tldraw** (`real-tldraw.*`)
+    - Authentication, Forms & Account Settings: **Clerk** (`real-clerk.*`)
+    - Developer Infrastructure & Dark Editorial: **Resend** (`real-resend.*`)
+    - Cloud Database & Platform Console: **Supabase** (`real-supabase.*`)
+    - Command Palette, Launcher & Desktop Utility: **Raycast** (`real-raycast.*`)
+    - Product Craft & Editorial Philosophy: **Linear** (`real-linear.*`)
+    - High-Impact Brand Stage & Manifesto: **Vercel** (`real-vercel.*`)
+    - Global Financial Infrastructure & Fluid Mesh: **Stripe** (`real-stripe.*`)
+  - **Local Browser Preview Engine Hardening (`lib/cli/commands/preview.mjs`)**: Added `--mobile` (390x844) and `--desktop` (1440x900) flags and direct headless screenshotting for local development URLs (`http://localhost:*`, `http://127.0.0.1:*`).
+
+### Fixed & De-Jargoned
+- **Global De-Jargon & Sober Engineering Architecture**:
+  - **Canonical Rule Purity (`rules/agentic-senior-core.md`)**: Rewritten to 100% pure monolingual English. Stripped out hybrid neologisms, parenthetical translations, and conversational throat-clearing. Codified *Strict Single-Language Purity* and *Silent Internal Discipline*.
+  - **Global All-Domain De-Jargon Sweep**: Scrubbed invented "wave/battle" terms, slogans, and over-dramatized labels across all 7 skills (`asc`, `asc-develop`, `asc-review`, `asc-reference`, `asc-test`, `asc-pentest`, `asc-ui`) and commands. Replaced with objective engineering terminology (*TDD Protocol*, *Regression Verification*, *Architecture Hierarchy*, *Surface Hierarchy*).
+  - **Brownfield Brand-First & Single Neutral Family Law (`asc-ui`)**: Enforced non-negotiable preservation of existing project tokens (`app.css`, Tailwind config). Banned mixing cool `slate` and warm `stone` grays. Enforced *Codebase Lexicon Supremacy* to prevent clumsy literal calques.
+  - **Slop Linter Pattern 33**: Added `copy-clumsy-indonesian-translations` regex pattern detecting literal translations (*laci sembul*, *garis rambut*, *jendela sembul*, *panggung asimetris*).
+
 ## 6.16.5
 
 ### Fixed & Hardened

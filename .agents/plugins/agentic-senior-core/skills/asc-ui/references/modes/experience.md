@@ -4,6 +4,10 @@ Use for: Creative portfolios, design galleries, interactive product demos, and m
 
 > **Core Principle:** The visitor is inside the work itself. Interface chrome recedes entirely so the visual artifact, artwork, or interaction leads from the first viewport. The UI serves as a quiet frame for the subject.
 
+> **Visual Reference Benchmarks:**
+> - Collaborative Infinite Canvas & Studio: `references/visuals/real-tldraw.png` (`real-tldraw-dom.json`)
+> - Command Center & Launcher Canvas: `references/visuals/real-raycast.png` (`real-raycast-dom.json`)
+
 ---
 
 ## 1. Canvas Treatment & Spatial Composition

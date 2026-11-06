@@ -30,7 +30,7 @@ describe('UI Engineering Structure & Quality Floor', () => {
     assert.ok(content.includes('## 6. Verification & Handoff Sweep'), 'Must include Verification Sweep');
   });
 
-  it('ensures all 17 reference files exist and are non-empty', async () => {
+  it('ensures all 18 reference files exist and are non-empty', async () => {
     const references = [
       'modes/genre-calibration.md',
       'modes/operate.md',
@@ -38,6 +38,7 @@ describe('UI Engineering Structure & Quality Floor', () => {
       'modes/read.md',
       'modes/experience.md',
       'reflexes.md',
+      'craft/composition-patterns.md',
       'craft/themes-catalog.md',
       'craft/typography.md',
       'craft/color-surfaces.md',
@@ -87,13 +88,13 @@ describe('UI Engineering Structure & Quality Floor', () => {
     }
   });
 
-  it('validates 32 slop regexes in known-ui-slop-patterns.json with positive and negative cases', async () => {
+  it('validates 33 slop regexes in known-ui-slop-patterns.json with positive and negative cases', async () => {
     const slopPath = path.join(pluginDir, 'hooks', 'lib', 'known-ui-slop-patterns.json');
     const raw = await fs.readFile(slopPath, 'utf8');
     const catalog = JSON.parse(raw);
 
     assert.ok(Array.isArray(catalog.patterns), 'patterns must be an array');
-    assert.strictEqual(catalog.patterns.length, 32, 'must have exactly 32 slop patterns');
+    assert.strictEqual(catalog.patterns.length, 33, 'must have exactly 33 slop patterns');
 
     const testCases = {
       'ui-gradient-purple-blue': {
@@ -223,6 +224,10 @@ describe('UI Engineering Structure & Quality Floor', () => {
       'copy-filler-preamble': {
         pos: "In today's fast-paced world, software must be reliable.",
         neg: 'Real-time crash reporting with sub-second alert latency.'
+      },
+      'copy-clumsy-indonesian-translations': {
+        pos: 'Buka laci sembul untuk melihat detail indikator.',
+        neg: 'Buka panel samping untuk melihat detail indikator.'
       }
     };
 
@@ -247,6 +252,19 @@ describe('UI Engineering Structure & Quality Floor', () => {
         false,
         `Pattern ${pattern.id} should NOT match negative sample: "${tc.neg}"`
       );
+    }
+  });
+
+  it('guarantees zero codebase contamination (no SAURAN or THEME LOCKED in skills)', async () => {
+    const files = await fs.readdir(path.join(uiSkillDir, 'references'), { recursive: true });
+    for (const file of files) {
+      if (typeof file === 'string' && file.endsWith('.md')) {
+        const fullPath = path.join(uiSkillDir, 'references', file);
+        const content = await fs.readFile(fullPath, 'utf8');
+        // Neither SAURAN nor THEME LOCKED should appear in UI guidelines
+        assert.ok(!content.includes('SAURAN evaluation'), `Found project contamination in ${file}`);
+        assert.ok(!content.includes('THEME LOCKED:'), `Found forced lock command in ${file}`);
+      }
     }
   });
 });

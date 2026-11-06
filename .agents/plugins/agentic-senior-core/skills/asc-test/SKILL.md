@@ -10,9 +10,9 @@ Staff-grade testing playbook and verification gates. Enforces test-first discipl
 
 ---
 
-## 1. The Iron Law of TDD
+## 1. Test-Driven Development Protocol
 
-> **THE IRON LAW:** No production code shall be written without a failing test first.
+> **CORE PROTOCOL:** No production code shall be written without a failing test first.
 
 Every feature, bugfix, or refactor must follow the Red-Green-Refactor sequence:
 1. **RED:** Write a minimal failing test. Execute it and confirm it fails for the expected reason.

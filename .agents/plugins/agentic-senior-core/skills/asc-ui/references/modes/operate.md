@@ -4,6 +4,10 @@ Use for: Dashboards, data grids, admin consoles, editors, settings, financial le
 
 > **Core Principle:** The visitor completes a task. Scanability, dense data alignment, low cognitive friction, and native expectations outrank emotional expression. Brand identity lives in the precision of micro-details, not loud decorative containers.
 
+> **Visual Reference Benchmarks:**
+> - CRM & Relational Operations: `references/visuals/real-attio.png` (`real-attio-dom.json`)
+> - Analytics & Telemetry Dashboards: `references/visuals/real-dub.png` (`real-dub-dom.json`)
+
 ---
 
 ## 1. Information Density & Layout Geometry
@@ -18,7 +22,7 @@ Use for: Dashboards, data grids, admin consoles, editors, settings, financial le
   - Hover feedback: `hover:bg-muted/40` across the entire row.
   - Text alignment rule: Left-align text strings, right-align numeric figures and monetary amounts, center status chips and icon actions.
   - Numeric values must use `tabular-nums` for vertical column alignment.
-- **Progressive Disclosure alih-alih Modal Popups:**
+- **Progressive Disclosure over Intrusive Modals:**
   - Avoid popping modals for inline edits or sub-entity creation. Use expandable rows, sliding side sheets (drawers), or inline input switches.
   - Reserve dialogs strictly for destructive confirmations (delete, revoke) or complex isolated workflows (import wizard).
 
@@ -53,26 +57,26 @@ Use for: Dashboards, data grids, admin consoles, editors, settings, financial le
 
 ---
 
-## 4. Audit & Inspection Finding Rows (Action Affordance Invariant)
+## 4. Inspection & Audit Finding Rows
 
 - **Interactive Row Contract:**
   - Finding rows, audit line items, and checklist items must never be rendered as dead, static text blocks.
-  - Every finding row (e.g. `FT-01: Bukti fisik belum dilampirkan`) must provide:
-    1. **Primary Action Affordance:** Explicit inline trigger button (e.g. `Periksa Bukti`, `Minta Rincian`, or expandable chevron).
+  - Every finding row (e.g. `Finding #1: Physical document pending verification`) must provide:
+    1. **Primary Action Affordance:** Explicit inline trigger button (e.g. `Review File`, `Request Details`, or expandable chevron).
     2. **Attachment Badge:** File type badge (`PDF`, `XLSX`), byte size, and upload timestamp.
-    3. **Status Pill:** High-contrast semantic pill (`Perlu Tindak Lanjut`, `Menunggu Konfirmasi`, `Selesai`).
+    3. **Status Pill:** High-contrast semantic pill (`Needs Attention`, `Pending Confirmation`, `Verified`).
     4. **Hover State:** `hover:bg-muted/40 transition-colors` across the entire row bounding box.
 
 ---
 
-## 5. Dual-Navigation De-Confliction (Lenses vs Lifecycle)
+## 5. Dual Navigation Patterns (Filters vs Lifecycles)
 
 - **Separation of Mental Models:**
-  - **Horizontal Tabs**: View-Port Filter Lenses (switching data views, e.g. *Ringkasan*, *Rubrik Domain*, *Temuan*, *Riwayat*). These change what information is rendered on the stage.
-  - **Vertical Rail**: Immutable Lifecycle Progression (e.g. *1. Unggah Dokumen $\to$ 2. Verifikasi $\to$ 3. Penilaian $\to$ 4. Konfirmasi Fisik $\to$ 5. Rangkuman*). This reflects where the entity is in its operational state.
+  - **Horizontal Tabs**: View-Port Filter Lenses (switching data views, e.g. *Overview*, *Domain Criteria*, *Findings*, *History*). These change what information is rendered on the stage.
+  - **Vertical Rail**: Immutable Lifecycle Progression (e.g. *1. Upload Document $\to$ 2. Verify $\to$ 3. Assess $\to$ 4. Confirm $\to$ 5. Summary*). This reflects where the entity is in its operational state.
 - **Accenting Active Lifecycle Step:**
   - Never let the current active step in the lifecycle rail look identical to future unstarted steps.
-  - Active step: highlighted with high-contrast accent ring or filled circle (`bg-primary text-primary-foreground`) with an active descriptor ("Tahap aktif verifikasi").
+  - Active step: highlighted with high-contrast accent ring or filled circle (`bg-primary text-primary-foreground`) with an active descriptor ("Active verification phase").
   - Completed steps: clear muted checks (`text-emerald-600` with subtle strike or timestamp).
   - Pending steps: muted borders (`border-border text-muted-foreground`).
 

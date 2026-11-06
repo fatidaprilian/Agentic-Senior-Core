@@ -27,7 +27,7 @@ Every UI edit must satisfy these 15 rules without exception:
 11. **Mobile containment:** Set `overflow-x: clip` on root shells. Never leak horizontal scrolling.
 12. **Touch targets:** Minimum 44×44px hit target with $\ge$ 8px clearance for all interactive touch controls.
 13. **Contrast floor:** Meet WCAG 2.2 AA (4.5:1 normal text, 3:1 large text and UI component boundaries).
-14. **Single-language purity:** Never mix languages on one surface; ban hybrid neologisms (`di-submit`, `meng-generate`).
+14. **Single-language purity:** Never mix languages on one surface; preserve monolingual consistency across headings, labels, errors, and actions.
 15. **Icon semantics:** Never use raw unicode or emojis as icons. Use dedicated SVG icons; mark decorative icons `aria-hidden="true"`.
 16. **Substance over restraint:** Stripping slop is only half the job. Replace removed ornaments with real substance: strong typographic scale contrast, full-field color anchors, and authentic interface fragments. Never leave an empty, sterile wireframe void.
 17. **Product over skill (No geek cosplay):** The real-world domain dictates aesthetics. Never inject terminal windows, ASCII art, or pseudo-telemetry consoles into civic, educational, or commercial products (`references/modes/genre-calibration.md`).
@@ -40,26 +40,17 @@ Every UI edit must satisfy these 15 rules without exception:
 
 Before declaring markup, drafting redesign plans, or inspecting user code:
 
-1. **Locate Skill Directory & References (MANDATORY):**
-   Reference files do NOT reside in the user workspace root. They are located adjacent to this `SKILL.md` file:
-   `<skill_directory>/references/<category>/<file>.md`
-   Identify the path of this `SKILL.md` file (provided by host/tooling) and resolve all reference paths relative to it.
-
-2. **Step 1 — Two-Phase Enforcement Gate (MANDATORY GATE):**
-   - **Phase A (Structure & Hierarchy First):** Lock project domain genre (Civic, Enterprise, SaaS, DevTools) and read `references/modes/genre-calibration.md` + target mode reference (`references/modes/<mode>.md`). Lock the primary focal anchor and spatial posture before writing code.
-   - **Phase B (Visual System & Themes):** Read `references/craft/themes-catalog.md` and lock one of the 16 curated themes across 8 real-world domains (e.g., Sovereign Slate, Almanac Index, Editorial Ledger, Pharmacy Calm, Ink & Signal, Graphite Instrument) to prevent probabilistic palette slop.
-   *Do NOT proceed until you have read the genre, mode, and theme references into context.*
-
-3. **Step 2 — Secondary Craft Ingestion:**
-   Execute `read_file` on at least one relevant craft reference for your task from Section 5 (e.g. `references/craft/typography.md`, `references/craft/color-surfaces.md`, or `references/divergence.md`).
-
-4. **Step 3 — Workspace Material Inventory:**
-   Only AFTER loading the mode reference, inspect the workspace:
-   - **Design Tokens:** Read project CSS variables, Tailwind configuration, or existing components in `components/` or `ui/`. If `DESIGN.md` exists, read it (read-only). Never create or edit persistent checkpoint files.
-   - **Take Material Inventory:**
-     - **Real:** Concrete numbers, existing endpoints, actual data attributes.
-     - **Pictures:** Actual screenshots and product visual assets.
-     - **Absent:** Missing quotes, missing logos, or unverified metrics—these are omitted entirely.
+1. **Step 1 — Workspace Brand Audit (Brownfield vs Greenfield):**
+   - Check project styling configuration: `app.css`, `globals.css`, `tailwind.config.*`, or `components/ui`.
+   - **Brownfield Rule:** If the project already defines brand tokens (e.g. custom brand colors, established fonts, existing UI library), **DO NOT OVERRIDE THEM**. Calibrate neutrals to the brand's color temperature (single neutral family law) and respect established naming.
+   - **Greenfield Fallback:** If the repository is brand new with zero tokens, read `references/modes/genre-calibration.md` and select a starting palette from `references/craft/themes-catalog.md`.
+2. **Step 2 — Silent Discipline & Real Visual Benchmarks:**
+   - Review `references/craft/composition-patterns.md` and inspect matching `references/visuals/real-*.png` / `*-dom.json` for authentic human-designed spacing and layout hierarchies rather than enclosing sections in repetitive `1px` boxes.
+   - **Silent Meta-Rules:** Never emit internal framework rules, theme catalog names, or parenthetical foreign translations in user deliverables. Focus purely on technical facts.
+3. **Step 3 — Workspace Material Inventory:**
+   - **Real:** Concrete numbers, existing endpoints, actual data attributes from controllers/models.
+   - **Pictures:** Actual screenshots and product visual assets.
+   - **Absent:** Missing quotes, missing logos, or unverified metrics—these are omitted entirely.
 
 ---
 
@@ -91,17 +82,19 @@ Never split the difference into cosmetic polish on a discarded look:
 | Target Domain / Task Requirement | Mandatory Reference Path |
 |---|---|
 | Domain & genre calibration (Anti-geek cosplay) | `references/modes/genre-calibration.md` |
-| Curated material themes & locked art direction | `references/craft/themes-catalog.md` |
+| Concrete structural layouts & anti-1px cage | `references/craft/composition-patterns.md` |
+| Real-world visual benchmarks & rendered DOMs | `references/visuals/` (13 live domains) |
+| Curated material themes (Greenfield reference) | `references/craft/themes-catalog.md` |
 | Waivable defaults & waiver syntax | `references/reflexes.md` |
 | Typography, line-height & tabular numbers | `references/craft/typography.md` |
-| Color tokens, 60-30-10 & elevation | `references/craft/color-surfaces.md` |
+| Color tokens, single neutral family & elevation | `references/craft/color-surfaces.md` |
 | Micro-interactions & GPU motion | `references/craft/motion.md` |
 | Native surfaces (selection, caret, scrollbars) | `references/craft/browser-surfaces.md` |
-| 50% reduction, active verbs & i18n | `references/copy-i18n.md` |
+| 50% reduction, active verbs & natural i18n | `references/copy-i18n.md` |
 | Responsive reflow, dvh & touch targets | `references/mobile-responsive.md` |
 | WCAG 2.2 AA contrast & keyboard operability | `references/accessibility.md` |
-| The Data State Quad & mutation feedback | `references/states-feedback.md` |
-| Anti-convergence, 4 Waves of Tells & Mirror Test | `references/divergence.md` |
+| The Data State System & mutation feedback | `references/states-feedback.md` |
+| Anti-convergence & layout diversity | `references/divergence.md` |
 | Structured UI audit matrix | `references/redesign-audit.md` |
 
 ---
@@ -109,9 +102,10 @@ Never split the difference into cosmetic polish on a discarded look:
 ## 6. Verification & Handoff Sweep
 
 Before completing any UI task, run this mechanical check:
-1. **Reference Compliance:** Confirm constraints from `references/modes/genre-calibration.md`, `references/craft/themes-catalog.md`, and target mode were strictly applied.
+1. **Brand & Reference Compliance:** Confirm project tokens were respected (or greenfield constraints followed). Verify zero clumsy literal translations or meta-jargon leaks.
 2. **Finish Gate Sweep:** Verify zero text clipping (+30% expansion buffer), zero awkward text wraps, and 4px/8px spacing grid consistency.
-3. **State Quad:** Loading skeleton, empty state, error with retry, and populated data are all handled.
-4. **Pending Feedback:** Buttons disable and display feedback during ongoing mutations.
-5. **Contrast & Focus:** Verify keyboard tab flow and high-contrast `:focus-visible` styling.
-6. **Lint Check:** Verify changes against `hooks/lib/known-ui-slop-patterns.json`.
+3. **Visual Verification (`asc preview`):** If a local dev server is running or an HTML prototype exists, run `asc preview <url|file> [--mobile]` to inspect the rendered visual balance before handoff.
+4. **Data States:** Loading skeleton, empty state, error with retry, and populated data are all handled.
+5. **Pending Feedback:** Buttons disable and display feedback during ongoing mutations.
+6. **Contrast & Focus:** Verify keyboard tab flow and high-contrast `:focus-visible` styling.
+7. **Lint Check:** Verify changes against `hooks/lib/known-ui-slop-patterns.json`.

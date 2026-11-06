@@ -80,80 +80,89 @@ Examples of strong signature elements:
 
 ---
 
-## 5. The Three Waves of AI Tells (Chronological Slop Registry)
+## 5. Common Layout & Aesthetic Pitfalls
 
-Slop is not static. As soon as AI models are instructed to avoid one set of clichés, they converge on the next fashionable alternative.
+Generic generative output typically falls into predictable styling clusters:
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│           THE FOUR WAVES OF AI DESIGN TELLS            │
+│           GENERIC LAYOUT CLUSTERS & HABITS             │
 ├────────────────────────────────────────────────────────┤
-│ Wave 1 (2023–2024): The Neon Starter Pack              │
-│ Violet/cyan gradients, glassmorphism, floating drop    │
-│ shadows, 3 identical cards with icon chips, emoji dots.│
+│ 1. The Gradient & Glow Default                         │
+│ Violet/cyan linear gradients, diffuse neon halos,      │
+│ identical 3-card rows with generic icon boxes.         │
 ├────────────────────────────────────────────────────────┤
-│ Wave 2 (2025): The Pseudo-Technical Bento              │
-│ Uppercase tracked eyebrows, pill badges ("Beta"),      │
-│ bento card grids, dark canvas with neon ambient halos. │
+│ 2. The Pseudo-Technical Bento                          │
+│ Uppercase tracked-out labels, pill badges, and dark    │
+│ bento grids applied indiscriminately to all products.  │
 ├────────────────────────────────────────────────────────┤
-│ Wave 3 (2025–2026): "The Fix That Became the Look"     │
-│ Yellow-cream parchment (#FDFBF7) + terracotta/rust,   │
-│ giant italic serif display, broadsheet newspaper grids,│
-│ performative index numbers (01 / 02), fake coordinates.│
+│ 3. The Unprompted Editorial Default                    │
+│ Yellow-cream backgrounds (#FDFBF7), oversized italic   │
+│ serifs, and artificial statutory broadsheet dividers.  │
 ├────────────────────────────────────────────────────────┤
-│ Wave 4 (2026): The Geek / Terminal Cosplay             │
-│ ASCII art charts, pseudo-telemetry consoles, fake dark │
-│ terminal frames forced onto non-developer products.    │
+│ 4. Misplaced Monospace & Terminal Containers           │
+│ Terminal window frames, prompt symbols ($), and ASCII  │
+│ charts injected into ordinary non-developer workflows. │
+├────────────────────────────────────────────────────────┤
+│ 5. The Over-Constrained Wireframe                      │
+│ Rigid 1px hairline grids and dense tables forced onto  │
+│ public homepages, stripping all visual pacing.         │
 └────────────────────────────────────────────────────────┘
 ```
 
-### 5.1 Defending Against Wave 3 (Editorial Slop)
-The remedy published for Wave 1 and 2 was "warm it up and make it editorial". Models adopted this wholesale, making warm editorial an instantly recognizable AI tell:
-- **Terracotta & Cream Monoculture:** Banned as an unprompted AI reflex. Warmth must come from low-chroma stone, authentic product photography, or deep rich ink—not default yellow-cream backgrounds paired with rust orange.
-- **Oversized Italic Serif Cliché:** Do not use italic serif display as a superficial shortcut to "luxury" or "premium" unless the client's actual brand specifically requires it.
-- **Broadsheet Cosplay:** Hairline 1px borders dividing zero-radius dense columns to mimic an 1890s newspaper is an artificial costume. Structure must emerge from clear spatial scale and tonal contrast.
-- **Performative Agency Metadata:** Banned decorative index numbering (`01`, `02`, `(001)`), fake coordinates (`37.77° N`), and version stamps (`©2026 — Scroll`) that convey zero operational data.
+### 5.1 Excessive Serif & Parchment Surfaces
+Editorial typography must serve products with genuine long-form prose or literary context:
+- **Terracotta & Cream Monoculture:** Warmth must come from low-chroma neutral tones, authentic imagery, or deep ink—not default yellow-cream backgrounds paired with rust orange.
+- **Oversized Italic Serif Display:** Do not use italic serif display as a superficial shortcut to "luxury" or "premium" unless the client's actual brand specifically requires it.
+- **Artificial Broadsheet Grids:** Dense hairline rules dividing zero-radius columns to mimic an archival newspaper is an artificial costume. Structure must emerge from spatial scale and tonal contrast.
+- **Performative Metadata:** Omit decorative index numbering (`01`, `02`, `(001)`), fake coordinates (`37.77° N`), and version stamps (`©2026 — Scroll`) that convey zero operational data.
 
-### 5.2 Defending Against Wave 4 (Geek & Terminal Cosplay)
-When models are forbidden from building generic cards or warm editorial broadsheets, they frequently overcorrect by turning *every* application into a cyberpunk or terminal telemetry dashboard:
-- **Hard Ban on Non-Developer Terminals:** Never enclose ordinary educational, institutional, or business data inside a fake terminal window with prompt symbols (`$`, `>`).
+### 5.2 Misplaced Monospace & Terminal Containers
+When models attempt to convey technical competence, they frequently force developer aesthetics onto general software:
+- **No Non-Developer Terminals:** Never enclose ordinary educational, institutional, or business data inside a fake terminal window with prompt symbols (`$`, `>`).
 - **No ASCII Charts or Brackets:** Never generate ASCII art radar charts (`/\`, `[■■■□□]`), pseudo-status brackets (`[STATUS: 112]`), or terminal line-drawings. Use semantic HTML5 `<progress>` elements, styled SVG bars, and clean tabular typography.
-- **Zero Pseudo-Telemetry Jargon:** Never label normal administrative or assessment features with fake aerospace/hacker jargon ("telemetry console", "neural assessment engine", "quantum telemetry"). Call it what it is plainly in human language.
+- **Plain Technical Vocabulary:** Never label normal administrative or assessment features with exaggerated jargon ("telemetry console", "neural assessment engine"). Use the genuine domain terms established in the codebase.
+
+### 5.3 Over-Constrained Border Dividers
+When avoiding card grids, models often collapse into the opposite extreme: wrapping every entity and summary item in continuous `border divide-y` matrices:
+- **Selective Borders:** Restrict dense table borders to genuine tabular datasets. Never force committee bios, team rosters, or public feature overviews into spreadsheet cell grids (`border-t border-l border-r border-b`).
+- **Surface Contrast Rhythm:** Separate public sections with generous vertical space (`py-16 lg:py-24`) and full-bleed background shifts (e.g., transition from deep brand grounding to crisp light paper), not continuous wireframe border lines.
+- **Direct Technical Prose:** Deliver clean, production-ready design decisions directly without citing internal rule names or theoretical frameworks.
 
 ---
 
-## 6. Substance Over Restraint (Anti-Sterile Empty Voids)
+## 6. Substance Over Restraint (Avoiding Sterile Layouts)
 
-Stripping away slop ornaments (cards, borders, badges, gradients) is only the first half of design engineering.
+Stripping away decorative clutter is only the first half of design engineering.
 
 > **THE SUBSTANCE INVARIANT:**
-> A page that loses its decorative clutter without gaining substantive weight becomes an uninspired, sterile wireframe. Users and jurors rightly prefer a rich interface with minor tells over an empty, depressing void.
+> A page that loses its decorative clutter without gaining substantive weight becomes an uninspired, sterile wireframe. Users and reviewers rightly prefer a rich interface over an empty void.
 
-### How to Build Substance Without Slop
+### How to Build Substance Without Clutter
 1. **Bold Typographic Scale Disparity:** Set primary headlines with dramatic scale confidence (e.g. `text-5xl` or `text-6xl` bold display paired with tight `leading-[1.1]`, balanced against crisp `text-sm` body).
-2. **Full-Field Color Anchors:** Instead of scattering small floating cards, ground layouts with full-bleed background tone shifts (e.g., transitioning from a clean light canvas into a deep, tinted section floor).
+2. **Full-Field Color Anchors:** Instead of scattering small floating boxes, ground layouts with full-bleed background tone shifts (e.g., transitioning from a clean light canvas into a deep, tinted section floor).
 3. **Authentic Interface Fragments:** For software products, construct working, interactive HTML/CSS UI components (a data table with real rows, an interactive calculation filter, or live code tabs) rather than empty illustrations or placeholder diagrams.
 
 ---
 
-## 7. The Card-Soup Syndrome & Unified Spatial Canvas
+## 7. Layout Containers vs. Discrete Cards
 
-The most prevalent tell of generative AI frontends in 2026 is **The Card-Soup Syndrome (Archipelago of Floating Cards)**.
+A common flaw in generated layouts is wrapping every page section in floating rounded card boxes.
 
-### 7.1 What is Card-Soup?
-Because LLMs are trained on millions of generic Tailwind and component library examples, their immediate probabilistic reflex when laying out any section is to wrap it inside:
+### 7.1 Container Roles
+Because generative models encounter millions of component snippets, they frequently wrap top-level sections inside:
 `<div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">`
 
-When applied across a full screen, the layout collapses into 5–8 disconnected white boxes floating on a grayish background. To human eyes, this immediately screams "low-effort AI template".
+When applied across a full screen, the layout collapses into disconnected white boxes floating on a grayish background.
 
-### 7.2 The Structural Rule: Cards vs. Spatial Architecture
+### 7.2 Structural Rules: Sections vs. Discrete Items
 - **Cards are strictly for discrete, interchangeable, dynamic items:** Product catalog grids, kanban task cards, or gallery thumbnails.
-- **Cards are FORBIDDEN as structural section wrappers:** Never wrap an application header, tab bar, left workflow rail, or primary data table in separate, floating rounded boxes!
+- **Forbidden for Structural Wrappers:** Never wrap an application header, tab bar, left workflow rail, or primary data table in separate, floating rounded boxes.
 
-### 7.3 The Unified Spatial Canvas Invariant
-In professional human-crafted software (Linear, Stripe, Vercel, GitHub):
+### 7.3 Unified Surface Discipline
+In professional software:
 1. **Single Cohesive Plane:** The application is housed in a unified spatial sheet or integrated rails, not an archipelago of floating islands.
-2. **Hairline Boundaries:** Spatial separation is established through clean 1px borders (`border-r border-slate-200`, `divide-y divide-slate-100`) and subtle background tonal shifts (`#f8fafc` canvas background $\to$ `#ffffff` primary sheet $\to$ `#fcfcfd` auxiliary rail).
-3. **High Data-to-Padding Ratio:** Tables must not be padded with bloated 24px–32px empty space. Use compact, scannable cell heights ($10\text{px}–14\text{px}$ vertical padding) with tabular monospace figures (`font-mono tabular-nums`).
+2. **Hairline Boundaries:** Spatial separation is established through clean dividers (`border-r border-border`, `divide-y divide-border`) and subtle background tonal shifts (`bg-background` $\to$ `bg-card` $\to$ `bg-muted`).
+3. **High Data-to-Padding Ratio:** Tables must not be padded with bloated empty space. Use compact, scannable cell heights ($10\text{px}–14\text{px}$ vertical padding) with tabular monospace figures (`font-mono tabular-nums`).
 
 

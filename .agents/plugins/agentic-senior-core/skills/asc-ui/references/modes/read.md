@@ -4,6 +4,10 @@ Use for: Documentation, API references, technical blogs, guides, knowledge bases
 
 > **Core Principle:** The visitor understands something. Structure for sustained comprehension, visual calm, and rapid scanning. The reading experience must minimize eye fatigue while providing effortless navigation through dense hierarchies.
 
+> **Visual Reference Benchmarks:**
+> - Documentation & API Reference: `references/visuals/real-mintlify.png` (`real-mintlify-dom.json`)
+> - Product Manifesto & Long-Form Craft: `references/visuals/real-linear.png` (`real-linear-dom.json`)
+
 ---
 
 ## 1. Ergonomic Reading Measure & Spacing

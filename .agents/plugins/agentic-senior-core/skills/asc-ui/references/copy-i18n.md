@@ -89,19 +89,35 @@ An operational error message must never produce a dead end or display raw intern
 
 ---
 
-## 6. Single-Language Purity & Anti-Gado-Gado
+## 6. Single-Language Consistency & Localization
 
-Interfaces must maintain strict language purity. Mixing two languages within the same surface causes cognitive friction and feels unpolished.
+Interfaces and developer communications must maintain strict language purity without robotic or literal translation awkwardness.
 
 ### 6.1 Strict Monolingual Surface
 Choose one language for the entire surface and enforce it across headings, labels, errors, and tooltips:
 - **English UI:** All copy, actions, and timestamps in English.
-- **Indonesian UI:** All copy, actions, and timestamps in standard Indonesian (KBBI/PUEBI).
+- **Indonesian UI:** All copy, actions, and timestamps in natural, standard Indonesian (KBBI/PUEBI).
 
-### 6.2 Ban Hybrid Neologisms (Indonesian Context)
-Never prefix Indonesian grammatical affixes (`di-`, `meng-`, `ter-`, `pe-`) onto raw English stems:
+### 6.2 Codebase Lexicon Supremacy (Anti-Hallucinated Naming)
+Before naming navigation menus, section titles, table columns, or actions in an existing codebase, inspect the project's models, controllers, and view variables:
+- **Respect established domain terms:** Always adopt the exact nouns established in the repository's models, routes, and translations. Never substitute recognized project nouns with unprompted external synonyms.
+- Use the actual terminology the organization and developers already use in their schema and UI.
 
-| Hybrid Neologism (Banned) | Standard Indonesian | Pure English Alternative |
+### 6.3 Ban Robot Translations & Meta-Jargon Parens
+In localized interface and review text:
+1. **No clumsy literal translations of English layout terms:**
+   - Do NOT translate *drawer* into awkward calques; write natural native labels (e.g. "panel samping" or "detail").
+   - Do NOT translate *modal* literally; write natural functional terms (e.g. "dialog" or "popup").
+   - Do NOT translate *hairline border* as literal anatomy; write "garis tipis 1px" or "garis pemisah".
+   - Do NOT translate layout stages into literal theatrical terms; write "layout dua kolom" or "area utama".
+2. **No parenthetical English jargon leaks:**
+   - Never write sentences that append raw English terms in parentheses as translation glosses.
+   - Write clear, natural localized prose without meta-framework disclaimers.
+
+### 6.4 Ban Hybrid Neologisms
+Never prefix local grammatical affixes onto foreign language stems:
+
+| Hybrid Neologism (Banned) | Standard Native Alternative | Pure English Alternative |
 |---|---|---|
 | `di-submit` | `Dikirim` / `Diserahkan` | `Submitted` |
 | `meng-generate` | `Menghasilkan` / `Membuat` | `Generating` |

@@ -36,7 +36,7 @@ Never fix a bug by immediately editing production code. Follow this deterministi
 - Edit production code to eliminate the bug.
 - Run the reproduction test fresh: it must pass with exit code 0.
 
-### Step 3: The Regression Proof Gate (Revert & Confirm)
+### Step 3: Regression Verification (Revert & Confirm)
 To prove that the test actually guards against the bug:
 1. Temporarily comment out or revert the fix in production code.
 2. Run the test fresh: **The test must fail.**
@@ -45,7 +45,7 @@ To prove that the test actually guards against the bug:
 
 ---
 
-## 2. Claim Verification Gate
+## 2. Claim Verification Standards
 
 Every claim regarding test results or bug fixes requires concrete execution evidence:
 

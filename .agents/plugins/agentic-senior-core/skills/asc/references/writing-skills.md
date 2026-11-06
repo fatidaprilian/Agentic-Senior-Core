@@ -4,7 +4,7 @@ Engineering guidelines for creating high-performance, token-efficient skills for
 
 ---
 
-## 1. The Discovery & Routing Trap
+## 1. Skill Discovery & Trigger Precision
 
 Research into agent skill selection shows that models degrade in tool and skill routing when descriptions summarize internal workflows.
 

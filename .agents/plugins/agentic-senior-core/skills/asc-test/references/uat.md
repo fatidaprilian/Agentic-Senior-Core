@@ -42,7 +42,7 @@ Verification records, testing matrices, and UAT notes belong in the agent conver
 
 ---
 
-## 4. The Edge Case Quad
+## 4. Boundary & Edge Case Categories
 
 Never sign off on acceptance testing by verifying only the primary happy path. Every scenario must be verified against four operational vectors:
 

@@ -1,6 +1,6 @@
 # Curated Design Themes Catalog (16 Production Material Systems)
 
-> **Core Invariant:** Never allow an LLM to invent an ad-hoc color palette or arbitrary font pairing from scratch. Unconstrained models converge onto the statistical median: muddy slate-indigo, generic SaaS card soup, or gimmick cosplay. Lock visual styling to one of **16 verified, domain-calibrated material themes** across **8 real-world software domains** (2 contrasting directions per domain).
+> **Core Invariant:** Never allow an LLM to invent an ad-hoc color palette or arbitrary font pairing from scratch on new greenfield projects. Unconstrained models converge onto the statistical median: muddy slate-indigo, generic SaaS card soup, or gimmick cosplay. On **Greenfield (new from scratch)** builds, lock visual styling to one of **16 verified, domain-calibrated material themes** across **8 real-world software domains** (2 contrasting directions per domain). If working in an existing codebase (*Brownfield*) with defined tokens in `app.css` or Tailwind config, **DO NOT override project tokens with this catalog**—respect and calibrate the project's authentic brand palette instead.
 
 ---
 
@@ -21,12 +21,12 @@ Select the domain matching the product's real-world purpose, then pick one of it
 
 ---
 
-## 2. Anti-Gimmick Exclusion Filter (Why Cosplay Themes Are Banned)
+## 2. Production Constraints & Accessibility Requirements
 
-External theme packs frequently confuse novelty with craft—producing a **second wave of AI slop** that breaks usability and production budgets. The following patterns are strictly excluded from ASC:
-1. **Cosplay & Novelty Surfaces:** Medieval blackletter parchment, green/amber CRT phosphor scanlines, two-drum pink/blue risograph with no black ink, torn-paper edges, and die-cut sticker outlines.
-2. **Decorative Runtime Shaders:** Mandatory `<canvas>` or WebGL background noise fields, drifting particle hazes, and SVG `feTurbulence` grain overlays sitting over running body text.
-3. **Broken Font & Asset Dependencies:** Fontshare-only families (`Sentient`, `General Sans`, `Switzer`, `Cabinet Grotesk`, `Boska`, `Chillax`, `Ranade`) that 404 on Google Fonts CDNs, and unbundled local texture URLs (`url("cotton.svg")`). Every font in this catalog is verified on Google Fonts with clean system fallbacks.
+Theme choices must satisfy real-world usability and production budgets. The following patterns are excluded:
+1. **Gimmick Surfaces:** Medieval blackletter parchment, CRT phosphor scanlines, two-drum pink/blue risograph with no black ink, torn-paper edges, and die-cut sticker outlines.
+2. **Runtime Shaders:** Mandatory `<canvas>` or WebGL background noise fields, drifting particle hazes, and SVG `feTurbulence` grain overlays sitting over running body text.
+3. **Broken Font & Asset Dependencies:** Unbundled font packages that fail to load on standard web CDNs, and unbundled local texture URLs (`url("cotton.svg")`). Every font in this catalog is verified on Google Fonts with clean system fallbacks.
 4. **Low-Contrast Mid-Tone Grounds:** Raw `70%` grey or `35%` saturated blue full-app drenches that fail WCAG 2.2 AA `4.5:1` contrast on secondary metadata.
 
 ---
@@ -34,7 +34,7 @@ External theme packs frequently confuse novelty with craft—producing a **secon
 ## 3. Domain 1 — Civic, Academic & Institutional
 
 ### `01. Sovereign Slate`
-*Best for: School evaluations (SAURAN), accreditation dossiers, compliance portals, municipal registries.*
+*Best for: Institutional evaluations, accreditation dossiers, compliance portals, municipal registries.*
 - **Surface Tokens:** Canvas `#f8fafc` (`oklch(98.4% 0.003 248)`) · Sheet `#ffffff` · Rail `#f1f5f9` · Rule `1px solid #e2e8f0`
 - **Ink Tokens:** Primary `#0f172a` · Secondary `#334155` · Muted `#64748b`
 - **Accent & Semantic:** Deep Pine `#0f766e` (`oklch(51% 0.096 186)`), Soft `#f0fdfa` · Status: Emerald `#047857`, Amber `#b45309`, Rose `#be123c`
@@ -191,8 +191,9 @@ External theme packs frequently confuse novelty with craft—producing a **secon
 
 ---
 
-## 11. Selection & Lock Protocol
+## 11. Selection & Lock Protocol (Greenfield Only)
 
 1. **Match Domain First:** Map the user's product to one of the 8 domains in Section 1. Never cross-contaminate genres (e.g., never apply `09. Graphite Instrument` dark terminal aesthetics to `01. Sovereign Slate` civic portals).
 2. **Alternate Within Domain:** Choose between Option A (cool/structural) and Option B (warm/editorial) based on brand tone or to diverge from recent builds.
-3. **Declare Lock Explicitly:** State `THEME LOCKED: <ID. Name>` during pre-flight and translate all tokens into CSS custom properties (`--bg-canvas`, `--bg-surface`, `--text-ink`, `--border-rule`, `--accent-primary`) before writing component markup.
+3. **Brownfield Preemption:** If the repository already defines brand tokens (e.g., Tailwind colors, CSS variables in `globals.css` or `app.css`), skip this catalog completely. Do not override established project palettes.
+4. **Silent Internal Token Application:** Translate selected tokens directly into CSS custom properties (`--bg-canvas`, `--bg-surface`, `--text-ink`, `--border-rule`, `--accent-primary`) in code. Never output promotional or meta-jargon phrases to the user.

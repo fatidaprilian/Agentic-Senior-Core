@@ -4,6 +4,12 @@ Use for: Landing pages, marketing websites, product launch pages, and pricing sc
 
 > **Core Principle:** The visitor decides and acts; design is the product. Earn attention and conversion with bold, authentic conviction. Ambition is expressed through scale, typographic contrast, and proof of reality—never through fluffy filler or generic card stacks.
 
+> **Visual Reference Benchmarks:**
+> - High-Impact Brand Stage: `references/visuals/real-vercel.png` (`real-vercel-dom.json`)
+> - Financial Infrastructure / Multi-Tier Flow: `references/visuals/real-stripe.png` (`real-stripe-dom.json`)
+> - Editorial Developer Infrastructure: `references/visuals/real-resend.png` (`real-resend-dom.json`)
+> - Storefront / Catalog Filter Stage: `references/visuals/real-marketplace.png` (`real-marketplace-dom.json`)
+
 ---
 
 ## 1. The Viewport Budget & The 80-Word Rule
@@ -18,13 +24,13 @@ Use for: Landing pages, marketing websites, product launch pages, and pricing sc
 
 ---
 
-## 2. In-Memory Direction Dealer (4 Structural Postures)
+## 2. Structural Layout Blueprints (4 Compositions)
 
-When building or redesigning a Persuade surface, never let the LLM default to the statistical average of marketing pages. Choose one of four researched structural postures based on the project's real material:
+When building or redesigning a Persuade surface, select a deliberate structural layout matching the product's real content:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                        THE 4 STRUCTURAL POSTURES                       │
+│                      THE 4 STRUCTURAL BLUEPRINTS                       │
 ├────────────────────────────────────────────────────────────────────────┤
 │ 1. Asymmetric Stage (65/35 Split): Left-anchored heavy typography      │
 │    offset against an interactive preview, ROI calculator, or live UI. │
@@ -37,15 +43,15 @@ When building or redesigning a Persuade surface, never let the LLM default to th
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
-- **Posture Selection Protocol:**
-  - If real software interface exists $\to$ **Posture 3 (Product-Led Canvas)**.
-  - If quantitative savings or enterprise value proposition $\to$ **Posture 1 (Asymmetric Stage)**.
-  - If technical documentation, whitepaper, or architectural manifesto $\to$ **Posture 2 (The Monolith Ledger)**.
-  - If performance benchmarks, protocol comparisons, or telemetry proof $\to$ **Posture 4 (Kinetic Proof Stream)**.
+- **Blueprint Selection:**
+  - If real software interface exists $\to$ **Blueprint 3 (Product-Led Canvas)**.
+  - If quantitative savings or enterprise value proposition $\to$ **Blueprint 1 (Asymmetric Stage)**.
+  - If technical documentation, whitepaper, or architectural manifesto $\to$ **Blueprint 2 (The Monolith Ledger)**.
+  - If performance benchmarks, protocol comparisons, or telemetry proof $\to$ **Blueprint 4 (Kinetic Proof Stream)**.
 
 ### Structural Blueprints (Enforced DOM Geometries)
 
-#### Posture 1: Asymmetric Stage (65/35 Split)
+#### Blueprint 1: Asymmetric Stage (65/35 Split)
 - **Container:** `grid grid-cols-1 lg:grid-cols-12 gap-12 items-center`
 - **Left Lead (7 cols):** `lg:col-span-7 space-y-6 text-left`
   - Display headline: `text-5xl lg:text-7xl font-bold tracking-tight leading-[1.05]`
@@ -55,14 +61,14 @@ When building or redesigning a Persuade surface, never let the LLM default to th
   - Authentic artifact, interactive widget, or live score/ROI card: `rounded-2xl border border-border/80 bg-card p-6 shadow-sm`
   - Zero equal-weight card grids below.
 
-#### Posture 2: The Monolith Ledger
+#### Blueprint 2: The Monolith Ledger
 - **Container:** `max-w-4xl mx-auto px-6 py-16 divide-y divide-border/60`
 - **Tabular Rows:** Each entity or program is a horizontal row: `py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline`
   - Category / Date: `md:col-span-3 text-xs font-semibold tracking-wider uppercase text-muted-foreground`
   - Heading & Data: `md:col-span-5 text-xl font-bold text-foreground`
   - Detail & Action: `md:col-span-4 text-sm text-muted-foreground`
 
-#### Posture 3: Product-Led Canvas
+#### Blueprint 3: Product-Led Canvas
 - **Container:** `flex flex-col items-center text-center max-w-6xl mx-auto px-6 pt-16 pb-20`
 - **Compact Hero Frame:** `max-w-2xl space-y-4 mb-10`
   - Headline: `text-4xl sm:text-6xl font-extrabold tracking-tight`
@@ -72,19 +78,22 @@ When building or redesigning a Persuade surface, never let the LLM default to th
 
 ---
 
-## 3. Anti-Cardocalypse & Visual Pacing
+## 3. Composition Variety & Content Rhythm
 
-- **Banned 3-Card Symmetrical Grid:**
-  - Never default to a 3-column grid where every card has identical dimensions, a Lucide icon in a pastel square, a bold title, and two lines of gray text.
+- **Banned Symmetrical 3-Card Rows:**
+  - Never default to a 3-column row where every item has identical dimensions, a generic icon box, a bold title, and two lines of gray text.
   - Instead, vary composition according to content weight:
     - *Flagship Feature:* Full-width container or asymmetric 8/4 split showing the primary capability in action.
     - *Supporting Capabilities:* Compact 2-column checklist or a structured comparison table.
-- **The Signature Element:**
-  - Every Persuade surface may feature at most **one memorable signature element** on the first screen that directly reflects the product domain:
+- **Anti-Spreadsheet Wireframe on Public Landing Pages:**
+  - Do NOT convert a public home or landing page into a 100+ row raw data dump. Provide structured category overviews with focused preview panels (see `references/craft/composition-patterns.md`).
+  - Do NOT wrap human directories or committees into spreadsheet border matrices (`border-t border-b border-l border-r`); use clean spacing, authentic badges, and natural typographic flow.
+- **The Focal Signature Element:**
+  - Every Persuade surface may feature at most **one memorable focal element** on the first screen that directly reflects the product domain:
     - An interactive calculator or estimator that recalculates results in real time.
     - An unedited, high-resolution product screenshot showing real user data.
     - A live interactive UI fragment (e.g., an assessment scorecard preview for educational tools, a filterable ledger row for accounting tools).
-  - **Hard Ban on Faux-Terminal Cosplay:** Never inject terminal prompts, ASCII art, or pseudo-telemetry consoles into non-developer products.
+  - **No Artificial Terminals:** Never inject terminal prompts, ASCII art, or pseudo-telemetry consoles into non-developer products.
   - A giant counter of marks or animated numbers is a decorative reflex, not a signature.
 
 ---
