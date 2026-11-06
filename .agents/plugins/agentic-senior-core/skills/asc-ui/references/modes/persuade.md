@@ -30,7 +30,7 @@ When building or redesigning a Persuade surface, never let the LLM default to th
 │    offset against an interactive preview, ROI calculator, or live UI. │
 │ 2. The Monolith Ledger: Single-column dense reading measure with       │
 │    full-bleed horizontal rows, hairline dividers, and deep ink.        │
-│ 3. Product-Led Canvas: Live application interface or CLI terminal     │
+│ 3. Product-Led Canvas: Live application interface or workflow canvas   │
 │    dominates the first viewport; copy recedes to tightly frame it.     │
 │ 4. Kinetic Proof Stream: Alternating proof blocks driven by verifiable │
 │    benchmarks, architectural diagrams, and real data payloads.         │
@@ -38,7 +38,7 @@ When building or redesigning a Persuade surface, never let the LLM default to th
 ```
 
 - **Posture Selection Protocol:**
-  - If real software or CLI exists $\to$ **Posture 3 (Product-Led Canvas)**.
+  - If real software interface exists $\to$ **Posture 3 (Product-Led Canvas)**.
   - If quantitative savings or enterprise value proposition $\to$ **Posture 1 (Asymmetric Stage)**.
   - If technical documentation, whitepaper, or architectural manifesto $\to$ **Posture 2 (The Monolith Ledger)**.
   - If performance benchmarks, protocol comparisons, or telemetry proof $\to$ **Posture 4 (Kinetic Proof Stream)**.
@@ -52,7 +52,7 @@ When building or redesigning a Persuade surface, never let the LLM default to th
   - Subtitle: `text-lg text-muted-foreground max-w-xl`
   - Actions: `flex flex-wrap items-center gap-4 pt-2`
 - **Right Artifact (5 cols):** `lg:col-span-5`
-  - Authentic artifact, interactive widget, or live ROI card: `rounded-2xl border border-border/80 bg-card p-6 shadow-sm`
+  - Authentic artifact, interactive widget, or live score/ROI card: `rounded-2xl border border-border/80 bg-card p-6 shadow-sm`
   - Zero equal-weight card grids below.
 
 #### Posture 2: The Monolith Ledger
@@ -67,8 +67,8 @@ When building or redesigning a Persuade surface, never let the LLM default to th
 - **Compact Hero Frame:** `max-w-2xl space-y-4 mb-10`
   - Headline: `text-4xl sm:text-6xl font-extrabold tracking-tight`
   - 1-sentence value claim + 1 primary action.
-- **Hero Canvas (70% Viewport Lead):** `w-full rounded-2xl border border-border/80 bg-slate-950 p-2 shadow-2xl`
-  - Real interface fragment or live demo canvas dominating the first viewport.
+- **Hero Canvas (70% Viewport Lead):** `w-full rounded-2xl border border-border/80 bg-card p-3 shadow-xl`
+  - Real interface fragment or live demo canvas dominating the first viewport. Respect project theme tokens; never force artificial dark backgrounds or terminal frames unless the target product is an actual CLI/developer tool.
 
 ---
 
@@ -80,15 +80,16 @@ When building or redesigning a Persuade surface, never let the LLM default to th
     - *Flagship Feature:* Full-width container or asymmetric 8/4 split showing the primary capability in action.
     - *Supporting Capabilities:* Compact 2-column checklist or a structured comparison table.
 - **The Signature Element:**
-  - Every Persuade surface must feature exactly **one memorable signature element** on the first screen:
-    - An interactive pricing slider that recalculates savings in real time.
-    - A live terminal code editor running the SDK quickstart.
+  - Every Persuade surface may feature at most **one memorable signature element** on the first screen that directly reflects the product domain:
+    - An interactive calculator or estimator that recalculates results in real time.
     - An unedited, high-resolution product screenshot showing real user data.
+    - A live interactive UI fragment (e.g., an assessment scorecard preview for educational tools, a filterable ledger row for accounting tools).
+  - **Hard Ban on Faux-Terminal Cosplay:** Never inject terminal prompts, ASCII art, or pseudo-telemetry consoles into non-developer products.
   - A giant counter of marks or animated numbers is a decorative reflex, not a signature.
 
 ---
 
-## 3. Material Honesty & Proof of Reality
+## 4. Material Honesty & Proof of Reality
 
 - **Zero Fabricated Evidence:**
   - Never invent customer quotes, fake partner logos ("Acme Corp, Pied Piper"), or fabricated performance metrics ("10,000+ teams trust us").

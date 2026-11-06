@@ -1,5 +1,23 @@
 # Changelog
 
+## 6.16.4
+
+### Added & Hardened
+- **Cross-Platform CLI Execution & Subcommands (`asc` & `ascx`)**:
+  - **Windows Spawn & Shim Resolver (`lib/cli/ascx/windows-spawn.mjs`)**: Resolves `.exe`/`.com` directly, wraps `.cmd`/`.bat` shims via `cmd.exe /d /s /c` with `windowsVerbatimArguments: true` (eliminating Windows CVE-2024-27980 `ENOENT`/`EINVAL` spawn failures and Node 22/24 `[DEP0190]` warnings), executes `.ps1` scripts, CMD builtins, and PowerShell cmdlets, routes `asc`/`ascx` directly to `process.execPath`, and prepends local `node_modules/.bin` paths.
+  - **Zero-Dependency Clone Scanner (`asc dedup`)**: Added `lib/cli/commands/dedup.mjs` scanning token windows to distinguish Rule-of-Three violations (`>= 3` locations) from `2x` advisory pairs while honoring `asc-dedup:ignore -- <reason>` and conventional framework route filenames (`page.tsx`, `layout.tsx`).
+  - **Baseline Preference Seeder (`asc bootstrap`)**: Added `lib/cli/commands/bootstrap.mjs` to seed curated UI and prose anti-slop rules into `.agents/adaptive_preferences.json`.
+  - **Zero-Argument Global Auto-Detection (`asc global`)**: Running `asc global` without flags now auto-detects installed AI coding hosts on the machine and synchronizes global rules, skills, and the Global Git Hook immediately after `npm install -g`.
+  - **Hook & Preview Hardening**: Fixed macOS/Linux default browser openers and `file://` headless screenshot URLs in `asc preview`, and added `--yes` to `npx jscpd@5` invocations in `dedup-gate.js` and `git-hook-generator.mjs` to prevent interactive prompt hangs.
+- **7th Core Meta-Skill (`/asc-pentest`) & Advanced Verification (`/asc-test`)**:
+  - Added `/asc-pentest` (`skills/asc-pentest/SKILL.md`, `commands/asc-pentest.{md,toml}`, and 4 references: `pentest-task-tree`, `api-security-idor`, `dast-baseline`, `fuzzing-dsl`) enforcing authorization scope gates, Pentest Task Tree (PTT) state tracking, multi-principal BOLA/BFLA verification matrices, OWASP API Top 10 stateful fuzzing, and deterministic matcher-based exploit proof.
+  - Expanded `/asc-test` with `property-testing.md`, `mutation-testing.md`, and `performance-budgets.md`.
+  - Added structural and CLI verification suites in `tests/pentest-structure.test.mjs` and `tests/cli-commands.test.mjs`.
+- **16-Theme Material Catalog, Genre Calibration & Unified Spatial Canvas (`/asc-ui`)**:
+  - Expanded `references/craft/themes-catalog.md` to **16 WCAG 2.2 AA material themes across 8 software domains** (2 contrasting directions per domain with Hex + OKLCH tokens and verified Google Fonts), filtering out WebGL noise shaders, missing local SVG textures, Fontshare-only 404 fonts, and novelty cosplay surfaces.
+  - Added `references/modes/genre-calibration.md` enforcing domain-authentic aesthetics and the Purpose-Gate against unearned widgets.
+  - Codified the Unified Spatial Canvas invariant (`divide-y`, `border-r` over floating card islands), anti-sticker callouts/scorecards, and dual-navigation de-confliction across `divergence.md`, `color-surfaces.md`, and `modes/operate.md`; removed mandatory screenshot loop overhead from `asc-ui`.
+
 ## 6.16.3
 
 ### Added & Hardened

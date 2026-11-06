@@ -47,3 +47,28 @@ Grounded in: Apple HIG, Google Material Design 3, and Refactoring UI Color Strat
   - When placing secondary text on a colored or dark surface, tint the text using the parent background hue or foreground token (`text-primary-foreground/70`).
   - **Never use neutral gray text (`text-slate-400`) on a saturated or colored background.** It produces a muddy, dirty optical illusion.
 
+---
+
+## 4. Integrated Scorecards & Metric Blocks (Anti-Sticker Invariant)
+
+- **Ban The Sticker Box:** Never place an isolated white box with a thin border floating inside an already white or light header canvas. This creates an optical "detached sticker" artifact.
+- **Anchor Into Layout Chrome:**
+  - Integrate scorecards directly into the identity header rail or stage banner using a unified divider (`border-l border-border/80 pl-6`) or structural inset well (`bg-muted/40`).
+- **Semantic Tinting for Evaluation Scores:**
+  - When communicating aggregate grades (e.g. `84,20 / 100`, Predikat B):
+    - Background: subtle semantic tint (`bg-emerald-500/10` or `bg-slate-500/10`).
+    - Border: matching tinted hairline (`border border-emerald-500/20`).
+    - Typography: tabular numbers (`font-mono tabular-nums`) with clear contrast ($Display \ge 3.5\times Body$).
+  - Always position the grading scale key (e.g. `A > 85, B 71-85`) in immediate secondary proximity as muted metadata.
+
+---
+
+## 5. Contextual Inline Alerts & Callouts (The Callout Invariant)
+
+- **Never Float Warning Text Adrift:** Warning notes, disclaimers, or temporary state alerts must NEVER be dumped as raw floating text between layout sections.
+- **The Callout Invariant:** Every alert must reside in a structured callout container:
+  - Container: 1px hairline border with matching light background tint (e.g. `border border-amber-500/30 bg-amber-500/10 rounded-md p-3`).
+  - Icon Anchor: Dedicated semantic SVG icon (alert circle, triangle) aligned with first line of text.
+  - Placement: Positioned immediately above or inside the data table/form it modifies, establishing unmistakable contextual binding.
+
+

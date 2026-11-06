@@ -33,6 +33,9 @@ Before writing tests, running suites, or claiming verification:
 1. **Mandatory Ingestion (BLOCKING GATE):** Call `read_file` on the tier reference matching your testing requirement BEFORE taking action:
    - Writing unit tests / TDD cycle ➔ `references/tdd-cycle.md`
    - Behavior testing, boundary isolation, mocks/fakes ➔ `references/test-design.md`
+   - Generative property invariants & fuzzing ➔ `references/property-testing.md`
+   - Mutation testing & assertion integrity ➔ `references/mutation-testing.md`
+   - Concurrency latency & performance budgets ➔ `references/performance-budgets.md`
    - Playwright browser tests, locators, page objects ➔ `references/e2e-playwright.md`
    - Acceptance criteria, UAT checklists, edge case quads ➔ `references/uat.md`
    - Bug reproduction, root-cause verification, regression proof ➔ `references/regression-proof.md`
@@ -104,6 +107,9 @@ Select the lowest testing tier that validates the requirement:
 |---|---|
 | Red-Green-Refactor mechanics & whole-suite checks | `references/tdd-cycle.md` |
 | Behavior testing, boundary isolation & mocking | `references/test-design.md` |
+| Generative property invariants & boundary fuzzing | `references/property-testing.md` |
+| Mutation integrity score (>= 80%) & mutant triage | `references/mutation-testing.md` |
+| Latency budgets (p95 <= 150ms) & concurrency benchmarking | `references/performance-budgets.md` |
 | Playwright E2E, reconnaissance & locator hierarchy | `references/e2e-playwright.md` |
 | Given/When/Then acceptance criteria & edge case quad | `references/uat.md` |
 | 3-step bugfix verification & regression proof | `references/regression-proof.md` |
@@ -118,5 +124,6 @@ Before declaring any coding or testing task complete:
 2. **Regression Proof:** For bugfixes, confirm the test failed without the fix and passes with it.
 3. **Whole-Suite Run:** Execute the full test suite (`ascx npm test` or project test runner); confirm exit code 0.
 4. **No Assertions Weakened:** Verify no existing test assertions were deleted or commented out to simulate success.
-5. **Hermetic State:** Ensure tests clean up temporary files, database records, and environment variables.
+5. **Mutation Sanity:** For critical authorization or business logic, verify tests catch condition inversion.
+6. **Hermetic State:** Ensure tests clean up temporary files, database records, and environment variables.
 

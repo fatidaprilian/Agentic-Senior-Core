@@ -30,13 +30,15 @@ describe('UI Engineering Structure & Quality Floor', () => {
     assert.ok(content.includes('## 6. Verification & Handoff Sweep'), 'Must include Verification Sweep');
   });
 
-  it('ensures all 15 reference files exist and are non-empty', async () => {
+  it('ensures all 17 reference files exist and are non-empty', async () => {
     const references = [
+      'modes/genre-calibration.md',
       'modes/operate.md',
       'modes/persuade.md',
       'modes/read.md',
       'modes/experience.md',
       'reflexes.md',
+      'craft/themes-catalog.md',
       'craft/typography.md',
       'craft/color-surfaces.md',
       'craft/motion.md',
@@ -54,6 +56,34 @@ describe('UI Engineering Structure & Quality Floor', () => {
       const stat = await fs.stat(refPath).catch(() => null);
       assert.ok(stat !== null, `Reference file must exist: ${ref}`);
       assert.ok(stat.size > 200, `Reference file must have substantive content: ${ref} (${stat?.size} bytes)`);
+    }
+  });
+
+  it('defines all 16 domain-calibrated material themes in craft/themes-catalog.md', async () => {
+    const catalogPath = path.join(uiSkillDir, 'references', 'craft', 'themes-catalog.md');
+    const content = await fs.readFile(catalogPath, 'utf8');
+
+    const expectedThemes = [
+      '01. Sovereign Slate',
+      '02. Almanac Index',
+      '03. Editorial Ledger',
+      '04. Warm Stationery',
+      '05. Pharmacy Calm',
+      '06. Clinical Precision',
+      '07. Ink & Signal',
+      '08. Obsidian Stage',
+      '09. Graphite Instrument',
+      '10. Technical Whiteprint',
+      '11. Atelier Gallery',
+      '12. Kinetic Grid',
+      '13. Studio Proof',
+      '14. Botanical Field',
+      '15. Formwork Concrete',
+      '16. Meridian Survey',
+    ];
+
+    for (const theme of expectedThemes) {
+      assert.ok(content.includes(`### \`${theme}\``), `themes-catalog.md must define theme heading: ${theme}`);
     }
   });
 

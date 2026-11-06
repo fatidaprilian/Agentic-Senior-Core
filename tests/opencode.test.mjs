@@ -18,6 +18,7 @@ const EXPECTED_SKILLS = [
   'asc-review',
   'asc-ui',
   'asc-test',
+  'asc-pentest',
 ];
 
 describe('OpenCode Native Plugin, Rules & Skills Integration', () => {

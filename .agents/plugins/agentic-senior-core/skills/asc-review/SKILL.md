@@ -32,7 +32,7 @@ Use when reviewing PRs, diffs, commits, or newly written feature code.
 ### Review Procedure
 1. **Scope Inspection**: Run `git diff --stat` (or `git status`) to inspect modified files and line deltas.
 2. **Test-Change Correlation**: For every modified application logic file, verify that a corresponding test was updated. If logic changed without tests, flag as missing test coverage.
-3. **Deterministic Verification**: Run project linter and test suite (`ascx test` / `npm test`). Confirm exit code 0 fresh.
+3. **Deterministic Verification**: Run project linter and test suite (`ascx npm test`). Confirm exit code 0 fresh.
 4. **Severity Priority Order**:
    - **Severity 1 (Critical)**: Correctness, data corruption, auth/permission bypass, security sinks, PII leakage.
    - **Severity 2 (High)**: Action feedback failures (hanging spinners, unhandled mutations, missing error boundaries), unhandled async rejections, missing remote timeouts.

@@ -25,17 +25,20 @@ function printUsage() {
   console.log('Plugin install (always-on, no per-project files):');
   console.log('  Claude Code:  /plugin marketplace add fatidaprilian/Agentic-Senior-Core');
   console.log('  Codex CLI:    codex plugins install agentic-senior-core\n');
-  console.log('Global install (all projects, zero project files):');
-  console.log('  asc global --antigravity --codex --cline --roo --kilocode --kiro --openhands --windsurf --copilot --all\n');
+  console.log('Global install (auto-detects installed tools, zero project files):');
+  console.log('  asc global');
+  console.log('  asc global --all\n');
   console.log('Adapter install (one file per project):');
   console.log('  asc adapter --cursor --devin --cline --copilot --kiro --continue --zed --aider --kilocode --roo --openhands --windsurf --all\n');
   console.log('Commands:');
+  console.log('  global            Auto-detect and install rules to user-level (global) locations');
   console.log('  adapter           Generate instruction-tier adapter files');
-  console.log('  global            Install rules to user-level (global) locations');
+  console.log('  status            Show detected IDEs and install hints');
+  console.log('  dedup             Scan codebase for duplicate code blocks (Rule of Three)');
+  console.log('  bootstrap         List or seed anti-slop preference rules');
   console.log('  install-git-hook  Install Git pre-commit hook for duplicate code enforcement');
   console.log('  uninstall         Remove ASC adapter files and git hooks from this project');
   console.log('  clean             Remove v4 per-project artifacts');
-  console.log('  status            Show detected IDEs and install hints');
   console.log('  preview           Render zero-dependency multi-browser snapshot or preview');
   console.log('  --version         Show version');
   console.log('  --help            Show this help');
@@ -88,6 +91,18 @@ async function main() {
   if (commandArgument === 'status') {
     const { runStatusCommand } = await import('../lib/cli/commands/status.mjs');
     await runStatusCommand();
+    return;
+  }
+
+  if (commandArgument === 'dedup') {
+    const { runDedupCommand } = await import('../lib/cli/commands/dedup.mjs');
+    await runDedupCommand(commandArguments);
+    return;
+  }
+
+  if (commandArgument === 'bootstrap') {
+    const { runBootstrapCommand } = await import('../lib/cli/commands/bootstrap.mjs');
+    await runBootstrapCommand(commandArguments);
     return;
   }
 

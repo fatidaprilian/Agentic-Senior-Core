@@ -274,7 +274,7 @@ function loadDedupConfig() {
 // minimal: attempt-then-fallback — try scan directly, fall back on failure.
 // No separate --version probes. Upgrade if jscpd provides a stable JS API.
 function runJscpdScan(scanCmd, tmpDir) {
-  var binaries = ['bunx jscpd', 'npx jscpd@5', 'npx jscpd'];
+  var binaries = ['bunx jscpd', 'npx --yes jscpd@5', 'npx --yes jscpd'];
   for (var i = 0; i < binaries.length; i++) {
     try {
       execSync(binaries[i] + scanCmd, {
@@ -284,7 +284,8 @@ function runJscpdScan(scanCmd, tmpDir) {
       });
       return loadReport(tmpDir);
     } catch (_) {
-      // Try next binary
+      var partial = loadReport(tmpDir);
+      if (partial) return partial;
     }
   }
   return null;

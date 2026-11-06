@@ -51,3 +51,29 @@ Use for: Dashboards, data grids, admin consoles, editors, settings, financial le
 - **Zero Decorative Halos:**
   - Never wrap status dots or cards in glowing radial blurs (`shadow-[0_0_12px_#10b981]`). Keep indicators solid and functional.
 
+---
+
+## 4. Audit & Inspection Finding Rows (Action Affordance Invariant)
+
+- **Interactive Row Contract:**
+  - Finding rows, audit line items, and checklist items must never be rendered as dead, static text blocks.
+  - Every finding row (e.g. `FT-01: Bukti fisik belum dilampirkan`) must provide:
+    1. **Primary Action Affordance:** Explicit inline trigger button (e.g. `Periksa Bukti`, `Minta Rincian`, or expandable chevron).
+    2. **Attachment Badge:** File type badge (`PDF`, `XLSX`), byte size, and upload timestamp.
+    3. **Status Pill:** High-contrast semantic pill (`Perlu Tindak Lanjut`, `Menunggu Konfirmasi`, `Selesai`).
+    4. **Hover State:** `hover:bg-muted/40 transition-colors` across the entire row bounding box.
+
+---
+
+## 5. Dual-Navigation De-Confliction (Lenses vs Lifecycle)
+
+- **Separation of Mental Models:**
+  - **Horizontal Tabs**: View-Port Filter Lenses (switching data views, e.g. *Ringkasan*, *Rubrik Domain*, *Temuan*, *Riwayat*). These change what information is rendered on the stage.
+  - **Vertical Rail**: Immutable Lifecycle Progression (e.g. *1. Unggah Dokumen $\to$ 2. Verifikasi $\to$ 3. Penilaian $\to$ 4. Konfirmasi Fisik $\to$ 5. Rangkuman*). This reflects where the entity is in its operational state.
+- **Accenting Active Lifecycle Step:**
+  - Never let the current active step in the lifecycle rail look identical to future unstarted steps.
+  - Active step: highlighted with high-contrast accent ring or filled circle (`bg-primary text-primary-foreground`) with an active descriptor ("Tahap aktif verifikasi").
+  - Completed steps: clear muted checks (`text-emerald-600` with subtle strike or timestamp).
+  - Pending steps: muted borders (`border-border text-muted-foreground`).
+
+

@@ -69,9 +69,12 @@ Synchronize ASC rules and skills across all installed AI coding tools.
 ### CLI Utility Commands
 ```bash
 asc status          # Detect installed AI coding tools
-asc global --all    # Install global rules and smart git hook dispatcher
+asc global          # Auto-detect installed AI tools and sync global rules/skills/hooks
+asc global --all    # Force-install global rules for all supported hosts
 asc adapter --all   # Generate workspace adapters for all detected IDEs
-asc adapter --cursor # Generate adapter specifically for Cursor
+asc dedup           # Scan codebase for Rule-of-Three structural/token clones
+asc bootstrap       # Configure project UI/architecture baseline bans (.agents/adaptive_preferences.json)
+asc preview <html/> # Open static HTML mockup or capture headless browser screenshot
 asc uninstall       # Clean up adapter files and hooks
 ```
 

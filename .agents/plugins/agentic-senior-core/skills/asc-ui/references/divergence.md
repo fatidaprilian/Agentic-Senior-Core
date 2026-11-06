@@ -86,7 +86,7 @@ Slop is not static. As soon as AI models are instructed to avoid one set of clic
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│           THE THREE WAVES OF AI DESIGN TELLS           │
+│           THE FOUR WAVES OF AI DESIGN TELLS            │
 ├────────────────────────────────────────────────────────┤
 │ Wave 1 (2023–2024): The Neon Starter Pack              │
 │ Violet/cyan gradients, glassmorphism, floating drop    │
@@ -100,15 +100,25 @@ Slop is not static. As soon as AI models are instructed to avoid one set of clic
 │ Yellow-cream parchment (#FDFBF7) + terracotta/rust,   │
 │ giant italic serif display, broadsheet newspaper grids,│
 │ performative index numbers (01 / 02), fake coordinates.│
+├────────────────────────────────────────────────────────┤
+│ Wave 4 (2026): The Geek / Terminal Cosplay             │
+│ ASCII art charts, pseudo-telemetry consoles, fake dark │
+│ terminal frames forced onto non-developer products.    │
 └────────────────────────────────────────────────────────┘
 ```
 
 ### 5.1 Defending Against Wave 3 (Editorial Slop)
-The remedy published for Wave 1 and 2 was "warm it up and make it editorial". Models adopted this wholesale, making warm editorial the most instantly recognizable AI tell of 2026:
+The remedy published for Wave 1 and 2 was "warm it up and make it editorial". Models adopted this wholesale, making warm editorial an instantly recognizable AI tell:
 - **Terracotta & Cream Monoculture:** Banned as an unprompted AI reflex. Warmth must come from low-chroma stone, authentic product photography, or deep rich ink—not default yellow-cream backgrounds paired with rust orange.
 - **Oversized Italic Serif Cliché:** Do not use italic serif display as a superficial shortcut to "luxury" or "premium" unless the client's actual brand specifically requires it.
 - **Broadsheet Cosplay:** Hairline 1px borders dividing zero-radius dense columns to mimic an 1890s newspaper is an artificial costume. Structure must emerge from clear spatial scale and tonal contrast.
 - **Performative Agency Metadata:** Banned decorative index numbering (`01`, `02`, `(001)`), fake coordinates (`37.77° N`), and version stamps (`©2026 — Scroll`) that convey zero operational data.
+
+### 5.2 Defending Against Wave 4 (Geek & Terminal Cosplay)
+When models are forbidden from building generic cards or warm editorial broadsheets, they frequently overcorrect by turning *every* application into a cyberpunk or terminal telemetry dashboard:
+- **Hard Ban on Non-Developer Terminals:** Never enclose ordinary educational, institutional, or business data inside a fake terminal window with prompt symbols (`$`, `>`).
+- **No ASCII Charts or Brackets:** Never generate ASCII art radar charts (`/\`, `[■■■□□]`), pseudo-status brackets (`[STATUS: 112]`), or terminal line-drawings. Use semantic HTML5 `<progress>` elements, styled SVG bars, and clean tabular typography.
+- **Zero Pseudo-Telemetry Jargon:** Never label normal administrative or assessment features with fake aerospace/hacker jargon ("telemetry console", "neural assessment engine", "quantum telemetry"). Call it what it is plainly in human language.
 
 ---
 
@@ -123,5 +133,27 @@ Stripping away slop ornaments (cards, borders, badges, gradients) is only the fi
 1. **Bold Typographic Scale Disparity:** Set primary headlines with dramatic scale confidence (e.g. `text-5xl` or `text-6xl` bold display paired with tight `leading-[1.1]`, balanced against crisp `text-sm` body).
 2. **Full-Field Color Anchors:** Instead of scattering small floating cards, ground layouts with full-bleed background tone shifts (e.g., transitioning from a clean light canvas into a deep, tinted section floor).
 3. **Authentic Interface Fragments:** For software products, construct working, interactive HTML/CSS UI components (a data table with real rows, an interactive calculation filter, or live code tabs) rather than empty illustrations or placeholder diagrams.
+
+---
+
+## 7. The Card-Soup Syndrome & Unified Spatial Canvas
+
+The most prevalent tell of generative AI frontends in 2026 is **The Card-Soup Syndrome (Archipelago of Floating Cards)**.
+
+### 7.1 What is Card-Soup?
+Because LLMs are trained on millions of generic Tailwind and component library examples, their immediate probabilistic reflex when laying out any section is to wrap it inside:
+`<div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">`
+
+When applied across a full screen, the layout collapses into 5–8 disconnected white boxes floating on a grayish background. To human eyes, this immediately screams "low-effort AI template".
+
+### 7.2 The Structural Rule: Cards vs. Spatial Architecture
+- **Cards are strictly for discrete, interchangeable, dynamic items:** Product catalog grids, kanban task cards, or gallery thumbnails.
+- **Cards are FORBIDDEN as structural section wrappers:** Never wrap an application header, tab bar, left workflow rail, or primary data table in separate, floating rounded boxes!
+
+### 7.3 The Unified Spatial Canvas Invariant
+In professional human-crafted software (Linear, Stripe, Vercel, GitHub):
+1. **Single Cohesive Plane:** The application is housed in a unified spatial sheet or integrated rails, not an archipelago of floating islands.
+2. **Hairline Boundaries:** Spatial separation is established through clean 1px borders (`border-r border-slate-200`, `divide-y divide-slate-100`) and subtle background tonal shifts (`#f8fafc` canvas background $\to$ `#ffffff` primary sheet $\to$ `#fcfcfd` auxiliary rail).
+3. **High Data-to-Padding Ratio:** Tables must not be padded with bloated 24px–32px empty space. Use compact, scannable cell heights ($10\text{px}–14\text{px}$ vertical padding) with tabular monospace figures (`font-mono tabular-nums`).
 
 

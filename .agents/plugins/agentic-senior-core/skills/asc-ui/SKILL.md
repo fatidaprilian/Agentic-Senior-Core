@@ -30,6 +30,9 @@ Every UI edit must satisfy these 15 rules without exception:
 14. **Single-language purity:** Never mix languages on one surface; ban hybrid neologisms (`di-submit`, `meng-generate`).
 15. **Icon semantics:** Never use raw unicode or emojis as icons. Use dedicated SVG icons; mark decorative icons `aria-hidden="true"`.
 16. **Substance over restraint:** Stripping slop is only half the job. Replace removed ornaments with real substance: strong typographic scale contrast, full-field color anchors, and authentic interface fragments. Never leave an empty, sterile wireframe void.
+17. **Product over skill (No geek cosplay):** The real-world domain dictates aesthetics. Never inject terminal windows, ASCII art, or pseudo-telemetry consoles into civic, educational, or commercial products (`references/modes/genre-calibration.md`).
+18. **The Purpose-Gate:** Every component, widget, or scorecard must enable an actual user task. Never invent unearned widgets, sliders, or simulated feeds without real business data.
+19. **Anti-card-soup invariant:** Never wrap structural layout sections (header, nav, rails, tables) into floating rounded card islands. Use a Unified Spatial Canvas with hairline dividers (`divide-y`, `border-r`). Cards are strictly for discrete, interchangeable items (`references/divergence.md`).
 
 ---
 
@@ -42,13 +45,10 @@ Before declaring markup, drafting redesign plans, or inspecting user code:
    `<skill_directory>/references/<category>/<file>.md`
    Identify the path of this `SKILL.md` file (provided by host/tooling) and resolve all reference paths relative to it.
 
-2. **Step 1 — Surface Mode Ingestion (MANDATORY GATE):**
-   Classify the surface and execute `read_file` on the corresponding mode reference BEFORE inspecting files or writing code:
-   - Dashboards, settings, data tables, developer tools ➔ `references/modes/operate.md`
-   - Landing pages, pricing tiers, conversion flows ➔ `references/modes/persuade.md`
-   - Documentation, changelogs, knowledge bases ➔ `references/modes/read.md`
-   - Showcases, portfolios, interactive galleries ➔ `references/modes/experience.md`
-   *Do NOT proceed until you have read the mode reference into context.*
+2. **Step 1 — Two-Phase Enforcement Gate (MANDATORY GATE):**
+   - **Phase A (Structure & Hierarchy First):** Lock project domain genre (Civic, Enterprise, SaaS, DevTools) and read `references/modes/genre-calibration.md` + target mode reference (`references/modes/<mode>.md`). Lock the primary focal anchor and spatial posture before writing code.
+   - **Phase B (Visual System & Themes):** Read `references/craft/themes-catalog.md` and lock one of the 16 curated themes across 8 real-world domains (e.g., Sovereign Slate, Almanac Index, Editorial Ledger, Pharmacy Calm, Ink & Signal, Graphite Instrument) to prevent probabilistic palette slop.
+   *Do NOT proceed until you have read the genre, mode, and theme references into context.*
 
 3. **Step 2 — Secondary Craft Ingestion:**
    Execute `read_file` on at least one relevant craft reference for your task from Section 5 (e.g. `references/craft/typography.md`, `references/craft/color-surfaces.md`, or `references/divergence.md`).
@@ -79,7 +79,7 @@ Visual posture is governed by the surface type, not product branding. Every surf
 Never split the difference into cosmetic polish on a discarded look:
 - **Polish / Refinement:** Preserves layout structure, DOM hierarchy, and design tokens. Resolves contrast, missing state quad, microcopy, and lint issues.
 - **Restyle:** Preserves layout geometry. Replaces color tokens, typographic scales, corner radiuses, and elevation shadows.
-- **Full Redesign:** Replaces entire spatial geometry and posture. Mandatory decoupled protocol: extract data/contracts first, discard old DOM, author standalone preview (`asc preview <path>`), build fresh geometry, re-bind dynamic data.
+- **Full Redesign:** Replaces entire spatial geometry and posture. Mandatory decoupled protocol: extract data/contracts first, discard old DOM, establish clear spatial posture and theme tokens, and compile directly to production files with complete layout coherence.
 
 ---
 
@@ -90,6 +90,8 @@ Never split the difference into cosmetic polish on a discarded look:
 
 | Target Domain / Task Requirement | Mandatory Reference Path |
 |---|---|
+| Domain & genre calibration (Anti-geek cosplay) | `references/modes/genre-calibration.md` |
+| Curated material themes & locked art direction | `references/craft/themes-catalog.md` |
 | Waivable defaults & waiver syntax | `references/reflexes.md` |
 | Typography, line-height & tabular numbers | `references/craft/typography.md` |
 | Color tokens, 60-30-10 & elevation | `references/craft/color-surfaces.md` |
@@ -99,7 +101,7 @@ Never split the difference into cosmetic polish on a discarded look:
 | Responsive reflow, dvh & touch targets | `references/mobile-responsive.md` |
 | WCAG 2.2 AA contrast & keyboard operability | `references/accessibility.md` |
 | The Data State Quad & mutation feedback | `references/states-feedback.md` |
-| Anti-convergence, 3 Waves of Tells & Mirror Test | `references/divergence.md` |
+| Anti-convergence, 4 Waves of Tells & Mirror Test | `references/divergence.md` |
 | Structured UI audit matrix | `references/redesign-audit.md` |
 
 ---
@@ -107,8 +109,9 @@ Never split the difference into cosmetic polish on a discarded look:
 ## 6. Verification & Handoff Sweep
 
 Before completing any UI task, run this mechanical check:
-1. **Reference Compliance:** Confirm constraints from the loaded `references/modes/<mode>.md` and craft references were strictly applied.
-2. **State Quad:** Loading skeleton, empty state, error with retry, and populated data are all handled.
-3. **Pending Feedback:** Buttons disable and display feedback during ongoing mutations.
-4. **Contrast & Focus:** Verify keyboard tab flow and high-contrast `:focus-visible` styling.
-5. **Lint Check:** Verify changes against `hooks/lib/known-ui-slop-patterns.json`.
+1. **Reference Compliance:** Confirm constraints from `references/modes/genre-calibration.md`, `references/craft/themes-catalog.md`, and target mode were strictly applied.
+2. **Finish Gate Sweep:** Verify zero text clipping (+30% expansion buffer), zero awkward text wraps, and 4px/8px spacing grid consistency.
+3. **State Quad:** Loading skeleton, empty state, error with retry, and populated data are all handled.
+4. **Pending Feedback:** Buttons disable and display feedback during ongoing mutations.
+5. **Contrast & Focus:** Verify keyboard tab flow and high-contrast `:focus-visible` styling.
+6. **Lint Check:** Verify changes against `hooks/lib/known-ui-slop-patterns.json`.

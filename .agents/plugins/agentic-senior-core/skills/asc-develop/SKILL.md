@@ -55,7 +55,7 @@ Use when adding endpoints, components, pages, or capabilities to an existing cod
 
 ### Step 3: Implement & Validate (TDD Integration)
 1. Follow the TDD cycle via `/asc-test`: write the failing test first (RED), write minimal code to pass (GREEN), then refactor.
-2. **Zero-Fake-Done Testing**: Run the project test suite (`ascx test`, `npm test`, `pytest`, `cargo test`). The test runner **MUST** exit with code 0.
+2. **Zero-Fake-Done Testing**: Run the project test suite (`ascx npm test`, `ascx pytest`, `ascx cargo test`). The test runner **MUST** exit with code 0.
 3. Never weaken or delete test assertions to simulate a passing run. Fix the underlying business logic.
 
 ---

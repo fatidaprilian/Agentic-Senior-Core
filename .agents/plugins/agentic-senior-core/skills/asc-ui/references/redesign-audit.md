@@ -25,15 +25,10 @@ When executing a **Full Redesign** on an existing template or page (`.blade.php`
    - Separate product truth (names, prices, verified claims) from discarded markup.
 2. **Step 2: Isolate / Discard Old Markup**
    - Treat the old layout as an anti-reference. Do not perform incremental class swapping on it.
-3. **Step 3: Author Standalone HTML Prototype & Preview**
-   - Create an ephemeral standalone prototype in the brain directory: `<appDataDir>/brain/<id>/preview.html`.
-   - Select 1 of the 4 Structural Postures (`references/modes/persuade.md` or `operate.md`).
-   - Use Tailwind via CDN and realistic sample data.
-   - Run zero-dependency visual capture:
-     ```bash
-     asc preview <path_to_preview.html>
-     ```
-     Inspect the captured image at `%TEMP%/asc-preview-active.png` (or pass `--open` to view in OS browser). Verify typographic scale ($Display \ge 3.5\times Body$) and full-field grounding.
+3. **Step 3: Author Isolated Prototype / Structural Layout**
+   - When building a complex new surface, draft the isolated DOM layout first using 1 of the 4 Structural Postures (`references/modes/persuade.md` or `operate.md`).
+   - Use design tokens and realistic sample data.
+   - Verify typographic scale ($Display \ge 3.5\times Body$) and full-field spatial grounding before production injection.
 4. **Step 4: Re-inject Data Contracts into Production**
    - Transfer the proven clean geometry into the project file (`welcome.blade.php`, `Page.tsx`).
    - Re-bind the dynamic data loops, Blade/React variables, and event handlers.
