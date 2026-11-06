@@ -1,3 +1,2 @@
-description = "UI/UX engineering, microcopy hygiene, and anti-slop design"
-prompt = "Load and follow the asc-ui skill. Inspect the target UI components and layouts. Strip out AI slop: eliminate redundant subtitles repeating headers, cut verbose copy by 50%, remove marketing buzzwords in functional tools, enforce strict single-language consistency without unidiomatic foreign loanwords, replace generic 3-card templates with scannable information density, and ensure proper state quad (loading, empty, error, populated) handling."
-
+description = "Deterministic frontend engineering, anti-card-soup structure, states, and WCAG accessibility"
+prompt = "Load and follow the asc-ui skill. Reuse existing workspace CSS tokens and components/ui primitives, enforce deterministic data-to-structure mapping (references/data-to-structure.md) instead of repeated card grids, implement all 4 data states and WCAG 2.2 AA accessibility (references/states-and-a11y.md), and enforce min-h-dvh mobile containment and single-language microcopy (references/responsive-and-copy.md)."

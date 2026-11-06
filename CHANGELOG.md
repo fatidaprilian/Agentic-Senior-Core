@@ -1,5 +1,23 @@
 # Changelog
 
+## 6.17.0
+
+### Added & Synthesized
+- **1-Hop Workflow Subskills (Adapted & Hardened Beyond Superpowers, Zero Top-Level Skill Bloat)**:
+  - **7-Skill Invariant Preserved**: Kept the exact 7 top-level skills (`asc`, `asc-develop`, `asc-test`, `asc-review`, `asc-reference`, `asc-pentest`, `asc-ui`) supporting both natural-language symptom triggers (EN + ID) and explicit `/asc-*` slash commands (`commands/asc-*.{md,toml}`).
+  - **Execution Plans & Autonomous Rulings (`skills/asc-develop/references/execution-plans.md`)**: Enforced *Look Before You Ask* repository inspection, single-question disambiguation with explicit trade-offs, right-sized testable tasks with exact function signatures, and continuous execution using inline `Ruling:` records instead of stalling on minor ambiguities.
+  - **Subagent Orchestration & Worktree Isolation (`skills/asc-develop/references/subagent-orchestration.md`)**: Codified non-overlapping file-set dispatch criteria, self-contained subagent prompts, a two-pass verification gate (*Spec Compliance* + *Code Quality & Security*), and `git worktree` isolation.
+  - **4-Phase Systematic Root-Cause Debugging (`skills/asc-test/references/systematic-debugging.md`)**: Enforced read-only root-cause data-flow tracing before touching production code, deterministic reproduction linked to `regression-proof.md`, a two-failure circuit breaker, and whole-suite verification.
+  - **Subagent Pressure Testing for Skills (`skills/asc/references/writing-skills.md`)**: Added RED-GREEN-REFACTOR pressure testing against baseline subagent rationalizations within the 150-line router budget.
+- **Antigravity Mechanical Hook Enforcement (Strict Host Manifest Isolation)**:
+  - **Antigravity `Stop` Verification Gate (`hooks/stop-verify-gate.js` & `<plugin_root>/hooks.json`)**: Inspects the active turn transcript on `model_stop` when `fullyIdle === true` and `executionNum < 2`, returning `{"decision": "continue", "reason": "..."}` when source files were modified without a subsequent verification/test command; leaves non-Antigravity `hooks/hooks.json` strictly untouched.
+  - **Structural Card Soup & Blind-Debug Detection (`hooks/post-edit-enforce.js` & `known-ui-slop-patterns.json`)**: Flags UI components stacking $\ge 3$ bordered card-grid sections without `<table>` or `<ol>` structures, adds pattern 34 (`ui-numbered-step-card`), and warns on `PostInvocation` when production code is edited for a bug/error prompt (`lastUserInput`) prior to running a reproduction command or test edit.
+
+### Changed & Removed
+- **Deterministic Frontend Engineering Overhaul (`skills/asc-ui`: `13,951 KB` $\rightarrow$ `16.1 KB`, `-99.88%`)**:
+  - Removed the `13.84 MB` `references/visuals/` directory (oversized DOM JSON dumps truncated by the 45 KB `read_file` ceiling and viewport PNGs) and consolidated 18 abstract design essays into 3 deterministic engineering references: `data-to-structure.md` (anti-card-soup semantic mapping), `states-and-a11y.md` (4-state contract, pending locks, WCAG 2.2 AA), and `responsive-and-copy.md` (token/primitive reuse, `min-h-dvh`, GPU transitions, single-language microcopy).
+  - Added verification suites in `tests/superpowers-subskills.test.mjs` and expanded `tests/ui-structure.test.mjs` and `tests/antigravity-hooks.test.mjs`.
+
 ## 6.16.6
 
 ### Added & Hardened

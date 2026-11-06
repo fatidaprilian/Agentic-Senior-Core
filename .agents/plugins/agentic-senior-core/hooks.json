@@ -25,6 +25,13 @@
         "command": "node hooks/post-edit-enforce.js",
         "timeout": 15
       }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "node hooks/stop-verify-gate.js",
+        "timeout": 5
+      }
     ]
   }
 }

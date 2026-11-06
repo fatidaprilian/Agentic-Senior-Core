@@ -244,5 +244,152 @@ describe('Antigravity Hooks Schema & Runtime Contracts', () => {
       await fs.rm(tmpDir, { recursive: true, force: true });
     }
   });
+
+  it('PostInvocation detects structural Card Soup (>= 3 card grid sections) and blind bug edits without repro', async () => {
+    const enforceScript = path.join(pluginRoot, 'hooks', 'post-edit-enforce.js');
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'agy-cardsoup-'));
+
+    try {
+      const transcriptPath = path.join(tmpDir, 'transcript.jsonl');
+      const cardSoupPage = [
+        '<main>',
+        '  <section className="grid grid-cols-4 gap-4"><div className="rounded-xl border p-6">A</div></section>',
+        '  <section className="grid grid-cols-3 gap-6"><div className="rounded-2xl border p-5">B</div></section>',
+        '  <section className="grid grid-cols-3 gap-6"><div className="rounded-xl border p-6">C</div></section>',
+        '</main>',
+      ].join('\n');
+
+      const steps = [
+        {
+          step_index: 1,
+          type: 'PLANNER_RESPONSE',
+          tool_calls: [
+            { name: 'write_file', args: { Path: path.join(tmpDir, 'LandingPage.tsx'), Content: cardSoupPage } },
+            { name: 'edit_file', args: { Path: path.join(tmpDir, 'service.ts'), Target: 'a', Replacement: 'b' } },
+          ],
+        },
+      ];
+      await fs.writeFile(transcriptPath, steps.map(s => JSON.stringify(s)).join('\n') + '\n', 'utf8');
+
+      const res = spawnSync(process.execPath, [enforceScript], {
+        cwd: pluginRoot,
+        input: JSON.stringify({
+          invocationNum: 1,
+          initialNumSteps: 0,
+          workspacePaths: [tmpDir],
+          transcriptPath,
+          lastUserInput: 'Fix this bug where login throws 500 error',
+        }),
+        encoding: 'utf8',
+      });
+
+      assert.equal(res.status, 0);
+      const out = JSON.parse(res.stdout.trim());
+      assert.ok(Array.isArray(out.injectSteps) && out.injectSteps.length > 0);
+      const combined = out.injectSteps.map(s => s.ephemeralMessage).join('\n');
+      assert.match(combined, /Card Soup/i);
+      assert.match(combined, /Systematic Debugging/i);
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('Antigravity Stop hook enforces verification after source edits while respecting fullyIdle and executionNum', async () => {
+    const stopScript = path.join(pluginRoot, 'hooks', 'stop-verify-gate.js');
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'agy-stop-'));
+
+    try {
+      const transcriptPath = path.join(tmpDir, 'transcript.jsonl');
+
+      // 1. Source file edited after USER_INPUT with NO run_command afterward -> continue
+      const unverifiedTranscript = [
+        { step_index: 0, type: 'USER_INPUT', content: 'Implement feature X' },
+        {
+          step_index: 1,
+          type: 'PLANNER_RESPONSE',
+          tool_calls: [
+            { name: 'edit_file', args: { Path: path.join(tmpDir, 'index.ts'), Target: 'old', Replacement: 'new' } },
+          ],
+        },
+      ];
+      await fs.writeFile(transcriptPath, unverifiedTranscript.map(s => JSON.stringify(s)).join('\n') + '\n', 'utf8');
+
+      const blockRes = spawnSync(process.execPath, [stopScript], {
+        cwd: pluginRoot,
+        input: JSON.stringify({
+          executionNum: 1,
+          terminationReason: 'model_stop',
+          error: '',
+          fullyIdle: true,
+          workspacePaths: [tmpDir],
+          transcriptPath,
+        }),
+        encoding: 'utf8',
+      });
+      assert.equal(blockRes.status, 0);
+      const blockOut = JSON.parse(blockRes.stdout.trim());
+      assert.equal(blockOut.decision, 'continue');
+      assert.match(blockOut.reason, /Verification Gate/i);
+
+      // 2. When fullyIdle is false (waiting on async background task), MUST allow stop
+      const asyncRes = spawnSync(process.execPath, [stopScript], {
+        cwd: pluginRoot,
+        input: JSON.stringify({
+          executionNum: 1,
+          terminationReason: 'model_stop',
+          error: '',
+          fullyIdle: false,
+          workspacePaths: [tmpDir],
+          transcriptPath,
+        }),
+        encoding: 'utf8',
+      });
+      assert.equal(JSON.parse(asyncRes.stdout.trim()).decision, 'allow');
+
+      // 3. When executionNum >= 2 (prevent infinite loop), MUST allow stop
+      const loopGuardRes = spawnSync(process.execPath, [stopScript], {
+        cwd: pluginRoot,
+        input: JSON.stringify({
+          executionNum: 2,
+          terminationReason: 'model_stop',
+          error: '',
+          fullyIdle: true,
+          workspacePaths: [tmpDir],
+          transcriptPath,
+        }),
+        encoding: 'utf8',
+      });
+      assert.equal(JSON.parse(loopGuardRes.stdout.trim()).decision, 'allow');
+
+      // 4. Source file edited AND followed by run_command -> allow stop
+      const verifiedTranscript = [
+        ...unverifiedTranscript,
+        {
+          step_index: 2,
+          type: 'PLANNER_RESPONSE',
+          tool_calls: [
+            { name: 'run_command', args: { CommandLine: 'ascx npm test' } },
+          ],
+        },
+      ];
+      await fs.writeFile(transcriptPath, verifiedTranscript.map(s => JSON.stringify(s)).join('\n') + '\n', 'utf8');
+
+      const allowRes = spawnSync(process.execPath, [stopScript], {
+        cwd: pluginRoot,
+        input: JSON.stringify({
+          executionNum: 1,
+          terminationReason: 'model_stop',
+          error: '',
+          fullyIdle: true,
+          workspacePaths: [tmpDir],
+          transcriptPath,
+        }),
+        encoding: 'utf8',
+      });
+      assert.equal(JSON.parse(allowRes.stdout.trim()).decision, 'allow');
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
+  });
 });
 

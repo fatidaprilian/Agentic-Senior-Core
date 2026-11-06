@@ -176,22 +176,69 @@ function handleAntigravityPostInvocation(data) {
     const findings = [];
     const minStep = typeof data.initialNumSteps === 'number' ? data.initialNumSteps : 0;
 
-    let sourceEditsSinceStart = 0;
+    const parsedSteps = [];
+    let lastUserInputIdx = 0;
     for (let i = 0; i < lines.length; i++) {
-      let step;
       try {
-        step = JSON.parse(lines[i]);
-      } catch (_) {
-        continue;
+        const s = JSON.parse(lines[i]);
+        parsedSteps.push(s);
+        if (s && s.type === 'USER_INPUT') {
+          lastUserInputIdx = parsedSteps.length - 1;
+        }
+      } catch (_) {}
+    }
+
+    const isBugPrompt = /\b(bug|error|crash|fail(?:ing|ed|s)?|broken|500|exception|kenapa gagal|kok error|benerin)\b/i
+      .test(String(data.lastUserInput || ''));
+    const testPathRe = /(?:\.test\.|\.spec\.|_test\.|__tests__[\/\\]|tests?[\/\\])/i;
+
+    let priorTurnReproOrTest = false;
+    for (let i = lastUserInputIdx; i < parsedSteps.length; i++) {
+      const s = parsedSteps[i];
+      if (!s || s.step_index >= minStep || s.type !== 'PLANNER_RESPONSE' || !Array.isArray(s.tool_calls)) continue;
+      for (let j = 0; j < s.tool_calls.length; j++) {
+        const tc = s.tool_calls[j];
+        if (!tc) continue;
+        if (tc.name === 'run_command' || tc.name === 'Bash' || tc.name === 'run_shell_command') {
+          priorTurnReproOrTest = true;
+        }
+        const n = normalizeEditToolCall(tc.name, tc.args);
+        if (n && n.filePath && testPathRe.test(n.filePath)) {
+          priorTurnReproOrTest = true;
+        }
       }
-      if (step.step_index >= minStep && step.type === 'PLANNER_RESPONSE' && Array.isArray(step.tool_calls)) {
+    }
+
+    let sourceEditsSinceStart = 0;
+    let prodEditsThisInv = 0;
+    let reproOrTestThisInv = false;
+
+    for (let i = 0; i < parsedSteps.length; i++) {
+      const step = parsedSteps[i];
+      if (step && step.step_index >= minStep && step.type === 'PLANNER_RESPONSE' && Array.isArray(step.tool_calls)) {
         for (let j = 0; j < step.tool_calls.length; j++) {
           const tc = step.tool_calls[j];
-          const norm = tc ? normalizeEditToolCall(tc.name, tc.args) : null;
+          if (!tc) continue;
+          if (tc.name === 'run_command' || tc.name === 'Bash' || tc.name === 'run_shell_command') {
+            reproOrTestThisInv = true;
+            continue;
+          }
+          if (tc.args && (tc.args.ArtifactMetadata || tc.args.IsArtifact)) continue;
+
+          const norm = normalizeEditToolCall(tc.name, tc.args);
           if (!norm || !norm.filePath) continue;
 
+          if (testPathRe.test(norm.filePath)) {
+            reproOrTestThisInv = true;
+          }
+
           const ext = path.extname(norm.filePath).slice(1);
-          if (SOURCE_EXTENSIONS.has(ext)) sourceEditsSinceStart++;
+          if (SOURCE_EXTENSIONS.has(ext)) {
+            sourceEditsSinceStart++;
+            if (!testPathRe.test(norm.filePath)) {
+              prodEditsThisInv++;
+            }
+          }
 
           const mappedInput = norm.canonicalTool === 'Edit'
             ? { file_path: norm.filePath, new_string: norm.newContent, old_string: norm.oldContent }
@@ -202,6 +249,10 @@ function handleAntigravityPostInvocation(data) {
           }, workspaceRoot, true);
         }
       }
+    }
+
+    if (isBugPrompt && prodEditsThisInv > 0 && !priorTurnReproOrTest && !reproOrTestThisInv) {
+      findings.push('[ASC Systematic Debugging] Production code was edited for a bug/error report before running a reproduction command or writing a failing regression test. Follow skills/asc-test/references/systematic-debugging.md (investigate root cause and reproduce first).');
     }
 
     if (sourceEditsSinceStart >= SESSION_DRIFT_THRESHOLD) {
@@ -263,7 +314,7 @@ function processSingleEdit(toolName, toolInput, emitFn, workspaceRoot, skipSessi
   checkSecurityPatterns(toolName, toolInput, filePath, findings);
   checkStubPatterns(toolName, toolInput, filePath, findings);
 
-  if (ext === 'html' || ext === 'css' || ext === 'jsx' || ext === 'tsx' || ext === 'vue' || ext === 'svelte') {
+  if (ext === 'html' || ext === 'css' || ext === 'jsx' || ext === 'tsx' || ext === 'vue' || ext === 'svelte' || filePath.toLowerCase().endsWith('.blade.php')) {
     checkUiSlopPatterns(toolName, toolInput, filePath, findings);
   }
 
@@ -428,6 +479,16 @@ function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
         }
       } catch (_) { }
     });
+  }
+
+  var cardGridRe = /<(?:section|div)[^>]*\bgrid\b[\s\S]{0,260}?rounded-(?:xl|2xl)[^>]*\bborder\b/ig;
+  var cardGrids = target.match(cardGridRe) || [];
+  var hasSemanticTableOrList = /<(?:table|ol)[\s>]/i.test(target);
+  if (cardGrids.length >= 3 && !hasSemanticTableOrList) {
+    findings.push(
+      '[ASC Card Soup Alert] ' + cardGrids.length + ' bordered card-grid sections detected in ' + path.basename(filePath)
+      + ' with zero semantic <table> or <ol> containers. Convert sequential steps to <ol> steppers, criteria/records to <table>, and rosters to divide-y lists (skills/asc-ui/references/data-to-structure.md).'
+    );
   }
 }
 

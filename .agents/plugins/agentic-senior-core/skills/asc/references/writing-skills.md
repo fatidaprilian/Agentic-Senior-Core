@@ -70,3 +70,18 @@ A skill without a verifiable gate is merely a suggestion.
 - Every modification must be coupled with an automated verification command (linter, unit test, Playwright run, or slop pattern check).
 - Mandate fresh execution evidence: require the agent to execute the runner fresh and verify exit code 0 before claiming completion.
 
+---
+
+## 5. Subagent Pressure Testing (TDD for Skills)
+
+Treat skill authoring as Test-Driven Development applied to agent behavior. Never write speculative lectures for failure modes you have not observed:
+
+1. **RED — Baseline Pressure Run (Without Skill):**
+   - Dispatch an isolated subagent with a realistic pressure scenario (time urgency, sunk-cost framing, or a tempting shortcut) *without* loading the target skill.
+   - Record the exact rationalizations and shortcuts the model takes.
+2. **GREEN — Minimal Counter-Rule:**
+   - Add only the specific blocking gate, decision table row, or hook pattern needed to defeat those observed rationalizations.
+   - Re-run the same pressure prompt on a fresh subagent *with* the skill loaded and verify full compliance.
+3. **REFACTOR — Close Loopholes Within Budget:**
+   - Tighten ambiguous phrasing while keeping `SKILL.md` strictly within the 150-line router budget and 1-hop reference limit.
+

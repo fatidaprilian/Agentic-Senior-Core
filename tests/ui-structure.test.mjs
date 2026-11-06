@@ -7,94 +7,79 @@ import { fileURLToPath } from 'node:url';
 const currentFilePath = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(currentFilePath), '..');
 
+async function computeDirSize(dirPath) {
+  let total = 0;
+  const entries = await fs.readdir(dirPath, { withFileTypes: true });
+  for (const entry of entries) {
+    const full = path.join(dirPath, entry.name);
+    if (entry.isDirectory()) {
+      total += await computeDirSize(full);
+    } else {
+      const st = await fs.stat(full);
+      total += st.size;
+    }
+  }
+  return total;
+}
+
 describe('UI Engineering Structure & Quality Floor', () => {
   const pluginDir = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core');
   const uiSkillDir = path.join(pluginDir, 'skills', 'asc-ui');
 
-  it('keeps asc-ui/SKILL.md as a lean router (< 150 lines)', async () => {
+  it('keeps asc-ui/SKILL.md as a lean deterministic router (<= 130 lines)', async () => {
     const skillPath = path.join(uiSkillDir, 'SKILL.md');
     const content = await fs.readFile(skillPath, 'utf8');
     const lineCount = content.split('\n').length;
 
     assert.ok(
-      lineCount <= 150,
-      `asc-ui/SKILL.md must be a lean router <= 150 lines (currently ${lineCount} lines)`
+      lineCount <= 130,
+      `asc-ui/SKILL.md must be a lean router <= 130 lines (currently ${lineCount} lines)`
     );
 
-    // Verify key sections are present
     assert.ok(content.includes('## 1. The Quality Floor'), 'Must include Quality Floor');
-    assert.ok(content.includes('## 2. Pre-Flight & Material Inventory'), 'Must include Material Inventory');
-    assert.ok(content.includes('## 3. Surface Modes & Ambition Scaling'), 'Must include Surface Modes');
-    assert.ok(content.includes('## 4. Scope Classification: Refine vs. Redesign'), 'Must include Scope Classification');
-    assert.ok(content.includes('## 5. On-Demand Reference Library'), 'Must include Reference Library');
-    assert.ok(content.includes('## 6. Verification & Handoff Sweep'), 'Must include Verification Sweep');
+    assert.ok(content.includes('## 2. Pre-Flight & Reuse Gate'), 'Must include Pre-Flight & Reuse Gate');
+    assert.ok(content.includes('## 3. Data-to-Structure Mapping'), 'Must include Data-to-Structure Mapping');
+    assert.ok(content.includes('## 4. On-Demand Engineering References'), 'Must include On-Demand Engineering References');
+    assert.ok(content.includes('## 5. Verification & Handoff Sweep'), 'Must include Verification & Handoff Sweep');
   });
 
-  it('ensures all 18 reference files exist and are non-empty', async () => {
-    const references = [
-      'modes/genre-calibration.md',
-      'modes/operate.md',
-      'modes/persuade.md',
-      'modes/read.md',
-      'modes/experience.md',
-      'reflexes.md',
-      'craft/composition-patterns.md',
-      'craft/themes-catalog.md',
-      'craft/typography.md',
-      'craft/color-surfaces.md',
-      'craft/motion.md',
-      'craft/browser-surfaces.md',
-      'copy-i18n.md',
-      'mobile-responsive.md',
-      'accessibility.md',
-      'states-feedback.md',
-      'divergence.md',
-      'redesign-audit.md',
+  it('purges bloated visuals/ directory and keeps total asc-ui footprint under 100 KB with 3 engineering references', async () => {
+    const visualsStat = await fs.stat(path.join(uiSkillDir, 'references', 'visuals')).catch(() => null);
+    assert.strictEqual(visualsStat, null, 'references/visuals bloat directory must not exist');
+
+    const expectedRefs = [
+      'data-to-structure.md',
+      'states-and-a11y.md',
+      'responsive-and-copy.md',
     ];
 
-    for (const ref of references) {
+    const actualEntries = await fs.readdir(path.join(uiSkillDir, 'references'));
+    assert.deepStrictEqual(
+      actualEntries.slice().sort(),
+      expectedRefs.slice().sort(),
+      'references/ must contain strictly the 3 deterministic engineering reference files'
+    );
+
+    for (const ref of expectedRefs) {
       const refPath = path.join(uiSkillDir, 'references', ref);
-      const stat = await fs.stat(refPath).catch(() => null);
-      assert.ok(stat !== null, `Reference file must exist: ${ref}`);
-      assert.ok(stat.size > 200, `Reference file must have substantive content: ${ref} (${stat?.size} bytes)`);
+      const stat = await fs.stat(refPath);
+      assert.ok(stat.size > 500, `Reference file must have substantive content: ${ref}`);
     }
+
+    const totalBytes = await computeDirSize(uiSkillDir);
+    assert.ok(
+      totalBytes < 100 * 1024,
+      `Total asc-ui directory must stay under 100 KB (currently ${totalBytes} bytes)`
+    );
   });
 
-  it('defines all 16 domain-calibrated material themes in craft/themes-catalog.md', async () => {
-    const catalogPath = path.join(uiSkillDir, 'references', 'craft', 'themes-catalog.md');
-    const content = await fs.readFile(catalogPath, 'utf8');
-
-    const expectedThemes = [
-      '01. Sovereign Slate',
-      '02. Almanac Index',
-      '03. Editorial Ledger',
-      '04. Warm Stationery',
-      '05. Pharmacy Calm',
-      '06. Clinical Precision',
-      '07. Ink & Signal',
-      '08. Obsidian Stage',
-      '09. Graphite Instrument',
-      '10. Technical Whiteprint',
-      '11. Atelier Gallery',
-      '12. Kinetic Grid',
-      '13. Studio Proof',
-      '14. Botanical Field',
-      '15. Formwork Concrete',
-      '16. Meridian Survey',
-    ];
-
-    for (const theme of expectedThemes) {
-      assert.ok(content.includes(`### \`${theme}\``), `themes-catalog.md must define theme heading: ${theme}`);
-    }
-  });
-
-  it('validates 33 slop regexes in known-ui-slop-patterns.json with positive and negative cases', async () => {
+  it('validates 34 slop regexes in known-ui-slop-patterns.json with positive and negative cases', async () => {
     const slopPath = path.join(pluginDir, 'hooks', 'lib', 'known-ui-slop-patterns.json');
     const raw = await fs.readFile(slopPath, 'utf8');
     const catalog = JSON.parse(raw);
 
     assert.ok(Array.isArray(catalog.patterns), 'patterns must be an array');
-    assert.strictEqual(catalog.patterns.length, 33, 'must have exactly 33 slop patterns');
+    assert.strictEqual(catalog.patterns.length, 34, 'must have exactly 34 slop patterns');
 
     const testCases = {
       'ui-gradient-purple-blue': {
@@ -228,6 +213,10 @@ describe('UI Engineering Structure & Quality Floor', () => {
       'copy-clumsy-indonesian-translations': {
         pos: 'Buka laci sembul untuk melihat detail indikator.',
         neg: 'Buka panel samping untuk melihat detail indikator.'
+      },
+      'ui-numbered-step-card': {
+        pos: '<div className="rounded-xl border p-6"><span className="badge">01</span><h3>Step One</h3></div>',
+        neg: '<ol className="divide-y divide-border"><li className="py-3">1. Verify account</li></ol>'
       }
     };
 
@@ -239,7 +228,6 @@ describe('UI Engineering Structure & Quality Floor', () => {
       const tc = testCases[pattern.id];
       assert.ok(tc, `Test case must be defined for pattern: ${pattern.id}`);
 
-      // Evaluate like post-edit-enforce.js
       const rePos = new RegExp(pattern.regex, 'ig');
       assert.ok(
         rePos.test(tc.pos),
@@ -255,17 +243,15 @@ describe('UI Engineering Structure & Quality Floor', () => {
     }
   });
 
-  it('guarantees zero codebase contamination (no SAURAN or THEME LOCKED in skills)', async () => {
+  it('guarantees zero codebase contamination in UI references', async () => {
     const files = await fs.readdir(path.join(uiSkillDir, 'references'), { recursive: true });
     for (const file of files) {
       if (typeof file === 'string' && file.endsWith('.md')) {
         const fullPath = path.join(uiSkillDir, 'references', file);
         const content = await fs.readFile(fullPath, 'utf8');
-        // Neither SAURAN nor THEME LOCKED should appear in UI guidelines
-        assert.ok(!content.includes('SAURAN evaluation'), `Found project contamination in ${file}`);
+        assert.ok(!content.includes('SAURAN'), `Found project contamination in ${file}`);
         assert.ok(!content.includes('THEME LOCKED:'), `Found forced lock command in ${file}`);
       }
     }
   });
 });
-

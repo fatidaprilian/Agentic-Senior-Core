@@ -1,7 +1,7 @@
 ---
 name: asc-test
 description: >
-  Trigger this skill when the user is: writing unit tests, integration tests, E2E tests, UAT checklists, reproducing bugs, fixing flaky tests, or verifying test coverage. Also trigger when the user says: "write a test", "TDD", "add tests", "verify this bug", "flaky test", "test this endpoint", "E2E test", "playwright", "UAT", "regression test", "bikin tes", "cara ngetes", "tes gagal terus". Also trigger when creating or editing files matching: `*.test.*`, `*.spec.*`, `tests/*`, `__tests__/*`, or `e2e/*`.
+  Trigger this skill when the user is: debugging errors or crashes, investigating bugs, writing unit/integration/E2E tests, UAT checklists, or fixing flaky tests. Also trigger when the user says: "write a test", "TDD", "fix this bug", "why is this failing", "error 500", "flaky test", "E2E test", "playwright", "UAT", "regression test", "bikin tes", "benerin bug", "kok error", "kenapa gagal", "tes gagal terus". Also trigger on files matching: `*.test.*`, `*.spec.*`, `tests/*`, `__tests__/*`, or `e2e/*`.
 ---
 
 # Testing, TDD, Verification & UAT Router
@@ -31,6 +31,7 @@ Every feature, bugfix, or refactor must follow the Red-Green-Refactor sequence:
 
 Before writing tests, running suites, or claiming verification:
 1. **Mandatory Ingestion (BLOCKING GATE):** Call `read_file` on the tier reference matching your testing requirement BEFORE taking action:
+   - Debugging runtime errors, 500 crashes, or unknown failures ➔ `references/systematic-debugging.md`
    - Writing unit tests / TDD cycle ➔ `references/tdd-cycle.md`
    - Behavior testing, boundary isolation, mocks/fakes ➔ `references/test-design.md`
    - Generative property invariants & fuzzing ➔ `references/property-testing.md`
@@ -105,6 +106,7 @@ Select the lowest testing tier that validates the requirement:
 
 | Testing Domain / Trigger | Mandatory Reference Path |
 |---|---|
+| 4-phase root-cause investigation & circuit breaker | `references/systematic-debugging.md` |
 | Red-Green-Refactor mechanics & whole-suite checks | `references/tdd-cycle.md` |
 | Behavior testing, boundary isolation & mocking | `references/test-design.md` |
 | Generative property invariants & boundary fuzzing | `references/property-testing.md` |

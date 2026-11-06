@@ -10,16 +10,17 @@ Universal AI coding rules and meta-tooling playbook. Grounded in Google Engineer
 
 ---
 
-## 1. The 6 Core Meta-Skills Architecture
+## 1. The 7 Core Meta-Skills Architecture
 
-Agentic Senior Core organizes operational guidance into 6 high-density, non-overlapping playbooks:
+Agentic Senior Core organizes operational guidance into 7 high-density, non-overlapping playbooks:
 
-1. **`/asc` (This Skill)**: Core engineering rules, codebase convention fingerprinting, adaptive preferences, debt tracking, skill authoring, and IDE adapter setup.
-2. **`/asc-develop`**: Engineering lifecycle for greenfield scaffolding, brownfield feature implementation, and structured refactoring.
+1. **`/asc` (This Skill)**: Core engineering rules, codebase convention fingerprinting, adaptive preferences, debt tracking, skill authoring & subagent pressure testing, and IDE adapter setup.
+2. **`/asc-develop`**: Engineering lifecycle for greenfield scaffolding, brownfield features, bite-sized execution plans (`Ruling:` execution), subagent orchestration, and structured refactoring.
 3. **`/asc-review`**: Quality and security assurance: production PR reviews, deep vulnerability audits (OWASP / ASI), and code clone deduplication.
-4. **`/asc-test`**: Dedicated testing playbook: the Iron Law of TDD, verification gates, Playwright E2E, UAT acceptance checklists, regression proofs, and flaky test remediation.
+4. **`/asc-test`**: Dedicated testing & debugging playbook: 4-phase systematic root-cause debugging, TDD, verification gates, Playwright E2E, UAT checklists, regression proofs, and flaky test remediation.
 5. **`/asc-reference`**: Domain architecture reference for REST/GraphQL APIs, database indexing/transactions/migrations, infrastructure configs, and service resilience.
-6. **`/asc-ui`**: Human-interface engineering: surface modes (Operate, Persuade, Read, Experience), UX microcopy hygiene, single-language localization, mobile reflow (`dvh`/`clamp`), and WCAG 2.2 AA accessibility.
+6. **`/asc-ui`**: Deterministic frontend engineering: anti-card-soup data-to-structure mapping, token/primitive reuse, 4-state data contracts, mobile containment (`min-h-dvh`), single-language microcopy, and WCAG 2.2 AA accessibility.
+7. **`/asc-pentest`**: Authorized dynamic security verification: scope gates, Pentest Task Trees, multi-principal BOLA/IDOR matrices, and OWASP API Top 10 stateful fuzzing.
 
 ---
 

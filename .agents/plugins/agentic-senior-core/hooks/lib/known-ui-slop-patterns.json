@@ -164,6 +164,11 @@
       "id": "copy-clumsy-indonesian-translations",
       "regex": "\\b(laci sembul|jendela sembul|garis rambut|panggung asimetris)\\b",
       "message": "warning: clumsy literal translation detected ('laci sembul', 'garis rambut'). Use natural Indonesian ('panel samping', 'garis tipis', 'area utama')."
+    },
+    {
+      "id": "ui-numbered-step-card",
+      "regex": "rounded-(?:xl|2xl)[^>{}]{0,120}\\bborder\\b[\\s\\S]{0,160}>\\s*0[1-9]\\s*</",
+      "message": "warning: numbered step card ('01', '02' inside bordered rounded card) detected. Render sequential workflows as a connected <ol> stepper instead of isolated cards."
     }
   ]
 }

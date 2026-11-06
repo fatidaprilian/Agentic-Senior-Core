@@ -1,3 +1,2 @@
-description = "Test-driven development, verification gates, Playwright E2E, and UAT"
-prompt = "Load and follow the asc-test skill. Enforce the Iron Law of TDD (no production code without a failing test first), apply verification gates with fresh execution evidence, perform regression proofs on bugfixes, design boundary-isolated tests without mocking the unit under test, and trace flaky tests."
-
+description = "Systematic root-cause debugging, TDD, verification gates, Playwright E2E, and UAT"
+prompt = "Load and follow the asc-test skill (including references/systematic-debugging.md for root-cause investigation before code edits). Enforce test-first discipline, apply verification gates with fresh execution evidence, perform regression proofs on bugfixes, design boundary-isolated tests, and remediate flaky tests."

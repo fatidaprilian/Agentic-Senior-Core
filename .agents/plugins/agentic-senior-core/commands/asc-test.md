@@ -1,2 +1,1 @@
-Run the testing, TDD, verification, and UAT standards from skills/asc-test/SKILL.md. Enforce test-first discipline (no production code without a failing test first), apply verification gates with fresh execution evidence, reproduce bugfixes with regression proofs, design boundary-isolated tests, and diagnose flaky tests.
-
+Run the testing, systematic root-cause debugging, TDD, verification, and UAT standards from skills/asc-test/SKILL.md. Load references/systematic-debugging.md to investigate root causes before editing production code, enforce test-first discipline, apply verification gates with fresh execution evidence, reproduce bugfixes with regression proofs, and remediate flaky tests.
