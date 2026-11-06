@@ -1,5 +1,16 @@
 # Changelog
 
+## 6.16.5
+
+### Fixed & Hardened
+- **Antigravity Hooks Protojson Schema & Lifecycle Contracts**:
+  - **Dedicated Host Hook Schemas**: Split `<plugin_root>/hooks.json` (strict Antigravity protojson format with top-level `"agentic-senior-core"` group, flat `PreInvocation`/`PostInvocation` handler arrays, and valid `type`/`command`/`timeout` fields) from `<plugin_root>/hooks/hooks.json` (Claude Code, Codex CLI, Copilot CLI, and Gemini CLI format).
+  - **Plugin CWD & Duplicate-Firing Cleanup (`lib/cli/commands/global.mjs`)**: Removed legacy `~/.gemini/config/hooks.json` and `~/.gemini/antigravity-cli/hooks.json` writes that executed `node hooks/...` from the wrong working directory; Antigravity now loads hooks directly from `<plugin_root>/hooks.json`.
+  - **Workspace Path & Modern Tool Normalizer (`hooks/path-util.cjs`)**: Added `resolveWorkspaceRoot()` (prioritizing `toolCall.args.Cwd` and `workspacePaths[0]` over `process.cwd()`) and `normalizeEditToolCall()` covering `edit_file` (`Path`, `Target`, `Replacement`), `write_file` (`Path`, `Content`), `replace_file_content`, `multi_replace_file_content` (`ReplacementChunks`), and `write_to_file`.
+  - **`PreToolUse` Output & Exit Contract (`hooks/pre-tool-dependency-gate.js`)**: Emits required `{"decision": "allow"}` on safe calls, `{"decision": "deny", "reason": "..."}` with exit code `0` on blocked dependencies/clones, and `{"decision": "force_ask"}` on `git commit`/`git push` in Antigravity so human-requested commits can be approved interactively.
+  - **`PostInvocation` & Stdin Safety (`post-edit-enforce.js`, `dedup-gate.js`, `ladder-pulse.js`, `session-start.js`)**: Fixed undeclared `sourceEditCount` in `post-edit-enforce.js`, enforced `{}` stdout on `PostToolUse`, routed enforcement nudges through `PostInvocation` `injectSteps`, and added EOF/timeout guards across hook stdin readers.
+  - **Release Sync Guard (`scripts/sync-check.mjs`)**: Added `package-lock.json` (`version` and `packages[""].version`) validation to `sync-check.mjs` and added 6 integration tests in `tests/antigravity-hooks.test.mjs`.
+
 ## 6.16.4
 
 ### Added & Hardened

@@ -1,23 +1,35 @@
 #!/usr/bin/env node
 // Agentic Senior Core — SessionStart hook
-// Injects universal coding rules on every session start.
-// Supports Claude Code, Codex CLI, and GitHub Copilot CLI.
+// Injects universal coding rules on session start for Claude Code, Codex CLI, and Copilot CLI.
+// If invoked under Antigravity SessionStart, returns valid JSON (rules/agentic-senior-core.md
+// is already loaded natively via plugin rules/).
 
 const fs = require('fs');
 const path = require('path');
+const { isAntigravityPayload } = require('./path-util.cjs');
 
 const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT || path.resolve(__dirname, '..');
 const isCopilot = Boolean(process.env.COPILOT_PLUGIN_DATA);
 const isCodex = !isCopilot && Boolean(process.env.PLUGIN_DATA);
+const isAntigravityEnv = Boolean(
+  process.env.ANTIGRAVITY_LS_ADDRESS ||
+  process.env.ANTIGRAVITY_CSRF_TOKEN ||
+  process.env.ANTIGRAVITY_CLI
+);
 
-let content;
-try {
-  content = fs.readFileSync(path.join(pluginRoot, 'rules', 'agentic-senior-core.md'), 'utf8');
-} catch (e) {
-  process.exit(0);
-}
+function emitForHost(stdinData) {
+  if (isAntigravityEnv || isAntigravityPayload(stdinData)) {
+    process.stdout.write('{}\n');
+    return;
+  }
 
-try {
+  let content;
+  try {
+    content = fs.readFileSync(path.join(pluginRoot, 'rules', 'agentic-senior-core.md'), 'utf8');
+  } catch (_) {
+    return;
+  }
+
   if (isCopilot) {
     process.stdout.write(JSON.stringify({ additionalContext: content }));
   } else if (isCodex) {
@@ -31,6 +43,45 @@ try {
   } else {
     process.stdout.write(content);
   }
-} catch (e) {
-  // Silent fail — stdout closed/EPIPE at hook exit must not surface as a hook failure
 }
+
+if (process.stdin.isTTY) {
+  try { emitForHost(null); } catch (_) {}
+  process.exit(0);
+}
+
+let handled = false;
+let inputBuffer = '';
+const timer = setTimeout(function () {
+  if (!handled) {
+    handled = true;
+    try { emitForHost(null); } catch (_) {}
+    process.exit(0);
+  }
+}, 250);
+
+process.stdin.setEncoding('utf8');
+process.stdin.on('data', function (chunk) {
+  inputBuffer += chunk;
+  try {
+    const parsed = JSON.parse(inputBuffer);
+    if (!handled) {
+      handled = true;
+      clearTimeout(timer);
+      emitForHost(parsed);
+      process.exit(0);
+    }
+  } catch (_) {}
+});
+
+process.stdin.on('end', function () {
+  if (handled) return;
+  handled = true;
+  clearTimeout(timer);
+  let parsed = null;
+  if (inputBuffer.trim()) {
+    try { parsed = JSON.parse(inputBuffer); } catch (_) {}
+  }
+  try { emitForHost(parsed); } catch (_) {}
+  process.exit(0);
+});

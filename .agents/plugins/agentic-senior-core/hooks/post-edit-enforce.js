@@ -55,6 +55,13 @@ const {
   SESSION_DRIFT_THRESHOLD,
   LADDER_PULSE_INTERVAL,
 } = require('./constants.cjs');
+const {
+  isAntigravityPayload,
+  resolveWorkspaceRoot,
+  normalizeEditToolCall,
+} = require('./path-util.cjs');
+
+let sourceEditCount = 0;
 
 // Module-level counter for Claude Code path (resets per process spawn)
 function logHook(event, msg) {
@@ -90,49 +97,63 @@ const stdinTimeout = setTimeout(() => {
   process.exit(0);
 }, 3000);
 
+let handled = false;
 let inputBuffer = '';
+
+function dispatchInput(data) {
+  if (handled) return;
+  handled = true;
+  clearTimeout(stdinTimeout);
+
+  if (isAntigravityPayload(data)) {
+    if (data.stepIdx !== undefined) {
+      // Antigravity PostToolUse strictly expects {} on stdout
+      process.stdout.write('{}\n');
+      process.exit(0);
+      return;
+    }
+    handleAntigravityPostInvocation(data);
+    return;
+  }
+
+  const workspaceRoot = resolveWorkspaceRoot(data);
+  const rawTool = data.tool_name || data.toolName || '';
+  const rawInput = data.tool_input || data.toolInput || {};
+  const norm = normalizeEditToolCall(rawTool, rawInput);
+
+  if (norm) {
+    const mappedInput = norm.canonicalTool === 'Edit'
+      ? { file_path: norm.filePath, new_string: norm.newContent, old_string: norm.oldContent }
+      : { file_path: norm.filePath, content: norm.newContent };
+    processSingleEdit(norm.canonicalTool, mappedInput, function (nudge) {
+      emitClaude(nudge);
+    }, workspaceRoot, false);
+  }
+  process.exit(0);
+}
+
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => {
   inputBuffer += chunk;
   logHook('DataChunk', `len=${chunk.length} preview=${chunk.slice(0, 100).replace(/[\r\n]+/g, ' ')}`);
   try {
     const data = JSON.parse(inputBuffer);
-    clearTimeout(stdinTimeout);
     logHook('StdinData', 'keys=' + Object.keys(data).join(','));
-
-    if (data.transcriptPath) {
-      handleAntigravityPostInvocation(data);
-      return;
-    }
-
-    const toolName = data.tool_name || '';
-    const toolInput = data.tool_input || {};
-    processSingleEdit(toolName, toolInput, function (nudge) {
-      emitClaude(nudge);
-    });
-    process.exit(0);
+    dispatchInput(data);
   } catch (e) {
     // incomplete json, wait for more chunks
   }
 });
 
 process.stdin.on('end', () => {
+  if (handled) return;
   clearTimeout(stdinTimeout);
   logHook('StdinEnd', `bufferLen=${inputBuffer.length}`);
   if (inputBuffer.trim()) {
     try {
       const data = JSON.parse(inputBuffer);
       logHook('ParsedInputOnEnd', 'keys=' + Object.keys(data).join(','));
-      if (data.transcriptPath) {
-        handleAntigravityPostInvocation(data);
-        return;
-      }
-      const toolName = data.tool_name || '';
-      const toolInput = data.tool_input || {};
-      processSingleEdit(toolName, toolInput, function (nudge) {
-        emitClaude(nudge);
-      });
-      process.exit(0);
+      dispatchInput(data);
     } catch (e) {
       logHook('JsonParseErrorOnEnd', e.message);
       process.exit(0);
@@ -144,84 +165,78 @@ process.stdin.on('end', () => {
 
 function handleAntigravityPostInvocation(data) {
   try {
-    if (!fs.existsSync(data.transcriptPath)) return;
+    const workspaceRoot = resolveWorkspaceRoot(data);
+    if (!data.transcriptPath || !fs.existsSync(data.transcriptPath)) {
+      process.stdout.write('{}\n');
+      process.exit(0);
+      return;
+    }
+
     const lines = fs.readFileSync(data.transcriptPath, 'utf8').split('\n').filter(Boolean);
     const findings = [];
+    const minStep = typeof data.initialNumSteps === 'number' ? data.initialNumSteps : 0;
 
-    // Session drift check: count source file edits since initialNumSteps
     let sourceEditsSinceStart = 0;
     for (let i = 0; i < lines.length; i++) {
-      const step = JSON.parse(lines[i]);
-      if (step.step_index >= data.initialNumSteps && step.type === 'PLANNER_RESPONSE' && step.tool_calls) {
+      let step;
+      try {
+        step = JSON.parse(lines[i]);
+      } catch (_) {
+        continue;
+      }
+      if (step.step_index >= minStep && step.type === 'PLANNER_RESPONSE' && Array.isArray(step.tool_calls)) {
         for (let j = 0; j < step.tool_calls.length; j++) {
           const tc = step.tool_calls[j];
-          let toolName = '';
-          let toolInput = {};
+          const norm = tc ? normalizeEditToolCall(tc.name, tc.args) : null;
+          if (!norm || !norm.filePath) continue;
 
-          if (tc.name === 'replace_file_content' || tc.name === 'multi_replace_file_content') {
-            toolName = 'Edit';
-            toolInput = {
-              file_path: tc.args.TargetFile || '',
-              new_string: tc.args.ReplacementContent || '',
-              old_string: tc.args.TargetContent || ''
-            };
-          } else if (tc.name === 'write_to_file') {
-            toolName = 'Write';
-            toolInput = {
-              file_path: tc.args.TargetFile || '',
-              content: tc.args.CodeContent || ''
-            };
-          }
+          const ext = path.extname(norm.filePath).slice(1);
+          if (SOURCE_EXTENSIONS.has(ext)) sourceEditsSinceStart++;
 
-          if (toolName) {
-            const fp = toolInput.file_path || '';
-            const ext = path.extname(fp).slice(1);
-            if (SOURCE_EXTENSIONS.has(ext)) sourceEditsSinceStart++;
+          const mappedInput = norm.canonicalTool === 'Edit'
+            ? { file_path: norm.filePath, new_string: norm.newContent, old_string: norm.oldContent }
+            : { file_path: norm.filePath, content: norm.newContent };
 
-            processSingleEdit(toolName, toolInput, function (nudge) {
-              findings.push(nudge);
-            }, true);
-          }
+          processSingleEdit(norm.canonicalTool, mappedInput, function (nudge) {
+            findings.push(nudge);
+          }, workspaceRoot, true);
         }
       }
     }
 
-    // Inject drift nudge if 4+ source files modified this invocation
     if (sourceEditsSinceStart >= SESSION_DRIFT_THRESHOLD) {
       findings.push('[ASC Session Drift] ' + sourceEditsSinceStart + ' source file edits this invocation. '
         + 'Re-read the decision ladder before continuing: (1) Does this need to be built? '
         + '(2) Does the codebase already have this? (3) Stdlib/native? (4) Existing dependency?');
     }
 
-    const isPostToolUse = data.stepIdx !== undefined;
-    logHook('AntigravityResult', `sourceEdits=${sourceEditsSinceStart}, findings=${findings.length}, isPostToolUse=${isPostToolUse}`);
+    logHook('AntigravityResult', `sourceEdits=${sourceEditsSinceStart}, findings=${findings.length}`);
 
-    if (isPostToolUse) {
-      process.stdout.write(JSON.stringify({}) + '\n');
-    } else if (findings.length > 0) {
+    if (findings.length > 0) {
       const injectSteps = findings.map(function (f) { return { ephemeralMessage: f }; });
       process.stdout.write(JSON.stringify({ injectSteps: injectSteps }) + '\n');
     } else {
-      process.stdout.write(JSON.stringify({}) + '\n');
+      process.stdout.write('{}\n');
     }
   } catch (e) {
     logHook('AntigravityError', e.message);
-    process.stdout.write(JSON.stringify({}) + '\n');
+    process.stdout.write('{}\n');
   }
   process.exit(0);
 }
 
-function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
-  const filePath = toolInput.file_path || toolInput.TargetFile || toolInput.filePath || '';
-  if (!filePath) return;
+function processSingleEdit(toolName, toolInput, emitFn, workspaceRoot, skipSessionCounter) {
+  const rawFilePath = toolInput.file_path || toolInput.TargetFile || toolInput.Path || toolInput.filePath || '';
+  if (!rawFilePath) return;
+  const root = workspaceRoot || process.cwd();
+  const filePath = path.isAbsolute(rawFilePath) ? rawFilePath : path.resolve(root, rawFilePath);
   const findings = [];
 
-  const isEdit = toolName === 'Edit' || toolName === 'replace_file_content' || toolName === 'multi_replace_file_content';
-  const isWrite = toolName === 'Write' || toolName === 'write_to_file';
+  const isEdit = toolName === 'Edit' || toolName === 'edit_file' || toolName === 'replace_file_content' || toolName === 'multi_replace_file_content';
+  const isWrite = toolName === 'Write' || toolName === 'write_file' || toolName === 'write_to_file';
 
-  // Increment per-process counter for Claude Code drift detection
   const ext = path.extname(filePath).slice(1);
-  if (SOURCE_EXTENSIONS.has(ext)) {
+  if (!skipSessionCounter && SOURCE_EXTENSIONS.has(ext)) {
     sourceEditCount++;
     if (sourceEditCount === SESSION_DRIFT_THRESHOLD) {
       findings.push('[ASC Session Drift] ' + SESSION_DRIFT_THRESHOLD + '+ source file edits this session. '
@@ -252,13 +267,13 @@ function processSingleEdit(toolName, toolInput, emitFn, skipArray) {
     checkUiSlopPatterns(toolName, toolInput, filePath, findings);
   }
 
-  checkUniversalLinter(filePath, ext, findings);
+  checkUniversalLinter(filePath, ext, findings, root);
 
   checkLivingDocNudge(filePath, findings);
-  checkTestTampering(filePath, findings);
+  checkTestTampering(filePath, findings, root);
 
   if (ext !== 'md') {
-    checkWorkflowGate(toolName, filePath, ext, findings);
+    checkWorkflowGate(toolName, filePath, ext, findings, root);
   }
 
   logHook('ProcessSingleEdit', 'tool=' + toolName + ', file=' + filePath + ', findings=' + findings.length);
@@ -439,9 +454,9 @@ function checkStubPatterns(toolName, toolInput, filePath, findings) {
   }
 }
 
-function checkUniversalLinter(filePath, ext, findings) {
+function checkUniversalLinter(filePath, ext, findings, workspaceRoot) {
   var execSync = require('child_process').execSync;
-  var cwd = process.cwd();
+  var cwd = workspaceRoot || process.cwd();
 
   if (ext === 'js' || ext === 'ts' || ext === 'jsx' || ext === 'tsx' || ext === 'mjs' || ext === 'cjs') {
     try {
@@ -519,14 +534,15 @@ function checkLivingDocNudge(filePath, findings) {
   }
 }
 
-function checkTestTampering(filePath, findings) {
+function checkTestTampering(filePath, findings, workspaceRoot) {
   var isTest = /(?:\.test\.|\.spec\.|_test\.|__tests__[\/\\]|tests?[\/\\]).*\.(?:js|ts|jsx|tsx|py|go|rs|rb)$/i.test(filePath);
   if (!isTest) return;
 
   try {
+    var root = workspaceRoot || process.cwd();
     var pathUtil = require('./path-util.cjs');
-    var localGate = path.join(process.cwd(), 'workflow-gate.json');
-    var gatePath = fs.existsSync(localGate) ? localGate : pathUtil.getWorkflowGatePath(process.cwd());
+    var localGate = path.join(root, 'workflow-gate.json');
+    var gatePath = fs.existsSync(localGate) ? localGate : pathUtil.getWorkflowGatePath(root);
     if (!fs.existsSync(gatePath)) return;
 
     var gate = JSON.parse(fs.readFileSync(gatePath, 'utf8'));
@@ -539,11 +555,12 @@ function checkTestTampering(filePath, findings) {
   } catch (_) { }
 }
 
-function checkWorkflowGate(toolName, filePath, ext, findings) {
+function checkWorkflowGate(toolName, filePath, ext, findings, workspaceRoot) {
   try {
+    var root = workspaceRoot || process.cwd();
     var pathUtil = require('./path-util.cjs');
-    var localGate = path.join(process.cwd(), 'workflow-gate.json');
-    var gatePath = fs.existsSync(localGate) ? localGate : pathUtil.getWorkflowGatePath(process.cwd());
+    var localGate = path.join(root, 'workflow-gate.json');
+    var gatePath = fs.existsSync(localGate) ? localGate : pathUtil.getWorkflowGatePath(root);
     if (!fs.existsSync(gatePath)) return;
 
     var gateStr = fs.readFileSync(gatePath, 'utf8');
@@ -564,16 +581,16 @@ function checkWorkflowGate(toolName, filePath, ext, findings) {
         + 'Stop and wait for phase approval. If you must proceed, log this bypass to the debt ledger.'
       );
     } else if (gate.phase === 'implement') {
-      validateDocSpecs(gate.workflow, findings);
+      validateDocSpecs(gate.workflow, findings, root);
     }
   } catch (_) {
     // Silent fail
   }
 }
 
-function validateDocSpecs(workflow, findings) {
+function validateDocSpecs(workflow, findings, workspaceRoot) {
   try {
-    var cwd = process.cwd();
+    var cwd = workspaceRoot || process.cwd();
     var docsDir = path.join(cwd, 'docs');
 
     // Anti-typo check for common doc typos (e.g. Architectyre.md)

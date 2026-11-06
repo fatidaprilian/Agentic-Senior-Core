@@ -1,0 +1,97 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node hooks/session-start.js",
+            "commandWindows": "node hooks/session-start.js",
+            "timeout": 5,
+            "statusMessage": "Loading ASC rules..."
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node hooks/subagent-start.js",
+            "commandWindows": "node hooks/subagent-start.js",
+            "timeout": 5,
+            "statusMessage": "Loading ASC rules..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|edit_file|replace_file_content|write_to_file|write_file|multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Edit(**/package.json)|Edit(**/requirements.txt)|Edit(**/pyproject.toml)|Edit(**/go.mod)|Edit(**/Cargo.toml)|Edit(**/Gemfile)",
+            "command": "node hooks/pre-tool-dependency-gate.js",
+            "commandWindows": "node hooks/pre-tool-dependency-gate.js",
+            "timeout": 5,
+            "statusMessage": "ASC Pre-tool dependency check (Edit)..."
+          },
+          {
+            "type": "command",
+            "if": "Write(**/package.json)|Write(**/requirements.txt)|Write(**/pyproject.toml)|Write(**/go.mod)|Write(**/Cargo.toml)|Write(**/Gemfile)",
+            "command": "node hooks/pre-tool-dependency-gate.js",
+            "commandWindows": "node hooks/pre-tool-dependency-gate.js",
+            "timeout": 5,
+            "statusMessage": "ASC Pre-tool dependency check (Write)..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|run_command|run_shell_command|terminal|execute_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node hooks/pre-tool-dependency-gate.js",
+            "commandWindows": "node hooks/pre-tool-dependency-gate.js",
+            "timeout": 5,
+            "statusMessage": "ASC Pre-tool dependency check (Terminal)..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|edit_file|replace_file_content|write_to_file|write_file|multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node hooks/post-edit-enforce.js",
+            "commandWindows": "node hooks/post-edit-enforce.js",
+            "timeout": 5,
+            "statusMessage": "ASC ladder & spec gate check..."
+          },
+          {
+            "type": "command",
+            "command": "node hooks/dedup-gate.js",
+            "commandWindows": "node hooks/dedup-gate.js",
+            "timeout": 15,
+            "statusMessage": "ASC duplicate-code scan..."
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "type": "command",
+        "command": "node hooks/pre-compact-pin.js",
+        "commandWindows": "node hooks/pre-compact-pin.js",
+        "timeout": 5,
+        "statusMessage": "ASC constraint pinning..."
+      }
+    ]
+  }
+}
+

@@ -14,6 +14,11 @@ const {
   LOC_DELTA_THRESHOLD,
   NEW_FILE_LINE_THRESHOLD,
 } = require('./constants.cjs');
+const {
+  isAntigravityPayload,
+  resolveWorkspaceRoot,
+  normalizeEditToolCall,
+} = require('./path-util.cjs');
 
 const JSCPD_TIMEOUT_MS = 10000;
 
@@ -77,133 +82,136 @@ function isFrameworkConventional(basename) {
   return FRAMEWORK_CONVENTIONAL_BASENAMES.has(basename) || hasConventionalSuffix(basename);
 }
 
+let handled = false;
 let inputBuffer = '';
+
+function handleDedupPayload(data) {
+  if (handled) return;
+  handled = true;
+
+  const isAntigravity = isAntigravityPayload(data);
+  if (isAntigravity && data && data.stepIdx !== undefined) {
+    // Antigravity PostToolUse strictly expects {} on stdout
+    process.stdout.write('{}\n');
+    process.exit(0);
+    return;
+  }
+
+  const workspaceRoot = resolveWorkspaceRoot(data);
+  let rawTool = '';
+  let rawArgs = {};
+
+  if (data && data.toolCall) {
+    rawTool = data.toolCall.name || '';
+    rawArgs = data.toolCall.args || {};
+  } else if (data) {
+    rawTool = data.tool_name || data.toolName || '';
+    rawArgs = data.tool_input || data.toolInput || {};
+  }
+
+  const norm = normalizeEditToolCall(rawTool, rawArgs);
+  if (!norm || !norm.filePath) {
+    if (isAntigravity) process.stdout.write('{}\n');
+    process.exit(0);
+    return;
+  }
+
+  const resolvedFile = path.isAbsolute(norm.filePath)
+    ? norm.filePath
+    : path.resolve(workspaceRoot, norm.filePath);
+  const ext = path.extname(resolvedFile).slice(1);
+  if (!SOURCE_EXTENSIONS.has(ext)) {
+    if (isAntigravity) process.stdout.write('{}\n');
+    process.exit(0);
+    return;
+  }
+
+  const config = loadDedupConfig(workspaceRoot);
+  const mappedInput = norm.canonicalTool === 'Edit'
+    ? { new_string: norm.newContent, old_string: norm.oldContent }
+    : { content: norm.newContent };
+
+  if (!isQualifyingEdit(norm.canonicalTool, mappedInput, config)) {
+    if (isAntigravity) process.stdout.write('{}\n');
+    process.exit(0);
+    return;
+  }
+
+  if (hasValidInlineIgnore(resolvedFile)) {
+    if (isAntigravity) process.stdout.write('{}\n');
+    process.exit(0);
+    return;
+  }
+
+  const scanDir = resolveScanDir(resolvedFile, config, workspaceRoot);
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'asc-dedup-'));
+
+  const ignoreFlags = (config.ignoreDirs || []).map(function (d) { return '--ignore "' + d + '"'; }).join(' ');
+  const minTokens = config.minTokens || 30;
+  const scanCmd = ' "' + scanDir + '" --min-tokens ' + minTokens
+    + ' --reporters json --silent --output "' + tmpDir + '" ' + ignoreFlags;
+
+  const report = runJscpdScan(scanCmd, tmpDir, workspaceRoot);
+  if (!report) {
+    cleanup(tmpDir);
+    if (isAntigravity) process.stdout.write('{}\n');
+    process.exit(0);
+    return;
+  }
+
+  const finding = checkForDuplicates(report, resolvedFile, config, workspaceRoot);
+  if (!finding) {
+    cleanup(tmpDir);
+    if (isAntigravity) process.stdout.write('{}\n');
+    process.exit(0);
+    return;
+  }
+
+  const nudge = '[ASC Dedup] ' + path.basename(resolvedFile) + ' looks similar to '
+    + finding.matchedFile + ' (' + finding.percent + '% overlap, '
+    + finding.lines + ' lines). Ladder step 2: does the codebase already have this? '
+    + 'Reuse it, or confirm this is intentional.';
+
+  cleanup(tmpDir);
+  if (config.mode === 'block') {
+    emitDeny(nudge, isAntigravity);
+  } else {
+    emitAdvisory(nudge, isAntigravity);
+  }
+  process.exit(0);
+}
+
+if (process.stdin.isTTY) {
+  process.exit(0);
+}
+
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => {
   inputBuffer += chunk;
   try {
     const data = JSON.parse(inputBuffer);
-
-    let toolName = '';
-    let toolInput = {};
-    let isAntigravity = false;
-
-    if (data.toolCall) {
-      // Antigravity PreToolUse shape (has toolCall directly)
-      isAntigravity = true;
-      toolName = data.toolCall.name;
-      toolInput = data.toolCall.args || {};
-    } else if (data.stepIdx !== undefined && data.transcriptPath) {
-      // Antigravity PostToolUse shape — no toolCall in payload,
-      // read the tool call details from the transcript at stepIdx
-      isAntigravity = true;
-      var extracted = extractToolCallFromTranscript(data.transcriptPath, data.stepIdx);
-      if (!extracted) { process.exit(0); return; }
-      toolName = extracted.toolName;
-      toolInput = extracted.toolInput;
-    } else {
-      // Claude Code / Codex / Copilot path
-      toolName = data.tool_name || data.toolName || '';
-      toolInput = data.tool_input || data.toolInput || {};
-    }
-
-    const filePath = toolInput.file_path || toolInput.TargetFile || toolInput.path || toolInput.target_file || '';
-    if (!filePath) { process.exit(0); return; }
-
-    const ext = path.extname(filePath).slice(1);
-    if (!SOURCE_EXTENSIONS.has(ext)) { process.exit(0); return; }
-
-    const config = loadDedupConfig();
-    if (!isQualifyingEdit(toolName, toolInput, config)) { process.exit(0); return; }
-
-    if (hasValidInlineIgnore(filePath)) { process.exit(0); return; }
-
-    const scanDir = resolveScanDir(filePath, config);
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'asc-dedup-'));
-
-    const ignoreFlags = (config.ignoreDirs || []).map(function (d) { return '--ignore "' + d + '"'; }).join(' ');
-    const minTokens = config.minTokens || 30;
-    const scanCmd = ' "' + scanDir + '" --min-tokens ' + minTokens
-      + ' --reporters json --silent --output "' + tmpDir + '" ' + ignoreFlags;
-
-    const report = runJscpdScan(scanCmd, tmpDir);
-    if (!report) { cleanup(tmpDir); process.exit(0); return; }
-
-    const finding = checkForDuplicates(report, filePath, config);
-    if (!finding) { cleanup(tmpDir); process.exit(0); return; }
-
-    const nudge = '[ASC Dedup] ' + path.basename(filePath) + ' looks similar to '
-      + finding.matchedFile + ' (' + finding.percent + '% overlap, '
-      + finding.lines + ' lines). Ladder step 2: does the codebase already have this? '
-      + 'Reuse it, or confirm this is intentional.';
-
-    if (config.mode === 'block') {
-      emitDeny(nudge, isAntigravity);
-    } else {
-      emitAdvisory(nudge, isAntigravity);
-    }
-
-    cleanup(tmpDir);
-    process.exit(0);
-  } catch (e) {
+    handleDedupPayload(data);
+  } catch (_) {
     // incomplete json, wait for more chunks
   }
 });
 
-// Extract tool call details from the Antigravity transcript at a given step index.
-// PostToolUse on Antigravity only provides stepIdx — the actual tool call args
-// must be recovered from the transcript log. Same approach as post-edit-enforce.js.
-function extractToolCallFromTranscript(transcriptPath, stepIdx) {
-  try {
-    if (!fs.existsSync(transcriptPath)) return null;
-    var lines = fs.readFileSync(transcriptPath, 'utf8').split('\n').filter(Boolean);
-
-    // Find the step with matching step_index that contains tool_calls
-    for (var i = lines.length - 1; i >= 0; i--) {
-      try {
-        var step = JSON.parse(lines[i]);
-        if (step.step_index !== stepIdx || !step.tool_calls) continue;
-
-        for (var j = 0; j < step.tool_calls.length; j++) {
-          var tc = step.tool_calls[j];
-          if (tc.name === 'replace_file_content' || tc.name === 'multi_replace_file_content') {
-            return {
-              toolName: 'Edit',
-              toolInput: {
-                file_path: tc.args.TargetFile || '',
-                new_string: tc.args.ReplacementContent || '',
-                old_string: tc.args.TargetContent || '',
-              },
-            };
-          } else if (tc.name === 'write_to_file') {
-            return {
-              toolName: 'Write',
-              toolInput: {
-                file_path: tc.args.TargetFile || '',
-                content: tc.args.CodeContent || '',
-              },
-            };
-          }
-        }
-      } catch (lineErr) {
-        if (process.env.ASC_DEBUG) {
-          console.error('[ASC Debug] Transcript line parse failed line ' + i + ':', lineErr.message);
-        }
-        // Skip malformed line and keep scanning
-      }
-    }
-    return null;
-  } catch (err) {
-    if (process.env.ASC_DEBUG) {
-      console.error('[ASC Debug] extractToolCallFromTranscript failed:', err.message);
-    }
-    return null;
+process.stdin.on('end', () => {
+  if (handled) return;
+  if (!inputBuffer.trim()) {
+    process.exit(0);
+    return;
   }
-}
+  try {
+    handleDedupPayload(JSON.parse(inputBuffer));
+  } catch (_) {
+    process.exit(0);
+  }
+});
 
 function isQualifyingEdit(toolName, toolInput, config) {
   var isWrite = ['Write', 'write_to_file', 'write_file'].indexOf(toolName) !== -1;
-  var isEdit = ['Edit', 'replace_file_content', 'multi_replace_file_content'].indexOf(toolName) !== -1;
+  var isEdit = ['Edit', 'edit_file', 'replace_file_content', 'multi_replace_file_content'].indexOf(toolName) !== -1;
 
   var newFileThreshold = (config && typeof config.NEW_FILE_LINE_THRESHOLD === 'number')
     ? config.NEW_FILE_LINE_THRESHOLD
@@ -225,8 +233,8 @@ function isQualifyingEdit(toolName, toolInput, config) {
   return false;
 }
 
-function resolveScanDir(filePath, config) {
-  var cwd = process.cwd();
+function resolveScanDir(filePath, config, workspaceRoot) {
+  var cwd = workspaceRoot || process.cwd();
 
   // User override takes priority
   if (config.scanRoot) {
@@ -248,10 +256,11 @@ function resolveScanDir(filePath, config) {
   return cwd;
 }
 
-function loadDedupConfig() {
+function loadDedupConfig(workspaceRoot) {
+  var root = workspaceRoot || process.cwd();
   var candidates = [
-    path.join(process.cwd(), '.asc', 'dedup-config.json'),
-    path.join(process.cwd(), '.agents', 'dedup-config.json'),
+    path.join(root, '.asc', 'dedup-config.json'),
+    path.join(root, '.agents', 'dedup-config.json'),
   ];
   for (var i = 0; i < candidates.length; i++) {
     try {
@@ -273,14 +282,15 @@ function loadDedupConfig() {
 
 // minimal: attempt-then-fallback — try scan directly, fall back on failure.
 // No separate --version probes. Upgrade if jscpd provides a stable JS API.
-function runJscpdScan(scanCmd, tmpDir) {
+function runJscpdScan(scanCmd, tmpDir, workspaceRoot) {
+  var cwd = workspaceRoot || process.cwd();
   var binaries = ['bunx jscpd', 'npx --yes jscpd@5', 'npx --yes jscpd'];
   for (var i = 0; i < binaries.length; i++) {
     try {
       execSync(binaries[i] + scanCmd, {
         timeout: JSCPD_TIMEOUT_MS,
         stdio: 'pipe',
-        cwd: process.cwd(),
+        cwd: cwd,
       });
       return loadReport(tmpDir);
     } catch (_) {
@@ -334,7 +344,7 @@ function isAllowedDuplicate(fileA, fileB, allowedDuplicates) {
   return false;
 }
 
-function checkForDuplicates(report, filePath, config) {
+function checkForDuplicates(report, filePath, config, workspaceRoot) {
   var duplicates = report.duplicates || [];
   if (duplicates.length === 0) return null;
 
@@ -355,17 +365,13 @@ function checkForDuplicates(report, filePath, config) {
         continue;
       }
 
-      // Skip framework-conventional filenames in different directories — identical names
-      // are mandated by the framework (e.g. Next.js page.tsx, Angular *.component.ts),
-      // not copy-paste duplication.
       if (isFrameworkConventional(targetBasename)
           && isFrameworkConventional(otherBasename)
           && path.dirname(path.resolve(filePath)) !== path.dirname(path.resolve(otherRaw))) {
         continue;
       }
 
-      // Show relative path instead of bare basename so the developer knows WHICH file.
-      var cwd = process.cwd();
+      var cwd = workspaceRoot || process.cwd();
       var matchedFile = path.relative(cwd, path.resolve(otherRaw)).replace(/\\/g, '/');
       var lines = dup.lines || 0;
       var totalFileLines = 1;
@@ -376,7 +382,6 @@ function checkForDuplicates(report, filePath, config) {
       }
       var percent = Math.round((lines / totalFileLines) * 100);
 
-      // Skip trivial matches (import boilerplate, small overlaps)
       if (lines < 10 && percent < 10) {
         continue;
       }
@@ -409,18 +414,21 @@ function emitAdvisory(nudge, isAntigravity) {
 
 function emitDeny(reason, isAntigravity) {
   if (isAntigravity) {
-    process.stdout.write(JSON.stringify({ decision: 'deny', reason: reason }) + '\n');
-  } else {
     process.stdout.write(JSON.stringify({
-      allow_tool: false,
-      deny_reason: reason,
-      hookSpecificOutput: {
-        hookEventName: 'PostToolUse',
-        permissionDecision: 'deny',
-        permissionDecisionReason: reason,
-      },
+      injectSteps: [{ ephemeralMessage: reason }],
     }) + '\n');
+    process.exit(0);
+    return;
   }
+  process.stdout.write(JSON.stringify({
+    allow_tool: false,
+    deny_reason: reason,
+    hookSpecificOutput: {
+      hookEventName: 'PostToolUse',
+      permissionDecision: 'deny',
+      permissionDecisionReason: reason,
+    },
+  }) + '\n');
   process.exit(2);
 }
 

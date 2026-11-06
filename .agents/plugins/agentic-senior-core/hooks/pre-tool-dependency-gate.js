@@ -1,11 +1,16 @@
 #!/usr/bin/env node
-// Agentic Senior Core — PreToolUse dependency gate hook
-// Hard-blocks edits/writes to package.json AND shell commands (npm install/yarn add/ascx)
-// if new dependencies duplicate stdlib/platform features.
-// Supports Claude Code, Antigravity IDE (run_command), and Copilot CLI hook response formats.
+// Agentic Senior Core — PreToolUse dependency & safety gate hook
+// Gates edits/writes to dependency manifests AND shell commands (npm install/yarn add/ascx,
+// git commit/push, unverified/insecure git clone).
+// Supports Antigravity (App, CLI, IDE), Claude Code, Codex CLI, and Copilot CLI.
 
 const fs = require('fs');
 const path = require('path');
+const {
+  isAntigravityPayload,
+  resolveWorkspaceRoot,
+  normalizeEditToolCall,
+} = require('./path-util.cjs');
 
 let knownDuplicates = new Set();
 let reviewDuplicates = new Set();
@@ -14,8 +19,6 @@ try {
   const knownPath = path.join(__dirname, 'lib', 'known-duplicates.json');
   if (fs.existsSync(knownPath)) {
     const raw = JSON.parse(fs.readFileSync(knownPath, 'utf8'));
-    // Tiered structure (v5): 'block' = always redundant, 'review' = context-dependent.
-    // Legacy flat 'duplicates' arrays are treated as review-tier for backward compatibility.
     if (Array.isArray(raw.block) || Array.isArray(raw.review)) {
       knownDuplicates = new Set(raw.block || []);
       reviewDuplicates = new Set(raw.review || []);
@@ -25,193 +28,184 @@ try {
     }
   }
 } catch (_) {
-  // Fallback if JSON loading fails: block only the always-redundant set
   knownDuplicates = new Set(['left-pad', 'is-odd', 'mkdirp', 'rimraf', 'node-fetch', 'underscore']);
 }
 
+function emitAllow(isAntigravity) {
+  if (isAntigravity) {
+    process.stdout.write(JSON.stringify({ decision: 'allow' }) + '\n');
+  }
+  process.exit(0);
+}
+
+function emitGateDecision(antigravityDecision, reason, isAntigravity) {
+  if (isAntigravity) {
+    process.stdout.write(JSON.stringify({
+      decision: antigravityDecision,
+      reason: reason,
+    }) + '\n');
+    process.exit(0);
+    return;
+  }
+
+  const output = {
+    allow_tool: false,
+    deny_reason: reason,
+    hookSpecificOutput: {
+      hookEventName: 'PreToolUse',
+      permissionDecision: 'deny',
+      permissionDecisionReason: reason,
+    },
+  };
+  process.stdout.write(JSON.stringify(output) + '\n');
+  process.exit(2);
+}
+
+function handlePayload(data) {
+  const isAntigravity = isAntigravityPayload(data);
+  if (!data || typeof data !== 'object') {
+    emitAllow(isAntigravity);
+    return;
+  }
+
+  const workspaceRoot = resolveWorkspaceRoot(data);
+  const toolName = data.toolCall ? (data.toolCall.name || '') : (data.tool_name || data.toolName || '');
+  const toolInput = data.toolCall ? (data.toolCall.args || {}) : (data.tool_input || data.toolInput || {});
+  let added = [];
+
+  const isTerminal = ['Bash', 'run_command', 'run_shell_command', 'terminal', 'execute_command'].includes(toolName);
+  const normalizedEdit = !isTerminal ? normalizeEditToolCall(toolName, toolInput) : null;
+
+  if (isTerminal) {
+    const command = toolInput.command || toolInput.CommandLine || toolInput.cmd || toolInput.commandLine || '';
+
+    if (isGitCommitOrPush(command)) {
+      const reason = isAntigravity
+        ? '[ASC Gate] Confirm git commit/push was explicitly requested by the user this turn.'
+        : '[ASC Hard-Block] git commit/push detected. Never run git commit, git push, or git push --force unless the user explicitly requests it this turn.';
+      emitGateDecision('force_ask', reason, isAntigravity);
+      return;
+    }
+
+    const allowlist = loadAllowlist(workspaceRoot);
+
+    const cloneCheck = checkGitClone(command, allowlist);
+    if (cloneCheck && cloneCheck.blocked) {
+      emitGateDecision('deny', cloneCheck.reason, isAntigravity);
+      return;
+    }
+
+    added = extractCommandDeps(command);
+  } else if (normalizedEdit) {
+    const filePath = normalizedEdit.filePath || '';
+    const manifestFiles = ['package.json', 'requirements.txt', 'pyproject.toml', 'go.mod', 'Cargo.toml', 'Gemfile'];
+    const isManifest = manifestFiles.some(function (m) { return filePath.endsWith(m); });
+    if (!isManifest) {
+      emitAllow(isAntigravity);
+      return;
+    }
+
+    const depPattern = /"([^"]+)"\s*:\s*"[~^>=<*]?\d/g;
+    const newDeps = extractDeps(normalizedEdit.newContent, depPattern);
+    const oldDeps = extractDeps(normalizedEdit.oldContent, depPattern);
+
+    added = newDeps.filter(function (d) { return oldDeps.indexOf(d) === -1; });
+  }
+
+  if (added.length === 0) {
+    emitAllow(isAntigravity);
+    return;
+  }
+
+  const allowlist = loadAllowlist(workspaceRoot);
+  const notAllowed = added.filter(function (dep) {
+    return !allowlist.has(dep);
+  });
+  const forbidden = notAllowed.filter(function (dep) {
+    return knownDuplicates.has(dep) || reviewDuplicates.has(dep);
+  });
+
+  const blocked = forbidden.filter(function (dep) {
+    return knownDuplicates.has(dep);
+  });
+  const reviewOnly = forbidden.filter(function (dep) {
+    return !knownDuplicates.has(dep) && reviewDuplicates.has(dep);
+  });
+
+  if (blocked.length > 0) {
+    const reason = '[ASC Hard-Block] Dependency ' + blocked.map(function (d) { return "'" + d + "'"; }).join(', ')
+      + ' duplicates standard library or native platform features. '
+      + 'Ladder step 3: use stdlib/native features instead, or add to .asc/dependency-allowlist.json to override.';
+    emitGateDecision('deny', reason, isAntigravity);
+    return;
+  }
+
+  if (reviewOnly.length > 0) {
+    const reasons = reviewOnly.map(function (dep) {
+      return "'" + dep + "': " + (reviewReasons[dep] || 'native alternative exists; confirm the package-specific need');
+    }).join(' ');
+    const reason = '[ASC Review] Dependency ' + reviewOnly.join(', ')
+      + ' may duplicate stdlib/native features. ' + reasons
+      + ' If the need is real, add it to .asc/dependency-allowlist.json and retry.';
+    emitGateDecision('deny', reason, isAntigravity);
+    return;
+  }
+
+  emitAllow(isAntigravity);
+}
+
+if (process.stdin.isTTY) {
+  process.exit(0);
+}
+
+let handled = false;
 let inputBuffer = '';
+const stdinTimer = setTimeout(function () {
+  if (!handled) {
+    handled = true;
+    process.exit(0);
+  }
+}, 3000);
+
 process.stdin.setEncoding('utf8');
-process.stdin.on('data', chunk => {
+process.stdin.on('data', function (chunk) {
   inputBuffer += chunk;
   try {
     const data = JSON.parse(inputBuffer);
-    const isAntigravity = !!data.toolCall;
-    const toolName = isAntigravity ? data.toolCall.name : (data.tool_name || data.toolName || '');
-    const toolInput = isAntigravity ? data.toolCall.args : (data.tool_input || data.toolInput || {});
-    let added = [];
-
-    const isTerminal = ['Bash', 'run_command', 'run_shell_command', 'terminal', 'execute_command'].includes(toolName);
-    const isFileEdit = ['Edit', 'Write', 'replace_file_content', 'write_to_file', 'write_file', 'multi_replace_file_content'].includes(toolName);
-
-    if (isTerminal) {
-      const command = toolInput.command || toolInput.CommandLine || toolInput.cmd || toolInput.commandLine || '';
-
-      // Hard-block git commit/push unless explicitly allowed
-      if (isGitCommitOrPush(command)) {
-        const reason = '[ASC Hard-Block] git commit/push detected. Never run git commit, git push, or git push --force unless the user explicitly requests it this turn.';
-        let output;
-        if (isAntigravity) {
-          output = { decision: "deny", reason: reason };
-        } else {
-          output = {
-            allow_tool: false,
-            deny_reason: reason,
-            hookSpecificOutput: {
-              hookEventName: 'PreToolUse',
-              permissionDecision: 'deny',
-              permissionDecisionReason: reason
-            }
-          };
-        }
-        process.stdout.write(JSON.stringify(output) + '\n');
-        process.exit(2);
-        return;
-      }
-
-      const allowlist = loadAllowlist();
-
-      // Hard-block unverified git clone targets (HalluSquatting mitigation)
-      const cloneCheck = checkGitClone(command, allowlist);
-      if (cloneCheck && cloneCheck.blocked) {
-        const reason = cloneCheck.reason;
-        let output;
-        if (isAntigravity) {
-          output = { decision: "deny", reason: reason };
-        } else {
-          output = {
-            allow_tool: false,
-            deny_reason: reason,
-            hookSpecificOutput: {
-              hookEventName: 'PreToolUse',
-              permissionDecision: 'deny',
-              permissionDecisionReason: reason
-            }
-          };
-        }
-        process.stdout.write(JSON.stringify(output) + '\n');
-        process.exit(2);
-        return;
-      }
-
-      added = extractCommandDeps(command);
-    } else if (isFileEdit) {
-      const filePath = toolInput.file_path || toolInput.TargetFile || toolInput.path || toolInput.target_file || '';
-      const manifestFiles = ['package.json', 'requirements.txt', 'pyproject.toml', 'go.mod', 'Cargo.toml', 'Gemfile'];
-      const isManifest = manifestFiles.some(function (m) { return filePath.endsWith(m); });
-      if (!isManifest) {
-        process.exit(0);
-        return;
-      }
-      const target = (toolName === 'Edit' || toolName === 'replace_file_content')
-        ? (toolInput.new_string || toolInput.ReplacementContent || toolInput.content || '')
-        : (toolInput.content || toolInput.CodeContent || '');
-      const baseline = (toolName === 'Edit' || toolName === 'replace_file_content')
-        ? (toolInput.old_string || toolInput.TargetContent || '')
-        : '';
-
-      const depPattern = /"([^"]+)"\s*:\s*"[~^>=<*]?\d/g;
-      const newDeps = extractDeps(target, depPattern);
-      const oldDeps = extractDeps(baseline, depPattern);
-
-      added = newDeps.filter(function (d) { return oldDeps.indexOf(d) === -1; });
+    if (!handled) {
+      handled = true;
+      clearTimeout(stdinTimer);
+      handlePayload(data);
     }
+  } catch (_) {
+    // Wait for remaining chunks
+  }
+});
 
-    if (added.length === 0) {
-      process.exit(0);
-      return;
-    }
-
-    const allowlist = loadAllowlist();
-    const notAllowed = added.filter(function (dep) {
-      return !allowlist.has(dep);
-    });
-    const forbidden = notAllowed.filter(function (dep) {
-      return knownDuplicates.has(dep) || reviewDuplicates.has(dep);
-    });
-
-    const blocked = forbidden.filter(function (dep) {
-      return knownDuplicates.has(dep);
-    });
-    const reviewOnly = forbidden.filter(function (dep) {
-      return !knownDuplicates.has(dep) && reviewDuplicates.has(dep);
-    });
-
-    if (blocked.length > 0) {
-      const reason = '[ASC Hard-Block] Dependency ' + blocked.map(function (d) { return "'" + d + "'"; }).join(', ')
-        + ' duplicates standard library or native platform features. '
-        + 'Ladder step 3: use stdlib/native features instead, or add to .asc/dependency-allowlist.json to override.';
-
-      let output;
-      if (isAntigravity) {
-        output = {
-          decision: "deny",
-          reason: reason
-        };
-      } else {
-        output = {
-          allow_tool: false,
-          deny_reason: reason,
-          hookSpecificOutput: {
-            hookEventName: 'PreToolUse',
-            permissionDecision: 'deny',
-            permissionDecisionReason: reason
-          }
-        };
-      }
-      process.stdout.write(JSON.stringify(output) + '\n');
-      process.exit(2);
-      return;
-    }
-
-    if (reviewOnly.length > 0) {
-      // Context-dependent packages: nudge with the specific reason instead of blocking.
-      // A PreToolUse deny is the only injection channel on some hosts, so deny with a
-      // clear "allowed after review" message pointing at the allowlist escape hatch.
-      const reasons = reviewOnly.map(function (dep) {
-        return "'" + dep + "': " + (reviewReasons[dep] || 'native alternative exists; confirm the package-specific need');
-      }).join(' ');
-      const reason = '[ASC Review] Dependency ' + reviewOnly.join(', ')
-        + ' may duplicate stdlib/native features. ' + reasons
-        + ' If the need is real, add it to .asc/dependency-allowlist.json and retry.';
-
-      let output;
-      if (isAntigravity) {
-        output = {
-          decision: "deny",
-          reason: reason
-        };
-      } else {
-        output = {
-          allow_tool: false,
-          deny_reason: reason,
-          hookSpecificOutput: {
-            hookEventName: 'PreToolUse',
-            permissionDecision: 'deny',
-            permissionDecisionReason: reason
-          }
-        };
-      }
-      process.stdout.write(JSON.stringify(output) + '\n');
-      process.exit(2);
-      return;
-    }
+process.stdin.on('end', function () {
+  if (handled) return;
+  handled = true;
+  clearTimeout(stdinTimer);
+  if (!inputBuffer.trim()) {
     process.exit(0);
-  } catch (e) {
-    // incomplete json, wait for more chunks
+    return;
+  }
+  try {
+    handlePayload(JSON.parse(inputBuffer));
+  } catch (_) {
+    process.exit(0);
   }
 });
 
 function isGitCommitOrPush(command) {
   if (!command || typeof command !== 'string') return false;
 
-  // Split multi-command strings (chained by &&, ||, ;, \n, |)
   const subcommands = command.split(/[\r\n;&|]+/);
 
   for (let i = 0; i < subcommands.length; i++) {
     const sub = subcommands[i].trim();
     if (!sub || !/\b(?:git|git\.exe)\b/i.test(sub)) continue;
 
-    // Tokenize sub-command handling quotes
     const tokens = sub.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) || [];
     let gitIdx = -1;
 
@@ -225,21 +219,17 @@ function isGitCommitOrPush(command) {
 
     if (gitIdx === -1) continue;
 
-    // Parse tokens after 'git' to find the git subcommand
     for (let k = gitIdx + 1; k < tokens.length; k++) {
       let tok = tokens[k].replace(/^['"]|['"]$/g, '');
       if (!tok) continue;
 
-      // If token is a flag (-C, --git-dir, -c, --no-pager, etc.)
       if (tok.startsWith('-')) {
-        // Skip standalone argument for options expecting a value after whitespace
         if (['-C', '-c', '--git-dir', '--work-tree', '--namespace', '--exec-path'].includes(tok)) {
           k++;
         }
         continue;
       }
 
-      // First non-flag token after git global options is the git subcommand
       const gitSub = tok.toLowerCase();
       if (gitSub === 'commit' || gitSub === 'push' || gitSub === 'commit-tree') {
         return true;
@@ -255,14 +245,12 @@ function isGitCommitOrPush(command) {
 function checkGitClone(command, allowlist) {
   if (!command || typeof command !== 'string') return null;
 
-  // Split multi-command strings (chained by &&, ||, ;, \n, |)
   const subcommands = command.split(/[\r\n;&|]+/);
 
   for (let i = 0; i < subcommands.length; i++) {
     const sub = subcommands[i].trim();
     if (!sub || !/\b(?:git|git\.exe)\b/i.test(sub)) continue;
 
-    // Tokenize sub-command handling quotes
     const tokens = sub.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) || [];
     let gitIdx = -1;
 
@@ -276,7 +264,6 @@ function checkGitClone(command, allowlist) {
 
     if (gitIdx === -1) continue;
 
-    // Parse tokens after 'git' to find the git subcommand
     let isClone = false;
     let nextIdx = gitIdx + 1;
     for (; nextIdx < tokens.length; nextIdx++) {
@@ -299,14 +286,12 @@ function checkGitClone(command, allowlist) {
 
     if (!isClone) continue;
 
-    // Find the target repository token (skip clone options like --depth, -b, --branch, etc.)
     let repoArg = '';
     for (let k = nextIdx; k < tokens.length; k++) {
       let tok = tokens[k].replace(/^['"]|['"]$/g, '');
       if (!tok) continue;
 
       if (tok.startsWith('-')) {
-        // Flags that take an argument after whitespace
         if (['-b', '--branch', '--depth', '--origin', '-o', '--reference', '--filter', '-u', '--upload-pack', '--template'].includes(tok)) {
           k++;
         }
@@ -319,19 +304,16 @@ function checkGitClone(command, allowlist) {
 
     if (!repoArg) continue;
 
-    // 1. Block insecure protocols (git://, http://)
     if (repoArg.startsWith('git://') || repoArg.startsWith('http://')) {
       return {
         blocked: true,
         reason: '[ASC Hard-Block] Insecure git clone protocol detected (' + repoArg + '). '
-          + 'Use secure HTTPS or SSH (git@) with verified TLS.'
+          + 'Use secure HTTPS or SSH (git@) with verified TLS.',
       };
     }
 
-    // 2. Allow checking against allowlist (exact URL, owner/repo, or repo name)
     const normalized = repoArg.toLowerCase().replace(/\.git$/, '');
 
-    // Extract owner/repo if possible (e.g. from https://github.com/owner/repo or git@github.com:owner/repo)
     let ownerRepo = '';
     const ghMatch = repoArg.match(/(?:github\.com|gitlab\.com|bitbucket\.org)[:\/]([^\/\s]+\/[^\/\s#?]+)/i);
     if (ghMatch) {
@@ -348,7 +330,7 @@ function checkGitClone(command, allowlist) {
         blocked: true,
         reason: '[ASC Hard-Block] Unverified git clone target: \'' + repoArg + '\'. '
           + 'Verify repository provenance against trusted sources (mitigate HalluSquatting) '
-          + 'or add to allowedRepositories in .asc/dependency-allowlist.json to allow.'
+          + 'or add to allowedRepositories in .asc/dependency-allowlist.json to allow.',
       };
     }
   }
@@ -366,11 +348,6 @@ function extractDeps(text, pattern) {
 }
 
 function extractCommandDeps(command) {
-  // JS: npm/yarn/pnpm/bun/ascx install/add
-  // Python: pip/pip3/uv install, poetry add
-  // Go: go get
-  // Rust: cargo add
-  // Ruby: gem install, bundle add
   const installRegex = /(?:npm|yarn|pnpm|bun|ascx|pip3?|uv|poetry|cargo|gem|bundle)\s+(?:install|i|add|get)(?:\s+[^\s]+)*/i;
   if (!installRegex.test(command)) return [];
 
@@ -380,11 +357,10 @@ function extractCommandDeps(command) {
 
   const rawArgs = parts.slice(pkgIndex + 1);
   const deps = [];
-  for (let arg of rawArgs) {
-    if (arg.startsWith('-')) continue; // Skip flags like -D, --save-dev
+  for (const arg of rawArgs) {
+    if (arg.startsWith('-')) continue;
     if (arg.startsWith('http://') || arg.startsWith('https://') || arg.startsWith('git+')) continue;
 
-    // Remove scope/version if any, e.g. lodash@^4.17 -> lodash, @types/node@18 -> @types/node
     let name = arg;
     if (name.startsWith('@')) {
       const slashIndex = name.indexOf('/');
@@ -401,12 +377,13 @@ function extractCommandDeps(command) {
   return deps;
 }
 
-function loadAllowlist() {
+function loadAllowlist(workspaceRoot) {
+  const root = workspaceRoot || process.cwd();
   const allowed = new Set();
   allowed.repositories = new Set();
   const candidates = [
-    path.join(process.cwd(), '.asc', 'dependency-allowlist.json'),
-    path.join(process.cwd(), '.agents', 'dependency-allowlist.json')
+    path.join(root, '.asc', 'dependency-allowlist.json'),
+    path.join(root, '.agents', 'dependency-allowlist.json'),
   ];
 
   for (let i = 0; i < candidates.length; i++) {

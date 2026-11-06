@@ -44,8 +44,8 @@ describe('Universal Plugin Structure', () => {
 });
 
 describe('Hooks', () => {
-  it('hooks.json has correct Claude format', async () => {
-    const hooksPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'hooks.json');
+  it('hooks/hooks.json has correct Claude/Codex format', async () => {
+    const hooksPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'hooks', 'hooks.json');
     const content = await fs.readFile(hooksPath, 'utf8');
     const hooks = JSON.parse(content);
     assert.ok(hooks.hooks.SessionStart, 'Must have SessionStart event');
@@ -54,6 +54,17 @@ describe('Hooks', () => {
     const sessionHook = hooks.hooks.SessionStart[0];
     assert.ok(sessionHook.hooks[0].command, 'Hook must have command field');
     assert.ok(sessionHook.hooks[0].commandWindows, 'Hook must have commandWindows field');
+  });
+
+  it('hooks.json at plugin root has strict Antigravity protojson format', async () => {
+    const agyHooksPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'hooks.json');
+    const content = await fs.readFile(agyHooksPath, 'utf8');
+    const parsed = JSON.parse(content);
+    const group = parsed['agentic-senior-core'];
+    assert.ok(group, 'Must define top-level "agentic-senior-core" hook group');
+    assert.ok(Array.isArray(group.PreToolUse), 'PreToolUse must be an array');
+    assert.ok(Array.isArray(group.PreInvocation), 'PreInvocation must be a flat handler array');
+    assert.ok(Array.isArray(group.PostInvocation), 'PostInvocation must be a flat handler array');
   });
 
   it('session-start.js and subagent-start.js exist', async () => {
@@ -85,8 +96,8 @@ describe('Hooks', () => {
     assert.ok(gateContent.includes('PreToolUse'), 'Must reference PreToolUse event');
   });
 
-  it('hooks.json registers PreToolUse and PostToolUse events', async () => {
-    const hooksPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'hooks.json');
+  it('hooks/hooks.json registers PreToolUse and PostToolUse events', async () => {
+    const hooksPath = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core', 'hooks', 'hooks.json');
     const content = await fs.readFile(hooksPath, 'utf8');
     const hooks = JSON.parse(content);
     assert.ok(hooks.hooks.PreToolUse, 'Must have PreToolUse event');
