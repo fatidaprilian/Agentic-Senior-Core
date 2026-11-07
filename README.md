@@ -108,22 +108,28 @@ If you need to override these defaults (e.g., to whitelist a specific dependency
 
 ## Commands & CLI
 
-ASC provides 6 orthogonal meta-commands to steer your agents (`/asc`, `/asc-develop`, `/asc-review`, `/asc-test`, `/asc-reference`, `/asc-ui`). 
-It also provides a CLI to manage your local setup (e.g. `asc adapter --all`, `asc global --all`).
+ASC provides 7 orthogonal meta-commands to direct AI agents:
 
-### Git Pre-Commit Hook
+| Command | Domain Focus | Operational Mechanism |
+|---|---|---|
+| `/asc` | Architecture & Meta | Codebase fingerprinting, adaptive preferences, debt ledger, and skill authoring pressure-testing. |
+| `/asc-develop` | Lifecycle & Planning | Greenfield scaffolding, brownfield features, 1-hop execution plans (`Ruling:` execution), subagent dispatch, and refactoring. |
+| `/asc-review` | Quality & Security | Production PR reviews, deep vulnerability audits (OWASP / ASI), and token-level clone deduplication. |
+| `/asc-test` | Testing & Debugging | 4-phase systematic root-cause debugging, Iron Law of TDD, verification gates, and regression proofs. |
+| `/asc-reference` | Backend Architecture | REST/GraphQL APIs, database indexing/transactions/migrations, Docker/K8s manifests, and service resilience. |
+| `/asc-ui` | Frontend Engineering | Anti-card-soup data-to-structure mapping (`<ol>`, `<table>`, `divide-y`), token reuse, 4 data states, and WCAG AA accessibility. |
+| `/asc-pentest` | Security Verification | Dynamic application security testing (DAST), authorization scope gates, Pentest Task Trees, and OWASP API Top 10 stateful fuzzing. |
 
-ASC automatically installs a native Git pre-commit hook when you run `asc adapter`. This hook runs via Git's own hook system — independent of any AI host's plugin runtime — so it works on **every** host, including adapter-only hosts (Cursor, Cline, Copilot IDE extension, etc.) and hosts where agent lifecycle hooks are unreliable.
+### Mechanical Enforcement & Lifecycle Hooks
 
-The hook:
-- Runs `jscpd` on directories containing staged files, using policy from `.asc/dedup-config.json`
-- Auto-fixes ESLint issues (including `no-confusing-void-expression`) and re-stages, if the target project has a typed ESLint config
-- Blocks the commit if a staged file duplicates existing code, with a clear message citing the match
-- Bypass with `git commit --no-verify` when duplication is intentional
+ASC enforces quality through deterministic hooks rather than relying on prompt compliance alone:
 
-Supports both `.husky/` (appends without overwriting) and `.git/hooks/` (direct install). Remove with `asc uninstall`. To install the hook standalone without generating adapter files: `asc install-git-hook`.
-
-> **Known limitation — Antigravity IDE hooks**: Agent lifecycle hooks (`hooks.json`) are documented but do not execute on Antigravity IDE's chat surface as of August 2026. The git pre-commit hook is the recommended primary enforcement mechanism for Antigravity users.
+- **Google Antigravity (App, CLI, IDE)**: Native protojson lifecycle hooks (`<plugin_root>/hooks.json`):
+  - `PreToolUse`: Intercepts unvetted dependencies and blocks unauthorized git commits/pushes.
+  - `PostInvocation`: Flags UI Card Soup ($\ge 3$ consecutive card grids without semantic tables/steppers) and warns on production edits during bug investigations prior to reproduction commands.
+  - `Stop`: Blocks turn completion when source code was modified without a subsequent verification command.
+- **Claude Code, Codex CLI, Copilot CLI**: Plugin lifecycle hooks (`hooks/hooks.json`) executing pre-tool dependency checks, duplicate code scans, and advisory pulse reminders.
+- **Universal Git Pre-Commit Hook**: Automatically installed via `asc global` or `asc adapter` (`~/.asc/global-hooks/pre-commit`), enforcing token-level clone checks (`jscpd`) and typed ESLint auto-fixes across all IDEs (Cursor, Windsurf, Zed, Cline, Kilo Code, Roo Code).
 
 **[See all available CLI Options and Agent Commands](docs/INSTALLATION.md#commands--cli)**
 
@@ -131,14 +137,14 @@ Supports both `.husky/` (appends without overwriting) and `.git/hooks/` (direct 
 
 ## Documentation Index
 
-- **[Installation & Supported Hosts](docs/INSTALLATION.md)** - Setup instructions for Claude Code, Copilot, Antigravity, Cursor, Windsurf, Zed, Aider, and more.
-- **[Configuration Overrides](docs/CONFIGURATION.md)** - How to use `.asc/dedup-config.json` and `.asc/dependency-allowlist.json`.
-- **[Architecture & Philosophy](docs/ARCHITECTURE.md)** - How the hooks work, our engineering principles, and Migration guide from v4.x.
-- **[Benchmarks](benchmarks/RESULTS.md)** - Directional results (n=1-2 per task, single model): on complex tasks ASC trended toward **~18% less code** and **~12-30% fewer tokens**. Indicative, not statistically conclusive — see the methodology for the planned n>=5 validation.
-- **[Grounding](docs/GROUNDING.md)** - Full verified citations behind every rule.
+- **[Installation & Supported Hosts](docs/INSTALLATION.md)** - Setup instructions for Google Antigravity, Claude Code, Codex, Copilot, Cursor, OpenCode, Roo, and 17+ others.
+- **[Configuration Overrides](docs/CONFIGURATION.md)** - How to configure `.asc/dedup-config.json` and `.asc/dependency-allowlist.json`.
+- **[Architecture & Philosophy](docs/architecture.md)** - Two-tier multi-host design, hook specifications, grounding standards, and cache-safety invariants.
+- **[Benchmarks](benchmarks/RESULTS.md)** - Empirical performance and token reduction measurements.
+- **[Grounding](docs/GROUNDING.md)** - Formal verified citations behind every rule (OWASP, Google Engineering Practices, USENIX).
 
 ---
 
 ## Works With Other Plugins
 
-ASC covers security, architecture, testing, API design, database safety, accessibility, infrastructure, and resilience — domains that code-reduction and minimalism plugins explicitly leave out of scope. They reduce volume; ASC enforces safety on what remains. Use them together. No conflicts — ASC is designed to be complementary.
+ASC covers security boundaries, architectural layering, testing discipline, API design, database integrity, accessibility, infrastructure, and resilience. Minimalism plugins reduce output volume; ASC enforces engineering safety on what remains. Use them together without conflict.

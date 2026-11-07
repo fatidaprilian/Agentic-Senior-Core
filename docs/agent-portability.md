@@ -48,20 +48,22 @@ Which ASC features work on which host tier:
 | Always-on rules | Hook injection | Static file in project |
 | On-demand skills | `skills/` directory | Not available |
 | Slash commands | `commands/` directory | Not available |
-| PostToolUse enforcement | Claude Code, Codex CLI, Copilot CLI, Antigravity | Not available |
+| PostToolUse / PostInvocation enforcement | Claude Code, Codex CLI, Copilot CLI, Google Antigravity | Not available |
 | Progressive skill loading | Claude Code, Codex CLI, Copilot CLI, Gemini CLI, Antigravity | Not available |
 | Subagent rule injection | Claude Code, Codex CLI, Copilot CLI, Antigravity | Not available |
 
 ### Hook event support by host
 
-| Event | Claude Code | Codex CLI | Copilot CLI |
-|-------|------------|-----------|-------------|
-| Session start | `SessionStart` | `SessionStart` | `sessionStart` |
-| Subagent start | `SubagentStart` | `SubagentStart` | `subagentStart` |
-| Pre tool use | `PreToolUse` | `PreToolUse` | `preToolUse` |
-| Post tool use | `PostToolUse` | `PostToolUse` | `postToolUse` |
-| File changed | `FileChanged` | N/A | N/A |
-| Stop | `Stop` | `Stop` | N/A |
+| Event | Claude Code | Codex CLI | Copilot CLI | Google Antigravity |
+|-------|------------|-----------|-------------|-------------------|
+| Session start | `SessionStart` | `SessionStart` | `sessionStart` | `SessionStart` |
+| Subagent start | `SubagentStart` | `SubagentStart` | `subagentStart` | N/A |
+| Pre tool use | `PreToolUse` | `PreToolUse` | `preToolUse` | `PreToolUse` |
+| Post tool use | `PostToolUse` | `PostToolUse` | `postToolUse` | N/A |
+| Pre invocation | N/A | N/A | N/A | `PreInvocation` |
+| Post invocation | N/A | N/A | N/A | `PostInvocation` |
+| File changed | `FileChanged` | N/A | N/A | N/A |
+| Stop | `Stop` | `Stop` | N/A | `Stop` |
 
 ### ASC fix applicability
 

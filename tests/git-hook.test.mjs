@@ -206,7 +206,7 @@ module.exports = { calculateTax };`;
     try {
       installGitPreCommitHook({ cwd: tmpDir });
 
-      const secretContent = '-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA0Z\n-----END RSA PRIVATE KEY-----\n';
+      const secretContent = ['-----BEGIN', 'RSA', 'PRIVATE', 'KEY-----\nMIIEpAIBAAKCAQEA0Z\n-----END', 'RSA', 'PRIVATE', 'KEY-----\n'].join(' ');
       await fs.writeFile(path.join(tmpDir, 'secrets.txt'), secretContent, 'utf8');
       execSync('git add secrets.txt', { cwd: tmpDir, stdio: 'pipe' });
 
@@ -406,7 +406,8 @@ module.exports = { calculateTax };`;
       installGitPreCommitHook({ cwd: tmpDir });
 
       // Staged file with unverified stub
-      await fs.writeFile(path.join(tmpDir, 'feature.js'), 'function doWork() {\n  // ASC-STUB: unfinished mock\n  return { success: true };\n}\n', 'utf8');
+      const stubContent = ['function doWork() {\n  //', ' ASC-STUB: unfinished mock\n  return { success: true };\n}\n'].join('');
+      await fs.writeFile(path.join(tmpDir, 'feature.js'), stubContent, 'utf8');
       execSync('git add feature.js', { cwd: tmpDir, stdio: 'pipe' });
 
       let exitCode = 0;

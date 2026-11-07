@@ -9,7 +9,7 @@ Agentic Senior Core supports 23+ AI coding agents across two enforcement layers:
 | Host / AI Coding Tool | PreToolUse Real-Time Hard-Block | PostToolUse Advisory Nudge | Git Pre-Commit Deterministic Gate | Prompt-Level Rules |
 |---|:---:|:---:|:---:|:---:|
 | **Claude Code** | Active | Active | Active | Always-on |
-| **Google Antigravity IDE** | Active (`decision: deny`) | Active | Active | Always-on |
+| **Google Antigravity (App, IDE, CLI)** | Active (`decision: deny` / `force_ask`) | Active (`PostInvocation` & `Stop` verification gate) | Active | Always-on |
 | **GitHub Copilot CLI** | Active | Active | Active | Always-on |
 | **Cursor** | Active (PreToolUse) | Advisory (post-edit) | Active | Always-on |
 | **Windsurf, Codex, Kiro, Cline, Zed, Roo, Continue, etc. (19+ Hosts)** | None (Host API limitation) | None | Active (Universal Git Hook) | Always-on (Adapter) |
@@ -78,14 +78,14 @@ Rules and hooks load automatically on every session with zero per-project files.
 > [!IMPORTANT]
 > **OpenAI Codex Hook Trust Review Note:**
 > OpenAI Codex enforces a cryptographic SHA-256 trust model for all plugin hooks to prevent unauthorized script execution. Upon initial installation, Codex UI/TUI will prompt you to review and **Trust** the lifecycle hooks (`SessionStart`, `SubagentStart`, `PreToolUse`, `PostToolUse`).
-> Once trusted, Codex records the SHA-256 hash in `~/.codex/config.toml` under `[hooks.state]` and will run seamlessly without prompting again.
+> Once trusted, Codex records the SHA-256 hash in `~/.codex/config.toml` under `[hooks.state]` and executes without prompting again.
 
 </details>
 
 <details>
 <summary><b>Gemini CLI</b> (terminal agent)</summary>
 
-Auto-detected. Gemini CLI reads `gemini-extension.json` from the installed package and loads the canonical plugin rule. Commands are available as `.toml` format (`/asc`, `/asc-develop`, `/asc-review`, `/asc-test`, `/asc-reference`, `/asc-ui`).
+Auto-detected. Gemini CLI reads `gemini-extension.json` from the installed package and loads the canonical plugin rule. Commands are available as `.toml` format (`/asc`, `/asc-develop`, `/asc-review`, `/asc-test`, `/asc-reference`, `/asc-ui`, `/asc-pentest`).
 
 </details>
 
@@ -214,7 +214,7 @@ asc global --kilocode
 asc adapter --roo
 ```
 
-Generates `.roo/rules/agentic-senior-core.md` and installs 5 core meta-skills into `.roo/skills/`. Repeat per project — or install once globally with `asc global --roo` (`~/.roo/rules/` and `~/.roo/skills/`).
+Generates `.roo/rules/agentic-senior-core.md` and installs 7 core meta-skills into `.roo/skills/`. Repeat per project — or install once globally with `asc global --roo` (`~/.roo/rules/` and `~/.roo/skills/`).
 
 </details>
 
@@ -361,7 +361,7 @@ asc global --all
 | OpenHands | `~/.openhands/microagents/` | CLI/headless/dev modes; Docker runs need the mount |
 | Windsurf / Devin Desktop | `~/.codeium/windsurf/memories/global_rules.md` | 6,000-char global limit (ASC rules fit); skipped if you already have your own file |
 | GitHub Copilot (VS Code) | VS Code profile `prompts/` folder | Installed as a user `*.instructions.md` with `applyTo: '**'` |
-| Roo Code | `~/.roo/rules/` & `~/.roo/skills/` | Global rules and 5 core meta-skills |
+| Roo Code | `~/.roo/rules/` & `~/.roo/skills/` | Global rules and 7 core meta-skills |
 
 Tools without a global rules **file** (manual one-time setup instead):
 
