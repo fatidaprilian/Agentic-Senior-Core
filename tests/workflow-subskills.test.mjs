@@ -9,7 +9,7 @@ const repositoryRoot = path.resolve(path.dirname(currentFilePath), '..');
 const pluginRoot = path.join(repositoryRoot, '.agents', 'plugins', 'agentic-senior-core');
 const skillsDir = path.join(pluginRoot, 'skills');
 
-describe('7-Skill Invariant & 1-Hop Superpowers Subskills', () => {
+describe('7-Skill Invariant & 1-Hop Workflow Subskills', () => {
   it('maintains strictly the 7 canonical top-level skills with zero skill bloat', async () => {
     const entries = await fs.readdir(skillsDir);
     const expected = [
@@ -28,15 +28,18 @@ describe('7-Skill Invariant & 1-Hop Superpowers Subskills', () => {
     const devSkill = await fs.readFile(path.join(skillsDir, 'asc-develop', 'SKILL.md'), 'utf8');
     const plansRef = await fs.readFile(path.join(skillsDir, 'asc-develop', 'references', 'execution-plans.md'), 'utf8');
     const subagentsRef = await fs.readFile(path.join(skillsDir, 'asc-develop', 'references', 'subagent-orchestration.md'), 'utf8');
+    const worktreeRef = await fs.readFile(path.join(skillsDir, 'asc-develop', 'references', 'git-worktrees.md'), 'utf8');
 
     assert.ok(devSkill.split('\n').length <= 150, 'asc-develop/SKILL.md must stay <= 150 lines');
     assert.ok(devSkill.includes('references/execution-plans.md'), 'asc-develop must link execution-plans.md');
     assert.ok(devSkill.includes('references/subagent-orchestration.md'), 'asc-develop must link subagent-orchestration.md');
+    assert.ok(devSkill.includes('references/git-worktrees.md'), 'asc-develop must link git-worktrees.md');
 
     assert.ok(plansRef.includes('Ruling:'), 'execution-plans.md must document autonomous Ruling protocol');
     assert.ok(plansRef.includes('Look Before You Ask'), 'execution-plans.md must document Look Before You Ask');
     assert.ok(subagentsRef.includes('Spec Compliance'), 'subagent-orchestration.md must document two-pass Spec Compliance review');
-    assert.ok(subagentsRef.includes('git worktree'), 'subagent-orchestration.md must document git worktree isolation');
+    assert.ok(worktreeRef.includes('GIT_DIR != GIT_COMMON'), 'git-worktrees.md must document Step 0 worktree isolation detection');
+    assert.ok(worktreeRef.includes('show-superproject-working-tree'), 'git-worktrees.md must include submodule guard');
   });
 
   it('wires systematic-debugging.md as a 1-hop gate in asc-test/SKILL.md and captures bug symptoms in YAML', async () => {

@@ -361,7 +361,79 @@ describe('Antigravity Hooks Schema & Runtime Contracts', () => {
       });
       assert.equal(JSON.parse(loopGuardRes.stdout.trim()).decision, 'allow');
 
-      // 4. Source file edited AND followed by run_command -> allow stop
+      // 4. Source file edited followed by run_command that FAILED (exit code 1) -> continue
+      const failingTranscript = [
+        ...unverifiedTranscript,
+        {
+          step_index: 2,
+          type: 'PLANNER_RESPONSE',
+          tool_calls: [
+            { name: 'run_command', args: { CommandLine: 'ascx npm test' } },
+          ],
+        },
+        {
+          step_index: 3,
+          type: 'GENERIC',
+          status: 'DONE',
+          content: 'Command exited with code 1.\n\nCommand output:\nFAIL tests/auth.test.mjs\nAssertionError: expected 200 to equal 401',
+        },
+      ];
+      await fs.writeFile(transcriptPath, failingTranscript.map(s => JSON.stringify(s)).join('\n') + '\n', 'utf8');
+
+      const failRes = spawnSync(process.execPath, [stopScript], {
+        cwd: pluginRoot,
+        input: JSON.stringify({
+          executionNum: 1,
+          terminationReason: 'model_stop',
+          error: '',
+          fullyIdle: true,
+          workspacePaths: [tmpDir],
+          transcriptPath,
+        }),
+        encoding: 'utf8',
+      });
+      assert.equal(failRes.status, 0);
+      const failOut = JSON.parse(failRes.stdout.trim());
+      assert.equal(failOut.decision, 'continue');
+      assert.match(failOut.reason, /Self-Healing Gate/i);
+
+      // 5. Source file edited followed only by inspection command (git status) -> continue
+      const inspectionTranscript = [
+        ...unverifiedTranscript,
+        {
+          step_index: 2,
+          type: 'PLANNER_RESPONSE',
+          tool_calls: [
+            { name: 'run_command', args: { CommandLine: 'ascx git status' } },
+          ],
+        },
+        {
+          step_index: 3,
+          type: 'GENERIC',
+          status: 'DONE',
+          content: 'Command exited with code 0.\n\nOn branch main\nChanges not staged for commit',
+        },
+      ];
+      await fs.writeFile(transcriptPath, inspectionTranscript.map(s => JSON.stringify(s)).join('\n') + '\n', 'utf8');
+
+      const inspectRes = spawnSync(process.execPath, [stopScript], {
+        cwd: pluginRoot,
+        input: JSON.stringify({
+          executionNum: 1,
+          terminationReason: 'model_stop',
+          error: '',
+          fullyIdle: true,
+          workspacePaths: [tmpDir],
+          transcriptPath,
+        }),
+        encoding: 'utf8',
+      });
+      assert.equal(inspectRes.status, 0);
+      const inspectOut = JSON.parse(inspectRes.stdout.trim());
+      assert.equal(inspectOut.decision, 'continue');
+      assert.match(inspectOut.reason, /inspection command/i);
+
+      // 6. Source file edited AND followed by verification command that exited 0 -> allow stop
       const verifiedTranscript = [
         ...unverifiedTranscript,
         {
@@ -370,6 +442,12 @@ describe('Antigravity Hooks Schema & Runtime Contracts', () => {
           tool_calls: [
             { name: 'run_command', args: { CommandLine: 'ascx npm test' } },
           ],
+        },
+        {
+          step_index: 3,
+          type: 'GENERIC',
+          status: 'DONE',
+          content: 'Command exited with code 0.\n\nCommand output:\nPASS tests/auth.test.mjs',
         },
       ];
       await fs.writeFile(transcriptPath, verifiedTranscript.map(s => JSON.stringify(s)).join('\n') + '\n', 'utf8');
@@ -387,6 +465,39 @@ describe('Antigravity Hooks Schema & Runtime Contracts', () => {
         encoding: 'utf8',
       });
       assert.equal(JSON.parse(allowRes.stdout.trim()).decision, 'allow');
+
+      // 7. Non-boomerang check: Passing verification followed by git status -> MUST allow stop
+      const verifyThenInspectTranscript = [
+        ...verifiedTranscript,
+        {
+          step_index: 4,
+          type: 'PLANNER_RESPONSE',
+          tool_calls: [
+            { name: 'run_command', args: { CommandLine: 'ascx git status' } },
+          ],
+        },
+        {
+          step_index: 5,
+          type: 'GENERIC',
+          status: 'DONE',
+          content: 'Command exited with code 0.\n\nOn branch main\nnothing to commit',
+        },
+      ];
+      await fs.writeFile(transcriptPath, verifyThenInspectTranscript.map(s => JSON.stringify(s)).join('\n') + '\n', 'utf8');
+
+      const nonBoomerangRes = spawnSync(process.execPath, [stopScript], {
+        cwd: pluginRoot,
+        input: JSON.stringify({
+          executionNum: 1,
+          terminationReason: 'model_stop',
+          error: '',
+          fullyIdle: true,
+          workspacePaths: [tmpDir],
+          transcriptPath,
+        }),
+        encoding: 'utf8',
+      });
+      assert.equal(JSON.parse(nonBoomerangRes.stdout.trim()).decision, 'allow');
     } finally {
       await fs.rm(tmpDir, { recursive: true, force: true });
     }

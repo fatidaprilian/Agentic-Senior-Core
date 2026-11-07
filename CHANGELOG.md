@@ -1,9 +1,25 @@
 # Changelog
 
+## 6.18.0
+
+### Added & Hardened
+- **Non-Boomerang Verification & Autonomous Self-Healing Gate (`hooks/stop-verify-gate.js`)**:
+  - Upgraded turn-completion gate to scan all commands executed following source modifications in `transcript.jsonl`.
+  - **Zero-Boomerang Inspection Handling**: Separated execution commands from passive inspection commands (`git status`, `git diff`, `dir`, `ls`, `pwd`, `cd`). Allows completion when passing test runs (exit code 0) are followed by inspection commands; blocks completion if only inspection commands were executed.
+  - **Exit-Code Verification**: Hard-blocks turn completion if the latest test/build execution failed (exit code != 0), injecting the 4-phase repair loop (isolate failure trace, minimal implementation fix, re-run).
+- **Universal Git Worktree Isolation (`skills/asc-develop/references/git-worktrees.md`)**:
+  - Added language-agnostic worktree procedure: Step 0 isolation detection (`GIT_DIR != GIT_COMMON` with submodule guards), native harness preference (`Workspace: 'branch'`), clean baseline verification, and deterministic cleanup.
+  - Linked as a 1-hop gate in `skills/asc-develop/SKILL.md` (router maintained at 72 lines).
+- **Token-Aware Structural Lexer (`hooks/post-edit-enforce.js`)**:
+  - Replaced linear regex with a streaming zero-dependency JSX/HTML tag lexer to parse multi-line `className`, template literals, and `clsx`/`cn` wrappers for precise Card Soup detection.
+- **Test Suite Sanitation & Expansion**:
+  - Renamed internal test suite to `tests/workflow-subskills.test.mjs`, purging all external project references.
+  - Added multi-command non-boomerang test cases in `tests/antigravity-hooks.test.mjs`.
+
 ## 6.17.0
 
 ### Added & Synthesized
-- **1-Hop Workflow Subskills (Adapted & Hardened Beyond Superpowers, Zero Top-Level Skill Bloat)**:
+- **1-Hop Workflow Subskills (Zero Top-Level Skill Bloat, High-Density Routing)**:
   - **7-Skill Invariant Preserved**: Kept the exact 7 top-level skills (`asc`, `asc-develop`, `asc-test`, `asc-review`, `asc-reference`, `asc-pentest`, `asc-ui`) supporting both natural-language symptom triggers (EN + ID) and explicit `/asc-*` slash commands (`commands/asc-*.{md,toml}`).
   - **Execution Plans & Autonomous Rulings (`skills/asc-develop/references/execution-plans.md`)**: Enforced *Look Before You Ask* repository inspection, single-question disambiguation with explicit trade-offs, right-sized testable tasks with exact function signatures, and continuous execution using inline `Ruling:` records instead of stalling on minor ambiguities.
   - **Subagent Orchestration & Worktree Isolation (`skills/asc-develop/references/subagent-orchestration.md`)**: Codified non-overlapping file-set dispatch criteria, self-contained subagent prompts, a two-pass verification gate (*Spec Compliance* + *Code Quality & Security*), and `git worktree` isolation.
@@ -16,7 +32,7 @@
 ### Changed & Removed
 - **Deterministic Frontend Engineering Overhaul (`skills/asc-ui`: `13,951 KB` $\rightarrow$ `16.1 KB`, `-99.88%`)**:
   - Removed the `13.84 MB` `references/visuals/` directory (oversized DOM JSON dumps truncated by the 45 KB `read_file` ceiling and viewport PNGs) and consolidated 18 abstract design essays into 3 deterministic engineering references: `data-to-structure.md` (anti-card-soup semantic mapping), `states-and-a11y.md` (4-state contract, pending locks, WCAG 2.2 AA), and `responsive-and-copy.md` (token/primitive reuse, `min-h-dvh`, GPU transitions, single-language microcopy).
-  - Added verification suites in `tests/superpowers-subskills.test.mjs` and expanded `tests/ui-structure.test.mjs` and `tests/antigravity-hooks.test.mjs`.
+  - Added verification suites in `tests/workflow-subskills.test.mjs` and expanded `tests/ui-structure.test.mjs` and `tests/antigravity-hooks.test.mjs`.
 
 ## 6.16.6
 

@@ -481,12 +481,40 @@ function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
     });
   }
 
-  var cardGridRe = /<(?:section|div)[^>]*\bgrid\b[\s\S]{0,260}?rounded-(?:xl|2xl)[^>]*\bborder\b/ig;
-  var cardGrids = target.match(cardGridRe) || [];
-  var hasSemanticTableOrList = /<(?:table|ol)[\s>]/i.test(target);
-  if (cardGrids.length >= 3 && !hasSemanticTableOrList) {
+  var cardGridsCount = 0;
+  // Token-aware JSX/HTML tag scanner
+  var tagRegex = /<(?:section|div|article)\b([^>]*?)>/gis;
+  var tagMatch;
+  while ((tagMatch = tagRegex.exec(target)) !== null) {
+    var attrBlock = tagMatch[1] || '';
+    var classMatch = attrBlock.match(/(?:className|class)\s*=\s*(?:["']([^"']*)["']|{`([^`]*)`}|{cn\(([^)]*)\)}|{clsx\(([^)]*)\)})/is);
+    if (!classMatch) continue;
+
+    var classStr = (classMatch[1] || classMatch[2] || classMatch[3] || classMatch[4] || '').toLowerCase();
+    var hasGrid = /\b(?:grid|grid-cols-\d+)\b/.test(classStr);
+    var hasCard = /\brounded-(?:xl|2xl|3xl|lg)\b/.test(classStr) && /\bborder\b/.test(classStr);
+
+    if (hasGrid && hasCard) {
+      cardGridsCount++;
+    } else if (hasGrid) {
+      var childSlice = target.slice(tagMatch.index, tagMatch.index + 500);
+      if (/\brounded-(?:xl|2xl|3xl|lg)\b[\s\S]{0,120}?\bborder\b/i.test(childSlice)) {
+        cardGridsCount++;
+      }
+    }
+  }
+
+  // Fallback to legacy regex if tag regex didn't catch
+  if (cardGridsCount === 0) {
+    var cardGridRe = /<(?:section|div)[^>]*\bgrid\b[\s\S]{0,260}?rounded-(?:xl|2xl)[^>]*\bborder\b/ig;
+    var legacyMatches = target.match(cardGridRe) || [];
+    cardGridsCount = legacyMatches.length;
+  }
+
+  var hasSemanticTableOrList = /<(?:table|ol|thead|tbody)[\s>]|\bdivide-y\b/i.test(target);
+  if (cardGridsCount >= 3 && !hasSemanticTableOrList) {
     findings.push(
-      '[ASC Card Soup Alert] ' + cardGrids.length + ' bordered card-grid sections detected in ' + path.basename(filePath)
+      '[ASC Card Soup Alert] ' + cardGridsCount + ' bordered card-grid sections detected in ' + path.basename(filePath)
       + ' with zero semantic <table> or <ol> containers. Convert sequential steps to <ol> steppers, criteria/records to <table>, and rosters to divide-y lists (skills/asc-ui/references/data-to-structure.md).'
     );
   }

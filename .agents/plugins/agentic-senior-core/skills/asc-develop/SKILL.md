@@ -17,7 +17,8 @@ Universal workflow for greenfield scaffolding, feature planning/implementation, 
 
 Before drafting multi-step plans, asking clarifying questions, or dispatching subagents:
 1. **Multi-step feature, architecture plan, or continuous task execution** $\rightarrow$ **MUST** `read_file` `references/execution-plans.md` first (*Look Before You Ask*, exact signatures, and *Rulings, Not Stalls*).
-2. **Executing $\ge$ 2 independent module tasks or parallel branches** $\rightarrow$ **MUST** `read_file` `references/subagent-orchestration.md` first (fresh context isolation, 2-pass review gate, `git worktree`).
+2. **Executing $\ge$ 2 independent module tasks or parallel branches** $\rightarrow$ **MUST** `read_file` `references/subagent-orchestration.md` first (fresh context isolation, 2-pass review gate).
+3. **Tasks touching $\ge 3$ files, major refactors, or risky migrations** $\rightarrow$ **MUST** `read_file` `references/git-worktrees.md` (Step 0 detection, isolated workspace, subproject guards).
 
 ---
 
@@ -66,4 +67,5 @@ Before drafting multi-step plans, asking clarifying questions, or dispatching su
 | Lifecycle Requirement | Mandatory Reference Path |
 | :--- | :--- |
 | Discovery, bite-sized plans, exact signatures & `Ruling:` execution | `references/execution-plans.md` |
-| Isolated subagent dispatch, 2-pass Spec/Quality review & `git worktree` | `references/subagent-orchestration.md` |
+| Isolated subagent dispatch & 2-pass Spec/Quality review gate | `references/subagent-orchestration.md` |
+| Workspace isolation, Step 0 detection & clean merge/cleanup | `references/git-worktrees.md` |

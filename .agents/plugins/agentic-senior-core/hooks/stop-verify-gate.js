@@ -75,6 +75,7 @@ function evaluateStop(data) {
 
     let lastSourceEditIdx = -1;
     let lastVerifyCmdIdx = -1;
+    let lastCmdCommandLine = '';
 
     for (let i = startIdx; i < steps.length; i++) {
       const step = steps[i];
@@ -86,6 +87,8 @@ function evaluateStop(data) {
 
         if (tc.name === 'run_command' || tc.name === 'Bash' || tc.name === 'run_shell_command') {
           lastVerifyCmdIdx = i;
+          const args = tc.args || {};
+          lastCmdCommandLine = args.CommandLine || args.command || args.cmd || '';
           continue;
         }
 
@@ -107,13 +110,78 @@ function evaluateStop(data) {
       }
     }
 
-    if (lastSourceEditIdx !== -1 && lastVerifyCmdIdx < lastSourceEditIdx) {
-      process.stdout.write(JSON.stringify({
-        decision: 'continue',
-        reason: '[ASC Verification Gate] Source code was modified this turn without running a fresh verification or test command afterward. Execute the relevant test, build, or syntax check command and confirm exit code 0 before concluding.',
-      }) + '\n');
-      process.exit(0);
-      return;
+    if (lastSourceEditIdx !== -1) {
+      // Collect all commands executed after lastSourceEditIdx
+      const postEditCommands = [];
+      for (let i = lastSourceEditIdx + 1; i < steps.length; i++) {
+        const step = steps[i];
+        if (!step || step.type !== 'PLANNER_RESPONSE' || !Array.isArray(step.tool_calls)) continue;
+        for (let j = 0; j < step.tool_calls.length; j++) {
+          const tc = step.tool_calls[j];
+          if (tc && (tc.name === 'run_command' || tc.name === 'Bash' || tc.name === 'run_shell_command')) {
+            const args = tc.args || {};
+            const cmdLine = args.CommandLine || args.command || args.cmd || '';
+            let output = '';
+            let failed = false;
+            for (let k = i + 1; k < steps.length; k++) {
+              const resStep = steps[k];
+              if (!resStep) continue;
+              if (resStep.type === 'PLANNER_RESPONSE') break;
+              if (resStep.status === 'ERROR' || resStep.type === 'ERROR_MESSAGE') {
+                failed = true;
+                output += (resStep.content || '') + '\n';
+                break;
+              }
+              if (typeof resStep.content === 'string') {
+                output += resStep.content + '\n';
+              }
+            }
+            const exitMatch = output.match(/Command exited with code (\d+)/i);
+            if (exitMatch && parseInt(exitMatch[1], 10) !== 0) {
+              failed = true;
+            }
+            postEditCommands.push({ stepIdx: i, cmdLine, failed, output });
+          }
+        }
+      }
+
+      // Case 1: No command executed at all after source edit
+      if (postEditCommands.length === 0) {
+        process.stdout.write(JSON.stringify({
+          decision: 'continue',
+          reason: '[ASC Verification Gate] Source code was modified this turn without running a fresh verification or test command afterward. Iron Law: No completion claims without fresh verification evidence. Execute the relevant test, build, or syntax check command and confirm exit code 0 before concluding.',
+        }) + '\n');
+        process.exit(0);
+        return;
+      }
+
+      // Case 2: Filter out inspection-only commands (git status, diff, ls, dir, cd, etc.)
+      function isInspection(cmd) {
+        const unascx = (cmd || '').trim().toLowerCase().replace(/^ascx\s+/, '');
+        return /^(?:git\s+status|git\s+diff|dir|ls|pwd|cd|echo|cat|type)\b/i.test(unascx);
+      }
+
+      const nonInspectionCmds = postEditCommands.filter(c => !isInspection(c.cmdLine));
+
+      if (nonInspectionCmds.length === 0) {
+        process.stdout.write(JSON.stringify({
+          decision: 'continue',
+          reason: '[ASC Verification Gate] Source code was modified this turn, but only inspection commands were executed (' + postEditCommands.map(c => c.cmdLine).join(', ') + '). An inspection command is not verification. Execute the test suite, build, or syntax check and confirm exit code 0 before concluding.',
+        }) + '\n');
+        process.exit(0);
+        return;
+      }
+
+      // Case 3: The last verification/execution command failed
+      const lastExecution = nonInspectionCmds[nonInspectionCmds.length - 1];
+      if (lastExecution.failed) {
+        process.stdout.write(JSON.stringify({
+          decision: 'continue',
+          reason: '[ASC Self-Healing Gate] The last verification command (' + (lastExecution.cmdLine || 'test/build') + ') exited with a non-zero exit code. Iron Law: No completion claims without fresh passing evidence. Follow the 4-phase repair loop: (1) Isolate failure trace from output, (2) Apply minimal implementation fix without weakening test assertions, (3) Re-run verification until exit code 0.',
+        }) + '\n');
+        process.exit(0);
+        return;
+      }
     }
 
     allowStop();
