@@ -1,6 +1,16 @@
 # Performance Budgets & Concurrency Benchmarking
 
-Staff-grade guidelines for performance testing, latency budgets, and concurrency verification. Grounded in the principles of **Grafana k6**.
+Staff-grade guidelines for performance testing, latency budgets, and concurrency verification.
+
+---
+
+## Step 0: Detect Installed Load Runner First
+
+For staging or pre-release soak/ramp-up testing, detect project/system load runners before falling back to micro-benchmark scripts:
+- **k6:** `ascx k6 run load-test.js` (supports ramp-up VUs, soak duration, and native `p(95) < 150` thresholds)
+- **autocannon / artillery:** `ascx npx autocannon -c 20 -d 10 http://localhost:3000/api/health`
+
+Use the zero-dependency Node `fetch` harness (Section 2) as an offline smoke fallback when external load tools are absent.
 
 ---
 

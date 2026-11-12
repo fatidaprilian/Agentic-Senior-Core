@@ -30,18 +30,24 @@ Every feature, bugfix, or refactor must follow the Red-Green-Refactor sequence:
 > Prepend this skill's directory path when calling `read_file`.
 
 Before writing tests, running suites, or claiming verification:
-1. **Mandatory Ingestion (BLOCKING GATE):** Call `read_file` on the tier reference matching your testing requirement BEFORE taking action:
-   - Debugging runtime errors, 500 crashes, or unknown failures ➔ `references/systematic-debugging.md`
-   - Writing unit tests / TDD cycle ➔ `references/tdd-cycle.md`
-   - Behavior testing, boundary isolation, mocks/fakes ➔ `references/test-design.md`
-   - Generative property invariants & fuzzing ➔ `references/property-testing.md`
-   - Mutation testing & assertion integrity ➔ `references/mutation-testing.md`
-   - Concurrency latency & performance budgets ➔ `references/performance-budgets.md`
-   - Playwright browser tests, locators, page objects ➔ `references/e2e-playwright.md`
-   - Acceptance criteria, UAT checklists, edge case quads ➔ `references/uat.md`
-   - Bug reproduction, root-cause verification, regression proof ➔ `references/regression-proof.md`
-   - Flaky tests, timing race conditions, 50-run stress loop ➔ `references/flaky-tests.md`
-   *Do NOT write test assertions or declare claims until this reference is loaded.*
+1. **Mandatory Ingestion (BLOCKING GATE):** Call `read_file` on the matching tier reference BEFORE taking action:
+
+| Testing Domain / Trigger | Mandatory Reference Path |
+|---|---|
+| Debugging runtime errors, 500 crashes, or unknown failures | `references/systematic-debugging.md` |
+| Writing unit tests / Red-Green-Refactor cycle | `references/tdd-cycle.md` |
+| Behavior testing, boundary isolation & mocking | `references/test-design.md` |
+| API contract compatibility (OpenAPI/Pact) & DB migration round-trips | `references/contract-and-migration.md` |
+| Concurrency idempotency, fault injection & pool exhaustion resilience | `references/resilience-chaos.md` |
+| Generative property invariants & boundary fuzzing | `references/property-testing.md` |
+| Mutation integrity score ($\ge 80\%$, Stryker/mutmut or manual check) | `references/mutation-testing.md` |
+| Latency budgets ($p_{95} \le 150\text{ms}$), k6 soak & concurrency benchmarks | `references/performance-budgets.md` |
+| Playwright E2E, `@axe-core/playwright` a11y & multi-user contexts | `references/e2e-playwright.md` |
+| Acceptance criteria, UAT checklists & edge case quads | `references/uat.md` |
+| Bug reproduction, root-cause verification & regression proof | `references/regression-proof.md` |
+| Flaky tests, timing race conditions & 50-run stress loop | `references/flaky-tests.md` |
+
+*Do NOT write test assertions or declare claims until the matching reference is loaded.*
 
 2. **Never make a claim regarding test status without fresh execution evidence:**
 
@@ -99,27 +105,7 @@ Select the lowest testing tier that validates the requirement:
 
 ---
 
-## 5. On-Demand Reference Library
-
-> [!IMPORTANT]
-> **Resolution Note:** All paths below are relative to this `SKILL.md` file's parent folder (`.../skills/asc-test/`). Prepend this skill's directory path when calling `read_file`.
-
-| Testing Domain / Trigger | Mandatory Reference Path |
-|---|---|
-| 4-phase root-cause investigation & circuit breaker | `references/systematic-debugging.md` |
-| Red-Green-Refactor mechanics & whole-suite checks | `references/tdd-cycle.md` |
-| Behavior testing, boundary isolation & mocking | `references/test-design.md` |
-| Generative property invariants & boundary fuzzing | `references/property-testing.md` |
-| Mutation integrity score (>= 80%) & mutant triage | `references/mutation-testing.md` |
-| Latency budgets (p95 <= 150ms) & concurrency benchmarking | `references/performance-budgets.md` |
-| Playwright E2E, reconnaissance & locator hierarchy | `references/e2e-playwright.md` |
-| Given/When/Then acceptance criteria & edge case quad | `references/uat.md` |
-| 3-step bugfix verification & regression proof | `references/regression-proof.md` |
-| Flakiness root causes & 50-run stress loop | `references/flaky-tests.md` |
-
----
-
-## 6. Verification & Handoff Sweep
+## 5. Verification & Handoff Sweep
 
 Before declaring any coding or testing task complete:
 1. **Reference Compliance:** Confirm constraints from the loaded `references/*.md` file were applied.

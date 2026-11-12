@@ -87,3 +87,23 @@ Do not use browser UI steps to set up prerequisite data for every test.
 - **Slow & Brittle:** Logging in via UI form $\to$ clicking through 5 wizards $\to$ creating a project $\to$ finally testing the billing page.
 - **Fast & Resilient:** Seed prerequisite users, workspaces, or API keys directly via database fixtures or HTTP API calls (`request.post('/api/test/seed')`), then navigate straight to the billing page.
 
+---
+
+## 5. Enterprise E2E Gates: Accessibility, Multi-User Contexts & Visual Stability
+
+1. **Automated Accessibility Gate (`@axe-core/playwright`)**:
+   If `@axe-core/playwright` is installed in the project, run automated WCAG 2.2 AA scans on primary rendered views and fail on `critical` or `serious` violations:
+   ```typescript
+   import AxeBuilder from '@axe-core/playwright';
+
+   const results = await new AxeBuilder({ page })
+     .withTags(['wcag2a', 'wcag2aa', 'wcag22aa'])
+     .analyze();
+   expect(results.violations.filter(v => ['critical', 'serious'].includes(v.impact || ''))).toEqual([]);
+   ```
+   When `@axe-core/playwright` is unavailable, inspect ARIA snapshot roles (`await expect(page.locator('main')).toMatchAriaSnapshot(...)`) and keyboard `Tab` focus traversal.
+2. **Multi-User Isolation & RBAC Contexts**:
+   Verify authorization boundaries across distinct browser contexts (`const ctxA = await browser.newContext(); const ctxB = await browser.newContext();`) rather than logging out and back in within one page. Assert User B cannot view or mutate User A's active resources in live UI sessions.
+3. **Visual Snapshot Stability**:
+   Before asserting `toHaveScreenshot()`, mask volatile nodes (timestamps, dynamic UUIDs, relative timers) via `mask: [page.getByTestId('timestamp')]` and wait for fonts/animations (`animations: 'disabled'`) to prevent false-positive pixel diffs.
+

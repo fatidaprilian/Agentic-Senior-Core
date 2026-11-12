@@ -1,6 +1,17 @@
 # Mutation Testing & Test Suite Integrity
 
-Staff-grade guidelines for mutation testing and eradicating false-positive test suites. Grounded in the principles of **Stryker Mutator**.
+Staff-grade guidelines for mutation testing and eradicating false-positive test suites.
+
+---
+
+## Step 0: Detect Installed Mutation Runner First
+
+Scripts measure; developers triage. Before performing manual mutant checks, check if a mutation runner is installed in the repository (`package.json`, `pyproject.toml`, `Cargo.toml`):
+- **JS/TS:** `ascx npx stryker run` (target `--mutate` on changed files only during rapid iteration)
+- **Python:** `ascx mutmut run`
+- **Rust:** `ascx cargo mutants`
+
+Use the manual Agentic Mutant Sanity Check (Section 4) only when a language-native mutation engine is unavailable.
 
 ---
 

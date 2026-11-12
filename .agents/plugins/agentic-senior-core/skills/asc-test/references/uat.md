@@ -2,6 +2,8 @@
 
 User Acceptance Testing verifies that software fulfills real operational requirements from the perspective of the end user, rather than merely passing isolated unit tests.
 
+> **Automation Scope:** Use Playwright or BDD runners to automate repeatable UAT regression journeys; final UAT acceptance sign-off remains a human stakeholder/QA verification step in staging.
+
 ---
 
 ## 1. Requirements to Acceptance Criteria (Given/When/Then)

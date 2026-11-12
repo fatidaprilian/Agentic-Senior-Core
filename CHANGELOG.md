@@ -1,5 +1,21 @@
 # Changelog
 
+## 6.19.0
+
+### Added & Upgraded
+- **Enterprise Security Verification (`skills/asc-pentest` — 108-line router, 8 1-hop references)**:
+  - **Standards Alignment**: Mapped findings across **OWASP Top 10:2025** (`A01`–`A10:2025`), **OWASP API Security Top 10 (2023)**, **OWASP ASVS v5.0 (L1–L3)**, **OWASP WSTG v4.2**, and **FIRST CVSS v4.0**.
+  - **SSRF, Concurrent Race & Business Logic (`references/ssrf-race-logic.md`)**: Added loopback/IPv6/cloud metadata (`169.254.169.254`) probes, bounded zero-dependency Node `Promise.all` TOCTOU burst harness, and state-skipping/rounding checks.
+  - **Auth, Session, CSRF & Client Vectors (`references/auth-session-client.md`)**: Added `HttpOnly`/`Secure`/`SameSite` checks, session fixation/revocation, CSRF origin verification, OAuth2 `state`/PKCE/`redirect_uri` bypasses, `X-Forwarded-For` rate-limit spoofing, and DOM XSS/`postMessage` checks.
+  - **Supply Chain, Container & TLS (`references/supply-chain-infra.md`)**: Added SCA/SBOM audits (`trivy fs`, `npm audit --omit=dev`, `pip-audit`, `govulncheck`, `cargo audit`), non-root/distroless container hygiene, and TLS 1.2+/HSTS transport verification.
+  - **Tool-First Orchestration & Variant Sweep (`references/scanner-orchestration.md`)**: Added auto-detection for `schemathesis`, `nuclei`, `zap-baseline.py`, and `trivy` (with optional Playwright SPA login cookie handoff), CVSS v4.0 calibration guardrails, and mandatory sibling-route Variant Analysis sweeps.
+  - **Fuzzing & Hygiene Updates**: Extended `references/fuzzing-dsl.md` with SSTI, GraphQL introspection/depth-DoS, and polyglot/ZIP-slip upload vectors; removed external project attributions across `asc-pentest` files.
+- **Enterprise QA Verification (`skills/asc-test` — 118-line router, 12 1-hop references)**:
+  - **API Contracts & Migration Round-Trips (`references/contract-and-migration.md`)**: Added breaking schema diff rules (OpenAPI/`oasdiff`, Pact consumer contracts) and the 5-step database migration round-trip test (`up -> seed -> assert -> down -> re-up`).
+  - **Concurrency Idempotency & Fault Injection (`references/resilience-chaos.md`)**: Added parallel `Idempotency-Key` / webhook out-of-order checks, downstream timeout/5xx/dropped-socket fault simulation, and connection pool exhaustion verification.
+  - **Runner-First & E2E Gates**: Added `@axe-core/playwright` WCAG 2.2 AA scans, multi-user RBAC `browser.newContext()` isolation, and dynamic visual snapshot masking in `references/e2e-playwright.md`; added Step 0 project runner detection (`stryker`/`mutmut`/`cargo mutants`, `k6`/`autocannon`) in `mutation-testing.md` and `performance-budgets.md`; clarified automated vs. human UAT sign-off scope in `uat.md`.
+- **Test Coverage**: Expanded `tests/pentest-structure.test.mjs` to enforce router line ceilings (`<= 150`) and 1-hop reference link integrity across all 8 `asc-pentest` and 12 `asc-test` references.
+
 ## 6.18.0
 
 ### Added & Hardened
