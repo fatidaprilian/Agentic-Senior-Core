@@ -61,12 +61,13 @@ When picking step 5 or 6 (unless trivial):
 - Before implementing a feature, locate an analogous module and follow its layer split, naming, and error-handling.
 - Atomic writes must be wrapped in transactions. Flag shared mutable state under concurrent requests.
 - UI component reuse: Component re-invention across pages is forbidden. Before declaring markup or styling, check existing components in `components/` or `ui/`. Compose or extend existing components via props/variants. Do not introduce single-page clones or ad-hoc styling that diverges from established pages.
+- Enterprise UI anti-redundancy: Page components must never render outer chrome (navigation bars, duplicate headers, or root wrapper padding) when an enclosing layout shell exists. Enforce single action boundaries (one primary CTA per viewport region; secondary/row actions use overflow menus). Zero data echoing: never duplicate identical record attributes across adjacent summary and detail containers. Enforce compound slots and edge-to-edge table containment (zero nested card-in-card soup; tabular numeric columns right-aligned).
 
 ## Error Handling & Observability
 - Fail fast on invalid input at trust boundaries; fail safe with graceful fallback for external runtime dependencies.
 - Structured error responses with safe details (RFC 9457). Distinguish client (4xx) from server (5xx) errors.
 - Action feedback: mutations (create, update, delete, submit) must provide immediate pending state (disable button/spinner) and clear success/error notification (toast or banner with retry). Never silently swallow mutation errors.
-- UI data states: handle the state quad — loading skeleton/spinner, empty state, error state with retry, and populated data. Wrap critical UI widgets in localized error boundaries.
+- UI data states: handle the state quad — loading skeleton matching component geometry (zero layout shift), empty state with single action trigger, error state with retry, and populated data. Wrap critical UI widgets in localized error boundaries.
 - External dependency resilience: classify dependencies as hard (fail fast + actionable error) or soft (fallback to static safe default, stale cache, or degraded mode).
 - Surface every operational error with context. Empty catch blocks mask production issues.
 - Structured key-value logging for significant events. Never leak stack traces or credentials in production logs.

@@ -8,8 +8,8 @@ Every interactive interface must enforce deterministic state coverage and WCAG 2
 
 Every asynchronous view, table, or list must explicitly handle all four states:
 
-1. **Loading State:** Render layout-preserving skeletons matching actual row/column heights (`animate-pulse bg-muted`). Avoid full-screen blocking spinners on incremental refetches.
-2. **Empty State:** State factually what is absent and provide one direct primary action when applicable (for example: *"No API keys created." -> `[Create API Key]`). Never write poetic or motivational empty-state essays.
+1. **Loading State (Skeleton-Geometry Parity):** Render layout-preserving skeletons matching exact actual row/column counts and heights (`animate-pulse bg-muted`). Table skeletons must render identical header and row structures to prevent cumulative layout shift upon data arrival. Avoid full-screen blocking spinners on incremental refetches.
+2. **Empty State:** State factually what is absent and provide one direct primary action trigger when applicable (for example: *"No API keys created." -> `[Create API Key]`). Never duplicate action buttons already visible in the primary page header. Never write poetic or motivational empty-state essays.
 3. **Error State:** Display a safe, specific failure reason (`role="alert"`) paired with an immediate `[Retry]` button that re-triggers the failed query without losing form inputs.
 4. **Populated State:** Handle text overflow (`truncate` or `line-clamp-2` with accessible full value), missing optional fields (`—`), and pagination/virtualization when rows exceed 100 items.
 

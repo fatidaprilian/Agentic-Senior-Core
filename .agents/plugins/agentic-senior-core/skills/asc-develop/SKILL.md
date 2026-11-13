@@ -31,7 +31,7 @@ Before drafting multi-step plans, asking clarifying questions, or dispatching su
 ### Step 2: Architecture & Implementation Hierarchy
 1. Apply the 1–6 Decision Ladder to every module (needed $\rightarrow$ reuse $\rightarrow$ stdlib $\rightarrow$ installed dep $\rightarrow$ single function $\rightarrow$ minimal code).
 2. Implement core domain models and services before transport controllers.
-3. For frontend views, follow `/asc-ui`. Enforce clean single-language prose (50% word reduction, zero marketing buzzwords).
+3. For frontend views, follow `/asc-ui`. Verify layout shell boundaries first: page components must never render outer chrome (navbars, duplicate headers, or root wrapper padding) already supplied by the layout shell. Enforce clean single-language prose (50% word reduction, zero marketing buzzwords).
 4. Add an automated quality gate workflow (lint, type-check, test).
 
 ---
@@ -40,11 +40,11 @@ Before drafting multi-step plans, asking clarifying questions, or dispatching su
 
 ### Step 1: Research & Reuse Inventory
 1. Inspect analogous modules for layer splits, naming conventions, validation, and error handling.
-2. Identify existing components (`components/ui/`), helpers, and notification providers that must **NOT** be rebuilt.
+2. Identify existing components (`components/ui/`), layout shells, helpers, and notification providers that must **NOT** be rebuilt or duplicated.
 
 ### Step 2: Right-Sized Plan & Fallback Matrix
 1. Break work into testable atomic tasks with exact file paths and function signatures (`references/execution-plans.md`).
-2. Define failure handling: network/DB failure recovery, pending UI states, and structured error responses (RFC 9457).
+2. Define failure handling: network/DB failure recovery, pending UI states, single action boundaries (one primary CTA per viewport region), and structured error responses (RFC 9457).
 
 ### Step 3: TDD Implementation & Autonomous Rulings
 1. Execute each task via `/asc-test` (`RED` failing test $\rightarrow$ `GREEN` minimal code $\rightarrow$ `REFACTOR`).

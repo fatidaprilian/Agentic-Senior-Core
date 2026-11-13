@@ -254,4 +254,71 @@ describe('UI Engineering Structure & Quality Floor', () => {
       }
     }
   });
+
+  it('verifies Enterprise UI Invariants and Anti-Redundancy standards across rules and skills', async () => {
+    const ruleContent = await fs.readFile(
+      path.join(pluginDir, 'rules', 'agentic-senior-core.md'),
+      'utf8'
+    );
+    assert.ok(
+      ruleContent.includes('Enterprise UI anti-redundancy'),
+      'Rule must specify Enterprise UI anti-redundancy'
+    );
+    assert.ok(
+      ruleContent.includes('Zero data echoing'),
+      'Rule must specify Zero data echoing'
+    );
+    assert.ok(
+      ruleContent.includes('tabular numeric columns right-aligned'),
+      'Rule must specify tabular numeric right-alignment'
+    );
+
+    const uiSkillContent = await fs.readFile(path.join(uiSkillDir, 'SKILL.md'), 'utf8');
+    assert.ok(
+      uiSkillContent.includes('Shell & action boundary invariants:'),
+      'asc-ui/SKILL.md must include Shell & action boundary invariants'
+    );
+    assert.ok(
+      uiSkillContent.includes('Zero data echoing & enterprise tabular rigor:'),
+      'asc-ui/SKILL.md must include Zero data echoing & enterprise tabular rigor'
+    );
+    assert.ok(
+      uiSkillContent.includes('Action Boundary & Anti-Echoing Check'),
+      'asc-ui/SKILL.md must include Action Boundary & Anti-Echoing Check'
+    );
+
+    const dataStructContent = await fs.readFile(
+      path.join(uiSkillDir, 'references', 'data-to-structure.md'),
+      'utf8'
+    );
+    assert.ok(
+      dataStructContent.includes('Shell Boundary Invariant'),
+      'data-to-structure.md must include Shell Boundary Invariant'
+    );
+    assert.ok(
+      dataStructContent.includes('Action Boundary Hierarchy'),
+      'data-to-structure.md must include Action Boundary Hierarchy'
+    );
+    assert.ok(
+      dataStructContent.includes('Data Projection Invariant'),
+      'data-to-structure.md must include Data Projection Invariant'
+    );
+    assert.ok(
+      dataStructContent.includes('Edge-to-Edge Enterprise Table'),
+      'data-to-structure.md must include Edge-to-Edge Enterprise Table'
+    );
+
+    const developSkillContent = await fs.readFile(
+      path.join(pluginDir, 'skills', 'asc-develop', 'SKILL.md'),
+      'utf8'
+    );
+    assert.ok(
+      developSkillContent.includes('layout shell boundaries'),
+      'asc-develop/SKILL.md must include layout shell boundaries check'
+    );
+    assert.ok(
+      developSkillContent.includes('single action boundaries'),
+      'asc-develop/SKILL.md must include single action boundaries check'
+    );
+  });
 });

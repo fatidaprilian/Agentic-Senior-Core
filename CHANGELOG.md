@@ -1,5 +1,21 @@
 # Changelog
 
+## 6.20.0
+
+### Added & Hardened
+- **Enterprise Design System Invariants & Anti-Redundancy (`skills/asc-ui` & `rules/agentic-senior-core.md`)**:
+  - **Empirical Standards Alignment**: Grounded in **IBM Carbon** row density standards (`xs`: 24px, `sm`: 32px, `md`: 40px), **Nielsen Norman Group (NN/g)** data table vs. card usability research, **Salesforce Lightning (SLDS)** Record Page Highlights Panel architecture, **Atlassian Design System (ADS)** page header slot isolation, and **Radix/shadcn** compound slot patterns.
+  - **Shell Boundary Invariant**: Strict prohibition of outer application chrome (`<nav>`, duplicate `<h1>` headers, redundant wrapper container padding) inside page components when enclosed by a layout shell.
+  - **Single Action Boundary**: Enforced single primary high-contrast CTA per viewport region. Secondary row actions exceeding two operations are consolidated into overflow menus (`···`).
+  - **Zero Data Echoing**: Prohibited identical key-value mirroring between summary highlights panels and child details containers.
+  - **Enterprise Tabular Rigor**: Mandated right-aligned numeric/currency columns (`text-right font-mono tabular-nums`), left-aligned descriptive text, compact 32px–40px row heights, and edge-to-edge table containment (`CardContent className="p-0"`).
+  - **Skeleton-Geometry Parity**: Required loading skeletons to replicate the exact geometry, column count, and row height of real components to eliminate Cumulative Layout Shift (CLS).
+- **Engineering Lifecycle Integration (`skills/asc-develop`)**:
+  - Added layout shell boundary verification in Greenfield scaffolding and Brownfield reuse inventory before generating UI components.
+  - Added single action boundary enforcement to failure handling and right-sized execution plans.
+- **Automated Verification Suite (`tests/ui-structure.test.mjs`)**:
+  - Added deterministic tests asserting Enterprise UI anti-redundancy rules, tabular numeric alignment, and router line budget compliance.
+
 ## 6.19.0
 
 ### Added & Upgraded

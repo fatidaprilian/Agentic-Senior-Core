@@ -20,6 +20,8 @@ Enforces structural semantics, token reuse, state completeness, accessibility, a
 6. **Mobile containment & touch targets:** Use `min-h-dvh` (never `100vh`/`h-screen`), `overflow-x: clip` on root shells, and minimum **44x44px** hit targets on touch controls.
 7. **Zero hallucinated proof or ornaments:** Never invent testimonials, partner logos, unbacked KPIs, small-caps eyebrow kickers above headings, purple-to-blue gradients, or terminal cosplay in non-developer apps.
 8. **Single-language microcopy:** Keep every visible string on a surface in one language with natural domain terms—zero mixed-language neologisms and zero literal translation calques.
+9. **Shell & action boundary invariants:** Page components must never render outer chrome (navbars, duplicate page titles, or root wrapper padding) when an enclosing layout shell exists. Enforce single action boundaries (one primary CTA per viewport region; secondary/row actions use overflow menus).
+10. **Zero data echoing & enterprise tabular rigor:** Never echo identical key-values across adjacent summary and detail panels. Numeric and currency columns in tables must be right-aligned (`text-right font-mono tabular-nums`). Edge-to-edge tables in cards must eliminate outer padding (`CardContent className="p-0"`). Loading skeletons must mirror exact component geometry to prevent layout shift.
 
 ---
 
@@ -65,7 +67,9 @@ Never default to `Card` grids as a generic layout wrapper. Select containers str
 ## 5. Verification & Handoff Sweep
 
 Before declaring any UI task complete:
-1. **Structural Rhythm Check:** Confirm the page does not stack consecutive card grids and uses `<table>`, `<ol>`, or `divide-y` lists where required.
-2. **State & Mutation Check:** Verify loading skeleton, empty state, error state with retry, and `disabled` pending state on submit buttons.
-3. **Mobile & Overflow Check:** Confirm `min-h-dvh`, wrapped horizontal tables (`overflow-x-auto`), and no fixed-pixel button widths (`w-[120px]`) that clip +30% text expansion.
-4. **Rendered Preview (`asc preview`):** When a local server or static HTML target is available, run `asc preview <url|file> [--mobile]` to inspect rendered layout balance before handoff.
+1. **Structural Rhythm & Shell Check:** Confirm the page does not declare outer chrome (no double navbar, duplicate titles, or redundant root padding) and does not stack consecutive card grids.
+2. **Action Boundary & Anti-Echoing Check:** Confirm exactly one primary CTA per viewport region, overflow menus for >= 3 row actions, and zero mirrored fields between summary and detail panels.
+3. **Tabular Rigor & Geometry Check:** Verify numeric columns are right-aligned, edge-to-edge tables omit card padding (`CardContent className="p-0"`), and loading skeletons match exact table/grid geometry (zero layout shift).
+4. **State & Mutation Check:** Verify loading skeleton, empty state with single action trigger, error state with retry, and `disabled` pending state on submit buttons.
+5. **Mobile & Overflow Check:** Confirm `min-h-dvh`, wrapped horizontal tables (`overflow-x-auto`), and no fixed-pixel button widths (`w-[120px]`) that clip +30% text expansion.
+6. **Rendered Preview (`asc preview`):** When a local server or static HTML target is available, run `asc preview <url|file> [--mobile]` to inspect rendered layout balance before handoff.
