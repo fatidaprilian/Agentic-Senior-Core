@@ -33,8 +33,9 @@ Never trust a subagent's verbal summary alone. After each subagent finishes, ins
    - Did the subagent implement every requirement and edge case in the task contract?
    - Did it introduce unrequested features, extra files, or unauthorized dependencies?
 2. **Pass 2 — Code Quality & Security:**
-   - Are inputs validated at trust boundaries, queries parameterized, and resource-level authorization checks enforced?
-   - Does the happy path use flat early returns without duplicated codebase utilities?
+   - Are inputs validated at trust boundaries with explicit DTO isolation (`CWE-915`), queries parameterized, and resource-level authorization checks enforced?
+   - Are resources deterministically closed (`CWE-404`), async paths free of blocking sync calls/unawaited tasks, and exceptions preserved without silent null/empty masking (`CWE-390`)?
+   - Does complexity stay bounded (cognitive complexity <= 15, nesting <= 3 via early returns) with single-language purity across comments and copy and zero duplicated utilities?
    - Run the task test command fresh and confirm `exit 0`.
 
 When all tasks finish, run the full repository test suite once across the combined diff before handoff.

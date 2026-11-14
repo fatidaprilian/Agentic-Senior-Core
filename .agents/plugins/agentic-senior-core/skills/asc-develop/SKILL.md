@@ -58,7 +58,7 @@ Before drafting multi-step plans, asking clarifying questions, or dispatching su
 1. **Baseline Check:** Run existing tests first; never refactor on a failing baseline.
 2. **YAGNI Scan:** Remove single-consumer wrapper abstractions, dead branches, and unused flags.
 3. **Scope Gate:** Execute local renames/extractions directly; confirm cross-module boundary changes first.
-4. **Invariants:** Flatten happy paths with early returns, preserve all error branches and user feedback states, and re-run the full test suite (`exit 0`).
+4. **Invariants:** Keep cognitive complexity <= 15 and nesting <= 3 with early returns, extract 4+ parameters into Parameter Objects, enforce deterministic resource cleanup, preserve all error branches and user feedback states, and re-run the full test suite (`exit 0`).
 
 ---
 

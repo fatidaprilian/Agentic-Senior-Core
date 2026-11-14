@@ -73,13 +73,13 @@ describe('UI Engineering Structure & Quality Floor', () => {
     );
   });
 
-  it('validates 34 slop regexes in known-ui-slop-patterns.json with positive and negative cases', async () => {
+  it('validates 35 slop regexes in known-ui-slop-patterns.json with positive and negative cases', async () => {
     const slopPath = path.join(pluginDir, 'hooks', 'lib', 'known-ui-slop-patterns.json');
     const raw = await fs.readFile(slopPath, 'utf8');
     const catalog = JSON.parse(raw);
 
     assert.ok(Array.isArray(catalog.patterns), 'patterns must be an array');
-    assert.strictEqual(catalog.patterns.length, 34, 'must have exactly 34 slop patterns');
+    assert.strictEqual(catalog.patterns.length, 35, 'must have exactly 35 slop patterns');
 
     const testCases = {
       'ui-gradient-purple-blue': {
@@ -217,6 +217,10 @@ describe('UI Engineering Structure & Quality Floor', () => {
       'ui-numbered-step-card': {
         pos: '<div className="rounded-xl border p-6"><span className="badge">01</span><h3>Step One</h3></div>',
         neg: '<ol className="divide-y divide-border"><li className="py-3">1. Verify account</li></ol>'
+      },
+      'copy-parenthetical-gloss': {
+        pos: 'Klik tombol Simpan (Save) atau Pengaturan (Settings).',
+        neg: 'Use an explicit Data Transfer Object (DTO) for API contracts.'
       }
     };
 

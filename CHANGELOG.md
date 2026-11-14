@@ -1,5 +1,22 @@
 # Changelog
 
+## 6.21.0
+
+### Added & Hardened
+- **Universal Clean Code & Code Review Playbook (`skills/asc-review` — lean router + 4 1-hop references)**:
+  - **Standards Alignment**: Grounded in **Google Engineering Practices** (`google/eng-practices`), **SonarSource Cognitive Complexity (Rule S3776)** & **Clean as You Code**, **Conventional Comments** (`conventionalcomments.org`), **MITRE CWE** (`CWE-404`, `CWE-390`, `CWE-915`), **Martin Fowler Code Smells**, **ISO 24495-1:2023**, **Microsoft & Google Style Guides**, and **Wikipedia WikiProject AI Cleanup**.
+  - **Clean Code & Complexity (`references/clean-code-and-complexity.md`)**: Enforced Cognitive Complexity <= 15, nesting depth <= 3 via guard clauses, Parameter Objects for >= 4 arguments, zero boolean mode flags, `< O(n^2)` collection bounds, Fowler design smell checklists, and acyclic module dependency rules.
+  - **Concurrency & Resource Lifecycle (`references/concurrency-and-resources.md`)**: Added deterministic RAII/scoped cleanup (`CWE-404`), async event-loop safety (no sync-over-async blocking, no unhandled fire-and-forget tasks), timeout/cancellation propagation, and canonical lock ordering.
+  - **Contracts & Error Integrity (`references/contracts-and-error-hygiene.md`)**: Enforced request/response DTO separation from persistence models (`CWE-915`), zero type escape hatches at trust boundaries, ban on swallowed/masked errors (`CWE-390`), and 3-part human-by-design error messages.
+  - **PR Protocol & Language Purity (`references/review-protocol.md`)**: Adopted `issue (blocking)`, `suggestion (non-blocking)`, `nitpick (non-blocking)`, and `question` labels alongside strict single-language purity checks.
+- **Always-On Rule Elevation (`rules/agentic-senior-core.md`)**:
+  - Codified bounded complexity/signatures, DTO boundary isolation (`CWE-915`), deterministic resource & async hygiene (`CWE-404`), error integrity (`CWE-390`), and human-by-design error prose.
+- **Cross-Stack Prose & Comment Hooks (`hooks/post-edit-enforce.js` & `hooks/lib/known-ui-slop-patterns.json`)**:
+  - Decoupled prose/comment scans from web UI file extensions so comment hygiene (`//`, `#`, `/* */`) and language purity run across all backend and document files (`.cs`, `.py`, `.ts`, `.go`, `.java`, `.rs`, `.md`) while excluding test and catalog fixtures.
+  - Generalized `copy-hybrid-neologism` morphology, added `copy-parenthetical-gloss` detection (#35), and expanded `copy-ai-buzzwords` with LLM writing tells.
+- **Cross-Skill Synchronization & Automated Tests**:
+  - Synchronized `skills/asc-develop`, `skills/asc`, and `skills/asc-ui/references/responsive-and-copy.md`; expanded `tests/ui-structure.test.mjs` and added `tests/review-structure.test.mjs`.
+
 ## 6.20.0
 
 ### Added & Hardened

@@ -314,8 +314,10 @@ function processSingleEdit(toolName, toolInput, emitFn, workspaceRoot, skipSessi
   checkSecurityPatterns(toolName, toolInput, filePath, findings);
   checkStubPatterns(toolName, toolInput, filePath, findings);
 
-  if (ext === 'html' || ext === 'css' || ext === 'jsx' || ext === 'tsx' || ext === 'vue' || ext === 'svelte' || filePath.toLowerCase().endsWith('.blade.php')) {
+  if (isUiMarkupFile(filePath, ext)) {
     checkUiSlopPatterns(toolName, toolInput, filePath, findings);
+  } else if (isCodeOrDocFile(filePath, ext)) {
+    checkProseAndCommentPatterns(toolName, toolInput, filePath, findings);
   }
 
   checkUniversalLinter(filePath, ext, findings, root);
@@ -462,6 +464,36 @@ function checkSecurityPatterns(toolName, toolInput, filePath, findings) {
       }
     } catch (_) { }
   }
+}
+
+function isUiMarkupFile(filePath, ext) {
+  return ext === 'html' || ext === 'css' || ext === 'jsx' || ext === 'tsx' || ext === 'vue' || ext === 'svelte' || ext === 'razor' || ext === 'cshtml' || filePath.toLowerCase().endsWith('.blade.php');
+}
+
+function isTestOrCatalogFixture(filePath) {
+  return /(?:\.test\.|\.spec\.|_test\.|__tests__[\/\\]|tests?[\/\\])/i.test(filePath) ||
+    /[\/\\](?:known-.*-patterns\.json|skills[\/\\]|rules[\/\\]|eval[\/\\])/i.test(filePath);
+}
+
+function isCodeOrDocFile(filePath, ext) {
+  return !isTestOrCatalogFixture(filePath) && (SOURCE_EXTENSIONS.has(ext) || ext === 'md');
+}
+
+function checkProseAndCommentPatterns(toolName, toolInput, filePath, findings) {
+  var target = toolName === 'Edit' ? (toolInput.new_string || toolInput.ReplacementContent || '') : (toolInput.content || toolInput.CodeContent || '');
+  if (!target || !UI_SLOP_PATTERNS.patterns) return;
+
+  UI_SLOP_PATTERNS.patterns.forEach(function (p) {
+    if (!p.id || (!p.id.startsWith('code-') && !p.id.startsWith('copy-'))) return;
+    try {
+      var regex = new RegExp(p.regex, 'ig');
+      var isMatch = regex.test(target);
+      logPatternCheck('prose-comment', p.id, isMatch);
+      if (isMatch) {
+        findings.push('[ASC Language/Comment Note] ' + p.message);
+      }
+    } catch (_) { }
+  });
 }
 
 function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {

@@ -29,4 +29,6 @@
    - Never mix English and Indonesian (`meng-generate`, `di-submit`).
    - In Indonesian interfaces, use natural idiomatic terms established in the codebase (*panel samping*, *garis pemisah*, *jendela dialog*, *unggah berkas*) rather than awkward literal calques (*laci sembul*, *garis rambut*, *jendela sembul*).
 3. **Zero Fabricated Content:** Never invent customer quotes, partner company names, fake user counts (`10,000+ teams`), or unbacked telemetry metrics. Omit absent marketing proof entirely.
+4. **Human-by-Design Error Copy (Microsoft & Google Style Guides):** Write operational errors in active plain language stating (1) what failed, (2) the operational impact, and (3) the next actionable step. Never blame the user, never apologize for external network outages, never use alarmist titles (`FATAL ERROR`), and never expose stack traces or internal exception names in UI strings.
+5. **Zero Parenthetical Translation Glosses:** Never append translated words in parentheses beside UI labels or prose (never write `"Pengaturan (Settings)"` or `"Simpan (Save)"`).
 

@@ -39,7 +39,7 @@ When picking step 5 or 6 (unless trivial):
 ## Code Quality
 - Idiomatic short names (`ctx`, `err`, `req`, `res`, `id`, `i`/`j`) over inflated identifiers.
 - All identifiers (variables, functions, classes, file names) must be in English. No emojis in code or commit messages.
-- Early returns over deep nesting (keep happy path flat).
+- Bounded complexity & signatures: Keep cognitive complexity <= 15 and nesting <= 3 levels via early returns. Group >= 4 parameters into a cohesive parameter object, avoid boolean mode flags, and prevent quadratic O(n^2) loops on unbounded collections.
 - Three similar lines is better than a premature abstraction (duplication over wrong abstraction).
 - Single design source of truth: UI styling must reuse defined design tokens, theme variables, or existing page patterns. No ad-hoc palette, radius, or font deviations between pages.
 - Human writing & prose hygiene: Functional communication is an operational tool, not marketing collateral. This applies to UI microcopy, READMEs, PR descriptions, and code comments alike:
@@ -60,6 +60,7 @@ When picking step 5 or 6 (unless trivial):
 - Scope and direction changes require explicit user confirmation before modifying abstractions or altering system contracts.
 - Before implementing a feature, locate an analogous module and follow its layer split, naming, and error-handling.
 - Atomic writes must be wrapped in transactions. Flag shared mutable state under concurrent requests.
+- Boundary typing & DTO isolation: Ban unsafe type escape hatches at module boundaries and never bind internal persistence entities directly to API inputs or outputs; use explicit request/response DTOs and allowlists (CWE-915).
 - UI component reuse: Component re-invention across pages is forbidden. Before declaring markup or styling, check existing components in `components/` or `ui/`. Compose or extend existing components via props/variants. Do not introduce single-page clones or ad-hoc styling that diverges from established pages.
 - Enterprise UI anti-redundancy: Page components must never render outer chrome (navigation bars, duplicate headers, or root wrapper padding) when an enclosing layout shell exists. Enforce single action boundaries (one primary CTA per viewport region; secondary/row actions use overflow menus). Zero data echoing: never duplicate identical record attributes across adjacent summary and detail containers. Enforce compound slots and edge-to-edge table containment (zero nested card-in-card soup; tabular numeric columns right-aligned).
 
@@ -69,7 +70,8 @@ When picking step 5 or 6 (unless trivial):
 - Action feedback: mutations (create, update, delete, submit) must provide immediate pending state (disable button/spinner) and clear success/error notification (toast or banner with retry). Never silently swallow mutation errors.
 - UI data states: handle the state quad — loading skeleton matching component geometry (zero layout shift), empty state with single action trigger, error state with retry, and populated data. Wrap critical UI widgets in localized error boundaries.
 - External dependency resilience: classify dependencies as hard (fail fast + actionable error) or soft (fallback to static safe default, stale cache, or degraded mode).
-- Surface every operational error with context. Empty catch blocks mask production issues.
+- Resource & async hygiene: Release acquired files, DB connections, streams, and listeners deterministically via native constructs or finally blocks (CWE-404). Propagate timeouts and cancellation tokens across all I/O, never block async loops with synchronous calls, and handle errors on all background tasks.
+- Error integrity & human-by-design errors: Never catch exceptions only to return null, empty collections, or false success (CWE-390); preserve original cause chains and surface operational errors with context. User-facing errors must use active, single-language prose stating what failed and the actionable fix without blaming the user or leaking internal traces.
 - Structured key-value logging for significant events. Never leak stack traces or credentials in production logs.
 
 ## Workflow

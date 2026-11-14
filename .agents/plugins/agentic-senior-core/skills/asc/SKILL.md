@@ -16,7 +16,7 @@ Agentic Senior Core organizes operational guidance into 7 high-density, non-over
 
 1. **`/asc` (This Skill)**: Core engineering rules, codebase convention fingerprinting, adaptive preferences, debt tracking, skill authoring & subagent pressure testing, and IDE adapter setup.
 2. **`/asc-develop`**: Engineering lifecycle for greenfield scaffolding, brownfield features, bite-sized execution plans (`Ruling:` execution), subagent orchestration, and structured refactoring.
-3. **`/asc-review`**: Quality and security assurance: production PR reviews, deep vulnerability audits (OWASP / ASI), and code clone deduplication.
+3. **`/asc-review`**: Quality, clean code, and security assurance: complexity ceilings (<= 15), resource/async hygiene, DTO isolation, Conventional Comments PR reviews, OWASP audits, and language purity.
 4. **`/asc-test`**: Dedicated testing & debugging playbook: 4-phase systematic root-cause debugging, TDD, verification gates, Playwright E2E, UAT checklists, regression proofs, and flaky test remediation.
 5. **`/asc-reference`**: Domain architecture reference for REST/GraphQL APIs, database indexing/transactions/migrations, infrastructure configs, and service resilience.
 6. **`/asc-ui`**: Deterministic frontend engineering: anti-card-soup data-to-structure mapping, token/primitive reuse, 4-state data contracts, mobile containment (`min-h-dvh`), single-language microcopy, and WCAG 2.2 AA accessibility.

@@ -52,12 +52,12 @@
     },
     {
       "id": "code-decorative-banner",
-      "regex": "//\\s*={5,}|//\\s*-{5,}\\s*[A-Z]+",
+      "regex": "(?:\\/\\/|#|\\/\\*)\\s*={5,}|(?:\\/\\/|#|\\/\\*)\\s*-{5,}\\s*[A-Z]+",
       "message": "note: decorative ASCII character banner detected. Keep comments concise, sentence-case, and focused on rationale."
     },
     {
       "id": "code-step-narration",
-      "regex": "//\\s*Step\\s+[0-9]+:\\s*|//\\s*Initialize\\s+(?:the\\s+)?[a-zA-Z0-9_]+",
+      "regex": "(?:\\/\\/|#|\\/\\*)\\s*Step\\s+[0-9]+:\\s*|(?:\\/\\/|#|\\/\\*)\\s*Initialize\\s+(?:the\\s+)?[a-zA-Z0-9_]+",
       "message": "note: procedural line-by-line comment narration detected. Describe non-obvious intent and constraints instead of restating the obvious code flow."
     },
     {
@@ -112,8 +112,8 @@
     },
     {
       "id": "copy-hybrid-neologism",
-      "regex": "\\b(meng-generate|di-submit|di-approve|di-cancel|meng-handle|di-delete|men-delete|me-restore|di-update|meng-update)\\b",
-      "message": "warning: hybrid neologism ('di-submit', 'meng-generate') detected. Maintain strict single-language purity (use native Indonesian terms or pure English)."
+      "regex": "\\b(?:me(?:ng?|m|n|ny)?|di|ter)-?(?:generate|submit|approve|cancel|handle|delete|restore|update|upload|download|export|import|filter|render|fetch|edit|save|deploy|clone|setup|build|parse|merge|push|pull|commit|reset|rollback|refresh|reload|search|sort|select|toggle|trigger|validate|verify|sync|mount|unmount|click|klik|scroll|hover|copy|paste|print|share|archive|publish|send|resend|retry|skip|block|unblock|lock|unlock|enable|disable|install|uninstall|upgrade|migrate|format|lint|test|restart|pause|resume|create|remove)\\b",
+      "message": "warning: hybrid neologism ('di-submit', 'meng-upload', 'menggenerate') detected. Maintain strict single-language purity (use native Indonesian terms or pure English)."
     },
     {
       "id": "ui-card-in-card-nesting",
@@ -142,8 +142,8 @@
     },
     {
       "id": "copy-ai-buzzwords",
-      "regex": "\\b(seamlessly?|robust(?:ness)?|empowers?|supercharg(?:ed?|ing)|cutting-edge|next-generation|blazing-fast|effortlessly?)\\b",
-      "message": "note: generic AI buzzword detected ('seamless', 'robust', 'supercharge', 'cutting-edge'). Use plain operational verbs and concrete metrics."
+      "regex": "\\b(seamlessly?|robust(?:ness)?|empowers?|supercharg(?:ed?|ing)|cutting-edge|next-generation|blazing-fast|effortlessly?|delv(?:e|es|ing)|testament|pivotal|game-changing)\\b",
+      "message": "note: generic AI buzzword detected ('seamless', 'robust', 'supercharge', 'cutting-edge', 'delve'). Use plain operational verbs and concrete metrics."
     },
     {
       "id": "copy-cadence-tricolon",
@@ -169,6 +169,11 @@
       "id": "ui-numbered-step-card",
       "regex": "rounded-(?:xl|2xl)[^>{}]{0,120}\\bborder\\b[\\s\\S]{0,160}>\\s*0[1-9]\\s*</",
       "message": "warning: numbered step card ('01', '02' inside bordered rounded card) detected. Render sequential workflows as a connected <ol> stepper instead of isolated cards."
+    },
+    {
+      "id": "copy-parenthetical-gloss",
+      "regex": "(?:simpan|batal|hapus|ubah|tambah|cari|muat|memuat|unggah|unduh|masuk|keluar|pengaturan|berhasil|gagal|peringatan|waktu habis|tutup|buka|kirim|ulang|daftar|riwayat|ringkasan|kelola)\\s+\\((?:save|cancel|delete|remove|edit|update|add|create|search|find|load|loading|upload|download|login|sign in|logout|sign out|settings|preferences|success|failed|failure|error|warning|timeout|close|open|send|submit|retry|list|history|summary|manage)[^)]*\\)|(?:save|cancel|delete|edit|upload|download|settings|loading|timeout|error|warning|success|failed|retry|search|filter)\\s+\\((?:simpan|batal|hapus|ubah|unggah|unduh|pengaturan|memuat|waktu habis|galat|kesalahan|peringatan|berhasil|gagal|coba lagi|cari|saring)[^)]*\\)",
+      "message": "warning: parenthetical translation gloss ('Simpan (Save)', 'Pengaturan (Settings)') detected. Enforce strict single-language purity without inline translations."
     }
   ]
 }
