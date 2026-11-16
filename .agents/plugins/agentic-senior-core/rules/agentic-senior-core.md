@@ -75,7 +75,7 @@ When picking step 5 or 6 (unless trivial):
 - Structured key-value logging for significant events. Never leak stack traces or credentials in production logs.
 
 ## Workflow
-- Prefix ALL terminal commands with `ascx` to compress output (e.g., `ascx <your_command>`).
+- Prefix terminal commands with `ascx` when available in `PATH` to compress output (e.g., `ascx <your_command>`); execute native commands directly when `ascx` is absent.
 - Never run `git commit`, `git push`, or `git push --force` unless explicitly requested this turn.
 - Testing baseline: new business logic gets one happy-path test and one failure-mode test, unless waived by user.
 - Test quality: Never mock the unit under test — mock only external boundaries/dependencies.

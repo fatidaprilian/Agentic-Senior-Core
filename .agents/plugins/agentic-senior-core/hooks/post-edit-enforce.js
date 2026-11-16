@@ -60,6 +60,7 @@ const {
   resolveWorkspaceRoot,
   normalizeEditToolCall,
 } = require('./path-util.cjs');
+const { findLayoutShells } = require('./component-registry.cjs');
 
 let sourceEditCount = 0;
 
@@ -265,7 +266,15 @@ function handleAntigravityPostInvocation(data) {
 
     if (findings.length > 0) {
       const injectSteps = findings.map(function (f) { return { ephemeralMessage: f }; });
-      process.stdout.write(JSON.stringify({ injectSteps: injectSteps }) + '\n');
+      const hasBlockingUi = findings.some(function (f) {
+        return f.indexOf('[ASC Card Soup Alert]') !== -1 || f.indexOf('[ASC Shell Collision Alert]') !== -1;
+      });
+      const invNum = typeof data.invocationNum === 'number' ? data.invocationNum : 0;
+      const out = { injectSteps: injectSteps };
+      if (hasBlockingUi && invNum < 5) {
+        out.terminationBehavior = 'force_continue';
+      }
+      process.stdout.write(JSON.stringify(out) + '\n');
     } else {
       process.stdout.write('{}\n');
     }
@@ -315,7 +324,7 @@ function processSingleEdit(toolName, toolInput, emitFn, workspaceRoot, skipSessi
   checkStubPatterns(toolName, toolInput, filePath, findings);
 
   if (isUiMarkupFile(filePath, ext)) {
-    checkUiSlopPatterns(toolName, toolInput, filePath, findings);
+    checkUiSlopPatterns(toolName, toolInput, filePath, findings, root);
   } else if (isCodeOrDocFile(filePath, ext)) {
     checkProseAndCommentPatterns(toolName, toolInput, filePath, findings);
   }
@@ -479,8 +488,21 @@ function isCodeOrDocFile(filePath, ext) {
   return !isTestOrCatalogFixture(filePath) && (SOURCE_EXTENSIONS.has(ext) || ext === 'md');
 }
 
+function readInspectTarget(filePath, fallbackSnippet) {
+  try {
+    if (filePath && fs.existsSync(filePath)) {
+      var st = fs.statSync(filePath);
+      if (st.isFile() && st.size <= 262144) {
+        return fs.readFileSync(filePath, 'utf8');
+      }
+    }
+  } catch (_) {}
+  return fallbackSnippet || '';
+}
+
 function checkProseAndCommentPatterns(toolName, toolInput, filePath, findings) {
-  var target = toolName === 'Edit' ? (toolInput.new_string || toolInput.ReplacementContent || '') : (toolInput.content || toolInput.CodeContent || '');
+  var snippet = toolName === 'Edit' ? (toolInput.new_string || toolInput.ReplacementContent || '') : (toolInput.content || toolInput.CodeContent || '');
+  var target = readInspectTarget(filePath, snippet);
   if (!target || !UI_SLOP_PATTERNS.patterns) return;
 
   UI_SLOP_PATTERNS.patterns.forEach(function (p) {
@@ -496,8 +518,25 @@ function checkProseAndCommentPatterns(toolName, toolInput, filePath, findings) {
   });
 }
 
-function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
-  var target = toolName === 'Edit' ? (toolInput.new_string || toolInput.ReplacementContent || '') : (toolInput.content || toolInput.CodeContent || '');
+function checkLayoutShellCollision(filePath, target, findings, workspaceRoot) {
+  var base = path.basename(filePath);
+  if (/^(?:_?layout|applayout|mainlayout|rootlayout|\+layout)\./i.test(base)) return;
+  if (!workspaceRoot) return;
+
+  var shells = findLayoutShells(workspaceRoot);
+  if (shells.length === 0) return;
+
+  if (/<nav\b|<header\b[^>]*role=["']banner/i.test(target)) {
+    findings.push(
+      '[ASC Shell Collision Alert] ' + base + ' renders outer <nav> or banner <header> even though layout shell ('
+      + shells[0] + ') already exists. Remove outer chrome from page components (skills/asc-ui/references/data-to-structure.md).'
+    );
+  }
+}
+
+function checkUiSlopPatterns(toolName, toolInput, filePath, findings, workspaceRoot) {
+  var snippet = toolName === 'Edit' ? (toolInput.new_string || toolInput.ReplacementContent || '') : (toolInput.content || toolInput.CodeContent || '');
+  var target = readInspectTarget(filePath, snippet);
   if (!target) return;
 
   if (UI_SLOP_PATTERNS.patterns) {
@@ -512,6 +551,8 @@ function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
       } catch (_) { }
     });
   }
+
+  checkLayoutShellCollision(filePath, target, findings, workspaceRoot);
 
   var cardGridsCount = 0;
   // Token-aware JSX/HTML tag scanner
@@ -544,7 +585,7 @@ function checkUiSlopPatterns(toolName, toolInput, filePath, findings) {
   }
 
   var hasSemanticTableOrList = /<(?:table|ol|thead|tbody)[\s>]|\bdivide-y\b/i.test(target);
-  if (cardGridsCount >= 3 && !hasSemanticTableOrList) {
+  if (cardGridsCount >= 2 && !hasSemanticTableOrList) {
     findings.push(
       '[ASC Card Soup Alert] ' + cardGridsCount + ' bordered card-grid sections detected in ' + path.basename(filePath)
       + ' with zero semantic <table> or <ol> containers. Convert sequential steps to <ol> steppers, criteria/records to <table>, and rosters to divide-y lists (skills/asc-ui/references/data-to-structure.md).'

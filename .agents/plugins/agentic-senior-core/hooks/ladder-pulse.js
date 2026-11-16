@@ -5,6 +5,7 @@
 
 const { getThresholds } = require('./constants.cjs');
 const { resolveWorkspaceRoot } = require('./path-util.cjs');
+const { scanComponentRegistry } = require('./component-registry.cjs');
 
 const SECURITY_REMINDER = '[ASC SECURITY PIN — verbatim, do not paraphrase] '
   + 'NEVER: interpolate input into SQL/shell · commit secrets/tokens/credentials '
@@ -29,13 +30,26 @@ function finish(payload) {
     const thresholds = getThresholds(workspaceRoot);
     const interval = thresholds.LADDER_PULSE_INTERVAL || 3;
     const invNum = payload && typeof payload.invocationNum === 'number' ? payload.invocationNum : 0;
+    const promptText = String((payload && payload.lastUserInput) || '');
+    const isUiTask = /\b(ui|page|dashboard|component|form|table|modal|card|navbar|sidebar|layout|css|tsx|jsx|vue|svelte|razor|tampilan|halaman|komponen)\b/i.test(promptText);
+    const shouldPulse = invNum > 0 && invNum % interval === 0;
 
-    if (invNum > 0 && invNum % interval === 0) {
-      process.stdout.write(JSON.stringify({
-        injectSteps: [{
-          ephemeralMessage: '**ASC LADDER PULSE**: Review the 1-6 decision ladder before writing new abstractions. Document deferred debt if taking shortcuts.\n\n' + SECURITY_REMINDER,
-        }],
-      }) + '\n');
+    if (shouldPulse || (invNum === 0 && isUiTask)) {
+      const registry = scanComponentRegistry(workspaceRoot);
+      const parts = [];
+      if (shouldPulse) {
+        parts.push('**ASC LADDER PULSE**: Review the 1-6 decision ladder before writing new abstractions. Document deferred debt if taking shortcuts.\n\n' + SECURITY_REMINDER);
+      }
+      if (registry.formatted && (isUiTask || shouldPulse)) {
+        parts.push(registry.formatted);
+      }
+      if (parts.length > 0) {
+        process.stdout.write(JSON.stringify({
+          injectSteps: [{ ephemeralMessage: parts.join('\n\n') }],
+        }) + '\n');
+      } else {
+        process.stdout.write('{}\n');
+      }
     } else {
       process.stdout.write('{}\n');
     }

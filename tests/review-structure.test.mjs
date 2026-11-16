@@ -83,10 +83,12 @@ describe('Clean Code, Review Standards & Cross-Stack Language Hygiene', () => {
     const catalog = JSON.parse(slopRaw);
     const byId = Object.fromEntries(catalog.patterns.map((p) => [p.id, new RegExp(p.regex, 'i')]));
 
-    // Comment syntax parity (//, #, /*)
+    // Comment syntax parity (//, #, /*) without false-matching Markdown headings (### Step 1:)
     assert.ok(byId['code-decorative-banner'].test('# =================='), 'Should match Python # banner');
     assert.ok(byId['code-step-narration'].test('# Step 2: compute total'), 'Should match Python # step narration');
     assert.ok(byId['code-step-narration'].test('/* Step 3: save record */'), 'Should match block comment step narration');
+    assert.strictEqual(byId['code-step-narration'].test('### Step 1: Define & Clarify'), false, 'Must NOT match Markdown ### heading');
+    assert.strictEqual(byId['code-decorative-banner'].test('### ===== Heading'), false, 'Must NOT match Markdown ### heading banner');
 
     // Broad morphological Indonesian-English hybrids without false English hits
     for (const hybrid of ['meng-upload', 'mengupload', 'di-export', 'disubmit', 'terupdate', 'di-deploy', 'merender']) {
@@ -129,5 +131,42 @@ describe('Clean Code, Review Standards & Cross-Stack Language Hygiene', () => {
     });
     assert.strictEqual(testRes.status, 0);
     assert.strictEqual(testRes.stdout.includes('[ASC Language/Comment Note]'), false, 'Test fixtures must not trigger false prose alerts');
+  });
+
+  it('self-scans all skill markdown prose outside quoted examples for banned buzzwords', async () => {
+    const skillsDir = path.join(pluginDir, 'skills');
+    const bannedWordsRe = /\b(seamlessly?|robust(?:ness)?|empowers?|supercharg(?:ed?|ing)|cutting-edge|next-generation|blazing-fast|effortlessly?|delv(?:e|es|ing)|testament|pivotal|game-changing)\b/i;
+
+    async function walk(dir, out = []) {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+      for (const e of entries) {
+        const fp = path.join(dir, e.name);
+        if (e.isDirectory()) await walk(fp, out);
+        else if (e.name.endsWith('.md')) out.push(fp);
+      }
+      return out;
+    }
+
+    const mdFiles = await walk(skillsDir);
+    for (const mdFile of mdFiles) {
+      const rel = path.relative(skillsDir, mdFile).replace(/\\/g, '/');
+      const lines = (await fs.readFile(mdFile, 'utf8')).split('\n');
+      let inCodeBlock = false;
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line.trim().startsWith('```')) {
+          inCodeBlock = !inCodeBlock;
+          continue;
+        }
+        if (inCodeBlock || line.includes('asc-prose: meta')) continue;
+        // Strip inline backticks so documented anti-pattern examples inside code spans are excluded
+        const proseOnly = line.replace(/`[^`]*`/g, '');
+        assert.strictEqual(
+          bannedWordsRe.test(proseOnly),
+          false,
+          `Banned buzzword found in ${rel}:${i + 1}: "${line.trim()}"`
+        );
+      }
+    }
   });
 });

@@ -4,9 +4,9 @@ description: >
   Trigger this skill when the user is: building a new feature, creating an endpoint, planning multi-step tasks, dispatching subagents, scaffolding a new project, or refactoring existing code. Trigger when the user says: "add a feature", "build this endpoint", "make a plan", "break down tasks", "implement this", "wire up", "new project", "scaffold this", "refactor this", "clean up this code", "tambah fitur", "bikin endpoint", "bikin plan", "pecah task", "bikin project baru", "rapikan kode ini", "refactor ini".
 ---
 
-# Engineering Lifecycle & Execution Router (`asc-develop`)
+# Engineering Lifecycle & Execution (`asc-develop`)
 
-Universal workflow for greenfield scaffolding, feature planning/implementation, subagent orchestration, and refactoring without repository disk clutter.
+Workflow for greenfield scaffolding, feature planning, isolated subagent orchestration, and targeted refactoring without workspace clutter.
 
 ---
 
@@ -31,7 +31,7 @@ Before drafting multi-step plans, asking clarifying questions, or dispatching su
 ### Step 2: Architecture & Implementation Hierarchy
 1. Apply the 1–6 Decision Ladder to every module (needed $\rightarrow$ reuse $\rightarrow$ stdlib $\rightarrow$ installed dep $\rightarrow$ single function $\rightarrow$ minimal code).
 2. Implement core domain models and services before transport controllers.
-3. For frontend views, follow `/asc-ui`. Verify layout shell boundaries first: page components must never render outer chrome (navbars, duplicate headers, or root wrapper padding) already supplied by the layout shell. Enforce clean single-language prose (50% word reduction, zero marketing buzzwords).
+3. For frontend views, follow `/asc-ui` and honor enclosing layout shell boundaries (zero duplicate navbars, headers, or root wrappers). Keep UI text concise and single-language.
 4. Add an automated quality gate workflow (lint, type-check, test).
 
 ---
@@ -58,7 +58,7 @@ Before drafting multi-step plans, asking clarifying questions, or dispatching su
 1. **Baseline Check:** Run existing tests first; never refactor on a failing baseline.
 2. **YAGNI Scan:** Remove single-consumer wrapper abstractions, dead branches, and unused flags.
 3. **Scope Gate:** Execute local renames/extractions directly; confirm cross-module boundary changes first.
-4. **Invariants:** Keep cognitive complexity <= 15 and nesting <= 3 with early returns, extract 4+ parameters into Parameter Objects, enforce deterministic resource cleanup, preserve all error branches and user feedback states, and re-run the full test suite (`exit 0`).
+4. **Invariants:** Apply the always-on complexity bounds, Parameter Objects, resource cleanup, and error branches from `rules/agentic-senior-core.md`, then re-run the full test suite (`exit 0`).
 
 ---
 

@@ -20,6 +20,8 @@ import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 import { computeBilledCost } from './agent-loop.mjs';
+import { gradeWorkspace } from './quality-grader.mjs';
+import { scanComponentRegistry } from '../../lib/core/component-registry.mjs';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..', '..');
@@ -53,12 +55,14 @@ function buildOpenCodeConfig(apiKey) {
 let SESSION_TIMEOUT_MS = 600_000; // 10 min per session (override with --timeout)
 
 function parseArgs(argv) {
-    const args = { task: null, runs: 1, condition: 'both', model: 'glm-5.3' };
+    const args = { task: null, runs: 1, condition: 'both', model: '', delayMs: 1000, dryRun: false };
     for (let i = 2; i < argv.length; i++) {
         if (argv[i] === '--task' && argv[i + 1]) args.task = argv[++i];
         else if (argv[i] === '--runs' && argv[i + 1]) args.runs = Math.max(1, parseInt(argv[++i], 10) || 1);
         else if (argv[i] === '--condition' && argv[i + 1]) args.condition = argv[++i];
         else if (argv[i] === '--model' && argv[i + 1]) args.model = argv[++i];
+        else if (argv[i] === '--delay-ms' && argv[i + 1]) args.delayMs = Math.max(0, parseInt(argv[++i], 10) || 0);
+        else if (argv[i] === '--dry-run') args.dryRun = true;
         else if (argv[i] === '--timeout' && argv[i + 1]) SESSION_TIMEOUT_MS = Math.max(30_000, parseInt(argv[++i], 10) * 1000);
     }
     return args;
@@ -159,16 +163,15 @@ function resolveOpenCodeBin() {
 
 const OPENCODE_BIN = resolveOpenCodeBin();
 
-function runOpenCodeSession(workDir, prompt) {
+function runOpenCodeSession(workDir, prompt, model) {
     return new Promise((resolve) => {
-        const child = spawn(OPENCODE_BIN, [
-            'run',
-            '--dir', workDir,
-            '-m', 'agentrouter/glm-5.3',
-            '--auto',
-            '--format', 'json',
-            prompt,
-        ], {
+        const cliArgs = ['run', '--dir', workDir, '--auto', '--format', 'json'];
+        if (model) {
+            const targetModel = model.includes('/') ? model : `agentrouter/${model}`;
+            cliArgs.push('-m', targetModel);
+        }
+        cliArgs.push(prompt);
+        const child = spawn(OPENCODE_BIN, cliArgs, {
             cwd: workDir,
             timeout: SESSION_TIMEOUT_MS,
             env: { ...process.env },
@@ -186,31 +189,42 @@ function runOpenCodeSession(workDir, prompt) {
     });
 }
 
-async function runSingleSession({ taskDir, prompt, withAsc, rulesContent, apiKey }) {
+async function runSingleSession({ taskDir, prompt, withAsc, rulesContent, apiKey, model, dryRun }) {
     const workDir = mkdtempSync(path.join(os.tmpdir(), 'asc-opencode-'));
     try {
         cpSync(path.join(taskDir, 'repo'), workDir, { recursive: true });
-        writeFileSync(path.join(workDir, 'opencode.json'), JSON.stringify(buildOpenCodeConfig(apiKey), null, 2), 'utf8');
+        if (apiKey && (!model || model.startsWith('agentrouter/'))) {
+            writeFileSync(path.join(workDir, 'opencode.json'), JSON.stringify(buildOpenCodeConfig(apiKey), null, 2), 'utf8');
+        }
 
-        // ASC condition: OpenCode reads AGENTS.md from the project root as its
-        // rules file. with-asc gets the full ASC ruleset; without-asc gets none.
+        // ASC condition: OpenCode reads AGENTS.md from project root.
+        // Include both rules and detected Component Registry for UI tasks.
         if (withAsc) {
-            writeFileSync(path.join(workDir, 'AGENTS.md'), rulesContent, 'utf8');
+            const registry = scanComponentRegistry(workDir);
+            const fullContext = registry.formatted ? `${rulesContent}\n\n${registry.formatted}` : rulesContent;
+            writeFileSync(path.join(workDir, 'AGENTS.md'), fullContext, 'utf8');
         }
 
         const baselineRef = ensureBaselineCommit(workDir);
+        if (dryRun) {
+            const grade = gradeWorkspace(workDir, { skipTests: true });
+            return { durationMs: 0, diff: { linesAdded: 0, linesRemoved: 0, netDelta: 0, filesChanged: 0 }, usage: { calls: 0, promptTokens: 0, completionTokens: 0, cachedTokens: 0, cacheWriteTokens: 0, reasoningTokens: 0, turns: 0 }, finished: true, lastText: 'dry-run', exitCode: 0, stderrTail: '', quality: grade };
+        }
+
         const startTime = Date.now();
-        const session = await runOpenCodeSession(workDir, prompt);
+        const session = await runOpenCodeSession(workDir, prompt, model);
         const durationMs = Date.now() - startTime;
 
         const { usage, finished, lastText } = parseUsageFromEvents(session.stdout);
         const diff = measureGitDiff(workDir, baselineRef);
+        const quality = gradeWorkspace(workDir);
 
         return {
             durationMs,
             diff,
             usage,
             finished,
+            quality,
             lastText: lastText.slice(0, 500),
             exitCode: session.code,
             stderrTail: session.stderr.slice(-500),
@@ -224,12 +238,13 @@ async function main() {
     const args = parseArgs(process.argv);
 
     if (!args.task) {
-        console.log('Usage: node benchmarks/harness/opencode-run.mjs --task <task-dir> [--runs n] [--condition with-asc|without-asc|both]');
+        console.log('Usage: node benchmarks/harness/opencode-run.mjs --task <task-dir> [--model <provider/model>] [--runs n] [--condition with-asc|without-asc|both] [--dry-run]');
         process.exit(0);
     }
 
-    if (!process.env.AGENTROUTER_API_KEY) {
-        console.error('Missing AGENTROUTER_API_KEY environment variable.');
+    const usesAgentRouter = !args.model || args.model.startsWith('agentrouter/') || !args.model.includes('/');
+    if (!args.dryRun && usesAgentRouter && !process.env.AGENTROUTER_API_KEY) {
+        console.error('Missing AGENTROUTER_API_KEY (or pass --model <provider/free-model> configured in local OpenCode).');
         process.exit(1);
     }
 
@@ -248,24 +263,28 @@ async function main() {
 
     await fs.mkdir(CACHE_DIR, { recursive: true });
 
-    console.log('ASC OpenCode Benchmark (AgentRouter glm-5.3)');
+    console.log(`ASC OpenCode Benchmark (${args.model || 'local-default'})`);
     console.log(`  Task:    ${path.basename(taskDir)}`);
-    console.log(`  Runs:    ${args.runs} x conditions: ${conditions.join(', ')}`);
-    console.log(`  Rates:   input $${RATES.inputPerMTokens}/M, output $${RATES.outputPerMTokens}/M, cache read $${RATES.cacheReadPerMTokens}/M\n`);
+    console.log(`  Runs:    ${args.runs} x conditions: ${conditions.join(', ')}\n`);
 
     for (const condition of conditions) {
         const withAsc = condition === 'with-asc';
 
         for (let run = 1; run <= args.runs; run++) {
             process.stdout.write(`  [${condition}] run ${run}/${args.runs}... `);
-            const result = await runSingleSession({ taskDir, prompt, withAsc, rulesContent, apiKey: process.env.AGENTROUTER_API_KEY });
+            const result = await runSingleSession({
+                taskDir, prompt, withAsc, rulesContent,
+                apiKey: process.env.AGENTROUTER_API_KEY,
+                model: args.model,
+                dryRun: args.dryRun,
+            });
             const billedCost = computeBilledCost(result.usage, RATES);
 
             const record = {
-                harness: 'opencode-agentrouter',
+                harness: 'opencode-eval',
                 task: path.basename(taskDir),
                 condition,
-                model: 'glm-5.3',
+                model: args.model || 'opencode-default',
                 run,
                 timestamp: new Date().toISOString(),
                 durationMs: result.durationMs,
@@ -274,19 +293,27 @@ async function main() {
                 usage: result.usage,
                 billedCostUSD: billedCost,
                 diff: result.diff,
+                quality: result.quality,
                 lastText: result.lastText,
                 stderrTail: result.stderrTail,
             };
-            const outFile = path.join(CACHE_DIR, `opencode-${path.basename(taskDir)}-${condition}-${Date.now()}.json`);
-            await fs.writeFile(outFile, JSON.stringify(record, null, 2), 'utf8');
+            if (!args.dryRun) {
+                const outFile = path.join(CACHE_DIR, `opencode-${path.basename(taskDir)}-${condition}-${Date.now()}.json`);
+                await fs.writeFile(outFile, JSON.stringify(record, null, 2), 'utf8');
+            }
 
             console.log(
-                `${result.finished ? 'completed' : `INCOMPLETE(exit ${result.exitCode})`} | turns ${result.usage.turns} | prompt ${result.usage.promptTokens} (cached ${result.usage.cachedTokens}) | output ${result.usage.completionTokens} | $${billedCost.toFixed(4)}`,
+                `${result.finished ? 'completed' : `INCOMPLETE(exit ${result.exitCode})`} | quality ${result.quality?.qualityScore ?? 'N/A'} | turns ${result.usage.turns} | $${billedCost.toFixed(4)}`,
             );
+            if (!args.dryRun && args.delayMs > 0 && run < args.runs) {
+                await new Promise((r) => setTimeout(r, args.delayMs));
+            }
         }
     }
 
-    console.log(`\nResults written to ${CACHE_DIR}. Summarize with: node benchmarks/harness/report.mjs`);
+    if (!args.dryRun) {
+        console.log(`\nResults written to ${CACHE_DIR}. Summarize with: node benchmarks/harness/report.mjs`);
+    }
 }
 
 main().catch((error) => {

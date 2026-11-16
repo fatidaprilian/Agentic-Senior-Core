@@ -21,6 +21,7 @@ const {
 } = require('./path-util.cjs');
 
 const JSCPD_TIMEOUT_MS = 10000;
+const UI_EXTENSIONS = new Set(['tsx', 'jsx', 'vue', 'svelte', 'html', 'css', 'razor', 'cshtml', 'php']);
 
 // Recognized source root directories — scan scope walks up to the first match
 const SOURCE_ROOTS = ['src', 'lib', 'app'];
@@ -94,6 +95,11 @@ function handleDedupPayload(data) {
     // Antigravity PostToolUse strictly expects {} on stdout
     process.stdout.write('{}\n');
     process.exit(0);
+    return;
+  }
+
+  if (isAntigravity && data && data.transcriptPath) {
+    handleAntigravityPostInvocationDedup(data);
     return;
   }
 
@@ -209,16 +215,17 @@ process.stdin.on('end', () => {
   }
 });
 
-function isQualifyingEdit(toolName, toolInput, config) {
+function isQualifyingEdit(toolName, toolInput, config, ext) {
   var isWrite = ['Write', 'write_to_file', 'write_file'].indexOf(toolName) !== -1;
   var isEdit = ['Edit', 'edit_file', 'replace_file_content', 'multi_replace_file_content'].indexOf(toolName) !== -1;
+  var isUi = ext ? UI_EXTENSIONS.has(ext) : false;
 
   var newFileThreshold = (config && typeof config.NEW_FILE_LINE_THRESHOLD === 'number')
     ? config.NEW_FILE_LINE_THRESHOLD
-    : NEW_FILE_LINE_THRESHOLD;
+    : (isUi ? 15 : NEW_FILE_LINE_THRESHOLD);
   var locDeltaThreshold = (config && typeof config.LOC_DELTA_THRESHOLD === 'number')
     ? config.LOC_DELTA_THRESHOLD
-    : LOC_DELTA_THRESHOLD;
+    : (isUi ? 12 : LOC_DELTA_THRESHOLD);
 
   if (isWrite) {
     var content = toolInput.content || toolInput.CodeContent || '';
@@ -228,9 +235,106 @@ function isQualifyingEdit(toolName, toolInput, config) {
     var newStr = toolInput.new_string || toolInput.ReplacementContent || toolInput.content || '';
     var oldStr = toolInput.old_string || toolInput.TargetContent || '';
     var delta = newStr.split('\n').length - oldStr.split('\n').length;
-    return delta > locDeltaThreshold;
+    return delta > locDeltaThreshold || (isUi && newStr.split('\n').length >= 15);
   }
   return false;
+}
+
+function handleAntigravityPostInvocationDedup(data) {
+  try {
+    var workspaceRoot = resolveWorkspaceRoot(data);
+    if (!data.transcriptPath || !fs.existsSync(data.transcriptPath)) {
+      process.stdout.write('{}\n');
+      process.exit(0);
+      return;
+    }
+
+    var config = loadDedupConfig(workspaceRoot);
+    var minStep = typeof data.initialNumSteps === 'number' ? data.initialNumSteps : 0;
+    var lines = fs.readFileSync(data.transcriptPath, 'utf8').split('\n').filter(Boolean);
+    var candidatesByFile = Object.create(null);
+
+    for (var i = 0; i < lines.length; i++) {
+      var step;
+      try { step = JSON.parse(lines[i]); } catch (_) { continue; }
+      if (!step || step.step_index < minStep || step.type !== 'PLANNER_RESPONSE' || !Array.isArray(step.tool_calls)) continue;
+
+      for (var j = 0; j < step.tool_calls.length; j++) {
+        var tc = step.tool_calls[j];
+        if (!tc || (tc.args && (tc.args.ArtifactMetadata || tc.args.IsArtifact))) continue;
+        var norm = normalizeEditToolCall(tc.name, tc.args);
+        if (!norm || !norm.filePath) continue;
+
+        var resolvedFile = path.isAbsolute(norm.filePath)
+          ? norm.filePath
+          : path.resolve(workspaceRoot, norm.filePath);
+        var ext = path.extname(resolvedFile).slice(1).toLowerCase();
+        if (!SOURCE_EXTENSIONS.has(ext) && !UI_EXTENSIONS.has(ext)) continue;
+
+        var mappedInput = norm.canonicalTool === 'Edit'
+          ? { new_string: norm.newContent, old_string: norm.oldContent }
+          : { content: norm.newContent };
+        if (!isQualifyingEdit(norm.canonicalTool, mappedInput, config, ext)) continue;
+        if (hasValidInlineIgnore(resolvedFile)) continue;
+
+        candidatesByFile[resolvedFile] = { resolvedFile: resolvedFile, ext: ext };
+      }
+    }
+
+    var files = Object.keys(candidatesByFile);
+    if (files.length === 0) {
+      process.stdout.write('{}\n');
+      process.exit(0);
+      return;
+    }
+
+    var reportsByScanDir = Object.create(null);
+    var findings = [];
+    var shouldBlock = false;
+    var ignoreFlags = (config.ignoreDirs || []).map(function (d) { return '--ignore "' + d + '"'; }).join(' ');
+    var minTokens = config.minTokens || 30;
+
+    for (var k = 0; k < files.length; k++) {
+      var entry = candidatesByFile[files[k]];
+      var scanDir = resolveScanDir(entry.resolvedFile, config, workspaceRoot);
+      if (!(scanDir in reportsByScanDir)) {
+        var tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'asc-dedup-'));
+        var scanCmd = ' "' + scanDir + '" --min-tokens ' + minTokens + ' --reporters json --silent --output "' + tmpDir + '" ' + ignoreFlags;
+        reportsByScanDir[scanDir] = runJscpdScan(scanCmd, tmpDir, workspaceRoot);
+        cleanup(tmpDir);
+      }
+      var report = reportsByScanDir[scanDir];
+      if (!report) continue;
+
+      var dup = checkForDuplicates(report, entry.resolvedFile, config, workspaceRoot);
+      if (!dup) continue;
+
+      findings.push(
+        '[ASC Dedup] ' + path.basename(entry.resolvedFile) + ' looks similar to '
+        + dup.matchedFile + ' (' + dup.percent + '% overlap, ' + dup.lines + ' lines). '
+        + 'Ladder step 2: reuse existing modules/components or consolidate instead of duplicating.'
+      );
+      if (config.mode === 'block' || (config.uiMode !== 'advisory' && UI_EXTENSIONS.has(entry.ext))) {
+        shouldBlock = true;
+      }
+    }
+
+    if (findings.length === 0) {
+      process.stdout.write('{}\n');
+      process.exit(0);
+      return;
+    }
+
+    var invNum = typeof data.invocationNum === 'number' ? data.invocationNum : 0;
+    var out = { injectSteps: findings.map(function (msg) { return { ephemeralMessage: msg }; }) };
+    if (shouldBlock && invNum < 5) {
+      out.terminationBehavior = 'force_continue';
+    }
+    process.stdout.write(JSON.stringify(out) + '\n');
+  } catch (_) {
+    process.stdout.write('{}\n');
+  }
+  process.exit(0);
 }
 
 function resolveScanDir(filePath, config, workspaceRoot) {
@@ -416,6 +520,7 @@ function emitDeny(reason, isAntigravity) {
   if (isAntigravity) {
     process.stdout.write(JSON.stringify({
       injectSteps: [{ ephemeralMessage: reason }],
+      terminationBehavior: 'force_continue',
     }) + '\n');
     process.exit(0);
     return;

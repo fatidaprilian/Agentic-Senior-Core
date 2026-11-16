@@ -1,6 +1,6 @@
 # Performance Budgets & Concurrency Benchmarking
 
-Staff-grade guidelines for performance testing, latency budgets, and concurrency verification.
+Guidelines for performance testing, latency budgets on interactive SLA paths, and concurrency verification.
 
 ---
 
@@ -22,7 +22,7 @@ Averages mask performance degradation. A service with an average response time o
 |---|---|---|
 | **Unit Logic Runtime** | $\le 5\text{ms}$ | Pure algorithms, mathematical transforms, string parsers. |
 | **$p_{50}$ (Median Latency)** | $\le 50\text{ms}$ | Standard read operations with warm database index. |
-| **$p_{95}$ (95th Percentile)** | $\le 150\text{ms}$ | 95 out of 100 requests must complete under this budget. |
+| **$p_{95}$ (95th Percentile)** | $\le 150\text{ms}$ | Interactive SLA-governed read/mutation APIs (exclude batch exports, file processing, and scheduled reports). |
 | **$p_{99}$ (Worst-case Tail)** | $\le 300\text{ms}$ | Tail latency under concurrency and database lock contention. |
 | **Error Rate Threshold** | Strictly $0.00\%$ | Zero 5xx errors or dropped socket connections under target load. |
 

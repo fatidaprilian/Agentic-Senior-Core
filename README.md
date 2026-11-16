@@ -2,21 +2,19 @@
 
 # Agentic-Senior-Core
 
-### Universal AI coding rules. Because your AI writes code like it gets paid by the line.
+### Engineering rules and enforcement hooks for AI coding agents. Because your AI writes code like it gets paid by the line.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**Minimalism plugins cut the code. This plugin makes sure what remains is production-safe.**
-
-**Install once. Works across all projects. Supports 23+ AI coding agents.**
+**Installs global rules, 7 domain skills, and runtime hooks across 9 plugin-capable hosts and 14 instruction-tier editors.**
 
 </div>
 
 ## Quick Start
 
-### 1. Install the package
-To install or forcefully update to the absolute latest version:
+### 1. Install or update the package
+Run npm to install or update to the latest release:
 
 ```bash
 npm install -g @ryuenn3123/agentic-senior-core@latest

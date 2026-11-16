@@ -24,7 +24,7 @@ Mocking is a technique for isolating external unmanaged systems, not an excuse t
 > Mock *only* external boundaries: third-party HTTP services, payment gateways, message brokers, system clock, or operating system hardware calls.
 
 ### 2.2 Mocking Hierarchy
-Prefer real code or robust test doubles over fragile call-count mocks:
+Prefer real implementations or stateful test doubles over fragile call-count mocks:
 
 1. **Real Implementation (Preferred):** Use the actual domain code, real validation functions, and real in-memory data structures.
 2. **In-Memory Fakes:** A working in-memory repository or fake mailer that stores sent emails in an array. Fakes preserve semantic behavior without network overhead.

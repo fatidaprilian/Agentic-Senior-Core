@@ -4,22 +4,22 @@ description: >
   Trigger this skill when the user asks: "what are the rules", "coding guidelines", "best practices", "how should I write this", "staff engineer approach", "map this codebase", "document our patterns", "fingerprint this repository", "learn my preferences", "bootstrap preferences", "log this debt", "add to debt ledger", "install ASC", "configure for Cursor", "set up adapter", "apa aturannya", "panduan koding", "petakan codebase", "pasang asc".
 ---
 
-# Agentic Senior Core: Architecture & Meta-Tools (`asc`)
+# Agentic Senior Core: Repository Meta-Tools (`asc`)
 
-Universal AI coding rules and meta-tooling playbook. Grounded in Google Engineering Practices, OWASP, and USENIX Security.
+Codebase convention fingerprinting, adaptive preferences, technical debt tracking, skill authoring, and host adapter synchronization. Grounded in Google Engineering Practices, OWASP, and USENIX Security.
 
 ---
 
-## 1. The 7 Core Meta-Skills Architecture
+## 1. The 7 Core Skills Architecture
 
-Agentic Senior Core organizes operational guidance into 7 high-density, non-overlapping playbooks:
+Agentic Senior Core organizes operational guidance into 7 focused, non-overlapping playbooks:
 
-1. **`/asc` (This Skill)**: Core engineering rules, codebase convention fingerprinting, adaptive preferences, debt tracking, skill authoring & subagent pressure testing, and IDE adapter setup.
-2. **`/asc-develop`**: Engineering lifecycle for greenfield scaffolding, brownfield features, bite-sized execution plans (`Ruling:` execution), subagent orchestration, and structured refactoring.
-3. **`/asc-review`**: Quality, clean code, and security assurance: complexity ceilings (<= 15), resource/async hygiene, DTO isolation, Conventional Comments PR reviews, OWASP audits, and language purity.
-4. **`/asc-test`**: Dedicated testing & debugging playbook: 4-phase systematic root-cause debugging, TDD, verification gates, Playwright E2E, UAT checklists, regression proofs, and flaky test remediation.
-5. **`/asc-reference`**: Domain architecture reference for REST/GraphQL APIs, database indexing/transactions/migrations, infrastructure configs, and service resilience.
-6. **`/asc-ui`**: Deterministic frontend engineering: anti-card-soup data-to-structure mapping, token/primitive reuse, 4-state data contracts, mobile containment (`min-h-dvh`), single-language microcopy, and WCAG 2.2 AA accessibility.
+1. **`/asc` (This Skill)**: Core rules, repository convention fingerprinting, adaptive preferences, debt ledger, skill pressure testing, and host adapter setup.
+2. **`/asc-develop`**: Greenfield scaffolding, brownfield feature execution (`Ruling:` protocol), subagent orchestration, and structured refactoring.
+3. **`/asc-review`**: Clean code review, complexity/resource/DTO enforcement, Conventional Comments PR evaluation, OWASP audits, and clone checks.
+4. **`/asc-test`**: Systematic root-cause debugging, TDD, verification gates, Playwright E2E, UAT checklists, regression proofs, and flaky test remediation.
+5. **`/asc-reference`**: Backend architecture guidance for REST/GraphQL APIs, SQL indexing/transactions/migrations, container configs, and network resilience.
+6. **`/asc-ui`**: Semantic frontend engineering, layout shell/action boundaries, token/primitive reuse, 4-state data contracts, mobile touch targets, and WCAG 2.2 accessibility.
 7. **`/asc-pentest`**: Authorized dynamic security verification: scope gates, Pentest Task Trees, multi-principal BOLA/IDOR matrices, and OWASP API Top 10 stateful fuzzing.
 
 ---

@@ -1,5 +1,23 @@
 # Changelog
 
+## 6.22.0
+
+### Fixed & Hardened
+- **Antigravity Hooks Bug Fixes & Host Parity (`hooks.json`, `dedup-gate.js`, `post-edit-enforce.js`, `stop-verify-gate.js`, `session-start.js`, `docs/agent-portability.md`)**:
+  - Registered `SessionStart` (`session-start.js`) and `PostInvocation` (`dedup-gate.js`) in Antigravity `hooks.json` and corrected `docs/agent-portability.md` to reflect official Antigravity event contracts (`SessionStart`, `PreToolUse`, `PostToolUse`, `PreInvocation`, `PostInvocation`, `Stop`).
+  - Added `transcriptPath` scanning to `dedup-gate.js` and updated `emitDeny` / `PostInvocation` to emit `"terminationBehavior": "force_continue"` for blocking duplicates and critical UI structural violations (`[ASC Card Soup Alert]`, `[ASC Shell Collision Alert]`).
+  - Upgraded `post-edit-enforce.js` to read full files on disk instead of edit fragments alone, lowered the Card Soup threshold to `>= 2` grid sections without semantic tables/lists, and added cross-file `<nav>` / banner `<header>` collision detection when layout shells exist.
+  - Extended `stop-verify-gate.js` to track UI extensions (`.tsx`, `.jsx`, `.html`, `.css`, `.vue`, `.svelte`, `.razor`, `.cshtml`, `.php`) and require UI tests or `asc preview` before completing turns.
+- **Automatic UI Component Registry (`hooks/component-registry.cjs`, `lib/core/component-registry.mjs`)**:
+  - Scans workspace component directories and active layout shells, injecting exported symbols and prop signatures automatically on `SessionStart` and `PreInvocation` (`ladder-pulse.js`) for UI tasks.
+- **Content Calibration, Template Cleanup & Regex Fixes**:
+  - Removed banned buzzword occurrences from `skills/asc-reference/references/infrastructure.md` and `skills/asc-test/references/test-design.md`, and added an automated self-scan over all `skills/*.md` prose outside inline code quotes.
+  - Fixed `code-step-narration` and `code-decorative-banner` `#` regexes so Markdown headings (`### Step 1:`) no longer false-trigger, and expanded `copy-cadence-tricolon` to match 2–4 word parallel sentence fragments.
+  - Added scale qualifiers to `asc-reference` (`Idempotency-Key`, `Expand-and-Contract`) and `asc-test` (`mutation-testing.md`, `performance-budgets.md`), clarified WCAG 2.2 AA (`24x24px` SC 2.5.8) vs. AAA/Apple HIG (`44x44px` SC 2.5.5) in `asc-ui`, deduplicated double reference tables in `asc-pentest` and `asc-reference`, made the `ascx` prefix conditional when available in `PATH`, and removed tricolon/contrast framing from `README.md`.
+- **UI Evaluation & Skill Pressure Harness (`benchmarks/`)**:
+  - Added `benchmarks/tasks/ui-operational-dashboard/`, deterministic workspace quality scorer `benchmarks/harness/quality-grader.mjs`, and `benchmarks/harness/skill-pressure.mjs`.
+  - Unlocked `benchmarks/harness/opencode-run.mjs` for any `--model <provider/model>` with `--delay-ms`, `--dry-run`, Component Registry injection, and quality metrics in `report.mjs`; verified end-to-end in `tests/host-parity.test.mjs`.
+
 ## 6.21.0
 
 ### Added & Hardened

@@ -56,14 +56,14 @@ Which ASC features work on which host tier:
 
 | Event | Claude Code | Codex CLI | Copilot CLI | Google Antigravity |
 |-------|------------|-----------|-------------|-------------------|
-| Session start | `SessionStart` | `SessionStart` | `sessionStart` | `SessionStart` |
+| Session start | `SessionStart` | `SessionStart` | `sessionStart` | `SessionStart` (`injectSteps`) |
 | Subagent start | `SubagentStart` | `SubagentStart` | `subagentStart` | N/A |
-| Pre tool use | `PreToolUse` | `PreToolUse` | `preToolUse` | `PreToolUse` |
-| Post tool use | `PostToolUse` | `PostToolUse` | `postToolUse` | N/A |
-| Pre invocation | N/A | N/A | N/A | `PreInvocation` |
-| Post invocation | N/A | N/A | N/A | `PostInvocation` |
+| Pre tool use | `PreToolUse` | `PreToolUse` | `preToolUse` | `PreToolUse` (`decision: deny/allow/ask`) |
+| Post tool use | `PostToolUse` | `PostToolUse` | `postToolUse` | `PostToolUse` (outputs `{}`) |
+| Pre invocation | N/A | N/A | N/A | `PreInvocation` (`injectSteps` / `terminate`) |
+| Post invocation | N/A | N/A | N/A | `PostInvocation` (`injectSteps` + `force_continue`) |
 | File changed | `FileChanged` | N/A | N/A | N/A |
-| Stop | `Stop` | `Stop` | N/A | `Stop` |
+| Stop | `Stop` | `Stop` | N/A | `Stop` (`decision: continue/allow`) |
 
 ### ASC fix applicability
 

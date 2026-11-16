@@ -4,9 +4,9 @@ description: >
   Trigger this skill when the user is: debugging errors or crashes, investigating bugs, writing unit/integration/E2E tests, UAT checklists, or fixing flaky tests. Also trigger when the user says: "write a test", "TDD", "fix this bug", "why is this failing", "error 500", "flaky test", "E2E test", "playwright", "UAT", "regression test", "bikin tes", "benerin bug", "kok error", "kenapa gagal", "tes gagal terus". Also trigger on files matching: `*.test.*`, `*.spec.*`, `tests/*`, `__tests__/*`, or `e2e/*`.
 ---
 
-# Testing, TDD, Verification & UAT Router
+# Testing, TDD & Verification (`asc-test`)
 
-Staff-grade testing playbook and verification gates. Enforces test-first discipline and routes deep testing guidance on demand.
+Enforces test-first development, root-cause debugging, and fresh runner verification before claiming fixes or features work.
 
 ---
 
@@ -40,8 +40,8 @@ Before writing tests, running suites, or claiming verification:
 | API contract compatibility (OpenAPI/Pact) & DB migration round-trips | `references/contract-and-migration.md` |
 | Concurrency idempotency, fault injection & pool exhaustion resilience | `references/resilience-chaos.md` |
 | Generative property invariants & boundary fuzzing | `references/property-testing.md` |
-| Mutation integrity score ($\ge 80\%$, Stryker/mutmut or manual check) | `references/mutation-testing.md` |
-| Latency budgets ($p_{95} \le 150\text{ms}$), k6 soak & concurrency benchmarks | `references/performance-budgets.md` |
+| Mutation integrity score ($\ge 80\%$ on critical billing, auth, or state-machine code) | `references/mutation-testing.md` |
+| Latency budgets ($p_{95} \le 150\text{ms}$ for SLA interactive APIs), k6 soak & concurrency | `references/performance-budgets.md` |
 | Playwright E2E, `@axe-core/playwright` a11y & multi-user contexts | `references/e2e-playwright.md` |
 | Acceptance criteria, UAT checklists & edge case quads | `references/uat.md` |
 | Bug reproduction, root-cause verification & regression proof | `references/regression-proof.md` |

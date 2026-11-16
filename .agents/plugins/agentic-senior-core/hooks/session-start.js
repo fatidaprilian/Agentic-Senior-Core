@@ -6,7 +6,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { isAntigravityPayload } = require('./path-util.cjs');
+const { isAntigravityPayload, resolveWorkspaceRoot } = require('./path-util.cjs');
+const { scanComponentRegistry } = require('./component-registry.cjs');
 
 const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT || path.resolve(__dirname, '..');
 const isCopilot = Boolean(process.env.COPILOT_PLUGIN_DATA);
@@ -19,7 +20,15 @@ const isAntigravityEnv = Boolean(
 
 function emitForHost(stdinData) {
   if (isAntigravityEnv || isAntigravityPayload(stdinData)) {
-    process.stdout.write('{}\n');
+    const workspaceRoot = resolveWorkspaceRoot(stdinData);
+    const registry = scanComponentRegistry(workspaceRoot);
+    if (registry.formatted) {
+      process.stdout.write(JSON.stringify({
+        injectSteps: [{ ephemeralMessage: registry.formatted }],
+      }) + '\n');
+    } else {
+      process.stdout.write('{}\n');
+    }
     return;
   }
 

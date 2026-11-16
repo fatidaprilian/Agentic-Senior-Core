@@ -4,7 +4,7 @@ description: >
   Trigger this skill when working on: UI components, UX design, layouts, microcopy, typography, design systems, modals, forms, tables, dashboards, empty states, or error UI. Also trigger when the user says: "design this page", "clean up UI", "write UI copy", "fix UI slop", "make it look professional", "too verbose", "improve the design", "broken on mobile", "bikin UI", "rapikan tampilan", "tulisan UI berlebihan", "tampilan di hp rusak", "terlalu kaku", "jangan kayak AI". Also trigger when creating or editing files matching: `*.tsx`, `*.jsx`, `*.vue`, `*.svelte`, `*.html`, `*.blade.php`, `*.css`, or UI component files.
 ---
 
-# Deterministic Frontend & UI Engineering Router (`asc-ui`)
+# Frontend & UI Engineering (`asc-ui`)
 
 Enforces structural semantics, token reuse, state completeness, accessibility, and anti-card-soup invariants across frontend codebases. Pure visual art direction belongs to design tools (Figma MCP, Stitch) or pre-built component kits (Shadcn/Radix blocks); this skill governs verifiable UI engineering.
 
@@ -17,7 +17,7 @@ Enforces structural semantics, token reuse, state completeness, accessibility, a
 3. **No card-in-card or ghost elevation:** Never nest a bordered rounded card inside another card. Choose either `border` OR `shadow-sm`, never both.
 4. **GPU-only motion & reduced motion:** Never use `transition-all` or animate layout geometry (`width`, `height`, `top`, `left`). Respect `@media (prefers-reduced-motion: reduce)`.
 5. **Focus & WCAG 2.2 AA contrast:** Maintain $\ge$ 4.5:1 text contrast (3:1 large text/controls). Never apply `outline-none` without an immediate `:focus-visible` ring replacement.
-6. **Mobile containment & touch targets:** Use `min-h-dvh` (never `100vh`/`h-screen`), `overflow-x: clip` on root shells, and minimum **44x44px** hit targets on touch controls.
+6. **Mobile containment & touch targets:** Use `min-h-dvh` (never `100vh`/`h-screen`), `overflow-x: clip` on root shells, at least **24x24px** targets for WCAG 2.2 AA (`SC 2.5.8`), and **44x44px** hit targets on primary touch controls (WCAG 2.2 AAA `SC 2.5.5` / Apple HIG).
 7. **Zero hallucinated proof or ornaments:** Never invent testimonials, partner logos, unbacked KPIs, small-caps eyebrow kickers above headings, purple-to-blue gradients, or terminal cosplay in non-developer apps.
 8. **Single-language microcopy:** Keep every visible string on a surface in one language with natural domain terms—zero mixed-language neologisms and zero literal translation calques.
 9. **Shell & action boundary invariants:** Page components must never render outer chrome (navbars, duplicate page titles, or root wrapper padding) when an enclosing layout shell exists. Enforce single action boundaries (one primary CTA per viewport region; secondary/row actions use overflow menus).

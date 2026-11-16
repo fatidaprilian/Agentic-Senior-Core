@@ -52,12 +52,12 @@
     },
     {
       "id": "code-decorative-banner",
-      "regex": "(?:\\/\\/|#|\\/\\*)\\s*={5,}|(?:\\/\\/|#|\\/\\*)\\s*-{5,}\\s*[A-Z]+",
+      "regex": "(?:\\/\\/|\\/\\*)\\s*(?:={5,}|-{5,}\\s*[A-Z]+)|(?:^|\\n)[ \\t]*#(?!#)\\s*(?:={5,}|-{5,}\\s*[A-Z]+)",
       "message": "note: decorative ASCII character banner detected. Keep comments concise, sentence-case, and focused on rationale."
     },
     {
       "id": "code-step-narration",
-      "regex": "(?:\\/\\/|#|\\/\\*)\\s*Step\\s+[0-9]+:\\s*|(?:\\/\\/|#|\\/\\*)\\s*Initialize\\s+(?:the\\s+)?[a-zA-Z0-9_]+",
+      "regex": "(?:\\/\\/|\\/\\*)\\s*(?:Step\\s+[0-9]+:|Initialize\\s+(?:the\\s+)?[a-zA-Z0-9_]+)|(?:^|\\n)[ \\t]*#(?!#)\\s*(?:Step\\s+[0-9]+:|Initialize\\s+(?:the\\s+)?[a-zA-Z0-9_]+)",
       "message": "note: procedural line-by-line comment narration detected. Describe non-obvious intent and constraints instead of restating the obvious code flow."
     },
     {
@@ -147,7 +147,7 @@
     },
     {
       "id": "copy-cadence-tricolon",
-      "regex": "\\b[A-Z][a-z]+\\.\\s+[A-Z][a-z]+\\.\\s+[A-Z][a-z]+\\.",
+      "regex": "(?:^|[\\s*>])(?:[A-Z][a-zA-Z0-9+'-]+(?:\\s+[a-zA-Z0-9+'-]+){0,3}\\.\\s+){2}[A-Z][a-zA-Z0-9+'-]+(?:\\s+[a-zA-Z0-9+'-]+){0,4}\\.",
       "message": "note: tricolon cadence detected ('Word. Word. Word.'). State the capability or outcome directly instead of using advertising triplets."
     },
     {

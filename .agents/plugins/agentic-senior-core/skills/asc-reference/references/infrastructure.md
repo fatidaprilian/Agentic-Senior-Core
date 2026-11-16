@@ -1,6 +1,6 @@
 # Infrastructure, Containers & CI/CD Engineering
 
-Robust infrastructure isolates workloads, prevents credential leakage, scales predictably, and fails gracefully.
+Production infrastructure isolates workloads, prevents credential leakage, scales predictably, and handles downstream failures safely.
 
 ---
 

@@ -1,6 +1,6 @@
 # Generative Property-Based Testing & Invariant Fuzzing
 
-Staff-grade guidelines for property-based testing and generative fuzzing. Grounded in the principles of **Hypothesis** and **fast-check**.
+Guidelines for property-based testing and generative fuzzing grounded in **Hypothesis** and **fast-check**.
 
 ---
 

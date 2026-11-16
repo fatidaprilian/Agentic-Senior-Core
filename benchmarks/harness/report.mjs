@@ -96,6 +96,10 @@ async function main() {
         console.log('|----------------------|-------------------|------------------|---------|------------------------|---------|');
 
         const metrics = [
+            ['Quality score', (r) => r.quality?.qualityScore ?? 0],
+            ['Slop hits', (r) => r.quality?.slopHits ?? 0],
+            ['Shell collisions', (r) => r.quality?.shellCollisions ?? 0],
+            ['Reused components', (r) => r.quality?.reusedComponentsCount ?? 0],
             ['Billed cost (USD)', (r) => r.billedCostUSD],
             ['Prompt tokens', (r) => r.usage.promptTokens],
             ['Cached tokens', (r) => r.usage.cachedTokens],

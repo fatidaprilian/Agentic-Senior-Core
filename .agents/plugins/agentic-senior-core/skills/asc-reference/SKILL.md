@@ -4,24 +4,24 @@ description: >
   Trigger this skill when working on: REST APIs, GraphQL APIs, SQL queries, database indexing, transactions, migrations, Docker configs, CI/CD pipelines, Kubernetes manifests, or service resilience. Also trigger when the user says: "design this API", "optimize query", "database transaction", "set up Docker", "add retry logic", "add pagination", "handle errors", "set up CI", "kok lambat banget", "cara deploy ini". Also trigger when editing files matching: `Dockerfile`, `docker-compose.*`, `.github/workflows/*`, `*.sql`, or migration files.
 ---
 
-# Domain Engineering Reference Router
+# Backend Architecture & Infrastructure Standards (`asc-reference`)
 
-Staff-grade architectural standards for APIs, databases, infrastructure, and distributed resilience. Enforces baseline invariants and routes deep domain guidance on demand.
+Operational design baseline for APIs, relational databases, container deployments, and network resilience. Apply controls pragmatically based on service SLA and operational scale.
 
 ---
 
 ## 1. The Core Engineering Floor
 
-Every backend and infrastructure change must satisfy these baseline invariants:
+Backend and infrastructure changes should satisfy these baseline invariants, scaled to project criticality:
 
 1. **RFC 9457 Problem Details:** All API error responses must return structured JSON problem details with actionable error types and HTTP status codes.
 2. **Bounded Reads:** Every list query or API endpoint must enforce pagination or explicit limits. Unbounded scans are forbidden.
-3. **Idempotent Mutations:** Side-effect mutations must accept an `Idempotency-Key` header and return cached responses on repeat requests.
+3. **Idempotent Mutations:** Payment, billing, webhook, and retry-exposed public mutations must accept an `Idempotency-Key` header and return cached responses on repeat requests.
 4. **ACID Transactions:** Any multi-table mutation or read-then-write sequence must run inside an explicit database transaction.
 5. **No N+1 Queries:** Database queries inside loops are forbidden; use eager loading, joins, or batching (DataLoader).
 6. **Precision Data Types:** Monetary amounts must use integer minor units (cents) or `NUMERIC(18, 4)`. Floating point (`FLOAT`/`DOUBLE`) for currency is banned.
 7. **UTC Timestamps:** All dates and times must be stored in UTC (`TIMESTAMPTZ` or ISO-8601 strings).
-8. **Reversible Migrations:** Schema changes require reversible migrations using Expand-and-Contract for zero-downtime evolution.
+8. **Reversible Migrations:** Schema changes require reversible `up`/`down` migrations; multi-replica zero-downtime deployments must use Expand-and-Contract.
 9. **Container Security:** Multi-stage Docker builds, non-root users (`USER node`/`USER 10001`), and zero baked credentials.
 10. **Zero-Hang Timeouts:** Every outbound network call must specify explicit connection and read timeouts.
 11. **Jittered Backoff:** Retries must use exponential backoff with full jitter and limit attempts to safe idempotent methods.
@@ -36,13 +36,7 @@ Every backend and infrastructure change must satisfy these baseline invariants:
 > `<skill_directory>/references/<file>.md`
 > Prepend this skill's directory path when calling `read_file`.
 
-Before modifying database schemas, writing API contracts, drafting Dockerfiles, or writing retry logic:
-1. **Mandatory Ingestion (BLOCKING GATE):** Call `read_file` on the matching domain reference BEFORE drafting plans or changing code:
-   - REST semantics, cursor pagination, RFC 9457, GraphQL ➔ `references/api.md`
-   - B-Tree indexing, N+1 queries, row locking, expand-and-contract migrations ➔ `references/database.md`
-   - Multi-stage Docker, non-root users, 12-factor env, health probes ➔ `references/infrastructure.md`
-   - Timeouts, jittered backoff, circuit breakers, hard vs. soft dependencies ➔ `references/resilience.md`
-   *Do NOT generate migrations, endpoint signatures, or network clients until this reference is loaded.*
+Before modifying database schemas, writing API contracts, drafting Dockerfiles, or writing retry logic, call `read_file` on the matching domain reference:
 
 | Domain | Scope & Trigger | Mandatory Reference Path |
 |---|---|---|
@@ -50,6 +44,8 @@ Before modifying database schemas, writing API contracts, drafting Dockerfiles, 
 | **Database** | B-Tree indexing, N+1 prevention, row locking (`FOR UPDATE`), expand-and-contract migrations | `references/database.md` |
 | **Infrastructure** | Multi-stage Docker, non-root users, 12-factor env validation, liveness/readiness probes | `references/infrastructure.md` |
 | **Resilience** | Outbound timeouts, full jitter backoff, circuit breakers, hard vs soft dependencies | `references/resilience.md` |
+
+*Do not generate migrations, endpoint signatures, or network clients until the applicable reference is loaded.*
 
 ---
 

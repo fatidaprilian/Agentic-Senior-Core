@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const { SOURCE_EXTENSIONS } = require('./constants.cjs');
 const { normalizeEditToolCall } = require('./path-util.cjs');
+const UI_EXTENSIONS = new Set(['tsx', 'jsx', 'html', 'css', 'vue', 'svelte', 'razor', 'cshtml', 'php']);
 
 function allowStop() {
   process.stdout.write(JSON.stringify({ decision: 'allow' }) + '\n');
@@ -74,6 +75,7 @@ function evaluateStop(data) {
       : '';
 
     let lastSourceEditIdx = -1;
+    let lastUiEditIdx = -1;
     let lastVerifyCmdIdx = -1;
     let lastCmdCommandLine = '';
 
@@ -104,8 +106,11 @@ function evaluateStop(data) {
         }
 
         const ext = path.extname(norm.filePath).slice(1).toLowerCase();
-        if (SOURCE_EXTENSIONS.has(ext)) {
+        if (SOURCE_EXTENSIONS.has(ext) || UI_EXTENSIONS.has(ext)) {
           lastSourceEditIdx = i;
+        }
+        if (UI_EXTENSIONS.has(ext)) {
+          lastUiEditIdx = i;
         }
       }
     }
@@ -147,9 +152,12 @@ function evaluateStop(data) {
 
       // Case 1: No command executed at all after source edit
       if (postEditCommands.length === 0) {
+        const uiNote = lastUiEditIdx >= lastSourceEditIdx && lastUiEditIdx !== -1
+          ? ' For UI modifications, run the UI test suite or `asc preview <url|file> [--mobile]` and confirm exit code 0 before concluding.'
+          : ' Execute the relevant test, build, or syntax check command and confirm exit code 0 before concluding.';
         process.stdout.write(JSON.stringify({
           decision: 'continue',
-          reason: '[ASC Verification Gate] Source code was modified this turn without running a fresh verification or test command afterward. Iron Law: No completion claims without fresh verification evidence. Execute the relevant test, build, or syntax check command and confirm exit code 0 before concluding.',
+          reason: '[ASC Verification Gate] Source code was modified this turn without running a fresh verification or test command afterward. Iron Law: No completion claims without fresh verification evidence.' + uiNote,
         }) + '\n');
         process.exit(0);
         return;
@@ -164,9 +172,12 @@ function evaluateStop(data) {
       const nonInspectionCmds = postEditCommands.filter(c => !isInspection(c.cmdLine));
 
       if (nonInspectionCmds.length === 0) {
+        const uiNote = lastUiEditIdx >= lastSourceEditIdx && lastUiEditIdx !== -1
+          ? ' For UI files, run the UI test suite or `asc preview <url|file> [--mobile]` and confirm exit code 0 before concluding.'
+          : ' Execute the test suite, build, or syntax check and confirm exit code 0 before concluding.';
         process.stdout.write(JSON.stringify({
           decision: 'continue',
-          reason: '[ASC Verification Gate] Source code was modified this turn, but only inspection commands were executed (' + postEditCommands.map(c => c.cmdLine).join(', ') + '). An inspection command is not verification. Execute the test suite, build, or syntax check and confirm exit code 0 before concluding.',
+          reason: '[ASC Verification Gate] Source code was modified this turn, but only inspection commands were executed (' + postEditCommands.map(c => c.cmdLine).join(', ') + '). An inspection command is not verification.' + uiNote,
         }) + '\n');
         process.exit(0);
         return;

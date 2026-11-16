@@ -4,9 +4,9 @@ description: >
   Trigger this skill when the user is: reviewing pull requests, checking recent changes, auditing security, scanning for vulnerabilities, threat modeling, or detecting duplicate code. Trigger when the user says: "review this code", "check this PR", "what's wrong with this", "look at my changes", "is this production-ready", "find bugs", "audit this", "security check", "find vulnerabilities", "check for XSS", "check for SQL injection", "OWASP check", "check auth", "find duplicate code", "check for clones", "audit for duplication", "review PR ini", "cek kodingan saya", "cari celah keamanan", "cari kode duplikat".
 ---
 
-# Clean Code, Review & Security Assurance Router (`asc-review`)
+# Code Review & Security Assurance (`asc-review`)
 
-Universal assurance router enforcing enterprise code health, complexity bounds, resource/concurrency safety, contract isolation, and security across all languages.
+Reviews code changes, trust boundaries, resource safety, and structural clones across stacks.
 
 Grounded in: Google Engineering Practices, SonarSource Cognitive Complexity & Clean as You Code, Conventional Comments, MITRE CWE (404, 390, 915), OWASP Top 10 (2025), and ISO 24495-1.
 

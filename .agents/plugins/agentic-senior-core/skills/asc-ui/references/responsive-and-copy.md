@@ -14,7 +14,7 @@
 
 1. **Dynamic Viewport Height:** Use `min-h-dvh` (`100dvh`) for full-height shells—never `h-screen` or `100vh`, which clip behind mobile browser toolbars.
 2. **Horizontal Overflow Containment:** Apply `overflow-x: clip` on the root layout shell. Wrap wide data tables in `<div class="overflow-x-auto">` so tables scroll internally without breaking mobile page width.
-3. **Touch Hit Targets:** Interactive controls on mobile/touch viewports must provide at least a **44x44px** hit area (`min-h-11 min-w-11` or equivalent padding) with $\ge$ 8px gap between adjacent actions.
+3. **Touch Hit Targets:** Interactive controls on mobile/touch viewports must satisfy at least **24x24px** (WCAG 2.2 Level AA `SC 2.5.8`) and target **44x44px** on primary touch buttons (`min-h-11 min-w-11` or equivalent padding per WCAG 2.2 Level AAA `SC 2.5.5` / Apple HIG) with $\ge$ 8px gap between adjacent actions.
 4. **Expansion Buffer (+30% Text Length):** Never hardcode fixed pixel widths on text buttons (`w-[120px]`). Use `px-4 py-2` with `min-w-*` so localized strings (such as Indonesian or German) expand without clipping.
 5. **GPU-Only Transitions:** Never use `transition-all`. Specify exact properties (`transition-colors`, `transition-opacity`, `transition-transform`) and never animate layout geometry (`width`, `height`, `top`, `left`, `margin`).
 

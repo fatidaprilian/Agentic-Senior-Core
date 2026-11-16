@@ -1,6 +1,6 @@
 # Mutation Testing & Test Suite Integrity
 
-Staff-grade guidelines for mutation testing and eradicating false-positive test suites.
+Practical guidelines for mutation testing and eliminating false-positive test suites on critical code paths.
 
 ---
 
@@ -47,7 +47,7 @@ Such tests give false confidence: business logic can break completely while 100%
 
 $$\text{Mutation Score} = \left( \frac{\text{Killed Mutants}}{\text{Total Mutants}} \right) \times 100\%$$
 
-- **Target Threshold**: Core business logic, pricing, authorization checks, and security boundaries must achieve a Mutation Score of $\ge 80\%$.
+- **Target Threshold:** Critical payment, authorization, and state-machine modules should target a Mutation Score $\ge 80\%$. Routine CRUD wrappers and thin UI presenters require standard unit/integration assertions rather than mutation gates.
 - **Survived Mutant Triage**:
   - Every survived mutant indicates an untested boundary or missing assertion.
   - Fix: Do not modify production code; write a specific failure assertion that kills the surviving mutant.

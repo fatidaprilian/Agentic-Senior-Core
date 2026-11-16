@@ -199,8 +199,8 @@ describe('UI Engineering Structure & Quality Floor', () => {
         neg: 'The compiler processes requests in 45 milliseconds on standard hardware.'
       },
       'copy-cadence-tricolon': {
-        pos: 'Fast. Simple. Secure. Start deploying now.',
-        neg: 'Deploy your application with automated tests and safe rollbacks.'
+        pos: 'Install once. Works across all projects. Supports 23+ AI coding agents.',
+        neg: 'Deploy your application with automated tests and safe rollbacks. J. R. Tolkien wrote classics.'
       },
       'copy-cadence-rebuttal': {
         pos: "Not just a tool, it's a workflow for engineering teams.",
