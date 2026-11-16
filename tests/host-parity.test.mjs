@@ -184,11 +184,20 @@ describe('Host Parity Matrix, Component Registry & UI Benchmark Evaluation', () 
       await fs.rm(tmpDir, { recursive: true, force: true });
     }
 
+    const isolatedGitEnv = {
+      ...process.env,
+      GIT_CONFIG_GLOBAL: path.join(os.tmpdir(), 'asc-nonexistent-gitconfig'),
+      GIT_CONFIG_NOSYSTEM: '1',
+    };
+    delete isolatedGitEnv.GIT_AUTHOR_NAME;
+    delete isolatedGitEnv.GIT_AUTHOR_EMAIL;
+    delete isolatedGitEnv.GIT_COMMITTER_NAME;
+    delete isolatedGitEnv.GIT_COMMITTER_EMAIL;
     const dryBench = spawnSync(process.execPath, [
       path.join(REPO_ROOT, 'benchmarks', 'harness', 'opencode-run.mjs'),
       '--task', path.join(REPO_ROOT, 'benchmarks', 'tasks', 'ui-operational-dashboard'),
       '--dry-run',
-    ], { cwd: REPO_ROOT, encoding: 'utf8' });
+    ], { cwd: REPO_ROOT, env: isolatedGitEnv, encoding: 'utf8' });
     assert.equal(dryBench.status, 0, `opencode-run dry-run failed: ${dryBench.stderr}`);
 
     const dryPressure = spawnSync(process.execPath, [

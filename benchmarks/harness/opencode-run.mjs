@@ -20,6 +20,7 @@ import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 import { computeBilledCost } from './agent-loop.mjs';
+import { ensureBaselineCommit, measureGitDiff } from './git-baseline.mjs';
 import { gradeWorkspace } from './quality-grader.mjs';
 import { scanComponentRegistry } from '../../lib/core/component-registry.mjs';
 
@@ -112,39 +113,7 @@ function parseUsageFromEvents(rawOutput) {
     return { usage, finished, lastText };
 }
 
-function ensureBaselineCommit(dir) {
-    try {
-        execSync('git rev-parse --git-dir', { cwd: dir, stdio: 'pipe' });
-    } catch {
-        execSync('git init', { cwd: dir, stdio: 'pipe' });
-    }
-    execSync('git add -A', { cwd: dir, stdio: 'pipe' });
-    try {
-        execSync('git commit -m "benchmark-baseline" --allow-empty', { cwd: dir, stdio: 'pipe' });
-    } catch {
-        // already clean
-    }
-    return execSync('git rev-parse HEAD', { cwd: dir, encoding: 'utf8', stdio: 'pipe' }).trim();
-}
-
-function measureGitDiff(repoDir, baselineRef) {
-    try {
-        execSync('git add -A', { cwd: repoDir, stdio: 'pipe' });
-        const stat = execSync(`git diff --stat ${baselineRef}`, { cwd: repoDir, encoding: 'utf8', stdio: 'pipe' });
-        const lines = stat.trim().split('\n');
-        const summary = lines[lines.length - 1] || '';
-        const insertions = parseInt((summary.match(/(\d+) insertion/) || ['', '0'])[1], 10);
-        const deletions = parseInt((summary.match(/(\d+) deletion/) || ['', '0'])[1], 10);
-        return {
-            linesAdded: insertions,
-            linesRemoved: deletions,
-            netDelta: insertions - deletions,
-            filesChanged: Math.max(0, lines.length - 1),
-        };
-    } catch {
-        return { linesAdded: 0, linesRemoved: 0, netDelta: 0, filesChanged: 0 };
-    }
-}
+// Shared baseline helpers imported from ./git-baseline.mjs
 
 // Resolve the opencode native binary directly (npm global install). Spawning
 // the .exe with an args array avoids cmd.exe quote-mangling of prompts that
