@@ -25,8 +25,9 @@ Before drafting multi-step plans, asking clarifying questions, or dispatching su
 ## Mode 1: Greenfield (New Project Scaffolding)
 
 ### Step 1: Define & Clarify (Look Before You Ask)
-1. Clarify only unresolved requirements (target runtime, frameworks, non-goals) in at most one focused question with 2–3 concrete options.
-2. Propose top-level directory layout and exact module contracts; confirm alignment before writing files.
+1. Evaluate any user architectural claim or leading premise using the Claim Evaluation Protocol in `rules/agentic-senior-core.md` (`AGREE` / `DISAGREE` / `UNKNOWN`) before confirming alignment.
+2. Clarify only unresolved requirements (target runtime, frameworks, non-goals) in at most one focused question with 2–3 concrete options.
+3. Propose top-level directory layout and exact module contracts; confirm alignment before writing files.
 
 ### Step 2: Architecture & Implementation Hierarchy
 1. Apply the 1–6 Decision Ladder to every module (needed $\rightarrow$ reuse $\rightarrow$ stdlib $\rightarrow$ installed dep $\rightarrow$ single function $\rightarrow$ minimal code).

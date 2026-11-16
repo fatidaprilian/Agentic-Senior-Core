@@ -7,9 +7,10 @@ const { getThresholds } = require('./constants.cjs');
 const { resolveWorkspaceRoot } = require('./path-util.cjs');
 const { scanComponentRegistry } = require('./component-registry.cjs');
 
-const SECURITY_REMINDER = '[ASC SECURITY PIN — verbatim, do not paraphrase] '
+const SECURITY_REMINDER = '[ASC SECURITY & EPISTEMIC PIN — verbatim, do not paraphrase] '
   + 'NEVER: interpolate input into SQL/shell · commit secrets/tokens/credentials '
-  + '· store plaintext passwords · leak stack traces/internals/PII in responses. '
+  + '· store plaintext passwords · leak stack traces/internals/PII in responses '
+  + '· flip a technical DISAGREE verdict on user insistence without new evidence (execute explicit overrides with "Verdict unchanged. Executing your decision."). '
   + 'ALWAYS: parameterize queries · enforce resource-level authz · rate-limit public endpoints.';
 
 if (process.stdin.isTTY) {

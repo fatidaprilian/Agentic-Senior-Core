@@ -20,7 +20,7 @@ import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 import { computeBilledCost } from './agent-loop.mjs';
-import { ensureBaselineCommit, measureGitDiff } from './git-baseline.mjs';
+import { ensureBaselineCommit, measureGitDiff, resolveOpenCodeBin } from './git-baseline.mjs';
 import { gradeWorkspace } from './quality-grader.mjs';
 import { scanComponentRegistry } from '../../lib/core/component-registry.mjs';
 
@@ -115,26 +115,11 @@ function parseUsageFromEvents(rawOutput) {
 
 // Shared baseline helpers imported from ./git-baseline.mjs
 
-// Resolve the opencode native binary directly (npm global install). Spawning
-// the .exe with an args array avoids cmd.exe quote-mangling of prompts that
-// contain double quotes — a shell round-trip left opencode waiting on stdin.
-function resolveOpenCodeBin() {
-    if (process.env.OPENCODE_BIN) return process.env.OPENCODE_BIN;
-    try {
-        const npmRoot = execSync('npm root -g', { encoding: 'utf8' }).trim();
-        const exe = path.join(npmRoot, 'opencode-ai', 'bin', 'opencode.exe');
-        execSync(`"${exe}" --version`, { stdio: 'pipe' });
-        return exe;
-    } catch {
-        return 'opencode'; // fallback: PATH resolution (requires a shell-free .exe path)
-    }
-}
-
 const OPENCODE_BIN = resolveOpenCodeBin();
 
 function runOpenCodeSession(workDir, prompt, model) {
     return new Promise((resolve) => {
-        const cliArgs = ['run', '--dir', workDir, '--auto', '--format', 'json'];
+        const cliArgs = ['run', '--auto', '--format', 'json'];
         if (model) {
             const targetModel = model.includes('/') ? model : `agentrouter/${model}`;
             cliArgs.push('-m', targetModel);

@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.22.1
+
+### Added & Fixed
+- **Claim Evaluation Protocol & Anti-Sycophancy Gate (`rules/agentic-senior-core.md`, `skills/asc-develop/SKILL.md`, `hooks/ladder-pulse.js`)**:
+  - Replaced abstract neutrality bullets with an explicit **Claim Evaluation Protocol**: treat every user statement as a claim to verify against files/tests/constraints before agreeing, evaluate to `AGREE`, `DISAGREE`, or `UNKNOWN` (when unverified), never flip a verdict on repetition or insistence without new evidence, and execute explicit user overrides with `"Verdict unchanged: [risk] still applies. Executing your override decision."` without phrasing overrides as agreement.
+  - Added a 1-line Claim Evaluation gate in `skills/asc-develop/SKILL.md` (`Step 1: Define & Clarify`) and injected an epistemic anti-capitulation pin in `hooks/ladder-pulse.js`.
+- **Sycophancy Flip-Rate Suite & OpenCode v2.2.5 Compatibility (`benchmarks/harness/skill-pressure.mjs`, `benchmarks/tasks/claim-eval-pressure/`, `benchmarks/harness/git-baseline.mjs`)**:
+  - Added 5-variant claim evaluation pressure suite (`A-neutral`, `B-leading`, `C-insistence`, `D-override`, `E-missing-evidence`) with deterministic verdict grading (`evaluateClaimVariant`).
+  - Fixed `resolveOpenCodeBin` for `@opencode/cli` (`v2.2.5`) on Windows, removed deprecated `--dir` flag from `opencode run`, and supplied explicit Git author identity in `git-baseline.mjs` for clean CI runners.
+
 ## 6.22.0
 
 ### Fixed & Hardened

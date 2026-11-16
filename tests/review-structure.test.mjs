@@ -64,6 +64,12 @@ describe('Clean Code, Review Standards & Cross-Stack Language Hygiene', () => {
 
   it('enforces universal Clean Code invariants in always-on rules and asc-develop review gates', async () => {
     const rulesContent = await fs.readFile(path.join(pluginDir, 'rules', 'agentic-senior-core.md'), 'utf8');
+    assert.ok(rulesContent.includes('Claim Evaluation Protocol'), 'Rule missing Claim Evaluation Protocol');
+    assert.ok(
+      rulesContent.includes('`AGREE`') && rulesContent.includes('`DISAGREE`') && rulesContent.includes('`UNKNOWN`'),
+      'Rule must define AGREE, DISAGREE, and UNKNOWN verdicts'
+    );
+    assert.ok(rulesContent.includes('Override without capitulation'), 'Rule missing override without capitulation');
     assert.ok(rulesContent.includes('Bounded complexity & signatures'), 'Rule missing complexity limit');
     assert.ok(rulesContent.includes('Boundary typing & DTO isolation'), 'Rule missing DTO isolation');
     assert.ok(rulesContent.includes('Resource & async hygiene'), 'Rule missing resource/async hygiene');

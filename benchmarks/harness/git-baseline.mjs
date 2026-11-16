@@ -1,4 +1,23 @@
 import { execSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+
+export function resolveOpenCodeBin() {
+  if (process.env.OPENCODE_BIN) return process.env.OPENCODE_BIN;
+  if (process.platform === 'win32') {
+    try {
+      const npmRoot = execSync('npm root -g', { encoding: 'utf8', stdio: 'pipe' }).trim();
+      const candidates = [
+        path.join(npmRoot, '@opencode', 'cli', 'bin', 'opencode.exe'),
+        path.join(npmRoot, 'opencode-ai', 'bin', 'opencode.exe'),
+      ];
+      for (const exe of candidates) {
+        if (existsSync(exe)) return exe;
+      }
+    } catch {}
+  }
+  return 'opencode';
+}
 
 export function ensureBaselineCommit(dir) {
   try {
