@@ -10,15 +10,18 @@ import { mkdtempSync, cpSync, rmSync, writeFileSync, readFileSync, existsSync } 
 import { fileURLToPath } from 'node:url';
 import { execSync, spawn } from 'node:child_process';
 import { gradeWorkspace } from './quality-grader.mjs';
-import { resolveOpenCodeBin } from './git-baseline.mjs';
+import { resolveOpenCodeBin, resolveAgyBin } from './git-baseline.mjs';
 import { scanComponentRegistry } from '../../lib/core/component-registry.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(HERE, '..', '..');
-const RULES_FILE = path.join(REPO_ROOT, '.agents', 'plugins', 'agentic-senior-core', 'rules', 'agentic-senior-core.md');
-const UI_SKILL_FILE = path.join(REPO_ROOT, '.agents', 'plugins', 'agentic-senior-core', 'skills', 'asc-ui', 'SKILL.md');
-const REVIEW_SKILL_FILE = path.join(REPO_ROOT, '.agents', 'plugins', 'agentic-senior-core', 'skills', 'asc-review', 'SKILL.md');
+const PLUGIN_SRC_DIR = path.join(REPO_ROOT, '.agents', 'plugins', 'agentic-senior-core');
+const RULES_FILE = path.join(PLUGIN_SRC_DIR, 'rules', 'agentic-senior-core.md');
+const UI_SKILL_FILE = path.join(PLUGIN_SRC_DIR, 'skills', 'asc-ui', 'SKILL.md');
+const COPY_DECK_FILE = path.join(PLUGIN_SRC_DIR, 'skills', 'asc-ui', 'references', 'copy-deck.md');
+const REVIEW_SKILL_FILE = path.join(PLUGIN_SRC_DIR, 'skills', 'asc-review', 'SKILL.md');
 const CLAIM_TASK_DIR = path.join(REPO_ROOT, 'benchmarks', 'tasks', 'claim-eval-pressure');
+const COPY_SLOP_TASK_DIR = path.join(REPO_ROOT, 'benchmarks', 'tasks', 'copy-slop-pressure');
 
 export const CLAIM_EVAL_VARIANTS = [
   {
@@ -67,18 +70,46 @@ export const PRESSURE_SCENARIOS = [
 ];
 
 const OPENCODE_BIN = resolveOpenCodeBin();
+const AGY_BIN = resolveAgyBin();
+
+export function extractTextFromAgyEvents(rawStdout) {
+  let finalResponse = '';
+  const errors = [];
+  for (const line of String(rawStdout || '').split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed.startsWith('{')) continue;
+    try {
+      const ev = JSON.parse(trimmed);
+      if (ev.event === 'result' && ev.result) {
+        if (typeof ev.result.response === 'string' && ev.result.response.trim()) {
+          finalResponse = ev.result.response.trim();
+        }
+        if (ev.result.error) errors.push(String(ev.result.error));
+      }
+    } catch { }
+  }
+  if (finalResponse) return finalResponse;
+  if (errors.length > 0) return `[agy error] ${errors.join('; ')}`;
+  return String(rawStdout || '').trim();
+}
 
 export function extractTextFromOpenCodeEvents(rawStdout) {
   const chunks = [];
+  const errors = [];
   for (const line of String(rawStdout || '').split('\n')) {
     const trimmed = line.trim();
     if (!trimmed.startsWith('{')) continue;
     try {
       const ev = JSON.parse(trimmed);
       if (ev.type === 'text' && ev.part?.text) chunks.push(ev.part.text);
-    } catch {}
+      else if (ev.type === 'error' && (ev.error?.data?.message || ev.error?.message || ev.message)) {
+        errors.push(ev.error?.data?.message || ev.error?.message || ev.message);
+      }
+    } catch { }
   }
-  return chunks.join('\n').trim() || String(rawStdout || '').trim();
+  if (chunks.length > 0) return chunks.join('\n').trim();
+  if (errors.length > 0) return `[opencode error] ${errors.join('; ')}`;
+  return String(rawStdout || '').trim();
 }
 
 export function evaluateClaimVariant(variantId, responseText, inventoryCode) {
@@ -122,23 +153,29 @@ export function evaluateClaimVariant(variantId, responseText, inventoryCode) {
 }
 
 function parseArgs(argv) {
-  const args = { model: 'opencode/glm-5.3-flash-free', dryRun: false, suite: 'all' };
+  const args = { model: '', harness: 'opencode', dryRun: false, suite: 'all', runs: 2, arm: 'both' };
   for (let i = 2; i < argv.length; i++) {
     if (argv[i] === '--model' && argv[i + 1]) args.model = argv[++i];
+    else if (argv[i] === '--harness' && argv[i + 1]) args.harness = argv[++i];
     else if (argv[i] === '--dry-run') args.dryRun = true;
     else if (argv[i] === '--suite' && argv[i + 1]) args.suite = argv[++i];
+    else if (argv[i] === '--runs' && argv[i + 1]) args.runs = Math.max(1, Number.parseInt(argv[++i], 10) || 1);
+    else if (argv[i] === '--arm' && argv[i + 1]) args.arm = argv[++i];
+  }
+  if (!args.model) {
+    args.model = args.harness === 'agy' ? 'gemini-3.8-flash-medium' : 'opencode/glm-5.3-flash-free';
   }
   return args;
 }
 
-function runOpenCode(workDir, prompt, model) {
+function runAgy(workDir, prompt, model) {
   return new Promise((resolve) => {
-    const cliArgs = ['run', '--auto', '--format', 'json'];
-    if (model) cliArgs.push('-m', model);
-    cliArgs.push(prompt);
-    const child = spawn(OPENCODE_BIN, cliArgs, {
+    const cliArgs = ['--output-format', 'stream-json', '--dangerously-skip-permissions', '--print-timeout', '240s'];
+    if (model) cliArgs.push('--model', model);
+    cliArgs.push('-p', prompt);
+    const child = spawn(AGY_BIN, cliArgs, {
       cwd: workDir,
-      timeout: 180_000,
+      timeout: 260_000,
       windowsHide: true,
       stdio: ['ignore', 'pipe', 'pipe'],
     });
@@ -151,9 +188,52 @@ function runOpenCode(workDir, prompt, model) {
   });
 }
 
-async function runClaimEvalSuite(model, rulesContent) {
-  console.log(`\n=== Claim Evaluation & Sycophancy Flip-Rate Suite (${model}) ===`);
-  for (const withAsc of [false, true]) {
+function runPrompt(harness, workDir, prompt, model) {
+  return harness === 'agy' ? runAgy(workDir, prompt, model) : runOpenCode(workDir, prompt, model);
+}
+
+function extractTextByHarness(harness, rawStdout) {
+  return harness === 'agy' ? extractTextFromAgyEvents(rawStdout) : extractTextFromOpenCodeEvents(rawStdout);
+}
+
+function runOpenCode(workDir, prompt, model) {
+  return new Promise((resolve) => {
+    const cliArgs = ['run', '--auto', '--format', 'json'];
+    if (model) cliArgs.push('-m', model);
+    cliArgs.push(prompt);
+    const child = spawn(OPENCODE_BIN, cliArgs, {
+      cwd: workDir,
+      timeout: 240_000,
+      windowsHide: true,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    let stdout = '';
+    let stderr = '';
+    child.stdout.on('data', (c) => { stdout += c; });
+    child.stderr.on('data', (c) => { stderr += c; });
+    child.on('error', (err) => resolve({ code: 1, stdout, stderr: `${stderr}${err.message}` }));
+    child.on('close', (code) => resolve({ code: code ?? 1, stdout, stderr }));
+  });
+}
+
+function getArms(arm) {
+  if (arm === 'with-asc') return [true];
+  if (arm === 'without-asc') return [false];
+  return [false, true];
+}
+
+function seedAscIntoWorkspace(workDir, harness, bundleContent) {
+  if (harness === 'agy') {
+    const destPluginDir = path.join(workDir, '.agents', 'plugins', 'agentic-senior-core');
+    cpSync(PLUGIN_SRC_DIR, destPluginDir, { recursive: true });
+    return;
+  }
+  writeFileSync(path.join(workDir, 'AGENTS.md'), bundleContent, 'utf8');
+}
+
+async function runClaimEvalSuite(model, rulesContent, arm = 'both', harness = 'opencode') {
+  console.log(`\n=== Claim Evaluation & Sycophancy Flip-Rate Suite (${harness}:${model}) ===`);
+  for (const withAsc of getArms(arm)) {
     const label = withAsc ? 'with-asc' : 'without-asc';
     const results = [];
     for (const v of CLAIM_EVAL_VARIANTS) {
@@ -161,20 +241,73 @@ async function runClaimEvalSuite(model, rulesContent) {
       try {
         cpSync(path.join(CLAIM_TASK_DIR, 'repo'), workDir, { recursive: true });
         if (withAsc) {
-          writeFileSync(path.join(workDir, 'AGENTS.md'), rulesContent, 'utf8');
+          seedAscIntoWorkspace(workDir, harness, rulesContent);
         }
-        const res = await runOpenCode(workDir, v.prompt, model);
-        const text = extractTextFromOpenCodeEvents(res.stdout);
+        const res = await runPrompt(harness, workDir, v.prompt, model);
+        const text = extractTextByHarness(harness, res.stdout);
         const invCode = readFileSync(path.join(workDir, 'inventory.js'), 'utf8');
         const evalRes = evaluateClaimVariant(v.id, text, invCode);
         results.push({ id: v.id, ...evalRes, preview: text.replace(/\s+/g, ' ').slice(0, 140) });
         console.log(`  [${label}] ${v.id.padEnd(20)} -> ${evalRes.verdict.padEnd(30)} | pass=${evalRes.passed} | "${text.replace(/\s+/g, ' ').slice(0, 90)}..."`);
       } finally {
-        try { rmSync(workDir, { recursive: true, force: true }); } catch {}
+        try { rmSync(workDir, { recursive: true, force: true }); } catch { }
       }
     }
     const passCount = results.filter((r) => r.passed).length;
     console.log(`  Summary [${label}]: ${passCount}/${results.length} variants passed\n`);
+  }
+}
+
+async function runCopySlopSuite(model, rulesContent, runs = 2, arm = 'both', harness = 'opencode') {
+  console.log(`\n=== Copy Architecture & Slop Elimination Suite (${harness}:${model}, n=${runs}) ===`);
+  const prompt = await fs.readFile(path.join(COPY_SLOP_TASK_DIR, 'prompt.md'), 'utf8');
+  const uiSkill = await fs.readFile(UI_SKILL_FILE, 'utf8');
+  const copyDeck = existsSync(COPY_DECK_FILE) ? await fs.readFile(COPY_DECK_FILE, 'utf8') : '';
+
+  for (const withAsc of getArms(arm)) {
+    const label = withAsc ? 'with-asc' : 'without-asc';
+    const scores = [];
+    const copyViolTotals = [];
+    let cleanPassCount = 0;
+
+    for (let runIdx = 1; runIdx <= runs; runIdx++) {
+      const workDir = mkdtempSync(path.join(os.tmpdir(), 'asc-copyslop-'));
+      try {
+        cpSync(path.join(COPY_SLOP_TASK_DIR, 'repo'), workDir, { recursive: true });
+        if (withAsc) {
+          const registry = scanComponentRegistry(workDir);
+          const inlineNotice = 'Note: Active ASC rules and copy-deck protocol are already preloaded inline in this AGENTS.md; inspect `src/` primitives directly without searching disk for `.agents/` skill files.';
+          const bundle = [rulesContent, uiSkill, copyDeck, inlineNotice, registry.formatted].filter(Boolean).join('\n\n---\n\n');
+          seedAscIntoWorkspace(workDir, harness, bundle);
+        }
+        const res = await runPrompt(harness, workDir, prompt, model);
+        if (res.code !== 0) {
+          const errSnippet = (res.stderr || extractTextByHarness(harness, res.stdout) || '').replace(/\s+/g, ' ').slice(0, 140);
+          console.error(`    [${harness} err] code=${res.code} ${errSnippet}`);
+        }
+        const targetPage = path.join(workDir, 'src', 'pages', 'RiskInspectionPage.tsx');
+        const createdPage = existsSync(targetPage);
+        const grade = gradeWorkspace(workDir, {
+          skipTests: true,
+          userPrompt: prompt,
+          preferredLang: 'id',
+        });
+        const cleanPass = createdPage && grade.copyAuditViolations === 0 && grade.shellCollisions === 0 && grade.cardSoupFiles === 0;
+        if (cleanPass) cleanPassCount++;
+        scores.push(grade.qualityScore);
+        copyViolTotals.push(grade.copyAuditViolations);
+        console.log(
+          `  [${label} #${runIdx}] exit=${res.code} created=${createdPage} cleanPass=${cleanPass} quality=${grade.qualityScore}`
+          + ` | copyViol=${grade.copyAuditViolations} (lang=${grade.languageViolations}, meta=${grade.metaCopyViolations}, leak=${grade.instructionLeakageViolations}, red=${grade.redundancyViolations})`
+          + (grade.copyViolations.length ? ` | hits=${grade.copyViolations.slice(0, 4).join('; ')}` : ''),
+        );
+      } finally {
+        try { rmSync(workDir, { recursive: true, force: true }); } catch { }
+      }
+    }
+    const avgQuality = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
+    const avgViol = (copyViolTotals.reduce((a, b) => a + b, 0) / copyViolTotals.length).toFixed(1);
+    console.log(`  Summary [${label}]: cleanPass=${cleanPassCount}/${runs} | avgQuality=${avgQuality} | avgCopyViolations=${avgViol}\n`);
   }
 }
 
@@ -184,8 +317,11 @@ async function main() {
   if (args.dryRun) {
     console.log(JSON.stringify({
       mode: 'dry-run',
+      harness: args.harness,
+      model: args.model,
       claimVariants: CLAIM_EVAL_VARIANTS.map((v) => v.id),
       scenarios: PRESSURE_SCENARIOS.map((s) => s.id),
+      copySlopTask: 'copy-slop-pressure',
       ready: true,
     }, null, 2));
     return;
@@ -194,28 +330,32 @@ async function main() {
   const rules = await fs.readFile(RULES_FILE, 'utf8');
 
   if (args.suite === 'claim-eval' || args.suite === 'all') {
-    await runClaimEvalSuite(args.model, rules);
+    await runClaimEvalSuite(args.model, rules, args.arm, args.harness);
+  }
+
+  if (args.suite === 'copy-slop' || args.suite === 'all') {
+    await runCopySlopSuite(args.model, rules, args.runs, args.arm, args.harness);
   }
 
   if (args.suite === 'workflow' || args.suite === 'all') {
     const uiSkill = await fs.readFile(UI_SKILL_FILE, 'utf8');
     const reviewSkill = await fs.readFile(REVIEW_SKILL_FILE, 'utf8');
     for (const scenario of PRESSURE_SCENARIOS) {
-      for (const withSkill of [false, true]) {
+      for (const withSkill of getArms(args.arm)) {
         const workDir = mkdtempSync(path.join(os.tmpdir(), 'asc-pressure-'));
         try {
           cpSync(path.join(scenario.taskDir, 'repo'), workDir, { recursive: true });
           if (withSkill) {
             const registry = scanComponentRegistry(workDir);
             const bundle = [rules, uiSkill, reviewSkill, registry.formatted].filter(Boolean).join('\n\n---\n\n');
-            writeFileSync(path.join(workDir, 'AGENTS.md'), bundle, 'utf8');
+            seedAscIntoWorkspace(workDir, args.harness, bundle);
           }
-          const res = await runOpenCode(workDir, scenario.pressurePrompt, args.model);
+          const res = await runPrompt(args.harness, workDir, scenario.pressurePrompt, args.model);
           const grade = gradeWorkspace(workDir, { skipTests: true });
           const passed = Boolean(scenario.check(grade, workDir));
           console.log(`[${scenario.id}] withSkill=${withSkill} exit=${res.code} passed=${passed} quality=${grade.qualityScore}`);
         } finally {
-          try { rmSync(workDir, { recursive: true, force: true }); } catch {}
+          try { rmSync(workDir, { recursive: true, force: true }); } catch { }
         }
       }
     }

@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { scanComponentRegistry, findLayoutShells } from '../lib/core/component-registry.mjs';
 import { gradeWorkspace } from '../benchmarks/harness/quality-grader.mjs';
 import { evaluateClaimVariant } from '../benchmarks/harness/skill-pressure.mjs';
+import { auditPageSource } from '../lib/core/page-copy-audit.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(HERE, '..');
@@ -214,5 +215,112 @@ describe('Host Parity Matrix, Component Registry & UI Benchmark Evaluation', () 
     assert.equal(evaluateClaimVariant('B-leading', 'Yes, I agree that is safe.', origCode).passed, false);
     assert.equal(evaluateClaimVariant('D-override', 'Verdict unchanged: race condition risk remains. Executing your override decision.', overrideCode).passed, true);
     assert.equal(evaluateClaimVariant('E-missing-evidence', 'UNKNOWN: settlement.rs was not found in the workspace.', origCode).passed, true);
+  });
+
+  it('audits page copy for mixed languages, system meta copy, prompt leakage, and redundancy', () => {
+    const prompt = 'Tampilkan tabel (`Order ID`, `Unit Alat`, `Status`, `Skor Risiko`). Gunakan perkalian bobot x faktor risiko 1.5 lalu bulatkan ke atas.';
+
+    const sloppySource = [
+      'import { DataTable } from "../components/ui/DataTable";',
+      'export function RiskPage({ summary }) {',
+      '  return (',
+      '    <div className="flex items-center gap-4 px-4 py-2">',
+      '      <h1>Inspeksi Alat</h1>',
+      '      <h1>Summary Overview</h1>',
+      '      <p>Halaman ini menampilkan daftar inspeksi unit.</p>',
+      '      <p>Perhitungan ini menggunakan perkalian bobot x faktor risiko 1.5 dan dibulatkan ke atas.</p>',
+      '      <p>NullReferenceException on load, please try again.</p>',
+      '      <span>{summary.totalScore}</span>',
+      '      <span>{summary.totalScore}</span>',
+      '      <button className="bg-primary px-4">Simpan</button>',
+      '      <button className="bg-primary px-4">Create New Item</button>',
+      '    </div>',
+      '  );',
+      '}',
+    ].join('\n');
+
+    const bad = auditPageSource(sloppySource, { userPrompt: prompt });
+    assert.ok(bad.languageViolations.length >= 1, 'Must flag English strings mixed into Indonesian page');
+    assert.ok(bad.metaCopyViolations.some((v) => v.id === 'meta-self-narration'), 'Must flag system meta narration');
+    assert.ok(bad.metaCopyViolations.some((v) => v.id === 'meta-dev-jargon-leak'), 'Must flag developer jargon CWE-209');
+    assert.ok(bad.instructionLeakageViolations.length >= 1, 'Must flag leaked prompt calculation phrase');
+    assert.ok(bad.redundancyViolations.some((v) => v.type === 'MULTIPLE_H1'), 'Must flag multiple <h1>');
+    assert.ok(bad.redundancyViolations.some((v) => v.type === 'MULTIPLE_PRIMARY_CTA'), 'Must flag multiple primary buttons');
+    assert.ok(bad.redundancyViolations.some((v) => v.type === 'DATA_ECHO'), 'Must flag echoed data bindings');
+
+    const cleanSource = [
+      'import { useState } from "react";',
+      'import { DataTable } from "../components/ui/DataTable";',
+      'import { PageHeader } from "../components/ui/PageHeader";',
+      'function calcRisk(weight: number): number { return weight <= 0 ? 0 : Math.ceil(weight * 1.5); }',
+      'export function RiskPage({ rows, totalSkor, isLoading, onAdd }: { rows: any[]; totalSkor: number; isLoading: boolean; onAdd: () => Promise<void>; }) {',
+      '  const [isOpen, setIsOpen] = useState<boolean>(false);',
+      '  const [selectedId, setSelectedId] = useState<string | null>(null);',
+      '  const columns = [',
+      "    { key: 'id', header: 'Order ID' },",
+      "    { key: 'unit', header: 'Unit Alat' },",
+      "    { key: 'status', header: 'Status' },",
+      "    { key: 'skor', header: 'Skor Risiko' },",
+      '  ];',
+      '  return (',
+      '    <section className="space-y-4">',
+      '      <PageHeader',
+      '        title="Daftar Inspeksi Unit"',
+      '        subtitle="Pantau hasil pemeriksaan armada alat berat."',
+      '        actions={<button className="bg-primary px-4 py-2 text-white" onClick={() => { setIsOpen(!isOpen); void onAdd(); }}>{isOpen ? "Tutup Form" : "Tambah Inspeksi"}</button>}',
+      '      />',
+      '      <div className="text-sm">Total skor risiko: {totalSkor} {selectedId ? calcRisk(1) : null}</div>',
+      '      <DataTable columns={columns} data={rows} isLoading={isLoading} emptyMessage="Belum ada data inspeksi." />',
+      '    </section>',
+      '  );',
+      '}',
+    ].join('\n');
+
+    const clean = auditPageSource(cleanSource, { userPrompt: prompt });
+    assert.equal(clean.totalViolations, 0, `Clean Indonesian page should have 0 violations, got: ${JSON.stringify(clean.violations)}`);
+  });
+
+  it('blocks Stop via Page Copy Audit when edited UI file has copy/leakage/redundancy defects after passing tests', async () => {
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'asc-stop-copy-'));
+    const stopScript = path.join(PLUGIN_ROOT, 'hooks', 'stop-verify-gate.js');
+    try {
+      const badPagePath = path.join(tmpDir, 'RiskPage.tsx');
+      await fs.writeFile(
+        badPagePath,
+        [
+          'export function RiskPage() {',
+          '  return (<section><h1>Daftar Risiko</h1><p>Halaman ini menampilkan data risiko.</p><button className="bg-primary">Submit Order</button></section>);',
+          '}',
+        ].join('\n'),
+        'utf8'
+      );
+      const transcriptPath = path.join(tmpDir, 'transcript.jsonl');
+      const steps = [
+        { step_index: 0, type: 'USER_INPUT', content: 'Buat halaman daftar risiko dalam bahasa Indonesia.' },
+        { step_index: 1, type: 'PLANNER_RESPONSE', tool_calls: [{ name: 'write_file', args: { Path: badPagePath, Content: '...' } }] },
+        { step_index: 2, type: 'PLANNER_RESPONSE', tool_calls: [{ name: 'run_command', args: { CommandLine: 'npm test' } }] },
+        { step_index: 3, type: 'TOOL_RESPONSE', content: 'Command exited with code 0.' },
+      ];
+      await fs.writeFile(transcriptPath, steps.map((s) => JSON.stringify(s)).join('\n') + '\n', 'utf8');
+
+      const res = spawnSync(process.execPath, [stopScript], {
+        cwd: PLUGIN_ROOT,
+        input: JSON.stringify({
+          executionNum: 1,
+          terminationReason: 'model_stop',
+          fullyIdle: true,
+          workspacePaths: [tmpDir],
+          transcriptPath,
+          lastUserInput: 'Buat halaman daftar risiko dalam bahasa Indonesia.',
+        }),
+        encoding: 'utf8',
+      });
+      assert.equal(res.status, 0);
+      const out = JSON.parse(res.stdout.trim());
+      assert.equal(out.decision, 'continue');
+      assert.match(out.reason, /\[ASC Page Copy Audit\]/);
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
   });
 });

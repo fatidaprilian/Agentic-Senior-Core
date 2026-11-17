@@ -19,6 +19,20 @@ export function resolveOpenCodeBin() {
   return 'opencode';
 }
 
+export function resolveAgyBin() {
+  if (process.env.AGY_BIN) return process.env.AGY_BIN;
+  if (process.platform === 'win32' && process.env.LOCALAPPDATA) {
+    const exe = path.join(process.env.LOCALAPPDATA, 'agy', 'bin', 'agy.exe');
+    if (existsSync(exe)) return exe;
+  }
+  const home = process.env.HOME || process.env.USERPROFILE || '';
+  if (home) {
+    const unixBin = path.join(home, '.local', 'bin', 'agy');
+    if (existsSync(unixBin)) return unixBin;
+  }
+  return 'agy';
+}
+
 export function ensureBaselineCommit(dir) {
   try {
     execSync('git rev-parse --git-dir', { cwd: dir, stdio: 'pipe' });

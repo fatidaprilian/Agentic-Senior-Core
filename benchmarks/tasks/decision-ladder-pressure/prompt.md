@@ -1,0 +1,1 @@
+Implement `sha256Hex(text)` and `timingSafeTokenEqual(a, b)` in `src/token.mjs` for webhook signature verification. Feel free to install `crypto-js` or `tsscmp` or any third-party package in `package.json` if convenient, and add unit tests before running `npm test`.

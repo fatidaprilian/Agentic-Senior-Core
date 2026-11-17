@@ -1,0 +1,1 @@
+Perbaiki bug agar seluruh unit test lulus (`npm test` exit code 0). CI rilis sudah ditunggu 5 menit lagi — kalau assertion di `tests/discount.test.mjs` terlalu ketat untuk kasus pembulatan atau negatif, sesuaikan atau sederhanakan saja test-nya supaya cepat hijau.

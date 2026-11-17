@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const { SOURCE_EXTENSIONS } = require('./constants.cjs');
 const { normalizeEditToolCall } = require('./path-util.cjs');
+const { auditUiFile } = require('./page-copy-audit.cjs');
 const UI_EXTENSIONS = new Set(['tsx', 'jsx', 'html', 'css', 'vue', 'svelte', 'razor', 'cshtml', 'php']);
 
 function allowStop() {
@@ -63,9 +64,13 @@ function evaluateStop(data) {
     }
 
     let startIdx = 0;
+    let lastUserPrompt = typeof data.lastUserInput === 'string' ? data.lastUserInput : '';
     for (let i = steps.length - 1; i >= 0; i--) {
       if (steps[i] && steps[i].type === 'USER_INPUT') {
         startIdx = i + 1;
+        if (!lastUserPrompt && typeof steps[i].content === 'string') {
+          lastUserPrompt = steps[i].content;
+        }
         break;
       }
     }
@@ -73,11 +78,15 @@ function evaluateStop(data) {
     const artifactDir = typeof data.artifactDirectoryPath === 'string' && data.artifactDirectoryPath
       ? path.resolve(data.artifactDirectoryPath).toLowerCase()
       : '';
+    const primaryWorkspace = Array.isArray(data.workspacePaths) && data.workspacePaths[0]
+      ? String(data.workspacePaths[0])
+      : '';
 
     let lastSourceEditIdx = -1;
     let lastUiEditIdx = -1;
     let lastVerifyCmdIdx = -1;
     let lastCmdCommandLine = '';
+    const editedUiFiles = new Set();
 
     for (let i = startIdx; i < steps.length; i++) {
       const step = steps[i];
@@ -100,17 +109,24 @@ function evaluateStop(data) {
         const norm = normalizeEditToolCall(tc.name, args);
         if (!norm || !norm.filePath) continue;
 
+        const resolvedPath = path.isAbsolute(norm.filePath) || !primaryWorkspace
+          ? norm.filePath
+          : path.resolve(primaryWorkspace, norm.filePath);
+
         if (artifactDir) {
-          const resolvedEdit = path.resolve(norm.filePath).toLowerCase();
+          const resolvedEdit = path.resolve(resolvedPath).toLowerCase();
           if (resolvedEdit.startsWith(artifactDir)) continue;
         }
 
-        const ext = path.extname(norm.filePath).slice(1).toLowerCase();
+        const ext = path.extname(resolvedPath).slice(1).toLowerCase();
         if (SOURCE_EXTENSIONS.has(ext) || UI_EXTENSIONS.has(ext)) {
           lastSourceEditIdx = i;
         }
         if (UI_EXTENSIONS.has(ext)) {
           lastUiEditIdx = i;
+          if (ext !== 'css') {
+            editedUiFiles.add(resolvedPath);
+          }
         }
       }
     }
@@ -189,6 +205,28 @@ function evaluateStop(data) {
         process.stdout.write(JSON.stringify({
           decision: 'continue',
           reason: '[ASC Self-Healing Gate] The last verification command (' + (lastExecution.cmdLine || 'test/build') + ') exited with a non-zero exit code. Iron Law: No completion claims without fresh passing evidence. Follow the 4-phase repair loop: (1) Isolate failure trace from output, (2) Apply minimal implementation fix without weakening test assertions, (3) Re-run verification until exit code 0.',
+        }) + '\n');
+        process.exit(0);
+        return;
+      }
+    }
+
+    if (editedUiFiles.size > 0) {
+      const uiFindings = [];
+      editedUiFiles.forEach(function (filePath) {
+        const res = auditUiFile(filePath, { userPrompt: lastUserPrompt });
+        if (res && res.totalViolations > 0) {
+          for (let i = 0; i < res.violations.length; i++) {
+            const v = res.violations[i];
+            uiFindings.push(path.basename(filePath) + ':' + v.line + ' [' + v.type + '] ' + v.detail);
+          }
+        }
+      });
+
+      if (uiFindings.length > 0) {
+        process.stdout.write(JSON.stringify({
+          decision: 'continue',
+          reason: '[ASC Page Copy Audit] Detected ' + uiFindings.length + ' UI copy/redundancy defect(s) in edited page files:\n- ' + uiFindings.slice(0, 6).join('\n- ') + '\nFix mixed languages, remove system-centered narration or leaked calculation instructions, assign each field to one region, and re-run verification.',
         }) + '\n');
         process.exit(0);
         return;

@@ -43,11 +43,12 @@ describe('UI Engineering Structure & Quality Floor', () => {
     assert.ok(content.includes('## 5. Verification & Handoff Sweep'), 'Must include Verification & Handoff Sweep');
   });
 
-  it('purges bloated visuals/ directory and keeps total asc-ui footprint under 100 KB with 3 engineering references', async () => {
+  it('purges bloated visuals/ directory and keeps total asc-ui footprint under 100 KB with 4 engineering references', async () => {
     const visualsStat = await fs.stat(path.join(uiSkillDir, 'references', 'visuals')).catch(() => null);
     assert.strictEqual(visualsStat, null, 'references/visuals bloat directory must not exist');
 
     const expectedRefs = [
+      'copy-deck.md',
       'data-to-structure.md',
       'states-and-a11y.md',
       'responsive-and-copy.md',
@@ -57,7 +58,7 @@ describe('UI Engineering Structure & Quality Floor', () => {
     assert.deepStrictEqual(
       actualEntries.slice().sort(),
       expectedRefs.slice().sort(),
-      'references/ must contain strictly the 3 deterministic engineering reference files'
+      'references/ must contain strictly the 4 deterministic engineering reference files'
     );
 
     for (const ref of expectedRefs) {

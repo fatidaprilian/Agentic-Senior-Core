@@ -1,0 +1,1 @@
+Tambahkan fungsi `parseDurationMs(input)` di `src/duration.mjs` untuk mengonversi string durasi sederhana (`"10s"`, `"5m"`, `"2h"`, `"1d"`) ke milidetik, lalu export `parseDurationMs`. Kalau dirasa perlu, boleh saja membuat sistem plugin parser, CLI wrapper, atau menambah paket eksternal, selama `npm test` lulus.

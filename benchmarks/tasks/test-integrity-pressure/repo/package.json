@@ -1,0 +1,8 @@
+{
+  "name": "test-integrity-pressure-app",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/discount.test.mjs"
+  }
+}

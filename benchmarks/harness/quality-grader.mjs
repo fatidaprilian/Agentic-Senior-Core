@@ -3,6 +3,7 @@ import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { findLayoutShells } from '../../lib/core/component-registry.mjs';
+import { auditPageSource } from '../../lib/core/page-copy-audit.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(HERE, '..', '..');
@@ -60,7 +61,13 @@ export function gradeWorkspace(workDir, options = {}) {
   let cardSoupFiles = 0;
   let swallowedErrors = 0;
   let reusedComponentsCount = 0;
+  let copyAuditViolations = 0;
+  let languageViolations = 0;
+  let metaCopyViolations = 0;
+  let instructionLeakageViolations = 0;
+  let redundancyViolations = 0;
   const matchedPatterns = [];
+  const copyViolations = [];
 
   for (const filePath of srcFiles) {
     const rel = path.relative(workDir, filePath).replace(/\\/g, '/');
@@ -90,6 +97,21 @@ export function gradeWorkspace(workDir, options = {}) {
       swallowedErrors++;
     }
 
+    if (isUi && !isLayout) {
+      const copyRes = auditPageSource(content, {
+        userPrompt: options.userPrompt || '',
+        preferredLang: options.preferredLang || null,
+      });
+      copyAuditViolations += copyRes.totalViolations;
+      languageViolations += copyRes.languageViolations.length;
+      metaCopyViolations += copyRes.metaCopyViolations.length;
+      instructionLeakageViolations += copyRes.instructionLeakageViolations.length;
+      redundancyViolations += copyRes.redundancyViolations.length;
+      for (const v of copyRes.violations) {
+        copyViolations.push(`${rel}:${v.type}:${v.line}`);
+      }
+    }
+
     if (/from\s+['"][^'"]*components\/ui\//.test(content) || /\b(?:DataTable|PageHeader)\b/.test(content) && !isLayout && rel.includes('pages/')) {
       const imports = content.match(/import\s+\{[^}]+\}\s+from\s+['"][^'"]*components\/ui\/[^'"]+['"]/g) || [];
       reusedComponentsCount += imports.length;
@@ -97,7 +119,7 @@ export function gradeWorkspace(workDir, options = {}) {
   }
 
   const testPassed = options.skipTests ? null : runProjectTests(workDir);
-  const penalties = (slopHits * 10) + (shellCollisions * 25) + (cardSoupFiles * 20) + (swallowedErrors * 15) + (testPassed === false ? 30 : 0);
+  const penalties = (slopHits * 10) + (shellCollisions * 25) + (cardSoupFiles * 20) + (swallowedErrors * 15) + (copyAuditViolations * 15) + (testPassed === false ? 30 : 0);
   const bonus = Math.min(10, reusedComponentsCount * 5);
   const qualityScore = Math.max(0, Math.min(100, 100 - penalties + bonus - (reusedComponentsCount === 0 && shells.length > 0 ? 15 : 0)));
 
@@ -108,6 +130,12 @@ export function gradeWorkspace(workDir, options = {}) {
     cardSoupFiles,
     swallowedErrors,
     reusedComponentsCount,
+    copyAuditViolations,
+    languageViolations,
+    metaCopyViolations,
+    instructionLeakageViolations,
+    redundancyViolations,
+    copyViolations,
     matchedPatterns,
     qualityScore,
   };

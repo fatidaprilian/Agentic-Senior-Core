@@ -31,9 +31,10 @@ Before writing or refactoring any UI file (`*.tsx`, `*.jsx`, `*.vue`, `*.svelte`
 
 1. **Audit Workspace Primitives:** Inspect `components/ui/`, shared layouts, `app.css`/`globals.css`, and Tailwind config. Reuse existing tables, dialogs, buttons, and form primitives rather than inventing ad-hoc markup.
 2. **Load Mandatory Reference Branch (1-Hop):**
+   - Building a new page or drafting UI text $\rightarrow$ **MUST** lock one page language, draft a **Copy Deck** & **Data Assignment Table** (`references/copy-deck.md`) before writing markup, and omit system-centered narration or prompt/formula leaks.
    - Building a new page, dashboard, or multi-section layout $\rightarrow$ **MUST** `read_file` `references/data-to-structure.md` before writing markup.
    - Implementing async data views, forms, modals, or interactive controls $\rightarrow$ **MUST** `read_file` `references/states-and-a11y.md`.
-   - Adjusting responsive behavior, CSS tokens, or localized UI copy $\rightarrow$ **MUST** `read_file` `references/responsive-and-copy.md`.
+   - Adjusting responsive behavior, CSS tokens, or microcopy details $\rightarrow$ **MUST** `read_file` `references/responsive-and-copy.md`.
 
 ---
 
@@ -58,6 +59,7 @@ Never default to `Card` grids as a generic layout wrapper. Select containers str
 
 | Engineering Concern | Reference Path |
 | :--- | :--- |
+| Pre-JSX language lock, Copy Deck & Data Assignment Table | `references/copy-deck.md` |
 | Anti-card-soup structural templates (`<ol>`, `<table>`, `divide-y`, `<dl>`) | `references/data-to-structure.md` |
 | 4-state data contract, pending mutation lock & WCAG 2.2 AA focus/contrast | `references/states-and-a11y.md` |
 | Brownfield token reuse, `100dvh` mobile reflow, GPU transitions & microcopy | `references/responsive-and-copy.md` |

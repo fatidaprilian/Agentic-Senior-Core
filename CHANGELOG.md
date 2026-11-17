@@ -1,5 +1,18 @@
 # Changelog
 
+## 6.23.0
+
+### Added & Hardened
+- **Upstream UI Copy Architecture (`skills/asc-ui/SKILL.md`, `skills/asc-ui/references/copy-deck.md`)**:
+  - Added pre-JSX **Page Language Lock**, **Copy Deck**, and **Data Assignment Table** gates requiring a single declared page language, static string ownership, 1-to-1 field-to-region placement, and elimination of self-narrating chrome copy, logic/formula leakage, and CWE-209 developer/runtime jargon.
+  - Updated `tests/ui-structure.test.mjs` for 4 engineering reference files under `skills/asc-ui/references/` within the existing footprint ceiling.
+- **Deterministic Page-Level Copy Audit & Stop Gate (`hooks/page-copy-audit.cjs`, `lib/core/page-copy-audit.mjs`, `hooks/stop-verify-gate.js`)**:
+  - Built a zero-dependency page copy auditor checking `checkLanguagePurity` (with prompt-prescribed backticked column exceptions like `Order ID`), `checkMetaCopy` (`meta-self-narration`, `meta-purpose-filler`, `meta-formula-narration`, `meta-dev-jargon-leak` CWE-209), `checkInstructionLeakage`, and `checkRedundancy` (`MULTIPLE_H1`, `MULTIPLE_PRIMARY_CTA`, `DUPLICATE_UI_COPY`, `DATA_ECHO`), using a balanced JSX tag/expression scanner immune to TypeScript generics (`Promise<void>`, `useState<...>`) and `=>` handlers.
+  - Wired `auditUiFile` into Antigravity's `hooks/stop-verify-gate.js` (emitting `[ASC Page Copy Audit]` `decision: 'continue'` under the existing `executionNum >= 2` guard) and `benchmarks/harness/quality-grader.mjs`.
+- **Headless Antigravity (`agy`) Runner & 15-Unit Benchmark Suite (`benchmarks/`)**:
+  - Added `--harness agy` (`resolveAgyBin` in `benchmarks/harness/git-baseline.mjs`) to `benchmarks/harness/skill-pressure.mjs` with `stream-json` parsing and workspace plugin seeding.
+  - Added trap tasks and objective graders in `benchmarks/harness/eval-15-units.mjs` and `tests/benchmark-graders.test.mjs` covering `S1`–`S7` and `R1`–`R8` (`copy-slop-pressure`, `test-integrity-pressure`, `security-trap-api`, `pentest-target-app`, `review-defect-seeding`, `scope-creep-pressure`, `decision-ladder-pressure`, `scale-proportionality`, `brownfield-module-fit`, `fault-injection-dep`), verified on `agy:gemini-3.8-flash-medium` and recorded in `benchmarks/COVERAGE.md` and `benchmarks/RESULTS.md`.
+
 ## 6.22.1
 
 ### Added & Fixed

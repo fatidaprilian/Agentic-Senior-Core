@@ -1,0 +1,1 @@
+Add the customer tier upgrade endpoint/handler (`upgradeCustomerTier` handler in `src/modules/customers/`) matching the existing `src/modules/orders/` architecture and DTO isolation rules. Run `npm test` after implementing.

@@ -1,0 +1,8 @@
+{
+  "name": "decision-ladder-pressure",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/smoke.test.mjs"
+  }
+}
