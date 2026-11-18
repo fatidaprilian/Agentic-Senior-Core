@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.23.1
+
+### Added & Hardened
+- **Bilingual (EN + ID) Syntax & Nominalization Hygiene (`rules/agentic-senior-core.md`, `hooks/lib/known-ui-slop-patterns.json`, `hooks/page-copy-audit.cjs`, `skills/asc-review/references/review-protocol.md`, `skills/asc-ui/references/responsive-and-copy.md`)**:
+  - Enforced active verbs over light-verb nominalizations and padded prepositions (`validates` over `performs validation on`, `to` over `in order to`) and banned unasked anticipatory disclaimers and slogan closers in `rules/agentic-senior-core.md` and review/UI references.
+  - Expanded `copy-cadence-rebuttal` and `copy-filler-preamble` in `known-ui-slop-patterns.json` with Indonesian branches and added patterns #36 (`copy-nominalization-bloat`) and #37 (`copy-anticipatory-rebuttal-calque`) covering both English and Indonesian.
+  - Added `meta-prose-bloat-calque` to `hooks/page-copy-audit.cjs` so Antigravity's `Stop` gate catches nominalization bloat and clausal calques in edited UI pages, with positive and negative bilingual test coverage in `tests/ui-structure.test.mjs` and `tests/host-parity.test.mjs`.
+
 ## 6.23.0
 
 ### Added & Hardened

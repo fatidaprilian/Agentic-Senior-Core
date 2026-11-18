@@ -152,13 +152,13 @@
     },
     {
       "id": "copy-cadence-rebuttal",
-      "regex": "\\b(Not (?:just )?a|More than a) \\w+[,.] (?:it's|a) \\w+\\b",
-      "message": "note: synthetic rebuttal cadence ('Not just a X, it\\'s a Y') detected. State what the system does directly without the false dichotomy."
+      "regex": "\\b(?:(?:Not (?:just )?a|More than a) \\w+[,.] (?:it's|a) \\w+|Bukan (?:sekadar|hanya) [a-zA-Z0-9_-]+(?:\\s+[a-zA-Z0-9_-]+){0,2}[,]\\s*(?:melainkan|tetapi)(?:\\s+juga)?\\s+[a-zA-Z0-9_-]+)\\b",
+      "message": "note: synthetic rebuttal cadence ('Not just a X, it\\'s a Y' / 'Bukan sekadar X, melainkan Y') detected. State what the system does directly without the false dichotomy."
     },
     {
       "id": "copy-filler-preamble",
-      "regex": "\\b(In today's (?:fast-paced|digital)|Built for (?:the )?modern teams?|Welcome to the)\\b",
-      "message": "note: AI preamble/filler detected ('In today\\'s fast-paced...', 'Built for modern teams'). Delete the introductory throat-clearing and lead with action."
+      "regex": "\\b(?:In today's (?:fast-paced|digital)|Built for (?:the )?modern teams?|Welcome to the|paving the way for a (?:scalable|brighter|modern) future|Di era (?:digital|modern)(?:\\s+yang\\s+berkembang\\s+pesat)?(?:\\s+saat\\s+ini)?|Selamat datang di (?:sistem|aplikasi|platform|halaman)|membawa dampak (?:besar|revolusioner) bagi masa depan)\\b",
+      "message": "note: AI preamble or utopian closer detected ('In today\\'s fast-paced...' / 'Di era digital...'). Delete the introductory throat-clearing and lead with action."
     },
     {
       "id": "copy-clumsy-indonesian-translations",
@@ -174,6 +174,16 @@
       "id": "copy-parenthetical-gloss",
       "regex": "(?:simpan|batal|hapus|ubah|tambah|cari|muat|memuat|unggah|unduh|masuk|keluar|pengaturan|berhasil|gagal|peringatan|waktu habis|tutup|buka|kirim|ulang|daftar|riwayat|ringkasan|kelola)\\s+\\((?:save|cancel|delete|remove|edit|update|add|create|search|find|load|loading|upload|download|login|sign in|logout|sign out|settings|preferences|success|failed|failure|error|warning|timeout|close|open|send|submit|retry|list|history|summary|manage)[^)]*\\)|(?:save|cancel|delete|edit|upload|download|settings|loading|timeout|error|warning|success|failed|retry|search|filter)\\s+\\((?:simpan|batal|hapus|ubah|unggah|unduh|pengaturan|memuat|waktu habis|galat|kesalahan|peringatan|berhasil|gagal|coba lagi|cari|saring)[^)]*\\)",
       "message": "warning: parenthetical translation gloss ('Simpan (Save)', 'Pengaturan (Settings)') detected. Enforce strict single-language purity without inline translations."
+    },
+    {
+      "id": "copy-nominalization-bloat",
+      "regex": "\\b(?:(?:perform|conduct|carry out|execute)\\s+(?:an?\\s+)?(?:validation|analysis|verification|check|inspection|optimization|assessment|calculation)\\s+(?:on|of|for)|is\\s+responsible\\s+for\\s+(?:handling|managing|performing|validating|processing)|in\\s+order\\s+to\\s+be\\s+able\\s+to|melakukan\\s+(?:validasi|analisis|pengujian|pengecekan|pemeriksaan|optimasi|perhitungan|pengukuran)\\s+(?:terhadap|pada|atas)|memberikan\\s+(?:pengaruh|dampak|bantuan|kontribusi)\\s+(?:terhadap|kepada)|dalam\\s+rangka\\s+untuk)\\b",
+      "message": "note: verbose light-verb nominalization or padded preposition detected. Replace with a direct active verb ('validates' / 'memvalidasi', 'to' / 'untuk')."
+    },
+    {
+      "id": "copy-anticipatory-rebuttal-calque",
+      "regex": "\\b(?:(?:While|Although)\\s+\\w+(?:\\s+\\w+){0,3},\\s+(?:this|that|it)\\s+does(?:n't|\\s+not)\\s+mean\\b|does(?:n't|\\s+not)\\s+come\\s+without\\s+a\\s+(?:cost|price)|Meskipun\\s+\\w+(?:\\s+\\w+){0,3},\\s+bukan\\s+berarti\\b|yang\\s+mana\\s+(?:hal\\s+(?:ini|tersebut)|sangat|dapat)|tidak\\s+datang\\s+tanpa\\s+(?:harga|biaya))\\b",
+      "message": "note: anticipatory AI disclaimer or literal clausal calque detected. State the concrete technical trade-off directly."
     }
   ]
 }

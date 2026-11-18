@@ -69,6 +69,11 @@ const META_COPY_PATTERNS = [
     re: /\b(?:NullReferenceException|TypeError|SyntaxError|ReferenceError|SQLSTATE|prisma\.|db\.query|db\.transaction|FOR UPDATE|unhandled exception|stack trace|HTTP [45]\d\d|JSON\.parse|useState|useEffect|req\.body)\b/i,
     msg: 'Internal developer/runtime jargon or exception identifier exposed in UI copy (CWE-209).',
   },
+  {
+    id: 'meta-prose-bloat-calque',
+    re: /\b(?:(?:perform|conduct|carry out)\s+(?:an?\s+)?(?:validation|analysis|verification|check|inspection)\s+(?:on|of)|in\s+order\s+to\s+be\s+able\s+to|melakukan\s+(?:validasi|analisis|pengujian|pengecekan|pemeriksaan)\s+(?:terhadap|pada|atas)|dalam\s+rangka\s+untuk|yang\s+mana\s+hal\s+(?:ini|tersebut)|di\s+era\s+digital\b|bukan\s+sekadar\s+\w+,\s*melainkan)\b/i,
+    msg: 'Verbose light-verb nominalization, clausal calque, or AI rhetorical filler detected in visible UI copy.',
+  },
 ];
 
 const UI_PROP_NAMES = '(?:title|subtitle|label|placeholder|emptyMessage|errorMessage|description|header|alt|aria-label|confirmText|cancelText|heading)';

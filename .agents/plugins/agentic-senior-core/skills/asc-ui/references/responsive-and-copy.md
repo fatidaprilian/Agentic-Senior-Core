@@ -31,4 +31,5 @@
 3. **Zero Fabricated Content:** Never invent customer quotes, partner company names, fake user counts (`10,000+ teams`), or unbacked telemetry metrics. Omit absent marketing proof entirely.
 4. **Human-by-Design Error Copy (Microsoft & Google Style Guides):** Write operational errors in active plain language stating (1) what failed, (2) the operational impact, and (3) the next actionable step. Never blame the user, never apologize for external network outages, never use alarmist titles (`FATAL ERROR`), and never expose stack traces or internal exception names in UI strings.
 5. **Zero Parenthetical Translation Glosses:** Never append translated words in parentheses beside UI labels or prose (never write `"Pengaturan (Settings)"` or `"Simpan (Save)"`).
+6. **Active Verbs & Clean Syntax:** Prefer direct verbs over nominalized light-verb wrappers (`validates` over `performs validation on`) and omit anticipatory disclaimers or slogan closers.
 

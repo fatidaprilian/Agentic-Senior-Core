@@ -74,13 +74,13 @@ describe('UI Engineering Structure & Quality Floor', () => {
     );
   });
 
-  it('validates 35 slop regexes in known-ui-slop-patterns.json with positive and negative cases', async () => {
+  it('validates 37 slop regexes in known-ui-slop-patterns.json with positive and negative cases', async () => {
     const slopPath = path.join(pluginDir, 'hooks', 'lib', 'known-ui-slop-patterns.json');
     const raw = await fs.readFile(slopPath, 'utf8');
     const catalog = JSON.parse(raw);
 
     assert.ok(Array.isArray(catalog.patterns), 'patterns must be an array');
-    assert.strictEqual(catalog.patterns.length, 35, 'must have exactly 35 slop patterns');
+    assert.strictEqual(catalog.patterns.length, 37, 'must have exactly 37 slop patterns');
 
     const testCases = {
       'ui-gradient-purple-blue': {
@@ -222,6 +222,14 @@ describe('UI Engineering Structure & Quality Floor', () => {
       'copy-parenthetical-gloss': {
         pos: 'Klik tombol Simpan (Save) atau Pengaturan (Settings).',
         neg: 'Use an explicit Data Transfer Object (DTO) for API contracts.'
+      },
+      'copy-nominalization-bloat': {
+        pos: 'This service is responsible for performing validation on incoming webhooks.',
+        neg: 'This service validates incoming webhooks.'
+      },
+      'copy-anticipatory-rebuttal-calque': {
+        pos: "While fast, this doesn't mean the cache avoids memory spikes.",
+        neg: 'While fast, this cache raises peak memory usage by 14%.'
       }
     };
 
@@ -246,6 +254,16 @@ describe('UI Engineering Structure & Quality Floor', () => {
         `Pattern ${pattern.id} should NOT match negative sample: "${tc.neg}"`
       );
     }
+
+    // Verify bilingual (Indonesian) branch parity on upgraded & newly added prose rules
+    const byId = Object.fromEntries(catalog.patterns.map((p) => [p.id, new RegExp(p.regex, 'i')]));
+    assert.ok(byId['copy-cadence-rebuttal'].test('Bukan sekadar tabel, melainkan pusat kendali operasional.'));
+    assert.equal(byId['copy-cadence-rebuttal'].test('Gunakan indeks komposit, bukan pencarian sekuensial.'), false);
+    assert.ok(byId['copy-filler-preamble'].test('Di era digital saat ini, keamanan data menjadi prioritas.'));
+    assert.ok(byId['copy-nominalization-bloat'].test('Modul ini melakukan validasi terhadap tanda tangan permintaan.'));
+    assert.equal(byId['copy-nominalization-bloat'].test('Modul ini memvalidasi tanda tangan permintaan.'), false);
+    assert.ok(byId['copy-anticipatory-rebuttal-calque'].test('Meskipun cepat, bukan berarti indeks ini bebas biaya memori.'));
+    assert.ok(byId['copy-anticipatory-rebuttal-calque'].test('Partisi tabel yang mana hal tersebut meningkatkan throughput.'));
   });
 
   it('guarantees zero codebase contamination in UI references', async () => {

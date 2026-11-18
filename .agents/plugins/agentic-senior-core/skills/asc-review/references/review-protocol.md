@@ -39,4 +39,5 @@ Audit all comments, identifiers, error strings, UI labels, and documentation acr
 - **Single-Language Purity (ISO 24495-1):** Every user-facing string, error payload, and file comment block must adhere to **one** language per surface or document:
   - Ban hybrid neologisms combining Indonesian affixes with English roots (`meng-generate`, `di-submit`, `mengupload`, `terupdate`).
   - Ban parenthetical translation glosses appended to terms (`"Kelola Aset (Asset Management)"`, `"Simpan (Save)"`).
+  - Prefer direct active verbs over light-verb nominalizations (`validates` over `performs validation on`; `to` over `in order to`) and reject unasked anticipatory disclaimers or utopian closers.
   - Ban LLM prose tells catalogued by WikiProject AI Cleanup: buzzwords (`seamless`, `robust`, `supercharge`, `cutting-edge`, `delve`, `pivotal`, `crucial`, `next-generation`), synthetic tricolon cadences (`Fast. Simple. Secure.`), and rebuttal tropes (`Not just a X, it's a Y`).

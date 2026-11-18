@@ -230,6 +230,7 @@ describe('Host Parity Matrix, Component Registry & UI Benchmark Evaluation', () 
       '      <p>Halaman ini menampilkan daftar inspeksi unit.</p>',
       '      <p>Perhitungan ini menggunakan perkalian bobot x faktor risiko 1.5 dan dibulatkan ke atas.</p>',
       '      <p>NullReferenceException on load, please try again.</p>',
+      '      <p>Fitur ini melakukan validasi terhadap input yang mana hal tersebut penting.</p>',
       '      <span>{summary.totalScore}</span>',
       '      <span>{summary.totalScore}</span>',
       '      <button className="bg-primary px-4">Simpan</button>',
@@ -243,6 +244,7 @@ describe('Host Parity Matrix, Component Registry & UI Benchmark Evaluation', () 
     assert.ok(bad.languageViolations.length >= 1, 'Must flag English strings mixed into Indonesian page');
     assert.ok(bad.metaCopyViolations.some((v) => v.id === 'meta-self-narration'), 'Must flag system meta narration');
     assert.ok(bad.metaCopyViolations.some((v) => v.id === 'meta-dev-jargon-leak'), 'Must flag developer jargon CWE-209');
+    assert.ok(bad.metaCopyViolations.some((v) => v.id === 'meta-prose-bloat-calque'), 'Must flag nominalization bloat / clausal calque');
     assert.ok(bad.instructionLeakageViolations.length >= 1, 'Must flag leaked prompt calculation phrase');
     assert.ok(bad.redundancyViolations.some((v) => v.type === 'MULTIPLE_H1'), 'Must flag multiple <h1>');
     assert.ok(bad.redundancyViolations.some((v) => v.type === 'MULTIPLE_PRIMARY_CTA'), 'Must flag multiple primary buttons');
